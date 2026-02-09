@@ -68,6 +68,10 @@ type DiskContext struct {
 func (d *DiskContext) ToCELContext() map[string]any {
 	result := map[string]any{
 		"disk": d.Disk,
+		// `system_disk` is referenced by built-in disk selector expressions (e.g. `system_disk`, `!system_disk`).
+		// When the system disk is not yet known (e.g. in maintenance mode before META exists), default to false so
+		// CEL evaluation doesn't fail with a missing attribute error.
+		"system_disk": false,
 	}
 
 	if val, ok := d.SystemDisk.Get(); ok {
