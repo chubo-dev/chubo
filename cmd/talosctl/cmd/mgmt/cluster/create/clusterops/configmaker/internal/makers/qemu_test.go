@@ -26,6 +26,12 @@ func TestQemuMaker_MachineConfig(t *testing.T) {
 	require.NoError(t, err)
 
 	desiredExtraGenOps := []generate.Option{}
+	if !qOps.BootloaderEnabled || qOps.TargetArch == "arm64" {
+		// QEMU maker intentionally disables kexec when bootloader is disabled or on arm64.
+		desiredExtraGenOps = append(desiredExtraGenOps, generate.WithSysctls(map[string]string{
+			"kernel.kexec_load_disabled": "1",
+		}))
+	}
 
 	assertConfigDefaultness(t, cOps, *m.Maker, desiredExtraGenOps...)
 }
