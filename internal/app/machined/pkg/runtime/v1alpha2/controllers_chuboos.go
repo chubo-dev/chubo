@@ -15,6 +15,7 @@ import (
 
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/config"
+	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/cri"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/files"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/hardware"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network"
@@ -81,6 +82,12 @@ func (ctrl *Controller) controllers(
 		},
 		&config.MachineTypeController{},
 		&config.PersistenceController{},
+		// Installation uses containerd but relies on CRI resource controllers (image cache + registries)
+		// to unblock the installer sequence (see v1alpha1 Install task).
+		&cri.ImageCacheConfigController{
+			V1Alpha1ServiceManager: system.Services(ctrl.v1alpha1Runtime),
+		},
+		&cri.RegistriesConfigController{},
 		&files.EtcFileController{
 			EtcRoot: etcRoot,
 			EtcPath: "/etc",
@@ -295,4 +302,3 @@ func (ctrl *Controller) controllers(
 		},
 	}
 }
-
