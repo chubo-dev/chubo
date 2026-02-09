@@ -57,12 +57,10 @@ import (
 	mountv3 "github.com/siderolabs/talos/internal/pkg/mount/v3"
 	"github.com/siderolabs/talos/internal/pkg/partition"
 	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/conditions"
 	"github.com/siderolabs/talos/pkg/images"
 	"github.com/siderolabs/talos/pkg/kernel/kspp"
 	"github.com/siderolabs/talos/pkg/kubernetes"
 	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
 	"github.com/siderolabs/talos/pkg/machinery/config/types/block/blockhelpers"
 	"github.com/siderolabs/talos/pkg/machinery/constants"
 	metamachinery "github.com/siderolabs/talos/pkg/machinery/meta"
@@ -416,88 +414,6 @@ func StartUdevd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 }
 
 // StartAllServices represents the task to start the system services.
-func StartAllServices(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
-	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) (err error) {
-		// nb: Treating the beginning of "service starts" as the activate event for a normal
-		// non-maintenance mode boot. At this point, we'd expect the user to
-		// start interacting with the system for troubleshooting at least.
-		platform.FireEvent(
-			ctx,
-			r.State().Platform(),
-			platform.Event{
-				Type:    platform.EventTypeActivate,
-				Message: "Talos is ready for user interaction.",
-			},
-		)
-
-		svcs := system.Services(r)
-
-		// load the kubelet service, but don't start it;
-		// KubeletServiceController will start it once it's ready.
-		svcs.Load(
-			&services.Kubelet{},
-		)
-
-		serviceList := []system.Service{
-			&services.CRI{},
-		}
-
-		switch t := r.Config().Machine().Type(); t {
-		case machine.TypeInit:
-			serviceList = append(serviceList,
-				&services.Trustd{},
-				&services.Etcd{Bootstrap: true},
-			)
-		case machine.TypeControlPlane:
-			serviceList = append(serviceList,
-				&services.Trustd{},
-				&services.Etcd{},
-			)
-		case machine.TypeWorker:
-			// nothing
-		case machine.TypeUnknown:
-			fallthrough
-		default:
-			panic(fmt.Sprintf("unexpected machine type %v", t))
-		}
-
-		svcs.LoadAndStart(serviceList...)
-
-		all := make([]conditions.Condition, 0, len(svcs.List()))
-
-		logger.Printf("waiting for %d services", len(svcs.List()))
-
-		for _, svc := range svcs.List() {
-			cond := system.WaitForService(system.StateEventUp, svc.AsProto().GetId())
-			all = append(all, cond)
-		}
-
-		ctx, cancel := context.WithTimeout(ctx, constants.BootTimeout)
-		defer cancel()
-
-		aggregateCondition := conditions.WaitForAll(all...)
-
-		errChan := make(chan error)
-
-		go func() {
-			errChan <- aggregateCondition.Wait(ctx)
-		}()
-
-		ticker := time.NewTicker(15 * time.Second)
-		defer ticker.Stop()
-
-		for {
-			logger.Printf("%s", aggregateCondition.String())
-
-			select {
-			case err := <-errChan:
-				return err
-			case <-ticker.C:
-			}
-		}
-	}, "startAllServices"
-}
-
 // StopServicesEphemeral represents the StopServicesEphemeral task.
 func StopServicesEphemeral(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) (err error) {
