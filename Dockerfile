@@ -1145,18 +1145,12 @@ ENTRYPOINT ["/bin/imager"]
 FROM imager AS iso-amd64-build
 ARG SOURCE_DATE_EPOCH
 ENV SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH}
-RUN /bin/installer \
-    iso \
-    --arch amd64 \
-    --output /out
+RUN ["/bin/imager", "iso", "--arch", "amd64", "--output", "/out"]
 
 FROM imager AS iso-arm64-build
 ARG SOURCE_DATE_EPOCH
 ENV SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH}
-RUN /bin/installer \
-    iso \
-    --arch arm64 \
-    --output /out
+RUN ["/bin/imager", "iso", "--arch", "arm64", "--output", "/out"]
 
 FROM scratch AS iso-amd64
 COPY --from=iso-amd64-build /out /
