@@ -29,6 +29,7 @@ import (
 	"github.com/siderolabs/talos/pkg/machinery/constants"
 	"github.com/siderolabs/talos/pkg/machinery/proto"
 	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	configres "github.com/siderolabs/talos/pkg/machinery/resources/config"
 	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
 	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
 	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
@@ -203,6 +204,28 @@ func (ctrl *VolumeManagerController) Run(ctx context.Context, r controller.Runti
 			return fmt.Errorf("error fetching system disk: %w", err)
 		}
 
+		// Before the META partition exists (e.g. in maintenance mode pre-install), the SystemDisk resource is absent.
+		// In that case, treat the configured install disk as the system disk so disk selectors using `system_disk`
+		// can still make progress (e.g. STATE provisioning to enable image cache for installation).
+		installDisk := ""
+		if systemDisk == nil {
+			cfgRes, err := safe.ReaderGetByID[*configres.MachineConfig](ctx, r, configres.PersistentID)
+			if err != nil && !state.IsNotFoundError(err) {
+				return fmt.Errorf("error fetching persistent machine config: %w", err)
+			}
+
+			if cfgRes == nil {
+				cfgRes, err = safe.ReaderGetByID[*configres.MachineConfig](ctx, r, configres.ActiveID)
+				if err != nil && !state.IsNotFoundError(err) {
+					return fmt.Errorf("error fetching active machine config: %w", err)
+				}
+			}
+
+			if cfgRes != nil && cfgRes.Config().Machine() != nil {
+				installDisk = cfgRes.Config().Machine().Install().Disk()
+			}
+		}
+
 		volumeLifecycle, err := safe.ReaderGetByID[*block.VolumeLifecycle](ctx, r, block.VolumeLifecycleID)
 		if err != nil && !state.IsNotFoundError(err) {
 			return fmt.Errorf("error fetching volume lifecycle: %w", err)
@@ -230,6 +253,13 @@ func (ctrl *VolumeManagerController) Run(ctx context.Context, r controller.Runti
 
 			if systemDisk != nil {
 				optionalSystemDisk = optional.Some(d.Metadata().ID() == systemDisk.TypedSpec().DiskID)
+			} else {
+				// Default to false for all disks to keep CEL contexts stable.
+				optionalSystemDisk = optional.Some(false)
+
+				if installDisk != "" && spec.DevPath == installDisk {
+					optionalSystemDisk = optional.Some(true)
+				}
 			}
 
 			return volumes.DiskContext{
