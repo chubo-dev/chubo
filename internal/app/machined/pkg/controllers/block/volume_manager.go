@@ -52,6 +52,18 @@ func (ctrl *VolumeManagerController) Inputs() []controller.Input {
 			Kind:      controller.InputStrong,
 		},
 		{
+			Namespace: configres.NamespaceName,
+			Type:      configres.MachineConfigType,
+			ID:        optional.Some(configres.PersistentID),
+			Kind:      controller.InputWeak,
+		},
+		{
+			Namespace: configres.NamespaceName,
+			Type:      configres.MachineConfigType,
+			ID:        optional.Some(configres.ActiveID),
+			Kind:      controller.InputWeak,
+		},
+		{
 			Namespace: block.NamespaceName,
 			Type:      block.VolumeStatusType,
 			Kind:      controller.InputStrong,
