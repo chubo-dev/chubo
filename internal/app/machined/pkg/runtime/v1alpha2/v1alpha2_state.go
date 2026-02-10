@@ -16,6 +16,7 @@ import (
 
 	talosconfig "github.com/siderolabs/talos/pkg/machinery/config"
 	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/siderolabs/talos/pkg/machinery/resources/chubo"
 	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
 	"github.com/siderolabs/talos/pkg/machinery/resources/config"
 	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
@@ -74,6 +75,7 @@ func NewState() (*State, error) {
 		description string
 	}{
 		{v1alpha1.NamespaceName, "Talos v1alpha1 subsystems glue resources."},
+		{chubo.NamespaceName, "ChuboOS module resources."},
 		{cluster.NamespaceName, "Cluster configuration and discovery resources."},
 		{cluster.RawNamespaceName, "Cluster unmerged raw resources."},
 		{config.NamespaceName, "Talos node configuration."},
@@ -113,6 +115,7 @@ func NewState() (*State, error) {
 		&block.VolumeMountStatus{},
 		&block.VolumeStatus{},
 		&block.ZswapStatus{},
+		chubo.NewBootstrapStatus(),
 		&cluster.Affiliate{},
 		&cluster.Config{},
 		&cluster.Identity{},
