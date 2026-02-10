@@ -700,6 +700,7 @@ COPY --from=depmod-arm64 /build/usr/lib/modules /usr/lib/modules
 
 # The rootfs target provides the Talos rootfs.
 FROM build AS rootfs-base-amd64
+ARG GO_BUILDFLAGS
 COPY --link --from=pkg-fhs / /rootfs
 COPY --link --from=pkg-apparmor-amd64 / /rootfs
 COPY --link --from=pkg-cni-stripped-amd64 / /rootfs
@@ -763,7 +764,12 @@ COPY ./hack/cleanup.sh /usr/bin/cleanup.sh
 RUN <<END
     cleanup.sh /rootfs
     mkdir -pv /rootfs/{boot/EFI,etc/{iscsi,nvme,cri/conf.d/hosts},usr/lib/firmware,usr/etc,usr/local/share,usr/share/zoneinfo/Etc,mnt,system,opt,.extra}
-    mkdir -pv /rootfs/{etc/kubernetes/manifests,etc/cni/net.d,etc/ssl/certs,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders,etc/selinux/targeted/contexts/files}
+    mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
+    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
+        echo "chuboos: skipping Kubernetes directories"
+    else
+        mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
+    fi
     mkdir -pv /rootfs/opt/{containerd/bin,containerd/lib}
 END
 COPY --chmod=0644 hack/zoneinfo/Etc/UTC /rootfs/usr/share/zoneinfo/Etc/UTC
@@ -786,6 +792,7 @@ RUN <<END
 END
 
 FROM build AS rootfs-base-arm64
+ARG GO_BUILDFLAGS
 COPY --link --from=pkg-fhs / /rootfs
 COPY --link --from=pkg-apparmor-arm64 / /rootfs
 COPY --link --from=pkg-cni-stripped-arm64 / /rootfs
@@ -850,7 +857,12 @@ COPY ./hack/cleanup.sh /usr/bin/cleanup.sh
 RUN <<END
     cleanup.sh /rootfs
     mkdir -pv /rootfs/{boot/EFI,etc/{iscsi,nvme,cri/conf.d/hosts},usr/lib/firmware,usr/etc,usr/local/share,usr/share/zoneinfo/Etc,mnt,system,opt,.extra}
-    mkdir -pv /rootfs/{etc/kubernetes/manifests,etc/cni/net.d,etc/ssl/certs,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders,etc/selinux/targeted/contexts/files}
+    mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
+    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
+        echo "chuboos: skipping Kubernetes directories"
+    else
+        mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
+    fi
     mkdir -pv /rootfs/opt/{containerd/bin,containerd/lib}
 END
 COPY --chmod=0644 hack/zoneinfo/Etc/UTC /rootfs/usr/share/zoneinfo/Etc/UTC
