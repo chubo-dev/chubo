@@ -1,0 +1,14 @@
+# BuildKit config for local development registries over plain HTTP.
+#
+# This is used by a docker buildx builder container (BuildKit) to push images to
+# the host's local registry without TLS.
+#
+# Typical usage (from workspace root):
+#   docker buildx create --driver docker-container --name chubo-os-http \
+#     --buildkitd-config talos/hack/buildkit/buildkitd.local-registry.toml \
+#     --buildkitd-flags '--allow-insecure-entitlement security.insecure' --use
+#
+[registry."host.docker.internal:5001"]
+  http = true
+  insecure = true
+
