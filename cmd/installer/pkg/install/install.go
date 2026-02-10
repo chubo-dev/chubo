@@ -894,7 +894,11 @@ func (i *Installer) getPartitionOptions(ctx context.Context, mode Mode, hostTalo
 		partition.NewPartitionOptions(false, quirk, partition.WithLabel(constants.MetaPartitionLabel)),
 	)
 
-	legacyImage := mode == ModeImage && !quirks.New(i.options.Version).SkipDataPartitions()
+	// Talos >= 1.8 can create STATE/EPHEMERAL on first boot, so the upstream installer
+	// skips them for reproducible "image" installs. For the `chuboos` fork we want a
+	// simpler, fully self-contained install artifact, so we always pre-create
+	// STATE/EPHEMERAL when installing from an image.
+	legacyImage := mode == ModeImage && (!quirks.New(i.options.Version).SkipDataPartitions() || forceDataPartitions())
 
 	// compatibility when installing on Talos < 1.8
 	if legacyImage || (hostTalosVersion != nil && hostTalosVersion.PrecreateStatePartition()) {
