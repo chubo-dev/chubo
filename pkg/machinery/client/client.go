@@ -198,6 +198,45 @@ func (c *Client) KubeconfigRaw(ctx context.Context) (io.ReadCloser, error) {
 	return ReadStream(stream)
 }
 
+// NomadConfigRaw returns Nomad CLI client configuration bundle (.tar.gz).
+//
+// This method doesn't support multiplexing of the result:
+// * either client.WithNodes is not used, or it contains a single node in the list.
+func (c *Client) NomadConfigRaw(ctx context.Context) (io.ReadCloser, error) {
+	stream, err := c.MachineClient.NomadConfig(ctx, &emptypb.Empty{})
+	if err != nil {
+		return nil, err
+	}
+
+	return ReadStream(stream)
+}
+
+// ConsulConfigRaw returns Consul CLI client configuration bundle (.tar.gz).
+//
+// This method doesn't support multiplexing of the result:
+// * either client.WithNodes is not used, or it contains a single node in the list.
+func (c *Client) ConsulConfigRaw(ctx context.Context) (io.ReadCloser, error) {
+	stream, err := c.MachineClient.ConsulConfig(ctx, &emptypb.Empty{})
+	if err != nil {
+		return nil, err
+	}
+
+	return ReadStream(stream)
+}
+
+// OpenBaoConfigRaw returns OpenBao/Vault CLI client configuration bundle (.tar.gz).
+//
+// This method doesn't support multiplexing of the result:
+// * either client.WithNodes is not used, or it contains a single node in the list.
+func (c *Client) OpenBaoConfigRaw(ctx context.Context) (io.ReadCloser, error) {
+	stream, err := c.MachineClient.OpenBaoConfig(ctx, &emptypb.Empty{})
+	if err != nil {
+		return nil, err
+	}
+
+	return ReadStream(stream)
+}
+
 func (c *Client) extractKubeconfig(r io.ReadCloser) ([]byte, error) {
 	defer r.Close() //nolint:errcheck
 
