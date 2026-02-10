@@ -1243,6 +1243,126 @@ func (s *Server) Kubeconfig(empty *emptypb.Empty, obj machine.MachineService_Kub
 	})
 }
 
+func (s *Server) routedNodeIP(ctx context.Context) (string, error) {
+	nodeAddrs, err := safe.ReaderGetByID[*network.NodeAddress](ctx, s.Controller.Runtime().State().V1Alpha2().Resources(), network.NodeAddressRoutedID)
+	if err != nil {
+		if state.IsNotFoundError(err) {
+			return "", status.Errorf(codes.FailedPrecondition, "node addresses not ready")
+		}
+
+		return "", err
+	}
+
+	ips := nodeAddrs.TypedSpec().IPs()
+	if len(ips) == 0 {
+		return "", status.Errorf(codes.FailedPrecondition, "no routed node addresses found")
+	}
+
+	return ips[0].String(), nil
+}
+
+func tarGzSingleFile(name string, contents []byte) ([]byte, error) {
+	var buf bytes.Buffer
+
+	zw := gzip.NewWriter(&buf)
+	tarW := tar.NewWriter(zw)
+
+	err := tarW.WriteHeader(&tar.Header{
+		Typeflag: tar.TypeReg,
+		Name:     name,
+		Size:     int64(len(contents)),
+		ModTime:  time.Now(),
+		Mode:     0o600,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = tarW.Write(contents)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = zw.Close(); err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+// NomadConfig implements machine.MachineService.
+func (s *Server) NomadConfig(empty *emptypb.Empty, obj machine.MachineService_NomadConfigServer) error {
+	if err := s.checkControlplane("NomadConfig"); err != nil {
+		return err
+	}
+
+	ip, err := s.routedNodeIP(obj.Context())
+	if err != nil {
+		return err
+	}
+
+	addr := "http://" + net.JoinHostPort(ip, "4646")
+
+	// TODO(chubo-os): include TLS (CA/certs) and ACL token once the Hashistack module owns those.
+	env := []byte(fmt.Sprintf("NOMAD_ADDR=%s\n", addr))
+
+	tgz, err := tarGzSingleFile("nomad.env", env)
+	if err != nil {
+		return err
+	}
+
+	return obj.Send(&common.Data{Bytes: tgz})
+}
+
+// ConsulConfig implements machine.MachineService.
+func (s *Server) ConsulConfig(empty *emptypb.Empty, obj machine.MachineService_ConsulConfigServer) error {
+	if err := s.checkControlplane("ConsulConfig"); err != nil {
+		return err
+	}
+
+	ip, err := s.routedNodeIP(obj.Context())
+	if err != nil {
+		return err
+	}
+
+	addr := "http://" + net.JoinHostPort(ip, "8500")
+
+	// TODO(chubo-os): include TLS (CA/certs) and ACL token once the Hashistack module owns those.
+	env := []byte(fmt.Sprintf("CONSUL_HTTP_ADDR=%s\n", addr))
+
+	tgz, err := tarGzSingleFile("consul.env", env)
+	if err != nil {
+		return err
+	}
+
+	return obj.Send(&common.Data{Bytes: tgz})
+}
+
+// OpenBaoConfig implements machine.MachineService.
+func (s *Server) OpenBaoConfig(empty *emptypb.Empty, obj machine.MachineService_OpenBaoConfigServer) error {
+	if err := s.checkControlplane("OpenBaoConfig"); err != nil {
+		return err
+	}
+
+	ip, err := s.routedNodeIP(obj.Context())
+	if err != nil {
+		return err
+	}
+
+	addr := "http://" + net.JoinHostPort(ip, "8200")
+
+	// TODO(chubo-os): include TLS (CA/certs) and bootstrap/unseal material once OpenBao is managed.
+	// Set both prefixes for CLI compatibility across Vault/OpenBao tooling.
+	env := []byte(fmt.Sprintf("VAULT_ADDR=%s\nBAO_ADDR=%s\n", addr, addr))
+
+	tgz, err := tarGzSingleFile("openbao.env", env)
+	if err != nil {
+		return err
+	}
+
+	return obj.Send(&common.Data{Bytes: tgz})
+}
+
 // Logs provides a service or container logs can be requested and the contents of the
 // log file are streamed in chunks.
 func (s *Server) Logs(req *machine.LogsRequest, l machine.MachineService_LogsServer) (err error) {

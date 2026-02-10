@@ -12502,7 +12502,7 @@ const file_machine_machine_proto_rawDesc = "" +
 	"\tImagePull\x12,\n" +
 	"\bmetadata\x18\x01 \x01(\v2\x10.common.MetadataR\bmetadata\"C\n" +
 	"\x11ImagePullResponse\x12.\n" +
-	"\bmessages\x18\x01 \x03(\v2\x12.machine.ImagePullR\bmessages2\xe1\x1d\n" +
+	"\bmessages\x18\x01 \x03(\v2\x12.machine.ImagePullR\bmessages2\x89\x1f\n" +
 	"\x0eMachineService\x12]\n" +
 	"\x12ApplyConfiguration\x12\".machine.ApplyConfigurationRequest\x1a#.machine.ApplyConfigurationResponse\x12B\n" +
 	"\tBootstrap\x12\x19.machine.BootstrapRequest\x1a\x1a.machine.BootstrapResponse\x12E\n" +
@@ -12530,7 +12530,10 @@ const file_machine_machine_proto_rawDesc = "" +
 	"\x13EtcdDowngradeCancel\x12\x16.google.protobuf.Empty\x1a$.machine.EtcdDowngradeCancelResponse\x12=\n" +
 	"\bHostname\x12\x16.google.protobuf.Empty\x1a\x19.machine.HostnameResponse\x124\n" +
 	"\n" +
-	"Kubeconfig\x12\x16.google.protobuf.Empty\x1a\f.common.Data0\x01\x121\n" +
+	"Kubeconfig\x12\x16.google.protobuf.Empty\x1a\f.common.Data0\x01\x125\n" +
+	"\vNomadConfig\x12\x16.google.protobuf.Empty\x1a\f.common.Data0\x01\x126\n" +
+	"\fConsulConfig\x12\x16.google.protobuf.Empty\x1a\f.common.Data0\x01\x127\n" +
+	"\rOpenBaoConfig\x12\x16.google.protobuf.Empty\x1a\f.common.Data0\x01\x121\n" +
 	"\x04List\x12\x14.machine.ListRequest\x1a\x11.machine.FileInfo0\x01\x12@\n" +
 	"\tDiskUsage\x12\x19.machine.DiskUsageRequest\x1a\x16.machine.DiskUsageInfo0\x01\x12;\n" +
 	"\aLoadAvg\x12\x16.google.protobuf.Empty\x1a\x18.machine.LoadAvgResponse\x12,\n" +
@@ -12976,92 +12979,98 @@ var file_machine_machine_proto_depIdxs = []int32{
 	200, // 189: machine.MachineService.EtcdDowngradeCancel:input_type -> google.protobuf.Empty
 	200, // 190: machine.MachineService.Hostname:input_type -> google.protobuf.Empty
 	200, // 191: machine.MachineService.Kubeconfig:input_type -> google.protobuf.Empty
-	61,  // 192: machine.MachineService.List:input_type -> machine.ListRequest
-	62,  // 193: machine.MachineService.DiskUsage:input_type -> machine.DiskUsageRequest
-	200, // 194: machine.MachineService.LoadAvg:input_type -> google.protobuf.Empty
-	74,  // 195: machine.MachineService.Logs:input_type -> machine.LogsRequest
-	200, // 196: machine.MachineService.LogsContainers:input_type -> google.protobuf.Empty
-	200, // 197: machine.MachineService.Memory:input_type -> google.protobuf.Empty
-	200, // 198: machine.MachineService.Mounts:input_type -> google.protobuf.Empty
-	200, // 199: machine.MachineService.NetworkDeviceStats:input_type -> google.protobuf.Empty
-	200, // 200: machine.MachineService.Processes:input_type -> google.protobuf.Empty
-	75,  // 201: machine.MachineService.Read:input_type -> machine.ReadRequest
-	18,  // 202: machine.MachineService.Reboot:input_type -> machine.RebootRequest
-	89,  // 203: machine.MachineService.Restart:input_type -> machine.RestartRequest
-	78,  // 204: machine.MachineService.Rollback:input_type -> machine.RollbackRequest
-	36,  // 205: machine.MachineService.Reset:input_type -> machine.ResetRequest
-	200, // 206: machine.MachineService.ServiceList:input_type -> google.protobuf.Empty
-	57,  // 207: machine.MachineService.ServiceRestart:input_type -> machine.ServiceRestartRequest
-	51,  // 208: machine.MachineService.ServiceStart:input_type -> machine.ServiceStartRequest
-	54,  // 209: machine.MachineService.ServiceStop:input_type -> machine.ServiceStopRequest
-	40,  // 210: machine.MachineService.Shutdown:input_type -> machine.ShutdownRequest
-	92,  // 211: machine.MachineService.Stats:input_type -> machine.StatsRequest
-	200, // 212: machine.MachineService.SystemStat:input_type -> google.protobuf.Empty
-	42,  // 213: machine.MachineService.Upgrade:input_type -> machine.UpgradeRequest
-	200, // 214: machine.MachineService.Version:input_type -> google.protobuf.Empty
-	167, // 215: machine.MachineService.GenerateClientConfiguration:input_type -> machine.GenerateClientConfigurationRequest
-	170, // 216: machine.MachineService.PacketCapture:input_type -> machine.PacketCaptureRequest
-	172, // 217: machine.MachineService.Netstat:input_type -> machine.NetstatRequest
-	176, // 218: machine.MachineService.MetaWrite:input_type -> machine.MetaWriteRequest
-	179, // 219: machine.MachineService.MetaDelete:input_type -> machine.MetaDeleteRequest
-	182, // 220: machine.MachineService.ImageList:input_type -> machine.ImageListRequest
-	184, // 221: machine.MachineService.ImagePull:input_type -> machine.ImagePullRequest
-	17,  // 222: machine.MachineService.ApplyConfiguration:output_type -> machine.ApplyConfigurationResponse
-	23,  // 223: machine.MachineService.Bootstrap:output_type -> machine.BootstrapResponse
-	84,  // 224: machine.MachineService.Containers:output_type -> machine.ContainersResponse
-	201, // 225: machine.MachineService.Copy:output_type -> common.Data
-	107, // 226: machine.MachineService.CPUFreqStats:output_type -> machine.CPUFreqStatsResponse
-	110, // 227: machine.MachineService.CPUInfo:output_type -> machine.CPUInfoResponse
-	116, // 228: machine.MachineService.DiskStats:output_type -> machine.DiskStatsResponse
-	201, // 229: machine.MachineService.Dmesg:output_type -> common.Data
-	34,  // 230: machine.MachineService.Events:output_type -> machine.Event
-	134, // 231: machine.MachineService.EtcdMemberList:output_type -> machine.EtcdMemberListResponse
-	127, // 232: machine.MachineService.EtcdRemoveMemberByID:output_type -> machine.EtcdRemoveMemberByIDResponse
-	121, // 233: machine.MachineService.EtcdLeaveCluster:output_type -> machine.EtcdLeaveClusterResponse
-	130, // 234: machine.MachineService.EtcdForfeitLeadership:output_type -> machine.EtcdForfeitLeadershipResponse
-	137, // 235: machine.MachineService.EtcdRecover:output_type -> machine.EtcdRecoverResponse
-	201, // 236: machine.MachineService.EtcdSnapshot:output_type -> common.Data
-	138, // 237: machine.MachineService.EtcdAlarmList:output_type -> machine.EtcdAlarmListResponse
-	141, // 238: machine.MachineService.EtcdAlarmDisarm:output_type -> machine.EtcdAlarmDisarmResponse
-	143, // 239: machine.MachineService.EtcdDefragment:output_type -> machine.EtcdDefragmentResponse
-	145, // 240: machine.MachineService.EtcdStatus:output_type -> machine.EtcdStatusResponse
-	149, // 241: machine.MachineService.EtcdDowngradeValidate:output_type -> machine.EtcdDowngradeValidateResponse
-	152, // 242: machine.MachineService.EtcdDowngradeEnable:output_type -> machine.EtcdDowngradeEnableResponse
-	154, // 243: machine.MachineService.EtcdDowngradeCancel:output_type -> machine.EtcdDowngradeCancelResponse
-	99,  // 244: machine.MachineService.Hostname:output_type -> machine.HostnameResponse
-	201, // 245: machine.MachineService.Kubeconfig:output_type -> common.Data
-	63,  // 246: machine.MachineService.List:output_type -> machine.FileInfo
-	65,  // 247: machine.MachineService.DiskUsage:output_type -> machine.DiskUsageInfo
-	101, // 248: machine.MachineService.LoadAvg:output_type -> machine.LoadAvgResponse
-	201, // 249: machine.MachineService.Logs:output_type -> common.Data
-	77,  // 250: machine.MachineService.LogsContainers:output_type -> machine.LogsContainersResponse
-	97,  // 251: machine.MachineService.Memory:output_type -> machine.MemoryResponse
-	67,  // 252: machine.MachineService.Mounts:output_type -> machine.MountsResponse
-	113, // 253: machine.MachineService.NetworkDeviceStats:output_type -> machine.NetworkDeviceStatsResponse
-	86,  // 254: machine.MachineService.Processes:output_type -> machine.ProcessesResponse
-	201, // 255: machine.MachineService.Read:output_type -> common.Data
-	20,  // 256: machine.MachineService.Reboot:output_type -> machine.RebootResponse
-	91,  // 257: machine.MachineService.Restart:output_type -> machine.RestartResponse
-	80,  // 258: machine.MachineService.Rollback:output_type -> machine.RollbackResponse
-	38,  // 259: machine.MachineService.Reset:output_type -> machine.ResetResponse
-	46,  // 260: machine.MachineService.ServiceList:output_type -> machine.ServiceListResponse
-	59,  // 261: machine.MachineService.ServiceRestart:output_type -> machine.ServiceRestartResponse
-	53,  // 262: machine.MachineService.ServiceStart:output_type -> machine.ServiceStartResponse
-	56,  // 263: machine.MachineService.ServiceStop:output_type -> machine.ServiceStopResponse
-	41,  // 264: machine.MachineService.Shutdown:output_type -> machine.ShutdownResponse
-	94,  // 265: machine.MachineService.Stats:output_type -> machine.StatsResponse
-	103, // 266: machine.MachineService.SystemStat:output_type -> machine.SystemStatResponse
-	44,  // 267: machine.MachineService.Upgrade:output_type -> machine.UpgradeResponse
-	70,  // 268: machine.MachineService.Version:output_type -> machine.VersionResponse
-	169, // 269: machine.MachineService.GenerateClientConfiguration:output_type -> machine.GenerateClientConfigurationResponse
-	201, // 270: machine.MachineService.PacketCapture:output_type -> common.Data
-	175, // 271: machine.MachineService.Netstat:output_type -> machine.NetstatResponse
-	178, // 272: machine.MachineService.MetaWrite:output_type -> machine.MetaWriteResponse
-	181, // 273: machine.MachineService.MetaDelete:output_type -> machine.MetaDeleteResponse
-	183, // 274: machine.MachineService.ImageList:output_type -> machine.ImageListResponse
-	186, // 275: machine.MachineService.ImagePull:output_type -> machine.ImagePullResponse
-	222, // [222:276] is the sub-list for method output_type
-	168, // [168:222] is the sub-list for method input_type
+	200, // 192: machine.MachineService.NomadConfig:input_type -> google.protobuf.Empty
+	200, // 193: machine.MachineService.ConsulConfig:input_type -> google.protobuf.Empty
+	200, // 194: machine.MachineService.OpenBaoConfig:input_type -> google.protobuf.Empty
+	61,  // 195: machine.MachineService.List:input_type -> machine.ListRequest
+	62,  // 196: machine.MachineService.DiskUsage:input_type -> machine.DiskUsageRequest
+	200, // 197: machine.MachineService.LoadAvg:input_type -> google.protobuf.Empty
+	74,  // 198: machine.MachineService.Logs:input_type -> machine.LogsRequest
+	200, // 199: machine.MachineService.LogsContainers:input_type -> google.protobuf.Empty
+	200, // 200: machine.MachineService.Memory:input_type -> google.protobuf.Empty
+	200, // 201: machine.MachineService.Mounts:input_type -> google.protobuf.Empty
+	200, // 202: machine.MachineService.NetworkDeviceStats:input_type -> google.protobuf.Empty
+	200, // 203: machine.MachineService.Processes:input_type -> google.protobuf.Empty
+	75,  // 204: machine.MachineService.Read:input_type -> machine.ReadRequest
+	18,  // 205: machine.MachineService.Reboot:input_type -> machine.RebootRequest
+	89,  // 206: machine.MachineService.Restart:input_type -> machine.RestartRequest
+	78,  // 207: machine.MachineService.Rollback:input_type -> machine.RollbackRequest
+	36,  // 208: machine.MachineService.Reset:input_type -> machine.ResetRequest
+	200, // 209: machine.MachineService.ServiceList:input_type -> google.protobuf.Empty
+	57,  // 210: machine.MachineService.ServiceRestart:input_type -> machine.ServiceRestartRequest
+	51,  // 211: machine.MachineService.ServiceStart:input_type -> machine.ServiceStartRequest
+	54,  // 212: machine.MachineService.ServiceStop:input_type -> machine.ServiceStopRequest
+	40,  // 213: machine.MachineService.Shutdown:input_type -> machine.ShutdownRequest
+	92,  // 214: machine.MachineService.Stats:input_type -> machine.StatsRequest
+	200, // 215: machine.MachineService.SystemStat:input_type -> google.protobuf.Empty
+	42,  // 216: machine.MachineService.Upgrade:input_type -> machine.UpgradeRequest
+	200, // 217: machine.MachineService.Version:input_type -> google.protobuf.Empty
+	167, // 218: machine.MachineService.GenerateClientConfiguration:input_type -> machine.GenerateClientConfigurationRequest
+	170, // 219: machine.MachineService.PacketCapture:input_type -> machine.PacketCaptureRequest
+	172, // 220: machine.MachineService.Netstat:input_type -> machine.NetstatRequest
+	176, // 221: machine.MachineService.MetaWrite:input_type -> machine.MetaWriteRequest
+	179, // 222: machine.MachineService.MetaDelete:input_type -> machine.MetaDeleteRequest
+	182, // 223: machine.MachineService.ImageList:input_type -> machine.ImageListRequest
+	184, // 224: machine.MachineService.ImagePull:input_type -> machine.ImagePullRequest
+	17,  // 225: machine.MachineService.ApplyConfiguration:output_type -> machine.ApplyConfigurationResponse
+	23,  // 226: machine.MachineService.Bootstrap:output_type -> machine.BootstrapResponse
+	84,  // 227: machine.MachineService.Containers:output_type -> machine.ContainersResponse
+	201, // 228: machine.MachineService.Copy:output_type -> common.Data
+	107, // 229: machine.MachineService.CPUFreqStats:output_type -> machine.CPUFreqStatsResponse
+	110, // 230: machine.MachineService.CPUInfo:output_type -> machine.CPUInfoResponse
+	116, // 231: machine.MachineService.DiskStats:output_type -> machine.DiskStatsResponse
+	201, // 232: machine.MachineService.Dmesg:output_type -> common.Data
+	34,  // 233: machine.MachineService.Events:output_type -> machine.Event
+	134, // 234: machine.MachineService.EtcdMemberList:output_type -> machine.EtcdMemberListResponse
+	127, // 235: machine.MachineService.EtcdRemoveMemberByID:output_type -> machine.EtcdRemoveMemberByIDResponse
+	121, // 236: machine.MachineService.EtcdLeaveCluster:output_type -> machine.EtcdLeaveClusterResponse
+	130, // 237: machine.MachineService.EtcdForfeitLeadership:output_type -> machine.EtcdForfeitLeadershipResponse
+	137, // 238: machine.MachineService.EtcdRecover:output_type -> machine.EtcdRecoverResponse
+	201, // 239: machine.MachineService.EtcdSnapshot:output_type -> common.Data
+	138, // 240: machine.MachineService.EtcdAlarmList:output_type -> machine.EtcdAlarmListResponse
+	141, // 241: machine.MachineService.EtcdAlarmDisarm:output_type -> machine.EtcdAlarmDisarmResponse
+	143, // 242: machine.MachineService.EtcdDefragment:output_type -> machine.EtcdDefragmentResponse
+	145, // 243: machine.MachineService.EtcdStatus:output_type -> machine.EtcdStatusResponse
+	149, // 244: machine.MachineService.EtcdDowngradeValidate:output_type -> machine.EtcdDowngradeValidateResponse
+	152, // 245: machine.MachineService.EtcdDowngradeEnable:output_type -> machine.EtcdDowngradeEnableResponse
+	154, // 246: machine.MachineService.EtcdDowngradeCancel:output_type -> machine.EtcdDowngradeCancelResponse
+	99,  // 247: machine.MachineService.Hostname:output_type -> machine.HostnameResponse
+	201, // 248: machine.MachineService.Kubeconfig:output_type -> common.Data
+	201, // 249: machine.MachineService.NomadConfig:output_type -> common.Data
+	201, // 250: machine.MachineService.ConsulConfig:output_type -> common.Data
+	201, // 251: machine.MachineService.OpenBaoConfig:output_type -> common.Data
+	63,  // 252: machine.MachineService.List:output_type -> machine.FileInfo
+	65,  // 253: machine.MachineService.DiskUsage:output_type -> machine.DiskUsageInfo
+	101, // 254: machine.MachineService.LoadAvg:output_type -> machine.LoadAvgResponse
+	201, // 255: machine.MachineService.Logs:output_type -> common.Data
+	77,  // 256: machine.MachineService.LogsContainers:output_type -> machine.LogsContainersResponse
+	97,  // 257: machine.MachineService.Memory:output_type -> machine.MemoryResponse
+	67,  // 258: machine.MachineService.Mounts:output_type -> machine.MountsResponse
+	113, // 259: machine.MachineService.NetworkDeviceStats:output_type -> machine.NetworkDeviceStatsResponse
+	86,  // 260: machine.MachineService.Processes:output_type -> machine.ProcessesResponse
+	201, // 261: machine.MachineService.Read:output_type -> common.Data
+	20,  // 262: machine.MachineService.Reboot:output_type -> machine.RebootResponse
+	91,  // 263: machine.MachineService.Restart:output_type -> machine.RestartResponse
+	80,  // 264: machine.MachineService.Rollback:output_type -> machine.RollbackResponse
+	38,  // 265: machine.MachineService.Reset:output_type -> machine.ResetResponse
+	46,  // 266: machine.MachineService.ServiceList:output_type -> machine.ServiceListResponse
+	59,  // 267: machine.MachineService.ServiceRestart:output_type -> machine.ServiceRestartResponse
+	53,  // 268: machine.MachineService.ServiceStart:output_type -> machine.ServiceStartResponse
+	56,  // 269: machine.MachineService.ServiceStop:output_type -> machine.ServiceStopResponse
+	41,  // 270: machine.MachineService.Shutdown:output_type -> machine.ShutdownResponse
+	94,  // 271: machine.MachineService.Stats:output_type -> machine.StatsResponse
+	103, // 272: machine.MachineService.SystemStat:output_type -> machine.SystemStatResponse
+	44,  // 273: machine.MachineService.Upgrade:output_type -> machine.UpgradeResponse
+	70,  // 274: machine.MachineService.Version:output_type -> machine.VersionResponse
+	169, // 275: machine.MachineService.GenerateClientConfiguration:output_type -> machine.GenerateClientConfigurationResponse
+	201, // 276: machine.MachineService.PacketCapture:output_type -> common.Data
+	175, // 277: machine.MachineService.Netstat:output_type -> machine.NetstatResponse
+	178, // 278: machine.MachineService.MetaWrite:output_type -> machine.MetaWriteResponse
+	181, // 279: machine.MachineService.MetaDelete:output_type -> machine.MetaDeleteResponse
+	183, // 280: machine.MachineService.ImageList:output_type -> machine.ImageListResponse
+	186, // 281: machine.MachineService.ImagePull:output_type -> machine.ImagePullResponse
+	225, // [225:282] is the sub-list for method output_type
+	168, // [168:225] is the sub-list for method input_type
 	168, // [168:168] is the sub-list for extension type_name
 	168, // [168:168] is the sub-list for extension extendee
 	0,   // [0:168] is the sub-list for field type_name

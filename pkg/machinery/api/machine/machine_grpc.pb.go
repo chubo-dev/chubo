@@ -47,6 +47,9 @@ const (
 	MachineService_EtcdDowngradeCancel_FullMethodName         = "/machine.MachineService/EtcdDowngradeCancel"
 	MachineService_Hostname_FullMethodName                    = "/machine.MachineService/Hostname"
 	MachineService_Kubeconfig_FullMethodName                  = "/machine.MachineService/Kubeconfig"
+	MachineService_NomadConfig_FullMethodName                 = "/machine.MachineService/NomadConfig"
+	MachineService_ConsulConfig_FullMethodName                = "/machine.MachineService/ConsulConfig"
+	MachineService_OpenBaoConfig_FullMethodName               = "/machine.MachineService/OpenBaoConfig"
 	MachineService_List_FullMethodName                        = "/machine.MachineService/List"
 	MachineService_DiskUsage_FullMethodName                   = "/machine.MachineService/DiskUsage"
 	MachineService_LoadAvg_FullMethodName                     = "/machine.MachineService/LoadAvg"
@@ -138,6 +141,12 @@ type MachineServiceClient interface {
 	EtcdDowngradeCancel(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdDowngradeCancelResponse, error)
 	Hostname(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HostnameResponse, error)
 	Kubeconfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
+	// NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream).
+	NomadConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
+	// ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream).
+	ConsulConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
+	// OpenBaoConfig downloads an OpenBao/Vault CLI client configuration bundle (returned as a .tar.gz stream).
+	OpenBaoConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FileInfo], error)
 	DiskUsage(ctx context.Context, in *DiskUsageRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DiskUsageInfo], error)
 	LoadAvg(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*LoadAvgResponse, error)
@@ -479,9 +488,66 @@ func (c *machineServiceClient) Kubeconfig(ctx context.Context, in *emptypb.Empty
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type MachineService_KubeconfigClient = grpc.ServerStreamingClient[common.Data]
 
+func (c *machineServiceClient) NomadConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[6], MachineService_NomadConfig_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[emptypb.Empty, common.Data]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MachineService_NomadConfigClient = grpc.ServerStreamingClient[common.Data]
+
+func (c *machineServiceClient) ConsulConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[7], MachineService_ConsulConfig_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[emptypb.Empty, common.Data]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MachineService_ConsulConfigClient = grpc.ServerStreamingClient[common.Data]
+
+func (c *machineServiceClient) OpenBaoConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[8], MachineService_OpenBaoConfig_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[emptypb.Empty, common.Data]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MachineService_OpenBaoConfigClient = grpc.ServerStreamingClient[common.Data]
+
 func (c *machineServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FileInfo], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[6], MachineService_List_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[9], MachineService_List_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -500,7 +566,7 @@ type MachineService_ListClient = grpc.ServerStreamingClient[FileInfo]
 
 func (c *machineServiceClient) DiskUsage(ctx context.Context, in *DiskUsageRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DiskUsageInfo], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[7], MachineService_DiskUsage_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[10], MachineService_DiskUsage_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -529,7 +595,7 @@ func (c *machineServiceClient) LoadAvg(ctx context.Context, in *emptypb.Empty, o
 
 func (c *machineServiceClient) Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[8], MachineService_Logs_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[11], MachineService_Logs_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -598,7 +664,7 @@ func (c *machineServiceClient) Processes(ctx context.Context, in *emptypb.Empty,
 
 func (c *machineServiceClient) Read(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[9], MachineService_Read_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[12], MachineService_Read_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -757,7 +823,7 @@ func (c *machineServiceClient) GenerateClientConfiguration(ctx context.Context, 
 
 func (c *machineServiceClient) PacketCapture(ctx context.Context, in *PacketCaptureRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[10], MachineService_PacketCapture_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[13], MachineService_PacketCapture_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -807,7 +873,7 @@ func (c *machineServiceClient) MetaDelete(ctx context.Context, in *MetaDeleteReq
 // Deprecated: Do not use.
 func (c *machineServiceClient) ImageList(ctx context.Context, in *ImageListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ImageListResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[11], MachineService_ImageList_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[14], MachineService_ImageList_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -894,6 +960,12 @@ type MachineServiceServer interface {
 	EtcdDowngradeCancel(context.Context, *emptypb.Empty) (*EtcdDowngradeCancelResponse, error)
 	Hostname(context.Context, *emptypb.Empty) (*HostnameResponse, error)
 	Kubeconfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error
+	// NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream).
+	NomadConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error
+	// ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream).
+	ConsulConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error
+	// OpenBaoConfig downloads an OpenBao/Vault CLI client configuration bundle (returned as a .tar.gz stream).
+	OpenBaoConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error
 	List(*ListRequest, grpc.ServerStreamingServer[FileInfo]) error
 	DiskUsage(*DiskUsageRequest, grpc.ServerStreamingServer[DiskUsageInfo]) error
 	LoadAvg(context.Context, *emptypb.Empty) (*LoadAvgResponse, error)
@@ -1018,6 +1090,15 @@ func (UnimplementedMachineServiceServer) Hostname(context.Context, *emptypb.Empt
 }
 func (UnimplementedMachineServiceServer) Kubeconfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error {
 	return status.Error(codes.Unimplemented, "method Kubeconfig not implemented")
+}
+func (UnimplementedMachineServiceServer) NomadConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error {
+	return status.Error(codes.Unimplemented, "method NomadConfig not implemented")
+}
+func (UnimplementedMachineServiceServer) ConsulConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error {
+	return status.Error(codes.Unimplemented, "method ConsulConfig not implemented")
+}
+func (UnimplementedMachineServiceServer) OpenBaoConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error {
+	return status.Error(codes.Unimplemented, "method OpenBaoConfig not implemented")
 }
 func (UnimplementedMachineServiceServer) List(*ListRequest, grpc.ServerStreamingServer[FileInfo]) error {
 	return status.Error(codes.Unimplemented, "method List not implemented")
@@ -1515,6 +1596,39 @@ func _MachineService_Kubeconfig_Handler(srv interface{}, stream grpc.ServerStrea
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type MachineService_KubeconfigServer = grpc.ServerStreamingServer[common.Data]
+
+func _MachineService_NomadConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MachineServiceServer).NomadConfig(m, &grpc.GenericServerStream[emptypb.Empty, common.Data]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MachineService_NomadConfigServer = grpc.ServerStreamingServer[common.Data]
+
+func _MachineService_ConsulConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MachineServiceServer).ConsulConfig(m, &grpc.GenericServerStream[emptypb.Empty, common.Data]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MachineService_ConsulConfigServer = grpc.ServerStreamingServer[common.Data]
+
+func _MachineService_OpenBaoConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MachineServiceServer).OpenBaoConfig(m, &grpc.GenericServerStream[emptypb.Empty, common.Data]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type MachineService_OpenBaoConfigServer = grpc.ServerStreamingServer[common.Data]
 
 func _MachineService_List_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(ListRequest)
@@ -2219,6 +2333,21 @@ var MachineService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Kubeconfig",
 			Handler:       _MachineService_Kubeconfig_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "NomadConfig",
+			Handler:       _MachineService_NomadConfig_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "ConsulConfig",
+			Handler:       _MachineService_ConsulConfig_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "OpenBaoConfig",
+			Handler:       _MachineService_OpenBaoConfig_Handler,
 			ServerStreams: true,
 		},
 		{

@@ -66,6 +66,12 @@ service MachineService {
   rpc EtcdDowngradeCancel(google.protobuf.Empty) returns (EtcdDowngradeCancelResponse);
   rpc Hostname(google.protobuf.Empty) returns (HostnameResponse);
   rpc Kubeconfig(google.protobuf.Empty) returns (stream common.Data);
+  // NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream).
+  rpc NomadConfig(google.protobuf.Empty) returns (stream common.Data);
+  // ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream).
+  rpc ConsulConfig(google.protobuf.Empty) returns (stream common.Data);
+  // OpenBaoConfig downloads an OpenBao/Vault CLI client configuration bundle (returned as a .tar.gz stream).
+  rpc OpenBaoConfig(google.protobuf.Empty) returns (stream common.Data);
   rpc List(ListRequest) returns (stream FileInfo);
   rpc DiskUsage(DiskUsageRequest) returns (stream DiskUsageInfo);
   rpc LoadAvg(google.protobuf.Empty) returns (LoadAvgResponse);
