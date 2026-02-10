@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build !chuboos
+//go:build chuboos
 
 package secrets_test
 
@@ -24,13 +24,12 @@ func TestValidate(t *testing.T) {
 
 	var invalidBundle secrets.Bundle
 	require.NoError(t, yaml.Unmarshal(invalidSecrets, &invalidBundle))
-	require.EqualError(t, invalidBundle.Validate(), `6 errors occurred:
+	require.EqualError(t, invalidBundle.Validate(), `4 errors occurred:
 	* cluster.secret is required
 	* one of [secrets.secretboxencryptionsecret, secrets.aescbcencryptionsecret] is required
 	* trustdinfo is required
-	* certs.etcd is invalid: failed to parse PEM block
-	* certs.k8saggregator is required
 	* certs.os is invalid: unsupported key type: "CERTIFICATE"
 
 `)
 }
+
