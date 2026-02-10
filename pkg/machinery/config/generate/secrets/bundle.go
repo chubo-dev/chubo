@@ -202,62 +202,8 @@ func (bundle *Bundle) populate(versionContract *config.VersionContract) error {
 		bundle.Certs = &Certs{}
 	}
 
-	if bundle.Certs.Etcd == nil {
-		etcd, err := NewEtcdCA(bundle.Clock.Now(), versionContract)
-		if err != nil {
-			return err
-		}
-
-		bundle.Certs.Etcd = &x509.PEMEncodedCertificateAndKey{
-			Crt: etcd.CrtPEM,
-			Key: etcd.KeyPEM,
-		}
-	}
-
-	if bundle.Certs.K8s == nil {
-		kubernetesCA, err := NewKubernetesCA(bundle.Clock.Now(), versionContract)
-		if err != nil {
-			return err
-		}
-
-		bundle.Certs.K8s = &x509.PEMEncodedCertificateAndKey{
-			Crt: kubernetesCA.CrtPEM,
-			Key: kubernetesCA.KeyPEM,
-		}
-	}
-
-	if bundle.Certs.K8sAggregator == nil {
-		aggregatorCA, err := NewAggregatorCA(bundle.Clock.Now(), versionContract)
-		if err != nil {
-			return err
-		}
-
-		bundle.Certs.K8sAggregator = &x509.PEMEncodedCertificateAndKey{
-			Crt: aggregatorCA.CrtPEM,
-			Key: aggregatorCA.KeyPEM,
-		}
-	}
-
-	if bundle.Certs.K8sServiceAccount == nil {
-		if versionContract.UseRSAServiceAccountKey() {
-			serviceAccount, err := x509.NewRSAKey()
-			if err != nil {
-				return err
-			}
-
-			bundle.Certs.K8sServiceAccount = &x509.PEMEncodedKey{
-				Key: serviceAccount.KeyPEM,
-			}
-		} else {
-			serviceAccount, err := x509.NewECDSAKey()
-			if err != nil {
-				return err
-			}
-
-			bundle.Certs.K8sServiceAccount = &x509.PEMEncodedKey{
-				Key: serviceAccount.KeyPEM,
-			}
-		}
+	if err := bundle.populateKubernetesEtcd(versionContract); err != nil {
+		return err
 	}
 
 	if bundle.Certs.OS == nil {
@@ -413,34 +359,14 @@ func (bundle *Bundle) validateCerts() error {
 
 	var multiErr error
 
-	if bundle.Certs.Etcd == nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.etcd is required"))
-	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.Etcd); err != nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.etcd is invalid: %w", err))
-	}
-
-	if bundle.Certs.K8s == nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8s is required"))
-	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.K8s); err != nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8s is invalid: %w", err))
-	}
-
-	if bundle.Certs.K8sAggregator == nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8saggregator is required"))
-	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.K8sAggregator); err != nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8saggregator is invalid: %w", err))
+	if err := bundle.validateKubernetesEtcdCerts(); err != nil {
+		multiErr = multierror.Append(multiErr, err)
 	}
 
 	if bundle.Certs.OS == nil {
 		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.os is required"))
 	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.OS); err != nil {
 		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.os is invalid: %w", err))
-	}
-
-	if bundle.Certs.K8sServiceAccount == nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8sserviceaccount is required"))
-	} else if _, err := bundle.Certs.K8sServiceAccount.GetKey(); err != nil {
-		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8sserviceaccount.key is invalid: %w", err))
 	}
 
 	return multiErr
