@@ -25,6 +25,14 @@ EDK2_VARS_TEMPLATE="${EDK2_VARS_TEMPLATE:-/opt/homebrew/share/qemu/edk2-arm-vars
 HOST_PORT="${HOST_PORT:-50000}"
 DISK_SIZE="${DISK_SIZE:-10G}"
 
+# Optional: add a host-reachable NIC using QEMU's vmnet backend (macOS only).
+# This avoids slirp's "guest not reachable" limitation and enables runtime mTLS flows
+# against the guest IP (not `127.0.0.1`).
+VMNET_ENABLE="${VMNET_ENABLE:-0}"
+VMNET_MODE="${VMNET_MODE:-shared}"     # shared|bridged
+VMNET_IFACE="${VMNET_IFACE:-en0}"      # only used for bridged
+VMNET_MAC="${VMNET_MAC:-}"             # optional override (6-byte MAC)
+
 # Keep this on by default: after installation completes, the next boot from the "EFI dir" will halt
 # and prompt you to boot from the installed disk instead (prevents accidental "still on ISO" loops).
 HALT_IF_INSTALLED="${HALT_IF_INSTALLED:-1}"
@@ -71,6 +79,18 @@ EOF
 cp -f "${EDK2_VARS_TEMPLATE}" "${RUNDIR}/edk2-vars.fd"
 qemu-img create -f qcow2 "${RUNDIR}/disk.qcow2" "${DISK_SIZE}" >/dev/null
 
+if [[ "${VMNET_ENABLE}" -eq 1 && -z "${VMNET_MAC}" ]]; then
+  if command -v openssl >/dev/null 2>&1; then
+    suffix="$(openssl rand -hex 3)"
+  else
+    # Best-effort fallback: avoid hard failures if openssl isn't present.
+    suffix="$(date +%s%N | tail -c 7)"
+    suffix="$(printf "%06s" "${suffix}" | tr ' ' '0')"
+  fi
+
+  VMNET_MAC="52:54:00:${suffix:0:2}:${suffix:2:2}:${suffix:4:2}"
+fi
+
 cat <<EOF
 RUNDIR: ${RUNDIR}
 EFI dir drive: ${EFIDIR} (appears as /dev/vda inside the VM)
@@ -82,6 +102,40 @@ Apply config example (maintenance mode):
 
 NOTE: for this QEMU layout, set machine.install.disk to /dev/vdb (not /dev/vda).
 EOF
+
+if [[ "${VMNET_ENABLE}" -eq 1 ]]; then
+  cat <<EOF
+
+VMNet NIC enabled (${VMNET_MODE}, mac=${VMNET_MAC})
+- Guest will acquire a host-reachable IP via DHCP.
+- Find the guest IP on macOS:
+    arp -an | grep -i "${VMNET_MAC}"
+- For runtime mTLS flows, use the guest IP (not 127.0.0.1).
+EOF
+fi
+
+qemu_net_args=()
+
+if [[ "${VMNET_ENABLE}" -eq 1 ]]; then
+  case "${VMNET_MODE}" in
+  shared)
+    qemu_net_args+=(
+      -device virtio-net-pci,netdev=net1,mac="${VMNET_MAC}"
+      -netdev vmnet-shared,id=net1
+    )
+    ;;
+  bridged)
+    qemu_net_args+=(
+      -device virtio-net-pci,netdev=net1,mac="${VMNET_MAC}"
+      -netdev vmnet-bridged,id=net1,ifname="${VMNET_IFACE}"
+    )
+    ;;
+  *)
+    echo "unknown VMNET_MODE: ${VMNET_MODE} (expected shared|bridged)" >&2
+    exit 2
+    ;;
+  esac
+fi
 
 exec "${QEMU_BIN}" \
   -machine virt,accel="${QEMU_ACCEL}" \
@@ -96,4 +150,5 @@ exec "${QEMU_BIN}" \
   -drive if=virtio,format=qcow2,file="${RUNDIR}/disk.qcow2" \
   -device virtio-net-pci,netdev=net0 \
   -netdev user,id=net0,hostfwd=tcp::"${HOST_PORT}"-:50000 \
+  "${qemu_net_args[@]}" \
   -nographic
