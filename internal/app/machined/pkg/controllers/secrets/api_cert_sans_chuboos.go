@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build !chuboos
+//go:build chuboos
 
 package secrets
 
@@ -17,12 +17,15 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
 	"github.com/siderolabs/talos/pkg/machinery/resources/network"
 	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
 )
 
 // APICertSANsController manages secrets.APICertSANs based on configuration.
+//
+// Talos upstream uses a filtered NodeAddress resource (excluding Kubernetes pod/service CIDRs),
+// but `chuboos` has no Kubernetes stack and doesn't create that filter. Use the unfiltered
+// accumulative addresses so OS API cert generation can proceed.
 type APICertSANsController struct{}
 
 // Name implements controller.Controller interface.
@@ -31,8 +34,6 @@ func (ctrl *APICertSANsController) Name() string {
 }
 
 // Inputs implements controller.Controller interface.
-//
-//nolint:dupl
 func (ctrl *APICertSANsController) Inputs() []controller.Input {
 	return []controller.Input{
 		{
@@ -50,7 +51,7 @@ func (ctrl *APICertSANsController) Inputs() []controller.Input {
 		{
 			Namespace: network.NamespaceName,
 			Type:      network.NodeAddressType,
-			ID:        optional.Some(network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s)),
+			ID:        optional.Some(network.NodeAddressAccumulativeID),
 			Kind:      controller.InputWeak,
 		},
 	}
@@ -87,7 +88,7 @@ func (ctrl *APICertSANsController) Run(ctx context.Context, r controller.Runtime
 				continue
 			}
 
-			return fmt.Errorf("error getting root k8s secrets: %w", err)
+			return fmt.Errorf("error getting root secrets: %w", err)
 		}
 
 		apiRoot := apiRootRes.TypedSpec()
@@ -104,7 +105,7 @@ func (ctrl *APICertSANsController) Run(ctx context.Context, r controller.Runtime
 		hostnameStatus := hostnameResource.TypedSpec()
 
 		addressesResource, err := safe.ReaderGet[*network.NodeAddress](ctx, r,
-			resource.NewMetadata(network.NamespaceName, network.NodeAddressType, network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s), resource.VersionUndefined))
+			resource.NewMetadata(network.NamespaceName, network.NodeAddressType, network.NodeAddressAccumulativeID, resource.VersionUndefined))
 		if err != nil {
 			if state.IsNotFoundError(err) {
 				continue

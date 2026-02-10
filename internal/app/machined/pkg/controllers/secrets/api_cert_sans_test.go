@@ -59,6 +59,13 @@ func (suite *APICertSANsSuite) TestReconcileControlPlane() {
 	}
 	suite.Require().NoError(suite.State().Create(suite.Ctx(), nodeAddresses))
 
+	// `chuboos` uses the unfiltered accumulative addresses, while upstream uses
+	// the "no k8s" filtered variant. Create both so the test remains valid in
+	// either build.
+	nodeAddressesAll := network.NewNodeAddress(network.NamespaceName, network.NodeAddressAccumulativeID)
+	nodeAddressesAll.TypedSpec().Addresses = slices.Clone(nodeAddresses.TypedSpec().Addresses)
+	suite.Require().NoError(suite.State().Create(suite.Ctx(), nodeAddressesAll))
+
 	suite.AssertWithin(10*time.Second, 100*time.Millisecond, func() error {
 		certSANs, err := ctest.Get[*secrets.CertSAN](
 			suite,
