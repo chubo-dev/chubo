@@ -767,6 +767,7 @@ RUN <<END
     mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
     if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
         echo "chuboos: skipping Kubernetes directories"
+        rm -f /rootfs/opt/cni/bin/flannel
     else
         mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
     fi
@@ -860,6 +861,7 @@ RUN <<END
     mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
     if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
         echo "chuboos: skipping Kubernetes directories"
+        rm -f /rootfs/opt/cni/bin/flannel
     else
         mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
     fi
