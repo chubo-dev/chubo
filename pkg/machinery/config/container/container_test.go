@@ -177,6 +177,7 @@ func TestValidate(t *testing.T) {
 			},
 		},
 	}
+	applyChuboOSValidationDefaults(v1alpha1Cfg)
 
 	invalidV1alpha1Config := &v1alpha1.Config{}
 
@@ -267,6 +268,7 @@ func TestCrossValidateEncryption(t *testing.T) {
 			},
 		},
 	}
+	applyChuboOSValidationDefaults(v1alpha1Cfg)
 
 	defaultEphemeral := block.NewVolumeConfigV1Alpha1()
 	defaultEphemeral.MetaName = constants.EphemeralPartitionLabel

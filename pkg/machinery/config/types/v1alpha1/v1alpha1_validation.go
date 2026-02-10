@@ -80,6 +80,10 @@ type NetworkDeviceCheck func(*Device, map[string]string) ([]string, error)
 //
 //nolint:gocyclo,cyclop
 func (c *Config) Validate(mode validation.RuntimeMode, options ...validation.Option) ([]string, error) {
+	if isChuboOS() {
+		return c.validateChuboOS(mode, options...)
+	}
+
 	var (
 		warnings []string
 		result   *multierror.Error
@@ -954,6 +958,10 @@ func (e *EtcdConfig) Validate() error {
 //
 //nolint:gocyclo
 func (c *Config) RuntimeValidate(ctx context.Context, st state.State, mode validation.RuntimeMode, opt ...validation.Option) ([]string, error) {
+	if isChuboOS() {
+		return c.runtimeValidateChuboOS(ctx, st, mode, opt...)
+	}
+
 	var (
 		warnings []string
 		result   *multierror.Error

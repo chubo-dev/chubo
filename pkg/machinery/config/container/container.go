@@ -97,6 +97,10 @@ func New(documents ...config.Document) (*Container, error) {
 		}
 	}
 
+	if err := maybeSynthesizeChuboOSV1Alpha1(container); err != nil {
+		return nil, err
+	}
+
 	return container, nil
 }
 
