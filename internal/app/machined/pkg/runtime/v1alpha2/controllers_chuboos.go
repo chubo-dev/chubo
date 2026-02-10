@@ -14,6 +14,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block"
+	chuboctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/chubo"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/config"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/cri"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/files"
@@ -82,6 +83,7 @@ func (ctrl *Controller) controllers(
 		},
 		&config.MachineTypeController{},
 		&config.PersistenceController{},
+		&chuboctrl.BootstrapStatusController{},
 		// Installation uses containerd but relies on CRI resource controllers (image cache + registries)
 		// to unblock the installer sequence (see v1alpha1 Install task).
 		&cri.ImageCacheConfigController{
