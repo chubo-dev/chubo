@@ -7,6 +7,13 @@ package chuboos
 //docgen:jsonschema
 
 import (
+	"crypto/ed25519"
+	"crypto/sha256"
+	stdlibx509 "crypto/x509"
+	"encoding/base64"
+	"encoding/hex"
+	"encoding/json"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"net/url"
@@ -25,6 +32,16 @@ import (
 
 // MachineConfigKind is the `chuboos` minimal machine config document kind.
 const MachineConfigKind = "MachineConfig"
+
+const (
+	// ChuboBootstrapModeSignedPayload enables signed bootstrap payload ingestion.
+	//
+	// The payload is expected to be a JWS compact string using Ed25519 (alg=EdDSA).
+	ChuboBootstrapModeSignedPayload = "signedPayload"
+
+	// chuboBootstrapPayloadPath is where the verified bootstrap payload is written.
+	chuboBootstrapPayloadPath = "/var/lib/chubo/bootstrap/bootstrap.json"
+)
 
 // MachineConfigAPIVersion is the API version string for the minimal machine config.
 //
@@ -247,6 +264,45 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 		return nil, errors.New("spec.trust.ca.key is required")
 	}
 
+	// Chubo bootstrap (Phase 3): signed payload verification.
+	if s.Spec.Modules != nil && s.Spec.Modules.Chubo != nil {
+		enabled := s.Spec.Modules.Chubo.Enabled == nil || *s.Spec.Modules.Chubo.Enabled
+
+		if !enabled && s.Spec.Modules.Chubo.Bootstrap != nil {
+			return nil, errors.New("spec.modules.chubo.bootstrap is set but spec.modules.chubo.enabled is false")
+		}
+
+		if enabled && s.Spec.Modules.Chubo.Bootstrap != nil {
+			bootstrap := s.Spec.Modules.Chubo.Bootstrap
+			switch strings.TrimSpace(bootstrap.Mode) {
+			case "":
+				// no-op
+			case ChuboBootstrapModeSignedPayload:
+				if strings.TrimSpace(bootstrap.SignerCert) == "" {
+					return nil, errors.New("spec.modules.chubo.bootstrap.signerCert is required for signedPayload mode")
+				}
+
+				if strings.TrimSpace(bootstrap.Payload) == "" {
+					return nil, errors.New("spec.modules.chubo.bootstrap.payload is required for signedPayload mode")
+				}
+
+				decoded, fp, err := verifyChuboBootstrapJWS(strings.TrimSpace(bootstrap.Payload), bootstrap.SignerCert)
+				if err != nil {
+					return nil, fmt.Errorf("invalid chubo bootstrap payload: %w", err)
+				}
+
+				if !json.Valid(decoded) {
+					return nil, errors.New("chubo bootstrap payload is not valid JSON")
+				}
+
+				// fp is currently informational; keep it computed here to ensure the cert parses.
+				_ = fp
+			default:
+				return nil, fmt.Errorf("unknown spec.modules.chubo.bootstrap.mode %q", bootstrap.Mode)
+			}
+		}
+	}
+
 	// Basic registry mirror URL validation (best-effort, avoids surprising runtime errors).
 	if s.Spec.Registry != nil {
 		for host, mirror := range s.Spec.Registry.Mirrors {
@@ -323,6 +379,38 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 		}
 	}
 
+	// Chubo bootstrap: write the verified payload into /var so chubo-agent (or a future OS module)
+	// can consume it without adding a separate remote API surface.
+	if s.Spec.Modules != nil && s.Spec.Modules.Chubo != nil {
+		enabled := s.Spec.Modules.Chubo.Enabled == nil || *s.Spec.Modules.Chubo.Enabled
+
+		if enabled && s.Spec.Modules.Chubo.Bootstrap != nil && strings.TrimSpace(s.Spec.Modules.Chubo.Bootstrap.Mode) == ChuboBootstrapModeSignedPayload {
+			decoded, fp, err := verifyChuboBootstrapJWS(strings.TrimSpace(s.Spec.Modules.Chubo.Bootstrap.Payload), s.Spec.Modules.Chubo.Bootstrap.SignerCert)
+			if err != nil {
+				return nil, fmt.Errorf("invalid chubo bootstrap payload: %w", err)
+			}
+
+			if !json.Valid(decoded) {
+				return nil, errors.New("chubo bootstrap payload is not valid JSON")
+			}
+
+			cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+				FileContent:     string(decoded),
+				FilePermissions: v1alpha1.FileMode(0o600),
+				FilePath:        chuboBootstrapPayloadPath,
+				FileOp:          "create",
+			})
+
+			// Store signer fingerprint for debugging/auditing (not a trust anchor).
+			cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+				FileContent:     fp + "\n",
+				FilePermissions: v1alpha1.FileMode(0o644),
+				FilePath:        "/var/lib/chubo/bootstrap/signer.sha256",
+				FileOp:          "create",
+			})
+		}
+	}
+
 	// Registry mirrors (CRI config-only controllers still consume these in `chuboos` installer flows).
 	if s.Spec.Registry != nil && len(s.Spec.Registry.Mirrors) > 0 {
 		if cfg.MachineConfig.MachineRegistries.RegistryMirrors == nil {
@@ -367,3 +455,78 @@ func (s *MachineConfigV1Alpha1) NodeID() optional.Optional[string] {
 	return optional.Some(s.Metadata.ID)
 }
 
+type chuboBootstrapJWSHeader struct {
+	Alg string `json:"alg"`
+}
+
+func verifyChuboBootstrapJWS(jwsCompact string, signerCertPEM string) ([]byte, string, error) {
+	cert, pub, fp, err := parseSignerEd25519Cert(signerCertPEM)
+	if err != nil {
+		return nil, "", err
+	}
+
+	_ = cert // reserved for future chain/pinning logic
+
+	parts := strings.Split(jwsCompact, ".")
+	if len(parts) != 3 {
+		return nil, "", errors.New("payload must be a JWS compact string (<protected>.<payload>.<signature>)")
+	}
+
+	protectedRaw, err := base64.RawURLEncoding.DecodeString(parts[0])
+	if err != nil {
+		return nil, "", fmt.Errorf("invalid JWS protected header encoding: %w", err)
+	}
+
+	var header chuboBootstrapJWSHeader
+	if err := json.Unmarshal(protectedRaw, &header); err != nil {
+		return nil, "", fmt.Errorf("invalid JWS protected header JSON: %w", err)
+	}
+
+	if header.Alg != "EdDSA" {
+		return nil, "", fmt.Errorf("unsupported JWS alg %q (expected %q)", header.Alg, "EdDSA")
+	}
+
+	payloadRaw, err := base64.RawURLEncoding.DecodeString(parts[1])
+	if err != nil {
+		return nil, "", fmt.Errorf("invalid JWS payload encoding: %w", err)
+	}
+
+	sigRaw, err := base64.RawURLEncoding.DecodeString(parts[2])
+	if err != nil {
+		return nil, "", fmt.Errorf("invalid JWS signature encoding: %w", err)
+	}
+
+	signingInput := []byte(parts[0] + "." + parts[1])
+	if !ed25519.Verify(pub, signingInput, sigRaw) {
+		return nil, "", errors.New("invalid JWS signature")
+	}
+
+	return payloadRaw, fp, nil
+}
+
+func parseSignerEd25519Cert(pemStr string) (*stdlibx509.Certificate, ed25519.PublicKey, string, error) {
+	pemStr = strings.TrimSpace(pemStr)
+	if pemStr == "" {
+		return nil, nil, "", errors.New("signer cert is empty")
+	}
+
+	block, _ := pem.Decode([]byte(pemStr))
+	if block == nil || block.Type != "CERTIFICATE" {
+		return nil, nil, "", errors.New("signerCert must be a PEM-encoded CERTIFICATE")
+	}
+
+	cert, err := stdlibx509.ParseCertificate(block.Bytes)
+	if err != nil {
+		return nil, nil, "", fmt.Errorf("failed to parse signer certificate: %w", err)
+	}
+
+	pub, ok := cert.PublicKey.(ed25519.PublicKey)
+	if !ok {
+		return nil, nil, "", errors.New("signerCert public key must be Ed25519")
+	}
+
+	sum := sha256.Sum256(cert.Raw)
+	fp := hex.EncodeToString(sum[:])
+
+	return cert, pub, fp, nil
+}
