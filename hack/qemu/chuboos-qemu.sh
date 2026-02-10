@@ -11,7 +11,7 @@ set -euo pipefail
 # maintenance API to 127.0.0.1:$HOST_PORT (default 50000).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TALOS_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 cd "${TALOS_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chuboos}"
@@ -97,4 +97,3 @@ exec "${QEMU_BIN}" \
   -device virtio-net-pci,netdev=net0 \
   -netdev user,id=net0,hostfwd=tcp::"${HOST_PORT}"-:50000 \
   -nographic
-
