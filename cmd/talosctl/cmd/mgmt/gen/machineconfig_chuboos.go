@@ -1,0 +1,154 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+package gen
+
+import (
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+
+	"github.com/siderolabs/go-pointer"
+	"github.com/spf13/cobra"
+
+	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
+	"github.com/siderolabs/talos/pkg/machinery/config/types/chuboos"
+)
+
+var genMachineConfigFlags struct {
+	output        string
+	id            string
+	installDisk   string
+	installImage  string
+	wipe          bool
+	registryMirrors []string
+	withSecrets   string
+}
+
+func newMachineConfigCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "machineconfig",
+		Short: "Generate a minimal (non-Kubernetes) machine config for ChuboOS",
+		Long: `Generates a single YAML document:
+
+  apiVersion: chubo.dev/v1alpha1
+  kind: MachineConfig
+
+The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chuboos`" + ` build variant.
+`,
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			if genMachineConfigFlags.output == "" {
+				genMachineConfigFlags.output = stdoutOutput
+			}
+
+			var bundle *secrets.Bundle
+			var err error
+
+			switch strings.TrimSpace(genMachineConfigFlags.withSecrets) {
+			case "":
+				bundle, err = secrets.NewBundle(secrets.NewClock(), nil)
+				if err != nil {
+					return fmt.Errorf("failed to generate secrets bundle: %w", err)
+				}
+			default:
+				bundle, err = secrets.LoadBundle(genMachineConfigFlags.withSecrets)
+				if err != nil {
+					return fmt.Errorf("failed to load secrets bundle: %w", err)
+				}
+			}
+
+			if bundle.Certs == nil || bundle.Certs.OS == nil {
+				return errors.New("secrets bundle is missing OS CA (certs.os)")
+			}
+
+			if bundle.TrustdInfo == nil || strings.TrimSpace(bundle.TrustdInfo.Token) == "" {
+				return errors.New("secrets bundle is missing trustd token (trustdinfo.token)")
+			}
+
+			mc := chuboos.NewMachineConfigV1Alpha1()
+			mc.Metadata.ID = strings.TrimSpace(genMachineConfigFlags.id)
+
+			mc.Spec.Install = &chuboos.InstallSpec{
+				Disk:  strings.TrimSpace(genMachineConfigFlags.installDisk),
+				Image: strings.TrimSpace(genMachineConfigFlags.installImage),
+				Wipe:  pointer.To(genMachineConfigFlags.wipe),
+			}
+
+			// Keep Talos default NTP server unless explicitly overridden later.
+			mc.Spec.Time = &chuboos.TimeSpec{
+				Servers: []string{"time.cloudflare.com"},
+			}
+
+			mc.Spec.Trust = &chuboos.TrustSpec{
+				Token: bundle.TrustdInfo.Token,
+				CA: &chuboos.CASpec{
+					Crt: string(bundle.Certs.OS.Crt),
+					Key: string(bundle.Certs.OS.Key),
+				},
+			}
+
+			if len(genMachineConfigFlags.registryMirrors) > 0 {
+				mc.Spec.Registry = &chuboos.RegistrySpec{
+					Mirrors: map[string]chuboos.RegistryMirrorSpec{},
+				}
+
+				for _, spec := range genMachineConfigFlags.registryMirrors {
+					left, right, ok := strings.Cut(spec, "=")
+					if !ok {
+						return fmt.Errorf("invalid registry mirror spec: %q", spec)
+					}
+
+					host := strings.TrimSpace(left)
+					endpoint := strings.TrimSpace(right)
+
+					if host == "" || endpoint == "" {
+						return fmt.Errorf("invalid registry mirror spec: %q", spec)
+					}
+
+					m := mc.Spec.Registry.Mirrors[host]
+					m.Endpoints = append(m.Endpoints, endpoint)
+					mc.Spec.Registry.Mirrors[host] = m
+				}
+			}
+
+			out, err := encoder.NewEncoder(mc, encoder.WithComments(encoder.CommentsDisabled)).Encode()
+			if err != nil {
+				return err
+			}
+
+			if genMachineConfigFlags.output == stdoutOutput {
+				_, err = cmd.OutOrStdout().Write(out)
+				return err
+			}
+
+			if err := validateFileExists(genMachineConfigFlags.output); err != nil {
+				return err
+			}
+
+			if err := os.MkdirAll(filepath.Dir(genMachineConfigFlags.output), 0o755); err != nil {
+				return err
+			}
+
+			return os.WriteFile(genMachineConfigFlags.output, out, 0o600)
+		},
+	}
+
+	cmd.Flags().StringVarP(&genMachineConfigFlags.output, "output", "o", stdoutOutput, `output path, or "-" for stdout`)
+	cmd.Flags().StringVar(&genMachineConfigFlags.id, "id", "", "optional stable node id (metadata.id)")
+	cmd.Flags().StringVar(&genMachineConfigFlags.installDisk, "install-disk", "/dev/sda", "disk to install to")
+	cmd.Flags().StringVar(&genMachineConfigFlags.installImage, "install-image", "", "installer image to install from (leave empty if you set it via boot args)")
+	cmd.Flags().BoolVar(&genMachineConfigFlags.wipe, "wipe", true, "wipe the install disk before installing")
+	cmd.Flags().StringSliceVar(&genMachineConfigFlags.registryMirrors, "registry-mirror", nil, "registry mirrors in format: <registry host>=<mirror URL>")
+	cmd.Flags().StringVar(&genMachineConfigFlags.withSecrets, "with-secrets", "", "use a secrets file generated using 'gen secrets' (optional)")
+
+	return cmd
+}
+
+func init() {
+	Cmd.AddCommand(newMachineConfigCmd())
+}
