@@ -29,8 +29,7 @@ DISK_SIZE="${DISK_SIZE:-10G}"
 # This avoids slirp's "guest not reachable" limitation and enables runtime mTLS flows
 # against the guest IP (not `127.0.0.1`).
 VMNET_ENABLE="${VMNET_ENABLE:-0}"
-VMNET_MODE="${VMNET_MODE:-shared}"     # shared|bridged
-VMNET_IFACE="${VMNET_IFACE:-en0}"      # only used for bridged
+VMNET_MODE="${VMNET_MODE:-bridged}"    # bridged (via socket_vmnet)
 VMNET_MAC="${VMNET_MAC:-}"             # optional override (6-byte MAC)
 
 # Reuse a previous run directory to boot from the installed disk without re-installing.
@@ -134,28 +133,89 @@ fi
 
 qemu_net_args=()
 
+started_socket_vmnet=0
+
 if [[ "${VMNET_ENABLE}" -eq 1 ]]; then
   case "${VMNET_MODE}" in
-  shared)
-    qemu_net_args+=(
-      -device virtio-net-pci,netdev=net1,mac="${VMNET_MAC}"
-      -netdev vmnet-shared,id=net1
-    )
-    ;;
   bridged)
+    # Use socket_vmnet (same backend Lima uses) so QEMU itself doesn't need extra privileges.
+    # This relies on the standard Lima sudoers entry (NOPASSWD) for the exact command below.
+    VMNET_SOCKET="/private/var/run/lima/socket_vmnet.bridged"
+    VMNET_PIDFILE="/private/var/run/lima/bridged_socket_vmnet.pid"
+
+    socket_vmnet_running=0
+    if [[ -f "${VMNET_PIDFILE}" ]]; then
+      socket_vmnet_pid="$(cat "${VMNET_PIDFILE}" 2>/dev/null || true)"
+      if [[ -n "${socket_vmnet_pid}" ]] && ps -p "${socket_vmnet_pid}" -o comm= >/dev/null 2>&1; then
+        comm="$(ps -p "${socket_vmnet_pid}" -o comm= 2>/dev/null | tr -d '[:space:]')"
+        if [[ "${comm}" == "socket_vmnet" ]]; then
+          socket_vmnet_running=1
+        fi
+      fi
+    fi
+
+    if [[ "${socket_vmnet_running}" -eq 0 ]]; then
+      if ! sudo -n /bin/mkdir -m 775 -p /private/var/run/lima; then
+        cat >&2 <<EOF
+failed to create /private/var/run/lima (sudo required).
+
+Expected a NOPASSWD sudoers entry for socket_vmnet (same as Lima uses).
+EOF
+        exit 1
+      fi
+
+      if ! sudo -n /opt/socket_vmnet/bin/socket_vmnet \
+        --pidfile="${VMNET_PIDFILE}" \
+        --socket-group=admin \
+        --vmnet-mode=bridged \
+        --vmnet-interface=en0 \
+        "${VMNET_SOCKET}" >/tmp/chuboos-socket_vmnet.log 2>&1 & then
+        cat >&2 <<EOF
+failed to start socket_vmnet (sudo required).
+
+Expected a NOPASSWD sudoers entry for the exact socket_vmnet command. See:
+  /private/etc/sudoers.d/lima
+EOF
+        exit 1
+      fi
+
+      started_socket_vmnet=1
+
+      # Wait for the socket to appear.
+      for _ in $(seq 1 50); do
+        if [[ -S "${VMNET_SOCKET}" ]]; then
+          break
+        fi
+        sleep 0.1
+      done
+
+      if [[ ! -S "${VMNET_SOCKET}" ]]; then
+        echo "failed to start socket_vmnet (see /tmp/chuboos-socket_vmnet.log)" >&2
+        exit 1
+      fi
+    fi
+
     qemu_net_args+=(
       -device virtio-net-pci,netdev=net1,mac="${VMNET_MAC}"
-      -netdev vmnet-bridged,id=net1,ifname="${VMNET_IFACE}"
+      -netdev stream,id=net1,server=off,addr.type=unix,addr.path="${VMNET_SOCKET}"
     )
     ;;
   *)
-    echo "unknown VMNET_MODE: ${VMNET_MODE} (expected shared|bridged)" >&2
+    echo "unknown VMNET_MODE: ${VMNET_MODE} (expected bridged)" >&2
     exit 2
     ;;
   esac
 fi
 
 qemu_disk_args=()
+
+cleanup() {
+  if [[ "${started_socket_vmnet}" -eq 1 ]]; then
+    sudo -n /usr/bin/pkill -F /private/var/run/lima/bridged_socket_vmnet.pid >/dev/null 2>&1 || true
+  fi
+}
+
+trap cleanup EXIT
 
 if [[ "${BOOT_FROM_DISK}" -eq 0 ]]; then
   cat <<EOF
@@ -183,7 +243,7 @@ EOF
   )
 fi
 
-exec "${QEMU_BIN}" \
+"${QEMU_BIN}" \
   -machine virt,accel="${QEMU_ACCEL}" \
   -cpu host \
   -smp 4 \
