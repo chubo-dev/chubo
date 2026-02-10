@@ -51,3 +51,22 @@ if [[ -n "${matches}" ]]; then
 fi
 
 echo "OK: no kube/etcd/flannel artifacts found in rootfs"
+
+# Extra guardrail: ensure the main OS binary (machined, installed as /usr/bin/init)
+# does not link Kubernetes/etcd client libraries in the `chuboos` build.
+#
+# We check Go module build info instead of symbols, since binaries are stripped (-s -w).
+
+init_mods="$(docker run --rm -v "${tmpdir}":/work -w /work "${TOOLS_IMAGE}" sh -lc \
+  'unsquashfs -cat rootfs.sqsh usr/bin/init > /tmp/chuboos-init && go version -m /tmp/chuboos-init' \
+)"
+
+forbidden_mods="$(printf '%s\n' "${init_mods}" | grep -E '^dep (k8s\\.io/|go\\.etcd\\.io/)' || true)"
+
+if [[ -n "${forbidden_mods}" ]]; then
+  echo "FAIL: init binary links forbidden modules:"
+  echo "${forbidden_mods}"
+  exit 1
+fi
+
+echo "OK: init binary doesn't link k8s.io/go.etcd.io modules"
