@@ -148,6 +148,7 @@ if [[ "${VMNET_ENABLE}" -eq 1 ]]; then
       socket_vmnet_pid="$(cat "${VMNET_PIDFILE}" 2>/dev/null || true)"
       if [[ -n "${socket_vmnet_pid}" ]] && ps -p "${socket_vmnet_pid}" -o comm= >/dev/null 2>&1; then
         comm="$(ps -p "${socket_vmnet_pid}" -o comm= 2>/dev/null | tr -d '[:space:]')"
+        comm="${comm##*/}" # macOS `ps` often returns the full path here
         if [[ "${comm}" == "socket_vmnet" ]]; then
           socket_vmnet_running=1
         fi
