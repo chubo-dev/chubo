@@ -13,6 +13,9 @@ IMAGE_TAG_OUT ?= $(TAG)$(TAG_SUFFIX_OUT)
 BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 REGISTRY_AND_USERNAME := $(IMAGE_REGISTRY)/$(USERNAME)
 NAME = Talos
+CRANE ?= crane
+# Optional flags for CRANE, e.g. `CRANE_FLAGS=--insecure` for a local HTTP registry.
+CRANE_FLAGS ?=
 
 CLOUD_IMAGES_EXTRA_ARGS ?= ""
 ZSTD_COMPRESSION_LEVEL ?= 18
@@ -468,11 +471,11 @@ installer: ## Builds the installer and outputs it to the artifact directory.
 	@crane_args=""
 	@for platform in $(subst $(,),$(space),$(PLATFORM)); do \
 		arch=$$(basename "$${platform}") && \
-		image=$$(crane push $(ARTIFACTS)/installer-$${arch}.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-$${arch}) && \
+		image=$$($(CRANE) $(CRANE_FLAGS) push $(ARTIFACTS)/installer-$${arch}.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-$${arch}) && \
 		crane_args="$${crane_args} -m $${image}" && \
 		rm -f $(ARTIFACTS)/installer-$${arch}.tar ; \
 	done; \
-	crane index append -t "${REGISTRY_AND_USERNAME}/installer:${IMAGE_TAG_OUT}" $${crane_args}
+	$(CRANE) $(CRANE_FLAGS) index append -t "${REGISTRY_AND_USERNAME}/installer:${IMAGE_TAG_OUT}" $${crane_args}
 	@echo "${REGISTRY_AND_USERNAME}/installer:${IMAGE_TAG_OUT}" > $(ARTIFACTS)/installer_image
 
 
@@ -481,7 +484,7 @@ secureboot-installer: ## Builds UEFI only installer which uses UKI and push it t
 	@$(MAKE) image-secureboot-installer IMAGER_ARGS="--base-installer-image $(REGISTRY_AND_USERNAME)/installer-base:$(IMAGE_TAG_IN) $(IMAGER_ARGS)"
 	@for platform in $(subst $(,),$(space),$(PLATFORM)); do \
 		arch=$$(basename "$${platform}") && \
-		crane push $(ARTIFACTS)/installer-$${arch}-secureboot.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-$${arch}-secureboot && \
+		$(CRANE) $(CRANE_FLAGS) push $(ARTIFACTS)/installer-$${arch}-secureboot.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-$${arch}-secureboot && \
 		rm -f $(ARTIFACTS)/installer-$${arch}-secureboot.tar ; \
 	done
 
@@ -519,7 +522,7 @@ integration-images-list: ## Generate list of integration images.
 cache-create: installer imager integration-images-list ## Generate image cache.
 	@cat $(ARTIFACTS)/integration-images.txt | \
 		$(TALOSCTL_EXECUTABLE) images cache-create --image-cache-path=/tmp/cache.tar --images=- --force
-	@crane push /tmp/cache.tar $(REGISTRY_AND_USERNAME)/image-cache:$(IMAGE_TAG_OUT)
+	@$(CRANE) $(CRANE_FLAGS) push /tmp/cache.tar $(REGISTRY_AND_USERNAME)/image-cache:$(IMAGE_TAG_OUT)
 	@$(MAKE) image-iso IMAGER_ARGS="--image-cache=$(REGISTRY_AND_USERNAME)/image-cache:$(IMAGE_TAG_OUT) --extra-kernel-arg='console=ttyS0'"
 
 # Code Quality
@@ -629,7 +632,7 @@ provision-tests-track-%:
 installer-with-extensions: $(ARTIFACTS)/extensions/_out/extensions-metadata
 	$(MAKE) image-installer \
 		IMAGER_ARGS="--base-installer-image=$(REGISTRY_AND_USERNAME)/installer-base:$(IMAGE_TAG_IN) $(shell cat $(ARTIFACTS)/extensions/_out/extensions-metadata | $(EXTENSIONS_FILTER_COMMAND) | xargs -n 1 echo --system-extension-image)"
-	crane push $(ARTIFACTS)/installer-amd64.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-amd64-extensions
+	$(CRANE) $(CRANE_FLAGS) push $(ARTIFACTS)/installer-amd64.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-amd64-extensions
 	INSTALLER_IMAGE_EXTENSIONS="$(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-amd64-extensions" yq eval -n '.machine.install.image = strenv(INSTALLER_IMAGE_EXTENSIONS)' > $(ARTIFACTS)/installer-extensions-patch.yaml
 
 kubelet-fat-patch:
@@ -691,7 +694,7 @@ clean: ## Cleans up all artifacts.
 
 .PHONY: image-list
 image-list: ## Prints a list of all images built by this Makefile with digests.
-	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$(crane digest {})'
+	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
 
 $(ARTIFACTS)/image-signer: $(ARTIFACTS) ## Downloads image-signer binary
 	@curl -sSL https://github.com/siderolabs/go-tools/releases/download/$(IMAGE_SIGNER_RELEASE)/image-signer-$(OPERATING_SYSTEM)-$(ARCH) -o $(ARTIFACTS)/image-signer
