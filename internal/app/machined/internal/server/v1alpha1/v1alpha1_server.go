@@ -20,6 +20,7 @@ import (
 	"io/fs"
 	"log"
 	"net"
+	"net/netip"
 	"os"
 	"path/filepath"
 	"slices"
@@ -51,6 +52,7 @@ import (
 	"golang.org/x/sys/unix"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
@@ -1301,7 +1303,45 @@ func (s *Server) routedNodeIP(ctx context.Context) (string, error) {
 		return "", status.Errorf(codes.FailedPrecondition, "no routed node addresses found")
 	}
 
+	// `proxyfrom` metadata is populated by apid from the original :authority
+	// header. If that authority matches one of the routed node addresses,
+	// prefer it so helper bundles advertise the client-reachable API path
+	// (for example vmnet/bridged IP over QEMU slirp NAT).
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if preferred, ok := preferredRoutedNodeIP(ips, md.Get("proxyfrom")); ok {
+			return preferred.String(), nil
+		}
+	}
+
 	return ips[0].String(), nil
+}
+
+func preferredRoutedNodeIP(ips []netip.Addr, authorities []string) (netip.Addr, bool) {
+	for _, authority := range authorities {
+		host := strings.TrimSpace(authority)
+		if host == "" || host == "unknown" {
+			continue
+		}
+
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
+
+		host = strings.Trim(host, "[]")
+
+		addr, err := netip.ParseAddr(host)
+		if err != nil {
+			continue
+		}
+
+		for _, ip := range ips {
+			if ip == addr {
+				return ip, true
+			}
+		}
+	}
+
+	return netip.Addr{}, false
 }
 
 type tarGzFile struct {

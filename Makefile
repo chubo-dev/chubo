@@ -581,6 +581,10 @@ chuboos-e2e-qemu: ## Runs chuboos core E2E in QEMU (install, runtime mTLS, upgra
 chuboos-e2e-docker: ## Runs chuboos non-root local fallback E2E in Docker provisioner (runtime + support bundle).
 	@./hack/chuboos/e2e-core-docker.sh
 
+.PHONY: chuboos-e2e-helper-bundles-qemu
+chuboos-e2e-helper-bundles-qemu: ## Runs one-command local QEMU smoke for nomad/consul/openbao helper bundles.
+	@./hack/chuboos/e2e-helper-bundles-qemu.sh
+
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
 
