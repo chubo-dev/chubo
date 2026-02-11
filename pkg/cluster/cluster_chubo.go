@@ -1,4 +1,4 @@
-//go:build !chubo
+//go:build chubo
 
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -16,10 +16,7 @@ import (
 
 	"github.com/siderolabs/gen/maps"
 	"github.com/siderolabs/gen/xslices"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 
-	k8s "github.com/siderolabs/talos/pkg/kubernetes"
 	"github.com/siderolabs/talos/pkg/machinery/client"
 	"github.com/siderolabs/talos/pkg/machinery/config/machine"
 )
@@ -35,14 +32,10 @@ type ClientProvider interface {
 	Close() error
 }
 
-// K8sProvider builds Kubernetes client to access Talos cluster.
-type K8sProvider interface {
-	Kubeconfig(ctx context.Context) ([]byte, error)
-	K8sRestConfig(ctx context.Context) (*rest.Config, error)
-	K8sClient(ctx context.Context) (*kubernetes.Clientset, error)
-	K8sHelper(ctx context.Context) (*k8s.Client, error)
-	K8sClose() error
-}
+// K8sProvider is intentionally empty in chubo builds.
+//
+// Chubo runtime flows avoid Kubernetes client integrations.
+type K8sProvider interface{}
 
 // CrashDumper captures Talos cluster state to the specified writer for debugging.
 type CrashDumper interface {

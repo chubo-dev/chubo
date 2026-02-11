@@ -1,4 +1,4 @@
-//go:build !chubo
+//go:build chubo
 
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -15,7 +15,6 @@ import (
 // Adapter provides cluster access via provision.Cluster.
 type Adapter struct {
 	cluster.ConfigClientProvider
-	cluster.KubernetesClient
 	cluster.APIBootstrapper
 	cluster.Info
 	cluster.ApplyConfigClient
@@ -70,10 +69,6 @@ func NewAdapter(clusterInfo provision.Cluster, opts ...provision.Option) *Adapte
 
 	return &Adapter{
 		ConfigClientProvider: configProvider,
-		KubernetesClient: cluster.KubernetesClient{
-			ClientProvider: &configProvider,
-			ForceEndpoint:  options.KubernetesEndpoint,
-		},
 		APIBootstrapper: cluster.APIBootstrapper{
 			ClientProvider: &configProvider,
 			Info:           infoW,
