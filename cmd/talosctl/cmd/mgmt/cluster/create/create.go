@@ -10,14 +10,12 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 	"time"
 
 	"github.com/hashicorp/go-getter/v2"
 
 	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
-	"github.com/siderolabs/talos/pkg/cluster/check"
 	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
 	"github.com/siderolabs/talos/pkg/provision"
 	"github.com/siderolabs/talos/pkg/provision/access"
@@ -157,38 +155,4 @@ func postCreate(
 	}
 
 	return bootstrapCluster(ctx, clusterAccess, cOps)
-}
-
-func bootstrapCluster(ctx context.Context, clusterAccess *access.Adapter, cOps clusterops.Common) error {
-	if !cOps.WithInitNode {
-		if err := clusterAccess.Bootstrap(ctx, os.Stdout); err != nil {
-			return fmt.Errorf("bootstrap error: %w", err)
-		}
-	}
-
-	if !cOps.ClusterWait {
-		return nil
-	}
-
-	// Run cluster readiness checks
-	checkCtx, checkCtxCancel := context.WithTimeout(ctx, cOps.ClusterWaitTimeout)
-	defer checkCtxCancel()
-
-	checks := check.DefaultClusterChecks()
-
-	if cOps.SkipK8sNodeReadinessCheck {
-		checks = slices.Concat(check.PreBootSequenceChecks(), check.K8sComponentsReadinessChecks())
-	}
-
-	checks = slices.Concat(checks, check.ExtraClusterChecks())
-
-	if err := check.Wait(checkCtx, clusterAccess, checks, check.StderrReporter()); err != nil {
-		return err
-	}
-
-	if cOps.SkipKubeconfig {
-		return nil
-	}
-
-	return mergeKubeconfig(ctx, clusterAccess)
 }
