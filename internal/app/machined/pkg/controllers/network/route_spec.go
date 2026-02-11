@@ -6,6 +6,7 @@ package network
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/netip"
 
@@ -164,6 +165,51 @@ func findMatchingRoutes(existingRoutes []rtnetlink.RouteMessage, expected *netwo
 	return result
 }
 
+func routeMatchesSpec(existing *rtnetlink.RouteMessage, expected *network.RouteSpecSpec, linkIndex uint32) bool {
+	var existingMTU uint32
+
+	if existing.Attributes.Metrics != nil {
+		existingMTU = existing.Attributes.Metrics.MTU
+	}
+
+	return existing.Scope == uint8(expected.Scope) &&
+		nethelpers.RouteFlags(existing.Flags).Equal(expected.Flags) &&
+		existing.Protocol == uint8(expected.Protocol) &&
+		existing.Attributes.OutIface == linkIndex &&
+		(value.IsZero(expected.Source) || existing.Attributes.Src.Equal(expected.Source.AsSlice())) &&
+		existingMTU == expected.MTU
+}
+
+// hasDefaultRoutePriorityCollision checks if there is already a default route with
+// the same table and priority. Linux rejects adding another route in that case.
+func hasDefaultRoutePriorityCollision(existingRoutes []rtnetlink.RouteMessage, expected *network.RouteSpecSpec) bool {
+	if !value.IsZero(expected.Destination) {
+		return false
+	}
+
+	for _, route := range existingRoutes {
+		if route.Family != uint8(expected.Family) {
+			continue
+		}
+
+		if nethelpers.RoutingTable(route.Table) != expected.Table {
+			continue
+		}
+
+		if route.DstLength != 0 || len(route.Attributes.Dst) != 0 {
+			continue
+		}
+
+		if route.Attributes.Priority != expected.Priority {
+			continue
+		}
+
+		return true
+	}
+
+	return false
+}
+
 //nolint:gocyclo,cyclop
 func (ctrl *RouteSpecController) syncRoute(ctx context.Context, r controller.Runtime, logger *zap.Logger, conn *rtnetlink.Conn,
 	links []rtnetlink.LinkMessage, routes []rtnetlink.RouteMessage, route *network.RouteSpec,
@@ -216,19 +262,8 @@ func (ctrl *RouteSpecController) syncRoute(ctx context.Context, r controller.Run
 		matchFound := false
 
 		for _, existing := range findMatchingRoutes(routes, route.TypedSpec()) {
-			var existingMTU uint32
-
-			if existing.Attributes.Metrics != nil {
-				existingMTU = existing.Attributes.Metrics.MTU
-			}
-
 			// check if existing route matches the spec: if it does, skip update
-			if existing.Scope == uint8(route.TypedSpec().Scope) && nethelpers.RouteFlags(existing.Flags).Equal(route.TypedSpec().Flags) &&
-				existing.Protocol == uint8(route.TypedSpec().Protocol) &&
-				existing.Attributes.OutIface == linkIndex &&
-				(value.IsZero(route.TypedSpec().Source) ||
-					existing.Attributes.Src.Equal(route.TypedSpec().Source.AsSlice())) &&
-				existingMTU == route.TypedSpec().MTU {
+			if routeMatchesSpec(existing, route.TypedSpec(), linkIndex) {
 				matchFound = true
 
 				continue
@@ -291,6 +326,34 @@ func (ctrl *RouteSpecController) syncRoute(ctx context.Context, r controller.Run
 		}
 
 		if err := conn.Route.Add(msg); err != nil {
+			if errors.Is(err, unix.EEXIST) {
+				// Re-list routes first to avoid failing on races where the route was added concurrently.
+				updatedRoutes, listErr := conn.Route.List()
+				if listErr == nil {
+					for _, existing := range findMatchingRoutes(updatedRoutes, route.TypedSpec()) {
+						if routeMatchesSpec(existing, route.TypedSpec(), linkIndex) {
+							return nil
+						}
+					}
+
+					// If two DHCP interfaces produce default routes with the same metric,
+					// Linux rejects the second route as EEXIST. Treat that as converged to
+					// avoid restart loops in the controller.
+					if hasDefaultRoutePriorityCollision(updatedRoutes, route.TypedSpec()) {
+						logger.Debug("skipping default route due to metric collision",
+							zap.String("destination", destinationStr),
+							zap.String("gateway", gatewayStr),
+							zap.Stringer("table", route.TypedSpec().Table),
+							zap.String("link", route.TypedSpec().OutLinkName),
+							zap.Uint32("priority", route.TypedSpec().Priority),
+							zap.Stringer("family", route.TypedSpec().Family),
+						)
+
+						return nil
+					}
+				}
+			}
+
 			return fmt.Errorf("error adding route: %w, message %+v", err, *msg)
 		}
 
