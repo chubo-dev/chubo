@@ -31,6 +31,7 @@ const (
 	openGyozaBinaryPath = "/var/lib/chubo/bin/opengyoza"
 	openGyozaConfigPath = "/var/lib/chubo/config/opengyoza.hcl"
 	openGyozaDataDir    = "/var/lib/chubo/opengyoza"
+	openGyozaFallback   = "/usr/bin/init"
 )
 
 var _ system.HealthcheckedService = (*OpenGyoza)(nil)
@@ -45,11 +46,21 @@ func (s *OpenGyoza) ID(runtime.Runtime) string {
 
 // PreFunc implements the Service interface.
 func (s *OpenGyoza) PreFunc(context.Context, runtime.Runtime) error {
+	if err := os.MkdirAll(filepath.Dir(openGyozaBinaryPath), 0o755); err != nil {
+		return err
+	}
+
 	if err := os.MkdirAll(filepath.Dir(openGyozaConfigPath), 0o755); err != nil {
 		return err
 	}
 
-	return os.MkdirAll(openGyozaDataDir, 0o700)
+	if err := os.MkdirAll(openGyozaDataDir, 0o700); err != nil {
+		return err
+	}
+
+	// Until real artifacts are installed, boot with a fallback executable (machined binary)
+	// which dispatches to the opengyoza mock mode by argv0.
+	return ensureServiceBinary(openGyozaBinaryPath, openGyozaFallback)
 }
 
 // PostFunc implements the Service interface.
@@ -62,7 +73,6 @@ func (s *OpenGyoza) Condition(r runtime.Runtime) conditions.Condition {
 	return conditions.WaitForAll(
 		timeresource.NewSyncCondition(r.State().V1Alpha2().Resources()),
 		network.NewReadyCondition(r.State().V1Alpha2().Resources(), network.AddressReady, network.HostnameReady),
-		conditions.WaitForFileToExist(openGyozaBinaryPath),
 		conditions.WaitForFileToExist(openGyozaConfigPath),
 	)
 }

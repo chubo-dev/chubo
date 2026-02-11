@@ -6,6 +6,8 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -31,6 +33,7 @@ const (
 	openWontonBinaryPath = "/var/lib/chubo/bin/openwonton"
 	openWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
 	openWontonDataDir    = "/var/lib/chubo/openwonton"
+	openWontonFallback   = "/usr/bin/init"
 )
 
 var _ system.HealthcheckedService = (*OpenWonton)(nil)
@@ -45,11 +48,21 @@ func (s *OpenWonton) ID(runtime.Runtime) string {
 
 // PreFunc implements the Service interface.
 func (s *OpenWonton) PreFunc(context.Context, runtime.Runtime) error {
+	if err := os.MkdirAll(filepath.Dir(openWontonBinaryPath), 0o755); err != nil {
+		return err
+	}
+
 	if err := os.MkdirAll(filepath.Dir(openWontonConfigPath), 0o755); err != nil {
 		return err
 	}
 
-	return os.MkdirAll(openWontonDataDir, 0o700)
+	if err := os.MkdirAll(openWontonDataDir, 0o700); err != nil {
+		return err
+	}
+
+	// Until real artifacts are installed, boot with a fallback executable (machined binary)
+	// which dispatches to the openwonton mock mode by argv0.
+	return ensureServiceBinary(openWontonBinaryPath, openWontonFallback)
 }
 
 // PostFunc implements the Service interface.
@@ -62,7 +75,6 @@ func (s *OpenWonton) Condition(r runtime.Runtime) conditions.Condition {
 	return conditions.WaitForAll(
 		timeresource.NewSyncCondition(r.State().V1Alpha2().Resources()),
 		network.NewReadyCondition(r.State().V1Alpha2().Resources(), network.AddressReady, network.HostnameReady),
-		conditions.WaitForFileToExist(openWontonBinaryPath),
 		conditions.WaitForFileToExist(openWontonConfigPath),
 	)
 }
@@ -139,4 +151,40 @@ func (s *OpenWonton) APIStartAllowed(runtime.Runtime) bool {
 // APIStopAllowed implements APIStoppableService.
 func (s *OpenWonton) APIStopAllowed(runtime.Runtime) bool {
 	return true
+}
+
+func ensureServiceBinary(targetPath string, fallbackPath string) error {
+	if st, err := os.Stat(targetPath); err == nil {
+		if st.Mode()&0o111 == 0 {
+			return os.Chmod(targetPath, 0o755)
+		}
+
+		return nil
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+
+	src, err := os.Open(fallbackPath)
+	if err != nil {
+		return fmt.Errorf("failed to open fallback binary %q: %w", fallbackPath, err)
+	}
+
+	defer src.Close() //nolint:errcheck
+
+	dst, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
+	if err != nil {
+		return fmt.Errorf("failed to create service binary %q: %w", targetPath, err)
+	}
+
+	if _, err := io.Copy(dst, src); err != nil {
+		_ = dst.Close()
+
+		return fmt.Errorf("failed to copy fallback binary to %q: %w", targetPath, err)
+	}
+
+	if err := dst.Close(); err != nil {
+		return fmt.Errorf("failed to finalize service binary %q: %w", targetPath, err)
+	}
+
+	return nil
 }

@@ -35,6 +35,8 @@ import (
 	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
 	"github.com/siderolabs/talos/internal/app/maintenance"
+	"github.com/siderolabs/talos/internal/app/opengyoza"
+	"github.com/siderolabs/talos/internal/app/openwonton"
 	"github.com/siderolabs/talos/internal/app/poweroff"
 	"github.com/siderolabs/talos/internal/app/trustd"
 	"github.com/siderolabs/talos/internal/pkg/mount/v3"
@@ -329,6 +331,14 @@ func main() {
 		return
 	case "dashboard":
 		dashboard.Main()
+
+		return
+	case "openwonton":
+		openwonton.Main()
+
+		return
+	case "opengyoza":
+		opengyoza.Main()
 
 		return
 	default:
