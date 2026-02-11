@@ -1,0 +1,92 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+package chubo
+
+import (
+	"github.com/cosi-project/runtime/pkg/resource"
+	"github.com/cosi-project/runtime/pkg/resource/meta"
+	"github.com/cosi-project/runtime/pkg/resource/protobuf"
+	"github.com/cosi-project/runtime/pkg/resource/typed"
+
+	"github.com/siderolabs/talos/pkg/machinery/proto"
+)
+
+// OpenGyozaStatusType is the type of OpenGyozaStatus resource.
+const OpenGyozaStatusType = resource.Type("OpenGyozaStatuses.chubo.dev")
+
+// OpenGyozaStatusID is the single ID for the OpenGyozaStatus resource.
+const OpenGyozaStatusID = resource.ID("opengyoza")
+
+// OpenGyozaStatus reports the state of the OS-managed opengyoza service.
+type OpenGyozaStatus = typed.Resource[OpenGyozaStatusSpec, OpenGyozaStatusExtension]
+
+// OpenGyozaStatusSpec describes opengyoza status.
+//
+//gotagsrewrite:gen
+type OpenGyozaStatusSpec struct {
+	// Configured indicates whether machine config requested opengyoza.
+	Configured bool `yaml:"configured" protobuf:"1"`
+	// Role is the requested service role (server|client).
+	Role string `yaml:"role,omitempty" protobuf:"2"`
+	// Running reflects v1alpha1 service running state.
+	Running bool `yaml:"running" protobuf:"3"`
+	// Healthy reflects v1alpha1 service health state.
+	Healthy bool `yaml:"healthy" protobuf:"4"`
+}
+
+// DeepCopy generates a deep copy of OpenGyozaStatusSpec.
+func (o OpenGyozaStatusSpec) DeepCopy() OpenGyozaStatusSpec {
+	return o
+}
+
+// NewOpenGyozaStatus initializes an OpenGyozaStatus resource.
+func NewOpenGyozaStatus() *OpenGyozaStatus {
+	return typed.NewResource[OpenGyozaStatusSpec, OpenGyozaStatusExtension](
+		resource.NewMetadata(NamespaceName, OpenGyozaStatusType, OpenGyozaStatusID, resource.VersionUndefined),
+		OpenGyozaStatusSpec{},
+	)
+}
+
+// OpenGyozaStatusExtension provides auxiliary methods for OpenGyozaStatus.
+type OpenGyozaStatusExtension struct{}
+
+// ResourceDefinition implements [typed.Extension] interface.
+func (OpenGyozaStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
+	return meta.ResourceDefinitionSpec{
+		Type: OpenGyozaStatusType,
+		Aliases: []resource.Type{
+			"opengyozastatus",
+			"opengyoza",
+		},
+		DefaultNamespace: NamespaceName,
+		PrintColumns: []meta.PrintColumn{
+			{
+				Name:     "Configured",
+				JSONPath: `{.configured}`,
+			},
+			{
+				Name:     "Role",
+				JSONPath: `{.role}`,
+			},
+			{
+				Name:     "Running",
+				JSONPath: `{.running}`,
+			},
+			{
+				Name:     "Healthy",
+				JSONPath: `{.healthy}`,
+			},
+		},
+	}
+}
+
+func init() {
+	proto.RegisterDefaultTypes()
+
+	err := protobuf.RegisterDynamic[OpenGyozaStatusSpec](OpenGyozaStatusType, &OpenGyozaStatus{})
+	if err != nil {
+		panic(err)
+	}
+}

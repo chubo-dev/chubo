@@ -291,3 +291,50 @@ func TestMachineConfigNomadInvalidRoleErrors(t *testing.T) {
 	require.Error(t, err)
 	require.Contains(t, err.Error(), `unknown spec.modules.chubo.nomad.role "broken"`)
 }
+
+func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
+	t.Parallel()
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Consul: &ChuboRoleSpec{
+				Role: "client",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	var (
+		foundConfig bool
+		foundRole   bool
+	)
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		switch f.FilePath {
+		case chuboOpenGyozaConfigPath:
+			foundConfig = true
+			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/opengyoza"`)
+			require.Contains(t, f.FileContent, "server = false")
+		case chuboOpenGyozaRolePath:
+			foundRole = true
+			require.Equal(t, "client\n", f.FileContent)
+		}
+	}
+
+	require.True(t, foundConfig)
+	require.True(t, foundRole)
+}

@@ -116,6 +116,7 @@ func NewState() (*State, error) {
 		&block.VolumeStatus{},
 		&block.ZswapStatus{},
 		chubo.NewBootstrapStatus(),
+		chubo.NewOpenGyozaStatus(),
 		chubo.NewOpenWontonStatus(),
 		&cluster.Affiliate{},
 		&cluster.Config{},

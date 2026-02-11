@@ -43,6 +43,8 @@ const (
 	chuboBootstrapPayloadPath = "/var/lib/chubo/bootstrap/bootstrap.json"
 	chuboOpenWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
 	chuboOpenWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
+	chuboOpenGyozaConfigPath  = "/var/lib/chubo/config/opengyoza.hcl"
+	chuboOpenGyozaRolePath    = "/var/lib/chubo/config/opengyoza.role"
 
 	chuboRoleServer = "server"
 	chuboRoleClient = "client"
@@ -459,6 +461,28 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				})
 			}
 		}
+
+		// Chubo Consul/OpenGyoza: render minimal host-process config for the OS-managed service.
+		if enabled && s.Spec.Modules.Chubo.Consul != nil {
+			consulEnabled := s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled
+			if consulEnabled {
+				role := normalizeChuboRole(s.Spec.Modules.Chubo.Consul.Role)
+
+				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+					FileContent:     renderOpenGyozaConfig(role),
+					FilePermissions: v1alpha1.FileMode(0o600),
+					FilePath:        chuboOpenGyozaConfigPath,
+					FileOp:          "create",
+				})
+
+				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+					FileContent:     role + "\n",
+					FilePermissions: v1alpha1.FileMode(0o644),
+					FilePath:        chuboOpenGyozaRolePath,
+					FileOp:          "create",
+				})
+			}
+		}
 	}
 
 	// Registry mirrors (CRI config-only controllers still consume these in `chuboos` installer flows).
@@ -531,6 +555,23 @@ client {
   enabled = %t
 }
 `, serverEnabled, clientEnabled)
+}
+
+func renderOpenGyozaConfig(role string) string {
+	serverEnabled := role == chuboRoleServer
+	bootstrapExpect := 0
+
+	if serverEnabled {
+		bootstrapExpect = 1
+	}
+
+	return fmt.Sprintf(`data_dir = "/var/lib/chubo/opengyoza"
+bind_addr = "0.0.0.0"
+client_addr = "0.0.0.0"
+log_level = "INFO"
+server = %t
+bootstrap_expect = %d
+`, serverEnabled, bootstrapExpect)
 }
 
 // NodeID returns the optional stable node ID, if set.
