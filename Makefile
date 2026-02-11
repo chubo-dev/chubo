@@ -577,6 +577,10 @@ chuboos-guardrails: ## Runs chuboos-specific regression guardrails (k8s-less ima
 chuboos-e2e-qemu: ## Runs chuboos core E2E in QEMU (install, runtime mTLS, upgrade, rollback, support).
 	@./hack/chuboos/e2e-core-qemu.sh
 
+.PHONY: chuboos-e2e-docker
+chuboos-e2e-docker: ## Runs chuboos non-root local fallback E2E in Docker provisioner (runtime + support bundle).
+	@./hack/chuboos/e2e-core-docker.sh
+
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
 
