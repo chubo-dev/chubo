@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-package chuboos
+package chubo
 
 //docgen:jsonschema
 
@@ -30,7 +30,7 @@ import (
 	"github.com/siderolabs/talos/pkg/machinery/config/validation"
 )
 
-// MachineConfigKind is the `chuboos` minimal machine config document kind.
+// MachineConfigKind is the `chubo` minimal machine config document kind.
 const MachineConfigKind = "MachineConfig"
 
 const (
@@ -79,7 +79,7 @@ var (
 	_ config.Validator = &MachineConfigV1Alpha1{}
 )
 
-// MachineConfigV1Alpha1 is the minimal, non-Kubernetes config document for the `chuboos` fork.
+// MachineConfigV1Alpha1 is the minimal, non-Kubernetes config document for the `chubo` fork.
 //
 // schemaRoot: true
 // schemaMeta: chubo.dev/v1alpha1/MachineConfig
@@ -131,7 +131,7 @@ type TrustSpec struct {
 	Token string `yaml:"token,omitempty"`
 
 	// Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on
-	// control plane nodes; for `chuboos` we start with the simple model and evolve
+	// control plane nodes; for `chubo` we start with the simple model and evolve
 	// it in Phase 3.
 	CA *CASpec `yaml:"ca,omitempty"`
 
@@ -359,7 +359,7 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 	return nil, nil
 }
 
-// ToV1Alpha1 synthesizes a minimal internal v1alpha1.Config suitable for the current `chuboos` boot pipeline.
+// ToV1Alpha1 synthesizes a minimal internal v1alpha1.Config suitable for the current `chubo` boot pipeline.
 //
 // This preserves Talos' internal config.Provider interface contract (which still depends on v1alpha1.Config),
 // while allowing the external config surface to remain small and non-Kubernetes.
@@ -367,7 +367,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 	cfg := &v1alpha1.Config{
 		ConfigVersion: v1alpha1.Version,
 		MachineConfig: &v1alpha1.MachineConfig{
-			// In `chuboos` we treat Talos' "controlplane" machine type as "managed node"
+			// In `chubo` we treat Talos' "controlplane" machine type as "managed node"
 			// to keep OS API certificate flows (trustd) enabled everywhere.
 			MachineType: machine.TypeControlPlane.String(),
 		},
@@ -516,7 +516,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 		}
 	}
 
-	// Registry mirrors (CRI config-only controllers still consume these in `chuboos` installer flows).
+	// Registry mirrors (CRI config-only controllers still consume these in `chubo` installer flows).
 	if s.Spec.Registry != nil && len(s.Spec.Registry.Mirrors) > 0 {
 		if cfg.MachineConfig.MachineRegistries.RegistryMirrors == nil {
 			cfg.MachineConfig.MachineRegistries.RegistryMirrors = make(map[string]*v1alpha1.RegistryMirrorConfig, len(s.Spec.Registry.Mirrors))

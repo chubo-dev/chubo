@@ -16,7 +16,7 @@ import (
 
 	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
 	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	chubotypes "github.com/siderolabs/talos/pkg/machinery/config/types/chuboos"
+	chubotypes "github.com/siderolabs/talos/pkg/machinery/config/types/chubo"
 )
 
 var genMachineConfigFlags struct {
