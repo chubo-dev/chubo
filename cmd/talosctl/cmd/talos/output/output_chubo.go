@@ -1,10 +1,9 @@
-//go:build !chubo
+//go:build chubo
 
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package output provides writers in different formats.
 package output
 
 import (
@@ -16,7 +15,6 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/spf13/cobra"
-	"k8s.io/client-go/util/jsonpath"
 )
 
 // Writer interface.
@@ -38,15 +36,7 @@ func NewWriter(format string) (Writer, error) {
 	case format == "json":
 		return NewJSON(writer), nil
 	case strings.HasPrefix(format, "jsonpath="):
-		path := format[len("jsonpath="):]
-
-		jp := jsonpath.New("talos")
-
-		if err := jp.Parse(path); err != nil {
-			return nil, fmt.Errorf("error parsing jsonpath: %w", err)
-		}
-
-		return NewJSONPath(writer, jp), nil
+		return nil, fmt.Errorf("output format %q is not supported in chubo build", format)
 	default:
 		return nil, fmt.Errorf("output format %q is not supported", format)
 	}
@@ -54,5 +44,5 @@ func NewWriter(format string) (Writer, error) {
 
 // CompleteOutputArg represents tab completion for `--output` argument.
 func CompleteOutputArg(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	return []string{"json", "table", "yaml", "jsonpath"}, cobra.ShellCompDirectiveNoFileComp
+	return []string{"json", "table", "yaml"}, cobra.ShellCompDirectiveNoFileComp
 }
