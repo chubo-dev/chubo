@@ -46,6 +46,7 @@ func editFn(c *client.Client) func(context.Context, string, resource.Resource, e
 	)
 
 	edit := editor.NewDefaultEditor([]string{
+		"CHUBO_EDITOR",
 		"TALOS_EDITOR",
 		"EDITOR",
 	})
@@ -186,13 +187,13 @@ func addEditingComment(in string) string {
 // editCmd represents the edit command.
 var editCmd = &cobra.Command{
 	Use:   "edit machineconfig",
-	Short: "Edit Talos node machine configuration with the default editor.",
+	Short: "Edit machine configuration with the default editor.",
 	Args:  cobra.RangeArgs(1, 2),
 	Long: `The edit command allows you to directly edit the machine configuration
 of a Talos node using your preferred text editor.
 
-It will open the editor defined by your TALOS_EDITOR,
-or EDITOR environment variables, or fall back to 'vi' for Linux
+It will open the editor defined by your CHUBO_EDITOR,
+TALOS_EDITOR, or EDITOR environment variables, or fall back to 'vi' for Linux
 or 'notepad' for Windows.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {

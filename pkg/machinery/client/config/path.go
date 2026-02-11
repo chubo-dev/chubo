@@ -20,8 +20,13 @@ type Path struct {
 	WriteAllowed bool
 }
 
-// GetTalosDirectory returns path to Talos directory ($TALOS_HOME or ~/.talos).
+// GetTalosDirectory returns path to the client state directory.
+// It prefers CHUBO_HOME, then TALOS_HOME, and finally falls back to ~/.chubo.
 func GetTalosDirectory() (string, error) {
+	if path, ok := os.LookupEnv(constants.ChuboHomeEnvVar); ok && filepath.IsAbs(path) {
+		return path, nil
+	}
+
 	if path, ok := os.LookupEnv(constants.TalosHomeEnvVar); ok && filepath.IsAbs(path) {
 		return path, nil
 	}
@@ -31,33 +36,68 @@ func GetTalosDirectory() (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(home, constants.TalosDir), nil
+	return filepath.Join(home, constants.ChuboDir), nil
 }
 
 // GetDefaultPaths returns the list of config file paths in order of priority.
 func GetDefaultPaths() ([]Path, error) {
-	talosDir, err := GetTalosDirectory()
+	chuboDir, err := GetTalosDirectory()
 	if err != nil {
 		return nil, err
 	}
 
-	result := make([]Path, 0, 3)
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return nil, err
+	}
 
-	if path, ok := os.LookupEnv(constants.TalosConfigEnvVar); ok {
-		result = append(result, Path{
+	result := make([]Path, 0, 5)
+	seen := map[string]struct{}{}
+
+	appendUnique := func(path Path) {
+		if path.Path == "" {
+			return
+		}
+
+		if _, ok := seen[path.Path]; ok {
+			return
+		}
+
+		seen[path.Path] = struct{}{}
+		result = append(result, path)
+	}
+
+	if path, ok := os.LookupEnv(constants.ChuboConfigEnvVar); ok {
+		appendUnique(Path{
 			Path:         path,
 			WriteAllowed: true,
 		})
 	}
 
-	result = append(
-		result,
+	if path, ok := os.LookupEnv(constants.TalosConfigEnvVar); ok {
+		appendUnique(Path{
+			Path:         path,
+			WriteAllowed: true,
+		})
+	}
+
+	appendUnique(
 		Path{
-			Path:         filepath.Join(talosDir, constants.TalosconfigFilename),
+			Path:         filepath.Join(chuboDir, constants.ChuboconfigFilename),
 			WriteAllowed: true,
 		},
+	)
+
+	appendUnique(
 		Path{
-			Path:         filepath.Join(constants.ServiceAccountMountPath, constants.TalosconfigFilename),
+			Path:         filepath.Join(homeDir, constants.TalosDir, constants.TalosconfigFilename),
+			WriteAllowed: true,
+		},
+	)
+
+	appendUnique(
+		Path{
+			Path:         filepath.Join(constants.ServiceAccountMountPath, constants.ChuboconfigFilename),
 			WriteAllowed: false,
 		},
 	)
@@ -80,7 +120,19 @@ func CustomSideroV1KeysDirPath(customPath string) string {
 		return ""
 	}
 
-	return filepath.Join(home, constants.TalosDir, constants.SideroV1KeysDir)
+	chuboPath := filepath.Join(home, constants.ChuboDir, constants.SideroV1KeysDir)
+
+	if _, err := os.Stat(chuboPath); err == nil {
+		return chuboPath
+	}
+
+	legacyPath := filepath.Join(home, constants.TalosDir, constants.SideroV1KeysDir)
+
+	if _, err := os.Stat(legacyPath); err == nil {
+		return legacyPath
+	}
+
+	return chuboPath
 }
 
 // firstValidPath iterates over the default paths and returns the first one that exists and readable.

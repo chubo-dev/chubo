@@ -21,8 +21,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
-	Use:               "talosctl",
-	Short:             "A CLI for out-of-band management of Kubernetes nodes created by Talos",
+	Use:               "chuboctl",
+	Aliases:           []string{"talosctl"},
+	Short:             "A CLI for out-of-band management of Chubo OS nodes",
 	Long:              ``,
 	SilenceErrors:     true,
 	SilenceUsage:      true,
@@ -55,9 +56,9 @@ func init() {
 		clusterGroup = "cluster"
 	)
 
-	rootCmd.AddGroup(&cobra.Group{ID: talosGroup, Title: "Manage running Talos clusters:"})
+	rootCmd.AddGroup(&cobra.Group{ID: talosGroup, Title: "Manage running Chubo OS nodes:"})
 	rootCmd.AddGroup(&cobra.Group{ID: mgmtGroup, Title: "Commands to generate and manage machine configuration offline:"})
-	rootCmd.AddGroup(&cobra.Group{ID: clusterGroup, Title: "Local Talos cluster commands:"})
+	rootCmd.AddGroup(&cobra.Group{ID: clusterGroup, Title: "Local cluster commands:"})
 
 	for _, cmd := range mgmt.Commands {
 		cmd.GroupID = mgmtGroup

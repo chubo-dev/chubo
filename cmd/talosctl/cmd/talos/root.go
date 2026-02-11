@@ -63,16 +63,31 @@ var Commands []*cobra.Command
 func addCommand(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVar(
 		&GlobalArgs.Talosconfig,
+		"chuboconfig",
+		"",
+		fmt.Sprintf("The path to the Chubo configuration file. Defaults to '%s' (or legacy '%s') env variables if set, otherwise '%s', then legacy '%s', then '%s'.",
+			constants.ChuboConfigEnvVar,
+			constants.TalosConfigEnvVar,
+			filepath.Join("$HOME", constants.ChuboDir, constants.ChuboconfigFilename),
+			filepath.Join("$HOME", constants.TalosDir, constants.TalosconfigFilename),
+			filepath.Join(constants.ServiceAccountMountPath, constants.ChuboconfigFilename),
+		),
+	)
+
+	cmd.PersistentFlags().StringVar(
+		&GlobalArgs.Talosconfig,
 		"talosconfig",
 		"",
-		fmt.Sprintf("The path to the Talos configuration file. Defaults to '%s' env variable if set, otherwise '%s' and '%s' in order.",
+		fmt.Sprintf("Legacy alias for --chuboconfig. Defaults to '%s' (or legacy '%s') env variables if set, otherwise '%s', then legacy '%s', then '%s'.",
+			constants.ChuboConfigEnvVar,
 			constants.TalosConfigEnvVar,
+			filepath.Join("$HOME", constants.ChuboDir, constants.ChuboconfigFilename),
 			filepath.Join("$HOME", constants.TalosDir, constants.TalosconfigFilename),
-			filepath.Join(constants.ServiceAccountMountPath, constants.TalosconfigFilename),
+			filepath.Join(constants.ServiceAccountMountPath, constants.ChuboconfigFilename),
 		),
 	)
 	cmd.PersistentFlags().StringSliceVarP(&GlobalArgs.Nodes, "nodes", "n", []string{}, "target the specified nodes")
-	cmd.PersistentFlags().StringSliceVarP(&GlobalArgs.Endpoints, "endpoints", "e", []string{}, "override default endpoints in Talos configuration")
+	cmd.PersistentFlags().StringSliceVarP(&GlobalArgs.Endpoints, "endpoints", "e", []string{}, "override default endpoints in client configuration")
 	cli.Should(cmd.RegisterFlagCompletionFunc("nodes", CompleteNodes))
 	cmd.PersistentFlags().StringVarP(&GlobalArgs.Cluster, "cluster", "c", "", "Cluster to connect to if a proxy endpoint is used.")
 	cmd.PersistentFlags().StringVar(&GlobalArgs.CmdContext, "context", "", "Context to be used in command")
@@ -80,8 +95,9 @@ func addCommand(cmd *cobra.Command) {
 		&GlobalArgs.SideroV1KeysDir,
 		"siderov1-keys-dir",
 		"",
-		fmt.Sprintf("The path to the SideroV1 auth PGP keys directory. Defaults to '%s' env variable if set, otherwise '%s'. Only valid for Contexts that use SideroV1 auth.",
+		fmt.Sprintf("The path to the SideroV1 auth PGP keys directory. Defaults to '%s' env variable if set, otherwise '%s' and legacy '%s'. Only valid for Contexts that use SideroV1 auth.",
 			constants.SideroV1KeysDirEnvVar,
+			filepath.Join("$HOME", constants.ChuboDir, constants.SideroV1KeysDir),
 			filepath.Join("$HOME", constants.TalosDir, constants.SideroV1KeysDir),
 		),
 	)

@@ -138,7 +138,7 @@ func rotateTalosCA(ctx context.Context, oldClient *client.Client, encoderOpt enc
 		return nil, nil
 	}
 
-	fmt.Printf("> Writing new talosconfig to %q\n", rotateCACmdFlags.output)
+	fmt.Printf("> Writing new chuboconfig to %q\n", rotateCACmdFlags.output)
 
 	return newTalosconfig, newTalosconfig.Save(rotateCACmdFlags.output)
 }
@@ -169,7 +169,7 @@ func rotateKubernetesCA(ctx context.Context, c *client.Client, encoderOpt encode
 		return nil
 	}
 
-	fmt.Printf("> Kubernetes CA rotation done, new 'kubeconfig' can be fetched with `talosctl kubeconfig`.\n")
+	fmt.Printf("> Kubernetes CA rotation done, new 'kubeconfig' can be fetched with `chuboctl kubeconfig`.\n")
 
 	return nil
 }
@@ -182,7 +182,7 @@ func init() {
 	rotateCACmd.Flags().StringVar(&rotateCACmdFlags.forceEndpoint, "k8s-endpoint", "", "use endpoint instead of kubeconfig default")
 	rotateCACmd.Flags().BoolVarP(&rotateCACmdFlags.withExamples, "with-examples", "", true, "patch all machine configs with the commented examples")
 	rotateCACmd.Flags().BoolVarP(&rotateCACmdFlags.withDocs, "with-docs", "", true, "patch all machine configs adding the documentation for each field")
-	rotateCACmd.Flags().StringVarP(&rotateCACmdFlags.output, "output", "o", "talosconfig", "path to the output new `talosconfig`")
+	rotateCACmd.Flags().StringVarP(&rotateCACmdFlags.output, "output", "o", "chuboconfig", "path to the output new `chuboconfig`")
 	rotateCACmd.Flags().BoolVarP(&rotateCACmdFlags.dryRun, "dry-run", "", true, "dry-run mode (no changes to the cluster)")
 	rotateCACmd.Flags().BoolVarP(&rotateCACmdFlags.rotateTalos, "talos", "", true, "rotate Talos API CA")
 	rotateCACmd.Flags().BoolVarP(&rotateCACmdFlags.rotateKubernetes, "kubernetes", "", true, "rotate Kubernetes API CA")

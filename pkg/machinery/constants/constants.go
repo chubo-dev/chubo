@@ -561,10 +561,16 @@ const (
 	// CRIBaseRuntimeSpec is the path to the base runtime spec for the CRI.
 	CRIBaseRuntimeSpec = "cri/conf.d/base-spec.json"
 
-	// TalosConfigEnvVar is the environment variable for setting the Talos configuration file path.
+	// ChuboConfigEnvVar is the environment variable for setting the Chubo configuration file path.
+	ChuboConfigEnvVar = "CHUBOCONFIG"
+
+	// TalosConfigEnvVar is the legacy environment variable for setting the Talos configuration file path.
 	TalosConfigEnvVar = "TALOSCONFIG"
 
-	// TalosHomeEnvVar is the environment variable for setting the Talos state directory file path.
+	// ChuboHomeEnvVar is the environment variable for setting the Chubo state directory file path.
+	ChuboHomeEnvVar = "CHUBO_HOME"
+
+	// TalosHomeEnvVar is the legacy environment variable for setting the Talos state directory file path.
 	TalosHomeEnvVar = "TALOS_HOME"
 
 	// APISocketPath is the path to file socket of apid.
@@ -1092,10 +1098,16 @@ const (
 	// KubernetesTalosAPIServiceNamespace is the namespace of the Kubernetes service to access Talos API.
 	KubernetesTalosAPIServiceNamespace = "default"
 
-	// TalosDir is the default name of the Talos directory under user home.
+	// ChuboDir is the default name of the Chubo directory under user home.
+	ChuboDir = ".chubo"
+
+	// TalosDir is the legacy name of the Talos directory under user home.
 	TalosDir = ".talos"
 
-	// TalosconfigFilename is the file name of Talosconfig under TalosDir or under ServiceAccountMountPath inside a pod.
+	// ChuboconfigFilename is the file name of chuboconfig under ChuboDir or under ServiceAccountMountPath inside a pod.
+	ChuboconfigFilename = "config"
+
+	// TalosconfigFilename is the legacy file name of talosconfig under TalosDir or under ServiceAccountMountPath inside a pod.
 	TalosconfigFilename = "config"
 
 	// KubernetesTalosProvider is the name of the Talos provider as a Kubernetes label.

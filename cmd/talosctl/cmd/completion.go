@@ -19,7 +19,7 @@ var completionCmd = &cobra.Command{
 	Short: "Output shell completion code for the specified shell (bash, fish or zsh)",
 	Long: `Output shell completion code for the specified shell (bash, fish or zsh).
 The shell code must be evaluated to provide interactive
-completion of talosctl commands.  This can be done by sourcing it from
+completion of chuboctl commands.  This can be done by sourcing it from
 the .bash_profile.
 
 Note for zsh users: [1] zsh completions are only supported in versions of zsh >= 5.2`,
@@ -28,30 +28,30 @@ Note for zsh users: [1] zsh completions are only supported in versions of zsh >=
 	brew install bash-completion
 ## or, if running Bash 4.1+
 	brew install bash-completion@2
-## If talosctl is installed via homebrew, this should start working immediately.
+## If chuboctl is installed via homebrew, this should start working immediately.
 ## If you've installed via other means, you may need add the completion to your completion directory
-	talosctl completion bash > $(brew --prefix)/etc/bash_completion.d/talosctl
+	chuboctl completion bash > $(brew --prefix)/etc/bash_completion.d/chuboctl
 
 # Installing bash completion on Linux
 ## If bash-completion is not installed on Linux, please install the 'bash-completion' package
 ## via your distribution's package manager.
-## Load the talosctl completion code for bash into the current shell
-	source <(talosctl completion bash)
+## Load the chuboctl completion code for bash into the current shell
+	source <(chuboctl completion bash)
 ## Write bash completion code to a file and source if from .bash_profile
-	talosctl completion bash > "${TALOS_HOME:-$HOME/.talos}/completion.bash.inc"
+	chuboctl completion bash > "${CHUBO_HOME:-$HOME/.chubo}/completion.bash.inc"
 	printf '
-		# talosctl shell completion
-		source "${TALOS_HOME:-$HOME/.talos}/completion.bash.inc"
+		# chuboctl shell completion
+		source "${CHUBO_HOME:-$HOME/.chubo}/completion.bash.inc"
 		' >> $HOME/.bash_profile
 	source $HOME/.bash_profile
-# Load the talosctl completion code for fish[1] into the current shell
-	talosctl completion fish | source
-# Set the talosctl completion code for fish[1] to autoload on startup
-    talosctl completion fish > ~/.config/fish/completions/talosctl.fish
-# Load the talosctl completion code for zsh[1] into the current shell
-	source <(talosctl completion zsh)
-# Set the talosctl completion code for zsh[1] to autoload on startup
-    talosctl completion zsh > "${fpath[1]}/_talosctl"`,
+# Load the chuboctl completion code for fish[1] into the current shell
+	chuboctl completion fish | source
+# Set the chuboctl completion code for fish[1] to autoload on startup
+    chuboctl completion fish > ~/.config/fish/completions/chuboctl.fish
+# Load the chuboctl completion code for zsh[1] into the current shell
+	source <(chuboctl completion zsh)
+# Set the chuboctl completion code for zsh[1] to autoload on startup
+    chuboctl completion zsh > "${fpath[1]}/_chuboctl"`,
 	ValidArgs: []string{"bash", "fish", "zsh"},
 	Args:      cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -68,7 +68,7 @@ Note for zsh users: [1] zsh completions are only supported in versions of zsh >=
 		case "zsh":
 			err := rootCmd.GenZshCompletion(os.Stdout)
 			// cobra does not hook the completion, so let's do it manually
-			fmt.Printf("compdef _talosctl talosctl")
+			fmt.Printf("compdef _chuboctl chuboctl talosctl")
 
 			return err
 		default:

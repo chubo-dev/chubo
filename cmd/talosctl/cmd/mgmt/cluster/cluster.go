@@ -51,10 +51,10 @@ func init() {
 	}
 
 	Cmd.PersistentFlags().StringVar(&PersistentFlags.StateDir, "state", DefaultStateDir, "directory path to store cluster state")
-	Cmd.PersistentFlags().StringVar(&PersistentFlags.ClusterName, "name", "talos-default", "the name of the cluster")
+	Cmd.PersistentFlags().StringVar(&PersistentFlags.ClusterName, "name", "chubo-default", "the name of the cluster")
 }
 
 // AddProvisionerFlag adds the provisioner flag to a command.
 func AddProvisionerFlag(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&provisionerName, ProvisionerFlagName, providers.DockerProviderName, "Talos cluster provisioner to use")
+	cmd.Flags().StringVar(&provisionerName, ProvisionerFlagName, providers.DockerProviderName, "cluster provisioner to use")
 }

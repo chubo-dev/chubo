@@ -38,7 +38,7 @@ import (
 // configCmd represents the config command.
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Manage the client configuration file (talosconfig)",
+	Short: "Manage the client configuration file (chuboconfig)",
 	Long:  ``,
 }
 
@@ -378,7 +378,7 @@ var configMergeCmd = &cobra.Command{
 
 		renames := c.Merge(secondConfig)
 		for _, rename := range renames {
-			fmt.Fprintf(os.Stderr, "renamed talosconfig context %s\n", rename.String())
+			fmt.Fprintf(os.Stderr, "renamed chuboconfig context %s\n", rename.String())
 		}
 
 		if err := c.Save(GlobalArgs.Talosconfig); err != nil {
@@ -402,13 +402,13 @@ var configNewCmd = &cobra.Command{
 	Args:  cobra.RangeArgs(0, 1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			args = []string{"talosconfig"}
+			args = []string{"chuboconfig"}
 		}
 
 		path := args[0]
 
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			if err := helpers.FailIfMultiNodes(ctx, "talosconfig"); err != nil {
+			if err := helpers.FailIfMultiNodes(ctx, "chuboconfig"); err != nil {
 				return err
 			}
 
@@ -418,7 +418,7 @@ var configNewCmd = &cobra.Command{
 			}
 
 			if _, err := os.Stat(path); err == nil {
-				return fmt.Errorf("talosconfig file already exists: %q", path)
+				return fmt.Errorf("chuboconfig file already exists: %q", path)
 			}
 
 			resp, err := c.GenerateClientConfiguration(ctx, &machineapi.GenerateClientConfigurationRequest{
