@@ -53,6 +53,7 @@ spec:
     - base-lint
     - base-unit-tests
     - chuboos-guardrails
+    - chuboos-e2e-qemu
     - e2e-iso
     - e2e-qemu-short
     - e2e-docker-short
@@ -286,6 +287,30 @@ spec:
             artifactPath: _out
         - name: ci-temp-release-tag
         - name: chuboos-guardrails
+    - name: chuboos-e2e-qemu
+      depends:
+        - default
+      runnerGroup: large
+      steps:
+        - name: download-artifacts
+          artifactStep:
+            type: download
+            artifactName: talos-artifacts
+            artifactPath: _out
+        - name: ci-temp-release-tag
+        - name: chuboos-e2e-qemu
+          withSudo: true
+        - name: save-talos-logs
+          conditions:
+            - always
+          artifactStep:
+            type: upload
+            artifactName: talos-logs-chuboos-e2e-qemu
+            disableExecutableListGeneration: true
+            artifactPath: /tmp/logs-chuboos-e2e.tar.gz
+            additionalArtifacts:
+              - /tmp/support-chuboos-e2e.zip
+              - /tmp/chuboos-support-e2e.zip
     - name: grype-scan
       buildxOptions:
         enabled: true

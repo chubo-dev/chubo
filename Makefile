@@ -573,6 +573,10 @@ chuboos-guardrails: ## Runs chuboos-specific regression guardrails (k8s-less ima
 	@_out/chuboos/talosctl-linux-amd64 --help | grep -q openbaoconfig
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 
+.PHONY: chuboos-e2e-qemu
+chuboos-e2e-qemu: ## Runs chuboos core E2E in QEMU (install, runtime mTLS, upgrade, rollback, support).
+	@./hack/chuboos/e2e-core-qemu.sh
+
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
 
