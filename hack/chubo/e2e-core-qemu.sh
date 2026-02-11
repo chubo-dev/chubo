@@ -34,6 +34,7 @@ REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-${REGISTRY_NODE_ADDR}=http://${REG
 
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1200}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
+MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
 SUPPORT_OUT="${SUPPORT_OUT:-/tmp/chubo-support-e2e.zip}"
 CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-/tmp/logs-chubo-e2e.tar.gz}"
 CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-/tmp/support-chubo-e2e.zip}"
@@ -231,7 +232,7 @@ echo "applying install config"
 "${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
 
 echo "waiting for node to leave maintenance mode after install apply"
-maintenance_deadline=$((SECONDS + 180))
+maintenance_deadline=$((SECONDS + MAINTENANCE_PERSIST_SECONDS))
 while "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; do
 	if ((SECONDS >= maintenance_deadline)); then
 		echo "maintenance API is still up after install apply; applying runtime config and rebooting"
