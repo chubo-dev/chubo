@@ -31,6 +31,7 @@ DISK_SIZE="${DISK_SIZE:-10G}"
 VMNET_ENABLE="${VMNET_ENABLE:-0}"
 VMNET_MODE="${VMNET_MODE:-bridged}"    # bridged (via socket_vmnet)
 VMNET_MAC="${VMNET_MAC:-}"             # optional override (6-byte MAC)
+SOCKET_VMNET_LOG="${SOCKET_VMNET_LOG:-/tmp/chuboos-socket_vmnet.log}"
 
 # Reuse a previous run directory to boot from the installed disk without re-installing.
 QEMU_RUNDIR="${QEMU_RUNDIR:-}"
@@ -170,7 +171,7 @@ EOF
         --socket-group=admin \
         --vmnet-mode=bridged \
         --vmnet-interface=en0 \
-        "${VMNET_SOCKET}" >/tmp/chuboos-socket_vmnet.log 2>&1 & then
+        "${VMNET_SOCKET}" >"${SOCKET_VMNET_LOG}" 2>&1 & then
         cat >&2 <<EOF
 failed to start socket_vmnet (sudo required).
 
@@ -191,7 +192,7 @@ EOF
       done
 
       if [[ ! -S "${VMNET_SOCKET}" ]]; then
-        echo "failed to start socket_vmnet (see /tmp/chuboos-socket_vmnet.log)" >&2
+        echo "failed to start socket_vmnet (see ${SOCKET_VMNET_LOG})" >&2
         exit 1
       fi
     fi

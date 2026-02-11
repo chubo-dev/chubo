@@ -562,44 +562,44 @@ unit-tests-race: ## Performs unit tests with race detection enabled.
 unit-tests-fips: ## Performs unit tests with FIPS strict mode.
 	@$(MAKE) target-$@ TARGET_ARGS="--allow security.insecure" PLATFORM=linux/$(ARCH)
 
-.PHONY: chuboos-guardrails
-chuboos-guardrails: ## Runs chuboos-specific regression guardrails (k8s-less image and CLI/API surface).
-	@$(MAKE) initramfs kernel sd-boot ARTIFACTS=_out/chuboos GO_BUILDTAGS=tcell_minimal,grpcnotrace,chuboos
-	@./hack/chuboos/check-rootfs.sh _out/chuboos/initramfs-arm64.xz
-	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chuboos -o _out/chuboos/machined-linux-arm64 ./internal/app/machined
-	@go build -o _out/chuboos/talosctl-linux-amd64 ./cmd/talosctl
-	@_out/chuboos/talosctl-linux-amd64 --help | grep -q nomadconfig
-	@_out/chuboos/talosctl-linux-amd64 --help | grep -q consulconfig
-	@_out/chuboos/talosctl-linux-amd64 --help | grep -q openbaoconfig
+.PHONY: chubo-guardrails
+chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
+	@$(MAKE) initramfs kernel sd-boot ARTIFACTS=_out/chubo GO_BUILDTAGS=tcell_minimal,grpcnotrace,chubo
+	@./hack/chubo/check-rootfs.sh _out/chubo/initramfs-arm64.xz
+	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/machined-linux-arm64 ./internal/app/machined
+	@go build -o _out/chubo/talosctl-linux-amd64 ./cmd/talosctl
+	@_out/chubo/talosctl-linux-amd64 --help | grep -q nomadconfig
+	@_out/chubo/talosctl-linux-amd64 --help | grep -q consulconfig
+	@_out/chubo/talosctl-linux-amd64 --help | grep -q openbaoconfig
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 
-.PHONY: chubo-guardrails
-chubo-guardrails: ## Alias for chuboos-guardrails (Wave B compatibility).
-	@$(MAKE) chuboos-guardrails
-
-.PHONY: chuboos-e2e-qemu
-chuboos-e2e-qemu: ## Runs chuboos core E2E in QEMU (install, runtime mTLS, upgrade, rollback, support).
-	@./hack/chuboos/e2e-core-qemu.sh
+.PHONY: chuboos-guardrails
+chuboos-guardrails: ## Legacy alias for chubo-guardrails (Wave B compatibility).
+	@$(MAKE) chubo-guardrails
 
 .PHONY: chubo-e2e-qemu
-chubo-e2e-qemu: ## Alias for chuboos-e2e-qemu (Wave B compatibility).
-	@$(MAKE) chuboos-e2e-qemu
+chubo-e2e-qemu: ## Runs chubo core E2E in QEMU (install, runtime mTLS, upgrade, rollback, support).
+	@./hack/chubo/e2e-core-qemu.sh
 
-.PHONY: chuboos-e2e-docker
-chuboos-e2e-docker: ## Runs chuboos non-root local fallback E2E in Docker provisioner (runtime + support bundle).
-	@./hack/chuboos/e2e-core-docker.sh
+.PHONY: chuboos-e2e-qemu
+chuboos-e2e-qemu: ## Legacy alias for chubo-e2e-qemu (Wave B compatibility).
+	@$(MAKE) chubo-e2e-qemu
 
 .PHONY: chubo-e2e-docker
-chubo-e2e-docker: ## Alias for chuboos-e2e-docker (Wave B compatibility).
-	@$(MAKE) chuboos-e2e-docker
+chubo-e2e-docker: ## Runs chubo non-root local fallback E2E in Docker provisioner (runtime + support bundle).
+	@./hack/chubo/e2e-core-docker.sh
 
-.PHONY: chuboos-e2e-helper-bundles-qemu
-chuboos-e2e-helper-bundles-qemu: ## Runs one-command local QEMU smoke for nomad/consul/openbao helper bundles.
-	@./hack/chuboos/e2e-helper-bundles-qemu.sh
+.PHONY: chuboos-e2e-docker
+chuboos-e2e-docker: ## Legacy alias for chubo-e2e-docker (Wave B compatibility).
+	@$(MAKE) chubo-e2e-docker
 
 .PHONY: chubo-e2e-helper-bundles-qemu
-chubo-e2e-helper-bundles-qemu: ## Alias for chuboos-e2e-helper-bundles-qemu (Wave B compatibility).
-	@$(MAKE) chuboos-e2e-helper-bundles-qemu
+chubo-e2e-helper-bundles-qemu: ## Runs one-command local QEMU smoke for nomad/consul/openbao helper bundles.
+	@./hack/chubo/e2e-helper-bundles-qemu.sh
+
+.PHONY: chuboos-e2e-helper-bundles-qemu
+chuboos-e2e-helper-bundles-qemu: ## Legacy alias for chubo-e2e-helper-bundles-qemu (Wave B compatibility).
+	@$(MAKE) chubo-e2e-helper-bundles-qemu
 
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false

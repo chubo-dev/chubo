@@ -1,4 +1,4 @@
-//go:build chuboos
+//go:build chubo || chuboos
 
 package v1alpha1
 
