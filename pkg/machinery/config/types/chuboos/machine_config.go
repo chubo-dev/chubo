@@ -41,6 +41,11 @@ const (
 
 	// chuboBootstrapPayloadPath is where the verified bootstrap payload is written.
 	chuboBootstrapPayloadPath = "/var/lib/chubo/bootstrap/bootstrap.json"
+	chuboOpenWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
+	chuboOpenWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
+
+	chuboRoleServer = "server"
+	chuboRoleClient = "client"
 )
 
 // MachineConfigAPIVersion is the API version string for the minimal machine config.
@@ -296,6 +301,34 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 				return nil, fmt.Errorf("unknown spec.modules.chubo.bootstrap.mode %q", bootstrap.Mode)
 			}
 		}
+
+		if !enabled && (s.Spec.Modules.Chubo.Nomad != nil || s.Spec.Modules.Chubo.Consul != nil || s.Spec.Modules.Chubo.OpenBao != nil) {
+			return nil, errors.New("spec.modules.chubo.nomad/consul/openbao are set but spec.modules.chubo.enabled is false")
+		}
+
+		if enabled {
+			if s.Spec.Modules.Chubo.Nomad != nil && (s.Spec.Modules.Chubo.Nomad.Enabled == nil || *s.Spec.Modules.Chubo.Nomad.Enabled) {
+				if err := validateChuboRole("spec.modules.chubo.nomad.role", s.Spec.Modules.Chubo.Nomad.Role); err != nil {
+					return nil, err
+				}
+			}
+
+			if s.Spec.Modules.Chubo.Consul != nil && (s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled) {
+				if err := validateChuboRole("spec.modules.chubo.consul.role", s.Spec.Modules.Chubo.Consul.Role); err != nil {
+					return nil, err
+				}
+			}
+
+			if s.Spec.Modules.Chubo.OpenBao != nil && (s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled) {
+				mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
+				switch mode {
+				case "", "nomadJob":
+					// valid
+				default:
+					return nil, fmt.Errorf("unknown spec.modules.chubo.openbao.mode %q", s.Spec.Modules.Chubo.OpenBao.Mode)
+				}
+			}
+		}
 	}
 
 	// Basic registry mirror URL validation (best-effort, avoids surprising runtime errors).
@@ -404,6 +437,28 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				FileOp:          "create",
 			})
 		}
+
+		// Chubo Nomad/OpenWonton: render minimal host-process config for the OS-managed service.
+		if enabled && s.Spec.Modules.Chubo.Nomad != nil {
+			nomadEnabled := s.Spec.Modules.Chubo.Nomad.Enabled == nil || *s.Spec.Modules.Chubo.Nomad.Enabled
+			if nomadEnabled {
+				role := normalizeChuboRole(s.Spec.Modules.Chubo.Nomad.Role)
+
+				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+					FileContent:     renderOpenWontonConfig(role),
+					FilePermissions: v1alpha1.FileMode(0o600),
+					FilePath:        chuboOpenWontonConfigPath,
+					FileOp:          "create",
+				})
+
+				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+					FileContent:     role + "\n",
+					FilePermissions: v1alpha1.FileMode(0o644),
+					FilePath:        chuboOpenWontonRolePath,
+					FileOp:          "create",
+				})
+			}
+		}
 	}
 
 	// Registry mirrors (CRI config-only controllers still consume these in `chuboos` installer flows).
@@ -439,6 +494,43 @@ func slicesClone[T any](in []T) []T {
 	copy(out, in)
 
 	return out
+}
+
+func validateChuboRole(path string, role string) error {
+	switch strings.TrimSpace(role) {
+	case "", chuboRoleServer, chuboRoleClient:
+		return nil
+	default:
+		return fmt.Errorf("unknown %s %q", path, role)
+	}
+}
+
+func normalizeChuboRole(role string) string {
+	switch strings.TrimSpace(role) {
+	case chuboRoleClient:
+		return chuboRoleClient
+	default:
+		return chuboRoleServer
+	}
+}
+
+func renderOpenWontonConfig(role string) string {
+	serverEnabled := role == chuboRoleServer
+	clientEnabled := role == chuboRoleClient
+
+	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"
+bind_addr = "0.0.0.0"
+log_level = "INFO"
+
+server {
+  enabled = %t
+  bootstrap_expect = 1
+}
+
+client {
+  enabled = %t
+}
+`, serverEnabled, clientEnabled)
 }
 
 // NodeID returns the optional stable node ID, if set.

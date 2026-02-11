@@ -217,3 +217,77 @@ spec:
 	_, err := mc.Validate(testRuntimeMode{})
 	require.NoError(t, err)
 }
+
+func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	var (
+		foundConfig bool
+		foundRole   bool
+	)
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		switch f.FilePath {
+		case chuboOpenWontonConfigPath:
+			foundConfig = true
+			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/openwonton"`)
+			require.Contains(t, f.FileContent, "server {\n  enabled = true")
+		case chuboOpenWontonRolePath:
+			foundRole = true
+			require.Equal(t, "server\n", f.FileContent)
+		}
+	}
+
+	require.True(t, foundConfig)
+	require.True(t, foundRole)
+}
+
+func TestMachineConfigNomadInvalidRoleErrors(t *testing.T) {
+	t.Parallel()
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Role: "broken",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), `unknown spec.modules.chubo.nomad.role "broken"`)
+}
