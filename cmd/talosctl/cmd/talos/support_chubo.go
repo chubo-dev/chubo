@@ -48,6 +48,7 @@ var supportCmd = &cobra.Command{
 - For each node:
   - Kernel logs.
   - OS services state and logs.
+  - Chubo module config snapshots.
   - Controller runtime dependency graph.
   - Mounts list.
   - Disk IO pressure snapshot.
@@ -111,6 +112,19 @@ func collectNodeData(ctx context.Context, c *client.Client, zw *zip.Writer, node
 		return writeZipEntry(zw, path.Join(node, name), data)
 	}
 
+	writeIfPresent := func(name string, collect func() ([]byte, error)) error {
+		data, err := collect()
+		if err != nil {
+			data = []byte(fmt.Sprintf("error: %s\n", err))
+		}
+
+		if len(data) == 0 {
+			return nil
+		}
+
+		return writeZipEntry(zw, path.Join(node, name), data)
+	}
+
 	if err := write("summary", func() ([]byte, error) { return collectSummary(ctx, c) }); err != nil {
 		return err
 	}
@@ -133,6 +147,23 @@ func collectNodeData(ctx context.Context, c *client.Client, zw *zip.Writer, node
 
 	if err := write("processes", func() ([]byte, error) { return collectProcesses(ctx, c) }); err != nil {
 		return err
+	}
+
+	for name, filePath := range map[string]string{
+		"openwonton.hcl":   "/var/lib/chubo/config/openwonton.hcl",
+		"openwonton.role":  "/var/lib/chubo/config/openwonton.role",
+		"opengyoza.hcl":    "/var/lib/chubo/config/opengyoza.hcl",
+		"opengyoza.role":   "/var/lib/chubo/config/opengyoza.role",
+		"openbao.mode":     "/var/lib/chubo/config/openbao.mode",
+		"openbao.nomadjob": "/var/lib/chubo/config/openbao.nomad.json",
+	} {
+		chuboFilePath := filePath
+
+		if err := writeIfPresent(path.Join("chubo-config", name), func() ([]byte, error) {
+			return collectOptionalFile(ctx, c, chuboFilePath)
+		}); err != nil {
+			return err
+		}
 	}
 
 	serviceIDs, serviceListData, err := collectServiceList(ctx, c)
@@ -365,6 +396,23 @@ func collectServiceLog(ctx context.Context, c *client.Client, serviceID string) 
 	}
 
 	return readDataStream(stream.Recv)
+}
+
+func collectOptionalFile(ctx context.Context, c *client.Client, filePath string) ([]byte, error) {
+	r, err := c.Read(ctx, filePath)
+	if err != nil {
+		errLower := strings.ToLower(err.Error())
+
+		if strings.Contains(errLower, "no such file") || strings.Contains(errLower, "not found") {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	defer r.Close() //nolint:errcheck
+
+	return io.ReadAll(r)
 }
 
 func readDataStream(recv func() (*commonapi.Data, error)) ([]byte, error) {
