@@ -562,6 +562,17 @@ unit-tests-race: ## Performs unit tests with race detection enabled.
 unit-tests-fips: ## Performs unit tests with FIPS strict mode.
 	@$(MAKE) target-$@ TARGET_ARGS="--allow security.insecure" PLATFORM=linux/$(ARCH)
 
+.PHONY: chuboos-guardrails
+chuboos-guardrails: ## Runs chuboos-specific regression guardrails (k8s-less image and CLI/API surface).
+	@$(MAKE) initramfs kernel sd-boot ARTIFACTS=_out/chuboos GO_BUILDTAGS=tcell_minimal,grpcnotrace,chuboos
+	@./hack/chuboos/check-rootfs.sh _out/chuboos/initramfs-arm64.xz
+	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chuboos -o _out/chuboos/machined-linux-arm64 ./internal/app/machined
+	@go build -o _out/chuboos/talosctl-linux-amd64 ./cmd/talosctl
+	@_out/chuboos/talosctl-linux-amd64 --help | grep -q nomadconfig
+	@_out/chuboos/talosctl-linux-amd64 --help | grep -q consulconfig
+	@_out/chuboos/talosctl-linux-amd64 --help | grep -q openbaoconfig
+	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
+
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
 

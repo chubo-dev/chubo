@@ -52,6 +52,7 @@ spec:
     - default
     - base-lint
     - base-unit-tests
+    - chuboos-guardrails
     - e2e-iso
     - e2e-qemu-short
     - e2e-docker-short
@@ -271,6 +272,20 @@ spec:
             artifactPath: _out
         - name: ci-temp-release-tag
         - name: lint
+    - name: chuboos-guardrails
+      buildxOptions:
+        enabled: true
+      depends:
+        - default
+      runnerGroup: large
+      steps:
+        - name: download-artifacts
+          artifactStep:
+            type: download
+            artifactName: talos-artifacts
+            artifactPath: _out
+        - name: ci-temp-release-tag
+        - name: chuboos-guardrails
     - name: grype-scan
       buildxOptions:
         enabled: true
