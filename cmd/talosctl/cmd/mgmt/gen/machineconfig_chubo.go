@@ -16,29 +16,29 @@ import (
 
 	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
 	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/chuboos"
+	chubotypes "github.com/siderolabs/talos/pkg/machinery/config/types/chuboos"
 )
 
 var genMachineConfigFlags struct {
-	output        string
-	id            string
-	installDisk   string
-	installImage  string
-	wipe          bool
+	output          string
+	id              string
+	installDisk     string
+	installImage    string
+	wipe            bool
 	registryMirrors []string
-	withSecrets   string
+	withSecrets     string
 }
 
 func newMachineConfigCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "machineconfig",
-		Short: "Generate a minimal (non-Kubernetes) machine config for ChuboOS",
+		Short: "Generate a minimal (non-Kubernetes) machine config for Chubo",
 		Long: `Generates a single YAML document:
 
   apiVersion: chubo.dev/v1alpha1
   kind: MachineConfig
 
-The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chuboos`" + ` build variant.
+The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`" + ` build variant.
 `,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
@@ -70,31 +70,31 @@ The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chuboo
 				return errors.New("secrets bundle is missing trustd token (trustdinfo.token)")
 			}
 
-			mc := chuboos.NewMachineConfigV1Alpha1()
+			mc := chubotypes.NewMachineConfigV1Alpha1()
 			mc.Metadata.ID = strings.TrimSpace(genMachineConfigFlags.id)
 
-			mc.Spec.Install = &chuboos.InstallSpec{
+			mc.Spec.Install = &chubotypes.InstallSpec{
 				Disk:  strings.TrimSpace(genMachineConfigFlags.installDisk),
 				Image: strings.TrimSpace(genMachineConfigFlags.installImage),
 				Wipe:  pointer.To(genMachineConfigFlags.wipe),
 			}
 
 			// Keep Talos default NTP server unless explicitly overridden later.
-			mc.Spec.Time = &chuboos.TimeSpec{
+			mc.Spec.Time = &chubotypes.TimeSpec{
 				Servers: []string{"time.cloudflare.com"},
 			}
 
-			mc.Spec.Trust = &chuboos.TrustSpec{
+			mc.Spec.Trust = &chubotypes.TrustSpec{
 				Token: bundle.TrustdInfo.Token,
-				CA: &chuboos.CASpec{
+				CA: &chubotypes.CASpec{
 					Crt: string(bundle.Certs.OS.Crt),
 					Key: string(bundle.Certs.OS.Key),
 				},
 			}
 
 			if len(genMachineConfigFlags.registryMirrors) > 0 {
-				mc.Spec.Registry = &chuboos.RegistrySpec{
-					Mirrors: map[string]chuboos.RegistryMirrorSpec{},
+				mc.Spec.Registry = &chubotypes.RegistrySpec{
+					Mirrors: map[string]chubotypes.RegistryMirrorSpec{},
 				}
 
 				for _, spec := range genMachineConfigFlags.registryMirrors {

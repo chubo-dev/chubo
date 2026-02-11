@@ -13,7 +13,7 @@ import (
 )
 
 // applyChuboOSValidationDefaults mutates cfg so that it passes the minimal
-// `chuboos` v1alpha1 validation path (OS API + trustd requirements).
+// `chubo` v1alpha1 validation path (OS API + trustd requirements).
 func applyChuboOSValidationDefaults(cfg *v1alpha1.Config) {
 	if cfg.MachineConfig == nil {
 		cfg.MachineConfig = &v1alpha1.MachineConfig{}
@@ -26,4 +26,3 @@ func applyChuboOSValidationDefaults(cfg *v1alpha1.Config) {
 		Key: []byte("key"),
 	}
 }
-

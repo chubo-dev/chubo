@@ -14,7 +14,7 @@ import (
 	"github.com/siderolabs/talos/pkg/machinery/config/validation"
 )
 
-// These methods are only used in `chuboos` builds, but the call sites live in
+// These methods are only used in `chubo` builds, but the call sites live in
 // upstream validation code paths which must compile in all build modes.
 func (c *Config) validateChuboOS(validation.RuntimeMode, ...validation.Option) ([]string, error) {
 	return nil, nil
@@ -23,4 +23,3 @@ func (c *Config) validateChuboOS(validation.RuntimeMode, ...validation.Option) (
 func (c *Config) runtimeValidateChuboOS(context.Context, state.State, validation.RuntimeMode, ...validation.Option) ([]string, error) {
 	return nil, nil
 }
-

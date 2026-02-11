@@ -7,7 +7,7 @@
 package container
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/config/types/chuboos"
+	chubotypes "github.com/siderolabs/talos/pkg/machinery/config/types/chuboos"
 )
 
 func maybeSynthesizeChuboOSV1Alpha1(container *Container) error {
@@ -17,7 +17,7 @@ func maybeSynthesizeChuboOSV1Alpha1(container *Container) error {
 	}
 
 	for _, doc := range container.documents {
-		mc, ok := doc.(*chuboos.MachineConfigV1Alpha1)
+		mc, ok := doc.(*chubotypes.MachineConfigV1Alpha1)
 		if !ok {
 			continue
 		}

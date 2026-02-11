@@ -8,7 +8,7 @@ package secrets
 
 import "github.com/siderolabs/talos/pkg/machinery/config"
 
-// In the `chuboos` build variant, Kubernetes/etcd PKI is intentionally omitted.
+// In the `chubo` build variant, Kubernetes/etcd PKI is intentionally omitted.
 func (bundle *Bundle) populateKubernetesEtcd(_ *config.VersionContract) error {
 	return nil
 }
@@ -16,4 +16,3 @@ func (bundle *Bundle) populateKubernetesEtcd(_ *config.VersionContract) error {
 func (bundle *Bundle) validateKubernetesEtcdCerts() error {
 	return nil
 }
-

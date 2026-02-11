@@ -29,10 +29,10 @@ func (c *Config) validateChuboOS(mode validation.RuntimeMode, options ...validat
 		return nil, result.ErrorOrNil()
 	}
 
-	// `chuboos` relies on OS API + trustd on every node; keep the Talos "controlplane"
+	// `chubo` relies on OS API + trustd on every node; keep the Talos "controlplane"
 	// machine type as the compatibility signal.
 	if !c.Machine().Type().IsControlPlane() {
-		result = multierror.Append(result, fmt.Errorf("chuboos requires machine.type to be %q (or %q)", machine.TypeControlPlane.String(), machine.TypeInit.String()))
+		result = multierror.Append(result, fmt.Errorf("chubo requires machine.type to be %q (or %q)", machine.TypeControlPlane.String(), machine.TypeInit.String()))
 	}
 
 	// Trust: keep Talos trustd token + OS issuing CA (for now).
@@ -82,4 +82,3 @@ func (c *Config) runtimeValidateChuboOS(ctx context.Context, st state.State, mod
 	// Disk selector matching and deeper runtime checks can be added once the schema stabilizes.
 	return c.validateChuboOS(mode, opt...)
 }
-
