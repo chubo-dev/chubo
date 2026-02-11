@@ -7,19 +7,9 @@ package cgroup
 import (
 	"runtime"
 	"sync"
-
-	"github.com/google/cadvisor/utils/sysfs"
-	"github.com/google/cadvisor/utils/sysinfo"
 )
 
-var availableCPUCores = sync.OnceValue(func() int {
-	_, cores, err := sysinfo.GetNodesInfo(sysfs.NewRealSysFs())
-	if err != nil || cores < 1 {
-		return runtime.NumCPU()
-	}
-
-	return cores
-})
+var availableCPUCores = sync.OnceValue(func() int { return runtime.NumCPU() })
 
 // MilliCores represents a CPU value in milli-cores.
 type MilliCores uint
