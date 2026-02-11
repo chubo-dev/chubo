@@ -118,7 +118,7 @@ done
 
 echo "Checking listener ports"
 
-netstat_output="$("${TALOSCTL}" "${common_args[@]}" netstat)"
+netstat_output="$("${TALOSCTL}" "${common_args[@]}" netstat --listening --all)"
 listen_lines="$(printf '%s\n' "${netstat_output}" | grep -E 'LISTEN' || true)"
 
 if [[ -z "${listen_lines}" ]]; then
