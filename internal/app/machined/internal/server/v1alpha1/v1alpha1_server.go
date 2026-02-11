@@ -141,6 +141,18 @@ func (s *Server) checkControlplane(apiName string) error {
 	return status.Errorf(codes.Unimplemented, "%s is only available on control plane nodes", apiName)
 }
 
+func (s *Server) checkControlplaneService(apiName string, serviceID string) error {
+	if err := s.checkControlplane(apiName); err != nil {
+		return err
+	}
+
+	if !slices.Contains(runtimeServiceIDs(s.Controller.Runtime()), serviceID) {
+		return status.Errorf(codes.Unimplemented, "%s is not available: %q service is not registered on this node", apiName, serviceID)
+	}
+
+	return nil
+}
+
 // Register implements the factory.Registrator interface.
 func (s *Server) Register(obj *grpc.Server) {
 	s.server = obj
@@ -1902,7 +1914,7 @@ func (s *Server) Memory(ctx context.Context, in *emptypb.Empty) (reply *machine.
 
 // EtcdMemberList implements the machine.MachineServer interface.
 func (s *Server) EtcdMemberList(ctx context.Context, in *machine.EtcdMemberListRequest) (*machine.EtcdMemberListResponse, error) {
-	if err := s.checkControlplane("member list"); err != nil {
+	if err := s.checkControlplaneService("member list", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -1951,7 +1963,7 @@ func (s *Server) EtcdMemberList(ctx context.Context, in *machine.EtcdMemberListR
 
 // EtcdRemoveMemberByID implements the machine.MachineServer interface.
 func (s *Server) EtcdRemoveMemberByID(ctx context.Context, in *machine.EtcdRemoveMemberByIDRequest) (*machine.EtcdRemoveMemberByIDResponse, error) {
-	if err := s.checkControlplane("etcd remove member"); err != nil {
+	if err := s.checkControlplaneService("etcd remove member", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -1981,7 +1993,7 @@ func (s *Server) EtcdRemoveMemberByID(ctx context.Context, in *machine.EtcdRemov
 
 // EtcdLeaveCluster implements the machine.MachineServer interface.
 func (s *Server) EtcdLeaveCluster(ctx context.Context, in *machine.EtcdLeaveClusterRequest) (*machine.EtcdLeaveClusterResponse, error) {
-	if err := s.checkControlplane("etcd leave"); err != nil {
+	if err := s.checkControlplaneService("etcd leave", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2007,7 +2019,7 @@ func (s *Server) EtcdLeaveCluster(ctx context.Context, in *machine.EtcdLeaveClus
 
 // EtcdForfeitLeadership implements the machine.MachineServer interface.
 func (s *Server) EtcdForfeitLeadership(ctx context.Context, in *machine.EtcdForfeitLeadershipRequest) (*machine.EtcdForfeitLeadershipResponse, error) {
-	if err := s.checkControlplane("etcd forfeit leadership"); err != nil {
+	if err := s.checkControlplaneService("etcd forfeit leadership", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2041,7 +2053,7 @@ func (s *Server) EtcdForfeitLeadership(ctx context.Context, in *machine.EtcdForf
 
 // EtcdSnapshot implements the machine.MachineServer interface.
 func (s *Server) EtcdSnapshot(in *machine.EtcdSnapshotRequest, srv machine.MachineService_EtcdSnapshotServer) error {
-	if err := s.checkControlplane("etcd snapshot"); err != nil {
+	if err := s.checkControlplaneService("etcd snapshot", "etcd"); err != nil {
 		return err
 	}
 
@@ -2088,7 +2100,7 @@ func (s *Server) EtcdRecover(srv machine.MachineService_EtcdRecoverServer) error
 		return err
 	}
 
-	if err := s.checkControlplane("etcd recover"); err != nil {
+	if err := s.checkControlplaneService("etcd recover", "etcd"); err != nil {
 		return err
 	}
 
@@ -2168,7 +2180,7 @@ func mapAlarms(alarms []*etcdserverpb.AlarmMember) []*machine.EtcdMemberAlarm {
 //
 // This method is available only on control plane nodes (which run etcd).
 func (s *Server) EtcdAlarmList(ctx context.Context, in *emptypb.Empty) (*machine.EtcdAlarmListResponse, error) {
-	if err := s.checkControlplane("etcd alarm list"); err != nil {
+	if err := s.checkControlplaneService("etcd alarm list", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2198,7 +2210,7 @@ func (s *Server) EtcdAlarmList(ctx context.Context, in *emptypb.Empty) (*machine
 //
 // This method is available only on control plane nodes (which run etcd).
 func (s *Server) EtcdAlarmDisarm(ctx context.Context, in *emptypb.Empty) (*machine.EtcdAlarmDisarmResponse, error) {
-	if err := s.checkControlplane("etcd alarm list"); err != nil {
+	if err := s.checkControlplaneService("etcd alarm list", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2231,7 +2243,7 @@ func (s *Server) EtcdAlarmDisarm(ctx context.Context, in *emptypb.Empty) (*machi
 //
 // This method is available only on control plane nodes (which run etcd).
 func (s *Server) EtcdDefragment(ctx context.Context, in *emptypb.Empty) (*machine.EtcdDefragmentResponse, error) {
-	if err := s.checkControlplane("etcd defragment"); err != nil {
+	if err := s.checkControlplaneService("etcd defragment", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2259,7 +2271,7 @@ func (s *Server) EtcdDefragment(ctx context.Context, in *emptypb.Empty) (*machin
 //
 // This method is available only on control plane nodes (which run etcd).
 func (s *Server) EtcdStatus(ctx context.Context, in *emptypb.Empty) (*machine.EtcdStatusResponse, error) {
-	if err := s.checkControlplane("etcd status"); err != nil {
+	if err := s.checkControlplaneService("etcd status", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2313,7 +2325,7 @@ func (s *Server) EtcdStatus(ctx context.Context, in *emptypb.Empty) (*machine.Et
 //
 // This method is available only on control plane nodes (which run etcd).
 func (s *Server) EtcdDowngradeCancel(ctx context.Context, _ *emptypb.Empty) (*machine.EtcdDowngradeCancelResponse, error) {
-	if err := s.checkControlplane("etcd downgrade cancel"); err != nil {
+	if err := s.checkControlplaneService("etcd downgrade cancel", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2347,7 +2359,7 @@ func (s *Server) EtcdDowngradeCancel(ctx context.Context, _ *emptypb.Empty) (*ma
 //
 //nolint:dupl
 func (s *Server) EtcdDowngradeEnable(ctx context.Context, in *machine.EtcdDowngradeEnableRequest) (*machine.EtcdDowngradeEnableResponse, error) {
-	if err := s.checkControlplane("etcd downgrade cancel"); err != nil {
+	if err := s.checkControlplaneService("etcd downgrade cancel", "etcd"); err != nil {
 		return nil, err
 	}
 
@@ -2385,7 +2397,7 @@ func (s *Server) EtcdDowngradeEnable(ctx context.Context, in *machine.EtcdDowngr
 //
 //nolint:dupl
 func (s *Server) EtcdDowngradeValidate(ctx context.Context, in *machine.EtcdDowngradeValidateRequest) (*machine.EtcdDowngradeValidateResponse, error) {
-	if err := s.checkControlplane("etcd downgrade cancel"); err != nil {
+	if err := s.checkControlplaneService("etcd downgrade cancel", "etcd"); err != nil {
 		return nil, err
 	}
 
