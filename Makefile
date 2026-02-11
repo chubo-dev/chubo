@@ -566,6 +566,7 @@ unit-tests-fips: ## Performs unit tests with FIPS strict mode.
 chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
 	@$(MAKE) initramfs kernel sd-boot ARTIFACTS=_out/chubo GO_BUILDTAGS=tcell_minimal,grpcnotrace,chubo
 	@./hack/chubo/check-rootfs.sh _out/chubo/initramfs-arm64.xz
+	@./hack/chubo/check-go-deps.sh
 	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/machined-linux-arm64 ./internal/app/machined
 	@go build -o _out/chubo/talosctl-linux-amd64 ./cmd/talosctl
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q nomadconfig
