@@ -46,6 +46,7 @@ SUPPORT_LISTING="${WORKDIR}/support-listing.txt"
 
 cluster_created=0
 registry_started=0
+runtime_config_applied=0
 
 require_cmd() {
 	local cmd="$1"
@@ -233,7 +234,9 @@ echo "waiting for node to leave maintenance mode after install apply"
 maintenance_deadline=$((SECONDS + 180))
 while "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; do
 	if ((SECONDS >= maintenance_deadline)); then
-		echo "maintenance API is still up after install apply; continuing with runtime wait/fallback path"
+		echo "maintenance API is still up after install apply; applying runtime config and rebooting"
+		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+		runtime_config_applied=1
 		break
 	fi
 
@@ -241,9 +244,13 @@ while "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/d
 done
 
 if ! wait_for_runtime; then
-	echo "runtime mTLS did not come up after install, applying runtime config and rebooting"
-	wait_for_maintenance
-	"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+	if ((runtime_config_applied == 0)); then
+		echo "runtime mTLS did not come up after install, applying runtime config and rebooting"
+		wait_for_maintenance
+		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+	else
+		echo "runtime mTLS did not come up after runtime config apply, retrying runtime wait"
+	fi
 	wait_for_runtime
 fi
 
