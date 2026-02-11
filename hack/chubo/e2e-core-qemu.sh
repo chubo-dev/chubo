@@ -81,7 +81,7 @@ wait_until() {
 
 wait_for_maintenance() {
 	wait_until "maintenance API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" version --insecure -e "${NODE_IP}" -n "${NODE_IP}"
+		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 wait_for_runtime() {
