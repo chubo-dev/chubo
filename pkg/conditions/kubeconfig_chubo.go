@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build !chubo && !chuboos
+//go:build chubo || chuboos
 
 package conditions
 
@@ -13,8 +13,6 @@ import (
 	"io/fs"
 	"os"
 	"time"
-
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 type kubeconfig string
@@ -25,17 +23,13 @@ func (filename kubeconfig) Wait(ctx context.Context) error {
 
 	for {
 		_, err := os.Stat(string(filename))
-		if err != nil && !errors.Is(err, fs.ErrNotExist) {
-			return err
-		}
-
-		_, err = clientcmd.BuildConfigFromFlags("", string(filename))
 		if err == nil {
 			return nil
 		}
 
-		// TODO: we can't check for specific error here (looking for file not found for client key/cert):
-		//       https://github.com/kubernetes/kubernetes/pull/105080
+		if err != nil && !errors.Is(err, fs.ErrNotExist) {
+			return err
+		}
 
 		select {
 		case <-ctx.Done():

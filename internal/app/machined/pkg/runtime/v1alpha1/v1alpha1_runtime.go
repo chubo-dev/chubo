@@ -13,7 +13,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/cosi-project/runtime/pkg/safe"
 
 	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
@@ -24,7 +23,6 @@ import (
 	"github.com/siderolabs/talos/pkg/machinery/config/container"
 	machineconfig "github.com/siderolabs/talos/pkg/machinery/resources/config"
 	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
 )
 
 // Runtime implements the Runtime interface.
@@ -218,20 +216,6 @@ func (r *Runtime) Events() runtime.EventStream {
 // Logging implements the Runtime interface.
 func (r *Runtime) Logging() runtime.LoggingManager {
 	return r.l
-}
-
-// NodeName implements the Runtime interface.
-func (r *Runtime) NodeName() (string, error) {
-	nodenameResource, err := safe.ReaderGet[*k8s.Nodename](
-		context.Background(),
-		r.s.V1Alpha2().Resources(),
-		resource.NewMetadata(k8s.NamespaceName, k8s.NodenameType, k8s.NodenameID, resource.VersionUndefined),
-	)
-	if err != nil {
-		return "", fmt.Errorf("error getting nodename resource: %w", err)
-	}
-
-	return nodenameResource.TypedSpec().Nodename, nil
 }
 
 // IsBootstrapAllowed checks for CRI to be up, checked in the bootstrap method.
