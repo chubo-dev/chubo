@@ -5,8 +5,11 @@ set -euo pipefail
 #
 # Policy:
 # - forbidden prefixes: k8s.io/* and go.etcd.io/etcd/*
-# - baseline file stores currently-allowed package paths
-# - check fails only when current deps include package paths not present in baseline
+# - cmd/talosctl is strict: zero forbidden deps allowed
+# - baseline file stores currently-allowed package paths for incremental targets
+# - check fails when:
+#   * cmd/talosctl has any forbidden deps
+#   * current deps include package paths not present in baseline
 # - removals are reported as improvement (baseline can be tightened with --update)
 #
 # Usage:
@@ -58,17 +61,39 @@ workdir="$(mktemp -d /tmp/chubo-go-deps-check.XXXXXX)"
 trap 'rm -rf "${workdir}"' EXIT
 current_file="${workdir}/current.txt"
 current_raw="${workdir}/current-raw.txt"
+strict_cmd_talosctl_file="${workdir}/cmd_talosctl_forbidden.txt"
 
 : >"${current_raw}"
+: >"${strict_cmd_talosctl_file}"
 
 for target_spec in "${TARGETS[@]}"; do
 	read -r goos goarch cgo target <<<"${target_spec}"
 	echo "Collecting deps for ${target} (GOOS=${goos} GOARCH=${goarch} CGO_ENABLED=${cgo})"
+	target_raw="${workdir}/${target//\//_}.raw.txt"
+	target_forbidden="${workdir}/${target//\//_}.forbidden.txt"
+
 	GOOS="${goos}" GOARCH="${goarch}" CGO_ENABLED="${cgo}" \
-		go list -deps -tags "${TAGS}" "./${target}" >>"${current_raw}"
+		go list -deps -tags "${TAGS}" "./${target}" >"${target_raw}"
+
+	cat "${target_raw}" >>"${current_raw}"
+
+	sort -u "${target_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${target_forbidden}" || true
+
+	target_count="$(wc -l <"${target_forbidden}" | tr -d ' ')"
+	echo "  forbidden deps for ${target}: ${target_count}"
+
+	if [[ "${target}" == "cmd/talosctl" ]]; then
+		cat "${target_forbidden}" >"${strict_cmd_talosctl_file}"
+	fi
 done
 
 sort -u "${current_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${current_file}" || true
+
+if [[ -s "${strict_cmd_talosctl_file}" ]]; then
+	echo "FAIL: cmd/talosctl must not import forbidden package deps:" >&2
+	sed 's/^/  + /' "${strict_cmd_talosctl_file}" >&2
+	exit 1
+fi
 
 if [[ "${UPDATE}" -eq 1 ]]; then
 	mkdir -p "$(dirname "${BASELINE}")"

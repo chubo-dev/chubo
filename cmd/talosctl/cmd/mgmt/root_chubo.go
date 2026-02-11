@@ -1,4 +1,4 @@
-//go:build !chubo
+//go:build chubo
 
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12,7 +12,6 @@ import (
 	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster"
 	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/debug"
 	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/gen"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/inject"
 	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/machineconfig"
 )
 
@@ -32,6 +31,5 @@ func init() {
 	addCommand(cluster.Cmd)
 	addCommand(gen.Cmd)
 	addCommand(debug.Cmd)
-	addCommand(inject.Cmd)
 	addCommand(machineconfig.Cmd)
 }
