@@ -144,13 +144,15 @@ type RegistryMirrorSpec struct {
 }
 
 type ModulesSpec struct {
-	Chubo     *ChuboModuleSpec     `yaml:"chubo,omitempty"`
-	Hashistack *HashistackModuleSpec `yaml:"hashistack,omitempty"`
+	Chubo *ChuboModuleSpec `yaml:"chubo,omitempty"`
 }
 
 type ChuboModuleSpec struct {
-	Enabled   *bool              `yaml:"enabled,omitempty"`
+	Enabled   *bool               `yaml:"enabled,omitempty"`
 	Bootstrap *ChuboBootstrapSpec `yaml:"bootstrap,omitempty"`
+	Nomad     *ChuboRoleSpec      `yaml:"nomad,omitempty"`
+	Consul    *ChuboRoleSpec      `yaml:"consul,omitempty"`
+	OpenBao   *ChuboOpenBaoSpec   `yaml:"openbao,omitempty"`
 }
 
 type ChuboBootstrapSpec struct {
@@ -159,19 +161,12 @@ type ChuboBootstrapSpec struct {
 	Payload    string `yaml:"payload,omitempty"`
 }
 
-type HashistackModuleSpec struct {
-	Enabled *bool                 `yaml:"enabled,omitempty"`
-	Nomad   *HashistackRoleSpec   `yaml:"nomad,omitempty"`
-	Consul  *HashistackRoleSpec   `yaml:"consul,omitempty"`
-	OpenBao *HashistackOpenBaoSpec `yaml:"openbao,omitempty"`
-}
-
-type HashistackRoleSpec struct {
+type ChuboRoleSpec struct {
 	Enabled *bool  `yaml:"enabled,omitempty"`
 	Role    string `yaml:"role,omitempty"` // server|client
 }
 
-type HashistackOpenBaoSpec struct {
+type ChuboOpenBaoSpec struct {
 	Enabled *bool  `yaml:"enabled,omitempty"`
 	Mode    string `yaml:"mode,omitempty"` // nomadJob
 }

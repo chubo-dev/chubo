@@ -15,15 +15,16 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v3"
 
 	"github.com/siderolabs/talos/pkg/machinery/config/validation"
 )
 
 type testRuntimeMode struct{}
 
-func (testRuntimeMode) String() string      { return "test" }
+func (testRuntimeMode) String() string        { return "test" }
 func (testRuntimeMode) RequiresInstall() bool { return false }
-func (testRuntimeMode) InContainer() bool   { return false }
+func (testRuntimeMode) InContainer() bool     { return false }
 
 func TestMachineConfigBootstrapSignedPayload(t *testing.T) {
 	t.Parallel()
@@ -176,3 +177,43 @@ func newSelfSignedEd25519Cert(t *testing.T, pub ed25519.PublicKey, priv ed25519.
 
 var _ validation.RuntimeMode = testRuntimeMode{}
 
+func TestMachineConfigChuboModuleServicesFromYAML(t *testing.T) {
+	t.Parallel()
+
+	const cfg = `apiVersion: chubo.dev/v1alpha1
+kind: MachineConfig
+spec:
+  trust:
+    token: token
+    ca:
+      crt: dummy-ca-crt
+      key: dummy-ca-key
+  modules:
+    chubo:
+      enabled: true
+      nomad:
+        enabled: true
+        role: server
+      consul:
+        enabled: true
+        role: client
+      openbao:
+        enabled: true
+        mode: nomadJob
+`
+
+	var mc MachineConfigV1Alpha1
+
+	require.NoError(t, yaml.Unmarshal([]byte(cfg), &mc))
+	require.NotNil(t, mc.Spec.Modules)
+	require.NotNil(t, mc.Spec.Modules.Chubo)
+	require.NotNil(t, mc.Spec.Modules.Chubo.Nomad)
+	require.NotNil(t, mc.Spec.Modules.Chubo.Consul)
+	require.NotNil(t, mc.Spec.Modules.Chubo.OpenBao)
+	require.Equal(t, "server", mc.Spec.Modules.Chubo.Nomad.Role)
+	require.Equal(t, "client", mc.Spec.Modules.Chubo.Consul.Role)
+	require.Equal(t, "nomadJob", mc.Spec.Modules.Chubo.OpenBao.Mode)
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+}

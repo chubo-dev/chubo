@@ -1343,7 +1343,7 @@ func (s *Server) NomadConfig(empty *emptypb.Empty, obj machine.MachineService_No
 
 	addr := "http://" + net.JoinHostPort(ip, "4646")
 
-	// TODO(chubo-os): include TLS (CA/certs) and ACL token once the Hashistack module owns those.
+	// TODO(chubo-os): include TLS (CA/certs) and ACL token once the Chubo module owns those.
 	env := []byte(fmt.Sprintf("NOMAD_ADDR=%s\n", addr))
 
 	tgz, err := tarGzSingleFile("nomad.env", env)
@@ -1367,7 +1367,7 @@ func (s *Server) ConsulConfig(empty *emptypb.Empty, obj machine.MachineService_C
 
 	addr := "http://" + net.JoinHostPort(ip, "8500")
 
-	// TODO(chubo-os): include TLS (CA/certs) and ACL token once the Hashistack module owns those.
+	// TODO(chubo-os): include TLS (CA/certs) and ACL token once the Chubo module owns those.
 	env := []byte(fmt.Sprintf("CONSUL_HTTP_ADDR=%s\n", addr))
 
 	tgz, err := tarGzSingleFile("consul.env", env)
