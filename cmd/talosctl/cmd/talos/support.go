@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"slices"
 	"strings"
 	"sync"
 	"text/tabwriter"
@@ -28,7 +29,9 @@ import (
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 
+	"github.com/siderolabs/talos/pkg/machinery/api/common"
 	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/siderolabs/talos/pkg/machinery/constants"
 	clusterresource "github.com/siderolabs/talos/pkg/machinery/resources/cluster"
 )
 
@@ -113,9 +116,22 @@ var supportCmd = &cobra.Command{
 
 func collectData(dest *os.File, progress chan bundle.Progress) error {
 	return WithClientNoNodes(func(ctx context.Context, c *client.Client) error {
-		clientset, err := getKubernetesClient(ctx, c)
+		kubernetesEnabled, err := isKubernetesEnabled(ctx, c)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to create kubernetes client %s\n", err)
+			fmt.Fprintf(os.Stderr, "Failed to discover kubernetes service state %s\n", err)
+			// Fail open to preserve existing support behavior if service discovery is unavailable.
+			kubernetesEnabled = true
+		}
+
+		var clientset *k8s.Clientset
+
+		if kubernetesEnabled {
+			clientset, err = getKubernetesClient(ctx, c)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Failed to create kubernetes client %s\n", err)
+			}
+		} else {
+			fmt.Fprintln(os.Stderr, "Kubernetes services not present, collecting Talos-only support bundle.")
 		}
 
 		opts := []bundle.Option{
@@ -133,13 +149,241 @@ func collectData(dest *os.File, progress chan bundle.Progress) error {
 
 		options := bundle.NewOptions(opts...)
 
-		collectors, err := collectors.GetForOptions(ctx, options)
+		supportCollectors, err := collectors.GetForOptions(ctx, options)
 		if err != nil {
-			return err
+			if !kubernetesEnabled && isNoKubernetesCollectorError(err) {
+				fmt.Fprintf(os.Stderr, "Falling back to Talos-only collectors: %s\n", err)
+
+				supportCollectors, err = getTalosOnlyCollectors(ctx, c)
+			}
+
+			if err != nil {
+				return err
+			}
+
+			fmt.Fprintln(os.Stderr, "Talos-only collector mode active.")
+
+			return support.CreateSupportBundle(ctx, options, supportCollectors...)
 		}
 
-		return support.CreateSupportBundle(ctx, options, collectors...)
+		collectErr := support.CreateSupportBundle(ctx, options, supportCollectors...)
+		if collectErr != nil && !kubernetesEnabled && isNoKubernetesCollectorError(collectErr) {
+			fmt.Fprintf(os.Stderr, "Ignoring unsupported Kubernetes collector error in Talos-only mode: %s\n", collectErr)
+
+			return nil
+		}
+
+		return collectErr
 	})
+}
+
+func getTalosOnlyCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
+	var allCollectors []*collectors.Collector
+
+	for _, node := range GlobalArgs.Nodes {
+		nodeCollectors, err := getTalosOnlyNodeCollectors(client.WithNode(ctx, node), c)
+		if err != nil {
+			return nil, err
+		}
+
+		allCollectors = append(allCollectors, collectors.WithNode(nodeCollectors, node)...)
+	}
+
+	return allCollectors, nil
+}
+
+func getTalosOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
+	supportCollectors := []*collectors.Collector{
+		collectors.NewCollector("summary", talosOnlySummary),
+		collectors.NewCollector("dmesg.log", talosOnlyDmesg),
+		collectors.NewCollector("service-list.log", talosOnlyServiceList),
+	}
+
+	resp, err := c.ServiceList(ctx)
+	if err != nil {
+		supportCollectors = append(
+			supportCollectors,
+			collectors.NewCollector("service-list-error.log", staticCollector(
+				fmt.Sprintf("failed to list services: %s\n", err),
+			)),
+		)
+
+		return supportCollectors, nil
+	}
+
+	serviceIDs := map[string]struct{}{}
+
+	for _, msg := range resp.Messages {
+		for _, svc := range msg.Services {
+			serviceIDs[svc.Id] = struct{}{}
+		}
+	}
+
+	keys := make([]string, 0, len(serviceIDs))
+	for id := range serviceIDs {
+		keys = append(keys, id)
+	}
+
+	slices.Sort(keys)
+
+	for _, id := range keys {
+		serviceID := id
+
+		supportCollectors = append(
+			supportCollectors,
+			collectors.WithFolder([]*collectors.Collector{
+				collectors.NewCollector(
+					fmt.Sprintf("%s.log", serviceID),
+					talosOnlyServiceLog(serviceID),
+				),
+			}, "service-logs")...,
+		)
+	}
+
+	return supportCollectors, nil
+}
+
+func talosOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	resp, err := options.TalosClient.Version(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var b strings.Builder
+
+	b.WriteString("Server:\n")
+
+	for _, msg := range resp.Messages {
+		if msg.Version == nil {
+			continue
+		}
+
+		node := "<unknown>"
+		if msg.Metadata != nil && msg.Metadata.Hostname != "" {
+			node = msg.Metadata.Hostname
+		}
+
+		fmt.Fprintf(&b, "  Node: %s\n", node)
+		fmt.Fprintf(&b, "  Tag: %s\n", msg.Version.Tag)
+		fmt.Fprintf(&b, "  SHA: %s\n", msg.Version.Sha)
+		fmt.Fprintf(&b, "  OS/Arch: %s/%s\n", msg.Version.Os, msg.Version.Arch)
+	}
+
+	return []byte(b.String()), nil
+}
+
+func talosOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	stream, err := options.TalosClient.Dmesg(ctx, false, false)
+	if err != nil {
+		return nil, err
+	}
+
+	var data []byte
+
+	for {
+		resp, err := stream.Recv()
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+
+			return nil, err
+		}
+
+		data = append(data, resp.GetBytes()...)
+	}
+
+	return data, nil
+}
+
+func talosOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	resp, err := options.TalosClient.ServiceList(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var b strings.Builder
+
+	for _, msg := range resp.Messages {
+		for _, svc := range msg.Services {
+			healthy := false
+			if svc.GetHealth() != nil {
+				healthy = svc.GetHealth().GetHealthy()
+			}
+
+			fmt.Fprintf(&b, "id=%s state=%s healthy=%t\n", svc.Id, svc.State, healthy)
+		}
+	}
+
+	return []byte(b.String()), nil
+}
+
+func talosOnlyServiceLog(serviceID string) collectors.Collect {
+	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
+		stream, err := options.TalosClient.Logs(
+			ctx,
+			constants.SystemContainerdNamespace,
+			common.ContainerDriver_CONTAINERD,
+			serviceID,
+			false,
+			-1,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		var data []byte
+
+		for {
+			resp, err := stream.Recv()
+			if err != nil {
+				if err == io.EOF {
+					break
+				}
+
+				return nil, err
+			}
+
+			data = append(data, resp.GetBytes()...)
+		}
+
+		return data, nil
+	}
+}
+
+func staticCollector(data string) collectors.Collect {
+	return func(_ context.Context, _ *bundle.Options) ([]byte, error) {
+		return []byte(data), nil
+	}
+}
+
+func isKubernetesEnabled(ctx context.Context, c *client.Client) (bool, error) {
+	resp, err := c.ServiceList(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	for _, msg := range resp.Messages {
+		for _, svc := range msg.Services {
+			if svc.Id == "kubelet" || svc.Id == "cri" {
+				return true, nil
+			}
+		}
+	}
+
+	return false, nil
+}
+
+func isNoKubernetesCollectorError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	msg := err.Error()
+
+	return strings.Contains(msg, "ListPodSandbox") ||
+		strings.Contains(msg, "kube-system") ||
+		strings.Contains(msg, "dial unix /run/containerd/containerd.sock")
 }
 
 func getKubernetesClient(ctx context.Context, c *client.Client) (*k8s.Clientset, error) {
