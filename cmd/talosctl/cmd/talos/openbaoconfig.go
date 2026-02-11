@@ -22,9 +22,10 @@ var openBaoConfigCmd = &cobra.Command{
 	Short: "Download the OpenBao client configuration bundle from the node",
 	Long: `Download the OpenBao client configuration bundle from the node.
 
-By default the bundle is written to PWD as 'openbao.env'.
-If [local-path] is a directory, 'openbao.env' is written under it.
-If [local-path] is "-", the config is written to stdout.`,
+By default the bundle is extracted to PWD/openbaoconfig/.
+If [local-path] is a directory, bundle is extracted under [local-path]/openbaoconfig/.
+If [local-path] does not exist, it is created and used as the extraction directory.
+If [local-path] is "-", the raw .tar.gz bundle is written to stdout.`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
@@ -37,12 +38,12 @@ If [local-path] is "-", the config is written to stdout.`,
 				return err
 			}
 
-			data, err := downloadSingleFile(ctx, c.OpenBaoConfigRaw, "openbao.env")
+			bundle, err := downloadBundle(ctx, c.OpenBaoConfigRaw)
 			if err != nil {
 				return err
 			}
 
-			return writeConfigFile(localPath, data, "openbao.env", openBaoConfigFlags.force)
+			return writeConfigBundle(localPath, bundle, "openbaoconfig", openBaoConfigFlags.force)
 		})
 	},
 }

@@ -22,9 +22,10 @@ var consulConfigCmd = &cobra.Command{
 	Short: "Download the Consul client configuration bundle from the node",
 	Long: `Download the Consul client configuration bundle from the node.
 
-By default the bundle is written to PWD as 'consul.env'.
-If [local-path] is a directory, 'consul.env' is written under it.
-If [local-path] is "-", the config is written to stdout.`,
+By default the bundle is extracted to PWD/consulconfig/.
+If [local-path] is a directory, bundle is extracted under [local-path]/consulconfig/.
+If [local-path] does not exist, it is created and used as the extraction directory.
+If [local-path] is "-", the raw .tar.gz bundle is written to stdout.`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
@@ -37,12 +38,12 @@ If [local-path] is "-", the config is written to stdout.`,
 				return err
 			}
 
-			data, err := downloadSingleFile(ctx, c.ConsulConfigRaw, "consul.env")
+			bundle, err := downloadBundle(ctx, c.ConsulConfigRaw)
 			if err != nil {
 				return err
 			}
 
-			return writeConfigFile(localPath, data, "consul.env", consulConfigFlags.force)
+			return writeConfigBundle(localPath, bundle, "consulconfig", consulConfigFlags.force)
 		})
 	},
 }

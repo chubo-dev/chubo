@@ -31,41 +31,52 @@ func defaultPath(args []string) (string, error) {
 	return filepath.Clean(args[0]), nil
 }
 
-func downloadSingleFile(ctx context.Context, raw rawDownloadFunc, filename string) ([]byte, error) {
+func downloadBundle(ctx context.Context, raw rawDownloadFunc) (io.ReadCloser, error) {
 	r, err := raw(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error copying: %w", err)
+		return nil, fmt.Errorf("error downloading config bundle: %w", err)
 	}
 
-	return helpers.ExtractFileFromTarGz(filename, r)
+	return r, nil
 }
 
-func writeConfigFile(localPath string, data []byte, defaultFilename string, force bool) error {
+func writeConfigBundle(localPath string, bundle io.ReadCloser, defaultDir string, force bool) error {
 	if localPath == stdoutOutput {
-		_, err := os.Stdout.Write(data)
+		defer bundle.Close() //nolint:errcheck
 
+		_, err := io.Copy(os.Stdout, bundle)
 		return err
 	}
 
 	st, err := os.Stat(localPath)
-	if err != nil {
-		if !errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("error checking path %q: %w", localPath, err)
+	switch {
+	case err == nil:
+		if !st.IsDir() {
+			return fmt.Errorf("local path %q should be a directory path for bundle output", localPath)
 		}
 
-		// If path doesn't exist, treat it as a file path (mkdir parent).
-		if err := os.MkdirAll(filepath.Dir(localPath), 0o755); err != nil {
-			return err
-		}
-	} else if st.IsDir() {
-		localPath = filepath.Join(localPath, defaultFilename)
+		localPath = filepath.Join(localPath, defaultDir)
+	case errors.Is(err, fs.ErrNotExist):
+		// Treat non-existing path as the target bundle directory.
+	default:
+		return fmt.Errorf("error checking path %q: %w", localPath, err)
 	}
 
 	if _, err := os.Stat(localPath); err == nil && !force {
-		return fmt.Errorf("%s already exists, use --force to overwrite: %q", defaultFilename, localPath)
+		return fmt.Errorf("%s already exists, use --force to overwrite: %q", defaultDir, localPath)
 	} else if err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return fmt.Errorf("error checking path %q: %w", localPath, err)
 	}
 
-	return os.WriteFile(localPath, data, 0o600)
+	if force {
+		if err := os.RemoveAll(localPath); err != nil {
+			return fmt.Errorf("error removing existing path %q: %w", localPath, err)
+		}
+	}
+
+	if err := os.MkdirAll(localPath, 0o755); err != nil {
+		return fmt.Errorf("error creating bundle output directory %q: %w", localPath, err)
+	}
+
+	return helpers.ExtractTarGz(localPath, bundle)
 }
