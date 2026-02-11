@@ -14,6 +14,7 @@ cd "${TALOS_ROOT}"
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
 ARCH="${ARCH:-amd64}"
+SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
@@ -37,6 +38,7 @@ REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-${REGISTRY_NODE_ADDR}=http://${REG
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1200}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
+ACTION_REBOOT_WAIT_SECONDS="${ACTION_REBOOT_WAIT_SECONDS:-600}"
 SUPPORT_OUT="${SUPPORT_OUT:-/tmp/chubo-support-e2e.zip}"
 CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-/tmp/logs-chubo-e2e.tar.gz}"
 CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-/tmp/support-chubo-e2e.zip}"
@@ -50,6 +52,25 @@ SUPPORT_LISTING="${WORKDIR}/support-listing.txt"
 cluster_created=0
 registry_started=0
 runtime_config_applied=0
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--skip-build)
+		SKIP_BUILD=1
+		;;
+	-h | --help)
+		echo "usage: $0 [--skip-build]"
+		exit 0
+		;;
+	*)
+		echo "unknown argument: $1" >&2
+		echo "usage: $0 [--skip-build]" >&2
+		exit 2
+		;;
+	esac
+
+	shift
+done
 
 require_cmd() {
 	local cmd="$1"
@@ -91,6 +112,72 @@ wait_for_maintenance() {
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
 		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+}
+
+wait_for_runtime_stable() {
+	local consecutive=0
+	local required_consecutive=5
+	local deadline=$((SECONDS + TIMEOUT_SECONDS))
+
+	while true; do
+		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
+			"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
+			consecutive=$((consecutive + 1))
+
+			if ((consecutive >= required_consecutive)); then
+				return 0
+			fi
+		else
+			consecutive=0
+		fi
+
+		if ((SECONDS >= deadline)); then
+			echo "timed out waiting for stable runtime API on ${NODE_IP}" >&2
+
+			return 1
+		fi
+
+		sleep "${SLEEP_SECONDS}"
+	done
+}
+
+read_boot_id() {
+	local boot_id
+
+	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+		return 1
+	fi
+
+	boot_id="$(printf '%s' "${boot_id}" | tr -d '\r\n[:space:]')"
+	if [[ -z "${boot_id}" ]]; then
+		return 1
+	fi
+
+	printf '%s\n' "${boot_id}"
+}
+
+wait_for_boot_id_change() {
+	local previous_boot_id="$1"
+	local context="$2"
+	local deadline=$((SECONDS + ACTION_REBOOT_WAIT_SECONDS))
+
+	while true; do
+		local current_boot_id
+
+		if current_boot_id="$(read_boot_id)"; then
+			if [[ "${current_boot_id}" != "${previous_boot_id}" ]]; then
+				echo "${context}: observed boot ID change (${previous_boot_id} -> ${current_boot_id})"
+				return 0
+			fi
+		fi
+
+		if ((SECONDS >= deadline)); then
+			echo "${context}: no boot ID change observed within ${ACTION_REBOOT_WAIT_SECONDS}s"
+			return 1
+		fi
+
+		sleep "${SLEEP_SECONDS}"
+	done
 }
 
 cleanup() {
@@ -143,18 +230,22 @@ fi
 rm -rf "${WORKDIR}" "${STATE_DIR}"
 mkdir -p "${WORKDIR}" "${ARTIFACTS}"
 
-echo "building chubo boot artifacts"
-make initramfs kernel sd-boot ARTIFACTS="${ARTIFACTS}" GO_BUILDTAGS="${GO_BUILDTAGS}" PLATFORM="linux/${ARCH}"
+if [[ "${SKIP_BUILD}" != "1" ]]; then
+	echo "building chubo boot artifacts"
+	make initramfs kernel sd-boot ARTIFACTS="${ARTIFACTS}" GO_BUILDTAGS="${GO_BUILDTAGS}" PLATFORM="linux/${ARCH}"
 
-echo "building chubo installer-base and imager docker images"
-make docker-installer-base docker-imager \
-	DEST="${ARTIFACTS}" \
-	GO_BUILDTAGS="${GO_BUILDTAGS}" \
-	PLATFORM="linux/${ARCH}" \
-	INSTALLER_ARCH=targetarch \
-	IMAGE_REGISTRY=localhost \
-	USERNAME=chubo \
-	IMAGE_TAG_OUT=dev
+	echo "building chubo installer-base and imager docker images"
+	make docker-installer-base docker-imager \
+		DEST="${ARTIFACTS}" \
+		GO_BUILDTAGS="${GO_BUILDTAGS}" \
+		PLATFORM="linux/${ARCH}" \
+		INSTALLER_ARCH=targetarch \
+		IMAGE_REGISTRY=localhost \
+		USERNAME=chubo \
+		IMAGE_TAG_OUT=dev
+else
+	echo "SKIP_BUILD=1: reusing existing artifacts in ${ARTIFACTS}"
+fi
 
 docker load -i "${ARTIFACTS}/installer-base.tar" >/dev/null
 docker load -i "${ARTIFACTS}/imager.tar" >/dev/null
@@ -233,14 +324,38 @@ wait_for_maintenance
 echo "applying install config"
 "${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
 
-echo "waiting for node to leave maintenance mode after install apply"
-maintenance_deadline=$((SECONDS + MAINTENANCE_PERSIST_SECONDS))
-while "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; do
-	if ((SECONDS >= maintenance_deadline)); then
-		echo "maintenance API is still up after install apply; applying runtime config and rebooting"
-		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-		runtime_config_applied=1
+echo "waiting for post-install transition"
+transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
+saw_maintenance_down=0
+maintenance_reentered_at=0
+
+while true; do
+	if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+		echo "runtime mTLS became available after install apply"
 		break
+	fi
+
+	if "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+		if ((saw_maintenance_down == 1)); then
+			if ((maintenance_reentered_at == 0)); then
+				maintenance_reentered_at="${SECONDS}"
+			fi
+
+			if ((SECONDS - maintenance_reentered_at >= MAINTENANCE_PERSIST_SECONDS)); then
+				echo "maintenance API stayed up after reboot; applying runtime config and rebooting"
+				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+				runtime_config_applied=1
+				break
+			fi
+		fi
+	else
+		saw_maintenance_down=1
+		maintenance_reentered_at=0
+	fi
+
+	if ((SECONDS >= transition_deadline)); then
+		echo "timed out waiting for post-install transition" >&2
+		exit 1
 	fi
 
 	sleep "${SLEEP_SECONDS}"
@@ -265,18 +380,39 @@ echo "validating runtime mTLS and runtime surface"
 	--node "${NODE_IP}"
 
 echo "running upgrade flow"
+pre_upgrade_boot_id="$(read_boot_id || true)"
 "${TALOSCTL}" upgrade \
 	--talosconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait=false
-wait_for_runtime
+
+if [[ -n "${pre_upgrade_boot_id}" ]]; then
+	wait_for_boot_id_change "${pre_upgrade_boot_id}" "upgrade" || true
+else
+	echo "upgrade: unable to read pre-upgrade boot ID, skipping reboot detection"
+fi
+
+wait_for_runtime_stable
 
 echo "running rollback flow"
-"${TALOSCTL}" rollback \
+pre_rollback_boot_id="$(read_boot_id || true)"
+if rollback_output="$("${TALOSCTL}" rollback \
 	--talosconfig "${TALOSCONFIG_FILE}" \
-	-e "${NODE_IP}" -n "${NODE_IP}"
-wait_for_runtime
+	-e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
+	if [[ -n "${pre_rollback_boot_id}" ]]; then
+		wait_for_boot_id_change "${pre_rollback_boot_id}" "rollback" || true
+	else
+		echo "rollback: unable to read pre-rollback boot ID, skipping reboot detection"
+	fi
+elif grep -q "previous UKI not found" <<<"${rollback_output}"; then
+	echo "rollback skipped: previous UKI not found for this node/image state"
+else
+	echo "${rollback_output}" >&2
+	exit 1
+fi
+
+wait_for_runtime_stable
 
 echo "collecting support bundle"
 rm -f "${SUPPORT_OUT}" "${SUPPORT_LISTING}"

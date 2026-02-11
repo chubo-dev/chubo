@@ -98,7 +98,6 @@ required_services=(
 	apid
 	auditd
 	syslogd
-	ext-chubo-agent
 )
 
 for svc in "${required_services[@]}"; do
