@@ -6,6 +6,7 @@ package talos
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -17,14 +18,19 @@ import (
 	"text/tabwriter"
 
 	"github.com/cosi-project/runtime/pkg/resource"
+	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/safe"
+	"github.com/cosi-project/runtime/pkg/state"
+	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
 	"github.com/gosuri/uiprogress"
 	"github.com/siderolabs/go-talos-support/support"
 	"github.com/siderolabs/go-talos-support/support/bundle"
 	"github.com/siderolabs/go-talos-support/support/collectors"
 	"github.com/spf13/cobra"
+	"go.yaml.in/yaml/v4"
 	"golang.org/x/sync/errgroup"
+	"google.golang.org/protobuf/types/known/emptypb"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
@@ -32,6 +38,7 @@ import (
 	"github.com/siderolabs/talos/pkg/machinery/api/common"
 	"github.com/siderolabs/talos/pkg/machinery/client"
 	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/siderolabs/talos/pkg/machinery/formatters"
 	clusterresource "github.com/siderolabs/talos/pkg/machinery/resources/cluster"
 )
 
@@ -196,20 +203,60 @@ func getTalosOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*colle
 	supportCollectors := []*collectors.Collector{
 		collectors.NewCollector("summary", talosOnlySummary),
 		collectors.NewCollector("dmesg.log", talosOnlyDmesg),
+		collectors.NewCollector("controller-runtime.log", talosOnlyServiceLog("controller-runtime")),
+		collectors.NewCollector("dns-resolve-cache.log", talosOnlyServiceLog("dns-resolve-cache")),
+		collectors.NewCollector("dependencies.dot", talosOnlyDependencies),
+		collectors.NewCollector("mounts", talosOnlyMounts),
+		collectors.NewCollector("devices", talosOnlyDevices),
+		collectors.NewCollector("io", talosOnlyIOPressure),
+		collectors.NewCollector("processes", talosOnlyProcesses),
 		collectors.NewCollector("service-list.log", talosOnlyServiceList),
 	}
 
-	resp, err := c.ServiceList(ctx)
+	resourceCollectors, err := getTalosOnlyResourceCollectors(ctx, c.COSI)
+	if err != nil {
+		supportCollectors = append(
+			supportCollectors,
+			collectors.WithFolder([]*collectors.Collector{
+				collectors.NewCollector("list-error.log", staticCollector(
+					fmt.Sprintf("failed to list COSI resource definitions: %s\n", err),
+				)),
+			}, "resources")...,
+		)
+	} else {
+		supportCollectors = append(
+			supportCollectors,
+			collectors.WithFolder(resourceCollectors, "resources")...,
+		)
+	}
+
+	serviceCollectors, err := getTalosOnlyServiceCollectors(ctx, c)
 	if err != nil {
 		supportCollectors = append(
 			supportCollectors,
 			collectors.NewCollector("service-list-error.log", staticCollector(
-				fmt.Sprintf("failed to list services: %s\n", err),
+				fmt.Sprintf("failed to list service collectors: %s\n", err),
 			)),
 		)
 
 		return supportCollectors, nil
 	}
+
+	supportCollectors = append(
+		supportCollectors,
+		collectors.WithFolder(serviceCollectors, "service-logs")...,
+	)
+
+	return supportCollectors, nil
+}
+
+func getTalosOnlyServiceCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
+	resp, err := c.ServiceList(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var collectorsList []*collectors.Collector
 
 	serviceIDs := map[string]struct{}{}
 
@@ -229,18 +276,34 @@ func getTalosOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*colle
 	for _, id := range keys {
 		serviceID := id
 
-		supportCollectors = append(
-			supportCollectors,
-			collectors.WithFolder([]*collectors.Collector{
-				collectors.NewCollector(
-					fmt.Sprintf("%s.log", serviceID),
-					talosOnlyServiceLog(serviceID),
-				),
-			}, "service-logs")...,
+		collectorsList = append(collectorsList,
+			collectors.NewCollector(fmt.Sprintf("%s.log", serviceID), talosOnlyServiceLog(serviceID)),
+			collectors.NewCollector(fmt.Sprintf("%s.state", serviceID), talosOnlyServiceInfo(serviceID)),
 		)
 	}
 
-	return supportCollectors, nil
+	return collectorsList, nil
+}
+
+func getTalosOnlyResourceCollectors(ctx context.Context, cosiState state.State) ([]*collectors.Collector, error) {
+	resourceDefinitions, err := safe.StateListAll[*meta.ResourceDefinition](ctx, cosiState)
+	if err != nil {
+		return nil, err
+	}
+
+	var collectorsList []*collectors.Collector
+
+	resourceDefinitions.ForEach(func(rd *meta.ResourceDefinition) {
+		collectorsList = append(
+			collectorsList,
+			collectors.NewCollector(
+				fmt.Sprintf("%s.yaml", rd.Metadata().ID()),
+				talosOnlyResource(rd),
+			),
+		)
+	})
+
+	return collectorsList, nil
 }
 
 func talosOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, error) {
@@ -296,6 +359,109 @@ func talosOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error
 	return data, nil
 }
 
+func talosOnlyDependencies(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	resp, err := options.TalosClient.Inspect.ControllerRuntimeDependencies(ctx)
+	if err != nil && resp == nil {
+		return nil, fmt.Errorf("error getting controller runtime dependencies: %w", err)
+	}
+
+	var b bytes.Buffer
+
+	if err := formatters.RenderGraph(ctx, options.TalosClient, resp, &b, true); err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+func talosOnlyMounts(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	resp, err := options.TalosClient.Mounts(ctx)
+	if err != nil && resp == nil {
+		return nil, fmt.Errorf("error getting mounts: %w", err)
+	}
+
+	var b bytes.Buffer
+
+	if err := formatters.RenderMounts(resp, &b, nil); err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+func talosOnlyDevices(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	reader, err := options.TalosClient.Read(ctx, "/proc/bus/pci/devices")
+	if err != nil {
+		return nil, err
+	}
+
+	defer reader.Close() //nolint:errcheck
+
+	return io.ReadAll(reader)
+}
+
+func talosOnlyIOPressure(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	resp, err := options.TalosClient.MachineClient.DiskStats(ctx, &emptypb.Empty{})
+	if err != nil {
+		return nil, err
+	}
+
+	var b bytes.Buffer
+
+	w := tabwriter.NewWriter(&b, 0, 0, 3, ' ', 0)
+	fmt.Fprintln(w, "NAME\tIO_TIME\tIO_TIME_WEIGHTED\tDISK_WRITE_SECTORS\tDISK_READ_SECTORS")
+
+	for _, msg := range resp.Messages {
+		for _, stat := range msg.Devices {
+			fmt.Fprintf(w, "%s\t%d\t%d\t%d\t%d\n",
+				stat.Name,
+				stat.IoTimeMs,
+				stat.IoTimeWeightedMs,
+				stat.WriteSectors,
+				stat.ReadSectors,
+			)
+		}
+	}
+
+	if err := w.Flush(); err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
+func talosOnlyProcesses(ctx context.Context, options *bundle.Options) ([]byte, error) {
+	resp, err := options.TalosClient.Processes(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var b bytes.Buffer
+
+	w := tabwriter.NewWriter(&b, 0, 0, 3, ' ', 0)
+	fmt.Fprintln(w, "PID\tSTATE\tTHREADS\tCPU-TIME\tVIRTMEM\tRESMEM\tCOMMAND")
+
+	for _, msg := range resp.Messages {
+		for _, proc := range msg.Processes {
+			fmt.Fprintf(w, "%6d\t%1s\t%4d\t%8.2f\t%7s\t%7s\t%s\n",
+				proc.Pid,
+				proc.State,
+				proc.Threads,
+				proc.CpuTime,
+				humanize.Bytes(proc.VirtualMemory),
+				humanize.Bytes(proc.ResidentMemory),
+				proc.Command,
+			)
+		}
+	}
+
+	if err := w.Flush(); err != nil {
+		return nil, err
+	}
+
+	return b.Bytes(), nil
+}
+
 func talosOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.ServiceList(ctx)
 	if err != nil {
@@ -316,6 +482,23 @@ func talosOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte,
 	}
 
 	return []byte(b.String()), nil
+}
+
+func talosOnlyServiceInfo(serviceID string) collectors.Collect {
+	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
+		resp, err := options.TalosClient.ServiceInfo(ctx, serviceID)
+		if err != nil && resp == nil {
+			return nil, fmt.Errorf("error getting service state for %q: %w", serviceID, err)
+		}
+
+		var b bytes.Buffer
+
+		if err := formatters.RenderServicesInfo(resp, &b, "", false); err != nil {
+			return nil, err
+		}
+
+		return b.Bytes(), nil
+	}
 }
 
 func talosOnlyServiceLog(serviceID string) collectors.Collect {
@@ -348,6 +531,60 @@ func talosOnlyServiceLog(serviceID string) collectors.Collect {
 		}
 
 		return data, nil
+	}
+}
+
+func talosOnlyResource(rd *meta.ResourceDefinition) collectors.Collect {
+	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
+		resp, err := options.TalosClient.COSI.List(
+			ctx,
+			resource.NewMetadata(
+				rd.TypedSpec().DefaultNamespace,
+				rd.TypedSpec().Type,
+				"",
+				resource.VersionUndefined,
+			),
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		var (
+			b        bytes.Buffer
+			hasItems bool
+		)
+
+		encoder := yaml.NewEncoder(&b)
+
+		for _, item := range resp.Items {
+			encoded := struct {
+				Metadata *resource.Metadata `yaml:"metadata"`
+				Spec     interface{}        `yaml:"spec"`
+			}{
+				Metadata: item.Metadata(),
+				Spec:     "<REDACTED>",
+			}
+
+			if rd.TypedSpec().Sensitivity != meta.Sensitive {
+				encoded.Spec = item.Spec()
+			}
+
+			if err := encoder.Encode(&encoded); err != nil {
+				return nil, err
+			}
+
+			hasItems = true
+		}
+
+		if !hasItems {
+			return nil, nil
+		}
+
+		if err := encoder.Close(); err != nil {
+			return nil, err
+		}
+
+		return b.Bytes(), nil
 	}
 }
 
