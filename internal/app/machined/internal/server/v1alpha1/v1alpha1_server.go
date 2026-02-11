@@ -494,7 +494,9 @@ func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (*mach
 		return nil, fmt.Errorf("error validating installer image %q: %w", in.GetImage(), err)
 	}
 
-	if s.Controller.Runtime().Config().Machine().Type() != machinetype.TypeWorker && !in.GetForce() {
+	serviceIDs := runtimeServiceIDs(s.Controller.Runtime())
+
+	if shouldRunEtcdUpgradePrechecks(s.Controller.Runtime().Config().Machine().Type(), in.GetForce(), serviceIDs) {
 		etcdClient, err := etcd.NewClientFromControlPlaneIPs(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
 		if err != nil {
 			return nil, fmt.Errorf("failed to create etcd client: %w", err)
@@ -512,6 +514,8 @@ func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (*mach
 		if err = etcdClient.ValidateForUpgrade(ctx, s.Controller.Runtime().Config()); err != nil {
 			return nil, fmt.Errorf("error validating etcd for upgrade: %w", err)
 		}
+	} else if !in.GetForce() && s.Controller.Runtime().Config().Machine().Type() != machinetype.TypeWorker {
+		log.Printf("skipping etcd upgrade validation: etcd service is not registered")
 	}
 
 	runCtx := context.WithValue(context.Background(), runtime.ActorIDCtxKey{}, actorID)
@@ -566,6 +570,30 @@ func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (*mach
 			},
 		},
 	}, nil
+}
+
+func runtimeServiceIDs(rt runtime.Runtime) []string {
+	services := system.Services(rt).List()
+
+	ids := make([]string, 0, len(services))
+
+	for _, svc := range services {
+		ids = append(ids, svc.AsProto().GetId())
+	}
+
+	return ids
+}
+
+func shouldRunEtcdUpgradePrechecks(machineType machinetype.Type, force bool, serviceIDs []string) bool {
+	if force {
+		return false
+	}
+
+	if machineType == machinetype.TypeWorker {
+		return false
+	}
+
+	return slices.Contains(serviceIDs, "etcd")
 }
 
 // ResetOptions implements runtime.ResetOptions interface.
