@@ -573,17 +573,33 @@ chuboos-guardrails: ## Runs chuboos-specific regression guardrails (k8s-less ima
 	@_out/chuboos/talosctl-linux-amd64 --help | grep -q openbaoconfig
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 
+.PHONY: chubo-guardrails
+chubo-guardrails: ## Alias for chuboos-guardrails (Wave B compatibility).
+	@$(MAKE) chuboos-guardrails
+
 .PHONY: chuboos-e2e-qemu
 chuboos-e2e-qemu: ## Runs chuboos core E2E in QEMU (install, runtime mTLS, upgrade, rollback, support).
 	@./hack/chuboos/e2e-core-qemu.sh
+
+.PHONY: chubo-e2e-qemu
+chubo-e2e-qemu: ## Alias for chuboos-e2e-qemu (Wave B compatibility).
+	@$(MAKE) chuboos-e2e-qemu
 
 .PHONY: chuboos-e2e-docker
 chuboos-e2e-docker: ## Runs chuboos non-root local fallback E2E in Docker provisioner (runtime + support bundle).
 	@./hack/chuboos/e2e-core-docker.sh
 
+.PHONY: chubo-e2e-docker
+chubo-e2e-docker: ## Alias for chuboos-e2e-docker (Wave B compatibility).
+	@$(MAKE) chuboos-e2e-docker
+
 .PHONY: chuboos-e2e-helper-bundles-qemu
 chuboos-e2e-helper-bundles-qemu: ## Runs one-command local QEMU smoke for nomad/consul/openbao helper bundles.
 	@./hack/chuboos/e2e-helper-bundles-qemu.sh
+
+.PHONY: chubo-e2e-helper-bundles-qemu
+chubo-e2e-helper-bundles-qemu: ## Alias for chuboos-e2e-helper-bundles-qemu (Wave B compatibility).
+	@$(MAKE) chuboos-e2e-helper-bundles-qemu
 
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
