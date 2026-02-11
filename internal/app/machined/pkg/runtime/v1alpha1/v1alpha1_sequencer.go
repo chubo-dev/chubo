@@ -86,11 +86,7 @@ func (*Sequencer) Initialize(r runtime.Runtime) []runtime.Phase {
 			EnforceKSPPRequirements,
 		).Append(
 			"earlyServices",
-			StartUdevd,
-			StartMachined,
-			StartAuditd,
-			StartSyslogd,
-			StartContainerd,
+			initializeEarlyServicesTasks()...,
 		).Append(
 			"usb",
 			WaitForUSB,
@@ -110,14 +106,7 @@ func (*Sequencer) Initialize(r runtime.Runtime) []runtime.Phase {
 			CleanupBootloader,
 		).AppendWithDeferredCheck(
 			func() bool {
-				if mode == runtime.ModeMetalAgent {
-					return false
-				}
-
-				disabledStr := procfs.ProcCmdline().Get(constants.KernelParamDashboardDisabled).First()
-				disabled, _ := strconv.ParseBool(pointer.SafeDeref(disabledStr)) //nolint:errcheck
-
-				return !disabled
+				return shouldStartDashboard(mode)
 			},
 			"dashboard",
 			StartDashboard,

@@ -1,0 +1,23 @@
+//go:build chuboos
+
+package v1alpha1
+
+import (
+	"testing"
+
+	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+)
+
+func TestShouldStartDashboardDisabledInChuboOS(t *testing.T) {
+	t.Parallel()
+
+	for _, mode := range []runtime.Mode{
+		runtime.ModeContainer,
+		runtime.ModeMetal,
+		runtime.ModeMetalAgent,
+	} {
+		if shouldStartDashboard(mode) {
+			t.Fatalf("shouldStartDashboard(%q) = true, want false", mode)
+		}
+	}
+}
