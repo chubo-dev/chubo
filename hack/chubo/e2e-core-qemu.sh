@@ -227,7 +227,18 @@ echo "waiting for maintenance API"
 wait_for_maintenance
 
 echo "applying install config"
-"${TALOSCTL}" apply-config --insecure -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
+"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
+
+echo "waiting for node to leave maintenance mode after install apply"
+maintenance_deadline=$((SECONDS + 180))
+while "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; do
+	if ((SECONDS >= maintenance_deadline)); then
+		echo "maintenance API is still up after install apply; continuing with runtime wait/fallback path"
+		break
+	fi
+
+	sleep "${SLEEP_SECONDS}"
+done
 
 if ! wait_for_runtime; then
 	echo "runtime mTLS did not come up after install, applying runtime config and rebooting"
