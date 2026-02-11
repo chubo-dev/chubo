@@ -115,7 +115,7 @@ func patchFn(c *client.Client, patches []configpatcher.Patch) func(context.Conte
 // patchCmd represents the edit command.
 var patchCmd = &cobra.Command{
 	Use:   "patch machineconfig",
-	Short: "Patch machine configuration of a Talos node with a local patch.",
+	Short: "Patch machine configuration of a node with a local patch.",
 	Args:  cobra.RangeArgs(1, 2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {

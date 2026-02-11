@@ -20,7 +20,7 @@ import (
 // inspectCmd represents the inspect command.
 var inspectCmd = &cobra.Command{
 	Use:   "inspect",
-	Short: "Inspect internals of Talos",
+	Short: "Inspect internals of the node OS",
 	Long:  ``,
 }
 

@@ -44,7 +44,7 @@ var upgradeCmdFlags struct {
 // upgradeCmd represents the processes command.
 var upgradeCmd = &cobra.Command{
 	Use:   "upgrade",
-	Short: "Upgrade Talos on the target node",
+	Short: "Upgrade the node OS on the target node",
 	Long:  ``,
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {

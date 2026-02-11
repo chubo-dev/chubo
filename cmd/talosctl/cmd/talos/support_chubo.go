@@ -47,12 +47,12 @@ var supportCmd = &cobra.Command{
 
 - For each node:
   - Kernel logs.
-  - Talos services state and logs.
+  - OS services state and logs.
   - Controller runtime dependency graph.
   - Mounts list.
   - Disk IO pressure snapshot.
   - Processes snapshot.
-  - Talos version summary.
+  - OS version summary.
 `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
