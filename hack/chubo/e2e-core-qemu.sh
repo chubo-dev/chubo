@@ -14,7 +14,9 @@ cd "${TALOS_ROOT}"
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
 ARCH="${ARCH:-amd64}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-linux-amd64}"
+HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
+HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
+TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
 
 CLUSTER_NAME="${CLUSTER_NAME:-chubo-e2e}"
 STATE_DIR="${STATE_DIR:-/tmp/chubo-e2e-state}"
@@ -120,7 +122,7 @@ require_cmd make
 require_cmd unzip
 
 if [[ ! -x "${TALOSCTL}" ]]; then
-	make talosctl-linux-amd64
+	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 fi
 
 if ! command -v crane >/dev/null 2>&1; then
