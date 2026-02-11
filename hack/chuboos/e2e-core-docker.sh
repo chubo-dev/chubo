@@ -46,6 +46,20 @@ require_cmd() {
 	fi
 }
 
+check_host_support() {
+	local host_os
+
+	host_os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+
+	if [[ "${host_os}" != "linux" ]] && [[ "${ALLOW_UNSUPPORTED_DOCKER:-0}" != "1" ]]; then
+		echo "docker provisioner fallback is only supported on Linux hosts." >&2
+		echo "host=${host_os} is known to fail with Talos container runtime requirements (seccomp/mount attrs)." >&2
+		echo "use 'make chubo-e2e-qemu' for authoritative validation, or set ALLOW_UNSUPPORTED_DOCKER=1 to bypass this guard." >&2
+
+		exit 2
+	fi
+}
+
 wait_until() {
 	local description="$1"
 	local timeout_seconds="$2"
@@ -93,6 +107,7 @@ require_cmd docker
 require_cmd go
 require_cmd make
 require_cmd unzip
+check_host_support
 
 if [[ ! -x "${TALOSCTL}" ]]; then
 	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}"
