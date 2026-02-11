@@ -19,6 +19,6 @@ func initializeEarlyServicesTasks() []runtime.TaskSetupFunc {
 }
 
 func shouldStartDashboard(runtime.Mode) bool {
-	// Chubo-OS keeps dashboard disabled to reduce exposed process surface.
+	// Chubo keeps dashboard disabled to reduce exposed process surface.
 	return false
 }

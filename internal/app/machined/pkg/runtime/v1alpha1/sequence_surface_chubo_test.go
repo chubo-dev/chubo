@@ -8,7 +8,7 @@ import (
 	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
 )
 
-func TestShouldStartDashboardDisabledInChuboOS(t *testing.T) {
+func TestShouldStartDashboardDisabledInChubo(t *testing.T) {
 	t.Parallel()
 
 	for _, mode := range []runtime.Mode{
