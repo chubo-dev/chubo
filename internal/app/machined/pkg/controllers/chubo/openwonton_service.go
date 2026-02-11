@@ -26,6 +26,8 @@ import (
 const (
 	openWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
 	openWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
+	openWontonBinaryPath = "/var/lib/chubo/bin/openwonton"
+	openWontonFallback   = "/usr/bin/init"
 	openWontonRoleServer = "server"
 )
 
@@ -135,6 +137,7 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 			res.TypedSpec().Role = role
 			res.TypedSpec().Running = running
 			res.TypedSpec().Healthy = healthy
+			res.TypedSpec().BinaryMode = detectServiceBinaryMode(openWontonBinaryPath, openWontonFallback)
 
 			return nil
 		}); err != nil {

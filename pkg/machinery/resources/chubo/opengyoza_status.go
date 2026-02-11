@@ -34,6 +34,8 @@ type OpenGyozaStatusSpec struct {
 	Running bool `yaml:"running" protobuf:"3"`
 	// Healthy reflects v1alpha1 service health state.
 	Healthy bool `yaml:"healthy" protobuf:"4"`
+	// BinaryMode reports whether the running binary is a fallback mock or an artifact.
+	BinaryMode string `yaml:"binaryMode,omitempty" protobuf:"5"`
 }
 
 // DeepCopy generates a deep copy of OpenGyozaStatusSpec.
@@ -77,6 +79,10 @@ func (OpenGyozaStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec
 			{
 				Name:     "Healthy",
 				JSONPath: `{.healthy}`,
+			},
+			{
+				Name:     "BinaryMode",
+				JSONPath: `{.binaryMode}`,
 			},
 		},
 	}

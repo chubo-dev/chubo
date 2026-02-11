@@ -26,6 +26,8 @@ import (
 const (
 	openGyozaConfigPath = "/var/lib/chubo/config/opengyoza.hcl"
 	openGyozaRolePath   = "/var/lib/chubo/config/opengyoza.role"
+	openGyozaBinaryPath = "/var/lib/chubo/bin/opengyoza"
+	openGyozaFallback   = "/usr/bin/init"
 	openGyozaRoleServer = "server"
 )
 
@@ -135,6 +137,7 @@ func (ctrl *OpenGyozaServiceController) Run(ctx context.Context, r controller.Ru
 			res.TypedSpec().Role = role
 			res.TypedSpec().Running = running
 			res.TypedSpec().Healthy = healthy
+			res.TypedSpec().BinaryMode = detectServiceBinaryMode(openGyozaBinaryPath, openGyozaFallback)
 
 			return nil
 		}); err != nil {
