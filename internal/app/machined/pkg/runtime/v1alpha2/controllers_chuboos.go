@@ -90,6 +90,7 @@ func (ctrl *Controller) controllers(
 		&chuboctrl.OpenGyozaServiceController{
 			V1Alpha1ServiceManager: system.Services(ctrl.v1alpha1Runtime),
 		},
+		&chuboctrl.OpenBaoJobStatusController{},
 		// Installation uses containerd but relies on CRI resource controllers (image cache + registries)
 		// to unblock the installer sequence (see v1alpha1 Install task).
 		&cri.ImageCacheConfigController{

@@ -45,9 +45,15 @@ const (
 	chuboOpenWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
 	chuboOpenGyozaConfigPath  = "/var/lib/chubo/config/opengyoza.hcl"
 	chuboOpenGyozaRolePath    = "/var/lib/chubo/config/opengyoza.role"
+	chuboOpenBaoJobPath       = "/var/lib/chubo/config/openbao.nomad.json"
+	chuboOpenBaoModePath      = "/var/lib/chubo/config/openbao.mode"
 
 	chuboRoleServer = "server"
 	chuboRoleClient = "client"
+
+	chuboOpenBaoModeNomadJob = "nomadJob"
+	chuboOpenBaoDefaultJobID = "openbao"
+	chuboOpenBaoDefaultImage = "ghcr.io/openbao/openbao:latest"
 )
 
 // MachineConfigAPIVersion is the API version string for the minimal machine config.
@@ -324,7 +330,7 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 			if s.Spec.Modules.Chubo.OpenBao != nil && (s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled) {
 				mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
 				switch mode {
-				case "", "nomadJob":
+				case "", chuboOpenBaoModeNomadJob:
 					// valid
 				default:
 					return nil, fmt.Errorf("unknown spec.modules.chubo.openbao.mode %q", s.Spec.Modules.Chubo.OpenBao.Mode)
@@ -483,6 +489,31 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				})
 			}
 		}
+
+		// Chubo OpenBao: render default Nomad job payload for the job-presence controller.
+		if enabled && s.Spec.Modules.Chubo.OpenBao != nil {
+			openBaoEnabled := s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled
+			mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
+			if mode == "" {
+				mode = chuboOpenBaoModeNomadJob
+			}
+
+			if openBaoEnabled && mode == chuboOpenBaoModeNomadJob {
+				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+					FileContent:     renderOpenBaoNomadJobPayload(),
+					FilePermissions: v1alpha1.FileMode(0o600),
+					FilePath:        chuboOpenBaoJobPath,
+					FileOp:          "create",
+				})
+
+				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+					FileContent:     mode + "\n",
+					FilePermissions: v1alpha1.FileMode(0o644),
+					FilePath:        chuboOpenBaoModePath,
+					FileOp:          "create",
+				})
+			}
+		}
 	}
 
 	// Registry mirrors (CRI config-only controllers still consume these in `chuboos` installer flows).
@@ -572,6 +603,56 @@ log_level = "INFO"
 server = %t
 bootstrap_expect = %d
 `, serverEnabled, bootstrapExpect)
+}
+
+func renderOpenBaoNomadJobPayload() string {
+	return fmt.Sprintf(`{
+  "Job": {
+    "ID": %q,
+    "Name": %q,
+    "Type": "service",
+    "Datacenters": ["dc1"],
+    "TaskGroups": [
+      {
+        "Name": "openbao",
+        "Count": 1,
+        "Networks": [
+          {
+            "Mode": "bridge",
+            "DynamicPorts": [
+              {
+                "Label": "http",
+                "To": 8200
+              }
+            ]
+          }
+        ],
+        "Tasks": [
+          {
+            "Name": "openbao",
+            "Driver": "docker",
+            "Config": {
+              "image": %q,
+              "ports": ["http"],
+              "args": ["server", "-dev", "-dev-listen-address=0.0.0.0:8200"]
+            },
+            "Resources": {
+              "CPU": 500,
+              "MemoryMB": 512
+            },
+            "Services": [
+              {
+                "Name": "openbao",
+                "PortLabel": "http"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+`, chuboOpenBaoDefaultJobID, chuboOpenBaoDefaultJobID, chuboOpenBaoDefaultImage)
 }
 
 // NodeID returns the optional stable node ID, if set.

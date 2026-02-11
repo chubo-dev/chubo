@@ -338,3 +338,53 @@ func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
 	require.True(t, foundConfig)
 	require.True(t, foundRole)
 }
+
+func TestMachineConfigOpenBaoRendersNomadJobPayload(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled: &enabled,
+				Mode:    "nomadJob",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	var (
+		foundPayload bool
+		foundMode    bool
+	)
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		switch f.FilePath {
+		case chuboOpenBaoJobPath:
+			foundPayload = true
+			require.Contains(t, f.FileContent, `"ID": "openbao"`)
+			require.Contains(t, f.FileContent, `"image": "ghcr.io/openbao/openbao:latest"`)
+		case chuboOpenBaoModePath:
+			foundMode = true
+			require.Equal(t, "nomadJob\n", f.FileContent)
+		}
+	}
+
+	require.True(t, foundPayload)
+	require.True(t, foundMode)
+}
