@@ -514,6 +514,22 @@ FROM machined-build-${TARGETARCH} AS machined-build
 FROM scratch AS machined
 COPY --from=machined-build /machined /machined
 
+# The chubo-agent target builds the module workload binary.
+FROM base AS chubo-agent-build-amd64
+WORKDIR /src/internal/app/chuboagent
+ARG GO_BUILDFLAGS
+ARG GO_LDFLAGS
+ARG GOAMD64
+RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /chubo-agent
+RUN chmod +x /chubo-agent
+
+FROM base AS chubo-agent-build-arm64
+WORKDIR /src/internal/app/chuboagent
+ARG GO_BUILDFLAGS
+ARG GO_LDFLAGS
+RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /chubo-agent
+RUN chmod +x /chubo-agent
+
 # The talosctl targets build the talosctl binaries.
 
 FROM base AS talosctl-linux-amd64-build
@@ -782,6 +798,8 @@ COPY --chmod=0644 hack/udevd/99-default.link /rootfs/usr/lib/systemd/network/
 COPY --chmod=0644 hack/udevd/40-vm-hotadd.rules hack/udevd/90-selinux.rules /rootfs/usr/lib/udev/rules.d/
 COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
+COPY --link --from=chubo-agent-build-amd64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
+COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
     ln -s /usr/share/zoneinfo/Etc/UTC /rootfs/etc/localtime
     touch /rootfs/etc/{extensions.yaml,resolv.conf,hosts,machine-id,cri/conf.d/cri.toml,cri/conf.d/01-registries.part,cri/conf.d/20-customization.part,cri/conf.d/base-spec.json,ssl/certs/ca-certificates.crt,selinux/targeted/contexts/files/file_contexts,iscsi/initiatorname.iscsi,nvme/{hostid,hostnqn}}
@@ -790,6 +808,11 @@ RUN <<END
     ln -s /etc/ssl /rootfs/usr/share/ca-certificates
     ln -s /etc/ssl /rootfs/usr/local/share/ca-certificates
     ln -s /etc/ssl /rootfs/etc/ca-certificates
+    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
+        chmod 0755 /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
+    else
+        rm -rf /rootfs/usr/local/etc/containers/chubo-agent.yaml /rootfs/usr/local/lib/containers/chubo-agent
+    fi
 END
 
 FROM build AS rootfs-base-arm64
@@ -876,6 +899,8 @@ COPY --chmod=0644 hack/udevd/99-default.link /rootfs/usr/lib/systemd/network/
 COPY --chmod=0644 hack/udevd/40-vm-hotadd.rules hack/udevd/90-selinux.rules /rootfs/usr/lib/udev/rules.d/
 COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
+COPY --link --from=chubo-agent-build-arm64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
+COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
     ln -s /usr/share/zoneinfo/Etc/UTC /rootfs/etc/localtime
     touch /rootfs/etc/{extensions.yaml,resolv.conf,hosts,machine-id,cri/conf.d/cri.toml,cri/conf.d/01-registries.part,cri/conf.d/20-customization.part,cri/conf.d/base-spec.json,ssl/certs/ca-certificates.crt,selinux/targeted/contexts/files/file_contexts,iscsi/initiatorname.iscsi,nvme/{hostid,hostnqn}}
@@ -884,6 +909,11 @@ RUN <<END
     ln -s /etc/ssl /rootfs/usr/share/ca-certificates
     ln -s /etc/ssl /rootfs/usr/local/share/ca-certificates
     ln -s /etc/ssl /rootfs/etc/ca-certificates
+    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
+        chmod 0755 /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
+    else
+        rm -rf /rootfs/usr/local/etc/containers/chubo-agent.yaml /rootfs/usr/local/lib/containers/chubo-agent
+    fi
 END
 
 FROM build-go AS build-sbom

@@ -1,0 +1,14 @@
+name: chubo-agent
+container:
+  entrypoint: /usr/bin/chubo-agent
+  mounts:
+    - source: /var/lib/chubo
+      destination: /var/lib/chubo
+      type: bind
+      options:
+        - bind
+        - rw
+depends:
+  - service: apid
+restart: always
+logToConsole: true
