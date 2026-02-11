@@ -27,6 +27,7 @@ REGISTRY_NAME="${REGISTRY_NAME:-chuboos-e2e-registry}"
 REGISTRY_PORT="${REGISTRY_PORT:-5001}"
 REGISTRY_LOCAL_ADDR="${REGISTRY_LOCAL_ADDR:-localhost:${REGISTRY_PORT}}"
 REGISTRY_NODE_ADDR="${REGISTRY_NODE_ADDR:-10.5.0.1:${REGISTRY_PORT}}"
+INSTALLER_BASE_IMAGE_LOCAL="${INSTALLER_BASE_IMAGE_LOCAL:-${REGISTRY_LOCAL_ADDR}/chubo/installer-base:dev}"
 INSTALLER_IMAGE_LOCAL="${INSTALLER_IMAGE_LOCAL:-${REGISTRY_LOCAL_ADDR}/chubo/installer:dev}"
 INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-${REGISTRY_NODE_ADDR}/chubo/installer:dev}"
 REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-${REGISTRY_NODE_ADDR}=http://${REGISTRY_NODE_ADDR}}"
@@ -159,6 +160,9 @@ docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1 || true
 docker run -d --rm --name "${REGISTRY_NAME}" -p "${REGISTRY_PORT}:5000" registry:2 >/dev/null
 registry_started=1
 
+echo "pushing installer-base image to local registry (${INSTALLER_BASE_IMAGE_LOCAL})"
+"${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-base.tar" "${INSTALLER_BASE_IMAGE_LOCAL}" >/dev/null
+
 echo "building installer image tar via imager"
 SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
 docker run --rm -t \
@@ -169,7 +173,7 @@ docker run --rm -t \
 	-e DETERMINISTIC_SEED=1 \
 	localhost/chubo/imager:dev installer \
 	--arch "${ARCH}" \
-	--base-installer-image localhost/chubo/installer-base:dev
+	--base-installer-image "${INSTALLER_BASE_IMAGE_LOCAL}"
 
 echo "pushing installer image to local registry (${INSTALLER_IMAGE_LOCAL})"
 installer_arch_ref="$("${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-${ARCH}.tar" "${INSTALLER_IMAGE_LOCAL}-${ARCH}")"
@@ -189,10 +193,13 @@ echo "generating secrets and machine configs"
 	-o "${TALOSCONFIG_FILE}"
 
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
-sed -i \
+# Use a temp file rewrite so this works on both GNU and BSD/macOS sed.
+runtime_tmp="${MACHINECONFIG_RUNTIME}.tmp"
+sed \
 	-e 's/^\([[:space:]]*wipe:[[:space:]]*\)true$/\1false/' \
 	-e 's|^\([[:space:]]*image:[[:space:]]*\).*$|\1""|' \
-	"${MACHINECONFIG_RUNTIME}"
+	"${MACHINECONFIG_RUNTIME}" >"${runtime_tmp}"
+mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 
 echo "creating single-node QEMU cluster in maintenance mode"
 "${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
