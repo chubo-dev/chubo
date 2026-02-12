@@ -1,4 +1,4 @@
-module github.com/siderolabs/talos/pkg/machinery
+module github.com/chubo-dev/chubo/pkg/machinery
 
 go 1.25.3
 

@@ -1,4 +1,4 @@
-module github.com/siderolabs/talos/tools/docgen
+module github.com/chubo-dev/chubo/tools/docgen
 
 go 1.25.0
 

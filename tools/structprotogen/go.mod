@@ -1,4 +1,4 @@
-module github.com/siderolabs/talos/tools/structprotogen
+module github.com/chubo-dev/chubo/tools/structprotogen
 
 go 1.25.0
 

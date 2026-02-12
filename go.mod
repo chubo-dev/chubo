@@ -1,4 +1,4 @@
-module github.com/siderolabs/talos
+module github.com/chubo-dev/chubo
 
 go 1.25.3
 
@@ -16,7 +16,7 @@ replace (
 	github.com/mdlayher/kobject => github.com/smira/kobject v0.0.0-20240304111826-49c8d4613389
 
 	// Use nested module.
-	github.com/siderolabs/talos/pkg/machinery => ./pkg/machinery
+	github.com/chubo-dev/chubo/pkg/machinery => ./pkg/machinery
 
 	// fork to add Talos-specific userspace socket location: https://github.com/siderolabs/talos/issues/8514
 	golang.zx2c4.com/wireguard/wgctrl => github.com/siderolabs/wgctrl-go v0.0.0-20251029173431-c4fd5f6a4e72
@@ -162,7 +162,7 @@ require (
 	github.com/siderolabs/net v0.4.0
 	github.com/siderolabs/proto-codec v0.1.3
 	github.com/siderolabs/siderolink v0.3.15
-	github.com/siderolabs/talos/pkg/machinery v1.13.0-alpha.1
+	github.com/chubo-dev/chubo/pkg/machinery v1.13.0-alpha.1
 	github.com/sirupsen/logrus v1.9.4-0.20230606125235-dd1b4c2e81af
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10

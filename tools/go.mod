@@ -1,4 +1,4 @@
-module github.com/siderolabs/talos/tools
+module github.com/chubo-dev/chubo/tools
 
 // upgrading all tools: go get tool
 
@@ -15,9 +15,9 @@ tool (
 	github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 	github.com/siderolabs/deep-copy
 	github.com/siderolabs/importvet/cmd/importvet
-	github.com/siderolabs/talos/tools/docgen
-	github.com/siderolabs/talos/tools/gotagsrewrite
-	github.com/siderolabs/talos/tools/structprotogen
+	github.com/chubo-dev/chubo/tools/docgen
+	github.com/chubo-dev/chubo/tools/gotagsrewrite
+	github.com/chubo-dev/chubo/tools/structprotogen
 	golang.org/x/tools/cmd/goimports
 	golang.org/x/tools/cmd/stringer
 	golang.org/x/vuln/cmd/govulncheck
@@ -29,9 +29,9 @@ tool (
 
 // local modules
 replace (
-	github.com/siderolabs/talos/tools/docgen => ./docgen
-	github.com/siderolabs/talos/tools/gotagsrewrite => ./gotagsrewrite
-	github.com/siderolabs/talos/tools/structprotogen => ./structprotogen
+	github.com/chubo-dev/chubo/tools/docgen => ./docgen
+	github.com/chubo-dev/chubo/tools/gotagsrewrite => ./gotagsrewrite
+	github.com/chubo-dev/chubo/tools/structprotogen => ./structprotogen
 )
 
 // Changes from https://github.com/anchore/syft/pull/3932 for deterministic SBOM
