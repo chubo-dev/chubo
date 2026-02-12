@@ -35,7 +35,7 @@ var tpl = `// This Source Code Form is subject to the terms of the Mozilla Publi
 package {{ .Package }}
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 )
 
 {{ $tick := "` + "`" + `" -}}

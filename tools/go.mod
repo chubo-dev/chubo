@@ -9,15 +9,15 @@ tool (
 	github.com/anchore/grype/cmd/grype
 	github.com/anchore/syft/cmd/syft
 	github.com/bufbuild/buf/cmd/buf
+	github.com/chubo-dev/chubo/tools/docgen
+	github.com/chubo-dev/chubo/tools/gotagsrewrite
+	github.com/chubo-dev/chubo/tools/structprotogen
 	github.com/dmarkham/enumer
 	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
 	github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto
 	github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 	github.com/siderolabs/deep-copy
 	github.com/siderolabs/importvet/cmd/importvet
-	github.com/chubo-dev/chubo/tools/docgen
-	github.com/chubo-dev/chubo/tools/gotagsrewrite
-	github.com/chubo-dev/chubo/tools/structprotogen
 	golang.org/x/tools/cmd/goimports
 	golang.org/x/tools/cmd/stringer
 	golang.org/x/vuln/cmd/govulncheck
@@ -192,6 +192,9 @@ require (
 	github.com/charmbracelet/x/ansi v0.10.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
+	github.com/chubo-dev/chubo/tools/docgen v0.0.0-00010101000000-000000000000 // indirect
+	github.com/chubo-dev/chubo/tools/gotagsrewrite v0.0.0-00010101000000-000000000000 // indirect
+	github.com/chubo-dev/chubo/tools/structprotogen v0.0.0-00010101000000-000000000000 // indirect
 	github.com/ckaznocha/intrange v0.3.1 // indirect
 	github.com/cli/browser v1.3.0 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
@@ -465,9 +468,6 @@ require (
 	github.com/siderolabs/deep-copy v0.5.8 // indirect
 	github.com/siderolabs/gen v0.8.6 // indirect
 	github.com/siderolabs/importvet v0.2.0 // indirect
-	github.com/siderolabs/talos/tools/docgen v0.0.0-20260206091223-d5ebcd7cae1a // indirect
-	github.com/siderolabs/talos/tools/gotagsrewrite v0.0.0-20260206091223-d5ebcd7cae1a // indirect
-	github.com/siderolabs/talos/tools/structprotogen v0.0.0-20260206091223-d5ebcd7cae1a // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
 	github.com/sivchari/containedctx v1.0.3 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect

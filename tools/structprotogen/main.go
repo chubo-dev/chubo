@@ -16,18 +16,18 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/tools/structprotogen/ast"
-	"github.com/siderolabs/talos/tools/structprotogen/consts"
-	"github.com/siderolabs/talos/tools/structprotogen/loader"
-	"github.com/siderolabs/talos/tools/structprotogen/proto"
-	"github.com/siderolabs/talos/tools/structprotogen/types"
+	"github.com/chubo-dev/chubo/tools/structprotogen/ast"
+	"github.com/chubo-dev/chubo/tools/structprotogen/consts"
+	"github.com/chubo-dev/chubo/tools/structprotogen/loader"
+	"github.com/chubo-dev/chubo/tools/structprotogen/proto"
+	"github.com/chubo-dev/chubo/tools/structprotogen/types"
 )
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:     "structprotogen path dest",
 	Short:   "This CLI is used to generate proto files from Go structs into one proto file",
-	Example: "structprotogen github.com/siderolabs/talos/pkg/machinery/resources/... ./api/resource/definitions",
+	Example: "structprotogen github.com/chubo-dev/chubo/pkg/machinery/resources/... ./api/resource/definitions",
 	Args:    cobra.ExactArgs(2),
 	Version: "v1.0.0",
 	RunE: func(cmd *cobra.Command, args []string) error {

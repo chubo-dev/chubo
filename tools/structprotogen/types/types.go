@@ -16,8 +16,8 @@ import (
 	"golang.org/x/tools/go/packages"
 	"gopkg.in/typ.v4/slices"
 
-	"github.com/siderolabs/talos/tools/structprotogen/ast"
-	"github.com/siderolabs/talos/tools/structprotogen/sliceutil"
+	"github.com/chubo-dev/chubo/tools/structprotogen/ast"
+	"github.com/chubo-dev/chubo/tools/structprotogen/sliceutil"
 )
 
 // PkgDecl is a struct which contains package path and tagged struct declarations.
@@ -62,7 +62,7 @@ func forEachTaggedStruct(taggedStructs ast.TaggedStructs, pkg *packages.Package,
 		obj := scope.Lookup(name)
 
 		// This is special resource - ignore it.
-		if pkg.PkgPath == "github.com/siderolabs/talos/pkg/machinery/resources/network" && name == "DeviceConfigSpecSpec" {
+		if pkg.PkgPath == "github.com/chubo-dev/chubo/pkg/machinery/resources/network" && name == "DeviceConfigSpecSpec" {
 			continue
 		}
 
