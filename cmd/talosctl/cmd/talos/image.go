@@ -80,7 +80,7 @@ func (flags imageCmdFlagsType) containerdInstance() (*common.ContainerdInstance,
 		}, nil
 	case "system":
 		return &common.ContainerdInstance{
-			Driver:    common.ContainerDriver_CRI,
+			Driver:    systemContainerDriver(),
 			Namespace: common.ContainerdNamespace_NS_SYSTEM,
 		}, nil
 	case "inmem":

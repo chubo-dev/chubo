@@ -5,7 +5,7 @@ set -euo pipefail
 # install -> runtime mTLS -> unsafe quorum check (2 peers blocks graceful upgrade)
 # -> safe quorum check (3 peers allows graceful upgrade/reboot)
 #
-# This script uses a one-shot local debug container on the node (`inmem`
+# This script uses a one-shot local debug container on the node (`system`
 # namespace) to mock opengyoza `/v1/status/peers` responses.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -358,7 +358,7 @@ start_peers_mock() {
 	local log_file="$2"
 
 	"${TALOSCTL}" debug "${mock_image_tar}" \
-		--namespace inmem \
+		--namespace system \
 		--talosconfig "${TALOSCONFIG_FILE}" \
 		-e "${NODE_IP}" -n "${NODE_IP}" >"${log_file}" 2>&1 &
 	local pid=$!
