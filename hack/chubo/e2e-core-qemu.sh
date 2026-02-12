@@ -141,6 +141,25 @@ wait_for_runtime_stable() {
 	done
 }
 
+check_binary_mode_artifact() {
+	local resource="$1"
+	local output
+
+	if ! output="$("${TALOSCTL}" get "${resource}" --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
+		echo "failed to query ${resource} status" >&2
+		echo "${output}" >&2
+		return 1
+	fi
+
+	if ! grep -q 'binaryMode: artifact' <<<"${output}"; then
+		echo "expected ${resource} binaryMode=artifact" >&2
+		echo "${output}" >&2
+		return 1
+	fi
+
+	echo "${resource}: binaryMode=artifact"
+}
+
 read_boot_id() {
 	local boot_id
 
@@ -378,6 +397,8 @@ echo "validating runtime mTLS and runtime surface"
 	--talosconfig "${TALOSCONFIG_FILE}" \
 	--endpoint "${NODE_IP}" \
 	--node "${NODE_IP}"
+check_binary_mode_artifact "openwontonstatus"
+check_binary_mode_artifact "opengyozastatus"
 
 echo "running upgrade flow"
 pre_upgrade_boot_id="$(read_boot_id || true)"
@@ -429,6 +450,7 @@ grep -q 'mounts' "${SUPPORT_LISTING}"
 grep -q 'io' "${SUPPORT_LISTING}"
 grep -q 'processes' "${SUPPORT_LISTING}"
 grep -q 'service-logs/.*\.state' "${SUPPORT_LISTING}"
+grep -q 'chubo-config/' "${SUPPORT_LISTING}"
 
 echo "chubo core E2E flow completed"
 echo "support bundle: ${SUPPORT_OUT}"
