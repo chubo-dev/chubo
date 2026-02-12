@@ -572,6 +572,10 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image a
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q nomadconfig
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q consulconfig
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q openbaoconfig
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+bootstrap\\b'
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+etcd\\b'
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 
 .PHONY: chuboos-guardrails
