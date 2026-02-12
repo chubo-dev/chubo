@@ -367,17 +367,17 @@ COPY ./pkg ./pkg
 COPY ./hack/boilerplate.txt ./hack/boilerplate.txt
 COPY --from=embed-target / ./
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go generate ./pkg/...
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/siderolabs/talos ./pkg/
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo ./pkg/
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -w ./pkg/
 WORKDIR /src/pkg/machinery
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go generate ./...
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/siderolabs/talos/tools/gotagsrewrite .
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/siderolabs/talos ./
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/gotagsrewrite .
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo ./
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -w ./
 
 FROM go-generate AS gen-proto-go
 WORKDIR /src/
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/siderolabs/talos/tools/structprotogen github.com/siderolabs/talos/pkg/machinery/... /api/resource/definitions/
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/structprotogen github.com/chubo-dev/chubo/pkg/machinery/... /api/resource/definitions/
 
 # compile protobuf service definitions
 FROM build-go AS generate-build
@@ -387,7 +387,7 @@ WORKDIR /src/api
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf build
 RUN --mount=type=cache,target=/.cache,id=talos/.cache,sharing=locked go tool github.com/bufbuild/buf/cmd/buf generate
 # Goimports and gofumpt generated files to adjust import order
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/siderolabs/talos /src/api/machinery/
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo /src/api/machinery/
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -w /src/api/machinery/
 
 FROM scratch AS generate-build-clean
@@ -662,7 +662,7 @@ COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
 ARG TAG
 ENV VERSION=${TAG}
 LABEL "alpha.talos.dev/version"="${VERSION}"
-LABEL org.opencontainers.image.source=https://github.com/siderolabs/talos
+LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
 ENTRYPOINT ["/talosctl"]
 
 # The kernel target is the linux kernel.
@@ -1072,7 +1072,7 @@ COPY --from=initramfs-archive /initramfs.xz /initramfs-${TARGETARCH}.xz
 
 FROM scratch AS talos
 COPY --from=rootfs / /
-LABEL org.opencontainers.image.source=https://github.com/siderolabs/talos
+LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
 ENTRYPOINT ["/sbin/init"]
 
 # The installer target generates an image that can be used to install Talos to
@@ -1143,7 +1143,7 @@ FROM installer-base-image-squashed AS installer-base
 ARG TAG
 ENV VERSION=${TAG}
 LABEL "alpha.talos.dev/version"="${VERSION}"
-LABEL org.opencontainers.image.source=https://github.com/siderolabs/talos
+LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
 ENTRYPOINT ["/bin/installer"]
 
 # Imager can be thought of as an extended installer.
@@ -1183,7 +1183,7 @@ FROM imager-image-squashed AS imager
 ARG TAG
 ENV VERSION=${TAG}
 LABEL "alpha.talos.dev/version"="${VERSION}"
-LABEL org.opencontainers.image.source=https://github.com/siderolabs/talos
+LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
 ENTRYPOINT ["/bin/imager"]
 
 FROM imager AS iso-amd64-build
@@ -1308,7 +1308,7 @@ COPY ./hack/cloud-image-uploader /src/hack/cloud-image-uploader
 WORKDIR /src/hack/cloud-image-uploader
 RUN --mount=type=cache,target=/.cache,id=talos/.cache,sharing=locked go tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint run --config ../../.golangci.yml
 WORKDIR /src
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/siderolabs/importvet/cmd/importvet github.com/siderolabs/talos/...
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/siderolabs/importvet/cmd/importvet github.com/chubo-dev/chubo/...
 
 # The protolint target performs linting on protobuf files.
 

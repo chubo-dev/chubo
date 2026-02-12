@@ -394,7 +394,7 @@ formatters:
       sections:
         - standard
         - default
-        - prefix(github.com/siderolabs/talos)
+        - prefix(github.com/chubo-dev/chubo)
   exclusions:
     generated: lax
     paths:
