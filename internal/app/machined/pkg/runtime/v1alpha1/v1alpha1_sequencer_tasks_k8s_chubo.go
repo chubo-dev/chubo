@@ -9,6 +9,7 @@ package v1alpha1
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -32,9 +33,20 @@ const (
 	openWontonDefaultHTTPTimeout = 5 * time.Second
 )
 
-func CordonAndDrainNode(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
+func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, string) {
+	type forceGetter interface {
+		GetForce() bool
+	}
+
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
 		client := &http.Client{Timeout: openWontonDefaultHTTPTimeout}
+
+		// Treat opengyoza quorum checks like Talos' etcd health checks: blocking by default,
+		// skippable only when the caller explicitly forces the operation.
+		force := false
+		if fg, ok := in.(forceGetter); ok {
+			force = fg.GetForce()
+		}
 
 		openGyozaRole, openGyozaConfigured, err := opengyozaquorum.ReadRole(openGyozaRolePath)
 		if err != nil {
@@ -42,17 +54,35 @@ func CordonAndDrainNode(runtime.Sequence, any) (runtime.TaskExecutionFunc, strin
 		}
 
 		if openGyozaConfigured && opengyozaquorum.IsServerRole(openGyozaRole) {
-			err = opengyozaquorum.CheckSafeServerStop(ctx, client, openGyozaHTTPAddress)
+			if force {
+				logger.Printf("skipping opengyoza quorum check: forced operation")
+				return nil
+			}
+
+			// Retry briefly so transient readiness issues (e.g. local agent not yet listening) don't
+			// silently skip the check on the first connection attempt.
+			var lastErr error
+			for attempt := 0; attempt < 20; attempt++ {
+				lastErr = opengyozaquorum.CheckSafeServerStop(ctx, client, openGyozaHTTPAddress)
+				if lastErr == nil || errors.Is(lastErr, opengyozaquorum.ErrUnsafeServerStop) {
+					break
+				}
+
+				if ctx.Err() != nil {
+					break
+				}
+
+				time.Sleep(100 * time.Millisecond)
+			}
+
+			err = lastErr
 			if err != nil {
 				if ctx.Err() != nil {
 					return ctx.Err()
 				}
 
-				if errors.Is(err, opengyozaquorum.ErrUnsafeServerStop) {
-					return err
-				}
-
-				logger.Printf("skipping opengyoza quorum check: %v", err)
+				logger.Printf("opengyoza quorum check failed: %v", err)
+				return fmt.Errorf("opengyoza quorum check failed: %w", err)
 			} else {
 				logger.Printf("opengyoza quorum check passed")
 			}
