@@ -108,3 +108,42 @@ func TestCheckSafeServerStop(t *testing.T) {
 		})
 	}
 }
+
+func TestCheckSafeServerStopFromPeers(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name        string
+		peers       []string
+		expectError bool
+	}{
+		{name: "single server is allowed", peers: []string{"127.0.0.1:8300"}, expectError: false},
+		{name: "three servers is safe", peers: []string{"a", "b", "c"}, expectError: false},
+		{name: "two servers is unsafe", peers: []string{"a", "b"}, expectError: true},
+	}
+
+	for _, tc := range cases {
+		tc := tc
+
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			err := CheckSafeServerStopFromPeers(tc.peers)
+			if tc.expectError {
+				if err == nil {
+					t.Fatalf("expected error")
+				}
+
+				if !errors.Is(err, ErrUnsafeServerStop) {
+					t.Fatalf("expected ErrUnsafeServerStop, got %v", err)
+				}
+
+				return
+			}
+
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+		})
+	}
+}

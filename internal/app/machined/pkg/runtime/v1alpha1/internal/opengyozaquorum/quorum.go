@@ -39,6 +39,22 @@ func IsServerRole(role string) bool {
 	return strings.TrimSpace(role) == roleServer
 }
 
+func CheckSafeServerStopFromPeers(peers []string) error {
+	peerCount := len(peers)
+	if peerCount <= 1 {
+		return nil
+	}
+
+	quorum := (peerCount / 2) + 1
+	remainingAfterStop := peerCount - 1
+
+	if remainingAfterStop < quorum {
+		return fmt.Errorf("%w: peers=%d quorum=%d", ErrUnsafeServerStop, peerCount, quorum)
+	}
+
+	return nil
+}
+
 func CheckSafeServerStop(ctx context.Context, client *http.Client, baseURL string) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, strings.TrimRight(baseURL, "/")+"/v1/status/peers", nil)
 	if err != nil {
@@ -64,17 +80,5 @@ func CheckSafeServerStop(ctx context.Context, client *http.Client, baseURL strin
 		return fmt.Errorf("failed to decode opengyoza peers: %w", err)
 	}
 
-	peerCount := len(peers)
-	if peerCount <= 1 {
-		return nil
-	}
-
-	quorum := (peerCount / 2) + 1
-	remainingAfterStop := peerCount - 1
-
-	if remainingAfterStop < quorum {
-		return fmt.Errorf("%w: peers=%d quorum=%d", ErrUnsafeServerStop, peerCount, quorum)
-	}
-
-	return nil
+	return CheckSafeServerStopFromPeers(peers)
 }

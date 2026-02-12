@@ -29,4 +29,6 @@ const (
 	UniqueMachineToken
 	// DiskImageBootloader stores the bootloader used for the disk image, this key is wiped on first boot.
 	DiskImageBootloader
+	// ChuboOpenGyozaPeersOverride overrides the opengyoza quorum peers list with a JSON-encoded []string.
+	ChuboOpenGyozaPeersOverride
 )
