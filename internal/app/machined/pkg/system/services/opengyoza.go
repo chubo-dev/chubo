@@ -34,6 +34,16 @@ const (
 	openGyozaFallback   = "/usr/bin/init"
 )
 
+var openGyozaRelease = serviceReleaseBinary{
+	ServiceName: "opengyoza",
+	Version:     "v1.6.4",
+	ZipEntry:    "gyoza",
+	AssetURLs: map[string]string{
+		"amd64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_amd64.zip",
+		"arm64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_arm64.zip",
+	},
+}
+
 var _ system.HealthcheckedService = (*OpenGyoza)(nil)
 
 // OpenGyoza implements an OS-managed Consul-compatible service.
@@ -45,7 +55,7 @@ func (s *OpenGyoza) ID(runtime.Runtime) string {
 }
 
 // PreFunc implements the Service interface.
-func (s *OpenGyoza) PreFunc(context.Context, runtime.Runtime) error {
+func (s *OpenGyoza) PreFunc(ctx context.Context, _ runtime.Runtime) error {
 	if err := os.MkdirAll(filepath.Dir(openGyozaBinaryPath), 0o755); err != nil {
 		return err
 	}
@@ -58,9 +68,9 @@ func (s *OpenGyoza) PreFunc(context.Context, runtime.Runtime) error {
 		return err
 	}
 
-	// Until real artifacts are installed, boot with a fallback executable (machined binary)
-	// which dispatches to the opengyoza mock mode by argv0.
-	return ensureServiceBinary(openGyozaBinaryPath, openGyozaFallback)
+	// Prefer real opengyoza release artifacts. Fallback to the local mock binary path
+	// if artifact install is unavailable (for example network-restricted boots).
+	return ensureServiceBinaryWithRelease(ctx, openGyozaBinaryPath, openGyozaFallback, openGyozaRelease)
 }
 
 // PostFunc implements the Service interface.

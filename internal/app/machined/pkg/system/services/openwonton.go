@@ -36,6 +36,16 @@ const (
 	openWontonFallback   = "/usr/bin/init"
 )
 
+var openWontonRelease = serviceReleaseBinary{
+	ServiceName: "openwonton",
+	Version:     "v1.6.5-rc1",
+	ZipEntry:    "wonton",
+	AssetURLs: map[string]string{
+		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/wonton_1.6.5-rc1_linux_amd64.zip",
+		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/wonton_1.6.5-rc1_linux_arm64.zip",
+	},
+}
+
 var _ system.HealthcheckedService = (*OpenWonton)(nil)
 
 // OpenWonton implements an OS-managed Nomad-compatible service.
@@ -47,7 +57,7 @@ func (s *OpenWonton) ID(runtime.Runtime) string {
 }
 
 // PreFunc implements the Service interface.
-func (s *OpenWonton) PreFunc(context.Context, runtime.Runtime) error {
+func (s *OpenWonton) PreFunc(ctx context.Context, _ runtime.Runtime) error {
 	if err := os.MkdirAll(filepath.Dir(openWontonBinaryPath), 0o755); err != nil {
 		return err
 	}
@@ -60,9 +70,9 @@ func (s *OpenWonton) PreFunc(context.Context, runtime.Runtime) error {
 		return err
 	}
 
-	// Until real artifacts are installed, boot with a fallback executable (machined binary)
-	// which dispatches to the openwonton mock mode by argv0.
-	return ensureServiceBinary(openWontonBinaryPath, openWontonFallback)
+	// Prefer real openwonton release artifacts. Fallback to the local mock binary path
+	// if artifact install is unavailable (for example network-restricted boots).
+	return ensureServiceBinaryWithRelease(ctx, openWontonBinaryPath, openWontonFallback, openWontonRelease)
 }
 
 // PostFunc implements the Service interface.
