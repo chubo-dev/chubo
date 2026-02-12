@@ -17,11 +17,19 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/makefs"
 )
 
 func TestXFSInfo(t *testing.T) { //nolint:tparallel
 	t.Setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin")
+
+	if _, err := exec.LookPath("mkfs.xfs"); err != nil {
+		t.Skipf("mkfs.xfs not available: %v", err)
+	}
+
+	if _, err := exec.LookPath("xfs_db"); err != nil {
+		t.Skipf("xfs_db not available: %v", err)
+	}
 
 	for _, test := range []struct {
 		name string
@@ -120,6 +128,10 @@ func TestXFSReproducibility(t *testing.T) {
 	t.Setenv("SOURCE_DATE_EPOCH", "1732109929")
 	t.Setenv("DETERMINISTIC_SEED", "1")
 	t.Setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin")
+
+	if _, err := exec.LookPath("mkfs.xfs"); err != nil {
+		t.Skipf("mkfs.xfs not available: %v", err)
+	}
 
 	tmpDir := t.TempDir()
 

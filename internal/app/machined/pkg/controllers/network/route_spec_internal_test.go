@@ -7,8 +7,8 @@ import (
 	"github.com/jsimonetti/rtnetlink/v2"
 	"github.com/siderolabs/gen/value"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	resourcenetwork "github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	resourcenetwork "github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 func TestRouteMatchesSpec(t *testing.T) {
@@ -102,19 +102,19 @@ func TestHasDefaultRoutePriorityCollision(t *testing.T) {
 		Priority:    1024,
 	}
 
-	routes := []rtnetlink.RouteMessage{
-		{
-			Family:    uint8(nethelpers.FamilyInet4),
-			DstLength: 0,
-			Attributes: rtnetlink.RouteAttributes{
-				Dst:      nil,
-				Gateway:  netip.MustParseAddr("10.0.2.2").AsSlice(),
-				OutIface: 8,
-				Priority: 1024,
-				Table:    uint32(nethelpers.TableMain),
+		routes := []rtnetlink.RouteMessage{
+			{
+				Family:    uint8(nethelpers.FamilyInet4),
+				DstLength: 0,
+				Table:     uint8(nethelpers.TableMain),
+				Attributes: rtnetlink.RouteAttributes{
+					Dst:      nil,
+					Gateway:  netip.MustParseAddr("10.0.2.2").AsSlice(),
+					OutIface: 8,
+					Priority: 1024,
+				},
 			},
-		},
-	}
+		}
 
 	if !hasDefaultRoutePriorityCollision(routes, spec) {
 		t.Fatal("expected default route priority collision")

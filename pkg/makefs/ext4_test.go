@@ -8,19 +8,24 @@ import (
 	"crypto/sha256"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/makefs"
 )
 
 // TestExt4Reproducibility tests that the ext4 filesystem is reproducible.
 func TestExt4Reproducibility(t *testing.T) {
 	t.Setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin")
 	t.Setenv("SOURCE_DATE_EPOCH", "1234567890")
+
+	if _, err := exec.LookPath("mkfs.ext4"); err != nil {
+		t.Skipf("mkfs.ext4 not available: %v", err)
+	}
 
 	tmpDir := t.TempDir()
 
@@ -83,6 +88,14 @@ func TestExt4Reproducibility(t *testing.T) {
 // TestExt4Resize tests that the ext4 filesystem can be resized.
 func TestExt4Resize(t *testing.T) {
 	t.Setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin")
+
+	if _, err := exec.LookPath("mkfs.ext4"); err != nil {
+		t.Skipf("mkfs.ext4 not available: %v", err)
+	}
+
+	if _, err := exec.LookPath("resize2fs"); err != nil {
+		t.Skipf("resize2fs not available: %v", err)
+	}
 
 	tmpDir := t.TempDir()
 
