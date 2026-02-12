@@ -12,14 +12,14 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	blockadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/block"
-	secretsadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/secrets"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton/blockautomaton"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	"github.com/siderolabs/talos/pkg/xfs"
+	blockadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/block"
+	secretsadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/secrets"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton/blockautomaton"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // EncryptionSaltController manages secrets.EncryptionSalt in STATE.

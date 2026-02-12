@@ -21,8 +21,8 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 const stdoutOutput = "-"

@@ -19,11 +19,11 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // Chain names.

@@ -34,7 +34,7 @@ import (
 	"github.com/google/go-containerregistry/pkg/v1/types"
 	"github.com/siderolabs/go-retry/retry"
 
-	"github.com/siderolabs/talos/pkg/imager/filemap"
+	"github.com/chubo-dev/chubo/pkg/imager/filemap"
 )
 
 const (

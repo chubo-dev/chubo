@@ -13,8 +13,8 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/fipsmode"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // MaintenanceRootController manages secrets.Root based on configuration.

@@ -15,9 +15,9 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // ExtensionStatusController loads extensions.yaml and updates ExtensionStatus resources.

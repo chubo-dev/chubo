@@ -9,7 +9,7 @@ package network
 import (
 	"net/netip"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 // DeepCopy generates a deep copy of *BondConfigV1Alpha1.

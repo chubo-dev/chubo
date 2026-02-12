@@ -14,10 +14,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/meta"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 const unset = "[gray](unset)[-]"

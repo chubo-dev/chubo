@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 // DiskUsageSuite verifies dmesg command.

@@ -16,7 +16,7 @@ import (
 	"github.com/siderolabs/go-kubeconfig"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/siderolabs/talos/pkg/provision/access"
+	"github.com/chubo-dev/chubo/pkg/provision/access"
 )
 
 func mergeKubeconfig(ctx context.Context, clusterAccess *access.Adapter) error {

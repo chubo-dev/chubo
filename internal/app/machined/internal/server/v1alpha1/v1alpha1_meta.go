@@ -12,8 +12,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 // MetaWrite implements the machine.MachineServer interface.

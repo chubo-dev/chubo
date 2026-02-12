@@ -22,9 +22,9 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/siderolabs/talos/internal/pkg/dns"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/pkg/dns"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // DNSResolveCacheController starts dns server on both udp and tcp ports based on finalized network configuration.

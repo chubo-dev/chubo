@@ -19,9 +19,9 @@ import (
 	"go.uber.org/zap"
 	"golang.zx2c4.com/wireguard/wgctrl"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/siderolink"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/siderolink"
 )
 
 // DefaultStatusUpdateInterval is the default interval between status updates.

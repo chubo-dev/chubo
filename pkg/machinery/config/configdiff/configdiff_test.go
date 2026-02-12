@@ -11,12 +11,12 @@ import (
 	"github.com/siderolabs/gen/xtesting/must"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configdiff"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/siderolink"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configdiff"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/siderolink"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 func TestDiffString(t *testing.T) {

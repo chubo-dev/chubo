@@ -14,8 +14,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // KernelCmdlineController presents /proc/cmdline as a resource.

@@ -32,15 +32,15 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	podsecurity "k8s.io/pod-security-admission/api"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/cluster/check"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/cluster/check"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 // TinkSuite verifies Talos-in-Kubernetes.

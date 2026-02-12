@@ -17,9 +17,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader/internal/decoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader/internal/decoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 )
 
 var (

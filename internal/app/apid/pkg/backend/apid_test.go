@@ -20,14 +20,14 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
 
-	"github.com/siderolabs/talos/internal/app/apid/pkg/backend"
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	"github.com/siderolabs/talos/pkg/machinery/api"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/role"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/internal/app/apid/pkg/backend"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	"github.com/chubo-dev/chubo/pkg/machinery/api"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 type APIDSuite struct {

@@ -15,9 +15,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"go4.org/netipx"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/adapters/network"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	networkres "github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	networkres "github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 func TestNfTablesRuleCompile(t *testing.T) { //nolint:tparallel

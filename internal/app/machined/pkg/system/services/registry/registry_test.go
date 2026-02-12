@@ -28,9 +28,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services/registry"
-	"github.com/siderolabs/talos/pkg/imager/cache"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services/registry"
+	"github.com/chubo-dev/chubo/pkg/imager/cache"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func TestRegistry(t *testing.T) {

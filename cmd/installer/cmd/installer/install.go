@@ -12,10 +12,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/cmd/installer/pkg/install"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/cmd/installer/pkg/install"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 // installCmd represents the installation command.

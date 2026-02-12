@@ -21,7 +21,7 @@ import (
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // DisksController provides a detailed view of blockdevices of type 'disk'.

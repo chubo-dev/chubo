@@ -14,10 +14,10 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // BootedEntryController is a controller that updates the booted entry resource.

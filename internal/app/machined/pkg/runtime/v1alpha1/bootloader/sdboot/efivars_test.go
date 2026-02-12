@@ -14,9 +14,9 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot"
-	"github.com/siderolabs/talos/internal/pkg/efivarfs"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot"
+	"github.com/chubo-dev/chubo/internal/pkg/efivarfs"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 type mockLogger struct {

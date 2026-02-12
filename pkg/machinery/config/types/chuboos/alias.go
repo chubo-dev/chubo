@@ -4,10 +4,10 @@
 
 // Package chuboos is a compatibility shim.
 //
-// New code should import github.com/siderolabs/talos/pkg/machinery/config/types/chubo.
+// New code should import github.com/chubo-dev/chubo/pkg/machinery/config/types/chubo.
 package chuboos
 
-import chubo "github.com/siderolabs/talos/pkg/machinery/config/types/chubo"
+import chubo "github.com/chubo-dev/chubo/pkg/machinery/config/types/chubo"
 
 const (
 	MachineConfigKind               = chubo.MachineConfigKind

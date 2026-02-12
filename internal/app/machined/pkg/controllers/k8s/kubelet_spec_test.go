@@ -24,12 +24,12 @@ import (
 	v1 "k8s.io/component-base/logs/api/v1"
 	kubeletconfig "k8s.io/kubelet/config/v1beta1"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	k8sctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	k8sctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 type KubeletSpecSuite struct {

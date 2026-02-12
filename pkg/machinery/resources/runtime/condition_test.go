@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/kernel"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/kernel"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 func TestCondition(t *testing.T) {

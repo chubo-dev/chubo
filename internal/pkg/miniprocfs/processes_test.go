@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/miniprocfs"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/internal/pkg/miniprocfs"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 func TestLive(t *testing.T) {

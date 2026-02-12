@@ -8,7 +8,7 @@ import (
 	"github.com/prometheus/procfs"
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/perf"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/perf"
 )
 
 // Memory adapter provides conversion from procfs.

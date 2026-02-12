@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 func TestInstallDiskSelector(t *testing.T) {

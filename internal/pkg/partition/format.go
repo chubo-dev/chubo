@@ -11,9 +11,9 @@ import (
 
 	"github.com/siderolabs/go-blockdevice/v2/block"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
-	"github.com/siderolabs/talos/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/makefs"
 )
 
 // FormatOptions contains format parameters.

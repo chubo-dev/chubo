@@ -11,8 +11,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 //go:generate go tool github.com/siderolabs/deep-copy -type ConfigSpec -type StatusSpec -type TunnelSpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .

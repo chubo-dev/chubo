@@ -7,10 +7,10 @@ package generate
 import (
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/network"
-	v1alpha1 "github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/network"
+	v1alpha1 "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 //nolint:gocyclo

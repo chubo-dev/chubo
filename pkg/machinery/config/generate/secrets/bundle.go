@@ -16,10 +16,10 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/cis"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/cis"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 // NewBundle creates secrets bundle generating all secrets.

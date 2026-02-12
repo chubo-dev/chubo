@@ -15,9 +15,9 @@ import (
 	"github.com/spf13/cobra"
 	snapshot "go.etcd.io/etcd/etcdutl/v3/snapshot"
 
-	"github.com/siderolabs/talos/pkg/logging"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/logging"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 var bootstrapCmdFlags struct {

@@ -11,9 +11,9 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/v1alpha1"
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/v1alpha1"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // DevicesStatusController loads extensions.yaml and updates DevicesStatus resources.

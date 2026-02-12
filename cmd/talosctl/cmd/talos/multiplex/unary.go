@@ -10,7 +10,7 @@ import (
 
 	"github.com/siderolabs/gen/channel"
 
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 // Unary initiates a multiplexed unary gRPC client call to multiple nodes.

@@ -14,11 +14,11 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	v1alpha1runtime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/kernel/kspp"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/kernel"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	v1alpha1runtime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/kernel/kspp"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/kernel"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // KernelParamDefaultsController creates default kernel params.

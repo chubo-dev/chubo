@@ -13,8 +13,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 	"github.com/siderolabs/gen/value"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // RouteSpecType is type of RouteSpec resource.

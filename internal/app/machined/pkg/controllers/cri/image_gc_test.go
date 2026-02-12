@@ -21,11 +21,11 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 
-	crictrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/cri"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	"github.com/siderolabs/talos/pkg/machinery/resources/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	crictrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/cri"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 func TestImageGC(t *testing.T) {

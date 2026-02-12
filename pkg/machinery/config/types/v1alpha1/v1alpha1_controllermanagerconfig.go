@@ -9,8 +9,8 @@ import (
 
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Image implements the config.ControllerManager interface.

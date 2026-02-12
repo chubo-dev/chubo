@@ -16,14 +16,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configpatcher"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/gendata"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configpatcher"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/gendata"
 )
 
 // TestConfigEncodingStability ensures that the encoding of a configuration is stable as we moved forward with the config format.

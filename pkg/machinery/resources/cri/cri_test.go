@@ -14,7 +14,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/state/registry"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 func TestRegisterResource(t *testing.T) {

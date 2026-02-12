@@ -9,8 +9,8 @@ import (
 	stderrors "errors"
 	"fmt"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/errors"
-	"github.com/siderolabs/talos/pkg/download"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/errors"
+	"github.com/chubo-dev/chubo/pkg/download"
 )
 
 const (

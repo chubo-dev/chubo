@@ -11,7 +11,7 @@ import (
 
 	k8s "k8s.io/client-go/kubernetes"
 
-	"github.com/siderolabs/talos/pkg/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/kubernetes"
 )
 
 // KubernetesFromKubeletClient provides Kubernetes client built from local kubelet config.

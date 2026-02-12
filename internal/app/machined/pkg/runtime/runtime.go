@@ -8,8 +8,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 // Runtime defines the runtime parameters.

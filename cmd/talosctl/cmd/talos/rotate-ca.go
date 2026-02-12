@@ -13,14 +13,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	"github.com/siderolabs/talos/pkg/rotate/pki/kubernetes"
-	"github.com/siderolabs/talos/pkg/rotate/pki/talos"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/rotate/pki/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/rotate/pki/talos"
 )
 
 var rotateCACmdFlags struct {

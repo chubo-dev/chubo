@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 )
 
 // NullLoggingManager sends all the logs to /dev/null.

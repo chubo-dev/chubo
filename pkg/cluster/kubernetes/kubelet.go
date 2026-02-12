@@ -20,11 +20,11 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/siderolabs/talos/pkg/kubernetes"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	v1alpha1config "github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	v1alpha1config "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 const kubelet = "kubelet"

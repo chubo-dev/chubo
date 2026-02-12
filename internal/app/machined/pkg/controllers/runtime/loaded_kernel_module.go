@@ -18,9 +18,9 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime/internal/filehash"
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime/internal/filehash"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // LoadedKernelModuleController presents /proc/modules as a resource.

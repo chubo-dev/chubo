@@ -17,11 +17,11 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/inotify"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/kobject"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/sysblock"
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/inotify"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/kobject"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/sysblock"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // DevicesController provides a view of available block devices with information about pending updates.

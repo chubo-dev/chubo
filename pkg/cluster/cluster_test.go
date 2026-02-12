@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/cluster"
 )
 
 func TestAssertNodes(t *testing.T) {

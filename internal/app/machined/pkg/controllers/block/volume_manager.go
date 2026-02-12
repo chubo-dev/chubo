@@ -22,17 +22,17 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/volumes"
-	"github.com/siderolabs/talos/internal/pkg/encryption"
-	"github.com/siderolabs/talos/internal/pkg/encryption/helpers"
-	blockpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/block"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	configres "github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/volumes"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
+	blockpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	configres "github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // VolumeManagerController manages volumes in the system, converting VolumeConfig resources to VolumeStatuses.

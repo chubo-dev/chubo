@@ -4,7 +4,7 @@
 
 package v1alpha1
 
-import "github.com/siderolabs/talos/pkg/machinery/config/config"
+import "github.com/chubo-dev/chubo/pkg/machinery/config/config"
 
 // Name implements the config.CNI interface.
 func (c *CNIConfig) Name() string {

@@ -16,9 +16,9 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/gen/xslices"
 
-	config2 "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	config2 "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // RegistriesConfigType is type of RegistriesConfig resource.

@@ -11,7 +11,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 	"github.com/dustin/go-humanize"
 
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // VolumeStatusType is type of VolumeStatus resource.

@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // restartCmd represents the restart command.

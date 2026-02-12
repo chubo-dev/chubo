@@ -11,10 +11,10 @@ import (
 	"github.com/siderolabs/gen/pair/ordered"
 	"github.com/siderolabs/go-pointer"
 
-	networkadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/network"
-	talosconfig "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	networkadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/network"
+	talosconfig "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // SetBondSlave sets the bond slave spec.

@@ -13,7 +13,7 @@ import (
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/makefs"
 )
 
 func TestVFATWithSourceDirectory(t *testing.T) {

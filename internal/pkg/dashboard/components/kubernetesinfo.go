@@ -11,11 +11,11 @@ import (
 	"github.com/rivo/tview"
 	"github.com/siderolabs/gen/maps"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 type staticPodStatuses struct {

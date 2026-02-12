@@ -13,18 +13,18 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/safe"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	secretsres "github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	"github.com/siderolabs/talos/pkg/provision/access"
-	"github.com/siderolabs/talos/pkg/rotate/pki/kubernetes"
-	"github.com/siderolabs/talos/pkg/rotate/pki/talos"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	secretsres "github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/provision/access"
+	"github.com/chubo-dev/chubo/pkg/rotate/pki/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/rotate/pki/talos"
 )
 
 // RotateCASuite verifies rotation of Talos and Kubernetes CAs.

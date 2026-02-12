@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/kubespan"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubespan"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func TestRoutingRules(t *testing.T) {

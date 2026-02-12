@@ -16,10 +16,10 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	siderolinkconfig "github.com/siderolabs/talos/pkg/machinery/config/types/siderolink"
-	"github.com/siderolabs/talos/pkg/machinery/resources/siderolink"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	siderolinkconfig "github.com/chubo-dev/chubo/pkg/machinery/config/types/siderolink"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/siderolink"
 )
 
 // SideroLinkSuite ...

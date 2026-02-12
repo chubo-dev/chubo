@@ -11,13 +11,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/volumes"
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	configconfig "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/volumes"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	configconfig "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // GetSystemVolumeTransformers returns the transformers for system volumes.

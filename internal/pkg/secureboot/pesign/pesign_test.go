@@ -15,8 +15,8 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/secureboot/pesign"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/pesign"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
 )
 
 type certificateProvider struct {

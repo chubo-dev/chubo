@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/pkg/ntp/internal/spike"
+	"github.com/chubo-dev/chubo/internal/pkg/ntp/internal/spike"
 )
 
 func TestSpikeDetector(t *testing.T) {

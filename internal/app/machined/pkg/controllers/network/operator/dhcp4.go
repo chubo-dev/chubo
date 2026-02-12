@@ -23,9 +23,9 @@ import (
 	"go.uber.org/zap"
 	"go4.org/netipx"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // DHCP4 implements the DHCPv4 network operator.

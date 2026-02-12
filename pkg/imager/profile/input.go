@@ -21,15 +21,15 @@ import (
 	"github.com/siderolabs/gen/value"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/internal/pkg/measure"
-	"github.com/siderolabs/talos/internal/pkg/secureboot/pesign"
-	"github.com/siderolabs/talos/pkg/archiver"
-	"github.com/siderolabs/talos/pkg/imager/profile/internal/signer/aws"
-	"github.com/siderolabs/talos/pkg/imager/profile/internal/signer/azure"
-	"github.com/siderolabs/talos/pkg/imager/profile/internal/signer/file"
-	"github.com/siderolabs/talos/pkg/images"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/internal/pkg/measure"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/pesign"
+	"github.com/chubo-dev/chubo/pkg/archiver"
+	"github.com/chubo-dev/chubo/pkg/imager/profile/internal/signer/aws"
+	"github.com/chubo-dev/chubo/pkg/imager/profile/internal/signer/azure"
+	"github.com/chubo-dev/chubo/pkg/imager/profile/internal/signer/file"
+	"github.com/chubo-dev/chubo/pkg/images"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 const (

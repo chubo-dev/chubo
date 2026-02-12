@@ -19,13 +19,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/peer"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/global"
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/formatters"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/global"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/formatters"
 )
 
 var kubernetesFlag bool

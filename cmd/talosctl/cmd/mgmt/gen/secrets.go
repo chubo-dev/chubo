@@ -12,9 +12,9 @@ import (
 	"github.com/spf13/cobra"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
 )
 
 var genSecretsCmdFlags struct {

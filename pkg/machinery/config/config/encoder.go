@@ -4,7 +4,7 @@
 
 package config
 
-import "github.com/siderolabs/talos/pkg/machinery/config/encoder"
+import "github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 
 // Encoder provides the interface to encode configuration documents.
 type Encoder interface {

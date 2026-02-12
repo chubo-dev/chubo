@@ -13,8 +13,8 @@ import (
 
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 // AppendDeletesTo appends all delete selectors found in the given YAML node to the given destination slice.

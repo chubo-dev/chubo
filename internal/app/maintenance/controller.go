@@ -4,7 +4,7 @@
 
 package maintenance
 
-import "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+import "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 
 var runtimeController runtime.Controller
 

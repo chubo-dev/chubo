@@ -14,7 +14,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	yaml "go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 // JSON outputs resources in JSON format.

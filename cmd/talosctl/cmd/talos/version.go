@@ -14,9 +14,9 @@ import (
 	"google.golang.org/grpc/peer"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 // versionCmdFlags represents the `talosctl version` command's flags.
@@ -110,7 +110,7 @@ func init() {
 	versionCmd.Flags().BoolVar(&versionCmdFlags.clientOnly, "client", false, "Print client version only")
 	versionCmd.Flags().BoolVarP(&versionCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
 
-	// TODO remove when https://github.com/siderolabs/talos/issues/907 is implemented
+	// TODO remove when https://github.com/chubo-dev/chubo/issues/907 is implemented
 	versionCmd.Flags().BoolVar(&versionCmdFlags.json, "json", false, "")
 	cli.Should(versionCmd.Flags().MarkHidden("json"))
 

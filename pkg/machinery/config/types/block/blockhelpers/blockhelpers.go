@@ -11,11 +11,11 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/cosi-project/runtime/pkg/state"
 
-	blockpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/block"
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	blockpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // MatchDisks returns a list of disks that match the given expression.

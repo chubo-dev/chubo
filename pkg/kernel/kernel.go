@@ -8,7 +8,7 @@ package kernel
 import (
 	"os"
 
-	"github.com/siderolabs/talos/pkg/machinery/kernel"
+	"github.com/chubo-dev/chubo/pkg/machinery/kernel"
 )
 
 // WriteParam writes a value to a key under /proc/sys.

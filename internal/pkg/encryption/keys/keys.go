@@ -13,7 +13,7 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/encryption"
 	"github.com/siderolabs/go-blockdevice/v2/encryption/token"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 var errNoSystemInfoGetter = errors.New("the UUID getter is not set")

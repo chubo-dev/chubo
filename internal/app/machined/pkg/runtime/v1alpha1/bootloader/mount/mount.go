@@ -14,8 +14,8 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/partitioning"
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/internal/pkg/mount/v3"
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
+	"github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
 )
 
 // Spec specifies what has to be mounted.

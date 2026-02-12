@@ -24,17 +24,17 @@ import (
 	"github.com/siderolabs/gen/maps"
 	yaml "go.yaml.in/yaml/v4"
 
-	networkadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/network"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/errors"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/internal/blockutils"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/internal/netutils"
-	"github.com/siderolabs/talos/internal/pkg/smbios"
-	"github.com/siderolabs/talos/pkg/download"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/xfs"
+	networkadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/errors"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/internal/blockutils"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/internal/netutils"
+	"github.com/chubo-dev/chubo/internal/pkg/smbios"
+	"github.com/chubo-dev/chubo/pkg/download"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 const (

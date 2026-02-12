@@ -9,7 +9,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	apiserverv1 "k8s.io/apiserver/pkg/apis/apiserver/v1"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // APIServerEncryptionConfig returns the encryption configuration for the API server.

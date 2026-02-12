@@ -12,8 +12,8 @@ import (
 
 	"github.com/dustin/go-humanize"
 
-	"github.com/siderolabs/talos/internal/pkg/containers/image"
-	"github.com/siderolabs/talos/internal/pkg/containers/image/progress"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image/progress"
 )
 
 // ReportInterval is the interval between progress reports.

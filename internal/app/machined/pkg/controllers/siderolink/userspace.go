@@ -21,10 +21,10 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/internal/pkg/ctxutil"
-	"github.com/siderolabs/talos/internal/pkg/endpoint"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/siderolink"
+	"github.com/chubo-dev/chubo/internal/pkg/ctxutil"
+	"github.com/chubo-dev/chubo/internal/pkg/endpoint"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/siderolink"
 )
 
 // UserspaceWireguardController imlements a controller that manages a Wireguard over GRPC tunnel in userspace.

@@ -13,17 +13,17 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/health"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/goroutine"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services/registry"
-	"github.com/siderolabs/talos/pkg/conditions"
-	"github.com/siderolabs/talos/pkg/logging"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/health"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/goroutine"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services/registry"
+	"github.com/chubo-dev/chubo/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/logging"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 type registryD struct{}

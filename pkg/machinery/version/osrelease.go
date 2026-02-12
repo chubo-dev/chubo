@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // OSRelease returns the contents of /etc/os-release.

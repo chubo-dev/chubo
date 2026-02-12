@@ -15,10 +15,10 @@ import (
 	"github.com/siderolabs/gen/maps"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 // EtcdConsistentAssertion checks that etcd membership is consistent across nodes.

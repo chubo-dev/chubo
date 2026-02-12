@@ -8,10 +8,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	blocktype "github.com/siderolabs/talos/pkg/machinery/config/types/block"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	blocktype "github.com/chubo-dev/chubo/pkg/machinery/config/types/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // MarshalEncryptionMeta is a function to persist encryption config to the META value.

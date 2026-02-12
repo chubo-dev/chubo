@@ -12,7 +12,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/cosi-project/runtime/pkg/state"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
 )
 
 // GetLocalMemberID gets the etcd member id of the local node via resources.

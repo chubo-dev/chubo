@@ -17,11 +17,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resolver"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/util"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resolver"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/util"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 // Data is a log line from a node.

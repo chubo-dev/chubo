@@ -13,7 +13,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/siderolabs/gen/optional"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // WaitForNetworkReady waits for devices to be ready.

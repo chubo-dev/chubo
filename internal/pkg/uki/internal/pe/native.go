@@ -15,7 +15,7 @@ import (
 
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
 )
 
 const (

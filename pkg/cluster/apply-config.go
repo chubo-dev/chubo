@@ -13,9 +13,9 @@ import (
 
 	"github.com/siderolabs/go-retry/retry"
 
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/provision"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // ApplyConfigClient client to apply config.

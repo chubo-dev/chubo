@@ -10,9 +10,9 @@ package base
 import (
 	"context"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/access"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/access"
 )
 
 const (

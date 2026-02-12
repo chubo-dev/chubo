@@ -17,8 +17,8 @@ import (
 	"github.com/foxboron/go-uefi/efivar"
 	"github.com/google/uuid"
 
-	"github.com/siderolabs/talos/internal/pkg/secureboot/pesign"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/pesign"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Entry is a UEFI database entry.

@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/imager/profile"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/imager/profile"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 func createOutputWithDefaults(kind profile.OutputKind, arch, version string, secureBoot bool) profile.Output {

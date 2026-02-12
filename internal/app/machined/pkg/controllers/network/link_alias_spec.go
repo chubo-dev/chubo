@@ -16,10 +16,10 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network/watch"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network/watch"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // LinkAliasSpecController applies network.LinkAliasSpec to the actual interfaces.

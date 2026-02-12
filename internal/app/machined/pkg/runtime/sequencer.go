@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 // Sequence represents a sequence type.

@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"net/netip"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // CompareByAlgorithm returns a comparison function based on the given algorithm.

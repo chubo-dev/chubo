@@ -10,8 +10,8 @@ import (
 
 	"github.com/siderolabs/crypto/x509"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 // NewEtcdCA generates a CA for the Etcd PKI.

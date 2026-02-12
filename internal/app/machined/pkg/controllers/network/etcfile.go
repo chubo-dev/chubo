@@ -25,15 +25,15 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"go.uber.org/zap"
 
-	efiles "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/files"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/mount/v3"
-	talosconfig "github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/files"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/xfs"
+	efiles "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/files"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	talosconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // EtcFileController creates /etc/hostname and /etc/resolv.conf files based on finalized network configuration.

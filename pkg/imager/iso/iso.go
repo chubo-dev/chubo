@@ -14,8 +14,8 @@ import (
 
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 
-	"github.com/siderolabs/talos/pkg/imager/utils"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 // VolumeID returns a valid volume ID for the given label.

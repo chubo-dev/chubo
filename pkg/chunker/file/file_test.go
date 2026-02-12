@@ -14,7 +14,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/pkg/chunker/file"
+	"github.com/chubo-dev/chubo/pkg/chunker/file"
 )
 
 type FileChunkerSuite struct {

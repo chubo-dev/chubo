@@ -17,7 +17,7 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 // Hostname implements the machine.MachineServer interface.

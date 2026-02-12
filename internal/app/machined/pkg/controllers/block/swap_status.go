@@ -19,8 +19,8 @@ import (
 	"github.com/dustin/go-humanize"
 	"go.uber.org/zap"
 
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // SwapStatusController provides a view of active swap devices.

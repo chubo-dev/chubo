@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	inspectapi "github.com/siderolabs/talos/pkg/machinery/api/inspect"
+	inspectapi "github.com/chubo-dev/chubo/pkg/machinery/api/inspect"
 )
 
 // InspectClient provides access to inspect API.

@@ -10,9 +10,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/constants"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/constants"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset"
 )
 
 func TestValidatePresets(t *testing.T) {

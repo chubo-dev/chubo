@@ -14,9 +14,9 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/rivo/tview"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 const noHostname = "(no hostname)"

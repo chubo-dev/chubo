@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/talos/cgroupsprinter"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/cgroupsprinter"
 )
 
 func TestGetPresetNames(t *testing.T) {

@@ -20,13 +20,13 @@ import (
 	"github.com/spf13/cobra"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/talos/cgroupsprinter"
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	"github.com/siderolabs/talos/internal/pkg/cgroups"
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/cgroupsprinter"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroups"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 var cgroupsCmdFlags struct {
@@ -53,7 +53,7 @@ Several presets are available to focus on specific cgroup subsystems:
 You can specify the preset using the --preset flag.
 
 Alternatively, a custom schema can be provided using the --schema-file flag.
-To see schema examples, refer to https://github.com/siderolabs/talos/tree/main/cmd/talosctl/cmd/talos/cgroupsprinter/schemas.
+To see schema examples, refer to https://github.com/chubo-dev/chubo/tree/main/cmd/talosctl/cmd/talos/cgroupsprinter/schemas.
 `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {

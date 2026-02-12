@@ -16,9 +16,9 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	runtimectrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	v1alpha1runtime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	runtimectrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	v1alpha1runtime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 const (

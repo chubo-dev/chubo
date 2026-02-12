@@ -11,7 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/configpatcher"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configpatcher"
 )
 
 var patchCmdFlags struct {

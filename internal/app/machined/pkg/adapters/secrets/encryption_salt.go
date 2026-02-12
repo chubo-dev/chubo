@@ -8,8 +8,8 @@ import (
 	"crypto/rand"
 	"io"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // EncryptionSalt adapter provides encryption salt generation.

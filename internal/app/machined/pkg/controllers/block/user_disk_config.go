@@ -17,13 +17,13 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	machineconfig "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	machineconfig "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 // UserDiskConfigController provides volume configuration based on Talos v1alpha1 user disks.

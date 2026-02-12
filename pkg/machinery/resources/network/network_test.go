@@ -17,9 +17,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	networkpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/network"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	networkpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 func TestRegisterResource(t *testing.T) {

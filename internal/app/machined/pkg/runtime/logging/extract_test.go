@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 )
 
 func TestParseLogLine(t *testing.T) {

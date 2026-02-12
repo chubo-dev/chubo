@@ -17,8 +17,8 @@ import (
 	informersv1 "k8s.io/client-go/informers/core/v1"
 	"k8s.io/client-go/tools/cache"
 
-	"github.com/siderolabs/talos/pkg/kubernetes"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // NodeWatcher defines a NodeWatcher-based node watcher.

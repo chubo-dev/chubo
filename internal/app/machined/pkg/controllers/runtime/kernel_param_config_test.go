@@ -12,11 +12,11 @@ import (
 	"github.com/siderolabs/go-retry/retry"
 	"github.com/stretchr/testify/suite"
 
-	runtimecontrollers "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	runtimeresource "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	runtimecontrollers "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	runtimeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 type KernelParamConfigSuite struct {

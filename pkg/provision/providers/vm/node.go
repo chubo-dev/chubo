@@ -10,7 +10,7 @@ import (
 
 	multierror "github.com/hashicorp/go-multierror"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // DestroyNodes destroys all VMs.

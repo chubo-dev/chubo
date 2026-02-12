@@ -6,8 +6,8 @@
 package images
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/gendata"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/machinery/gendata"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 var (

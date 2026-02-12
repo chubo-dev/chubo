@@ -9,9 +9,9 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 
-	configpb "github.com/siderolabs/talos/pkg/machinery/api/resource/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	configpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // MachineTypeType is type of MachineType resource.

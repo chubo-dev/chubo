@@ -23,7 +23,7 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 
-	grpclog "github.com/siderolabs/talos/pkg/grpc/middleware/log"
+	grpclog "github.com/chubo-dev/chubo/pkg/grpc/middleware/log"
 )
 
 // Registrator describes the set of methods required in order for a concrete

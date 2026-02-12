@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
 )
 
 const (

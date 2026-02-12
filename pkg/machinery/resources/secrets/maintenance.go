@@ -11,7 +11,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 	"github.com/siderolabs/crypto/x509"
 
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // MaintenanceServiceCertsType is type of MaintenanceCerts resource.

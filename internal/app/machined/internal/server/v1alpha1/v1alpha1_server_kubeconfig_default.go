@@ -15,9 +15,9 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/siderolabs/talos/pkg/kubeconfig"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/kubeconfig"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 // Kubeconfig implements the machine.MachineServer interface.

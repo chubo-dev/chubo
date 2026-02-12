@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/merge"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/runtime/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/merge"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime/extensions"
 )
 
 //go:embed testdata/extension_service_config.yaml

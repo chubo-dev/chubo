@@ -7,10 +7,10 @@ package network
 //docgen:jsonschema
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/registry"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 // DefaultActionConfig is a default action config document kind.

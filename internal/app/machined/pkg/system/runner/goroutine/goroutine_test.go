@@ -17,14 +17,14 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/logging"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/goroutine"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	v1alpha1cfg "github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/logging"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/goroutine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	v1alpha1cfg "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 func MockEventSink(state events.ServiceState, message string, args ...any) {

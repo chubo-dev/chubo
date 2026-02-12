@@ -14,7 +14,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // TimeServerSpecController applies network.TimeServerSpec to the actual interfaces.

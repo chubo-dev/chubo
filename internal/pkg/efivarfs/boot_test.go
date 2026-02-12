@@ -14,7 +14,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/efivarfs"
+	"github.com/chubo-dev/chubo/internal/pkg/efivarfs"
 )
 
 // Generated with old working marshaler and manually double-checked

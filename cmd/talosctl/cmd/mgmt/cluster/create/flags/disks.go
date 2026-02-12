@@ -10,7 +10,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/siderolabs/talos/pkg/bytesize"
+	"github.com/chubo-dev/chubo/pkg/bytesize"
 )
 
 // DiskRequest is the configuration required for disk creation.

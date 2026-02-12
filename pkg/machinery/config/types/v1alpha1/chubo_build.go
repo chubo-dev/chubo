@@ -7,4 +7,3 @@
 package v1alpha1
 
 func isChuboOS() bool { return true }
-

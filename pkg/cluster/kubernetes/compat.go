@@ -12,8 +12,8 @@ import (
 	"github.com/blang/semver/v4"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/compatibility"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/compatibility"
 )
 
 // NodeVersion holds the node identifier along with its Talos version.

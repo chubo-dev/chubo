@@ -9,8 +9,8 @@ import (
 
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 // This file contains methods which bridge v1alpha1 (legacy) config types to new-style config interfaces for networking.

@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/internal/blockutils"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/internal/blockutils"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func TestVolumeMatch(t *testing.T) {

@@ -11,9 +11,9 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub"
-	"github.com/siderolabs/talos/pkg/imager/utils"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 //go:embed grub.cfg

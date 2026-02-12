@@ -13,15 +13,15 @@ import (
 	"github.com/siderolabs/protoenc"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	clusterpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
-	networkpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/network"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	clusterpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
+	networkpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 //nolint:lll

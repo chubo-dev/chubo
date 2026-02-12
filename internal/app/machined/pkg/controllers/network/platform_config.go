@@ -16,8 +16,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	"go.uber.org/zap"
 
-	v1alpha1runtime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	v1alpha1runtime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // PlatformConfigController runs the platform config acquire code and publishes the result as a resource.

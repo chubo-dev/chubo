@@ -41,10 +41,10 @@ import (
 	"k8s.io/client-go/util/connrotation"
 	"k8s.io/client-go/util/workqueue"
 
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 const (

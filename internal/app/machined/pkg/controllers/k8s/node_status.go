@@ -18,11 +18,11 @@ import (
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/k8s/internal/nodewatch"
-	"github.com/siderolabs/talos/pkg/conditions"
-	"github.com/siderolabs/talos/pkg/kubernetes"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s/internal/nodewatch"
+	"github.com/chubo-dev/chubo/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 // watchErrorsThreshold is the number of consecutive watch errors before the controller stops watching.

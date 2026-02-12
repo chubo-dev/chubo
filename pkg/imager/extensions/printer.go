@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"text/tabwriter"
 
-	"github.com/siderolabs/talos/internal/pkg/extensions"
+	"github.com/chubo-dev/chubo/internal/pkg/extensions"
 )
 
 func (builder *Builder) printExtensions(extensions []*extensions.Extension) error {

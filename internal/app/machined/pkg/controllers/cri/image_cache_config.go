@@ -23,17 +23,17 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	cfg "github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	cfg "github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // ServiceManager is the interface to the v1alpha1 services subsystems.

@@ -12,7 +12,7 @@ import (
 	"github.com/distribution/reference"
 	"github.com/moby/moby/client"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 func (p *provisioner) ensureImageExists(ctx context.Context, containerImage string, options *provision.Options) error {

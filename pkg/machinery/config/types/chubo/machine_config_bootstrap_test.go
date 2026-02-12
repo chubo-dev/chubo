@@ -17,7 +17,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
 type testRuntimeMode struct{}

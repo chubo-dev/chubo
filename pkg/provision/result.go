@@ -9,7 +9,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 // Cluster describes the provisioned Cluster.

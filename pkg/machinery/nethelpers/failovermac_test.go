@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 func TestFailOverMACUnmarshalText(t *testing.T) {

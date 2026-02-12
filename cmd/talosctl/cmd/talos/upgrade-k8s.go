@@ -15,12 +15,12 @@ import (
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/cli-utils/pkg/inventory"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	"github.com/siderolabs/talos/pkg/cluster"
-	k8s "github.com/siderolabs/talos/pkg/cluster/kubernetes"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	k8s "github.com/chubo-dev/chubo/pkg/cluster/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // upgradeK8sCmd represents the upgrade-k8s command.

@@ -14,12 +14,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	secretsctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	timeres "github.com/siderolabs/talos/pkg/machinery/resources/time"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	secretsctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeres "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 )
 
 func TestEtcdSuite(t *testing.T) {

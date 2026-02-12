@@ -9,8 +9,8 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
 // Option controls Provisioner.

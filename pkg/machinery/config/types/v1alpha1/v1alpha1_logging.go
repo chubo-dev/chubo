@@ -12,8 +12,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Validate checks logging configuration for errors.

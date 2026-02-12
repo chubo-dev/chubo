@@ -22,10 +22,10 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protowire"
 
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // GracefulShutdownTimeout is the timeout for graceful shutdown of the backend connection.

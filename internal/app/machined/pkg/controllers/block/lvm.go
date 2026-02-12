@@ -17,10 +17,10 @@ import (
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 	"go.uber.org/zap"
 
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // LVMActivationController activates LVM volumes when they are discovered by the block.DiscoveryController.

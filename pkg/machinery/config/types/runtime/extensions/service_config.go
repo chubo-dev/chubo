@@ -11,11 +11,11 @@ import (
 
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/registry"
-	"github.com/siderolabs/talos/pkg/machinery/config/merge"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/merge"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
 // ServiceConfigKind is a Extension config document kind.

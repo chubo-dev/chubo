@@ -11,12 +11,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/network"
 )
 
 //go:embed testdata/linkaliasconfig.yaml

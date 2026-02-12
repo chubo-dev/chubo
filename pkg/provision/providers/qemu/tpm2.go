@@ -11,8 +11,8 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/providers/vm"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm"
 )
 
 func (p *provisioner) createVirtualTPMState(state *provision.State, nodeName string, tpm2Enabled bool) (tpmConfig, error) {

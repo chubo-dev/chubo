@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/machinery/platforms"
+	"github.com/chubo-dev/chubo/pkg/machinery/platforms"
 )
 
 func TestSBC(t *testing.T) {

@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/assert"
 
-	flags "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+	flags "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
 )
 
 func TestVirtiofsFlag_AccumulatesAndRequests(t *testing.T) {

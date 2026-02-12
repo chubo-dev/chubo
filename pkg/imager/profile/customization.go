@@ -5,7 +5,7 @@
 package profile
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
 // CustomizationProfile describes customizations that can be applied to the image.

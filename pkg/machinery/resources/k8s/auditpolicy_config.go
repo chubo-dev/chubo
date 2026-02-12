@@ -11,7 +11,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // AuditPolicyConfigType is type of AuditPolicyConfig resource.

@@ -16,14 +16,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime/internal/diagnostics"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime/internal/diagnostics"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 func TestAddressOverlapCheck(t *testing.T) {

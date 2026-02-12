@@ -17,11 +17,11 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/swap"
 	"go.uber.org/zap"
 
-	mountv3 "github.com/siderolabs/talos/internal/pkg/mount/v3"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/makefs"
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
+	mountv3 "github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
 )
 
 // Format establishes a filesystem on a block device.

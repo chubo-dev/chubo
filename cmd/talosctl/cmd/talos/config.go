@@ -27,12 +27,12 @@ import (
 	"go.yaml.in/yaml/v4"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 // configCmd represents the config command.

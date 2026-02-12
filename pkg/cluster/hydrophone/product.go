@@ -4,7 +4,7 @@
 
 package hydrophone
 
-import "github.com/siderolabs/talos/pkg/machinery/version"
+import "github.com/chubo-dev/chubo/pkg/machinery/version"
 
 type product struct {
 	Vendor           string `yaml:"vendor"`
@@ -24,7 +24,7 @@ var talos = product{
 	Name:             "Talos Linux",
 	Version:          version.Tag,
 	WebsiteURL:       "https://www.siderolabs.com/",
-	RepoURL:          "https://github.com/siderolabs/talos",
+	RepoURL:          "https://github.com/chubo-dev/chubo",
 	DocumentationURL: "https://www.talos.dev",
 	ProductLogoURL:   "https://www.talos.dev/images/Sidero_stacked_darkbkgd_RGB.svg",
 	Type:             "installer",

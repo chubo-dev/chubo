@@ -15,10 +15,10 @@ import (
 	"go.yaml.in/yaml/v4"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 // TalosconfigSuite checks `talosctl config`.

@@ -17,9 +17,9 @@ import (
 
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/imager/profile"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/imager/profile"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions"
 )
 
 func (i *Imager) handleEmbeddedConfig() error {

@@ -13,13 +13,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	kubespanctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/kubespan"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/network"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	kubespanctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubespan"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 )
 
 type ConfigSuite struct {

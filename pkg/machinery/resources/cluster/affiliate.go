@@ -14,8 +14,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 	"github.com/siderolabs/gen/value"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 //go:generate go tool github.com/siderolabs/deep-copy -type AffiliateSpec -type ConfigSpec -type IdentitySpec -type MemberSpec -type InfoSpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .

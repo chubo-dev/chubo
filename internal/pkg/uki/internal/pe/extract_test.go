@@ -13,7 +13,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/pkg/uki/internal/pe"
+	"github.com/chubo-dev/chubo/internal/pkg/uki/internal/pe"
 )
 
 func TestUKIExtract(t *testing.T) {

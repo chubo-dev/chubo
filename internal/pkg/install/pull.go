@@ -15,10 +15,10 @@ import (
 	"github.com/containerd/containerd/v2/pkg/oci"
 	"github.com/containerd/errdefs"
 
-	"github.com/siderolabs/talos/internal/pkg/containers/image"
-	"github.com/siderolabs/talos/internal/pkg/containers/image/console"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image/console"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // PullAndValidateInstallerImage pulls down the installer and validates that it can run.

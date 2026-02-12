@@ -14,10 +14,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/cri"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	criseccompresource "github.com/siderolabs/talos/pkg/machinery/resources/cri"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/cri"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	criseccompresource "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 func (suite *CRISeccompProfileFileSuite) TestReconcileSeccompProfileFile() {

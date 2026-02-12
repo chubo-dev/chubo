@@ -21,12 +21,12 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/kubeconfig"
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	timeresource "github.com/siderolabs/talos/pkg/machinery/resources/time"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/kubeconfig"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // KubernetesCertificateValidityDuration is the validity duration for the certificates created with this controller.

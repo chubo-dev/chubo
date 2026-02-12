@@ -5,7 +5,7 @@
 package vm
 
 import (
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 func (p *Provisioner) startDNSd(_ *State, _ provision.ClusterRequest) error {

@@ -26,8 +26,8 @@ import (
 	"github.com/siderolabs/go-debug"
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/internal/pkg/containermode"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/containermode"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // CommonCgroup interface presents a cgroup manager, be it v1 or v2

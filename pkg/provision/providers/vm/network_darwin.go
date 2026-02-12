@@ -10,7 +10,7 @@ import (
 
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // CreateNetwork on darwin assigns the bridge name to the to-be created interface name.

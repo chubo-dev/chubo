@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/pkg/provision/providers/vm"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm"
 )
 
 var dnsdLaunchCmdFlags struct {

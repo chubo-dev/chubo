@@ -25,16 +25,16 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
-	"github.com/siderolabs/talos/pkg/httpdefaults"
-	"github.com/siderolabs/talos/pkg/machinery/client/dialer"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/httpdefaults"
+	"github.com/chubo-dev/chubo/pkg/machinery/client/dialer"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 const defaultDiscoveryTTL = 30 * time.Minute

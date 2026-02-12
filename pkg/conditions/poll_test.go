@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/conditions"
 )
 
 func TestPollingCondition(t *testing.T) {

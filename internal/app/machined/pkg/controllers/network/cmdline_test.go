@@ -18,9 +18,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	netconfig "github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	netconfig "github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 func TestCmdlineParse(t *testing.T) {

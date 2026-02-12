@@ -14,9 +14,9 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sys/unix"
 
-	v1alpha1runtime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/timex"
-	"github.com/siderolabs/talos/pkg/machinery/resources/time"
+	v1alpha1runtime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/timex"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 )
 
 // AdjtimeStatusController manages time.AdjtimeStatus based on Linux kernel info.

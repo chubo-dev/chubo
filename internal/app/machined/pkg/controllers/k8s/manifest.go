@@ -16,10 +16,10 @@ import (
 	"go.uber.org/zap"
 	"k8s.io/apimachinery/pkg/runtime"
 
-	k8sadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/k8s"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/k8s/internal/k8stemplates"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	k8sadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/k8s"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s/internal/k8stemplates"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // ManifestController renders manifests based on templates and config/secrets.

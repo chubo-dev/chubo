@@ -7,8 +7,8 @@ package cluster
 import (
 	"net/netip"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // MapProvisionNodeInfosToClusterNodeInfos maps provision.NodeInfos to cluster.NodeInfos.

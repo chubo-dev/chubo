@@ -16,11 +16,11 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
-	"github.com/siderolabs/talos/pkg/machinery/meta"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 const (

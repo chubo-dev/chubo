@@ -17,11 +17,11 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/siderolabs/gen/xslices"
 
-	coreconfig "github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	coreconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
 // V1Alpha1ConflictValidator is the interface implemented by config documents which conflict with legacy v1alpha1 config.

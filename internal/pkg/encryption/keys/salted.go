@@ -12,7 +12,7 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/encryption"
 	"github.com/siderolabs/go-blockdevice/v2/encryption/token"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
 )
 
 // SaltedHandler is a key handler wrapper that salts the key with a provided random salt.

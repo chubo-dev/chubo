@@ -26,10 +26,10 @@ import (
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 	"github.com/siderolabs/go-procfs/procfs"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/kernel"
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/kernel"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 //nolint:gocyclo,cyclop

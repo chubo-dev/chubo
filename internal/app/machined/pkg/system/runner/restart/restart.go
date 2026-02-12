@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
 )
 
 type restarter struct {

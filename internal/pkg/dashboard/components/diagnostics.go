@@ -10,8 +10,8 @@ import (
 
 	"github.com/rivo/tview"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // Diagnostics represents the diagnostics widget.

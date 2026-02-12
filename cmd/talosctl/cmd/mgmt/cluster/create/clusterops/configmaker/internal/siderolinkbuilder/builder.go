@@ -22,16 +22,16 @@ import (
 	"github.com/siderolabs/gen/maps"
 	"github.com/siderolabs/go-procfs/procfs"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	configbase "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configpatcher"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/security"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/siderolink"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	configbase "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configpatcher"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/security"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/siderolink"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // New creates a new SiderolinkBuilder.

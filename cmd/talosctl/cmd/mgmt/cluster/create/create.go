@@ -15,10 +15,10 @@ import (
 
 	"github.com/hashicorp/go-getter/v2"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/access"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/access"
 )
 
 // downloadBootAssets downloads the boot assets in the given qemuOps if they are URLs, and replaces their URL paths with the downloaded paths on the filesystem.

@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/siderolabs/crypto/x509"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
 )
 
 // populateKubernetesEtcd fills Kubernetes/etcd PKI into the secrets bundle.

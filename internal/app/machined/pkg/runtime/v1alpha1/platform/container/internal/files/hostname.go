@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"os"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // ReadHostname reads and parses /etc/hostname file.

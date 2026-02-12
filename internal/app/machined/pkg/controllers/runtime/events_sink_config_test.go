@@ -13,13 +13,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	runtimectrls "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	runtimecfg "github.com/siderolabs/talos/pkg/machinery/config/types/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	runtimectrls "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	runtimecfg "github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 type EventsSinkConfigSuite struct {

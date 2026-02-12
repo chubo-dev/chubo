@@ -7,9 +7,9 @@ package configpatcher
 import (
 	jsonpatch "github.com/evanphx/json-patch"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 )
 
 // configOrBytes encapsulates either unmarshaled config or raw byte representation.

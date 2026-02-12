@@ -13,7 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/siderolabs/talos/pkg/safepath"
+	"github.com/chubo-dev/chubo/pkg/safepath"
 )
 
 // ExtractFileFromTarGz reads a single file data from an archive.

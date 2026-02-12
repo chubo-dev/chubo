@@ -10,8 +10,8 @@ import (
 
 	"github.com/siderolabs/gen/optional"
 
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 // NetworkRuleConfig defines the interface to access network firewall configuration.

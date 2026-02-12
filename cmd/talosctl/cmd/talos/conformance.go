@@ -12,9 +12,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/cluster/hydrophone"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/cluster/hydrophone"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 // conformanceCmd represents the conformance command.

@@ -20,12 +20,12 @@ import (
 	"github.com/google/cel-go/common/types"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/internal/pkg/mount/v3"
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/xfs"
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
+	"github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
 )
 
 // VolumeMatch returns a CEL expression that matches a volume by filesystem or partition label.

@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/yamlutils"
+	"github.com/chubo-dev/chubo/pkg/machinery/yamlutils"
 )
 
 func TestStringBytes(t *testing.T) {

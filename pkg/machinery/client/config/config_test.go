@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
 func TestConfigMerge(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // Crashdump is a no-op in chubo builds.

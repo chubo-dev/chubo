@@ -22,10 +22,10 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	yaml "go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	platformerrors "github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/errors"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	platformerrors "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/errors"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // Read and de-base64 a property from `extraConfig`. This is commonly referred to as `guestinfo`.

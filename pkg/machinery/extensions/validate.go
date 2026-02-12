@@ -13,7 +13,7 @@ import (
 
 	"github.com/blang/semver/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 // ValidationOptions are used to configure the validation process.

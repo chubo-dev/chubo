@@ -18,15 +18,15 @@ import (
 	"github.com/stretchr/testify/suite"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	netctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	networkcfg "github.com/siderolabs/talos/pkg/machinery/config/types/network"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/fipsmode"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	netctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	networkcfg "github.com/chubo-dev/chubo/pkg/machinery/config/types/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 type LinkConfigSuite struct {

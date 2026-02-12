@@ -7,7 +7,7 @@
 package profile
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
 // DeepCopy generates a deep copy of Profile.

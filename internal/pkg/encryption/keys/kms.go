@@ -21,10 +21,10 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/helpers"
-	"github.com/siderolabs/talos/internal/pkg/endpoint"
-	"github.com/siderolabs/talos/pkg/httpdefaults"
-	"github.com/siderolabs/talos/pkg/machinery/client/dialer"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/endpoint"
+	"github.com/chubo-dev/chubo/pkg/httpdefaults"
+	"github.com/chubo-dev/chubo/pkg/machinery/client/dialer"
 )
 
 // KMSToken is the userdata stored in the partition token metadata.

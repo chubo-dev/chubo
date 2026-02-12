@@ -17,8 +17,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 // AccessPolicy defines the access policy for resources accessed via the API.

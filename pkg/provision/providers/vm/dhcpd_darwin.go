@@ -17,7 +17,7 @@ import (
 
 	"github.com/siderolabs/go-retry/retry"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // CreateDHCPd creates a DHCP server on darwin.

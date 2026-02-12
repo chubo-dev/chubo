@@ -17,10 +17,10 @@ import (
 	"go.uber.org/zap"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
-	extservices "github.com/siderolabs/talos/pkg/machinery/extensions/services"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	extservices "github.com/chubo-dev/chubo/pkg/machinery/extensions/services"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // ServiceManager is the interface to the v1alpha1 services subsystems.

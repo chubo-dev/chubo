@@ -14,9 +14,9 @@ import (
 	"github.com/blang/semver/v4"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 // FailIfMultiNodes checks if ctx contains multi-node request metadata.

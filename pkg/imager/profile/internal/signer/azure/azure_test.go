@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/imager/profile/internal/signer/azure"
+	"github.com/chubo-dev/chubo/pkg/imager/profile/internal/signer/azure"
 )
 
 func TestIntegration(t *testing.T) {

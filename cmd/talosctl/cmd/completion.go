@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/cli"
 )
 
 // completionCmd represents the completion command.

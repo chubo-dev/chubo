@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/cosi-project/runtime/pkg/state"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // VIP implements a no-op Virtual IP operator for chubo mode.

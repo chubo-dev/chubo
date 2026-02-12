@@ -19,8 +19,8 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/perf"
-	perfresource "github.com/siderolabs/talos/pkg/machinery/resources/perf"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/perf"
+	perfresource "github.com/chubo-dev/chubo/pkg/machinery/resources/perf"
 )
 
 type PerfSuite struct {

@@ -11,10 +11,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader/internal/decoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	_ "github.com/siderolabs/talos/pkg/machinery/config/types" // import config types to register them
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader/internal/decoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	_ "github.com/chubo-dev/chubo/pkg/machinery/config/types" // import config types to register them
 )
 
 // ErrNoConfig is returned when no configuration was found in the input.

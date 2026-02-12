@@ -9,8 +9,8 @@ package v1alpha1
 import (
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func (Config) Doc() *encoder.Doc {
@@ -907,7 +907,7 @@ func (InstallConfig) Doc() *encoder.Doc {
 				Name:        "image",
 				Type:        "string",
 				Note:        "",
-				Description: "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/siderolabs/talos/releases).",
+				Description: "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Allows for supplying the image used to perform the installation." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{},
@@ -2181,7 +2181,7 @@ func (DiscoveryRegistriesConfig) Doc() *encoder.Doc {
 				Name:        "kubernetes",
 				Type:        "RegistryKubernetesConfig",
 				Note:        "",
-				Description: "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/siderolabs/talos/issues/9980 for more information.",
+				Description: "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/chubo-dev/chubo/issues/9980 for more information.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information" /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{

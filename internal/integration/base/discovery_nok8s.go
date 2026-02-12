@@ -9,8 +9,8 @@ package base
 import (
 	"context"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 func discoverNodesK8s(ctx context.Context, client *client.Client, suite *TalosSuite) (cluster.Info, error) {

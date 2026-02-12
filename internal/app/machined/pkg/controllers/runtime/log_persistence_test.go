@@ -13,11 +13,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	runtimectrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	runtimectrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 func TestLogPersistenceSuite(t *testing.T) {

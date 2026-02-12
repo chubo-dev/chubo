@@ -11,7 +11,7 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/resource"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 //go:generate go tool github.com/dmarkham/enumer -type=ConfigLayer,Operator -linecomment -text

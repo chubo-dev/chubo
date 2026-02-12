@@ -11,7 +11,7 @@ import (
 	_ "embed"
 	"time"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 //go:embed testdata/rook-ceph-cluster-values.yaml

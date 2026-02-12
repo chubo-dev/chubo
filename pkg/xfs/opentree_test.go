@@ -12,10 +12,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/xfs"
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
-	"github.com/siderolabs/talos/pkg/xfs/opentree"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
+	"github.com/chubo-dev/chubo/pkg/xfs/opentree"
 )
 
 func TestOpentree(t *testing.T) {

@@ -16,7 +16,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/siderolabs/gen/maps"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Validate validates that a set of labels are correctly defined.

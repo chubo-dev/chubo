@@ -20,8 +20,8 @@ import (
 	"github.com/siderolabs/go-loadbalancer/upstream"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 // KubePrismController creates KubePrism load balancer based on KubePrismEndpointsType resource.

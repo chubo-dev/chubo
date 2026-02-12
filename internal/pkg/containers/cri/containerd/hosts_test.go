@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/containers/cri/containerd"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/cri/containerd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 func TestGenerateHostsWithTLS(t *testing.T) {

@@ -12,15 +12,15 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	blockadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/block"
-	clusteradapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/cluster"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton/blockautomaton"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/files"
-	"github.com/siderolabs/talos/pkg/xfs"
+	blockadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/block"
+	clusteradapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/cluster"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton/blockautomaton"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // NodeIdentityController manages runtime.Identity caching identity in the STATE.

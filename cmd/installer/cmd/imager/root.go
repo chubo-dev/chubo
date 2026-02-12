@@ -18,14 +18,14 @@ import (
 	"github.com/spf13/cobra"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/cmd/installer/pkg/install"
-	"github.com/siderolabs/talos/pkg/archiver"
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/imager"
-	"github.com/siderolabs/talos/pkg/imager/profile"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/overlay"
-	"github.com/siderolabs/talos/pkg/reporter"
+	"github.com/chubo-dev/chubo/cmd/installer/pkg/install"
+	"github.com/chubo-dev/chubo/pkg/archiver"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/imager"
+	"github.com/chubo-dev/chubo/pkg/imager/profile"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/overlay"
+	"github.com/chubo-dev/chubo/pkg/reporter"
 )
 
 var cmdFlags struct {

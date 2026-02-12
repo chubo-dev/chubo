@@ -14,12 +14,12 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/mgmt/helpers"
-	"github.com/siderolabs/talos/pkg/images"
-	talosclient "github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+	"github.com/chubo-dev/chubo/pkg/images"
+	talosclient "github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 //nolint:maligned

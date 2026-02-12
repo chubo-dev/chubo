@@ -10,7 +10,7 @@ import (
 	"github.com/blang/semver/v4"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/kubernetes"
 )
 
 func TestVersionGTE(t *testing.T) {

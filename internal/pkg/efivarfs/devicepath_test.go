@@ -13,7 +13,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/siderolabs/talos/internal/pkg/efivarfs"
+	"github.com/chubo-dev/chubo/internal/pkg/efivarfs"
 )
 
 // nolint:gocyclo

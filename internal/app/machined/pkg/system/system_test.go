@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
 )
 
 type SystemServicesSuite struct {

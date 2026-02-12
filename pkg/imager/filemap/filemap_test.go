@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/imager/filemap"
+	"github.com/chubo-dev/chubo/pkg/imager/filemap"
 )
 
 func TestFileMap(t *testing.T) {

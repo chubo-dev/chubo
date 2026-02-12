@@ -13,15 +13,15 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	clusteradapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/cluster"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	clusterctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	clusteradapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/cluster"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	clusterctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 type KubePrismControllerSuite struct {

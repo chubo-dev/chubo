@@ -4,7 +4,7 @@
 
 package check
 
-import "github.com/siderolabs/talos/pkg/machinery/config/machine"
+import "github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 
 // Option represents functional option.
 type Option func(o *Options) error

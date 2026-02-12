@@ -18,14 +18,14 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/codes"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/cluster/check"
-	"github.com/siderolabs/talos/pkg/cluster/hydrophone"
-	clusterapi "github.com/siderolabs/talos/pkg/machinery/api/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	clusterres "github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/cluster/check"
+	"github.com/chubo-dev/chubo/pkg/cluster/hydrophone"
+	clusterapi "github.com/chubo-dev/chubo/pkg/machinery/api/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	clusterres "github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 type clusterNodes struct {

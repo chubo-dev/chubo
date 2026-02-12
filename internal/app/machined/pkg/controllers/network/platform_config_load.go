@@ -15,13 +15,13 @@ import (
 	"go.uber.org/zap"
 	"go.yaml.in/yaml/v4"
 
-	blockadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/block"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton/blockautomaton"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/xfs"
+	blockadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton/blockautomaton"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // PlatformConfigLoadController loads cached platform network config from STATE.

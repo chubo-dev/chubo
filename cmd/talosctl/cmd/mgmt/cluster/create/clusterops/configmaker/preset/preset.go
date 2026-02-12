@@ -13,7 +13,7 @@ import (
 
 	"gopkg.in/typ.v4/slices"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
 )
 
 const secureBootSuffix = "-secureboot"

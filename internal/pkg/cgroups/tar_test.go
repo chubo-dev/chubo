@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/cgroups"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroups"
 )
 
 func TestTreeFromTarGz(t *testing.T) {

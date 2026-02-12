@@ -10,7 +10,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/siderolabs/talos/pkg/provision/access"
+	"github.com/chubo-dev/chubo/pkg/provision/access"
 )
 
 func mergeKubeconfig(ctx context.Context, clusterAccess *access.Adapter) error {

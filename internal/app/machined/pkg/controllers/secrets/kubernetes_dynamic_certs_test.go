@@ -18,14 +18,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	secretsctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	timeresource "github.com/siderolabs/talos/pkg/machinery/resources/time"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	secretsctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 )
 
 func TestKubernetesDynamicCertsSuite(t *testing.T) {

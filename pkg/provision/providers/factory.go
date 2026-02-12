@@ -8,8 +8,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/providers/docker"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/docker"
 )
 
 const (

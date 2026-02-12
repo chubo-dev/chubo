@@ -15,12 +15,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	hardwarectrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/hardware"
-	runtimetalos "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/meta"
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	hardwarectrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/hardware"
+	runtimetalos "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 type SystemInfoSuite struct {

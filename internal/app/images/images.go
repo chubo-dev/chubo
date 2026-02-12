@@ -21,12 +21,12 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/siderolabs/talos/internal/app/internal/ctrhelper"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/containers/image"
-	"github.com/siderolabs/talos/internal/pkg/containers/image/progress"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/internal/app/internal/ctrhelper"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image/progress"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 // Service implements machine.ImageService.

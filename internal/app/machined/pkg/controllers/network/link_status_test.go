@@ -29,10 +29,10 @@ import (
 	"go.uber.org/zap/zaptest"
 	"golang.org/x/sys/unix"
 
-	netctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	netctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 type LinkStatusSuite struct {

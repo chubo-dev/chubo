@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest/observer"
 
-	"github.com/siderolabs/talos/pkg/logging"
+	"github.com/chubo-dev/chubo/pkg/logging"
 )
 
 func assertLogged(t *testing.T, core zapcore.Core, logs *observer.ObservedLogs, entries []zapcore.Entry, expectedCount int) {

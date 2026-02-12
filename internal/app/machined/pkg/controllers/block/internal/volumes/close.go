@@ -11,8 +11,8 @@ import (
 	"github.com/siderolabs/gen/xerrors"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // Close the encrypted volumes.

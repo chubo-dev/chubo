@@ -16,8 +16,8 @@ import (
 	"github.com/siderolabs/go-pointer"
 	sideronet "github.com/siderolabs/net"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // ClusterConfig implements config.ClusterConfig, config.Token, and config.ClusterNetwork interfaces.

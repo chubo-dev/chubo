@@ -15,11 +15,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	secretsctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	secretsctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 func TestMaintenanceCertSANsSuite(t *testing.T) {

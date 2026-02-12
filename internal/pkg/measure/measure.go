@@ -13,9 +13,9 @@ import (
 
 	"github.com/google/go-tpm/tpm2"
 
-	"github.com/siderolabs/talos/internal/pkg/measure/internal/pcr"
-	tpm2internal "github.com/siderolabs/talos/internal/pkg/secureboot/tpm2"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/measure/internal/pcr"
+	tpm2internal "github.com/chubo-dev/chubo/internal/pkg/secureboot/tpm2"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // SectionsData holds a map of Section to file path to the corresponding section.

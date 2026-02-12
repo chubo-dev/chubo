@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/kobject"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/kobject"
 )
 
 func TestWatcher(t *testing.T) {

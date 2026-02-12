@@ -10,8 +10,8 @@ import (
 	"github.com/mdlayher/kobject"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/sysblock"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/sysblock"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 func TestWalk(t *testing.T) {

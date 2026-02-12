@@ -8,7 +8,7 @@ package containermode
 import (
 	"os"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // InContainer checks whether or not Talos is running in a container.

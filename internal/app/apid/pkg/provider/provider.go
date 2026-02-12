@@ -19,7 +19,7 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // TLSConfig provides client & server TLS configs for apid.

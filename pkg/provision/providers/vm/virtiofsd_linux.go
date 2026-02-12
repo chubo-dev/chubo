@@ -12,7 +12,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 func (p *Provisioner) findVirtiofsd() (string, error) {

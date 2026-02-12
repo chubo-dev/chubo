@@ -10,7 +10,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 func newQemu(ctx context.Context) (provision.Provisioner, error) {

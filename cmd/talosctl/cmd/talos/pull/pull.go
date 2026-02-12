@@ -12,8 +12,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/reporter"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/reporter"
 )
 
 // ProgressWriter writes pull progress updates to a reporter.

@@ -14,9 +14,9 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	chubotypes "github.com/siderolabs/talos/pkg/machinery/config/types/chubo"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	chubotypes "github.com/chubo-dev/chubo/pkg/machinery/config/types/chubo"
 )
 
 var genMachineConfigFlags struct {

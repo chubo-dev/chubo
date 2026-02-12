@@ -9,11 +9,11 @@ package mgmt
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/debug"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/gen"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/inject"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/machineconfig"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/debug"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/gen"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/inject"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/machineconfig"
 )
 
 // Commands is a list of commands published by the package.

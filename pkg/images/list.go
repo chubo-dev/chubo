@@ -9,8 +9,8 @@ import (
 
 	"github.com/google/go-containerregistry/pkg/name"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Versions holds all the images (and their versions) that are used in Talos.

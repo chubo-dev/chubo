@@ -23,8 +23,8 @@ import (
 	"go.uber.org/zap/zapcore"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/ntp/internal/spike"
-	"github.com/siderolabs/talos/internal/pkg/timex"
+	"github.com/chubo-dev/chubo/internal/pkg/ntp/internal/spike"
+	"github.com/chubo-dev/chubo/internal/pkg/timex"
 )
 
 // Syncer performs time sync via NTP on schedule.

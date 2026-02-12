@@ -23,7 +23,7 @@ import (
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/siderolabs/go-retry/retry"
 
-	"github.com/siderolabs/talos/pkg/httpdefaults"
+	"github.com/chubo-dev/chubo/pkg/httpdefaults"
 )
 
 const b64 = "base64"

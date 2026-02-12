@@ -13,10 +13,10 @@ import (
 	"github.com/siderolabs/go-retry/retry"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	etcdctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/resources/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	etcdctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 func TestMemberSuite(t *testing.T) {

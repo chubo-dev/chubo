@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/makefs"
 )
 
 func TestGenerateProtofile(t *testing.T) {

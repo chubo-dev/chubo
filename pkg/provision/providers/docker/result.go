@@ -7,7 +7,7 @@ package docker
 import (
 	"errors"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 type result struct {

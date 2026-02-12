@@ -15,9 +15,9 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services/mocks"
-	extservices "github.com/siderolabs/talos/pkg/machinery/extensions/services"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services/mocks"
+	extservices "github.com/chubo-dev/chubo/pkg/machinery/extensions/services"
 )
 
 type MockClient struct {

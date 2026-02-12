@@ -14,7 +14,7 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"github.com/siderolabs/go-circular"
 
-	"github.com/siderolabs/talos/pkg/chunker"
+	"github.com/chubo-dev/chubo/pkg/chunker"
 )
 
 // Options is the functional options struct.

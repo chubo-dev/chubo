@@ -4,7 +4,7 @@
 
 package preset
 
-import "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
 
 // ISOSecureBoot configures Talos to boot from a disk image from the Image Factory.
 type ISOSecureBoot struct{}

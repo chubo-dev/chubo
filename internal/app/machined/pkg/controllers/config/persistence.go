@@ -15,13 +15,13 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	blockadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/block"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton/blockautomaton"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/xfs"
+	blockadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton/blockautomaton"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // PersistenceController ensures that the machine configuration is persisted in STATE partition.

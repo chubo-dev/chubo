@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network/internal/addressutil"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network/internal/addressutil"
 )
 
 func TestBroadcastAddr(t *testing.T) {

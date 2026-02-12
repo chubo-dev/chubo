@@ -3,7 +3,7 @@ package runtime
 import (
 	"testing"
 
-	machinetype "github.com/siderolabs/talos/pkg/machinery/config/machine"
+	machinetype "github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 func TestShouldRunEtcdUpgradePrechecks(t *testing.T) {

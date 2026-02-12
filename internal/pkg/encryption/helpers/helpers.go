@@ -8,7 +8,7 @@ package helpers
 import (
 	"context"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 // SystemInformationGetter defines the closure which can be used in key handlers to get the node UUID.

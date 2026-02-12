@@ -14,10 +14,10 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/siderolabs/talos/internal/pkg/ntp"
-	timeapi "github.com/siderolabs/talos/pkg/machinery/api/time"
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/ntp"
+	timeapi "github.com/chubo-dev/chubo/pkg/machinery/api/time"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // ConfigProvider defines an interface sufficient for the TimeServer.

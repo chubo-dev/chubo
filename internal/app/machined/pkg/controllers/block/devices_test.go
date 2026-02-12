@@ -12,9 +12,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	blockctrls "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	blockctrls "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 type DevicesSuite struct {

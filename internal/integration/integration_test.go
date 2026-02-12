@@ -16,17 +16,17 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/integration/api"
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/internal/integration/cli"
-	"github.com/siderolabs/talos/internal/integration/k8s"
-	provision_test "github.com/siderolabs/talos/internal/integration/provision"
-	"github.com/siderolabs/talos/pkg/images"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/version"
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/providers"
+	"github.com/chubo-dev/chubo/internal/integration/api"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/cli"
+	"github.com/chubo-dev/chubo/internal/integration/k8s"
+	provision_test "github.com/chubo-dev/chubo/internal/integration/provision"
+	"github.com/chubo-dev/chubo/pkg/images"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/providers"
 )
 
 // Accumulated list of all the suites to run.

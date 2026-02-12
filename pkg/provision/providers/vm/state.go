@@ -5,7 +5,7 @@
 //nolint:revive
 package vm
 
-import "github.com/siderolabs/talos/pkg/provision"
+import "github.com/chubo-dev/chubo/pkg/provision"
 
 // Deprecated: Use provision.State instead.
 type State = provision.State

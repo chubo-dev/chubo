@@ -23,12 +23,12 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/siderolabs/talos/internal/app/internal/ctrhelper"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/containerd"
-	"github.com/siderolabs/talos/internal/pkg/capability"
-	"github.com/siderolabs/talos/internal/pkg/cgroup"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/internal/ctrhelper"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/containerd"
+	"github.com/chubo-dev/chubo/internal/pkg/capability"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroup"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Service implements machine.DebugService.

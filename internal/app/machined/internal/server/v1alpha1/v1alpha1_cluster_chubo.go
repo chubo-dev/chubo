@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	clusterapi "github.com/siderolabs/talos/pkg/machinery/api/cluster"
+	clusterapi "github.com/chubo-dev/chubo/pkg/machinery/api/cluster"
 )
 
 // HealthCheck implements the cluster.ClusterServer interface.

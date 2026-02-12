@@ -31,7 +31,7 @@ import (
 	sideronet "github.com/siderolabs/net"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // CreateNetwork builds bridge interface name by taking part of checksum of the network name

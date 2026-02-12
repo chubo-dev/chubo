@@ -21,9 +21,9 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/encryption/token"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/helpers"
-	"github.com/siderolabs/talos/internal/pkg/encryption/keys"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/keys"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 const keyHandlerTimeout = time.Second * 10

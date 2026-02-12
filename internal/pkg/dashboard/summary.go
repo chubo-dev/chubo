@@ -7,9 +7,9 @@ package dashboard
 import (
 	"github.com/rivo/tview"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/components"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/components"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
 )
 
 // SummaryGrid represents the summary grid with the basic node information and the logs.

@@ -14,11 +14,11 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/safe"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	runtimecfg "github.com/siderolabs/talos/pkg/machinery/config/types/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	runtimecfg "github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // EnvironmentSuite verifies Environment API.

@@ -27,8 +27,8 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	sideronet "github.com/siderolabs/net"
 
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/internal/cniutils"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/internal/cniutils"
 )
 
 type networkConfig struct {

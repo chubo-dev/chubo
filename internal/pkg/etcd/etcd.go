@@ -22,12 +22,12 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	etcdresource "github.com/siderolabs/talos/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	etcdresource "github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
 )
 
 // QuorumCheckTimeout is the amount of time to allow for KV operations before quorum is declared invalid.

@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network/watch"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network/watch"
 )
 
 type mockTrigger struct {

@@ -11,7 +11,7 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/encryption"
 	"github.com/siderolabs/go-blockdevice/v2/encryption/token"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
 )
 
 // NodeIDKeyHandler generates the key based on current node information

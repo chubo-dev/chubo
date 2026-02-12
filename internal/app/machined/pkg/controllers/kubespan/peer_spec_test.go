@@ -13,16 +13,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	clusteradapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/cluster"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	kubespanctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/kubespan"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	clusteradapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/cluster"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	kubespanctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubespan"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 type PeerSpecSuite struct {

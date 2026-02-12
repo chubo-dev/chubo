@@ -26,13 +26,13 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/siderolabs/talos/internal/pkg/etcd"
-	"github.com/siderolabs/talos/pkg/chunker/stream"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	etcdresource "github.com/siderolabs/talos/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+	"github.com/chubo-dev/chubo/pkg/chunker/stream"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	etcdresource "github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
 )
 
 // EtcdMemberList implements the machine.MachineServer interface.

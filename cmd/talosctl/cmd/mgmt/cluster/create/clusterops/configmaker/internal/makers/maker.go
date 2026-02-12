@@ -4,7 +4,7 @@
 
 package makers
 
-import "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
 
 // ConfigMaker helps creating cluster and provision configuration.
 type ConfigMaker interface {

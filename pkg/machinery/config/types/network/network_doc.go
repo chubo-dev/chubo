@@ -10,8 +10,8 @@ import (
 	"net/netip"
 	"time"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 func (BondConfigV1Alpha1) Doc() *encoder.Doc {

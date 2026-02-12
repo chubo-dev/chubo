@@ -16,14 +16,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	configctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/config"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	talosconfig "github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/siderolink"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	configctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/config"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	talosconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/siderolink"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 type PersistenceSuite struct {

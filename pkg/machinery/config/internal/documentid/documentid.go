@@ -8,7 +8,7 @@ package documentid
 import (
 	"cmp"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 )
 
 const (

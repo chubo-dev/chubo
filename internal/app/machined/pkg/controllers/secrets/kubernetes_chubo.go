@@ -6,7 +6,7 @@
 
 package secrets
 
-import "github.com/siderolabs/talos/pkg/machinery/constants"
+import "github.com/chubo-dev/chubo/pkg/machinery/constants"
 
 // KubernetesCertificateValidityDuration is kept for chubo build compatibility.
 const KubernetesCertificateValidityDuration = constants.KubernetesDefaultCertificateValidityDuration

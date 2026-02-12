@@ -31,14 +31,14 @@ import (
 	kubeletv1config "k8s.io/kubelet/config/v1"
 	kubeletconfig "k8s.io/kubelet/config/v1beta1"
 
-	runtimetalos "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/files"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	runtimetalos "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // ServiceManager is the interface to the v1alpha1 services subsystems.

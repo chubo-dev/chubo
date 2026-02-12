@@ -12,7 +12,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/controller"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // KubeletCSRNotApprovedCheck is disabled in chubo mode.

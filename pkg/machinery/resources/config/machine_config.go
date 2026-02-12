@@ -9,10 +9,10 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 
-	configpb "github.com/siderolabs/talos/pkg/machinery/api/resource/config"
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	configpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // MachineConfigType is type of Service resource.

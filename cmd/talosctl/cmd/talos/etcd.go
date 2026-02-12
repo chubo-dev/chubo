@@ -21,13 +21,13 @@ import (
 	"github.com/spf13/cobra"
 	snapshot "go.etcd.io/etcd/etcdutl/v3/snapshot"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/logging"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	etcdresource "github.com/siderolabs/talos/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/logging"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	etcdresource "github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
 )
 
 // etcdCmd represents the etcd command.

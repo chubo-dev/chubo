@@ -12,9 +12,9 @@ import (
 	"github.com/containerd/cgroups/v3"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/cgroup"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroup"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // CreateSystemCgroups creates system cgroups.

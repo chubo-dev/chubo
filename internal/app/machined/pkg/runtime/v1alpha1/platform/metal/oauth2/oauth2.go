@@ -20,9 +20,9 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"golang.org/x/oauth2"
 
-	metalurl "github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/metal/url"
-	"github.com/siderolabs/talos/pkg/httpdefaults"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	metalurl "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/metal/url"
+	"github.com/chubo-dev/chubo/pkg/httpdefaults"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Config represents the OAuth2 configuration.

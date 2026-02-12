@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/siderolabs/talos/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
 // MetaValues is a list of MetaValue.

@@ -13,7 +13,7 @@ import (
 	"github.com/siderolabs/gen/channel"
 	"google.golang.org/grpc"
 
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 // Streaming initiates a multiplexed streaming gRPC client call to multiple nodes.

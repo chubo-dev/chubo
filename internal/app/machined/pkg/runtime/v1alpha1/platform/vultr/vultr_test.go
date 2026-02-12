@@ -14,7 +14,7 @@ import (
 	"github.com/vultr/metadata"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/vultr"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/vultr"
 )
 
 //go:embed testdata/metadata.json

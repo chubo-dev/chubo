@@ -13,7 +13,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 // List of globs and destinations for early CPU ucode.

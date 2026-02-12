@@ -12,11 +12,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/common"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster"
-	_ "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create" // import to get the command registered via the init() function.
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/talos"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+	_ "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create" // import to get the command registered via the init() function.
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos"
 )
 
 // rootCmd represents the base command when called without any subcommands.

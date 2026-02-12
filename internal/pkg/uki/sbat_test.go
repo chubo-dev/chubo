@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/uki"
+	"github.com/chubo-dev/chubo/internal/pkg/uki"
 )
 
 func TestGetSBAT(t *testing.T) {

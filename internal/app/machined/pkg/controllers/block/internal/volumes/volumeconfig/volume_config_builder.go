@@ -7,10 +7,10 @@ package volumeconfig
 import (
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/volumes"
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	configconfig "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/volumes"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	configconfig "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // Builder is a small utility to build spec-modifying functions

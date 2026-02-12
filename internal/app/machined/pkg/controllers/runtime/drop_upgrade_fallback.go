@@ -14,9 +14,9 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/meta"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // MetaProvider wraps acquiring meta.

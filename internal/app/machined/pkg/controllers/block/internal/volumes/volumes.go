@@ -11,9 +11,9 @@ import (
 
 	"github.com/siderolabs/gen/optional"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption"
-	blockpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption"
+	blockpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // CompareVolumeConfigs compares two volume configs in the proposed order of provisioning.

@@ -25,13 +25,13 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/siderolabs/talos/internal/app/trustd/internal/provider"
-	"github.com/siderolabs/talos/internal/app/trustd/internal/reg"
-	"github.com/siderolabs/talos/pkg/grpc/factory"
-	"github.com/siderolabs/talos/pkg/grpc/middleware/auth/basic"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	"github.com/siderolabs/talos/pkg/startup"
+	"github.com/chubo-dev/chubo/internal/app/trustd/internal/provider"
+	"github.com/chubo-dev/chubo/internal/app/trustd/internal/reg"
+	"github.com/chubo-dev/chubo/pkg/grpc/factory"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/auth/basic"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/startup"
 )
 
 func runDebugServer(ctx context.Context) {

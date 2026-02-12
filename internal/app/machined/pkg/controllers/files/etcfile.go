@@ -18,10 +18,10 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/mount/v3"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/resources/files"
-	"github.com/siderolabs/talos/pkg/xfs"
+	"github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // EtcFileController watches EtcFileSpecs, creates/updates files.

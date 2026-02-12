@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/imager"
-	"github.com/siderolabs/talos/pkg/imager/profile"
-	"github.com/siderolabs/talos/pkg/reporter"
+	"github.com/chubo-dev/chubo/pkg/imager"
+	"github.com/chubo-dev/chubo/pkg/imager/profile"
+	"github.com/chubo-dev/chubo/pkg/reporter"
 )
 
 func TestImager(t *testing.T) {

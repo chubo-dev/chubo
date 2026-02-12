@@ -17,11 +17,11 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/filetree"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/filetree"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // PKIController renders manifests based on templates and config/secrets.

@@ -27,11 +27,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	k8sadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/k8s"
-	"github.com/siderolabs/talos/pkg/argsbuilder"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	k8sadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/k8s"
+	"github.com/chubo-dev/chubo/pkg/argsbuilder"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // systemCriticalPriority is copied from scheduling.SystemCriticalPriority in Kubernetes internals.

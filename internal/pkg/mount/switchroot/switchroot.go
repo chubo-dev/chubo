@@ -16,13 +16,13 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/mount/v3"
-	"github.com/siderolabs/talos/internal/pkg/secureboot"
-	"github.com/siderolabs/talos/internal/pkg/secureboot/tpm2"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/fipsmode"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/tpm2"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 // Paths preserved in the initramfs.

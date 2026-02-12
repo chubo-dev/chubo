@@ -21,12 +21,12 @@ import (
 	blockdev "github.com/siderolabs/go-blockdevice/v2/block"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv"
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv/syslinux"
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv/talos"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/syslinux"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // Meta represents the META reader/writer.

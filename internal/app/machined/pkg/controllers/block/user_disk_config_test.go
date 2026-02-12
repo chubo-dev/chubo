@@ -14,13 +14,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	blockctrls "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	blockctrls "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 type UserDiskConfigSuite struct {

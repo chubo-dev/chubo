@@ -5,7 +5,7 @@
 package grub
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // BootLabel represents a boot label, e.g. A or B.

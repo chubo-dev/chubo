@@ -11,7 +11,7 @@ import (
 	"net/netip"
 	"os/exec"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 type networkConfig struct {

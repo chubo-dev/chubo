@@ -11,9 +11,9 @@ import (
 	"io"
 	"net"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/syslogd/internal/parser"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/syslogd/internal/parser"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Main is an entrypoint to the API service.

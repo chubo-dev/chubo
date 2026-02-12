@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/volumes"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/volumes"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 //nolint:dupl

@@ -8,8 +8,8 @@ package main
 import (
 	"os"
 
-	_ "github.com/siderolabs/talos/cmd/talosctl/acompat"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd"
+	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd"
 )
 
 func main() {

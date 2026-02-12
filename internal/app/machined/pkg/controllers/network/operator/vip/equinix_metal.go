@@ -13,8 +13,8 @@ import (
 	"github.com/packethost/packngo"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/download"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/download"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // EquinixMetalHandler implements assignment and release of Virtual IPs using API.

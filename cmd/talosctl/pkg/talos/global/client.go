@@ -14,9 +14,9 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"google.golang.org/grpc"
 
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
 // Args is a context for the Talos command line client.

@@ -16,8 +16,8 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"github.com/siderolabs/go-blockdevice/v2/blkid"
 
-	"github.com/siderolabs/talos/internal/pkg/efivarfs"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/efivarfs"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // TalosBootEntryDescription is the description of the Talos Linux UKI UEFI boot entry.
@@ -157,7 +157,7 @@ func CreateBootEntry(rw efivarfs.ReadWriter, blkidInfo *blkid.Info, printf func(
 	// We need to do this since Talos 1.11.x release assumed that the boot order set by the code stays even after a reboot,
 	// but UEFI firmware settings can set a different boot order on boot, which lead to multiple Talos Linux UKI entries in the boot order,
 	// causing some UEFI firmwares to fail to boot at all.
-	// See https://github.com/siderolabs/talos/issues/11829
+	// See https://github.com/chubo-dev/chubo/issues/11829
 
 	// find the next minimal available index for the new Talos Linux UKI boot entry
 	nextMinimalIndex := -1

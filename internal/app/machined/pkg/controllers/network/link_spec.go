@@ -23,11 +23,11 @@ import (
 	"golang.org/x/sys/unix"
 	"golang.zx2c4.com/wireguard/wgctrl"
 
-	networkadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/network"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network/watch"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	networkadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network/watch"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // LinkSpecController applies network.LinkSpec to the actual interfaces.

@@ -22,17 +22,17 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	timectrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/time"
-	v1alpha1runtime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	timeresource "github.com/siderolabs/talos/pkg/machinery/resources/time"
-	v1alpha1resource "github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	timectrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/time"
+	v1alpha1runtime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
+	v1alpha1resource "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 type SyncSuite struct {

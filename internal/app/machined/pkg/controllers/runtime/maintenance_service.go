@@ -25,14 +25,14 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	machinedruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/maintenance"
-	"github.com/siderolabs/talos/pkg/grpc/factory"
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	machineryconfig "github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	machinedruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/maintenance"
+	"github.com/chubo-dev/chubo/pkg/grpc/factory"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	machineryconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // MaintenanceServiceController runs the maintenance service based on the configuration.

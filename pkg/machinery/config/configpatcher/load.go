@@ -13,7 +13,7 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
 )
 
 type patch []map[string]any

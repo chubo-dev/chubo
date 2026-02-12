@@ -16,12 +16,12 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"go.uber.org/zap"
 
-	networkpb "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/network"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	configconfig "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	networkpb "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	configconfig "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // LinkAliasConfigController manages network.LinkAliasSpec based on machine configuration, list of links, etc.

@@ -16,14 +16,14 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/blkid"
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 
-	bootloaderutils "github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/efiutils"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/mount"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/options"
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	"github.com/siderolabs/talos/internal/pkg/smbios"
-	"github.com/siderolabs/talos/internal/pkg/uki"
-	"github.com/siderolabs/talos/pkg/imager/utils"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	bootloaderutils "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/efiutils"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/mount"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/options"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	"github.com/chubo-dev/chubo/internal/pkg/smbios"
+	"github.com/chubo-dev/chubo/internal/pkg/uki"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 const (

@@ -14,7 +14,7 @@ import (
 
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 // DmesgSuite verifies dmesg command.

@@ -19,12 +19,12 @@ import (
 	"github.com/stretchr/testify/suite"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/logging"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/process"
-	"github.com/siderolabs/talos/internal/pkg/cri"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/logging"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/process"
+	"github.com/chubo-dev/chubo/internal/pkg/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 const (

@@ -12,7 +12,7 @@ import (
 
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/overlay"
+	"github.com/chubo-dev/chubo/pkg/machinery/overlay"
 )
 
 // Execute executes the overlay installer.

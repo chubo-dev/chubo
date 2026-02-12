@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/msguid"
+	"github.com/chubo-dev/chubo/internal/pkg/msguid"
 )
 
 func TestRoundTrip(t *testing.T) {

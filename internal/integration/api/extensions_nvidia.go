@@ -20,7 +20,7 @@ import (
 	nodev1 "k8s.io/api/node/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 //go:embed testdata/nvidia-device-plugin.yaml

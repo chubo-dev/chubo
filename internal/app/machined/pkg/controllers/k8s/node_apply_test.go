@@ -14,9 +14,9 @@ import (
 	"go.uber.org/zap/zaptest"
 	v1 "k8s.io/api/core/v1"
 
-	k8sctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	k8sctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 func TestApplyLabels(t *testing.T) { //nolint:dupl

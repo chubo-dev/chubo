@@ -23,17 +23,17 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap/zaptest"
 
-	clusteradapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/cluster"
-	clusterctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/cluster"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	clusteradapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/cluster"
+	clusterctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/cluster"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 type DiscoveryServiceSuite struct {

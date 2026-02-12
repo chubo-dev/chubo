@@ -19,12 +19,12 @@ import (
 	v1 "k8s.io/api/core/v1"
 	apiresource "k8s.io/apimachinery/pkg/api/resource"
 
-	k8sadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/k8s"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	k8sctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	k8sadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/k8s"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	k8sctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 type ControlPlaneStaticPodSuite struct {

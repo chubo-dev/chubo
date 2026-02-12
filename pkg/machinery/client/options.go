@@ -10,8 +10,8 @@ import (
 
 	"google.golang.org/grpc"
 
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/machinery/client/dialer"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/client/dialer"
 )
 
 var defaultDialOptions = []grpc.DialOption{

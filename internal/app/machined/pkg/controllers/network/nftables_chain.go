@@ -17,9 +17,9 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"go.uber.org/zap"
 
-	networkadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/network"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	networkadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // NfTablesChainController applies network.NfTablesChain to the Linux nftables interface.

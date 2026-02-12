@@ -7,7 +7,7 @@ package grub_test
 import (
 	"testing"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub"
 )
 
 //nolint:dupl

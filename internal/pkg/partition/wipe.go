@@ -12,7 +12,7 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/block"
 	"github.com/siderolabs/go-blockdevice/v2/partitioning/gpt"
 
-	blockres "github.com/siderolabs/talos/pkg/machinery/resources/block"
+	blockres "github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // VolumeWipeTarget is a target for wiping a volume.

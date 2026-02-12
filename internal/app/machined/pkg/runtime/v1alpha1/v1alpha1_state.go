@@ -15,13 +15,13 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/cosi-project/runtime/pkg/state"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha2"
-	"github.com/siderolabs/talos/internal/pkg/meta"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	metaconsts "github.com/siderolabs/talos/pkg/machinery/meta"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha2"
+	"github.com/chubo-dev/chubo/internal/pkg/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	metaconsts "github.com/chubo-dev/chubo/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // State implements the state interface.

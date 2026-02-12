@@ -11,7 +11,7 @@ import (
 	"github.com/siderolabs/gen/maps"
 	"kernel.org/pub/linux/libs/security/libcap/cap"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // AllCapabilitiesSet returns the set of all available capabilities.

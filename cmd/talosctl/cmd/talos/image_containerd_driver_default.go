@@ -6,7 +6,7 @@
 
 package talos
 
-import "github.com/siderolabs/talos/pkg/machinery/api/common"
+import "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 
 func systemContainerDriver() common.ContainerDriver {
 	return common.ContainerDriver_CRI

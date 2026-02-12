@@ -7,7 +7,7 @@ package poweroff_test
 import (
 	"testing"
 
-	"github.com/siderolabs/talos/internal/app/poweroff"
+	"github.com/chubo-dev/chubo/internal/app/poweroff"
 )
 
 func TestParseArgs(t *testing.T) {

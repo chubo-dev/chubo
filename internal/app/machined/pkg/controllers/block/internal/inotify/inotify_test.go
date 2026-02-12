@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/inotify"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/inotify"
 )
 
 func assertEvent(t *testing.T, watchCh <-chan string, errCh <-chan error, expected string) {

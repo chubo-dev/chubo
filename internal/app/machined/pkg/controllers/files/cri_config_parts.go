@@ -15,9 +15,9 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/toml"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/files"
+	"github.com/chubo-dev/chubo/internal/pkg/toml"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 )
 
 // CRIConfigPartsController merges parts of the CRI config from /etc/cri/conf.d/*.part into final /etc/cri/conf.d/cri.toml.

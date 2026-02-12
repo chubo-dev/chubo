@@ -9,8 +9,8 @@ import (
 
 	"google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 // mdKey is used to store roles in gRPC metadata.

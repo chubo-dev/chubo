@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
 )
 
 type installMode struct{}

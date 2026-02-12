@@ -15,7 +15,7 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	xfs "github.com/siderolabs/talos/pkg/xfs"
+	xfs "github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // FS represents a subfilesystem that can be created and managed.

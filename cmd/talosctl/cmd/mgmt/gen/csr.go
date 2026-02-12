@@ -17,8 +17,8 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 var genCSRCmdFlags struct {

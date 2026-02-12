@@ -7,7 +7,7 @@ package imager
 import (
 	"fmt"
 
-	"github.com/siderolabs/talos/pkg/reporter"
+	"github.com/chubo-dev/chubo/pkg/reporter"
 )
 
 // progressPrintf wraps a reporter.Reporter to report progress via Printf logging.

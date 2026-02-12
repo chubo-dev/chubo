@@ -7,7 +7,7 @@
 package cli
 
 import (
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 // CompletionSuite verifies dmesg command.

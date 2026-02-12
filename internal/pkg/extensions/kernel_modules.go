@@ -22,9 +22,9 @@ import (
 	"github.com/u-root/u-root/pkg/cpio"
 	"github.com/ulikunitz/xz"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 // ProvidesKernelModules returns true if the extension provides kernel modules.

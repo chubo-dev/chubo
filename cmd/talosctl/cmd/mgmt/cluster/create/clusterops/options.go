@@ -12,16 +12,16 @@ import (
 
 	"github.com/docker/cli/opts"
 
-	clustercmd "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/flags"
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/mgmt/helpers"
-	"github.com/siderolabs/talos/pkg/bytesize"
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/images"
-	"github.com/siderolabs/talos/pkg/machinery/config/bundle"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/version"
-	"github.com/siderolabs/talos/pkg/provision"
+	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+	"github.com/chubo-dev/chubo/pkg/bytesize"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/images"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/bundle"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // ClusterConfigs is the configuration needed to create a talos cluster via the provisioner interface.

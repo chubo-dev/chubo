@@ -24,16 +24,16 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	containerdrunner "github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/containerd"
-	"github.com/siderolabs/talos/internal/pkg/capability"
-	"github.com/siderolabs/talos/internal/pkg/containers/image"
-	"github.com/siderolabs/talos/internal/pkg/containers/image/console"
-	"github.com/siderolabs/talos/internal/pkg/environment"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	configcore "github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	containerdrunner "github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/containerd"
+	"github.com/chubo-dev/chubo/internal/pkg/capability"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image/console"
+	"github.com/chubo-dev/chubo/internal/pkg/environment"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	configcore "github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // RunInstallerContainer performs an installation via the installer container.

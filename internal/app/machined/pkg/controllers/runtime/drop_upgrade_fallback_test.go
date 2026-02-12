@@ -17,12 +17,12 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
-	machineruntime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/meta"
-	metaconsts "github.com/siderolabs/talos/pkg/machinery/meta"
-	runtimeres "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
+	machineruntime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/meta"
+	metaconsts "github.com/chubo-dev/chubo/pkg/machinery/meta"
+	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 type DropUpgradeFallbackControllerSuite struct {

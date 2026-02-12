@@ -14,8 +14,8 @@ import (
 	"github.com/google/go-tpm/tpm2"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/measure/internal/pcr"
-	tpm2internal "github.com/siderolabs/talos/internal/pkg/secureboot/tpm2"
+	"github.com/chubo-dev/chubo/internal/pkg/measure/internal/pcr"
+	tpm2internal "github.com/chubo-dev/chubo/internal/pkg/secureboot/tpm2"
 )
 
 type keyWrapper struct {

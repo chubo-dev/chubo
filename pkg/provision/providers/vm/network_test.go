@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/provision/providers/vm"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm"
 )
 
 func TestGetVmnetInterfaceNameNoVmnetInterface(t *testing.T) {

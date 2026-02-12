@@ -15,7 +15,7 @@ import (
 
 	"github.com/pkg/xattr"
 
-	"github.com/siderolabs/talos/pkg/safepath"
+	"github.com/chubo-dev/chubo/pkg/safepath"
 )
 
 // Untar extracts .tar archive from r into filesystem under rootPath.

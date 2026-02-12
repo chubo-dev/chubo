@@ -13,8 +13,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 )
 
 type jsonLinesSender struct {

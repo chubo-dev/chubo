@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/block/internal/volumes"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/block/internal/volumes"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 func TestCompareVolumeConfigs(t *testing.T) {

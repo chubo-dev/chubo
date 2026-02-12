@@ -24,13 +24,13 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	clusterapi "github.com/siderolabs/talos/pkg/machinery/api/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	inspectapi "github.com/siderolabs/talos/pkg/machinery/api/inspect"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	storageapi "github.com/siderolabs/talos/pkg/machinery/api/storage"
-	timeapi "github.com/siderolabs/talos/pkg/machinery/api/time"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
+	clusterapi "github.com/chubo-dev/chubo/pkg/machinery/api/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	inspectapi "github.com/chubo-dev/chubo/pkg/machinery/api/inspect"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	storageapi "github.com/chubo-dev/chubo/pkg/machinery/api/storage"
+	timeapi "github.com/chubo-dev/chubo/pkg/machinery/api/time"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
 // Client implements the proto.MachineServiceClient interface. It serves as the

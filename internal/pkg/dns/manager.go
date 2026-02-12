@@ -21,7 +21,7 @@ import (
 	"github.com/thejerf/suture/v4"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 // ErrCreatingRunner is an error that occurs when creating a runner.

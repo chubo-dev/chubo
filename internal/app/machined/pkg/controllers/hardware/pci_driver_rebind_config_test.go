@@ -11,12 +11,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/hardware"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	hardwareconfigtype "github.com/siderolabs/talos/pkg/machinery/config/types/hardware"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	hardwareres "github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	hardwareconfigtype "github.com/chubo-dev/chubo/pkg/machinery/config/types/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	hardwareres "github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 type PCIDriverRebindConfigSuite struct {

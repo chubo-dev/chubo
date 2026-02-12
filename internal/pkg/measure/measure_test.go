@@ -19,8 +19,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/pkg/measure"
-	"github.com/siderolabs/talos/internal/pkg/measure/internal/pcr"
+	"github.com/chubo-dev/chubo/internal/pkg/measure"
+	"github.com/chubo-dev/chubo/internal/pkg/measure/internal/pcr"
 )
 
 const (

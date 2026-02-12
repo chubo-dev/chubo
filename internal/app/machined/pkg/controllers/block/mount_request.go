@@ -14,7 +14,7 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // MountRequestController provides mount requests based on VolumeMountRequests and VolumeStatuses.

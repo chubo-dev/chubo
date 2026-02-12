@@ -13,8 +13,8 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func mustParseURL(uri string) *url.URL {

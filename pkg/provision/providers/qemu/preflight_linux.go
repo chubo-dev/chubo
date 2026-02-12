@@ -18,7 +18,7 @@ import (
 	"github.com/coreos/go-iptables/iptables"
 	"github.com/hashicorp/go-getter/v2"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func (check *preflightCheckContext) verifyPlatformSpecific(ctx context.Context) error {

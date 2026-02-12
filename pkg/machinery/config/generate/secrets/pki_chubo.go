@@ -6,7 +6,7 @@
 
 package secrets
 
-import "github.com/siderolabs/talos/pkg/machinery/config"
+import "github.com/chubo-dev/chubo/pkg/machinery/config"
 
 // In the `chubo` build variant, Kubernetes/etcd PKI is intentionally omitted.
 func (bundle *Bundle) populateKubernetesEtcd(_ *config.VersionContract) error {

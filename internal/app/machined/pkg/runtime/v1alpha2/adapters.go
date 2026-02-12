@@ -9,9 +9,9 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/state"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/config"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/config"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform"
 )
 
 // platformConfigurator adapts a runtime.Platform to the config.PlatformConfigurator interface.

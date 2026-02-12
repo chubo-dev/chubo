@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/syslogd/internal/parser"
+	"github.com/chubo-dev/chubo/internal/app/syslogd/internal/parser"
 )
 
 func TestParser(t *testing.T) {

@@ -17,7 +17,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/siderolabs/talos/internal/pkg/msguid"
+	"github.com/chubo-dev/chubo/internal/pkg/msguid"
 )
 
 // DevicePath represents a path consisting of one or more elements to an

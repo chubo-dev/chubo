@@ -38,31 +38,31 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/emergency"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/options"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
-	"github.com/siderolabs/talos/internal/pkg/environment"
-	"github.com/siderolabs/talos/internal/pkg/install"
-	mountv3 "github.com/siderolabs/talos/internal/pkg/mount/v3"
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/images"
-	"github.com/siderolabs/talos/pkg/kernel/kspp"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/block/blockhelpers"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	metamachinery "github.com/siderolabs/talos/pkg/machinery/meta"
-	blockres "github.com/siderolabs/talos/pkg/machinery/resources/block"
-	crires "github.com/siderolabs/talos/pkg/machinery/resources/cri"
-	resourcefiles "github.com/siderolabs/talos/pkg/machinery/resources/files"
-	resourceruntime "github.com/siderolabs/talos/pkg/machinery/resources/runtime"
-	resourcev1alpha1 "github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
-	"github.com/siderolabs/talos/pkg/minimal"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/emergency"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/options"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	"github.com/chubo-dev/chubo/internal/pkg/environment"
+	"github.com/chubo-dev/chubo/internal/pkg/install"
+	mountv3 "github.com/chubo-dev/chubo/internal/pkg/mount/v3"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/images"
+	"github.com/chubo-dev/chubo/pkg/kernel/kspp"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/block/blockhelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	metamachinery "github.com/chubo-dev/chubo/pkg/machinery/meta"
+	blockres "github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	resourcefiles "github.com/chubo-dev/chubo/pkg/machinery/resources/files"
+	resourceruntime "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	resourcev1alpha1 "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/minimal"
 )
 
 // WaitForUSB represents the WaitForUSB task.
@@ -1362,7 +1362,7 @@ func KexecPrepare(_ runtime.Sequence, data any) (runtime.TaskExecutionFunc, stri
 		if goruntime.GOARCH == "arm64" {
 			// see https://lkml.org/lkml/2025/11/27/178
 			// [TODO]: remove this once the kernel issue is resolved
-			// see also https://github.com/siderolabs/talos/pull/12396
+			// see also https://github.com/chubo-dev/chubo/pull/12396
 			log.Print("kexec skipped as kexec has issues on arm64")
 
 			return nil

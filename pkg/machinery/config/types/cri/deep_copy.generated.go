@@ -9,7 +9,7 @@ package cri
 import (
 	"net/url"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
 )
 
 // DeepCopy generates a deep copy of *RegistryAuthConfigV1Alpha1.

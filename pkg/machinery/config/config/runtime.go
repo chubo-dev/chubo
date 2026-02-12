@@ -12,7 +12,7 @@ import (
 
 	"github.com/siderolabs/gen/optional"
 
-	"github.com/siderolabs/talos/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
 )
 
 // RuntimeConfig defines the interface to access Talos runtime configuration.

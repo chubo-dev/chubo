@@ -21,10 +21,10 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services"
-	chubores "github.com/siderolabs/talos/pkg/machinery/resources/chubo"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	v1alpha1res "github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	chubores "github.com/chubo-dev/chubo/pkg/machinery/resources/chubo"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	v1alpha1res "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 const (

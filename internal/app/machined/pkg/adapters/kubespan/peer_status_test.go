@@ -12,9 +12,9 @@ import (
 	"github.com/siderolabs/gen/value"
 	"github.com/stretchr/testify/assert"
 
-	kubespanadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/kubespan"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/adapters/wireguard"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
+	kubespanadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/kubespan"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/wireguard"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 )
 
 func TestPeerStatus_PickNewEndpoint(t *testing.T) {

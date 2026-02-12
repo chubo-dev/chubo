@@ -15,7 +15,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/pkg/archiver"
+	"github.com/chubo-dev/chubo/pkg/archiver"
 )
 
 type TarSuite struct {

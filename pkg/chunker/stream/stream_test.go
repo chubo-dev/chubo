@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/pkg/chunker/stream"
+	"github.com/chubo-dev/chubo/pkg/chunker/stream"
 )
 
 type StreamChunkerSuite struct {

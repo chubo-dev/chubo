@@ -15,11 +15,11 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	clusteradapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/cluster"
-	runtimetalos "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/resources/files"
+	clusteradapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/cluster"
+	runtimetalos "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 )
 
 // NQNController creates an EtcFileSpec for the NVMe Qualified Name (NQN) and HostID file.

@@ -11,7 +11,7 @@ import (
 
 	"github.com/scaleway/scaleway-sdk-go/api/instance/v1"
 
-	"github.com/siderolabs/talos/pkg/download"
+	"github.com/chubo-dev/chubo/pkg/download"
 )
 
 const (

@@ -26,7 +26,7 @@ import (
 	"golang.org/x/sys/unix"
 	"golang.org/x/text/encoding/unicode"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 const (

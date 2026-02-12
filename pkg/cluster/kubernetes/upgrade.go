@@ -11,7 +11,7 @@ import (
 	"github.com/siderolabs/go-kubernetes/kubernetes/manifests"
 	"github.com/siderolabs/go-kubernetes/kubernetes/upgrade"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 )
 
 const (

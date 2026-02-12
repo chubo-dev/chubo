@@ -22,12 +22,12 @@ import (
 	"github.com/containerd/containerd/v2/pkg/oci"
 	"github.com/containerd/errdefs"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/internal/lastlog"
-	"github.com/siderolabs/talos/internal/pkg/cgroup"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/internal/lastlog"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroup"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // containerdRunner is a runner.Runner that runs container in containerd.

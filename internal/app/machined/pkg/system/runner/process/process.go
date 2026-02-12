@@ -25,14 +25,14 @@ import (
 	"github.com/siderolabs/go-cmd/pkg/cmd/proc/reaper"
 	"kernel.org/pub/linux/libs/security/libcap/cap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/internal/lastlog"
-	"github.com/siderolabs/talos/internal/pkg/cgroup"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/internal/lastlog"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroup"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // processRunner is a runner.Runner that runs a process on the host.

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	metadata "google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/pkg/grpc/middleware/log"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/log"
 )
 
 func TestExtractMetadata(t *testing.T) {

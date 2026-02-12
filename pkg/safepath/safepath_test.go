@@ -7,7 +7,7 @@ package safepath_test
 import (
 	"testing"
 
-	"github.com/siderolabs/talos/pkg/safepath"
+	"github.com/chubo-dev/chubo/pkg/safepath"
 )
 
 func TestCleanPath(t *testing.T) {

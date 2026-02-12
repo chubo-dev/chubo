@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 func TestSupportsResetOption(t *testing.T) {

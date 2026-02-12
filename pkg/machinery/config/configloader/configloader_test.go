@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/configloader"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
 )
 
 // callMethods calls obj's "getter" methods recursively and fails on panic.

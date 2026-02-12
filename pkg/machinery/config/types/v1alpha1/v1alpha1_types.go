@@ -13,7 +13,7 @@ migrated to their own documents.
 */
 package v1alpha1
 
-//go:generate go tool github.com/siderolabs/talos/tools/docgen -output ./v1alpha1_types_doc.go ./v1alpha1_types.go
+//go:generate go tool github.com/chubo-dev/chubo/tools/docgen -output ./v1alpha1_types_doc.go ./v1alpha1_types.go
 
 //go:generate go tool k8s.io/code-generator/cmd/deepcopy-gen --go-header-file ../../../../../hack/boilerplate.txt --bounding-dirs ../v1alpha1 --output-file zz_generated.deepcopy
 
@@ -32,9 +32,9 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/registry"
-	"github.com/siderolabs/talos/pkg/machinery/config/merge"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/merge"
 )
 
 func init() {
@@ -877,7 +877,7 @@ type InstallConfig struct {
 	//   description: |
 	//     Allows for supplying the image used to perform the installation.
 	//     Image reference for each Talos release can be found on
-	//     [GitHub releases page](https://github.com/siderolabs/talos/releases).
+	//     [GitHub releases page](https://github.com/chubo-dev/chubo/releases).
 	//   examples:
 	//     - value: '"ghcr.io/siderolabs/installer:latest"'
 	InstallImage string `yaml:"image,omitempty"`
@@ -2585,7 +2585,7 @@ type DiscoveryRegistriesConfig struct {
 	//   as annotations on the Node resources.
 	//
 	//   This feature is deprecated as it is not compatible with Kubernetes 1.32+.
-	//   See https://github.com/siderolabs/talos/issues/9980 for more information.
+	//   See https://github.com/chubo-dev/chubo/issues/9980 for more information.
 	RegistryKubernetes RegistryKubernetesConfig `yaml:"kubernetes"`
 	// description: |
 	//   Service registry is using an external service to push and pull information about cluster members.

@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
-	"github.com/siderolabs/talos/pkg/machinery/platforms"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+	"github.com/chubo-dev/chubo/pkg/machinery/platforms"
 )
 
 // DiskImage configures Talos to boot from a disk image from the Image Factory.

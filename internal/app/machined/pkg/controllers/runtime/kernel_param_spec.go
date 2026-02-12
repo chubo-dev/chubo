@@ -17,10 +17,10 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
 
-	krnl "github.com/siderolabs/talos/pkg/kernel"
-	"github.com/siderolabs/talos/pkg/kernel/kspp"
-	"github.com/siderolabs/talos/pkg/machinery/kernel"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	krnl "github.com/chubo-dev/chubo/pkg/kernel"
+	"github.com/chubo-dev/chubo/pkg/kernel/kspp"
+	"github.com/chubo-dev/chubo/pkg/machinery/kernel"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // KernelParamSpecController watches KernelParamSpecs, sets/resets kernel params.

@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	cluster2 "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	cluster2 "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 func TestAffiliateSpec_Merge(t *testing.T) {

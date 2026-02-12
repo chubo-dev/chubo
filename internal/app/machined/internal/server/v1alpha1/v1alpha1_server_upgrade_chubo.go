@@ -15,12 +15,12 @@ import (
 
 	"github.com/google/uuid"
 
-	runtimepkg "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/pkg/install"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	machinetype "github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/meta"
-	crires "github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	runtimepkg "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/install"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	machinetype "github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
+	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 // Upgrade initiates an upgrade.

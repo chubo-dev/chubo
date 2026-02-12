@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"runtime"
 
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/gendata"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/gendata"
 )
 
 var (

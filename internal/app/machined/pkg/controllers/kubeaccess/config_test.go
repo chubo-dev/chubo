@@ -14,12 +14,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	kubeaccessctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/kubeaccess"
-	"github.com/siderolabs/talos/pkg/machinery/config/container"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubeaccess"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	kubeaccessctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubeaccess"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubeaccess"
 )
 
 type ConfigSuite struct {

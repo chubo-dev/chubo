@@ -12,8 +12,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 //go:generate go tool github.com/siderolabs/deep-copy -type AddressSpecSpec -type AddressStatusSpec -type BondMasterSpec -type DNSResolveCacheSpec -type EthernetSpecSpec -type EthernetStatusSpec -type HardwareAddrSpec -type HostDNSConfigSpec -type HostnameSpecSpec -type HostnameStatusSpec -type LinkAliasSpecSpec -type LinkRefreshSpec -type LinkSpecSpec -type LinkStatusSpec -type NfTablesChainSpec -type NodeAddressSpec -type NodeAddressSortAlgorithmSpec -type NodeAddressFilterSpec -type OperatorSpecSpec -type PlatformConfigSpec -type ProbeSpecSpec -type ProbeStatusSpec -type ResolverSpecSpec -type ResolverStatusSpec -type RouteSpecSpec -type RouteStatusSpec -type StatusSpec -type TimeServerSpecSpec -type TimeServerStatusSpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .

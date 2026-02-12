@@ -7,7 +7,7 @@
 package hardware
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 )
 
 func (PCIDriverRebindConfigV1Alpha1) Doc() *encoder.Doc {

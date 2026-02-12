@@ -15,7 +15,7 @@ import (
 
 	"github.com/siderolabs/go-retry/retry"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 // ApplyConfigSuite verifies dmesg command.

@@ -17,8 +17,8 @@ import (
 	"github.com/insomniacslk/dhcp/iana"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // GetDHCPv6ClientIdentifier returns the DHCPv6 client identifier to use.

@@ -16,9 +16,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 
-	"github.com/siderolabs/talos/pkg/cli"
-	timeapi "github.com/siderolabs/talos/pkg/machinery/api/time"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	timeapi "github.com/chubo-dev/chubo/pkg/machinery/api/time"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 var timeCmdFlags struct {

@@ -11,8 +11,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 func TestMachineTypeProtobufMarshal(t *testing.T) {

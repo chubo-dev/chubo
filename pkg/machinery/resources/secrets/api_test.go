@@ -12,7 +12,7 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 func TestAPIProtobufMarshal(t *testing.T) {

@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/siderolabs/talos/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/conditions"
 )
 
 // StateEvent is a service event (e.g. 'up', 'down').

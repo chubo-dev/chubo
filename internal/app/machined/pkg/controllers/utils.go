@@ -14,7 +14,7 @@ import (
 
 	yaml "go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // LoadOrNewFromFile either loads value from file.yaml or generates new values and saves as file.yaml.

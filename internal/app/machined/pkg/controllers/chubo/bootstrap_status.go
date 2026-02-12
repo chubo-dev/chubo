@@ -17,8 +17,8 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/chubo"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/chubo"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
 const (

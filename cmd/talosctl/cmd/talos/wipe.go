@@ -11,8 +11,8 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/storage"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/storage"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 // wipeCmd represents the wipe command.

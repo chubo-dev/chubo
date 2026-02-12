@@ -20,8 +20,8 @@ import (
 	"go4.org/netipx"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // NfTablesRule adapter provides encoding to nftables instructions.

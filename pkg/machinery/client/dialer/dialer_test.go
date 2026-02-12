@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/siderolabs/talos/pkg/machinery/client/dialer"
+	"github.com/chubo-dev/chubo/pkg/machinery/client/dialer"
 )
 
 func TestDynamicProxyDialer_SOCKS5(t *testing.T) {

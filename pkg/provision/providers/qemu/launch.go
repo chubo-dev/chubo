@@ -22,8 +22,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/siderolabs/go-blockdevice/v2/blkid"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/provision/providers/vm"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm"
 )
 
 // LaunchConfig is passed in to the Launch function over stdin.

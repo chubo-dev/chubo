@@ -4,7 +4,7 @@
 
 package machineconfig
 
-import "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/gen"
+import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/gen"
 
 func init() {
 	// alias for `talosctl gen config`

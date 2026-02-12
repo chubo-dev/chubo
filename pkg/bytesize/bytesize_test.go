@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/bytesize"
+	"github.com/chubo-dev/chubo/pkg/bytesize"
 )
 
 func TestBytesizeNoDefaultUnit(t *testing.T) {

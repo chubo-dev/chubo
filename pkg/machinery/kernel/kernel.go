@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 const (
@@ -49,7 +49,7 @@ func DefaultArgs(quirks quirks.Quirks) []string {
 	}
 
 	if quirks.SupportsDisablingModuleSignatureVerification() {
-		result = append(result, constants.KernelParamEnforceModuleSigVerify+"=1") // see https://github.com/siderolabs/talos/issues/11989
+		result = append(result, constants.KernelParamEnforceModuleSigVerify+"=1") // see https://github.com/chubo-dev/chubo/issues/11989
 	}
 
 	if quirks.ProcMemOverrideNever() {

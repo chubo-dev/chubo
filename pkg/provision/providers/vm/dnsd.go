@@ -13,7 +13,7 @@ import (
 	"github.com/miekg/dns"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // DNSd entrypoint.

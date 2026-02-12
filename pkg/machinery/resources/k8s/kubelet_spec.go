@@ -11,7 +11,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 	"github.com/opencontainers/runtime-spec/specs-go"
 
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // KubeletSpecType is type of KubeletSpec resource.

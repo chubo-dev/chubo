@@ -5,7 +5,7 @@ package v1alpha1
 import (
 	"testing"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 )
 
 func TestShouldStartDashboardDisabledForMetalAgent(t *testing.T) {

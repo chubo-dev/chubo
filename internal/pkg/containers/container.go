@@ -17,9 +17,9 @@ import (
 
 	"github.com/siderolabs/go-tail"
 
-	"github.com/siderolabs/talos/pkg/chunker"
-	"github.com/siderolabs/talos/pkg/chunker/file"
-	"github.com/siderolabs/talos/pkg/chunker/stream"
+	"github.com/chubo-dev/chubo/pkg/chunker"
+	"github.com/chubo-dev/chubo/pkg/chunker/file"
+	"github.com/chubo-dev/chubo/pkg/chunker/stream"
 )
 
 // Container presents information about a container.

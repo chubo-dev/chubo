@@ -13,8 +13,8 @@ import (
 	"github.com/rs/xid"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // ActorIDCtxKey is the context key used for event actor id.

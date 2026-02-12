@@ -13,7 +13,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 )
 
 type rawDownloadFunc func(context.Context) (io.ReadCloser, error)

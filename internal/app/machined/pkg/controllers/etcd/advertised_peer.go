@@ -21,11 +21,11 @@ import (
 	"go.etcd.io/etcd/api/v3/etcdserverpb"
 	"go.uber.org/zap"
 
-	etcdcli "github.com/siderolabs/talos/internal/pkg/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	etcdcli "github.com/chubo-dev/chubo/internal/pkg/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // AdvertisedPeerController updates advertised peer list for this instance of etcd.

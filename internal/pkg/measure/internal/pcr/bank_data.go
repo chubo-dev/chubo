@@ -15,9 +15,9 @@ import (
 
 	"github.com/google/go-tpm/tpm2"
 
-	"github.com/siderolabs/talos/internal/pkg/secureboot"
-	tpm2internal "github.com/siderolabs/talos/internal/pkg/secureboot/tpm2"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot"
+	tpm2internal "github.com/chubo-dev/chubo/internal/pkg/secureboot/tpm2"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // RSAKey is the input for the CalculateBankData function.

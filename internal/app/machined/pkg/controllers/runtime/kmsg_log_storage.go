@@ -13,7 +13,7 @@ import (
 	"github.com/siderolabs/go-kmsg"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 )
 
 // KmsgLogStorageController presents kernel message log as a 'kernel' log.

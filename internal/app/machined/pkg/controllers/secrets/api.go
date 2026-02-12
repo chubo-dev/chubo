@@ -19,15 +19,15 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/grpc/gen"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	timeresource "github.com/siderolabs/talos/pkg/machinery/resources/time"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/grpc/gen"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 // APIController manages secrets.API based on configuration to provide apid certificate.

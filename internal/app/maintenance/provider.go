@@ -12,7 +12,7 @@ import (
 
 	"github.com/siderolabs/crypto/tls"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // NewTLSProvider creates a new TLS provider for maintenance service.

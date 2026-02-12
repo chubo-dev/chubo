@@ -7,7 +7,7 @@ package qemu
 import (
 	"sync"
 
-	"github.com/siderolabs/talos/pkg/provision/providers/vm"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm"
 )
 
 // PowerState is current VM power state.

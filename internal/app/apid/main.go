@@ -28,15 +28,15 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 
-	apidbackend "github.com/siderolabs/talos/internal/app/apid/pkg/backend"
-	"github.com/siderolabs/talos/internal/app/apid/pkg/director"
-	"github.com/siderolabs/talos/internal/app/apid/pkg/provider"
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/grpc/factory"
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	"github.com/siderolabs/talos/pkg/grpc/proxy/backend"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/startup"
+	apidbackend "github.com/chubo-dev/chubo/internal/app/apid/pkg/backend"
+	"github.com/chubo-dev/chubo/internal/app/apid/pkg/director"
+	"github.com/chubo-dev/chubo/internal/app/apid/pkg/provider"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/grpc/factory"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	"github.com/chubo-dev/chubo/pkg/grpc/proxy/backend"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/startup"
 )
 
 func runDebugServer(ctx context.Context) {

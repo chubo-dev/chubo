@@ -11,7 +11,7 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/state"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
 // These methods are only used in `chubo` builds, but the call sites live in

@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/yamlstrip"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/yamlstrip"
 )
 
 func TestComments(t *testing.T) {

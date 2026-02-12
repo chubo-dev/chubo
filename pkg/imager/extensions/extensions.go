@@ -11,10 +11,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/siderolabs/talos/internal/pkg/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	extinterface "github.com/siderolabs/talos/pkg/machinery/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/internal/pkg/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	extinterface "github.com/chubo-dev/chubo/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 // Builder rebuilds initramfs.xz with extensions.

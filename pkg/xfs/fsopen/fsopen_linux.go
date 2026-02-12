@@ -16,8 +16,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/pkg/makefs"
-	"github.com/siderolabs/talos/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 // ErrRepairUnsupported is reported when the filesystem does not support repairs.

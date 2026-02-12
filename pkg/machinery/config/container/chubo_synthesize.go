@@ -7,7 +7,7 @@
 package container
 
 import (
-	chubotypes "github.com/siderolabs/talos/pkg/machinery/config/types/chubo"
+	chubotypes "github.com/chubo-dev/chubo/pkg/machinery/config/types/chubo"
 )
 
 func maybeSynthesizeChuboOSV1Alpha1(container *Container) error {

@@ -9,9 +9,9 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
-	"github.com/siderolabs/talos/pkg/xfs"
-	"github.com/siderolabs/talos/pkg/xfs/opentree"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/xfs/opentree"
 )
 
 // VolumeMountStatus adapter provides conversion from MountStatus.

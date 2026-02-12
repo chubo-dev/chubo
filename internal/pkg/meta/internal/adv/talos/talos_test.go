@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv"
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv/talos"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
 )
 
 func TestMarshalUnmarshal(t *testing.T) {

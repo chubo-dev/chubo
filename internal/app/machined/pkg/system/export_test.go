@@ -5,8 +5,8 @@
 package system
 
 import (
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/conditions"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/conditions"
 )
 
 func NewServices(runtime runtime.Runtime) *singleton { //nolint:revive

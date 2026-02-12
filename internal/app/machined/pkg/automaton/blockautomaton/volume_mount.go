@@ -14,8 +14,8 @@ import (
 	"github.com/siderolabs/gen/xerrors"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // VolumeMountCallbackFunc is a callback function that is called when a volume is mounted.

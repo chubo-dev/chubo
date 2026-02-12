@@ -9,7 +9,7 @@ import (
 	"net/netip"
 	"os"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // ReadResolvConf reads and parses /etc/resolv.conf file.

@@ -5,8 +5,8 @@
 package profile
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/imager/imageropts"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/imageropts"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 // Output describes image generation result.

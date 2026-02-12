@@ -24,12 +24,12 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/components"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/logdata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resolver"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/resourcedata"
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/components"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/logdata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resolver"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 func init() {

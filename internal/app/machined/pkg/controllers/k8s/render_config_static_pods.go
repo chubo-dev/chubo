@@ -23,9 +23,9 @@ import (
 	auditv1 "k8s.io/apiserver/pkg/apis/audit/v1"
 	schedulerv1 "k8s.io/kube-scheduler/config/v1"
 
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 // RenderConfigsStaticPodController manages k8s.ConfigsReady and renders configs for the control plane.

@@ -11,7 +11,7 @@ import (
 	"github.com/beevik/ntp"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/timex"
+	"github.com/chubo-dev/chubo/internal/pkg/timex"
 )
 
 // CurrentTimeFunc provides a function which returns current time.

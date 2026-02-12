@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 const testDir = "testdir"

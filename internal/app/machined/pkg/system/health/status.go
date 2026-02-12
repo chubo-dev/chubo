@@ -11,7 +11,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 // Status of the healthcheck.

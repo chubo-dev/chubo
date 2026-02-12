@@ -16,10 +16,10 @@ import (
 	"github.com/siderolabs/go-retry/retry"
 	"google.golang.org/grpc"
 
-	"github.com/siderolabs/talos/pkg/grpc/middleware/auth/basic"
-	securityapi "github.com/siderolabs/talos/pkg/machinery/api/security"
-	"github.com/siderolabs/talos/pkg/machinery/client/resolver"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/auth/basic"
+	securityapi "github.com/chubo-dev/chubo/pkg/machinery/api/security"
+	"github.com/chubo-dev/chubo/pkg/machinery/client/resolver"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 var remoteGeneratorPprof = pprof.NewProfile("pkg/grpc/gen.RemoteGenerator")

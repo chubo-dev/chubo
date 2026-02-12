@@ -5,8 +5,8 @@
 package bundle
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/config/configpatcher"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configpatcher"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate"
 )
 
 // Option controls config options specific to config bundle generation.

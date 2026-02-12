@@ -10,8 +10,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 // BootstrapEtcd is a no-op in chubo mode, where etcd is not part of the runtime.

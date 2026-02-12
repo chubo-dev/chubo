@@ -10,8 +10,8 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/flags"
-	"github.com/siderolabs/talos/pkg/provision/providers/vm"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm"
 )
 
 var virtiofsdLaunchCmdFlags struct {

@@ -9,8 +9,8 @@ package cli
 import (
 	"regexp"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 // VersionSuite verifies version command.

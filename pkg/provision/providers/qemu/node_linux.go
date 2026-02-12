@@ -8,7 +8,7 @@ import (
 	"context"
 	"net"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 func (p *provisioner) findAPIBindAddrs(ctx context.Context, clusterReq provision.ClusterRequest) (*net.TCPAddr, error) {

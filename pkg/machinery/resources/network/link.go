@@ -10,7 +10,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 // VLANSpec describes VLAN settings if Kind == "vlan".

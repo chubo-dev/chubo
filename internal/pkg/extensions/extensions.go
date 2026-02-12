@@ -6,7 +6,7 @@
 package extensions
 
 import (
-	"github.com/siderolabs/talos/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions"
 )
 
 // Extension wraps the extensions.Extension type with additional methods.

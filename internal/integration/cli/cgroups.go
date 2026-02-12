@@ -9,7 +9,7 @@ package cli
 import (
 	"regexp"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 // CgroupsSuite verifies dmesg command.

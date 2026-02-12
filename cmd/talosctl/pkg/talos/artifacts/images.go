@@ -15,7 +15,7 @@ import (
 	"github.com/google/go-containerregistry/pkg/name"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/images"
+	"github.com/chubo-dev/chubo/pkg/images"
 )
 
 // ExtensionRef is a ref to the extension for some Talos version.

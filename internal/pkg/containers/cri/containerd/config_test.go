@@ -11,9 +11,9 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/pkg/containers/cri/containerd"
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/cri/containerd"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 //go:embed testdata/cri.toml

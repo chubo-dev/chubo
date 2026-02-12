@@ -18,9 +18,9 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/containermode"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/xfs"
+	"github.com/chubo-dev/chubo/internal/pkg/containermode"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
 //go:embed policy/policy.33

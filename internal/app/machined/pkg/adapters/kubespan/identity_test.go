@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	kubespanadapter "github.com/siderolabs/talos/internal/app/machined/pkg/adapters/kubespan"
-	"github.com/siderolabs/talos/pkg/machinery/fipsmode"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
+	kubespanadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/kubespan"
+	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 )
 
 func TestIdentityGenerateKey(t *testing.T) {

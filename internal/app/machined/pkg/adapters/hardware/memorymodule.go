@@ -7,7 +7,7 @@ package hardware
 import (
 	"github.com/siderolabs/go-smbios/smbios"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 // MemoryModule adapter provider conversion from smbios.SMBIOS.

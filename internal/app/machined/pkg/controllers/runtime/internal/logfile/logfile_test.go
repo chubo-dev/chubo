@@ -13,7 +13,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime/internal/logfile"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime/internal/logfile"
 )
 
 func TestWrite(t *testing.T) {

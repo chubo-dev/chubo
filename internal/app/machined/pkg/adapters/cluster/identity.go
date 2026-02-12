@@ -11,8 +11,8 @@ import (
 
 	"github.com/jxskiss/base62"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 // IdentitySpec adapter provides identity generation.

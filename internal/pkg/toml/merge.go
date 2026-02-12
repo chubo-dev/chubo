@@ -14,7 +14,7 @@ import (
 
 	"github.com/pelletier/go-toml/v2"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/merge"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/merge"
 )
 
 // tomlDecodeFile decodes a TOML file into the provided destination, and returns a sha256 hash of the file content.

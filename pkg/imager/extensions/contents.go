@@ -12,8 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/siderolabs/talos/internal/pkg/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/internal/pkg/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
 )
 
 func findExtensionsWithKernelModules(extensions []*extensions.Extension, quirks quirks.Quirks) []string {

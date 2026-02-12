@@ -22,8 +22,8 @@ import (
 	"github.com/siderolabs/go-retry/retry"
 	"github.com/sirupsen/logrus"
 
-	"github.com/siderolabs/talos/internal/pkg/containers/image/progress"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/internal/pkg/containers/image/progress"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 // Image pull retry settings.

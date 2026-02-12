@@ -18,13 +18,13 @@ import (
 	"github.com/siderolabs/go-retry/retry"
 	"google.golang.org/grpc/codes"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	machineapi "github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	configres "github.com/siderolabs/talos/pkg/machinery/resources/config"
-	v1alpha1res "github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	configres "github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	v1alpha1res "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // MapToInternalIP maps a slice of NodeInfo to a slice of internal IPs.

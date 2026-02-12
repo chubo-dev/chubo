@@ -13,7 +13,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/cosi-project/runtime/pkg/safe"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 func cleanupAffiliates(ctx context.Context, ctrl controller.Controller, r controller.Runtime, touchedIDs map[resource.ID]struct{}) error {

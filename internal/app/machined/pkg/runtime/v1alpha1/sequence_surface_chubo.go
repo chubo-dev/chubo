@@ -6,7 +6,7 @@
 
 package v1alpha1
 
-import "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+import "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 
 func initializeEarlyServicesTasks() []runtime.TaskSetupFunc {
 	return []runtime.TaskSetupFunc{

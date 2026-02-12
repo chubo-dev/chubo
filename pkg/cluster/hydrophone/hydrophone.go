@@ -20,8 +20,8 @@ import (
 	"sigs.k8s.io/hydrophone/pkg/conformance/client"
 	"sigs.k8s.io/hydrophone/pkg/types"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Options for the tests.

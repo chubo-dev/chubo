@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime/internal/filehash"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime/internal/filehash"
 )
 
 func assertEvent(t *testing.T, eventCh <-chan string, errCh <-chan error, expected string) {

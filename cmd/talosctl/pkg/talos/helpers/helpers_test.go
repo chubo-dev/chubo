@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	yaml "go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 )
 
 type cfg struct {

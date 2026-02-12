@@ -16,7 +16,7 @@ import (
 	"go.uber.org/zap"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/k8s"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 // StaticPodServerController renders all static pod definitions as a PodList and serves it as YAML via HTTP.

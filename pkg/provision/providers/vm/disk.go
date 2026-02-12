@@ -11,7 +11,7 @@ import (
 
 	"github.com/detailyang/go-fallocate"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // UserDiskName returns disk device path.

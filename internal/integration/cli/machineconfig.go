@@ -16,7 +16,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/internal/integration/base"
+	"github.com/chubo-dev/chubo/internal/integration/base"
 )
 
 // MachineConfigSuite verifies machineconfig command.

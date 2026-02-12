@@ -11,9 +11,9 @@ import (
 	"github.com/siderolabs/gen/maps"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	clussterres "github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	clussterres "github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 // DiscoveredClusterInfo represents a cluster.Info populated using the discovery service.

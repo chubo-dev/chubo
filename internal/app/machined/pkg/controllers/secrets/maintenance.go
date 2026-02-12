@@ -17,9 +17,9 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
-	timeresource "github.com/siderolabs/talos/pkg/machinery/resources/time"
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 // MaintenanceController manages secrets.MaintenanceServiceCerts.

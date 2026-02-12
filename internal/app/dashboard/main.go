@@ -19,14 +19,14 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform"
-	metalurl "github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/platform/metal/url"
-	"github.com/siderolabs/talos/internal/pkg/dashboard"
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/role"
-	"github.com/siderolabs/talos/pkg/startup"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform"
+	metalurl "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/platform/metal/url"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/startup"
 )
 
 // Main is the entrypoint into dashboard.

@@ -10,8 +10,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 	"github.com/cosi-project/runtime/pkg/resource/typed"
 
-	"github.com/siderolabs/talos/pkg/machinery/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // ExtensionStatusType is type of Extension resource.

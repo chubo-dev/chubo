@@ -13,7 +13,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/services/registry"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services/registry"
 )
 
 func main() {

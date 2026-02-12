@@ -16,7 +16,7 @@ import (
 	"github.com/siderolabs/gen/channel"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // Runner describes a state of running probe.

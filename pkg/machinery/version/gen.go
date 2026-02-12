@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 func main() {

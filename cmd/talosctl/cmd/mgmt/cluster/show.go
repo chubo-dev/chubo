@@ -18,9 +18,9 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/pkg/cli"
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/providers"
+	"github.com/chubo-dev/chubo/pkg/cli"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/providers"
 )
 
 // showCmd represents the cluster show command.

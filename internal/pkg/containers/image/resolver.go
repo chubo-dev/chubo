@@ -17,9 +17,9 @@ import (
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/httpdefaults"
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/httpdefaults"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 // NewResolver builds registry resolver based on Talos configuration.

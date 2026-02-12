@@ -17,7 +17,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 )
 
 // GenerateAdminInput is the interface for the GenerateAdmin function.

@@ -15,7 +15,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // MountStatusController provides mount requests based on VolumeMountRequests and VolumeStatuses.

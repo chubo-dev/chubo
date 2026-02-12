@@ -16,8 +16,8 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/encryption/luks"
 	"github.com/siderolabs/go-blockdevice/v2/encryption/token"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/helpers"
-	"github.com/siderolabs/talos/internal/pkg/secureboot/tpm2"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/tpm2"
 )
 
 // TPMToken is the userdata stored in the partition token metadata.

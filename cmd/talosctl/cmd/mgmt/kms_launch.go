@@ -16,7 +16,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 
-	grpclog "github.com/siderolabs/talos/pkg/grpc/middleware/log"
+	grpclog "github.com/chubo-dev/chubo/pkg/grpc/middleware/log"
 )
 
 var kmsLaunchCmdFlags struct {

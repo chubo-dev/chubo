@@ -18,16 +18,16 @@ import (
 	"github.com/spf13/cobra/doc"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/block"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/cri"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/hardware"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/network"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/runtime/extensions"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/security"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/siderolink"
-	v1alpha1 "github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/hardware"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/security"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/siderolink"
+	v1alpha1 "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 func frontmatter(title, description string) string {

@@ -7,7 +7,7 @@ package runtime
 import (
 	"github.com/cosi-project/runtime/pkg/resource"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 //go:generate go tool github.com/siderolabs/deep-copy -type BootedEntrySpec -type DevicesStatusSpec -type DiagnosticSpec -type EnvironmentSpec -type EventSinkConfigSpec -type ExtensionServiceConfigSpec -type ExtensionServiceConfigStatusSpec -type KernelCmdlineSpec -type KernelModuleSpecSpec -type KernelParamSpecSpec -type KernelParamStatusSpec -type KmsgLogConfigSpec -type LoadedKernelModuleSpec -type MaintenanceServiceConfigSpec -type MaintenanceServiceRequestSpec -type MachineResetSignalSpec -type MachineStatusSpec -type MetaKeySpec -type MountStatusSpec -type OOMActionSpec -type PlatformMetadataSpec -type SecurityStateSpec -type MetaLoadedSpec -type SBOMItemSpec -type UniqueMachineTokenSpec -type VersionSpec -type WatchdogTimerConfigSpec -type WatchdogTimerStatusSpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .

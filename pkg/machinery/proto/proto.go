@@ -17,7 +17,7 @@ import (
 	_ "google.golang.org/grpc/encoding/gzip" //nolint:depguard // enable compression server-side
 	"google.golang.org/protobuf/proto"       //nolint:depguard
 
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 // Message is the main interface for protobuf API v2 messages.

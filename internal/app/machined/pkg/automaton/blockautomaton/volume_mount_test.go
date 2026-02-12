@@ -22,9 +22,9 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/automaton/blockautomaton"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/automaton/blockautomaton"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 func TestVolumeMounter(t *testing.T) {

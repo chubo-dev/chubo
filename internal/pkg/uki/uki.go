@@ -10,10 +10,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/siderolabs/talos/internal/pkg/measure"
-	"github.com/siderolabs/talos/internal/pkg/secureboot/pesign"
-	"github.com/siderolabs/talos/internal/pkg/uki/internal/pe"
-	"github.com/siderolabs/talos/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/internal/pkg/measure"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/pesign"
+	"github.com/chubo-dev/chubo/internal/pkg/uki/internal/pe"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
 )
 
 // Section is a name of a PE file section (UEFI binary).

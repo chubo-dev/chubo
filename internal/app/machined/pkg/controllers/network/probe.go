@@ -13,8 +13,8 @@ import (
 	"github.com/cosi-project/runtime/pkg/state"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network/internal/probe"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network/internal/probe"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // ProbeController runs network probes configured with ProbeSpecs and outputs ProbeStatuses.

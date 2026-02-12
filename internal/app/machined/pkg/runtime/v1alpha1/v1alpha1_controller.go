@@ -18,14 +18,14 @@ import (
 	"github.com/siderolabs/go-kmsg"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/logging"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/acpi"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha2"
-	krnl "github.com/siderolabs/talos/pkg/kernel"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/kernel"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/logging"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/acpi"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha2"
+	krnl "github.com/chubo-dev/chubo/pkg/kernel"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/kernel"
 )
 
 // Controller represents the controller responsible for managing the execution

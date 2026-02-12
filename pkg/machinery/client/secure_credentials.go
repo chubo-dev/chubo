@@ -9,7 +9,7 @@ package client
 import (
 	"google.golang.org/grpc/credentials"
 
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
 // RequireTransportSecurity implements credentials.PerRPCCredentials.

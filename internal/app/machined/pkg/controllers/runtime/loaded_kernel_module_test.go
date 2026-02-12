@@ -11,8 +11,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	runtimectrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	runtimectrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime"
 )
 
 func TestLoadedKernelModuleSuite(t *testing.T) {

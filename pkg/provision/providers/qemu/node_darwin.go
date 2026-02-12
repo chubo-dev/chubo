@@ -8,7 +8,7 @@ import (
 	"context"
 	"net"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // findAPIBindAddrs returns the 0.0.0.0 address to bind to all interfaces on macos with a random port on macos.

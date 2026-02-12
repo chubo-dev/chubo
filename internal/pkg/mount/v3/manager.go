@@ -11,9 +11,9 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/pkg/xfs"
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
-	"github.com/siderolabs/talos/pkg/xfs/opentree"
+	"github.com/chubo-dev/chubo/pkg/xfs"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
+	"github.com/chubo-dev/chubo/pkg/xfs/opentree"
 )
 
 // Manager is the filesystem manager for mounting and unmounting filesystems.

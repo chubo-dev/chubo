@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/pkg/endpoint"
+	"github.com/chubo-dev/chubo/internal/pkg/endpoint"
 )
 
 func TestParseEndpoint(t *testing.T) {

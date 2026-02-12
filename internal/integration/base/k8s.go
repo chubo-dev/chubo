@@ -52,8 +52,8 @@ import (
 	"k8s.io/client-go/util/jsonpath"
 	"k8s.io/kubectl/pkg/scheme"
 
-	taloskubernetes "github.com/siderolabs/talos/pkg/kubernetes"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	taloskubernetes "github.com/chubo-dev/chubo/pkg/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // K8sSuite is a base suite for K8s tests.

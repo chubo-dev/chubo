@@ -14,7 +14,7 @@ import (
 
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 )
 
 // Selector represents a delete selector for a document.

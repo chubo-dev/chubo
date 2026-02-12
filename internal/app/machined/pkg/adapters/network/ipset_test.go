@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go4.org/netipx"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/adapters/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/network"
 )
 
 func TestBuildIPSet(t *testing.T) {

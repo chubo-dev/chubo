@@ -15,7 +15,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/siderolabs/talos/internal/pkg/measure"
+	"github.com/chubo-dev/chubo/internal/pkg/measure"
 )
 
 // PCRSigner implements measure.RSAKey interface.

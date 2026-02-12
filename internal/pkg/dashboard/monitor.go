@@ -8,8 +8,8 @@ import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/components"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/components"
 )
 
 // MonitorGrid represents the monitoring grid with a process table and various metrics.

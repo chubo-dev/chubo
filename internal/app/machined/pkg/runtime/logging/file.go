@@ -16,8 +16,8 @@ import (
 	"github.com/siderolabs/gen/containers"
 	"github.com/siderolabs/go-tail"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/follow"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/follow"
 )
 
 // FileLoggingManager implements simple logging to files.

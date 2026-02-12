@@ -12,8 +12,8 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // BondMasterSpec adapter provides encoding/decoding to netlink structures.

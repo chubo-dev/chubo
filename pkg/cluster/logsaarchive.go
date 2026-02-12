@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/siderolabs/talos/pkg/imager/filemap"
+	"github.com/chubo-dev/chubo/pkg/imager/filemap"
 )
 
 // SaveClusterLogsArchive saves all logs from the cluster state directory to a gzip archive.

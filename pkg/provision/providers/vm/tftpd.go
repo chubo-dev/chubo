@@ -11,7 +11,7 @@ import (
 	"github.com/pin/tftp/v3"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/pkg/provision/providers/vm/internal/ipxe"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm/internal/ipxe"
 )
 
 // TFTPd starts a TFTP server on the given IPs.

@@ -10,7 +10,7 @@ import (
 
 	"github.com/siderolabs/go-blockdevice/v2/blkid"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // InstallOptions configures bootloader installation.

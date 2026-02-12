@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	yaml "go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/encoder"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 )
 
 type Config struct {

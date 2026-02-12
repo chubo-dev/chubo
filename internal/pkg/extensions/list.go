@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/siderolabs/talos/pkg/machinery/extensions"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions"
 )
 
 // List prepared unpacked extensions under rootPath.

@@ -13,13 +13,13 @@ import (
 
 	"github.com/siderolabs/gen/ensure"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/registry"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
-//go:generate go tool github.com/siderolabs/talos/tools/docgen -output ./siderolink_doc.go ./siderolink.go
+//go:generate go tool github.com/chubo-dev/chubo/tools/docgen -output ./siderolink_doc.go ./siderolink.go
 
 //go:generate go tool github.com/siderolabs/deep-copy -type ConfigV1Alpha1 -pointer-receiver -header-file ../../../../../hack/boilerplate.txt -o deep_copy.generated.go .
 

@@ -12,7 +12,7 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/state"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 )
 
 // Configuration implements the platform.Platform interface.

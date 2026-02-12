@@ -7,7 +7,7 @@ package v1alpha1
 import (
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 // NetworkConfigOption generates NetworkConfig.

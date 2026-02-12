@@ -24,17 +24,17 @@ import (
 	"github.com/opencontainers/runtime-spec/specs-go"
 	sideronet "github.com/siderolabs/net"
 
-	"github.com/siderolabs/talos/pkg/machinery/compatibility"
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/block/blockhelpers"
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/kubelet"
-	"github.com/siderolabs/talos/pkg/machinery/labels"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
-	"github.com/siderolabs/talos/pkg/machinery/role"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/machinery/compatibility"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/block/blockhelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/kubelet"
+	"github.com/chubo-dev/chubo/pkg/machinery/labels"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 var (

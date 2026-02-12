@@ -12,10 +12,10 @@ import (
 	"github.com/siderolabs/gen/xerrors"
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	configconfig "github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	configconfig "github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // Size constants.

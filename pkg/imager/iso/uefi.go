@@ -16,9 +16,9 @@ import (
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 	"github.com/siderolabs/go-copy/copy"
 
-	"github.com/siderolabs/talos/pkg/imager/utils"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/makefs"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/makefs"
 )
 
 const (

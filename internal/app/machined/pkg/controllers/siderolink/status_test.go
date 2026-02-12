@@ -16,10 +16,10 @@ import (
 	"github.com/stretchr/testify/suite"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/ctest"
-	siderolinkctrl "github.com/siderolabs/talos/internal/app/machined/pkg/controllers/siderolink"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/siderolink"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
+	siderolinkctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/siderolink"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/siderolink"
 )
 
 type StatusSuite struct {

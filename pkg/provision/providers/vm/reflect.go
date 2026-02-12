@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 // Reflect decode state file.

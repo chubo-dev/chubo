@@ -12,8 +12,8 @@ import (
 	specs "github.com/opencontainers/runtime-spec/specs-go"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/containermode"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/containermode"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // prepareRootfs creates /system/libexec/<service> rootfs and bind-mounts /sbin/init there.

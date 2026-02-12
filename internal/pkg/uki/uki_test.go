@@ -22,13 +22,13 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/measure"
-	"github.com/siderolabs/talos/internal/pkg/uki"
-	"github.com/siderolabs/talos/pkg/machinery/config/generate/secrets"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
-	"github.com/siderolabs/talos/pkg/machinery/version"
-	"github.com/siderolabs/talos/pkg/splash"
+	"github.com/chubo-dev/chubo/internal/pkg/measure"
+	"github.com/chubo-dev/chubo/internal/pkg/uki"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/splash"
 )
 
 type certificateProvider struct {

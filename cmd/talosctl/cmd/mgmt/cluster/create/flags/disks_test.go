@@ -10,8 +10,8 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/stretchr/testify/assert"
 
-	flags "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/flags"
-	"github.com/siderolabs/talos/pkg/bytesize"
+	flags "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+	"github.com/chubo-dev/chubo/pkg/bytesize"
 )
 
 func TestDisksFlag_ExtraOpts(t *testing.T) {

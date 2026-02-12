@@ -17,9 +17,9 @@ import (
 	"github.com/ryanuber/go-glob"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/block"
-	"github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/network"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // Empty is an empty CEL environment.

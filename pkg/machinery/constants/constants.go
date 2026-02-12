@@ -128,7 +128,7 @@ const (
 	KernelParamEquinixMetalEvents = "em.events_url"
 
 	// KernelParamEnforceModuleSigVerify is the kernel parameter name to specify module signature verification enforcement.
-	// see https://github.com/siderolabs/talos/issues/11989
+	// see https://github.com/chubo-dev/chubo/issues/11989
 	KernelParamEnforceModuleSigVerify = "module.sig_enforce"
 
 	// NewRoot is the path where the switchroot target is mounted.
@@ -1366,7 +1366,7 @@ ID=%[2]s
 VERSION_ID=%[3]s
 PRETTY_NAME="%[1]s (%[3]s)"
 HOME_URL="https://www.talos.dev/"
-BUG_REPORT_URL="https://github.com/siderolabs/talos/issues"
+BUG_REPORT_URL="https://github.com/chubo-dev/chubo/issues"
 VENDOR_NAME="Sidero Labs"
 VENDOR_URL="https://www.siderolabs.com/"
 `

@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaquorum"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
-	"github.com/siderolabs/talos/pkg/machinery/meta"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaquorum"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
+	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
 // Chubo doesn't ship Kubernetes, etcd, or CRI management.

@@ -12,7 +12,7 @@ import (
 	"github.com/siderolabs/grpc-proxy/proxy"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/apid/pkg/backend"
+	"github.com/chubo-dev/chubo/internal/app/apid/pkg/backend"
 )
 
 type APIDFactorySuite struct {

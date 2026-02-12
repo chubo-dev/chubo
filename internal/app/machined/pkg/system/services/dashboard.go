@@ -13,15 +13,15 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"github.com/siderolabs/go-procfs/procfs"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/process"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/restart"
-	"github.com/siderolabs/talos/internal/pkg/capability"
-	"github.com/siderolabs/talos/internal/pkg/console"
-	"github.com/siderolabs/talos/pkg/conditions"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/process"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/restart"
+	"github.com/chubo-dev/chubo/internal/pkg/capability"
+	"github.com/chubo-dev/chubo/internal/pkg/console"
+	"github.com/chubo-dev/chubo/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Dashboard implements the Service interface. It serves as the concrete type with

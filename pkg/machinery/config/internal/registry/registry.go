@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 )
 
 var (

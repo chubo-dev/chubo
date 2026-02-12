@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/pkg/argsbuilder"
+	"github.com/chubo-dev/chubo/pkg/argsbuilder"
 )
 
 type ArgsbuilderSuite struct {

@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/imager/iso"
+	"github.com/chubo-dev/chubo/pkg/imager/iso"
 )
 
 func TestVolumeID(t *testing.T) {

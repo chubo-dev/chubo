@@ -16,8 +16,8 @@ import (
 	blockdev "github.com/siderolabs/go-blockdevice/v2/block"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // HandleEncryption makes sure the encryption for the volumes is handled appropriately.

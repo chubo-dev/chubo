@@ -9,8 +9,8 @@ import (
 	"slices"
 	"time"
 
-	"github.com/siderolabs/talos/pkg/conditions"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 // DefaultClusterChecks returns a set of default Talos cluster readiness checks.

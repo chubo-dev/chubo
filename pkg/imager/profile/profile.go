@@ -13,8 +13,8 @@ import (
 	"github.com/siderolabs/go-pointer"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/imager/quirks"
-	"github.com/siderolabs/talos/pkg/machinery/overlay"
+	"github.com/chubo-dev/chubo/pkg/machinery/imager/quirks"
+	"github.com/chubo-dev/chubo/pkg/machinery/overlay"
 )
 
 //go:generate go tool github.com/siderolabs/deep-copy -type Profile -type SecureBootAssets -header-file ../../../hack/boilerplate.txt -o deep_copy.generated.go .

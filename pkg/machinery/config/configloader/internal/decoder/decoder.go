@@ -14,8 +14,8 @@ import (
 	"github.com/siderolabs/gen/xyaml"
 	yaml "go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/registry"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
 )
 
 // ErrMissingKind indicates that the manifest is missing a kind.

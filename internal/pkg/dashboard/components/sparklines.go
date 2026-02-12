@@ -8,7 +8,7 @@ import (
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
 )
 
 // BaseSparklineGroup represents the widget with some sparklines.

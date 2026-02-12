@@ -16,7 +16,7 @@ import (
 
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 
-	"github.com/siderolabs/talos/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
 )
 
 const (

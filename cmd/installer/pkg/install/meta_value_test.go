@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/cmd/installer/pkg/install"
+	"github.com/chubo-dev/chubo/cmd/installer/pkg/install"
 )
 
 func TestMetaValues(t *testing.T) {

@@ -17,8 +17,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/network/internal/probe"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network/internal/probe"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 func TestProbeHTTP(t *testing.T) {

@@ -16,8 +16,8 @@ import (
 	"github.com/siderolabs/gen/maps"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/imager/profile"
-	"github.com/siderolabs/talos/pkg/machinery/version"
+	"github.com/chubo-dev/chubo/pkg/imager/profile"
+	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
 func TestFillDefaults(t *testing.T) {

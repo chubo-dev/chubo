@@ -8,8 +8,8 @@ package environment
 import (
 	"github.com/siderolabs/go-procfs/procfs"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Get the desired set of the environment variables based on kernel cmdline and machine config.

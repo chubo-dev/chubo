@@ -12,7 +12,7 @@ import (
 
 	"google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
 // NodeContext contains the context.Context for a single node and the node name.

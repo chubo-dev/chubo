@@ -9,8 +9,8 @@ package base
 import (
 	"slices"
 
-	"github.com/siderolabs/talos/pkg/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 type infoWrapper struct {

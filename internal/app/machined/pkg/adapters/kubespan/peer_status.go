@@ -12,8 +12,8 @@ import (
 	"go4.org/netipx"
 	"golang.zx2c4.com/wireguard/wgctrl/wgtypes"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/adapters/wireguard"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubespan"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/wireguard"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 )
 
 // PeerStatusSpec adapter provides Wireguard integration and state management.

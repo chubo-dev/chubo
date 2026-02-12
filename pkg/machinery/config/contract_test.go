@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/machinery/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config"
 )
 
 func TestContractGreater(t *testing.T) {

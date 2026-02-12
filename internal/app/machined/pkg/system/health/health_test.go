@@ -13,7 +13,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/health"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/health"
 )
 
 type CheckSuite struct {

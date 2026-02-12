@@ -14,7 +14,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 // AffiliateMergeController merges raw Affiliates from the RawNamespaceName into final representation in the NamespaceName.

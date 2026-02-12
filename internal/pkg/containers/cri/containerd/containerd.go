@@ -14,8 +14,8 @@ import (
 	"github.com/containerd/containerd/v2/core/remotes/docker"
 	"github.com/pelletier/go-toml/v2"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
 
 // GenerateCRIConfig returns a part of CRI config for registry auth.

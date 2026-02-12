@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	"github.com/siderolabs/talos/internal/app/apid/pkg/director"
+	"github.com/chubo-dev/chubo/internal/app/apid/pkg/director"
 )
 
 type DirectorSuite struct {

@@ -7,9 +7,9 @@ package components_test
 import (
 	"testing"
 
-	"github.com/siderolabs/talos/internal/pkg/dashboard/apidata"
-	"github.com/siderolabs/talos/internal/pkg/dashboard/components"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/apidata"
+	"github.com/chubo-dev/chubo/internal/pkg/dashboard/components"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 func TestUpdate(t *testing.T) {

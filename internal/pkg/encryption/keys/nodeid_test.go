@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/keys"
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/keys"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 func TestNodeID(t *testing.T) {

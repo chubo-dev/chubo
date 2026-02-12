@@ -6,7 +6,7 @@
 
 package container_test
 
-import "github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+import "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 
 func applyChuboOSValidationDefaults(*v1alpha1.Config) {}
 

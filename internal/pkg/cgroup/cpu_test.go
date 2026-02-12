@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/internal/pkg/cgroup"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroup"
 )
 
 func TestAvailableMillicores(t *testing.T) {

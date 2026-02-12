@@ -10,10 +10,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/siderolabs/talos/internal/pkg/containers"
-	taloscontainerd "github.com/siderolabs/talos/internal/pkg/containers/containerd"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/containers"
+	taloscontainerd "github.com/chubo-dev/chubo/internal/pkg/containers/containerd"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func getContainerInspector(ctx context.Context, namespace string, driver common.ContainerDriver) (containers.Inspector, error) {

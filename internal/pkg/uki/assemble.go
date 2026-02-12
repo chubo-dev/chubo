@@ -7,7 +7,7 @@ package uki
 import (
 	"path/filepath"
 
-	"github.com/siderolabs/talos/internal/pkg/uki/internal/pe"
+	"github.com/chubo-dev/chubo/internal/pkg/uki/internal/pe"
 )
 
 // assemble the UKI file out of sections.

@@ -14,7 +14,7 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/cosi-project/runtime/pkg/state"
 
-	config2 "github.com/siderolabs/talos/pkg/machinery/config/config"
+	config2 "github.com/chubo-dev/chubo/pkg/machinery/config/config"
 )
 
 //go:generate go tool github.com/siderolabs/deep-copy -type RegistriesConfigSpec -type ImageCacheConfigSpec -type SeccompProfileSpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .

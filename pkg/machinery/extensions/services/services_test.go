@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/extensions/services"
-	"github.com/siderolabs/talos/pkg/machinery/nethelpers"
+	"github.com/chubo-dev/chubo/pkg/machinery/extensions/services"
+	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
 //go:embed "testdata/hello.yaml"

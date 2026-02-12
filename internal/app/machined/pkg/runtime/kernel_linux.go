@@ -13,8 +13,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
-	"github.com/siderolabs/talos/pkg/xfs/opentree"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
+	"github.com/chubo-dev/chubo/pkg/xfs/opentree"
 )
 
 // KernelCap represents kernel capabilities that we can check at runtime.

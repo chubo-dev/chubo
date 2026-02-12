@@ -9,7 +9,7 @@ package container_test
 import (
 	"github.com/siderolabs/crypto/x509"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 // applyChuboOSValidationDefaults mutates cfg so that it passes the minimal

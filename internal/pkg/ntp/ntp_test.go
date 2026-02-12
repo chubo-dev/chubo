@@ -19,9 +19,9 @@ import (
 	"go.uber.org/zap/zaptest"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/ntp"
-	"github.com/siderolabs/talos/internal/pkg/timex"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/ntp"
+	"github.com/chubo-dev/chubo/internal/pkg/timex"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 type NTPSuite struct {

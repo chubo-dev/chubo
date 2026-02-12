@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/siderolabs/talos/cmd/installer/cmd/imager"
-	"github.com/siderolabs/talos/cmd/installer/cmd/installer"
+	"github.com/chubo-dev/chubo/cmd/installer/cmd/imager"
+	"github.com/chubo-dev/chubo/cmd/installer/cmd/installer"
 )
 
 func main() {

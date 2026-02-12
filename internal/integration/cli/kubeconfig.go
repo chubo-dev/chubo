@@ -13,8 +13,8 @@ import (
 
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/siderolabs/talos/internal/integration/base"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/internal/integration/base"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
 // KubeconfigSuite verifies dmesg command.

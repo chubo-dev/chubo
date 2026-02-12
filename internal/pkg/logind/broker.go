@@ -20,8 +20,8 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // DBusBroker implements simplified D-Bus broker which allows to connect

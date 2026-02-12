@@ -16,9 +16,9 @@ import (
 
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 
-	ctrs "github.com/siderolabs/talos/internal/pkg/containers"
-	criclient "github.com/siderolabs/talos/internal/pkg/cri"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	ctrs "github.com/chubo-dev/chubo/internal/pkg/containers"
+	criclient "github.com/chubo-dev/chubo/internal/pkg/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 type inspector struct {

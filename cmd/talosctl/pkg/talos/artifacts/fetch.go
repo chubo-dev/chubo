@@ -17,7 +17,7 @@ import (
 	"github.com/google/go-containerregistry/pkg/v1/remote"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/pkg/images"
+	"github.com/chubo-dev/chubo/pkg/images"
 )
 
 type imageHandler func(ctx context.Context, img v1.Image) error

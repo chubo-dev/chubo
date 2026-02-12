@@ -15,9 +15,9 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"google.golang.org/grpc/codes"
 
-	"github.com/siderolabs/talos/pkg/conditions"
-	"github.com/siderolabs/talos/pkg/machinery/client"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // NoDiagnostics checks whether there are no diagnostic warnings.

@@ -17,8 +17,8 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/partitioning/gpt"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/partition"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	"github.com/chubo-dev/chubo/internal/pkg/partition"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // CreatePartitionResult is the result of creating a partition.

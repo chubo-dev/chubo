@@ -12,7 +12,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/machinery/fipsmode"
+	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
 )
 
 func TestEnabled(t *testing.T) {

@@ -24,8 +24,8 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/siderolabs/talos/pkg/provision"
-	"github.com/siderolabs/talos/pkg/provision/providers/vm/internal/ethtool"
+	"github.com/chubo-dev/chubo/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision/providers/vm/internal/ethtool"
 )
 
 //nolint:gocyclo

@@ -14,8 +14,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"k8s.io/client-go/util/jsonpath"
 
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/talos/output"
-	"github.com/siderolabs/talos/pkg/machinery/resources/hardware"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/output"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 )
 
 func TestWriteResource(t *testing.T) {

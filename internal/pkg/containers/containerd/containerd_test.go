@@ -22,14 +22,14 @@ import (
 	"github.com/opencontainers/runtime-spec/specs-go"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/logging"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/events"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner"
-	containerdrunner "github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/containerd"
-	"github.com/siderolabs/talos/internal/app/machined/pkg/system/runner/process"
-	ctrd "github.com/siderolabs/talos/internal/pkg/containers/containerd"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/logging"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/events"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner"
+	containerdrunner "github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/containerd"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/runner/process"
+	ctrd "github.com/chubo-dev/chubo/internal/pkg/containers/containerd"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 const (

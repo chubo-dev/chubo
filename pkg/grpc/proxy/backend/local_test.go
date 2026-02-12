@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/siderolabs/talos/pkg/grpc/middleware/authz"
-	"github.com/siderolabs/talos/pkg/grpc/proxy/backend"
-	"github.com/siderolabs/talos/pkg/machinery/role"
+	"github.com/chubo-dev/chubo/pkg/grpc/middleware/authz"
+	"github.com/chubo-dev/chubo/pkg/grpc/proxy/backend"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 func TestLocalGetConnection(t *testing.T) {

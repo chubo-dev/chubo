@@ -20,12 +20,12 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
-	"github.com/siderolabs/talos/internal/app/machined/pkg/controllers/kubeaccess/serviceaccount"
-	"github.com/siderolabs/talos/internal/pkg/etcd"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/config"
-	"github.com/siderolabs/talos/pkg/machinery/resources/kubeaccess"
-	"github.com/siderolabs/talos/pkg/machinery/resources/secrets"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubeaccess/serviceaccount"
+	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubeaccess"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
 // CRDController manages Kubernetes endpoints resource for Talos API endpoints.

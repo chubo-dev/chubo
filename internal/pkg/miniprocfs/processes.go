@@ -11,7 +11,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 )
 
 const (

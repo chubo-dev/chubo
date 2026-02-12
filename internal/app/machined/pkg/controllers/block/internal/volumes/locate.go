@@ -14,9 +14,9 @@ import (
 	"github.com/siderolabs/go-blockdevice/v2/partitioning"
 	"go.uber.org/zap"
 
-	taloscel "github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	"github.com/siderolabs/talos/pkg/machinery/resources/block"
+	taloscel "github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 )
 
 // LocateAndProvision locates and provisions a volume.

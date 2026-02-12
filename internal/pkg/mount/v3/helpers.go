@@ -14,9 +14,9 @@ import (
 	"github.com/freddierice/go-losetup/v2"
 	"golang.org/x/sys/unix"
 
-	"github.com/siderolabs/talos/internal/pkg/selinux"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/xfs/fsopen"
+	"github.com/chubo-dev/chubo/internal/pkg/selinux"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/xfs/fsopen"
 )
 
 //

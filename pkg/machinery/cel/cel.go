@@ -17,7 +17,7 @@ import (
 	"go.yaml.in/yaml/v4"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 
-	"github.com/siderolabs/talos/pkg/machinery/proto"
+	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
 // Expression is a CEL expression that can be marshaled/unmarshaled as part of the resource.

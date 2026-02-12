@@ -14,7 +14,7 @@ import (
 
 	"go.yaml.in/yaml/v4"
 
-	"github.com/siderolabs/talos/pkg/machinery/overlay"
+	"github.com/chubo-dev/chubo/pkg/machinery/overlay"
 )
 
 var _ overlay.Installer[overlay.ExtraOptions] = (*Options)(nil)

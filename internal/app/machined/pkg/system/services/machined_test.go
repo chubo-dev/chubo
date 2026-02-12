@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/pkg/machinery/api"
+	"github.com/chubo-dev/chubo/pkg/machinery/api"
 )
 
 func collectMethods(t *testing.T) map[string]struct{} {

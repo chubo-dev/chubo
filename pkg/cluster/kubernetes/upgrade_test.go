@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/siderolabs/talos/pkg/cluster/kubernetes"
+	"github.com/chubo-dev/chubo/pkg/cluster/kubernetes"
 )
 
 func TestValidateImageReference(t *testing.T) {

@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/siderolabs/talos/pkg/conditions"
-	"github.com/siderolabs/talos/pkg/reporter"
+	"github.com/chubo-dev/chubo/pkg/conditions"
+	"github.com/chubo-dev/chubo/pkg/reporter"
 )
 
 // ConditionReporter is a reporter that reports conditions to a reporter.Reporter.

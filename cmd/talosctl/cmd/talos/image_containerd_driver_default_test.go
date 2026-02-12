@@ -9,7 +9,7 @@ package talos
 import (
 	"testing"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 func TestSystemContainerDriverDefault(t *testing.T) {

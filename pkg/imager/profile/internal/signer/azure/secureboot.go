@@ -13,7 +13,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azcertificates"
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/internal/pkg/secureboot/pesign"
+	"github.com/chubo-dev/chubo/internal/pkg/secureboot/pesign"
 )
 
 // SecureBootSigner implements pesign.CertificateSigner interface.

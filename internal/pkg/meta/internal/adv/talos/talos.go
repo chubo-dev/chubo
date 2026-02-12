@@ -16,7 +16,7 @@ import (
 	"github.com/siderolabs/gen/maps"
 	"github.com/siderolabs/gen/xslices"
 
-	"github.com/siderolabs/talos/internal/pkg/meta/internal/adv"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
 )
 
 // Basic constants configuring the ADV.

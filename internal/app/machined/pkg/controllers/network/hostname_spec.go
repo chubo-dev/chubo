@@ -15,8 +15,8 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sys/unix"
 
-	v1alpha1runtime "github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
-	"github.com/siderolabs/talos/pkg/machinery/resources/network"
+	v1alpha1runtime "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
 // HostnameSpecController applies network.HostnameSpec to the actual interfaces.

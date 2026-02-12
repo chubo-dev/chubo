@@ -12,8 +12,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/siderolabs/talos/cmd/installer/pkg/install"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/cmd/installer/pkg/install"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // rootCmd represents the base command when called without any subcommands.

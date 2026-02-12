@@ -9,7 +9,7 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/state"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
 // Validator is the interface to validate configuration.

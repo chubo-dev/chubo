@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/siderolabs/talos/internal/pkg/encryption/keys"
+	"github.com/chubo-dev/chubo/internal/pkg/encryption/keys"
 )
 
 func TestSalted(t *testing.T) {

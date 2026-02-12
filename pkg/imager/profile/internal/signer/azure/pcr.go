@@ -16,7 +16,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/siderolabs/go-pointer"
 
-	"github.com/siderolabs/talos/internal/pkg/measure"
+	"github.com/chubo-dev/chubo/internal/pkg/measure"
 )
 
 // KeySigner implements measure.RSAKey interface.

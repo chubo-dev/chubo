@@ -9,9 +9,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/siderolabs/talos/pkg/chunker"
-	"github.com/siderolabs/talos/pkg/chunker/stream"
-	"github.com/siderolabs/talos/pkg/follow"
+	"github.com/chubo-dev/chubo/pkg/chunker"
+	"github.com/chubo-dev/chubo/pkg/chunker/stream"
+	"github.com/chubo-dev/chubo/pkg/follow"
 )
 
 // Options is the functional options struct.

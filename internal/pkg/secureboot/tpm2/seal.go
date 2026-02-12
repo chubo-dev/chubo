@@ -10,8 +10,8 @@ import (
 
 	"github.com/google/go-tpm/tpm2"
 
-	"github.com/siderolabs/talos/internal/pkg/tpm"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/internal/pkg/tpm"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Seal seals the key using TPM2.0.

@@ -24,8 +24,8 @@ import (
 	"go.uber.org/goleak"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/siderolabs/talos/internal/pkg/dns"
-	"github.com/siderolabs/talos/pkg/machinery/resources/cluster"
+	"github.com/chubo-dev/chubo/internal/pkg/dns"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 func TestDNS(t *testing.T) {

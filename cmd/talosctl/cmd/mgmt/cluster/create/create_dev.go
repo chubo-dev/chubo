@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	clustercmd "github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
-	"github.com/siderolabs/talos/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker"
-	clientconfig "github.com/siderolabs/talos/pkg/machinery/client/config"
-	"github.com/siderolabs/talos/pkg/provision/providers"
+	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker"
+	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
+	"github.com/chubo-dev/chubo/pkg/provision/providers"
 )
 
 //nolint:gocyclo,cyclop

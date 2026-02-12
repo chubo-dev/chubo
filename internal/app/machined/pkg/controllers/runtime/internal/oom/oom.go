@@ -16,11 +16,11 @@ import (
 	"github.com/google/cel-go/common/types"
 	"go.uber.org/zap"
 
-	"github.com/siderolabs/talos/internal/pkg/cgroups"
-	"github.com/siderolabs/talos/pkg/machinery/cel"
-	"github.com/siderolabs/talos/pkg/machinery/cel/celenv"
-	"github.com/siderolabs/talos/pkg/machinery/constants"
-	"github.com/siderolabs/talos/pkg/machinery/resources/runtime"
+	"github.com/chubo-dev/chubo/internal/pkg/cgroups"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel"
+	"github.com/chubo-dev/chubo/pkg/machinery/cel/celenv"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
 // RankedCgroup contains information about a cgroup used for OOM handling.

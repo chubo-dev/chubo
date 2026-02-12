@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/siderolabs/talos/pkg/machinery/constants"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // Variable represents a variable substitution in the download URL.

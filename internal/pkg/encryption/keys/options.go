@@ -4,7 +4,7 @@
 
 package keys
 
-import "github.com/siderolabs/talos/internal/pkg/encryption/helpers"
+import "github.com/chubo-dev/chubo/internal/pkg/encryption/helpers"
 
 // KeyOption represents key option callback used in KeyHandler.GetKey func.
 type KeyOption func(o *KeyOptions) error

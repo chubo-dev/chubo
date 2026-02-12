@@ -11,7 +11,7 @@ import (
 	"io/fs"
 	"os"
 
-	"github.com/siderolabs/talos/pkg/provision"
+	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
 //nolint:gocyclo

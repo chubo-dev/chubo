@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/siderolabs/talos/pkg/download"
+	"github.com/chubo-dev/chubo/pkg/download"
 )
 
 const (

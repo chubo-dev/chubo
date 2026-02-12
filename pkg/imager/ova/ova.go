@@ -17,8 +17,8 @@ import (
 
 	"github.com/siderolabs/go-cmd/pkg/cmd"
 
-	"github.com/siderolabs/talos/pkg/imager/utils"
-	"github.com/siderolabs/talos/pkg/imager/vmdkconvert"
+	"github.com/chubo-dev/chubo/pkg/imager/utils"
+	"github.com/chubo-dev/chubo/pkg/imager/vmdkconvert"
 )
 
 const mfTpl = `SHA256({{ .VMDK }})= {{ .VMDKSHA }}
