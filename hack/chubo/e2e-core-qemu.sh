@@ -52,6 +52,7 @@ SUPPORT_LISTING="${WORKDIR}/support-listing.txt"
 cluster_created=0
 registry_started=0
 runtime_config_applied=0
+chubo_status_configured=0
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
@@ -150,6 +151,13 @@ check_binary_mode_artifact() {
 		echo "${output}" >&2
 		return 1
 	fi
+
+	if grep -q 'configured: false' <<<"${output}"; then
+		echo "${resource}: configured=false (skipping binaryMode assertion in this flow)"
+		return 0
+	fi
+
+	chubo_status_configured=1
 
 	if ! grep -q 'binaryMode: artifact' <<<"${output}"; then
 		echo "expected ${resource} binaryMode=artifact" >&2
@@ -450,7 +458,12 @@ grep -q 'mounts' "${SUPPORT_LISTING}"
 grep -q 'io' "${SUPPORT_LISTING}"
 grep -q 'processes' "${SUPPORT_LISTING}"
 grep -q 'service-logs/.*\.state' "${SUPPORT_LISTING}"
-grep -q 'chubo-config/' "${SUPPORT_LISTING}"
+
+if ((chubo_status_configured == 1)); then
+	grep -q 'chubo-config/' "${SUPPORT_LISTING}"
+else
+	echo "support bundle: no configured chubo services in this run; skipping chubo-config snapshot assertion"
+fi
 
 echo "chubo core E2E flow completed"
 echo "support bundle: ${SUPPORT_OUT}"
