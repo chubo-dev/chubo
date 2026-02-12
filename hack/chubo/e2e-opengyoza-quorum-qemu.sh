@@ -594,6 +594,12 @@ mkdir -p "${DOCKER_CONFIG}"
 cat >"${DOCKER_CONFIG}/config.json" <<'EOF'
 {"auths":{}}
 EOF
+mkdir -p "${DOCKER_CONFIG}/cli-plugins"
+# Talos build targets use `docker buildx build`. If buildx is only installed via Docker Desktop,
+# make it available under the isolated DOCKER_CONFIG.
+if [[ -x /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx ]]; then
+	ln -sf /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx "${DOCKER_CONFIG}/cli-plugins/docker-buildx"
+fi
 
 pick_control_plane_port
 pick_registry_port
