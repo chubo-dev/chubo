@@ -16,6 +16,7 @@ GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
 GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}"
 ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
+WITH_HELPERS="${WITH_HELPERS:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
@@ -50,6 +51,8 @@ ACTION_REBOOT_WAIT_SECONDS="${ACTION_REBOOT_WAIT_SECONDS:-600}"
 SUPPORT_OUT="${SUPPORT_OUT:-${WORKDIR}/support.zip}"
 CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-${WORKDIR}/cluster-logs.tar.gz}"
 CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-${WORKDIR}/cluster-support.zip}"
+HELPERS_DIR="${HELPERS_DIR:-${WORKDIR}/helpers}"
+HELPERS_VALIDATION_OUT="${HELPERS_VALIDATION_OUT:-${WORKDIR}/helpers-validation.txt}"
 
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
@@ -68,13 +71,16 @@ while [[ $# -gt 0 ]]; do
 	--skip-build)
 		SKIP_BUILD=1
 		;;
+	--with-helpers)
+		WITH_HELPERS=1
+		;;
 	-h | --help)
-		echo "usage: $0 [--skip-build]"
+		echo "usage: $0 [--skip-build] [--with-helpers]"
 		exit 0
 		;;
 	*)
 		echo "unknown argument: $1" >&2
-		echo "usage: $0 [--skip-build]" >&2
+		echo "usage: $0 [--skip-build] [--with-helpers]" >&2
 		exit 2
 		;;
 	esac
@@ -92,28 +98,6 @@ require_cmd() {
 	fi
 }
 
-pick_registry_port() {
-	local candidate="${REGISTRY_PORT}"
-	local attempts=0
-
-	while lsof -nP -iTCP:"${candidate}" -sTCP:LISTEN >/dev/null 2>&1; do
-		attempts=$((attempts + 1))
-		if ((attempts > 20)); then
-			echo "failed to find a free registry port (starting at ${REGISTRY_PORT})" >&2
-			return 1
-		fi
-
-		candidate=$((5400 + RANDOM % 500))
-	done
-
-	if [[ "${candidate}" != "${REGISTRY_PORT}" ]]; then
-		echo "registry port ${REGISTRY_PORT} is busy, switching to ${candidate}"
-	fi
-
-	REGISTRY_PORT="${candidate}"
-	return 0
-}
-
 refresh_registry_refs() {
 	: "${REGISTRY_LOCAL_ADDR:=localhost:${REGISTRY_PORT}}"
 	: "${REGISTRY_NODE_ADDR:=10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.1:${REGISTRY_PORT}}"
@@ -121,6 +105,29 @@ refresh_registry_refs() {
 	: "${INSTALLER_IMAGE_LOCAL:=${REGISTRY_LOCAL_ADDR}/chubo/installer:dev}"
 	: "${INSTALLER_IMAGE_NODE:=${REGISTRY_NODE_ADDR}/chubo/installer:dev}"
 	: "${REGISTRY_MIRROR_NODE:=${REGISTRY_NODE_ADDR}=http://${REGISTRY_NODE_ADDR}}"
+}
+
+start_registry() {
+	local attempt=1
+
+	while true; do
+		echo "starting local OCI registry on :${REGISTRY_PORT} (attempt ${attempt}/20)"
+		docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1 || true
+
+		if docker run -d --rm --name "${REGISTRY_NAME}" -p "${REGISTRY_PORT}:5000" registry:2 >/dev/null 2>&1; then
+			registry_started=1
+			refresh_registry_refs
+			return 0
+		fi
+
+		if ((attempt >= 20)); then
+			echo "failed to start local registry after ${attempt} attempts" >&2
+			return 1
+		fi
+
+		REGISTRY_PORT=$((5400 + RANDOM % 500))
+		attempt=$((attempt + 1))
+	done
 }
 
 wait_until() {
@@ -263,6 +270,56 @@ check_binary_mode_artifact() {
 	echo "${resource}: binaryMode=artifact"
 }
 
+download_helper_bundles() {
+	local bundle
+
+	echo "downloading helper bundles"
+	rm -rf "${HELPERS_DIR}"
+	mkdir -p "${HELPERS_DIR}"
+
+	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${TALOSCTL}" openbaoconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+
+	for bundle in nomadconfig consulconfig openbaoconfig; do
+		local dir="${HELPERS_DIR}/${bundle}"
+		test -d "${dir}"
+
+		case "${bundle}" in
+		nomadconfig)
+			test -f "${dir}/nomad.env"
+			test -f "${dir}/nomad.hcl"
+			;;
+		consulconfig)
+			test -f "${dir}/consul.env"
+			test -f "${dir}/consul.hcl"
+			;;
+		openbaoconfig)
+			test -f "${dir}/openbao.env"
+			test -f "${dir}/openbao.hcl"
+			;;
+		esac
+
+		test -f "${dir}/ca.pem"
+		test -f "${dir}/client.pem"
+		test -f "${dir}/client-key.pem"
+		test -f "${dir}/acl.token"
+		test -f "${dir}/README"
+	done
+
+	{
+		echo "helpers_dir=${HELPERS_DIR}"
+		echo "nomad_addr=$(awk -F= '/^NOMAD_ADDR=/{print $2}' "${HELPERS_DIR}/nomadconfig/nomad.env")"
+		echo "consul_addr=$(awk -F= '/^CONSUL_HTTP_ADDR=/{print $2}' "${HELPERS_DIR}/consulconfig/consul.env")"
+		echo "openbao_addr=$(awk -F= '/^VAULT_ADDR=/{print $2}' "${HELPERS_DIR}/openbaoconfig/openbao.env")"
+		echo "nomad_token_len=$(tr -d '\n' < "${HELPERS_DIR}/nomadconfig/acl.token" | wc -c | tr -d ' ')"
+		echo "consul_token_len=$(tr -d '\n' < "${HELPERS_DIR}/consulconfig/acl.token" | wc -c | tr -d ' ')"
+		echo "openbao_token_len=$(tr -d '\n' < "${HELPERS_DIR}/openbaoconfig/acl.token" | wc -c | tr -d ' ')"
+	} >"${HELPERS_VALIDATION_OUT}"
+
+	cat "${HELPERS_VALIDATION_OUT}"
+}
+
 read_boot_id() {
 	local boot_id
 
@@ -329,7 +386,6 @@ require_cmd docker
 require_cmd go
 require_cmd make
 require_cmd unzip
-require_cmd lsof
 
 if [[ ! -x "${TALOSCTL}" ]]; then
 	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
@@ -376,13 +432,7 @@ fi
 docker load -i "${ARTIFACTS}/installer-base.tar" >/dev/null
 docker load -i "${ARTIFACTS}/imager.tar" >/dev/null
 
-pick_registry_port
-refresh_registry_refs
-
-echo "starting local OCI registry on :${REGISTRY_PORT}"
-docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1 || true
-docker run -d --rm --name "${REGISTRY_NAME}" -p "${REGISTRY_PORT}:5000" registry:2 >/dev/null
-registry_started=1
+start_registry
 
 echo "pushing installer-base image to local registry (${INSTALLER_BASE_IMAGE_LOCAL})"
 "${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-base.tar" "${INSTALLER_BASE_IMAGE_LOCAL}" >/dev/null
@@ -500,6 +550,10 @@ echo "validating runtime mTLS and runtime surface"
 	--node "${NODE_IP}"
 check_binary_mode_artifact "openwontonstatus"
 check_binary_mode_artifact "opengyozastatus"
+
+if [[ "${WITH_HELPERS}" == "1" ]]; then
+	download_helper_bundles
+fi
 
 echo "running upgrade flow"
 pre_upgrade_boot_id="$(read_boot_id || true)"

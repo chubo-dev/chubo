@@ -586,6 +586,14 @@ chubo-e2e-qemu: ## Runs chubo core E2E in QEMU (install, runtime mTLS, upgrade, 
 chuboos-e2e-qemu: ## Legacy alias for chubo-e2e-qemu (Wave B compatibility).
 	@$(MAKE) chubo-e2e-qemu
 
+.PHONY: chubo-e2e-full-qemu
+chubo-e2e-full-qemu: ## Runs full chubo QEMU E2E (core flow + helper bundles).
+	@WITH_HELPERS=1 ./hack/chubo/e2e-core-qemu.sh
+
+.PHONY: chuboos-e2e-full-qemu
+chuboos-e2e-full-qemu: ## Legacy alias for chubo-e2e-full-qemu (Wave B compatibility).
+	@$(MAKE) chubo-e2e-full-qemu
+
 .PHONY: chubo-e2e-docker
 chubo-e2e-docker: ## Runs chubo non-root local fallback E2E in Docker provisioner (runtime + support bundle).
 	@./hack/chubo/e2e-core-docker.sh
