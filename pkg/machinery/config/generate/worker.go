@@ -94,10 +94,17 @@ func (in *Input) worker() ([]config.Document, error) {
 		return nil, err
 	}
 
+	var workerClusterCA *x509.PEMEncodedCertificateAndKey
+
+	if in.Options.SecretsBundle.Certs.K8s != nil {
+		// Workers should only carry the Kubernetes CA cert, not the CA private key.
+		workerClusterCA = &x509.PEMEncodedCertificateAndKey{Crt: in.Options.SecretsBundle.Certs.K8s.Crt}
+	}
+
 	cluster := &v1alpha1.ClusterConfig{
 		ClusterID:      in.Options.SecretsBundle.Cluster.ID,
 		ClusterSecret:  in.Options.SecretsBundle.Cluster.Secret,
-		ClusterCA:      &x509.PEMEncodedCertificateAndKey{Crt: in.Options.SecretsBundle.Certs.K8s.Crt},
+		ClusterCA:      workerClusterCA,
 		BootstrapToken: in.Options.SecretsBundle.Secrets.BootstrapToken,
 		ControlPlane: &v1alpha1.ControlPlaneConfig{
 			Endpoint: &v1alpha1.Endpoint{URL: controlPlaneURL},

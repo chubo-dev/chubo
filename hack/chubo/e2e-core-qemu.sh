@@ -13,6 +13,7 @@ cd "${TALOS_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
+GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}"
 ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
@@ -38,6 +39,7 @@ REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-${REGISTRY_NODE_ADDR}=http://${REG
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1200}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
+MAINTENANCE_FALLBACK_SECONDS="${MAINTENANCE_FALLBACK_SECONDS:-180}"
 ACTION_REBOOT_WAIT_SECONDS="${ACTION_REBOOT_WAIT_SECONDS:-600}"
 SUPPORT_OUT="${SUPPORT_OUT:-/tmp/chubo-support-e2e.zip}"
 CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-/tmp/logs-chubo-e2e.tar.gz}"
@@ -236,7 +238,10 @@ require_cmd make
 require_cmd unzip
 
 if [[ ! -x "${TALOSCTL}" ]]; then
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
+	echo "existing talosctl binary is not chubo-tagged; rebuilding"
+	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 fi
 
 if ! command -v crane >/dev/null 2>&1; then
@@ -355,6 +360,7 @@ echo "waiting for post-install transition"
 transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
 saw_maintenance_down=0
 maintenance_reentered_at=0
+maintenance_up_since=0
 
 while true; do
 	if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
@@ -363,6 +369,10 @@ while true; do
 	fi
 
 	if "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+		if ((maintenance_up_since == 0)); then
+			maintenance_up_since="${SECONDS}"
+		fi
+
 		if ((saw_maintenance_down == 1)); then
 			if ((maintenance_reentered_at == 0)); then
 				maintenance_reentered_at="${SECONDS}"
@@ -374,10 +384,16 @@ while true; do
 				runtime_config_applied=1
 				break
 			fi
+		elif ((runtime_config_applied == 0)) && ((SECONDS - maintenance_up_since >= MAINTENANCE_FALLBACK_SECONDS)); then
+			echo "maintenance API stayed up for ${MAINTENANCE_FALLBACK_SECONDS}s after install apply; forcing runtime config and reboot"
+			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+			runtime_config_applied=1
+			break
 		fi
 	else
 		saw_maintenance_down=1
 		maintenance_reentered_at=0
+		maintenance_up_since=0
 	fi
 
 	if ((SECONDS >= transition_deadline)); then
