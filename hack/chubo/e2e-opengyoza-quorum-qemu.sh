@@ -5,8 +5,8 @@ set -euo pipefail
 # install -> runtime mTLS -> unsafe quorum check (2 peers blocks graceful upgrade)
 # -> safe quorum check (3 peers allows graceful upgrade/reboot)
 #
-# This script uses a one-shot local debug container on the node (`system`
-# namespace) to mock opengyoza `/v1/status/peers` responses.
+# This script overrides the peers list via a META tag to make the quorum
+# scenarios deterministic (no reliance on network namespaces or debug containers).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
@@ -53,14 +53,12 @@ MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
 MACHINECONFIG_RUNTIME="${WORKDIR}/machineconfig-runtime.yaml"
 TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
 ROLE_PATCH_FILE="${WORKDIR}/opengyoza-role-patch.yaml"
-UNSAFE_MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock-unsafe.tar"
-SAFE_MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock-safe.tar"
 UNSAFE_UPGRADE_OUT="${WORKDIR}/unsafe-upgrade.out"
 UNSAFE_MACHINED_LOG="${WORKDIR}/unsafe-machined.log"
-SAFE_MOCK_LOG="${WORKDIR}/safe-mock.log"
-UNSAFE_MOCK_LOG="${WORKDIR}/unsafe-mock.log"
 CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
-LAST_MOCK_PID=""
+
+# Keep in sync with meta.ChuboOpenGyozaPeersOverride (talos/pkg/machinery/meta/constants.go).
+OPENGYOZA_PEERS_OVERRIDE_META_KEY="${OPENGYOZA_PEERS_OVERRIDE_META_KEY:-18}"
 
 cluster_created=0
 registry_started=0
@@ -239,32 +237,6 @@ dump_machined_logs() {
 	fi
 }
 
-wait_for_process_exit() {
-	local pid="$1"
-	local timeout_seconds="$2"
-	local description="$3"
-	local deadline=$((SECONDS + timeout_seconds))
-
-	while kill -0 "${pid}" >/dev/null 2>&1; do
-		if ((SECONDS >= deadline)); then
-			echo "timed out waiting for process ${pid}: ${description}" >&2
-			return 1
-		fi
-
-		sleep 1
-	done
-
-	local rc=0
-	wait "${pid}" || rc=$?
-	if ((rc != 0)); then
-		# Debug containers can terminate with transport errors during node shutdown/reboot.
-		# Treat any exit as completion; scenario assertions happen via upgrade output checks.
-		echo "process ${pid} exited with status ${rc}: ${description}" >&2
-	fi
-
-	return 0
-}
-
 pick_control_plane_port() {
 	local candidate="${CONTROL_PLANE_PORT}"
 	local attempts=0
@@ -370,115 +342,6 @@ create_cluster_with_retry() {
 
 		return 1
 	done
-}
-
-start_peers_mock() {
-	local mock_image_tar="$1"
-	local log_file="$2"
-
-	"${TALOSCTL}" debug "${mock_image_tar}" \
-		--namespace system \
-		--talosconfig "${TALOSCONFIG_FILE}" \
-		-e "${NODE_IP}" -n "${NODE_IP}" >"${log_file}" 2>&1 &
-	local pid=$!
-	local deadline=$((SECONDS + 60))
-
-	while true; do
-		if grep -q "ready" "${log_file}" 2>/dev/null; then
-			LAST_MOCK_PID="${pid}"
-			return 0
-		fi
-
-		if ! kill -0 "${pid}" >/dev/null 2>&1; then
-			echo "mock process exited before becoming ready: ${log_file}" >&2
-			cat "${log_file}" >&2
-			return 1
-		fi
-
-		if ((SECONDS >= deadline)); then
-			echo "timed out waiting for mock process readiness: ${log_file}" >&2
-			cat "${log_file}" >&2
-			kill "${pid}" >/dev/null 2>&1 || true
-			return 1
-		fi
-
-		sleep 1
-	done
-}
-
-build_mock_image_tar() {
-	local image_ref="$1"
-	local peers_json="$2"
-	local output_tar="$3"
-	local mock_dir="${WORKDIR}/$(basename "${output_tar}" .tar)"
-
-	rm -rf "${mock_dir}"
-	mkdir -p "${mock_dir}"
-
-cat >"${mock_dir}/main.go" <<'EOF'
-package main
-
-import (
-	"log"
-	"net"
-	"net/http"
-	"os"
-	"strings"
-)
-
-func main() {
-	peersBytes, err := os.ReadFile("/peers.json")
-	if err != nil {
-		log.Fatalf("read peers failed: %v", err)
-	}
-
-	peers := strings.TrimSpace(string(peersBytes))
-	if peers == "" {
-		peers = `[]`
-	}
-
-	var srv *http.Server
-
-	mux := http.NewServeMux()
-	mux.HandleFunc("/v1/status/peers", func(w http.ResponseWriter, _ *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(peers))
-		log.Printf("served /v1/status/peers, shutting down")
-		go func() {
-			_ = srv.Close()
-		}()
-	})
-
-	srv = &http.Server{Handler: mux}
-	ln, err := net.Listen("tcp", "127.0.0.1:8500")
-	if err != nil {
-		log.Fatalf("listen failed: %v", err)
-	}
-	log.Printf("ready")
-	if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
-		log.Fatalf("listen failed: %v", err)
-	}
-}
-EOF
-
-	cat >"${mock_dir}/peers.json" <<EOF
-${peers_json}
-EOF
-
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "${mock_dir}/opengyoza-peers-mock" "${mock_dir}/main.go"
-
-	cat >"${mock_dir}/Dockerfile" <<'EOF'
-FROM scratch
-COPY peers.json /peers.json
-COPY opengyoza-peers-mock /opengyoza-peers-mock
-ENTRYPOINT ["/opengyoza-peers-mock"]
-EOF
-
-	if ! docker build --platform linux/amd64 --provenance=false -t "${image_ref}" "${mock_dir}" >/dev/null; then
-		# Fallback for older Docker engines without provenance flag support.
-		docker build --platform linux/amd64 -t "${image_ref}" "${mock_dir}" >/dev/null
-	fi
-	docker save "${image_ref}" -o "${output_tar}"
 }
 
 cleanup() {
@@ -770,14 +633,12 @@ if [[ "${role}" != "server" ]]; then
 	exit 1
 fi
 
-echo "building one-shot opengyoza peers mock images"
-build_mock_image_tar "chubo/opengyoza-peers-mock-unsafe:dev" '["peer-a","peer-b"]' "${UNSAFE_MOCK_IMAGE_TAR}"
-build_mock_image_tar "chubo/opengyoza-peers-mock-safe:dev" '["peer-a","peer-b","peer-c"]' "${SAFE_MOCK_IMAGE_TAR}"
-
 echo "running unsafe quorum scenario (2 peers): graceful upgrade must be blocked"
 pre_unsafe_boot_id="$(read_boot_id || true)"
-start_peers_mock "${UNSAFE_MOCK_IMAGE_TAR}" "${UNSAFE_MOCK_LOG}"
-unsafe_mock_pid="${LAST_MOCK_PID}"
+echo "writing opengyoza peers override (unsafe) to META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
+"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b"]' \
+	--talosconfig "${TALOSCONFIG_FILE}" \
+	-e "${NODE_IP}" -n "${NODE_IP}"
 
 set +e
 "${TALOSCTL}" upgrade \
@@ -788,8 +649,6 @@ set +e
 	--timeout 5m >"${UNSAFE_UPGRADE_OUT}" 2>&1
 unsafe_upgrade_rc=$?
 set -e
-
-wait_for_process_exit "${unsafe_mock_pid}" 30 "unsafe quorum mock request"
 
 if ((unsafe_upgrade_rc == 0)); then
 	echo "expected unsafe quorum upgrade to fail, but it succeeded" >&2
@@ -821,8 +680,10 @@ if [[ -z "${pre_safe_boot_id}" ]]; then
 	exit 1
 fi
 
-start_peers_mock "${SAFE_MOCK_IMAGE_TAR}" "${SAFE_MOCK_LOG}"
-safe_mock_pid="${LAST_MOCK_PID}"
+echo "writing opengyoza peers override (safe) to META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
+"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b","peer-c"]' \
+	--talosconfig "${TALOSCONFIG_FILE}" \
+	-e "${NODE_IP}" -n "${NODE_IP}"
 
 "${TALOSCTL}" upgrade \
 	--talosconfig "${TALOSCONFIG_FILE}" \
@@ -830,8 +691,12 @@ safe_mock_pid="${LAST_MOCK_PID}"
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait=false
 
-wait_for_process_exit "${safe_mock_pid}" 30 "safe quorum mock request"
 wait_for_boot_id_change "${pre_safe_boot_id}" "safe quorum upgrade"
 wait_for_runtime_stable
+
+echo "clearing opengyoza peers override META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
+"${TALOSCTL}" meta delete "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" \
+	--talosconfig "${TALOSCONFIG_FILE}" \
+	-e "${NODE_IP}" -n "${NODE_IP}" || true
 
 echo "opengyoza quorum gate E2E passed"
