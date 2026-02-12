@@ -22,12 +22,15 @@ import (
 // Keep the Talos sequencer API shape, but make these tasks no-ops.
 
 const (
+	openWontonHTTPAddress        = "http://127.0.0.1:4646"
+	openWontonRolePath           = "/var/lib/chubo/config/openwonton.role"
+	openWontonDrainDeadline      = 10 * time.Minute
 	openWontonDefaultHTTPTimeout = 5 * time.Second
 )
 
 func CordonAndDrainNode(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
-		role, configured, err := openwontondrain.ReadRole(openwontondrain.RolePath)
+		role, configured, err := openwontondrain.ReadRole(openWontonRolePath)
 		if err != nil {
 			logger.Printf("skipping openwonton drain: failed to read role: %v", err)
 
@@ -40,7 +43,7 @@ func CordonAndDrainNode(runtime.Sequence, any) (runtime.TaskExecutionFunc, strin
 			return nil
 		}
 
-		if role != openwontondrain.RoleClient {
+		if !openwontondrain.IsClientRole(role) {
 			logger.Printf("skipping openwonton drain: role=%q", role)
 
 			return nil
@@ -53,7 +56,7 @@ func CordonAndDrainNode(runtime.Sequence, any) (runtime.TaskExecutionFunc, strin
 
 		client := &http.Client{Timeout: openWontonDefaultHTTPTimeout}
 
-		if err := openwontondrain.DrainNode(ctx, client, openwontondrain.HTTPAddress, nodeName, openwontondrain.DefaultDrainDeadline); err != nil {
+		if err := openwontondrain.DrainNode(ctx, client, openWontonHTTPAddress, nodeName, openWontonDrainDeadline); err != nil {
 			if ctx.Err() != nil {
 				return ctx.Err()
 			}

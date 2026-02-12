@@ -18,11 +18,8 @@ import (
 )
 
 const (
-	HTTPAddress          = "http://127.0.0.1:4646"
-	RolePath             = "/var/lib/chubo/config/openwonton.role"
-	RoleClient           = "client"
-	DefaultDrainDeadline = 10 * time.Minute
-	requestBodyLimit     = 4096
+	roleClient       = "client"
+	requestBodyLimit = 4096
 )
 
 var ErrNodeNotFound = errors.New("openwonton node not found")
@@ -43,6 +40,10 @@ func ReadRole(path string) (role string, configured bool, err error) {
 	}
 
 	return strings.TrimSpace(string(b)), true, nil
+}
+
+func IsClientRole(role string) bool {
+	return strings.TrimSpace(role) == roleClient
 }
 
 func DrainNode(ctx context.Context, client *http.Client, baseURL, nodeName string, deadline time.Duration) error {

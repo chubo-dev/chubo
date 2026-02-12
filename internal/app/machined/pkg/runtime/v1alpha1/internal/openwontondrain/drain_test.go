@@ -17,6 +17,8 @@ import (
 	"time"
 )
 
+const testDrainDeadline = 10 * time.Minute
+
 func TestReadRole(t *testing.T) {
 	t.Parallel()
 
@@ -54,8 +56,8 @@ func TestReadRole(t *testing.T) {
 			t.Fatalf("expected configured=true")
 		}
 
-		if role != RoleClient {
-			t.Fatalf("expected role %q, got %q", RoleClient, role)
+		if !IsClientRole(role) {
+			t.Fatalf("expected client role, got %q", role)
 		}
 	})
 }
@@ -99,7 +101,7 @@ func TestDrainNodeSuccess(t *testing.T) {
 				t.Fatalf("drain payload missing DrainSpec: %#v", payload)
 			}
 
-			if int64(drainSpec["Deadline"].(float64)) != DefaultDrainDeadline.Nanoseconds() {
+			if int64(drainSpec["Deadline"].(float64)) != testDrainDeadline.Nanoseconds() {
 				t.Fatalf("unexpected drain deadline: %#v", drainSpec["Deadline"])
 			}
 
@@ -118,7 +120,7 @@ func TestDrainNodeSuccess(t *testing.T) {
 
 	client := &http.Client{Timeout: time.Second}
 
-	if err := DrainNode(context.Background(), client, server.URL, "client-a", DefaultDrainDeadline); err != nil {
+	if err := DrainNode(context.Background(), client, server.URL, "client-a", testDrainDeadline); err != nil {
 		t.Fatalf("expected success, got error: %v", err)
 	}
 
@@ -148,7 +150,7 @@ func TestDrainNodeSingleNodeFallback(t *testing.T) {
 
 	client := &http.Client{Timeout: time.Second}
 
-	if err := DrainNode(context.Background(), client, server.URL, "missing-name", DefaultDrainDeadline); err != nil {
+	if err := DrainNode(context.Background(), client, server.URL, "missing-name", testDrainDeadline); err != nil {
 		t.Fatalf("expected success, got error: %v", err)
 	}
 }
@@ -172,7 +174,7 @@ func TestDrainNodeNoMatch(t *testing.T) {
 
 	client := &http.Client{Timeout: time.Second}
 
-	err := DrainNode(context.Background(), client, server.URL, "missing", DefaultDrainDeadline)
+	err := DrainNode(context.Background(), client, server.URL, "missing", testDrainDeadline)
 	if err == nil {
 		t.Fatalf("expected error")
 	}
