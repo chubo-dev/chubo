@@ -183,8 +183,8 @@ const file_resource_definitions_proto_proto_proto_rawDesc = "" +
 	"\x06source\x18\x03 \x01(\tR\x06source\x12\x18\n" +
 	"\aoptions\x18\x04 \x03(\tR\aoptions\x12S\n" +
 	"\fuid_mappings\x18\x05 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vuidMappings\x12S\n" +
-	"\fgid_mappings\x18\x06 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vgidMappingsBt\n" +
-	"(dev.talos.api.resource.definitions.protoZHgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/protob\x06proto3"
+	"\fgid_mappings\x18\x06 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vgidMappingsBs\n" +
+	"(dev.chubo.api.resource.definitions.protoZGgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/protob\x06proto3"
 
 var (
 	file_resource_definitions_proto_proto_proto_rawDescOnce sync.Once

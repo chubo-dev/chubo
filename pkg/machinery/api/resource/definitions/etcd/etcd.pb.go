@@ -14,7 +14,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -372,8 +372,8 @@ const file_resource_definitions_etcd_etcd_proto_rawDesc = "" +
 	"\x17listen_client_addresses\x18\x06 \x03(\v2\r.common.NetIPR\x15listenClientAddresses\x1ah\n" +
 	"\x0eExtraArgsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12@\n" +
-	"\x05value\x18\x02 \x01(\v2*.talos.resource.definitions.etcd.ArgValuesR\x05value:\x028\x01Br\n" +
-	"'dev.talos.api.resource.definitions.etcdZGgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/etcdb\x06proto3"
+	"\x05value\x18\x02 \x01(\v2*.talos.resource.definitions.etcd.ArgValuesR\x05value:\x028\x01Bq\n" +
+	"'dev.chubo.api.resource.definitions.etcdZFgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/etcdb\x06proto3"
 
 var (
 	file_resource_definitions_etcd_etcd_proto_rawDescOnce sync.Once

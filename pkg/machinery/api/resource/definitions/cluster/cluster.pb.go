@@ -14,8 +14,8 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
-	enums "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	enums "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
 )
 
 const (
@@ -563,8 +563,8 @@ const file_resource_definitions_cluster_cluster_proto_rawDesc = "" +
 	"\bhostname\x18\x03 \x01(\tR\bhostname\x12P\n" +
 	"\fmachine_type\x18\x04 \x01(\x0e2-.talos.resource.definitions.enums.MachineTypeR\vmachineType\x12)\n" +
 	"\x10operating_system\x18\x05 \x01(\tR\x0foperatingSystem\x12U\n" +
-	"\rcontrol_plane\x18\x06 \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlaneBx\n" +
-	"*dev.talos.api.resource.definitions.clusterZJgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/clusterb\x06proto3"
+	"\rcontrol_plane\x18\x06 \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlaneBw\n" +
+	"*dev.chubo.api.resource.definitions.clusterZIgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/clusterb\x06proto3"
 
 var (
 	file_resource_definitions_cluster_cluster_proto_rawDescOnce sync.Once

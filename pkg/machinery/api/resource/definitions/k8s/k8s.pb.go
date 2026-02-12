@@ -15,8 +15,8 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
-	proto "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/proto"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	proto "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/proto"
 )
 
 const (
@@ -2576,8 +2576,8 @@ const file_resource_definitions_k8s_k8s_proto_rawDesc = "" +
 	"\x03pod\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x03pod\"M\n" +
 	"\x13StaticPodStatusSpec\x126\n" +
 	"\n" +
-	"pod_status\x18\x01 \x01(\v2\x17.google.protobuf.StructR\tpodStatusBp\n" +
-	"&dev.talos.api.resource.definitions.k8sZFgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/k8sb\x06proto3"
+	"pod_status\x18\x01 \x01(\v2\x17.google.protobuf.StructR\tpodStatusBo\n" +
+	"&dev.chubo.api.resource.definitions.k8sZEgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/k8sb\x06proto3"
 
 var (
 	file_resource_definitions_k8s_k8s_proto_rawDescOnce sync.Once

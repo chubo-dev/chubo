@@ -14,7 +14,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -955,8 +955,8 @@ const file_resource_definitions_secrets_secrets_proto_rawDesc = "" +
 	"\raccepted_c_as\x18\x05 \x03(\v2\x1d.common.PEMEncodedCertificateR\vacceptedCAs\"\x91\x01\n" +
 	"\x0fTrustdCertsSpec\x12;\n" +
 	"\x06server\x18\x02 \x01(\v2#.common.PEMEncodedCertificateAndKeyR\x06server\x12A\n" +
-	"\raccepted_c_as\x18\x03 \x03(\v2\x1d.common.PEMEncodedCertificateR\vacceptedCAsBx\n" +
-	"*dev.talos.api.resource.definitions.secretsZJgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/secretsb\x06proto3"
+	"\raccepted_c_as\x18\x03 \x03(\v2\x1d.common.PEMEncodedCertificateR\vacceptedCAsBw\n" +
+	"*dev.chubo.api.resource.definitions.secretsZIgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/secretsb\x06proto3"
 
 var (
 	file_resource_definitions_secrets_secrets_proto_rawDescOnce sync.Once

@@ -15,8 +15,8 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
-	enums "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	enums "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
 )
 
 const (
@@ -477,8 +477,8 @@ const file_resource_definitions_cri_cri_proto_rawDesc = "" +
 	"\x18tls_insecure_skip_verify\x18\x03 \x01(\bR\x15tlsInsecureSkipVerify\"W\n" +
 	"\x12SeccompProfileSpec\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12-\n" +
-	"\x05value\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x05valueBp\n" +
-	"&dev.talos.api.resource.definitions.criZFgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/crib\x06proto3"
+	"\x05value\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x05valueBo\n" +
+	"&dev.chubo.api.resource.definitions.criZEgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/crib\x06proto3"
 
 var (
 	file_resource_definitions_cri_cri_proto_rawDescOnce sync.Once

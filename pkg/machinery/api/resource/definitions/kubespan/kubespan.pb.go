@@ -15,8 +15,8 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
-	enums "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	enums "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
 )
 
 const (
@@ -471,8 +471,8 @@ const file_resource_definitions_kubespan_kubespan_proto_rawDesc = "" +
 	"\x0etransmit_bytes\x18\x05 \x01(\x03R\rtransmitBytes\x12J\n" +
 	"\x13last_handshake_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x11lastHandshakeTime\x12?\n" +
 	"\x12last_used_endpoint\x18\a \x01(\v2\x11.common.NetIPPortR\x10lastUsedEndpoint\x12L\n" +
-	"\x14last_endpoint_change\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x12lastEndpointChangeBz\n" +
-	"+dev.talos.api.resource.definitions.kubespanZKgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/kubespanb\x06proto3"
+	"\x14last_endpoint_change\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\x12lastEndpointChangeBy\n" +
+	"+dev.chubo.api.resource.definitions.kubespanZJgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/kubespanb\x06proto3"
 
 var (
 	file_resource_definitions_kubespan_kubespan_proto_rawDescOnce sync.Once

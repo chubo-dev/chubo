@@ -92,8 +92,8 @@ const file_resource_definitions_kubeaccess_kubeaccess_proto_rawDesc = "" +
 	"ConfigSpec\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\x12*\n" +
 	"\x11allowed_api_roles\x18\x02 \x03(\tR\x0fallowedApiRoles\x12B\n" +
-	"\x1dallowed_kubernetes_namespaces\x18\x03 \x03(\tR\x1ballowedKubernetesNamespacesB~\n" +
-	"-dev.talos.api.resource.definitions.kubeaccessZMgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/kubeaccessb\x06proto3"
+	"\x1dallowed_kubernetes_namespaces\x18\x03 \x03(\tR\x1ballowedKubernetesNamespacesB}\n" +
+	"-dev.chubo.api.resource.definitions.kubeaccessZLgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/kubeaccessb\x06proto3"
 
 var (
 	file_resource_definitions_kubeaccess_kubeaccess_proto_rawDescOnce sync.Once

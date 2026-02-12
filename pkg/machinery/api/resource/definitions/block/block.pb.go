@@ -15,7 +15,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	enums "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
+	enums "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
 )
 
 const (
@@ -2698,8 +2698,8 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\x14reject_compress_fail\x18\b \x01(\x04R\x12rejectCompressFail\x120\n" +
 	"\x14reject_compress_poor\x18\t \x01(\x04R\x12rejectCompressPoor\x12,\n" +
 	"\x12written_back_pages\x18\n" +
-	" \x01(\x04R\x10writtenBackPagesBt\n" +
-	"(dev.talos.api.resource.definitions.blockZHgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/blockb\x06proto3"
+	" \x01(\x04R\x10writtenBackPagesBs\n" +
+	"(dev.chubo.api.resource.definitions.blockZGgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/blockb\x06proto3"
 
 var (
 	file_resource_definitions_block_block_proto_rawDescOnce sync.Once

@@ -134,8 +134,8 @@ const file_security_security_proto_rawDesc = "" +
 	"\x02ca\x18\x01 \x01(\fR\x02ca\x12\x10\n" +
 	"\x03crt\x18\x02 \x01(\fR\x03crt2c\n" +
 	"\x0fSecurityService\x12P\n" +
-	"\vCertificate\x12\x1f.securityapi.CertificateRequest\x1a .securityapi.CertificateResponseBP\n" +
-	"\x16dev.talos.api.securityZ6github.com/siderolabs/talos/pkg/machinery/api/securityb\x06proto3"
+	"\vCertificate\x12\x1f.securityapi.CertificateRequest\x1a .securityapi.CertificateResponseBO\n" +
+	"\x16dev.chubo.api.securityZ5github.com/chubo-dev/chubo/pkg/machinery/api/securityb\x06proto3"
 
 var (
 	file_security_security_proto_rawDescOnce sync.Once

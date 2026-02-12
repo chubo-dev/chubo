@@ -182,8 +182,8 @@ const file_resource_config_config_proto_rawDesc = "" +
 	"\x04INIT\x10\x01\x12\x11\n" +
 	"\rCONTROL_PLANE\x10\x02\x12\n" +
 	"\n" +
-	"\x06WORKER\x10\x03B^\n" +
-	"\x1ddev.talos.api.resource.configZ=github.com/siderolabs/talos/pkg/machinery/api/resource/configb\x06proto3"
+	"\x06WORKER\x10\x03B]\n" +
+	"\x1ddev.chubo.api.resource.configZ<github.com/chubo-dev/chubo/pkg/machinery/api/resource/configb\x06proto3"
 
 var (
 	file_resource_config_config_proto_rawDescOnce sync.Once

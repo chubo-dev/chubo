@@ -622,8 +622,8 @@ const file_resource_definitions_hardware_hardware_proto_rawDesc = "" +
 	"\fwake_up_type\x18\x06 \x01(\tR\n" +
 	"wakeUpType\x12\x1d\n" +
 	"\n" +
-	"sku_number\x18\a \x01(\tR\tskuNumberBz\n" +
-	"+dev.talos.api.resource.definitions.hardwareZKgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/hardwareb\x06proto3"
+	"sku_number\x18\a \x01(\tR\tskuNumberBy\n" +
+	"+dev.chubo.api.resource.definitions.hardwareZJgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/hardwareb\x06proto3"
 
 var (
 	file_resource_definitions_hardware_hardware_proto_rawDescOnce sync.Once

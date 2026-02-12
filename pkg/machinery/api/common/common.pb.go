@@ -1025,8 +1025,8 @@ const file_common_common_proto_rawDesc = "" +
 	"\x16remove_deprecated_enum\x12\x1c.google.protobuf.EnumOptions\x18\xbd\xd7\x05 \x01(\tR\x14removeDeprecatedEnum:d\n" +
 	"\x1cremove_deprecated_enum_value\x12!.google.protobuf.EnumValueOptions\x18\xbd\xd7\x05 \x01(\tR\x19removeDeprecatedEnumValue:Z\n" +
 	"\x18remove_deprecated_method\x12\x1e.google.protobuf.MethodOptions\x18\xbd\xd7\x05 \x01(\tR\x16removeDeprecatedMethod:]\n" +
-	"\x19remove_deprecated_service\x12\x1f.google.protobuf.ServiceOptions\x18\xbd\xd7\x05 \x01(\tR\x17removeDeprecatedServiceBL\n" +
-	"\x14dev.talos.api.commonZ4github.com/siderolabs/talos/pkg/machinery/api/commonb\x06proto3"
+	"\x19remove_deprecated_service\x12\x1f.google.protobuf.ServiceOptions\x18\xbd\xd7\x05 \x01(\tR\x17removeDeprecatedServiceBK\n" +
+	"\x14dev.chubo.api.commonZ3github.com/chubo-dev/chubo/pkg/machinery/api/commonb\x06proto3"
 
 var (
 	file_common_common_proto_rawDescOnce sync.Once

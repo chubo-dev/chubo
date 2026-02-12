@@ -4342,8 +4342,8 @@ const file_resource_definitions_enums_enums_proto_rawDesc = "" +
 	"\x0fNetworkOperator\x12\x12\n" +
 	"\x0eOPERATOR_DHCP4\x10\x00\x12\x12\n" +
 	"\x0eOPERATOR_DHCP6\x10\x01\x12\x10\n" +
-	"\fOPERATOR_VIP\x10\x02Bt\n" +
-	"(dev.talos.api.resource.definitions.enumsZHgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enumsb\x06proto3"
+	"\fOPERATOR_VIP\x10\x02Bs\n" +
+	"(dev.chubo.api.resource.definitions.enumsZGgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enumsb\x06proto3"
 
 var (
 	file_resource_definitions_enums_enums_proto_rawDescOnce sync.Once

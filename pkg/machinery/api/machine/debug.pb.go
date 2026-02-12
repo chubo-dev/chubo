@@ -14,7 +14,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -442,8 +442,8 @@ const file_machine_debug_proto_rawDesc = "" +
 	"\texit_code\x18\x03 \x01(\x05H\x00R\bexitCodeB\x06\n" +
 	"\x04resp2i\n" +
 	"\fDebugService\x12Y\n" +
-	"\fContainerRun\x12!.machine.DebugContainerRunRequest\x1a\".machine.DebugContainerRunResponse(\x010\x01BN\n" +
-	"\x15dev.talos.api.machineZ5github.com/siderolabs/talos/pkg/machinery/api/machineb\x06proto3"
+	"\fContainerRun\x12!.machine.DebugContainerRunRequest\x1a\".machine.DebugContainerRunResponse(\x010\x01BM\n" +
+	"\x15dev.chubo.api.machineZ4github.com/chubo-dev/chubo/pkg/machinery/api/machineb\x06proto3"
 
 var (
 	file_machine_debug_proto_rawDescOnce sync.Once

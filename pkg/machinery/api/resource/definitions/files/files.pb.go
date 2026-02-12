@@ -138,8 +138,8 @@ const file_resource_definitions_files_files_proto_rawDesc = "" +
 	"\x04mode\x18\x02 \x01(\rR\x04mode\x12#\n" +
 	"\rselinux_label\x18\x03 \x01(\tR\fselinuxLabel\"6\n" +
 	"\x11EtcFileStatusSpec\x12!\n" +
-	"\fspec_version\x18\x01 \x01(\tR\vspecVersionBt\n" +
-	"(dev.talos.api.resource.definitions.filesZHgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/filesb\x06proto3"
+	"\fspec_version\x18\x01 \x01(\tR\vspecVersionBs\n" +
+	"(dev.chubo.api.resource.definitions.filesZGgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/filesb\x06proto3"
 
 var (
 	file_resource_definitions_files_files_proto_rawDescOnce sync.Once

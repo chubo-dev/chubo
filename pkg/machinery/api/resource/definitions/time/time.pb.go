@@ -204,8 +204,8 @@ const file_resource_definitions_time_time_proto_rawDesc = "" +
 	"StatusSpec\x12\x16\n" +
 	"\x06synced\x18\x01 \x01(\bR\x06synced\x12\x14\n" +
 	"\x05epoch\x18\x02 \x01(\x03R\x05epoch\x12#\n" +
-	"\rsync_disabled\x18\x03 \x01(\bR\fsyncDisabledBr\n" +
-	"'dev.talos.api.resource.definitions.timeZGgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/timeb\x06proto3"
+	"\rsync_disabled\x18\x03 \x01(\bR\fsyncDisabledBq\n" +
+	"'dev.chubo.api.resource.definitions.timeZFgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/timeb\x06proto3"
 
 var (
 	file_resource_definitions_time_time_proto_rawDescOnce sync.Once

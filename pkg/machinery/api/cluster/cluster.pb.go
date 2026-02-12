@@ -15,7 +15,7 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -205,8 +205,8 @@ const file_cluster_cluster_proto_rawDesc = "" +
 	"\bmetadata\x18\x01 \x01(\v2\x10.common.MetadataR\bmetadata\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage2\\\n" +
 	"\x0eClusterService\x12J\n" +
-	"\vHealthCheck\x12\x1b.cluster.HealthCheckRequest\x1a\x1c.cluster.HealthCheckProgress0\x01BN\n" +
-	"\x15dev.talos.api.clusterZ5github.com/siderolabs/talos/pkg/machinery/api/clusterb\x06proto3"
+	"\vHealthCheck\x12\x1b.cluster.HealthCheckRequest\x1a\x1c.cluster.HealthCheckProgress0\x01BM\n" +
+	"\x15dev.chubo.api.clusterZ4github.com/chubo-dev/chubo/pkg/machinery/api/clusterb\x06proto3"
 
 var (
 	file_cluster_cluster_proto_rawDescOnce sync.Once

@@ -74,8 +74,8 @@ const file_resource_network_device_config_proto_rawDesc = "" +
 	"\n" +
 	"$resource/network/device_config.proto\x12\x10resource.network\"?\n" +
 	"\x14DeviceConfigSpecSpec\x12'\n" +
-	"\x0fyaml_marshalled\x18\x01 \x01(\fR\x0eyamlMarshalledB`\n" +
-	"\x1edev.talos.api.resource.networkZ>github.com/siderolabs/talos/pkg/machinery/api/resource/networkb\x06proto3"
+	"\x0fyaml_marshalled\x18\x01 \x01(\fR\x0eyamlMarshalledB_\n" +
+	"\x1edev.chubo.api.resource.networkZ=github.com/chubo-dev/chubo/pkg/machinery/api/resource/networkb\x06proto3"
 
 var (
 	file_resource_network_device_config_proto_rawDescOnce sync.Once

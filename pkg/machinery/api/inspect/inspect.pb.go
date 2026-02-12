@@ -15,7 +15,7 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -278,8 +278,8 @@ const file_inspect_inspect_proto_rawDesc = "" +
 	"INPUT_WEAK\x10\x02\x12\x17\n" +
 	"\x13INPUT_DESTROY_READY\x10\x042y\n" +
 	"\x0eInspectService\x12g\n" +
-	"\x1dControllerRuntimeDependencies\x12\x16.google.protobuf.Empty\x1a..inspect.ControllerRuntimeDependenciesResponseBN\n" +
-	"\x15dev.talos.api.inspectZ5github.com/siderolabs/talos/pkg/machinery/api/inspectb\x06proto3"
+	"\x1dControllerRuntimeDependencies\x12\x16.google.protobuf.Empty\x1a..inspect.ControllerRuntimeDependenciesResponseBM\n" +
+	"\x15dev.chubo.api.inspectZ4github.com/chubo-dev/chubo/pkg/machinery/api/inspectb\x06proto3"
 
 var (
 	file_inspect_inspect_proto_rawDescOnce sync.Once

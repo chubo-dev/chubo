@@ -14,7 +14,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -264,8 +264,8 @@ const file_resource_definitions_siderolink_siderolink_proto_rawDesc = "" +
 	"\fapi_endpoint\x18\x01 \x01(\tR\vapiEndpoint\x12\x1b\n" +
 	"\tlink_name\x18\x02 \x01(\tR\blinkName\x12\x10\n" +
 	"\x03mtu\x18\x03 \x01(\x03R\x03mtu\x124\n" +
-	"\fnode_address\x18\x04 \x01(\v2\x11.common.NetIPPortR\vnodeAddressB~\n" +
-	"-dev.talos.api.resource.definitions.siderolinkZMgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/siderolinkb\x06proto3"
+	"\fnode_address\x18\x04 \x01(\v2\x11.common.NetIPPortR\vnodeAddressB}\n" +
+	"-dev.chubo.api.resource.definitions.siderolinkZLgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/siderolinkb\x06proto3"
 
 var (
 	file_resource_definitions_siderolink_siderolink_proto_rawDescOnce sync.Once

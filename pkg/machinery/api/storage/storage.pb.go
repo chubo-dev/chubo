@@ -15,7 +15,7 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -654,8 +654,8 @@ const file_storage_storage_proto_rawDesc = "" +
 	"\bmetadata\x18\x01 \x01(\v2\x10.common.MetadataR\bmetadata2\x9f\x01\n" +
 	"\x0eStorageService\x127\n" +
 	"\x05Disks\x12\x16.google.protobuf.Empty\x1a\x16.storage.DisksResponse\x12T\n" +
-	"\x0fBlockDeviceWipe\x12\x1f.storage.BlockDeviceWipeRequest\x1a .storage.BlockDeviceWipeResponseBN\n" +
-	"\x15dev.talos.api.storageZ5github.com/siderolabs/talos/pkg/machinery/api/storageb\x06proto3"
+	"\x0fBlockDeviceWipe\x12\x1f.storage.BlockDeviceWipeRequest\x1a .storage.BlockDeviceWipeResponseBM\n" +
+	"\x15dev.chubo.api.storageZ4github.com/chubo-dev/chubo/pkg/machinery/api/storageb\x06proto3"
 
 var (
 	file_storage_storage_proto_rawDescOnce sync.Once

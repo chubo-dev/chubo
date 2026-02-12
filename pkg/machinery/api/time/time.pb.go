@@ -16,7 +16,7 @@ import (
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -203,8 +203,8 @@ const file_time_time_proto_rawDesc = "" +
 	".time.TimeR\bmessages2u\n" +
 	"\vTimeService\x122\n" +
 	"\x04Time\x12\x16.google.protobuf.Empty\x1a\x12.time.TimeResponse\x122\n" +
-	"\tTimeCheck\x12\x11.time.TimeRequest\x1a\x12.time.TimeResponseBH\n" +
-	"\x12dev.talos.api.timeZ2github.com/siderolabs/talos/pkg/machinery/api/timeb\x06proto3"
+	"\tTimeCheck\x12\x11.time.TimeRequest\x1a\x12.time.TimeResponseBG\n" +
+	"\x12dev.chubo.api.timeZ1github.com/chubo-dev/chubo/pkg/machinery/api/timeb\x06proto3"
 
 var (
 	file_time_time_proto_rawDescOnce sync.Once

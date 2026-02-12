@@ -11,13 +11,13 @@ import (
 	cosi "github.com/cosi-project/runtime/api/v1alpha1"
 	"google.golang.org/protobuf/reflect/protoreflect"
 
-	"github.com/siderolabs/talos/pkg/machinery/api/cluster"
-	"github.com/siderolabs/talos/pkg/machinery/api/common"
-	"github.com/siderolabs/talos/pkg/machinery/api/inspect"
-	"github.com/siderolabs/talos/pkg/machinery/api/machine"
-	"github.com/siderolabs/talos/pkg/machinery/api/security"
-	"github.com/siderolabs/talos/pkg/machinery/api/storage"
-	"github.com/siderolabs/talos/pkg/machinery/api/time"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/cluster"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/inspect"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/security"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/storage"
+	"github.com/chubo-dev/chubo/pkg/machinery/api/time"
 )
 
 // TalosAPIdOne2ManyAPIs returns a list of API services that support one-to-many

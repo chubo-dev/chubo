@@ -15,8 +15,8 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
-	enums "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	enums "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
 )
 
 const (
@@ -1771,8 +1771,8 @@ const file_resource_definitions_runtime_runtime_proto_rawDesc = "" +
 	"\x17WatchdogTimerStatusSpec\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\tR\x06device\x123\n" +
 	"\atimeout\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12>\n" +
-	"\rfeed_interval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\ffeedIntervalBx\n" +
-	"*dev.talos.api.resource.definitions.runtimeZJgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/runtimeb\x06proto3"
+	"\rfeed_interval\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\ffeedIntervalBw\n" +
+	"*dev.chubo.api.resource.definitions.runtimeZIgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/runtimeb\x06proto3"
 
 var (
 	file_resource_definitions_runtime_runtime_proto_rawDescOnce sync.Once

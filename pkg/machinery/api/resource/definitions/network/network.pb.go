@@ -15,9 +15,9 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
-	enums "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums"
-	runtime "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/runtime"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	enums "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums"
+	runtime "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/runtime"
 )
 
 const (
@@ -5115,8 +5115,8 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\vlisten_port\x18\x03 \x01(\x03R\n" +
 	"listenPort\x12#\n" +
 	"\rfirewall_mark\x18\x04 \x01(\x03R\ffirewallMark\x12G\n" +
-	"\x05peers\x18\x05 \x03(\v21.talos.resource.definitions.network.WireguardPeerR\x05peersBx\n" +
-	"*dev.talos.api.resource.definitions.networkZJgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/networkb\x06proto3"
+	"\x05peers\x18\x05 \x03(\v21.talos.resource.definitions.network.WireguardPeerR\x05peersBw\n" +
+	"*dev.chubo.api.resource.definitions.networkZIgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/networkb\x06proto3"
 
 var (
 	file_resource_definitions_network_network_proto_rawDescOnce sync.Once

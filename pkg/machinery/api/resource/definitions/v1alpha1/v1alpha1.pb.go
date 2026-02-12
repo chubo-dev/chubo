@@ -91,8 +91,8 @@ const file_resource_definitions_v1alpha1_v1alpha1_proto_rawDesc = "" +
 	"\vServiceSpec\x12\x18\n" +
 	"\arunning\x18\x01 \x01(\bR\arunning\x12\x18\n" +
 	"\ahealthy\x18\x02 \x01(\bR\ahealthy\x12\x18\n" +
-	"\aunknown\x18\x03 \x01(\bR\aunknownBz\n" +
-	"+dev.talos.api.resource.definitions.v1alpha1ZKgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/v1alpha1b\x06proto3"
+	"\aunknown\x18\x03 \x01(\bR\aunknownBy\n" +
+	"+dev.chubo.api.resource.definitions.v1alpha1ZJgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/v1alpha1b\x06proto3"
 
 var (
 	file_resource_definitions_v1alpha1_v1alpha1_proto_rawDescOnce sync.Once

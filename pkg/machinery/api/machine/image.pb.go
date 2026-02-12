@@ -17,7 +17,7 @@ import (
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 
-	common "github.com/siderolabs/talos/pkg/machinery/api/common"
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -692,8 +692,8 @@ const file_machine_image_proto_rawDesc = "" +
 	"\x04List\x12 .machine.ImageServiceListRequest\x1a!.machine.ImageServiceListResponse0\x01\x12M\n" +
 	"\x04Pull\x12 .machine.ImageServicePullRequest\x1a!.machine.ImageServicePullResponse0\x01\x12S\n" +
 	"\x06Import\x12\".machine.ImageServiceImportRequest\x1a#.machine.ImageServiceImportResponse(\x01\x12D\n" +
-	"\x06Remove\x12\".machine.ImageServiceRemoveRequest\x1a\x16.google.protobuf.EmptyBN\n" +
-	"\x15dev.talos.api.machineZ5github.com/siderolabs/talos/pkg/machinery/api/machineb\x06proto3"
+	"\x06Remove\x12\".machine.ImageServiceRemoveRequest\x1a\x16.google.protobuf.EmptyBM\n" +
+	"\x15dev.chubo.api.machineZ4github.com/chubo-dev/chubo/pkg/machinery/api/machineb\x06proto3"
 
 var (
 	file_machine_image_proto_rawDescOnce sync.Once

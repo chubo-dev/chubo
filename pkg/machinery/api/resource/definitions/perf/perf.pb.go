@@ -745,8 +745,8 @@ const file_resource_definitions_perf_perf_proto_rawDesc = "" +
 	"\fhugepagesize\x18- \x01(\x04R\fhugepagesize\x12!\n" +
 	"\fdirect_map4k\x18. \x01(\x04R\vdirectMap4k\x12!\n" +
 	"\fdirect_map2m\x18/ \x01(\x04R\vdirectMap2m\x12!\n" +
-	"\fdirect_map1g\x180 \x01(\x04R\vdirectMap1gBr\n" +
-	"'dev.talos.api.resource.definitions.perfZGgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/perfb\x06proto3"
+	"\fdirect_map1g\x180 \x01(\x04R\vdirectMap1gBq\n" +
+	"'dev.chubo.api.resource.definitions.perfZFgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/perfb\x06proto3"
 
 var (
 	file_resource_definitions_perf_perf_proto_rawDescOnce sync.Once

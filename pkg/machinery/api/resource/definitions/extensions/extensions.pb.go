@@ -270,8 +270,8 @@ const file_resource_definitions_extensions_extensions_proto_rawDesc = "" +
 	"\vdescription\x18\x04 \x01(\tR\vdescription\x12Z\n" +
 	"\rcompatibility\x18\x05 \x01(\v24.talos.resource.definitions.extensions.CompatibilityR\rcompatibility\x12\x1d\n" +
 	"\n" +
-	"extra_info\x18\x06 \x01(\tR\textraInfoB~\n" +
-	"-dev.talos.api.resource.definitions.extensionsZMgithub.com/siderolabs/talos/pkg/machinery/api/resource/definitions/extensionsb\x06proto3"
+	"extra_info\x18\x06 \x01(\tR\textraInfoB}\n" +
+	"-dev.chubo.api.resource.definitions.extensionsZLgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/extensionsb\x06proto3"
 
 var (
 	file_resource_definitions_extensions_extensions_proto_rawDescOnce sync.Once
