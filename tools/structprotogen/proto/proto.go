@@ -14,9 +14,9 @@ import (
 
 	"gopkg.in/typ.v4/slices"
 
-	"github.com/siderolabs/talos/tools/structprotogen/consts"
-	"github.com/siderolabs/talos/tools/structprotogen/sliceutil"
-	"github.com/siderolabs/talos/tools/structprotogen/types"
+	"github.com/chubo-dev/chubo/tools/structprotogen/consts"
+	"github.com/chubo-dev/chubo/tools/structprotogen/sliceutil"
+	"github.com/chubo-dev/chubo/tools/structprotogen/types"
 )
 
 // Pkg represents a protobuf package.
@@ -61,8 +61,8 @@ func (p *Pkg) WriteDebug(w io.Writer) {
 
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
 	fmt.Fprintf(w, "package talos.resource.definitions.%s; // %s\n\n", p.Name, p.GoPkg)
-	fmt.Fprintf(w, "option go_package = \"github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
-	fmt.Fprintf(w, "option java_package = \"dev.talos.api.resource.definitions.%s\";\n\n", pkgName)
+	fmt.Fprintf(w, "option go_package = \"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
+	fmt.Fprintf(w, "option java_package = \"dev.chubo.api.resource.definitions.%s\";\n\n", pkgName)
 
 	if p.imports.Len() > 0 {
 		for i := 0; i < p.imports.Len(); i++ {
@@ -89,8 +89,8 @@ func (p *Pkg) Format(w io.Writer) {
 
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
 	fmt.Fprintf(w, "package talos.resource.definitions.%s;\n\n", p.Name)
-	fmt.Fprintf(w, "option go_package = \"github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
-	fmt.Fprintf(w, "option java_package = \"dev.talos.api.resource.definitions.%s\";\n\n", pkgName)
+	fmt.Fprintf(w, "option go_package = \"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
+	fmt.Fprintf(w, "option java_package = \"dev.chubo.api.resource.definitions.%s\";\n\n", pkgName)
 
 	if p.imports.Len() > 0 {
 		for i := 0; i < p.imports.Len(); i++ {
@@ -394,24 +394,24 @@ func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (stri
 		return commoProto, "common.PEMEncodedKey"
 	case typeData{"github.com/siderolabs/crypto/x509", "PEMEncodedCertificate"}:
 		return commoProto, "common.PEMEncodedCertificate"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/cel", "Expression"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/cel", "Expression"}:
 		return "google/api/expr/v1alpha1/checked.proto", "google.api.expr.v1alpha1.CheckedExpr"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/cri", "RegistryMirrorConfig"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryMirrorConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
 		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryMirrorConfig"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/cri", "RegistryAuthConfig"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryAuthConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
 		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryAuthConfig"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/cri", "RegistryTLSConfig"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryTLSConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
 		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryTLSConfig"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/runtime", "PlatformMetadataSpec"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime", "PlatformMetadataSpec"}:
 		return "resource/definitions/runtime/runtime.proto", "talos.resource.definitions.runtime.PlatformMetadataSpec"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/block", "ParameterSpec"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/block", "ParameterSpec"}:
 		return "resource/definitions/block/block.proto", "talos.resource.definitions.block.ParameterSpec"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/etcd", "ArgValues"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd", "ArgValues"}:
 		return "resource/definitions/etcd/etcd.proto", "talos.resource.definitions.etcd.ArgValues"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/resources/k8s", "ArgValues"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s", "ArgValues"}:
 		return "resource/definitions/k8s/k8s.proto", "talos.resource.definitions.k8s.ArgValues"
 	default:
 		return "", ""
@@ -461,11 +461,11 @@ func formatBasicTypeName(typPkg string, typ string) (importPath, fullName string
 		return "google/protobuf/duration.proto", "google.protobuf.Duration"
 	case typeData{"io/fs", "FileMode"}:
 		return "", "uint32" //nolint:goconst
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/nethelpers", "AddressFlags"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/nethelpers", "AddressFlags"}:
 		return "", "uint32"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/nethelpers", "LinkFlags"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/nethelpers", "LinkFlags"}:
 		return "", "uint32"
-	case typeData{"github.com/siderolabs/talos/pkg/machinery/nethelpers", "RouteFlags"}:
+	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/nethelpers", "RouteFlags"}:
 		return "", "uint32"
 	default:
 		return "", ""
