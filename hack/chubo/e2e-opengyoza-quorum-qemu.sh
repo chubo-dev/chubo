@@ -448,6 +448,19 @@ fi
 rm -rf "${WORKDIR}" "${STATE_DIR}"
 mkdir -p "${WORKDIR}" "${ARTIFACTS}"
 
+# On macOS with Colima, Docker is typically exposed via a per-user unix socket.
+# This script runs under sudo and uses an isolated DOCKER_CONFIG (below), so
+# Docker context resolution won't work unless DOCKER_HOST is set. Best-effort
+# auto-detect the default Colima socket for the invoking user.
+if [[ -z "${DOCKER_HOST:-}" && "$(uname -s)" == "Darwin" && -n "${SUDO_USER:-}" ]]; then
+	colima_home="$(eval echo "~${SUDO_USER}" 2>/dev/null || true)"
+
+	if [[ -n "${colima_home}" && -S "${colima_home}/.colima/default/docker.sock" ]]; then
+		export DOCKER_HOST="unix://${colima_home}/.colima/default/docker.sock"
+		echo "detected Colima docker socket for ${SUDO_USER}, using DOCKER_HOST=${DOCKER_HOST}"
+	fi
+fi
+
 # When running under sudo, the root user's Docker config might reference credential helpers
 # (e.g. "docker-credential-desktop") which are not available or not usable in CI/automation.
 # Use an isolated Docker config for this E2E run to avoid auth helper lookups (we only talk to
@@ -462,6 +475,14 @@ mkdir -p "${DOCKER_CONFIG}/cli-plugins"
 # make it available under the isolated DOCKER_CONFIG.
 if [[ -x /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx ]]; then
 	ln -sf /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx "${DOCKER_CONFIG}/cli-plugins/docker-buildx"
+fi
+
+if ! docker version >/dev/null 2>&1; then
+	echo "docker CLI is available but cannot connect to a daemon." >&2
+	echo "hint: set DOCKER_HOST before running under sudo (this script uses an isolated DOCKER_CONFIG)." >&2
+	echo "hint: to get the host from your current Docker context, run (as your user):" >&2
+	echo "  docker context inspect \"$(docker context show)\" --format '{{.Endpoints.docker.Host}}'" >&2
+	exit 1
 fi
 
 pick_control_plane_port
