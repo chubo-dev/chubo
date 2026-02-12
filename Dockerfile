@@ -298,6 +298,7 @@ FROM build AS build-go
 COPY ./go.mod ./go.sum ./go.work ./
 COPY ./pkg/machinery/go.mod ./pkg/machinery/go.sum ./pkg/machinery/
 COPY ./hack/cloud-image-uploader/go.mod ./hack/cloud-image-uploader/go.sum ./hack/cloud-image-uploader/
+COPY ./hack/third_party ./hack/third_party
 COPY ./tools ./tools
 WORKDIR /src
 RUN --mount=type=cache,target=/.cache,id=talos/.cache go mod download
