@@ -9,16 +9,61 @@ package v1alpha1
 import (
 	"context"
 	"log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 
 	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
+	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
 )
 
 // Chubo doesn't ship Kubernetes, etcd, or CRI management.
 // Keep the Talos sequencer API shape, but make these tasks no-ops.
 
+const (
+	openWontonDefaultHTTPTimeout = 5 * time.Second
+)
+
 func CordonAndDrainNode(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
-		logger.Printf("skipping cordon/drain (chubo build)")
+		role, configured, err := openwontondrain.ReadRole(openwontondrain.RolePath)
+		if err != nil {
+			logger.Printf("skipping openwonton drain: failed to read role: %v", err)
+
+			return nil
+		}
+
+		if !configured {
+			logger.Printf("skipping openwonton drain: role file not found")
+
+			return nil
+		}
+
+		if role != openwontondrain.RoleClient {
+			logger.Printf("skipping openwonton drain: role=%q", role)
+
+			return nil
+		}
+
+		nodeName, err := r.NodeName()
+		if err != nil || strings.TrimSpace(nodeName) == "" {
+			nodeName, _ = os.Hostname() //nolint:errcheck
+		}
+
+		client := &http.Client{Timeout: openWontonDefaultHTTPTimeout}
+
+		if err := openwontondrain.DrainNode(ctx, client, openwontondrain.HTTPAddress, nodeName, openwontondrain.DefaultDrainDeadline); err != nil {
+			if ctx.Err() != nil {
+				return ctx.Err()
+			}
+
+			logger.Printf("skipping openwonton drain: %v", err)
+
+			return nil
+		}
+
+		logger.Printf("requested openwonton drain for node %q", nodeName)
 
 		return nil
 	}, "cordonAndDrainNode"
