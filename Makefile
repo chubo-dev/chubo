@@ -602,6 +602,14 @@ chubo-e2e-helper-bundles-qemu: ## Runs one-command local QEMU smoke for nomad/co
 chuboos-e2e-helper-bundles-qemu: ## Legacy alias for chubo-e2e-helper-bundles-qemu (Wave B compatibility).
 	@$(MAKE) chubo-e2e-helper-bundles-qemu
 
+.PHONY: chubo-e2e-opengyoza-quorum-qemu
+chubo-e2e-opengyoza-quorum-qemu: ## Runs dedicated QEMU fixture for opengyoza quorum gate (unsafe vs safe graceful upgrade paths).
+	@./hack/chubo/e2e-opengyoza-quorum-qemu.sh
+
+.PHONY: chuboos-e2e-opengyoza-quorum-qemu
+chuboos-e2e-opengyoza-quorum-qemu: ## Legacy alias for chubo-e2e-opengyoza-quorum-qemu (Wave B compatibility).
+	@$(MAKE) chubo-e2e-opengyoza-quorum-qemu
+
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
 
