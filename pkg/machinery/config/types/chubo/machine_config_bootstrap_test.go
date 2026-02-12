@@ -222,6 +222,7 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 	t.Parallel()
 
 	enabled := true
+	bootstrapExpect := 3
 
 	mc := NewMachineConfigV1Alpha1()
 	mc.Spec.Trust = &TrustSpec{
@@ -234,8 +235,10 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 	mc.Spec.Modules = &ModulesSpec{
 		Chubo: &ChuboModuleSpec{
 			Nomad: &ChuboRoleSpec{
-				Enabled: &enabled,
-				Role:    "server",
+				Enabled:         &enabled,
+				Role:            "server",
+				BootstrapExpect: &bootstrapExpect,
+				Join:            []string{"10.0.0.10", "10.0.0.11"},
 			},
 		},
 	}
@@ -258,6 +261,9 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 			foundConfig = true
 			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/openwonton"`)
 			require.Contains(t, f.FileContent, "server {\n  enabled = true")
+			require.Contains(t, f.FileContent, "bootstrap_expect = 3")
+			require.Contains(t, f.FileContent, "server_join {")
+			require.Contains(t, f.FileContent, `retry_join = ["10.0.0.10","10.0.0.11"]`)
 		case chuboOpenWontonRolePath:
 			foundRole = true
 			require.Equal(t, "server\n", f.FileContent)
@@ -292,6 +298,56 @@ func TestMachineConfigNomadInvalidRoleErrors(t *testing.T) {
 	require.Contains(t, err.Error(), `unknown spec.modules.chubo.nomad.role "broken"`)
 }
 
+func TestMachineConfigNomadInvalidBootstrapExpectErrors(t *testing.T) {
+	t.Parallel()
+
+	bootstrapExpect := -1
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				BootstrapExpect: &bootstrapExpect,
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "spec.modules.chubo.nomad.bootstrapExpect must be >= 0")
+}
+
+func TestMachineConfigNomadEmptyJoinErrors(t *testing.T) {
+	t.Parallel()
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Join: []string{"", "10.0.0.1"},
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "spec.modules.chubo.nomad.join must not contain empty entries")
+}
+
 func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
 	t.Parallel()
 
@@ -307,6 +363,7 @@ func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
 		Chubo: &ChuboModuleSpec{
 			Consul: &ChuboRoleSpec{
 				Role: "client",
+				Join: []string{"10.0.0.20", "10.0.0.21"},
 			},
 		},
 	}
@@ -329,6 +386,7 @@ func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
 			foundConfig = true
 			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/opengyoza"`)
 			require.Contains(t, f.FileContent, "server = false")
+			require.Contains(t, f.FileContent, `retry_join = ["10.0.0.20","10.0.0.21"]`)
 		case chuboOpenGyozaRolePath:
 			foundRole = true
 			require.Equal(t, "client\n", f.FileContent)

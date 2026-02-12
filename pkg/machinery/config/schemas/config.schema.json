@@ -903,6 +903,23 @@
           "description": "Role selects the role (server|client).\n",
           "markdownDescription": "Role selects the role (server|client).",
           "x-intellij-html-description": "\u003cp\u003eRole selects the role (server|client).\u003c/p\u003e\n"
+        },
+        "bootstrapExpect": {
+          "type": "integer",
+          "title": "bootstrapExpect",
+          "description": "BootstrapExpect controls the expected number of peers for quorum/bootstrap.\nWhen unset, server roles default to 1 and client roles default to 0.\n",
+          "markdownDescription": "BootstrapExpect controls the expected number of peers for quorum/bootstrap.\nWhen unset, server roles default to 1 and client roles default to 0.",
+          "x-intellij-html-description": "\u003cp\u003eBootstrapExpect controls the expected number of peers for quorum/bootstrap.\nWhen unset, server roles default to 1 and client roles default to 0.\u003c/p\u003e\n"
+        },
+        "join": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "join",
+          "description": "Join is the ordered list of peer addresses (IP/host) to join/retry-join.\n",
+          "markdownDescription": "Join is the ordered list of peer addresses (IP/host) to join/retry-join.",
+          "x-intellij-html-description": "\u003cp\u003eJoin is the ordered list of peer addresses (IP/host) to join/retry-join.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,

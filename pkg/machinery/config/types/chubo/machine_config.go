@@ -227,6 +227,13 @@ type ChuboRoleSpec struct {
 
 	// Role selects the role (server|client).
 	Role string `yaml:"role,omitempty"`
+
+	// BootstrapExpect controls the expected number of peers for quorum/bootstrap.
+	// When unset, server roles default to 1 and client roles default to 0.
+	BootstrapExpect *int `yaml:"bootstrapExpect,omitempty"`
+
+	// Join is the ordered list of peer addresses (IP/host) to join/retry-join.
+	Join []string `yaml:"join,omitempty"`
 }
 
 type ChuboOpenBaoSpec struct {
@@ -372,10 +379,26 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 				if err := validateChuboRole("spec.modules.chubo.nomad.role", s.Spec.Modules.Chubo.Nomad.Role); err != nil {
 					return nil, err
 				}
+
+				if err := validateChuboBootstrapExpect("spec.modules.chubo.nomad.bootstrapExpect", s.Spec.Modules.Chubo.Nomad.BootstrapExpect); err != nil {
+					return nil, err
+				}
+
+				if err := validateChuboJoin("spec.modules.chubo.nomad.join", s.Spec.Modules.Chubo.Nomad.Join); err != nil {
+					return nil, err
+				}
 			}
 
 			if s.Spec.Modules.Chubo.Consul != nil && (s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled) {
 				if err := validateChuboRole("spec.modules.chubo.consul.role", s.Spec.Modules.Chubo.Consul.Role); err != nil {
+					return nil, err
+				}
+
+				if err := validateChuboBootstrapExpect("spec.modules.chubo.consul.bootstrapExpect", s.Spec.Modules.Chubo.Consul.BootstrapExpect); err != nil {
+					return nil, err
+				}
+
+				if err := validateChuboJoin("spec.modules.chubo.consul.join", s.Spec.Modules.Chubo.Consul.Join); err != nil {
 					return nil, err
 				}
 			}
@@ -504,9 +527,11 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 			nomadEnabled := s.Spec.Modules.Chubo.Nomad.Enabled == nil || *s.Spec.Modules.Chubo.Nomad.Enabled
 			if nomadEnabled {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Nomad.Role)
+				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Nomad.BootstrapExpect)
+				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Nomad.Join)
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenWontonConfig(role),
+					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenWontonConfigPath,
 					FileOp:          "create",
@@ -526,9 +551,11 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 			consulEnabled := s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled
 			if consulEnabled {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Consul.Role)
+				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Consul.BootstrapExpect)
+				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Consul.Join)
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenGyozaConfig(role),
+					FileContent:     renderOpenGyozaConfig(role, bootstrapExpect, join),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenGyozaConfigPath,
 					FileOp:          "create",
@@ -622,40 +649,115 @@ func normalizeChuboRole(role string) string {
 	}
 }
 
-func renderOpenWontonConfig(role string) string {
+func validateChuboBootstrapExpect(path string, v *int) error {
+	if v == nil {
+		return nil
+	}
+
+	if *v < 0 {
+		return fmt.Errorf("%s must be >= 0", path)
+	}
+
+	return nil
+}
+
+func validateChuboJoin(path string, addrs []string) error {
+	for _, raw := range addrs {
+		if strings.TrimSpace(raw) == "" {
+			return fmt.Errorf("%s must not contain empty entries", path)
+		}
+	}
+
+	return nil
+}
+
+func normalizeChuboJoin(addrs []string) []string {
+	if len(addrs) == 0 {
+		return nil
+	}
+
+	out := make([]string, 0, len(addrs))
+
+	for _, a := range addrs {
+		a = strings.TrimSpace(a)
+		if a == "" {
+			continue
+		}
+
+		out = append(out, a)
+	}
+
+	return out
+}
+
+func defaultChuboBootstrapExpect(role string, v *int) int {
+	if v != nil {
+		return *v
+	}
+
+	if role == chuboRoleServer {
+		return 1
+	}
+
+	return 0
+}
+
+func renderHCLStringArray(values []string) string {
+	// HCL accepts JSON list syntax, so json.Marshal gives us correct quoting.
+	b, err := json.Marshal(values)
+	if err != nil {
+		// json.Marshal shouldn't fail for []string; fall back to empty list.
+		return "[]"
+	}
+
+	return string(b)
+}
+
+func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) string {
 	serverEnabled := role == chuboRoleServer
 	clientEnabled := role == chuboRoleClient
+
+	joinBlock := ""
+	if len(join) > 0 {
+		joinBlock = fmt.Sprintf(`server_join {
+  retry_join = %s
+  retry_max = 0
+  retry_interval = "15s"
+}
+
+`, renderHCLStringArray(join))
+	}
 
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"
 bind_addr = "0.0.0.0"
 log_level = "INFO"
 
-server {
+%sserver {
   enabled = %t
-  bootstrap_expect = 1
+  bootstrap_expect = %d
 }
 
 client {
   enabled = %t
 }
-`, serverEnabled, clientEnabled)
+`, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
 }
 
-func renderOpenGyozaConfig(role string) string {
+func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string) string {
 	serverEnabled := role == chuboRoleServer
-	bootstrapExpect := 0
 
-	if serverEnabled {
-		bootstrapExpect = 1
+	joinLine := ""
+	if len(join) > 0 {
+		joinLine = fmt.Sprintf("retry_join = %s\n", renderHCLStringArray(join))
 	}
 
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/opengyoza"
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
 log_level = "INFO"
-server = %t
+%sserver = %t
 bootstrap_expect = %d
-`, serverEnabled, bootstrapExpect)
+`, joinLine, serverEnabled, bootstrapExpect)
 }
 
 func renderOpenBaoNomadJobPayload() string {
