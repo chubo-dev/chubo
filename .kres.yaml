@@ -298,7 +298,7 @@ spec:
             artifactName: talos-artifacts
             artifactPath: _out
         - name: ci-temp-release-tag
-        - name: chubo-e2e-qemu
+        - name: chubo-e2e-full-qemu
           withSudo: true
         - name: save-talos-logs
           conditions:
@@ -307,10 +307,10 @@ spec:
             type: upload
             artifactName: talos-logs-chubo-e2e-qemu
             disableExecutableListGeneration: true
-            artifactPath: /tmp/logs-chubo-e2e.tar.gz
+            artifactPath: /tmp/chubo-core-work-*/cluster-logs.tar.gz
             additionalArtifacts:
-              - /tmp/support-chubo-e2e.zip
-              - /tmp/chubo-support-e2e.zip
+              - /tmp/chubo-core-work-*/cluster-support.zip
+              - /tmp/chubo-core-work-*/support.zip
     - name: grype-scan
       buildxOptions:
         enabled: true
