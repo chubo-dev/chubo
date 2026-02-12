@@ -5,8 +5,8 @@ set -euo pipefail
 # install -> runtime mTLS -> unsafe quorum check (2 peers blocks graceful upgrade)
 # -> safe quorum check (3 peers allows graceful upgrade/reboot)
 #
-# This script uses a one-shot local debug container on the node to mock
-# opengyoza `/v1/status/peers` responses.
+# This script uses a one-shot local debug container on the node (`inmem`
+# namespace) to mock opengyoza `/v1/status/peers` responses.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
@@ -20,22 +20,26 @@ SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
+RUN_ID="${RUN_ID:-$RANDOM}"
+BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"
+BASE_NET_SUBNET="${BASE_NET_SUBNET:-$((10 + RANDOM % 200))}"
 
-CLUSTER_NAME="${CLUSTER_NAME:-chubo-opengyoza-quorum-e2e}"
-STATE_DIR="${STATE_DIR:-/tmp/chubo-opengyoza-quorum-e2e-state}"
-WORKDIR="${WORKDIR:-/tmp/chubo-opengyoza-quorum-e2e-work}"
-NODE_IP="${NODE_IP:-10.5.0.2}"
-CIDR="${CIDR:-10.5.0.0/24}"
+CLUSTER_NAME="${CLUSTER_NAME:-chubo-ogy-${RUN_ID}}"
+STATE_DIR="${STATE_DIR:-/tmp/chubo-ogy-state-${RUN_ID}}"
+WORKDIR="${WORKDIR:-/tmp/chubo-ogy-work-${RUN_ID}}"
+NODE_IP="${NODE_IP:-10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.2}"
+CIDR="${CIDR:-10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.0/24}"
 INSTALL_DISK="${INSTALL_DISK:-/dev/vda}"
+CONTROL_PLANE_PORT="${CONTROL_PLANE_PORT:-7443}"
 
-REGISTRY_NAME="${REGISTRY_NAME:-chubo-opengyoza-quorum-e2e-registry}"
-REGISTRY_PORT="${REGISTRY_PORT:-5001}"
-REGISTRY_LOCAL_ADDR="${REGISTRY_LOCAL_ADDR:-localhost:${REGISTRY_PORT}}"
-REGISTRY_NODE_ADDR="${REGISTRY_NODE_ADDR:-10.5.0.1:${REGISTRY_PORT}}"
-INSTALLER_BASE_IMAGE_LOCAL="${INSTALLER_BASE_IMAGE_LOCAL:-${REGISTRY_LOCAL_ADDR}/chubo/installer-base:dev}"
-INSTALLER_IMAGE_LOCAL="${INSTALLER_IMAGE_LOCAL:-${REGISTRY_LOCAL_ADDR}/chubo/installer:dev}"
-INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-${REGISTRY_NODE_ADDR}/chubo/installer:dev}"
-REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-${REGISTRY_NODE_ADDR}=http://${REGISTRY_NODE_ADDR}}"
+REGISTRY_NAME="${REGISTRY_NAME:-chubo-ogy-reg-${RUN_ID}}"
+REGISTRY_PORT="${REGISTRY_PORT:-$((5100 + RANDOM % 300))}"
+REGISTRY_LOCAL_ADDR="${REGISTRY_LOCAL_ADDR:-}"
+REGISTRY_NODE_ADDR="${REGISTRY_NODE_ADDR:-}"
+INSTALLER_BASE_IMAGE_LOCAL="${INSTALLER_BASE_IMAGE_LOCAL:-}"
+INSTALLER_IMAGE_LOCAL="${INSTALLER_IMAGE_LOCAL:-}"
+INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-}"
+REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-}"
 
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1200}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
@@ -49,11 +53,13 @@ MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
 MACHINECONFIG_RUNTIME="${WORKDIR}/machineconfig-runtime.yaml"
 TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
 ROLE_PATCH_FILE="${WORKDIR}/opengyoza-role-patch.yaml"
-MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock.tar"
+UNSAFE_MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock-unsafe.tar"
+SAFE_MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock-safe.tar"
 UNSAFE_UPGRADE_OUT="${WORKDIR}/unsafe-upgrade.out"
 SAFE_MOCK_LOG="${WORKDIR}/safe-mock.log"
 UNSAFE_MOCK_LOG="${WORKDIR}/unsafe-mock.log"
 CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
+LAST_MOCK_PID=""
 
 cluster_created=0
 registry_started=0
@@ -120,14 +126,37 @@ wait_for_runtime() {
 		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
+service_is_up() {
+	local service_name="$1"
+
+	"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
+		grep -qi "Health check successful"
+}
+
 wait_for_runtime_stable() {
 	local consecutive=0
-	local required_consecutive=5
+	local required_consecutive=2
 	local deadline=$((SECONDS + TIMEOUT_SECONDS))
+	local attempts=0
 
 	while true; do
-		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
-			"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
+		local has_version=0
+		local has_machined=0
+		local has_containerd=0
+
+		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+			has_version=1
+		fi
+
+		if service_is_up "machined"; then
+			has_machined=1
+		fi
+
+		if service_is_up "containerd"; then
+			has_containerd=1
+		fi
+
+		if ((has_version == 1 && has_machined == 1 && has_containerd == 1)); then
 			consecutive=$((consecutive + 1))
 
 			if ((consecutive >= required_consecutive)); then
@@ -135,6 +164,11 @@ wait_for_runtime_stable() {
 			fi
 		else
 			consecutive=0
+		fi
+
+		attempts=$((attempts + 1))
+		if ((attempts % 10 == 0)); then
+			echo "waiting for stable runtime: version=${has_version} machined=${has_machined} containerd=${has_containerd}"
 		fi
 
 		if ((SECONDS >= deadline)); then
@@ -201,13 +235,83 @@ wait_for_process_exit() {
 		sleep 1
 	done
 
-	wait "${pid}"
+	local rc=0
+	wait "${pid}" || rc=$?
+	if ((rc != 0)); then
+		# Debug containers can terminate with transport errors during node shutdown/reboot.
+		# Treat any exit as completion; scenario assertions happen via upgrade output checks.
+		echo "process ${pid} exited with status ${rc}: ${description}" >&2
+	fi
+
+	return 0
+}
+
+pick_control_plane_port() {
+	local candidate="${CONTROL_PLANE_PORT}"
+	local attempts=0
+
+	while lsof -nP -iTCP:"${candidate}" -sTCP:LISTEN >/dev/null 2>&1; do
+		attempts=$((attempts + 1))
+		if ((attempts > 20)); then
+			echo "failed to find a free control-plane port (starting at ${CONTROL_PLANE_PORT})" >&2
+			return 1
+		fi
+
+		candidate=$((20000 + RANDOM % 20000))
+	done
+
+	if [[ "${candidate}" != "${CONTROL_PLANE_PORT}" ]]; then
+		echo "control-plane port ${CONTROL_PLANE_PORT} is busy, switching to ${candidate}"
+	fi
+
+	CONTROL_PLANE_PORT="${candidate}"
+	return 0
+}
+
+pick_registry_port() {
+	local candidate="${REGISTRY_PORT}"
+	local attempts=0
+
+	while lsof -nP -iTCP:"${candidate}" -sTCP:LISTEN >/dev/null 2>&1; do
+		attempts=$((attempts + 1))
+		if ((attempts > 20)); then
+			echo "failed to find a free registry port (starting at ${REGISTRY_PORT})" >&2
+			return 1
+		fi
+
+		candidate=$((5400 + RANDOM % 500))
+	done
+
+	if [[ "${candidate}" != "${REGISTRY_PORT}" ]]; then
+		echo "registry port ${REGISTRY_PORT} is busy, switching to ${candidate}"
+	fi
+
+	REGISTRY_PORT="${candidate}"
+	return 0
+}
+
+refresh_registry_refs() {
+	: "${REGISTRY_LOCAL_ADDR:=localhost:${REGISTRY_PORT}}"
+	: "${REGISTRY_NODE_ADDR:=10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.1:${REGISTRY_PORT}}"
+	: "${INSTALLER_BASE_IMAGE_LOCAL:=${REGISTRY_LOCAL_ADDR}/chubo/installer-base:dev}"
+	: "${INSTALLER_IMAGE_LOCAL:=${REGISTRY_LOCAL_ADDR}/chubo/installer:dev}"
+	: "${INSTALLER_IMAGE_NODE:=${REGISTRY_NODE_ADDR}/chubo/installer:dev}"
+	: "${REGISTRY_MIRROR_NODE:=${REGISTRY_NODE_ADDR}=http://${REGISTRY_NODE_ADDR}}"
 }
 
 run_cluster_create() {
+	local monitor_path="${STATE_DIR}/${CLUSTER_NAME}/${CLUSTER_NAME}-controlplane-1.monitor"
+
+	if ((${#monitor_path} >= 104)); then
+		echo "qemu monitor path too long (${#monitor_path} bytes): ${monitor_path}" >&2
+		echo "set shorter STATE_DIR and/or CLUSTER_NAME" >&2
+		return 1
+	fi
+
 	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
 		--arch "${ARCH}" \
 		--cidr "${CIDR}" \
+		--control-plane-port "${CONTROL_PLANE_PORT}" \
 		--controlplanes 1 \
 		--workers 0 \
 		--disk 12288 \
@@ -250,74 +354,102 @@ create_cluster_with_retry() {
 }
 
 start_peers_mock() {
-	local peers_json="$1"
+	local mock_image_tar="$1"
 	local log_file="$2"
 
-	"${TALOSCTL}" debug "${MOCK_IMAGE_TAR}" \
-		--namespace system \
+	"${TALOSCTL}" debug "${mock_image_tar}" \
+		--namespace inmem \
 		--talosconfig "${TALOSCONFIG_FILE}" \
-		-e "${NODE_IP}" -n "${NODE_IP}" \
-		--args "${peers_json}" >"${log_file}" 2>&1 &
-	echo $!
+		-e "${NODE_IP}" -n "${NODE_IP}" >"${log_file}" 2>&1 &
+	local pid=$!
+	local deadline=$((SECONDS + 60))
+
+	while true; do
+		if grep -q "ready" "${log_file}" 2>/dev/null; then
+			LAST_MOCK_PID="${pid}"
+			return 0
+		fi
+
+		if ! kill -0 "${pid}" >/dev/null 2>&1; then
+			echo "mock process exited before becoming ready: ${log_file}" >&2
+			cat "${log_file}" >&2
+			return 1
+		fi
+
+		if ((SECONDS >= deadline)); then
+			echo "timed out waiting for mock process readiness: ${log_file}" >&2
+			cat "${log_file}" >&2
+			kill "${pid}" >/dev/null 2>&1 || true
+			return 1
+		fi
+
+		sleep 1
+	done
 }
 
 build_mock_image_tar() {
-	local mock_dir="${WORKDIR}/opengyoza-peers-mock"
+	local image_ref="$1"
+	local peers_json="$2"
+	local output_tar="$3"
+	local mock_dir="${WORKDIR}/$(basename "${output_tar}" .tar)"
 
 	rm -rf "${mock_dir}"
 	mkdir -p "${mock_dir}"
 
-	cat >"${mock_dir}/main.go" <<'EOF'
+cat >"${mock_dir}/main.go" <<'EOF'
 package main
 
 import (
-	"fmt"
-	"io"
 	"log"
-	"net"
+	"net/http"
 	"os"
-	"time"
+	"strings"
 )
 
 func main() {
-	peers := `["peer-a","peer-b"]`
-	if len(os.Args) > 1 {
-		peers = os.Args[1]
+	peersBytes, err := os.ReadFile("/peers.json")
+	if err != nil {
+		log.Fatalf("read peers failed: %v", err)
 	}
 
-	ln, err := net.Listen("tcp", "127.0.0.1:8500")
-	if err != nil {
+	peers := strings.TrimSpace(string(peersBytes))
+	if peers == "" {
+		peers = `[]`
+	}
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/v1/status/peers", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(peers))
+	})
+
+	server := &http.Server{
+		Addr:    "127.0.0.1:8500",
+		Handler: mux,
+	}
+
+	log.Printf("ready")
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("listen failed: %v", err)
 	}
-	defer ln.Close() //nolint:errcheck
-
-	conn, err := ln.Accept()
-	if err != nil {
-		log.Fatalf("accept failed: %v", err)
-	}
-	defer conn.Close() //nolint:errcheck
-
-	_ = conn.SetDeadline(time.Now().Add(10 * time.Second))
-	_, _ = io.CopyN(io.Discard, conn, 4096)
-
-	resp := fmt.Sprintf("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: %d\r\nConnection: close\r\n\r\n%s", len(peers), peers)
-	if _, err := conn.Write([]byte(resp)); err != nil {
-		log.Fatalf("write failed: %v", err)
-	}
 }
+EOF
+
+	cat >"${mock_dir}/peers.json" <<EOF
+${peers_json}
 EOF
 
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "${mock_dir}/opengyoza-peers-mock" "${mock_dir}/main.go"
 
 	cat >"${mock_dir}/Dockerfile" <<'EOF'
 FROM scratch
+COPY peers.json /peers.json
 COPY opengyoza-peers-mock /opengyoza-peers-mock
 ENTRYPOINT ["/opengyoza-peers-mock"]
 EOF
 
-	local image_ref="chubo/opengyoza-peers-mock:dev"
 	docker build -t "${image_ref}" "${mock_dir}" >/dev/null
-	docker save "${image_ref}" -o "${MOCK_IMAGE_TAR}"
+	docker save "${image_ref}" -o "${output_tar}"
 }
 
 cleanup() {
@@ -348,12 +480,17 @@ fi
 require_cmd docker
 require_cmd go
 require_cmd make
+require_cmd lsof
 
 if [[ ! -x "${TALOSCTL}" ]]; then
 	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
-	echo "existing talosctl binary is not chubo-tagged; rebuilding"
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	if [[ "${SKIP_BUILD}" == "1" ]]; then
+		echo "warning: existing talosctl binary is not chubo-tagged; continuing due --skip-build"
+	else
+		echo "existing talosctl binary is not chubo-tagged; rebuilding"
+		make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	fi
 fi
 
 if ! command -v crane >/dev/null 2>&1; then
@@ -372,6 +509,18 @@ fi
 
 rm -rf "${WORKDIR}" "${STATE_DIR}"
 mkdir -p "${WORKDIR}" "${ARTIFACTS}"
+
+pick_control_plane_port
+pick_registry_port
+refresh_registry_refs
+echo "run configuration:"
+echo "  cluster: ${CLUSTER_NAME}"
+echo "  state dir: ${STATE_DIR}"
+echo "  work dir: ${WORKDIR}"
+echo "  cidr: ${CIDR}"
+echo "  node ip: ${NODE_IP}"
+echo "  control-plane port: ${CONTROL_PLANE_PORT}"
+echo "  registry: ${REGISTRY_LOCAL_ADDR} -> ${REGISTRY_NODE_ADDR}"
 
 if [[ "${SKIP_BUILD}" != "1" ]]; then
 	echo "building chubo boot artifacts"
@@ -521,12 +670,14 @@ fi
 wait_for_runtime_stable
 echo "runtime mTLS is stable"
 
-echo "building one-shot opengyoza peers mock image"
-build_mock_image_tar
+echo "building one-shot opengyoza peers mock images"
+build_mock_image_tar "chubo/opengyoza-peers-mock-unsafe:dev" '["peer-a","peer-b"]' "${UNSAFE_MOCK_IMAGE_TAR}"
+build_mock_image_tar "chubo/opengyoza-peers-mock-safe:dev" '["peer-a","peer-b","peer-c"]' "${SAFE_MOCK_IMAGE_TAR}"
 
 echo "running unsafe quorum scenario (2 peers): graceful upgrade must be blocked"
 pre_unsafe_boot_id="$(read_boot_id || true)"
-unsafe_mock_pid="$(start_peers_mock '["peer-a","peer-b"]' "${UNSAFE_MOCK_LOG}")"
+start_peers_mock "${UNSAFE_MOCK_IMAGE_TAR}" "${UNSAFE_MOCK_LOG}"
+unsafe_mock_pid="${LAST_MOCK_PID}"
 
 set +e
 "${TALOSCTL}" upgrade \
@@ -568,7 +719,8 @@ if [[ -z "${pre_safe_boot_id}" ]]; then
 	exit 1
 fi
 
-safe_mock_pid="$(start_peers_mock '["peer-a","peer-b","peer-c"]' "${SAFE_MOCK_LOG}")"
+start_peers_mock "${SAFE_MOCK_IMAGE_TAR}" "${SAFE_MOCK_LOG}"
+safe_mock_pid="${LAST_MOCK_PID}"
 
 "${TALOSCTL}" upgrade \
 	--talosconfig "${TALOSCONFIG_FILE}" \
