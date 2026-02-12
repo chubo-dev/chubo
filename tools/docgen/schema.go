@@ -218,12 +218,14 @@ func structToSchema(pkg string, st *Struct, allStructs []*Struct) *jsonschema.Sc
 
 	if st.Text != nil && st.Text.SchemaMeta != "" {
 		parts := strings.Split(st.Text.SchemaMeta, "/")
-		if len(parts) != 2 {
+		if len(parts) < 2 {
 			log.Fatalf("invalid schema meta: %s", st.Text.SchemaMeta)
 		}
 
-		apiVersionVal := parts[0]
-		kindVal := parts[1]
+		// Schema meta uses the form "<apiVersion>/<kind>". Allow multi-part apiVersions
+		// (e.g. "chubo.dev/v1alpha1/MachineConfig") by treating the last segment as the kind.
+		apiVersionVal := strings.Join(parts[:len(parts)-1], "/")
+		kindVal := parts[len(parts)-1]
 
 		apiVersionSchema := &jsonschema.Schema{
 			Title: "apiVersion",

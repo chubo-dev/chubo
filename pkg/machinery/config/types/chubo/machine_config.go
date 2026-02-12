@@ -22,12 +22,12 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/gen/optional"
 
-	"github.com/siderolabs/talos/pkg/machinery/config/config"
-	"github.com/siderolabs/talos/pkg/machinery/config/internal/registry"
-	"github.com/siderolabs/talos/pkg/machinery/config/machine"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/meta"
-	"github.com/siderolabs/talos/pkg/machinery/config/types/v1alpha1"
-	"github.com/siderolabs/talos/pkg/machinery/config/validation"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
 // MachineConfigKind is the `chubo` minimal machine config document kind.
@@ -86,8 +86,11 @@ var (
 type MachineConfigV1Alpha1 struct {
 	meta.Meta `yaml:",inline"`
 
+	// Metadata contains stable identity information for the node.
 	Metadata MachineConfigMetadata `yaml:"metadata,omitempty"`
-	Spec     MachineConfigSpec     `yaml:"spec"`
+
+	// Spec holds the desired machine configuration.
+	Spec MachineConfigSpec `yaml:"spec"`
 }
 
 type MachineConfigMetadata struct {
@@ -96,19 +99,39 @@ type MachineConfigMetadata struct {
 }
 
 type MachineConfigSpec struct {
-	Install   *InstallSpec   `yaml:"install,omitempty"`
-	Network   *NetworkSpec   `yaml:"network,omitempty"`
-	Time      *TimeSpec      `yaml:"time,omitempty"`
-	Logging   *LoggingSpec   `yaml:"logging,omitempty"`
-	Trust     *TrustSpec     `yaml:"trust,omitempty"`
-	Registry  *RegistrySpec  `yaml:"registry,omitempty"`
-	Modules   *ModulesSpec   `yaml:"modules,omitempty"`
+	// Install configures on-disk installation behavior.
+	Install *InstallSpec `yaml:"install,omitempty"`
+
+	// Network configures basic host networking.
+	Network *NetworkSpec `yaml:"network,omitempty"`
+
+	// Time configures time synchronization settings.
+	Time *TimeSpec `yaml:"time,omitempty"`
+
+	// Logging configures OS logging behavior.
+	Logging *LoggingSpec `yaml:"logging,omitempty"`
+
+	// Trust configures OS trust primitives and API access requirements.
+	Trust *TrustSpec `yaml:"trust,omitempty"`
+
+	// Registry configures container image registry settings.
+	Registry *RegistrySpec `yaml:"registry,omitempty"`
+
+	// Modules configures optional OS-managed modules.
+	Modules *ModulesSpec `yaml:"modules,omitempty"`
+
+	// Bootstrap configures bootstrap behavior (payload ingestion, signer pinning).
 	Bootstrap *BootstrapSpec `yaml:"bootstrap,omitempty"`
 }
 
 type InstallSpec struct {
-	Disk  string `yaml:"disk,omitempty"`
-	Wipe  *bool  `yaml:"wipe,omitempty"`
+	// Disk is the target disk (for example: /dev/sda).
+	Disk string `yaml:"disk,omitempty"`
+
+	// Wipe controls whether to wipe the target disk before installing.
+	Wipe *bool `yaml:"wipe,omitempty"`
+
+	// Image is the installer image reference (OCI ref) used during install.
 	Image string `yaml:"image,omitempty"`
 }
 
@@ -118,11 +141,12 @@ type NetworkSpec struct {
 }
 
 type TimeSpec struct {
+	// Servers is the list of NTP servers to use.
 	Servers []string `yaml:"servers,omitempty"`
 }
 
 type LoggingSpec struct {
-	// Placeholder for Phase 2 schema; not yet wired to runtime knobs.
+	// ConsoleLevel configures console log level (placeholder; not yet wired to runtime knobs).
 	ConsoleLevel string `yaml:"consoleLevel,omitempty"`
 }
 
@@ -140,7 +164,10 @@ type TrustSpec struct {
 }
 
 type CASpec struct {
+	// Crt is a PEM-encoded CA certificate.
 	Crt string `yaml:"crt,omitempty"`
+
+	// Key is a PEM-encoded CA private key.
 	Key string `yaml:"key,omitempty"`
 }
 
@@ -151,37 +178,63 @@ type RegistrySpec struct {
 }
 
 type RegistryMirrorSpec struct {
-	Endpoints    []string `yaml:"endpoints,omitempty"`
-	OverridePath *bool    `yaml:"overridePath,omitempty"`
-	SkipFallback *bool    `yaml:"skipFallback,omitempty"`
+	// Endpoints is the ordered list of mirror endpoints (URLs).
+	Endpoints []string `yaml:"endpoints,omitempty"`
+
+	// OverridePath controls whether to override the default image path when using mirrors.
+	OverridePath *bool `yaml:"overridePath,omitempty"`
+
+	// SkipFallback controls whether to skip fallback to the original registry.
+	SkipFallback *bool `yaml:"skipFallback,omitempty"`
 }
 
 type ModulesSpec struct {
+	// Chubo configures the Chubo module (openwonton/opengyoza/openbao bootstrap).
 	Chubo *ChuboModuleSpec `yaml:"chubo,omitempty"`
 }
 
 type ChuboModuleSpec struct {
-	Enabled   *bool               `yaml:"enabled,omitempty"`
+	// Enabled turns the module on/off.
+	Enabled *bool `yaml:"enabled,omitempty"`
+
+	// Bootstrap configures trust/bootstrap payload ingestion.
 	Bootstrap *ChuboBootstrapSpec `yaml:"bootstrap,omitempty"`
-	Nomad     *ChuboRoleSpec      `yaml:"nomad,omitempty"`
-	Consul    *ChuboRoleSpec      `yaml:"consul,omitempty"`
-	OpenBao   *ChuboOpenBaoSpec   `yaml:"openbao,omitempty"`
+
+	// Nomad configures the openwonton role and settings.
+	Nomad *ChuboRoleSpec `yaml:"nomad,omitempty"`
+
+	// Consul configures the opengyoza role and settings.
+	Consul *ChuboRoleSpec `yaml:"consul,omitempty"`
+
+	// OpenBao configures OpenBao integration (currently via Nomad job).
+	OpenBao *ChuboOpenBaoSpec `yaml:"openbao,omitempty"`
 }
 
 type ChuboBootstrapSpec struct {
-	Mode       string `yaml:"mode,omitempty"`
+	// Mode selects the bootstrap mechanism (for example: signedPayload).
+	Mode string `yaml:"mode,omitempty"`
+
+	// SignerCert is the PEM-encoded signer certificate used to verify bootstrap payloads.
 	SignerCert string `yaml:"signerCert,omitempty"`
-	Payload    string `yaml:"payload,omitempty"`
+
+	// Payload is the bootstrap payload (format depends on Mode).
+	Payload string `yaml:"payload,omitempty"`
 }
 
 type ChuboRoleSpec struct {
-	Enabled *bool  `yaml:"enabled,omitempty"`
-	Role    string `yaml:"role,omitempty"` // server|client
+	// Enabled turns the role on/off.
+	Enabled *bool `yaml:"enabled,omitempty"`
+
+	// Role selects the role (server|client).
+	Role string `yaml:"role,omitempty"`
 }
 
 type ChuboOpenBaoSpec struct {
-	Enabled *bool  `yaml:"enabled,omitempty"`
-	Mode    string `yaml:"mode,omitempty"` // nomadJob
+	// Enabled turns OpenBao integration on/off.
+	Enabled *bool `yaml:"enabled,omitempty"`
+
+	// Mode selects the integration mode (nomadJob).
+	Mode string `yaml:"mode,omitempty"`
 }
 
 type BootstrapSpec struct {
@@ -664,8 +717,10 @@ func (s *MachineConfigV1Alpha1) NodeID() optional.Optional[string] {
 	return optional.Some(s.Metadata.ID)
 }
 
+// chuboBootstrapJWSHeader is the protected header for the JWS compact bootstrap payload.
 type chuboBootstrapJWSHeader struct {
-	Alg string `json:"alg"`
+	// Alg is the JWS algorithm identifier (expected "EdDSA").
+	Alg string `json:"alg" yaml:"alg"`
 }
 
 func verifyChuboBootstrapJWS(jwsCompact string, signerCertPEM string) ([]byte, string, error) {
