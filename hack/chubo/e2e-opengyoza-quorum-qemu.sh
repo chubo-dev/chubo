@@ -64,19 +64,23 @@ LAST_MOCK_PID=""
 cluster_created=0
 registry_started=0
 runtime_config_applied=0
+CLEANUP_STALE_ONLY=0
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
 	--skip-build)
 		SKIP_BUILD=1
 		;;
+	--cleanup-stale | --cleanup-stale-only)
+		CLEANUP_STALE_ONLY=1
+		;;
 	-h | --help)
-		echo "usage: $0 [--skip-build]"
+		echo "usage: $0 [--skip-build] [--cleanup-stale]"
 		exit 0
 		;;
 	*)
 		echo "unknown argument: $1" >&2
-		echo "usage: $0 [--skip-build]" >&2
+		echo "usage: $0 [--skip-build] [--cleanup-stale]" >&2
 		exit 2
 		;;
 	esac
@@ -401,6 +405,7 @@ package main
 
 import (
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"strings"
@@ -417,19 +422,25 @@ func main() {
 		peers = `[]`
 	}
 
+	var srv *http.Server
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/v1/status/peers", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(peers))
+		log.Printf("served /v1/status/peers, shutting down")
+		go func() {
+			_ = srv.Close()
+		}()
 	})
 
-	server := &http.Server{
-		Addr:    "127.0.0.1:8500",
-		Handler: mux,
+	srv = &http.Server{Handler: mux}
+	ln, err := net.Listen("tcp", "127.0.0.1:8500")
+	if err != nil {
+		log.Fatalf("listen failed: %v", err)
 	}
-
 	log.Printf("ready")
-	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("listen failed: %v", err)
 	}
 }
@@ -448,7 +459,10 @@ COPY opengyoza-peers-mock /opengyoza-peers-mock
 ENTRYPOINT ["/opengyoza-peers-mock"]
 EOF
 
-	docker build -t "${image_ref}" "${mock_dir}" >/dev/null
+	if ! docker build --platform linux/amd64 --provenance=false -t "${image_ref}" "${mock_dir}" >/dev/null; then
+		# Fallback for older Docker engines without provenance flag support.
+		docker build --platform linux/amd64 -t "${image_ref}" "${mock_dir}" >/dev/null
+	fi
 	docker save "${image_ref}" -o "${output_tar}"
 }
 
@@ -467,6 +481,47 @@ cleanup() {
 
 trap cleanup EXIT
 
+cleanup_stale_clusters() {
+	local state_root
+
+	shopt -s nullglob
+
+	# Prefer a graceful destroy, but also force-kill any orphaned QEMU processes
+	# that reference our chubo-ogy state dirs (these can be left behind after aborted runs).
+	local stale_qemu_pids=""
+	stale_qemu_pids="$(/bin/ps -ax -o pid=,command= | /usr/bin/awk '$0 ~ /qemu-system-/ && index($0, "/tmp/chubo-ogy-state-") { print $1 }' 2>/dev/null || true)"
+	if [[ -n "${stale_qemu_pids}" ]]; then
+		echo "killing stale QEMU processes: ${stale_qemu_pids}"
+		/bin/kill ${stale_qemu_pids} >/dev/null 2>&1 || true
+		/bin/sleep 1
+		for pid in ${stale_qemu_pids}; do
+			/bin/kill -0 "${pid}" >/dev/null 2>&1 || continue
+			/bin/kill -9 "${pid}" >/dev/null 2>&1 || true
+		done
+	fi
+
+	for state_root in /tmp/chubo-ogy-state-*; do
+		[[ -d "${state_root}" ]] || continue
+
+		local cluster_dir
+		for cluster_dir in "${state_root}"/chubo-ogy-*; do
+			[[ -d "${cluster_dir}" ]] || continue
+
+			local cluster_name
+			cluster_name="$(basename "${cluster_dir}")"
+
+			echo "destroying stale cluster ${cluster_name} (state dir ${state_root})"
+			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+		done
+	done
+
+	for state_root in /tmp/chubo-ogy-state-* /tmp/chubo-ogy-work-*; do
+		[[ -e "${state_root}" ]] || continue
+
+		rm -rf "${state_root}"
+	done
+}
+
 if [[ "${ARCH}" != "amd64" ]]; then
 	echo "unsupported ARCH=${ARCH} (only amd64 is supported by this script)" >&2
 	exit 2
@@ -475,6 +530,11 @@ fi
 if [[ "${EUID}" -ne 0 ]]; then
 	echo "error: qemu fixture requires root for cluster provisioning; run with \`sudo -E\`" >&2
 	exit 1
+fi
+
+if ((CLEANUP_STALE_ONLY == 1)); then
+	cleanup_stale_clusters
+	exit 0
 fi
 
 require_cmd docker
@@ -509,6 +569,16 @@ fi
 
 rm -rf "${WORKDIR}" "${STATE_DIR}"
 mkdir -p "${WORKDIR}" "${ARTIFACTS}"
+
+# When running under sudo, the root user's Docker config might reference credential helpers
+# (e.g. "docker-credential-desktop") which are not available or not usable in CI/automation.
+# Use an isolated Docker config for this E2E run to avoid auth helper lookups (we only talk to
+# local registries and public images).
+export DOCKER_CONFIG="${WORKDIR}/.docker"
+mkdir -p "${DOCKER_CONFIG}"
+cat >"${DOCKER_CONFIG}/config.json" <<'EOF'
+{"auths":{}}
+EOF
 
 pick_control_plane_port
 pick_registry_port
@@ -669,6 +739,15 @@ fi
 
 wait_for_runtime_stable
 echo "runtime mTLS is stable"
+
+echo "verifying opengyoza role file"
+role="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
+role="$(printf '%s' "${role}" | tr -d '\r\n[:space:]')"
+if [[ "${role}" != "server" ]]; then
+	echo "expected opengyoza role to be 'server', got ${role:-<missing>}" >&2
+	echo "role file read failed or returned unexpected content" >&2
+	exit 1
+fi
 
 echo "building one-shot opengyoza peers mock images"
 build_mock_image_tar "chubo/opengyoza-peers-mock-unsafe:dev" '["peer-a","peer-b"]' "${UNSAFE_MOCK_IMAGE_TAR}"
