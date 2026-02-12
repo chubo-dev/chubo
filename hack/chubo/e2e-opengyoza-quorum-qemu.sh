@@ -42,6 +42,7 @@ SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
 MAINTENANCE_FALLBACK_SECONDS="${MAINTENANCE_FALLBACK_SECONDS:-180}"
 ACTION_REBOOT_WAIT_SECONDS="${ACTION_REBOOT_WAIT_SECONDS:-600}"
+CLUSTER_CREATE_MAX_ATTEMPTS="${CLUSTER_CREATE_MAX_ATTEMPTS:-3}"
 
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
@@ -52,6 +53,7 @@ MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock.tar"
 UNSAFE_UPGRADE_OUT="${WORKDIR}/unsafe-upgrade.out"
 SAFE_MOCK_LOG="${WORKDIR}/safe-mock.log"
 UNSAFE_MOCK_LOG="${WORKDIR}/unsafe-mock.log"
+CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
 
 cluster_created=0
 registry_started=0
@@ -200,6 +202,51 @@ wait_for_process_exit() {
 	done
 
 	wait "${pid}"
+}
+
+run_cluster_create() {
+	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+		--arch "${ARCH}" \
+		--cidr "${CIDR}" \
+		--controlplanes 1 \
+		--workers 0 \
+		--disk 12288 \
+		--cpus 2.0 \
+		--memory 2.0GiB \
+		--skip-injecting-config \
+		--skip-kubeconfig \
+		--skip-k8s-node-readiness-check \
+		--with-cluster-discovery=false \
+		--with-init-node=false \
+		--kubeprism-port=0 \
+		--wait=false \
+		--vmlinuz-path "${ARTIFACTS}/vmlinuz-${ARCH}" \
+		--initrd-path "${ARTIFACTS}/initramfs-${ARCH}.xz" \
+		--install-image "${INSTALLER_IMAGE_NODE}" \
+		--registry-mirror "${REGISTRY_MIRROR_NODE}"
+}
+
+create_cluster_with_retry() {
+	local attempt=1
+
+	while true; do
+		echo "creating single-node QEMU cluster in maintenance mode (attempt ${attempt}/${CLUSTER_CREATE_MAX_ATTEMPTS})"
+		if run_cluster_create 2>&1 | tee "${CLUSTER_CREATE_LOG}"; then
+			cluster_created=1
+			return 0
+		fi
+
+		if grep -Eq 'interface bridge[0-9]+ not found' "${CLUSTER_CREATE_LOG}" && ((attempt < CLUSTER_CREATE_MAX_ATTEMPTS)); then
+			echo "cluster create hit bridge bring-up race; destroying partial state and retrying"
+			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			rm -rf "${STATE_DIR:?}/${CLUSTER_NAME}"
+			attempt=$((attempt + 1))
+			sleep 2
+			continue
+		fi
+
+		return 1
+	done
 }
 
 start_peers_mock() {
@@ -404,27 +451,7 @@ EOF
 "${TALOSCTL}" machineconfig patch "${MACHINECONFIG_INSTALL}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_INSTALL}"
 "${TALOSCTL}" machineconfig patch "${MACHINECONFIG_RUNTIME}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_RUNTIME}"
 
-echo "creating single-node QEMU cluster in maintenance mode"
-"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
-	--arch "${ARCH}" \
-	--cidr "${CIDR}" \
-	--controlplanes 1 \
-	--workers 0 \
-	--disk 12288 \
-	--cpus 2.0 \
-	--memory 2.0GiB \
-	--skip-injecting-config \
-	--skip-kubeconfig \
-	--skip-k8s-node-readiness-check \
-	--with-cluster-discovery=false \
-	--with-init-node=false \
-	--kubeprism-port=0 \
-	--wait=false \
-	--vmlinuz-path "${ARTIFACTS}/vmlinuz-${ARCH}" \
-	--initrd-path "${ARTIFACTS}/initramfs-${ARCH}.xz" \
-	--install-image "${INSTALLER_IMAGE_NODE}" \
-	--registry-mirror "${REGISTRY_MIRROR_NODE}"
-cluster_created=1
+create_cluster_with_retry
 
 echo "waiting for maintenance API"
 wait_for_maintenance
