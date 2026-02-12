@@ -8,6 +8,7 @@ package v1alpha1
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -19,6 +20,7 @@ import (
 	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaquorum"
 	"github.com/siderolabs/talos/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
+	"github.com/siderolabs/talos/pkg/machinery/meta"
 )
 
 // Chubo doesn't ship Kubernetes, etcd, or CRI management.
@@ -59,23 +61,37 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 				return nil
 			}
 
-			// Retry briefly so transient readiness issues (e.g. local agent not yet listening) don't
-			// silently skip the check on the first connection attempt.
-			var lastErr error
-			for attempt := 0; attempt < 20; attempt++ {
-				lastErr = opengyozaquorum.CheckSafeServerStop(ctx, client, openGyozaHTTPAddress)
-				if lastErr == nil || errors.Is(lastErr, opengyozaquorum.ErrUnsafeServerStop) {
-					break
+			peersOverrideJSON, ok := r.State().Machine().Meta().ReadTag(meta.ChuboOpenGyozaPeersOverride)
+			peersOverrideJSON = strings.TrimSpace(peersOverrideJSON)
+
+			if ok && peersOverrideJSON != "" {
+				var peers []string
+
+				if uerr := json.Unmarshal([]byte(peersOverrideJSON), &peers); uerr != nil {
+					err = fmt.Errorf("failed to decode opengyoza peers override meta: %w", uerr)
+				} else {
+					err = opengyozaquorum.CheckSafeServerStopFromPeers(peers)
+				}
+			} else {
+				// Retry briefly so transient readiness issues (e.g. local agent not yet listening) don't
+				// silently skip the check on the first connection attempt.
+				var lastErr error
+				for attempt := 0; attempt < 20; attempt++ {
+					lastErr = opengyozaquorum.CheckSafeServerStop(ctx, client, openGyozaHTTPAddress)
+					if lastErr == nil || errors.Is(lastErr, opengyozaquorum.ErrUnsafeServerStop) {
+						break
+					}
+
+					if ctx.Err() != nil {
+						break
+					}
+
+					time.Sleep(100 * time.Millisecond)
 				}
 
-				if ctx.Err() != nil {
-					break
-				}
-
-				time.Sleep(100 * time.Millisecond)
+				err = lastErr
 			}
 
-			err = lastErr
 			if err != nil {
 				if ctx.Err() != nil {
 					return ctx.Err()
