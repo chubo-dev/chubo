@@ -56,6 +56,7 @@ ROLE_PATCH_FILE="${WORKDIR}/opengyoza-role-patch.yaml"
 UNSAFE_MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock-unsafe.tar"
 SAFE_MOCK_IMAGE_TAR="${WORKDIR}/opengyoza-peers-mock-safe.tar"
 UNSAFE_UPGRADE_OUT="${WORKDIR}/unsafe-upgrade.out"
+UNSAFE_MACHINED_LOG="${WORKDIR}/unsafe-machined.log"
 SAFE_MOCK_LOG="${WORKDIR}/safe-mock.log"
 UNSAFE_MOCK_LOG="${WORKDIR}/unsafe-mock.log"
 CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
@@ -222,6 +223,20 @@ wait_for_boot_id_change() {
 
 		sleep "${SLEEP_SECONDS}"
 	done
+}
+
+dump_machined_logs() {
+	local label="$1"
+	local out_path="$2"
+
+	echo "capturing machined logs (${label}) to ${out_path}"
+
+	if wait_until "runtime mTLS API on ${NODE_IP} for log capture" 300 \
+		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
+		"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
+	else
+		echo "runtime mTLS API not available for log capture" >"${out_path}"
+	fi
 }
 
 wait_for_process_exit() {
@@ -772,12 +787,14 @@ wait_for_process_exit "${unsafe_mock_pid}" 30 "unsafe quorum mock request"
 
 if ((unsafe_upgrade_rc == 0)); then
 	echo "expected unsafe quorum upgrade to fail, but it succeeded" >&2
+	dump_machined_logs "unsafe-upgrade-succeeded" "${UNSAFE_MACHINED_LOG}" || true
 	cat "${UNSAFE_UPGRADE_OUT}" >&2
 	exit 1
 fi
 
 if ! grep -qi "opengyoza server stop would break quorum" "${UNSAFE_UPGRADE_OUT}"; then
 	echo "unsafe quorum failure did not include expected reason" >&2
+	dump_machined_logs "unsafe-upgrade-missing-reason" "${UNSAFE_MACHINED_LOG}" || true
 	cat "${UNSAFE_UPGRADE_OUT}" >&2
 	exit 1
 fi
