@@ -20,36 +20,43 @@ HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
 
-CLUSTER_NAME="${CLUSTER_NAME:-chubo-e2e}"
-STATE_DIR="${STATE_DIR:-/tmp/chubo-e2e-state}"
-WORKDIR="${WORKDIR:-/tmp/chubo-e2e-work}"
-NODE_IP="${NODE_IP:-10.5.0.2}"
-CIDR="${CIDR:-10.5.0.0/24}"
+RUN_ID="${RUN_ID:-$RANDOM}"
+BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"
+BASE_NET_SUBNET="${BASE_NET_SUBNET:-$((10 + RANDOM % 200))}"
+CONTROL_PLANE_PORT="${CONTROL_PLANE_PORT:-$((7400 + RANDOM % 400))}"
+CLUSTER_CREATE_MAX_ATTEMPTS="${CLUSTER_CREATE_MAX_ATTEMPTS:-3}"
+
+CLUSTER_NAME="${CLUSTER_NAME:-chubo-core-${RUN_ID}}"
+STATE_DIR="${STATE_DIR:-/tmp/chubo-core-state-${RUN_ID}}"
+WORKDIR="${WORKDIR:-/tmp/chubo-core-work-${RUN_ID}}"
+NODE_IP="${NODE_IP:-10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.2}"
+CIDR="${CIDR:-10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.0/24}"
 INSTALL_DISK="${INSTALL_DISK:-/dev/vda}"
 
-REGISTRY_NAME="${REGISTRY_NAME:-chubo-e2e-registry}"
-REGISTRY_PORT="${REGISTRY_PORT:-5001}"
-REGISTRY_LOCAL_ADDR="${REGISTRY_LOCAL_ADDR:-localhost:${REGISTRY_PORT}}"
-REGISTRY_NODE_ADDR="${REGISTRY_NODE_ADDR:-10.5.0.1:${REGISTRY_PORT}}"
-INSTALLER_BASE_IMAGE_LOCAL="${INSTALLER_BASE_IMAGE_LOCAL:-${REGISTRY_LOCAL_ADDR}/chubo/installer-base:dev}"
-INSTALLER_IMAGE_LOCAL="${INSTALLER_IMAGE_LOCAL:-${REGISTRY_LOCAL_ADDR}/chubo/installer:dev}"
-INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-${REGISTRY_NODE_ADDR}/chubo/installer:dev}"
-REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-${REGISTRY_NODE_ADDR}=http://${REGISTRY_NODE_ADDR}}"
+REGISTRY_NAME="${REGISTRY_NAME:-chubo-core-reg-${RUN_ID}}"
+REGISTRY_PORT="${REGISTRY_PORT:-$((5100 + RANDOM % 300))}"
+REGISTRY_LOCAL_ADDR="${REGISTRY_LOCAL_ADDR:-}"
+REGISTRY_NODE_ADDR="${REGISTRY_NODE_ADDR:-}"
+INSTALLER_BASE_IMAGE_LOCAL="${INSTALLER_BASE_IMAGE_LOCAL:-}"
+INSTALLER_IMAGE_LOCAL="${INSTALLER_IMAGE_LOCAL:-}"
+INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-}"
+REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-}"
 
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1200}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
 MAINTENANCE_FALLBACK_SECONDS="${MAINTENANCE_FALLBACK_SECONDS:-180}"
 ACTION_REBOOT_WAIT_SECONDS="${ACTION_REBOOT_WAIT_SECONDS:-600}"
-SUPPORT_OUT="${SUPPORT_OUT:-/tmp/chubo-support-e2e.zip}"
-CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-/tmp/logs-chubo-e2e.tar.gz}"
-CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-/tmp/support-chubo-e2e.zip}"
+SUPPORT_OUT="${SUPPORT_OUT:-${WORKDIR}/support.zip}"
+CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-${WORKDIR}/cluster-logs.tar.gz}"
+CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-${WORKDIR}/cluster-support.zip}"
 
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
 MACHINECONFIG_RUNTIME="${WORKDIR}/machineconfig-runtime.yaml"
 TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
 SUPPORT_LISTING="${WORKDIR}/support-listing.txt"
+CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
 
 cluster_created=0
 registry_started=0
@@ -85,6 +92,37 @@ require_cmd() {
 	fi
 }
 
+pick_registry_port() {
+	local candidate="${REGISTRY_PORT}"
+	local attempts=0
+
+	while lsof -nP -iTCP:"${candidate}" -sTCP:LISTEN >/dev/null 2>&1; do
+		attempts=$((attempts + 1))
+		if ((attempts > 20)); then
+			echo "failed to find a free registry port (starting at ${REGISTRY_PORT})" >&2
+			return 1
+		fi
+
+		candidate=$((5400 + RANDOM % 500))
+	done
+
+	if [[ "${candidate}" != "${REGISTRY_PORT}" ]]; then
+		echo "registry port ${REGISTRY_PORT} is busy, switching to ${candidate}"
+	fi
+
+	REGISTRY_PORT="${candidate}"
+	return 0
+}
+
+refresh_registry_refs() {
+	: "${REGISTRY_LOCAL_ADDR:=localhost:${REGISTRY_PORT}}"
+	: "${REGISTRY_NODE_ADDR:=10.${BASE_NET_OCTET}.${BASE_NET_SUBNET}.1:${REGISTRY_PORT}}"
+	: "${INSTALLER_BASE_IMAGE_LOCAL:=${REGISTRY_LOCAL_ADDR}/chubo/installer-base:dev}"
+	: "${INSTALLER_IMAGE_LOCAL:=${REGISTRY_LOCAL_ADDR}/chubo/installer:dev}"
+	: "${INSTALLER_IMAGE_NODE:=${REGISTRY_NODE_ADDR}/chubo/installer:dev}"
+	: "${REGISTRY_MIRROR_NODE:=${REGISTRY_NODE_ADDR}=http://${REGISTRY_NODE_ADDR}}"
+}
+
 wait_until() {
 	local description="$1"
 	local timeout_seconds="$2"
@@ -104,6 +142,61 @@ wait_until() {
 		fi
 
 		sleep "${SLEEP_SECONDS}"
+	done
+}
+
+run_cluster_create() {
+	local monitor_path="${STATE_DIR}/${CLUSTER_NAME}/${CLUSTER_NAME}-controlplane-1.monitor"
+
+	if ((${#monitor_path} >= 104)); then
+		echo "qemu monitor path too long (${#monitor_path} bytes): ${monitor_path}" >&2
+		echo "set shorter STATE_DIR and/or CLUSTER_NAME" >&2
+		return 1
+	fi
+
+	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+		--arch "${ARCH}" \
+		--cidr "${CIDR}" \
+		--control-plane-port "${CONTROL_PLANE_PORT}" \
+		--controlplanes 1 \
+		--workers 0 \
+		--disk 12288 \
+		--cpus 2.0 \
+		--memory 2.0GiB \
+		--skip-injecting-config \
+		--skip-kubeconfig \
+		--skip-k8s-node-readiness-check \
+		--with-cluster-discovery=false \
+		--with-init-node=false \
+		--kubeprism-port=0 \
+		--wait=false \
+		--vmlinuz-path "${ARTIFACTS}/vmlinuz-${ARCH}" \
+		--initrd-path "${ARTIFACTS}/initramfs-${ARCH}.xz" \
+		--install-image "${INSTALLER_IMAGE_NODE}" \
+		--registry-mirror "${REGISTRY_MIRROR_NODE}"
+}
+
+create_cluster_with_retry() {
+	local attempt=1
+
+	while true; do
+		echo "creating single-node QEMU cluster in maintenance mode (attempt ${attempt}/${CLUSTER_CREATE_MAX_ATTEMPTS})"
+		if run_cluster_create 2>&1 | tee "${CLUSTER_CREATE_LOG}"; then
+			cluster_created=1
+			return 0
+		fi
+
+		if grep -Eq 'interface bridge[0-9]+ not found' "${CLUSTER_CREATE_LOG}" && ((attempt < CLUSTER_CREATE_MAX_ATTEMPTS)); then
+			echo "cluster create hit bridge bring-up race; destroying partial state and retrying"
+			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			rm -rf "${STATE_DIR:?}/${CLUSTER_NAME}"
+			attempt=$((attempt + 1))
+			sleep 2
+			continue
+		fi
+
+		echo "cluster create failed; see ${CLUSTER_CREATE_LOG}" >&2
+		return 1
 	done
 }
 
@@ -236,6 +329,7 @@ require_cmd docker
 require_cmd go
 require_cmd make
 require_cmd unzip
+require_cmd lsof
 
 if [[ ! -x "${TALOSCTL}" ]]; then
 	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
@@ -281,6 +375,9 @@ fi
 
 docker load -i "${ARTIFACTS}/installer-base.tar" >/dev/null
 docker load -i "${ARTIFACTS}/imager.tar" >/dev/null
+
+pick_registry_port
+refresh_registry_refs
 
 echo "starting local OCI registry on :${REGISTRY_PORT}"
 docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1 || true
@@ -328,27 +425,7 @@ sed \
 	"${MACHINECONFIG_RUNTIME}" >"${runtime_tmp}"
 mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 
-echo "creating single-node QEMU cluster in maintenance mode"
-"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
-	--arch "${ARCH}" \
-	--cidr "${CIDR}" \
-	--controlplanes 1 \
-	--workers 0 \
-	--disk 12288 \
-	--cpus 2.0 \
-	--memory 2.0GiB \
-	--skip-injecting-config \
-	--skip-kubeconfig \
-	--skip-k8s-node-readiness-check \
-	--with-cluster-discovery=false \
-	--with-init-node=false \
-	--kubeprism-port=0 \
-	--wait=false \
-	--vmlinuz-path "${ARTIFACTS}/vmlinuz-${ARCH}" \
-	--initrd-path "${ARTIFACTS}/initramfs-${ARCH}.xz" \
-	--install-image "${INSTALLER_IMAGE_NODE}" \
-	--registry-mirror "${REGISTRY_MIRROR_NODE}"
-cluster_created=1
+create_cluster_with_retry
 
 echo "waiting for maintenance API"
 wait_for_maintenance
