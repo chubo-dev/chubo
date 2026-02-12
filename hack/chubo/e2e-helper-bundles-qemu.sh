@@ -110,9 +110,21 @@ parse_bridged_ip() {
 	awk '
 		{
 			for (i = 1; i <= NF; i++) {
+				# talosctl prints addresses as either "<ip>/<cidr>" or "<iface>/<ip>/<cidr>".
 				if ($i ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+$/) {
 					ip = $i
 					sub(/\/.*/, "", ip)
+					if (ip !~ /^10\.0\.2\./ && ip != "127.0.0.1") {
+						print ip
+						exit
+					}
+				} else if ($i ~ /^[^\/]+\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+$/) {
+					n = split($i, parts, "/")
+					if (n == 3) {
+						ip = parts[2]
+					} else {
+						next
+					}
 					if (ip !~ /^10\.0\.2\./ && ip != "127.0.0.1") {
 						print ip
 						exit
@@ -182,25 +194,42 @@ echo "starting local registry on :${REGISTRY_PORT}"
 ensure_registry
 
 if [[ "${SKIP_BUILD}" -eq 0 ]]; then
-	echo "building and pushing installer-base + imager (${INSTALLER_TAG})"
-	GO_BUILDTAGS="${GO_BUILDTAGS}" make installer-base imager \
-		IMAGE_REGISTRY="${REGISTRY_BUILD_ADDR}" \
+	IMAGES_DIR="${RUN_DIR}/images"
+	mkdir -p "${IMAGES_DIR}"
+
+	echo "building installer-base + imager tarballs (${INSTALLER_TAG})"
+	GO_BUILDTAGS="${GO_BUILDTAGS}" make docker-installer-base docker-imager \
+		DEST="${IMAGES_DIR}" \
+		IMAGE_REGISTRY=localhost \
 		USERNAME="${USERNAME}" \
 		IMAGE_TAG_OUT="${INSTALLER_TAG}" \
-		PUSH=true \
+		PLATFORM=linux/arm64 \
 		INSTALLER_ARCH=targetarch
 
-	echo "building installer tarball"
-	make image-installer \
-		IMAGE_REGISTRY="${REGISTRY_LOCAL_ADDR}" \
-		USERNAME="${USERNAME}" \
-		IMAGE_TAG_IN="${INSTALLER_TAG}" \
-		PLATFORM=linux/arm64 \
-		IMAGER_ARGS="--insecure --base-installer-image ${REGISTRY_BUILD_ADDR}/${USERNAME}/installer-base:${INSTALLER_TAG}"
+	echo "loading imager image into local docker (for installer build)"
+	docker load -i "${IMAGES_DIR}/imager.tar" >/dev/null
+
+	echo "pushing installer-base image to local registry (${REGISTRY_LOCAL_ADDR}/${USERNAME}/installer-base:${INSTALLER_TAG})"
+	"${CRANE_BIN}" --insecure push "${IMAGES_DIR}/installer-base.tar" "${REGISTRY_LOCAL_ADDR}/${USERNAME}/installer-base:${INSTALLER_TAG}" >/dev/null
+
+	echo "building installer tarball via imager"
+	SOURCE_DATE_EPOCH="$(git log -1 --pretty=%ct)"
+	docker run --rm -t \
+		--network=host \
+		--user "$(id -u):$(id -g)" \
+		-v "${PWD}/${ARTIFACTS}:/secureboot:ro" \
+		-v "${PWD}/${ARTIFACTS}:/out" \
+		-e SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH}" \
+		-e DETERMINISTIC_SEED=1 \
+		localhost/${USERNAME}/imager:"${INSTALLER_TAG}" installer \
+		--arch arm64 \
+		--insecure \
+		--base-installer-image "${REGISTRY_LOCAL_ADDR}/${USERNAME}/installer-base:${INSTALLER_TAG}"
 
 	echo "pushing installer tarball (${INSTALLER_TAG}-arm64)"
-	installer_arch_ref="$("${CRANE_BIN}" --insecure push _out/installer-arm64.tar "${REGISTRY_LOCAL_ADDR}/${USERNAME}/installer:${INSTALLER_TAG}-arm64")"
+	installer_arch_ref="$("${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-arm64.tar" "${REGISTRY_LOCAL_ADDR}/${USERNAME}/installer:${INSTALLER_TAG}-arm64")"
 	"${CRANE_BIN}" --insecure index append -t "${REGISTRY_LOCAL_ADDR}/${USERNAME}/installer:${INSTALLER_TAG}" -m "${installer_arch_ref}" >/dev/null
+	rm -f "${ARTIFACTS}/installer-arm64.tar"
 else
 	echo "SKIP_BUILD=1, reusing existing installer image tag: ${INSTALLER_TAG}"
 
