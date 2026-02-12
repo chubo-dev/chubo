@@ -17,7 +17,7 @@ import (
 
 // populateKubernetesEtcd fills Kubernetes/etcd PKI into the secrets bundle.
 //
-// This is isolated behind build tags so the `chuboos` build variant can omit
+// This is isolated behind build tags so the `chubo` build variant can omit
 // Kubernetes/etcd PKI entirely.
 func (bundle *Bundle) populateKubernetesEtcd(versionContract *config.VersionContract) error {
 	if bundle.Certs.Etcd == nil {
@@ -110,4 +110,3 @@ func (bundle *Bundle) validateKubernetesEtcdCerts() error {
 
 	return multiErr
 }
-

@@ -59,7 +59,7 @@ func (suite *APICertSANsSuite) TestReconcileControlPlane() {
 	}
 	suite.Require().NoError(suite.State().Create(suite.Ctx(), nodeAddresses))
 
-	// `chuboos` uses the unfiltered accumulative addresses, while upstream uses
+	// `chubo` uses the unfiltered accumulative addresses, while upstream uses
 	// the "no k8s" filtered variant. Create both so the test remains valid in
 	// either build.
 	nodeAddressesAll := network.NewNodeAddress(network.NamespaceName, network.NodeAddressAccumulativeID)

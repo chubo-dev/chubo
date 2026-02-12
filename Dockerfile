@@ -781,8 +781,8 @@ RUN <<END
     cleanup.sh /rootfs
     mkdir -pv /rootfs/{boot/EFI,etc/{iscsi,nvme,cri/conf.d/hosts},usr/lib/firmware,usr/etc,usr/local/share,usr/share/zoneinfo/Etc,mnt,system,opt,.extra}
     mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
-    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
-        echo "chuboos: skipping Kubernetes directories"
+    if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
+        echo "chubo build: skipping Kubernetes directories"
         rm -f /rootfs/opt/cni/bin/flannel
     else
         mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
@@ -808,7 +808,7 @@ RUN <<END
     ln -s /etc/ssl /rootfs/usr/share/ca-certificates
     ln -s /etc/ssl /rootfs/usr/local/share/ca-certificates
     ln -s /etc/ssl /rootfs/etc/ca-certificates
-    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
+    if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
         chmod 0755 /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
     else
         rm -rf /rootfs/usr/local/etc/containers/chubo-agent.yaml /rootfs/usr/local/lib/containers/chubo-agent
@@ -882,8 +882,8 @@ RUN <<END
     cleanup.sh /rootfs
     mkdir -pv /rootfs/{boot/EFI,etc/{iscsi,nvme,cri/conf.d/hosts},usr/lib/firmware,usr/etc,usr/local/share,usr/share/zoneinfo/Etc,mnt,system,opt,.extra}
     mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
-    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
-        echo "chuboos: skipping Kubernetes directories"
+    if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
+        echo "chubo build: skipping Kubernetes directories"
         rm -f /rootfs/opt/cni/bin/flannel
     else
         mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
@@ -909,7 +909,7 @@ RUN <<END
     ln -s /etc/ssl /rootfs/usr/share/ca-certificates
     ln -s /etc/ssl /rootfs/usr/local/share/ca-certificates
     ln -s /etc/ssl /rootfs/etc/ca-certificates
-    if echo "${GO_BUILDFLAGS}" | grep -q 'chuboos'; then
+    if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
         chmod 0755 /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
     else
         rm -rf /rootfs/usr/local/etc/containers/chubo-agent.yaml /rootfs/usr/local/lib/containers/chubo-agent

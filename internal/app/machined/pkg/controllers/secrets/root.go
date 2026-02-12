@@ -152,8 +152,8 @@ type RootOSController = transform.Controller[*config.MachineConfig, *secrets.OSR
 func NewRootOSController() *RootOSController {
 	return transform.NewController(
 		transform.Settings[*config.MachineConfig, *secrets.OSRoot]{
-			Name:                    "secrets.RootOSController",
-			// Talos upstream always has a Cluster config, but `chuboos` intentionally
+			Name: "secrets.RootOSController",
+			// Talos upstream always has a Cluster config, but `chubo` intentionally
 			// synthesizes a minimal (non-Kubernetes) config which may have Cluster() == nil.
 			// OS root secrets only depend on Machine().Security(), so do not gate on Cluster().
 			MapMetadataOptionalFunc: func(cfg *config.MachineConfig) optional.Optional[*secrets.OSRoot] {

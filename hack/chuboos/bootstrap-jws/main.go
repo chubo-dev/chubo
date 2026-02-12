@@ -69,7 +69,7 @@ func main() {
 	now := time.Now().UTC()
 	tmpl := &x509.Certificate{
 		SerialNumber:          big.NewInt(1),
-		Subject:               pkix.Name{CommonName: "chuboos-bootstrap-signer"},
+		Subject:               pkix.Name{CommonName: "chubo-bootstrap-signer"},
 		NotBefore:             now.Add(-1 * time.Minute),
 		NotAfter:              now.Add(24 * time.Hour),
 		KeyUsage:              x509.KeyUsageDigitalSignature,
