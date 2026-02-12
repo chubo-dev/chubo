@@ -473,7 +473,7 @@ if [[ "${ARCH}" != "amd64" ]]; then
 fi
 
 if [[ "${EUID}" -ne 0 ]]; then
-	echo "error: please run as root user (CNI, qemu hvf requirement), we recommend running with \`sudo -E\`" >&2
+	echo "error: qemu fixture requires root for cluster provisioning; run with \`sudo -E\`" >&2
 	exit 1
 fi
 
