@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package inspect;
 
-option go_package = "github.com/siderolabs/talos/pkg/machinery/api/inspect";
-option java_package = "dev.talos.api.inspect";
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/inspect";
+option java_package = "dev.chubo.api.inspect";
 
 import "common/common.proto";
 import "google/protobuf/empty.proto";

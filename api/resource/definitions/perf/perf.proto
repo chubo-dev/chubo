@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package talos.resource.definitions.perf;
 
-option go_package = "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/perf";
-option java_package = "dev.talos.api.resource.definitions.perf";
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/perf";
+option java_package = "dev.chubo.api.resource.definitions.perf";
 
 // CPUSpec represents the last CPU stats snapshot.
 message CPUSpec {

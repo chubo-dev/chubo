@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package talos.resource.definitions.chubo;
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/chubo";
+option java_package = "dev.chubo.api.resource.definitions.chubo";
+
+// BootstrapStatusSpec describes bootstrap payload status.
+message BootstrapStatusSpec {
+  bool configured = 1;
+  bool rendered = 2;
+  string signer_sha256 = 3;
+}
+
+// OpenBaoJobStatusSpec describes OpenBao job status.
+message OpenBaoJobStatusSpec {
+  bool configured = 1;
+  string mode = 2;
+  string job_id = 3;
+  bool nomad_reachable = 4;
+  bool present = 5;
+  string last_error = 6;
+}
+
+// OpenGyozaStatusSpec describes opengyoza status.
+message OpenGyozaStatusSpec {
+  bool configured = 1;
+  string role = 2;
+  bool running = 3;
+  bool healthy = 4;
+  string binary_mode = 5;
+}
+
+// OpenWontonStatusSpec describes openwonton status.
+message OpenWontonStatusSpec {
+  bool configured = 1;
+  string role = 2;
+  bool running = 3;
+  bool healthy = 4;
+  string binary_mode = 5;
+}
+

@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package talos.resource.definitions.block;
 
-option go_package = "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/block";
-option java_package = "dev.talos.api.resource.definitions.block";
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block";
+option java_package = "dev.chubo.api.resource.definitions.block";
 
 import "google/api/expr/v1alpha1/checked.proto";
 import "resource/definitions/enums/enums.proto";

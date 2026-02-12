@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package storage;
 
-option go_package = "github.com/siderolabs/talos/pkg/machinery/api/storage";
-option java_package = "dev.talos.api.storage";
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/storage";
+option java_package = "dev.chubo.api.storage";
 
 import "common/common.proto";
 import "google/protobuf/empty.proto";

@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package resource.network;
 
-option go_package = "github.com/siderolabs/talos/pkg/machinery/api/resource/network";
-option java_package = "dev.talos.api.resource.network";
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/network";
+option java_package = "dev.chubo.api.resource.network";
 
 // DeviceConfigSpecSpec is the spec for the network.DeviceConfigSpec resource.
 message DeviceConfigSpecSpec {

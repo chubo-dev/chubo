@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package talos.resource.definitions.enums;
 
-option go_package = "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/enums";
-option java_package = "dev.talos.api.resource.definitions.enums";
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums";
+option java_package = "dev.chubo.api.resource.definitions.enums";
 
 // RuntimeMachineStage describes the stage of the machine boot/run process.
 enum RuntimeMachineStage {
