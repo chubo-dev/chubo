@@ -37,6 +37,42 @@ func ensureServiceBinaryWithRelease(ctx context.Context, targetPath string, fall
 	return ensureServiceBinary(targetPath, fallbackPath)
 }
 
+func ensureServiceBinary(targetPath string, fallbackPath string) error {
+	if st, err := os.Stat(targetPath); err == nil {
+		if st.Mode()&0o111 == 0 {
+			return os.Chmod(targetPath, 0o755)
+		}
+
+		return nil
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+
+	src, err := os.Open(fallbackPath)
+	if err != nil {
+		return fmt.Errorf("failed to open fallback binary %q: %w", fallbackPath, err)
+	}
+
+	defer src.Close() //nolint:errcheck
+
+	dst, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
+	if err != nil {
+		return fmt.Errorf("failed to create service binary %q: %w", targetPath, err)
+	}
+
+	if _, err := io.Copy(dst, src); err != nil {
+		_ = dst.Close()
+
+		return fmt.Errorf("failed to copy fallback binary to %q: %w", targetPath, err)
+	}
+
+	if err := dst.Close(); err != nil {
+		return fmt.Errorf("failed to finalize service binary %q: %w", targetPath, err)
+	}
+
+	return nil
+}
+
 func installServiceBinaryFromRelease(ctx context.Context, targetPath string, release serviceReleaseBinary) error {
 	artifactBinaryPath, err := ensureCachedReleaseBinary(ctx, release)
 	if err != nil {

@@ -6,8 +6,6 @@ package services
 
 import (
 	"context"
-	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -33,20 +31,9 @@ const (
 	openWontonBinaryPath = "/var/lib/chubo/bin/openwonton"
 	openWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
 	openWontonDataDir    = "/var/lib/chubo/openwonton"
+	openWontonGlibcDir   = "/var/lib/chubo/lib/openwonton"
 	openWontonFallback   = "/usr/bin/init"
 )
-
-var openWontonRelease = serviceReleaseBinary{
-	ServiceName: "openwonton",
-	Version:     "v1.6.5-rc1",
-	// The OpenWonton release zip contains both `wonton` (glibc-linked) and `nomad` (static).
-	// Talos doesn't ship glibc, so we install the static `nomad` binary.
-	ZipEntry: "nomad",
-	AssetURLs: map[string]string{
-		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/wonton_1.6.5-rc1_linux_amd64.zip",
-		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/wonton_1.6.5-rc1_linux_arm64.zip",
-	},
-}
 
 var _ system.HealthcheckedService = (*OpenWonton)(nil)
 
@@ -72,13 +59,22 @@ func (s *OpenWonton) PreFunc(ctx context.Context, r runtime.Runtime) error {
 		return err
 	}
 
+	if err := os.MkdirAll(openWontonGlibcDir, 0o755); err != nil {
+		return err
+	}
+
 	if err := EnsureChuboServiceTLSMaterial(ctx, r, OpenWontonServiceID); err != nil {
 		return err
 	}
 
-	// Prefer real openwonton release artifacts. Fallback to the local mock binary path
-	// if artifact install is unavailable (for example network-restricted boots).
-	return ensureServiceBinaryWithRelease(ctx, openWontonBinaryPath, openWontonFallback, openWontonRelease)
+	// Prefer real openwonton release artifacts (wonton + glibc bundle from the OCI image tar).
+	// Fall back to the local mock binary path if artifact install is unavailable (for example
+	// network-restricted boots).
+	if err := ensureOpenWontonRuntime(ctx, openWontonBinaryPath, openWontonGlibcDir); err == nil {
+		return nil
+	}
+
+	return ensureServiceBinary(openWontonBinaryPath, openWontonFallback)
 }
 
 // PostFunc implements the Service interface.
@@ -113,9 +109,17 @@ func (s *OpenWonton) Runner(r runtime.Runtime) (runner.Runner, error) {
 		debug = r.Config().Debug()
 	}
 
+	loader, libraryPath, err := openWontonLoaderAndLibraryPath(openWontonGlibcDir)
+	if err != nil {
+		return nil, err
+	}
+
 	args := &runner.Args{
 		ID: s.ID(r),
 		ProcessArgs: []string{
+			loader,
+			"--library-path",
+			libraryPath,
 			openWontonBinaryPath,
 			"agent",
 			"-config",
@@ -172,40 +176,4 @@ func (s *OpenWonton) APIStartAllowed(runtime.Runtime) bool {
 // APIStopAllowed implements APIStoppableService.
 func (s *OpenWonton) APIStopAllowed(runtime.Runtime) bool {
 	return true
-}
-
-func ensureServiceBinary(targetPath string, fallbackPath string) error {
-	if st, err := os.Stat(targetPath); err == nil {
-		if st.Mode()&0o111 == 0 {
-			return os.Chmod(targetPath, 0o755)
-		}
-
-		return nil
-	} else if !os.IsNotExist(err) {
-		return err
-	}
-
-	src, err := os.Open(fallbackPath)
-	if err != nil {
-		return fmt.Errorf("failed to open fallback binary %q: %w", fallbackPath, err)
-	}
-
-	defer src.Close() //nolint:errcheck
-
-	dst, err := os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
-	if err != nil {
-		return fmt.Errorf("failed to create service binary %q: %w", targetPath, err)
-	}
-
-	if _, err := io.Copy(dst, src); err != nil {
-		_ = dst.Close()
-
-		return fmt.Errorf("failed to copy fallback binary to %q: %w", targetPath, err)
-	}
-
-	if err := dst.Close(); err != nil {
-		return fmt.Errorf("failed to finalize service binary %q: %w", targetPath, err)
-	}
-
-	return nil
 }
