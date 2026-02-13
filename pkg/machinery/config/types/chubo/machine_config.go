@@ -45,6 +45,8 @@ const (
 	chuboOpenWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
 	chuboOpenGyozaConfigPath  = "/var/lib/chubo/config/opengyoza.hcl"
 	chuboOpenGyozaRolePath    = "/var/lib/chubo/config/opengyoza.role"
+	chuboOpenWontonTLSDir     = "/var/lib/chubo/certs/openwonton"
+	chuboOpenGyozaTLSDir      = "/var/lib/chubo/certs/opengyoza"
 	chuboOpenBaoJobPath       = "/var/lib/chubo/config/openbao.nomad.json"
 	chuboOpenBaoModePath      = "/var/lib/chubo/config/openbao.mode"
 
@@ -732,6 +734,15 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) str
 bind_addr = "0.0.0.0"
 log_level = "INFO"
 
+tls {
+  http = true
+  rpc = true
+  ca_file = "%s/ca.pem"
+  cert_file = "%s/server.pem"
+  key_file = "%s/server-key.pem"
+  verify_https_client = true
+}
+
 %sserver {
   enabled = %t
   bootstrap_expect = %d
@@ -740,7 +751,7 @@ log_level = "INFO"
 client {
   enabled = %t
 }
-`, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
+`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string) string {
@@ -755,9 +766,18 @@ func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string) stri
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
 log_level = "INFO"
+ports {
+  https = 8500
+  http = -1
+}
+ca_file = "%s/ca.pem"
+cert_file = "%s/server.pem"
+key_file = "%s/server-key.pem"
+verify_incoming = true
+verify_outgoing = true
 %sserver = %t
 bootstrap_expect = %d
-`, joinLine, serverEnabled, bootstrapExpect)
+`, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, joinLine, serverEnabled, bootstrapExpect)
 }
 
 func renderOpenBaoNomadJobPayload() string {

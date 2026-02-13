@@ -251,13 +251,13 @@ func kubeletSeccomp(seccomp *specs.LinuxSeccomp) {
 	)
 }
 
-func simpleHealthCheck(ctx context.Context, url string) error {
+func simpleHealthCheckWithClient(ctx context.Context, url string, c *http.Client) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return err
 	}
 
-	resp, err := http.DefaultClient.Do(req) //nolint:bodyclose
+	resp, err := c.Do(req) //nolint:bodyclose
 	if err != nil {
 		return err
 	}
@@ -271,4 +271,8 @@ func simpleHealthCheck(ctx context.Context, url string) error {
 	}
 
 	return bodyCloser()
+}
+
+func simpleHealthCheck(ctx context.Context, url string) error {
+	return simpleHealthCheckWithClient(ctx, url, http.DefaultClient)
 }

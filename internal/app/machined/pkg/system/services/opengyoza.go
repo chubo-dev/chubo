@@ -55,7 +55,7 @@ func (s *OpenGyoza) ID(runtime.Runtime) string {
 }
 
 // PreFunc implements the Service interface.
-func (s *OpenGyoza) PreFunc(ctx context.Context, _ runtime.Runtime) error {
+func (s *OpenGyoza) PreFunc(ctx context.Context, r runtime.Runtime) error {
 	if err := os.MkdirAll(filepath.Dir(openGyozaBinaryPath), 0o755); err != nil {
 		return err
 	}
@@ -65,6 +65,10 @@ func (s *OpenGyoza) PreFunc(ctx context.Context, _ runtime.Runtime) error {
 	}
 
 	if err := os.MkdirAll(openGyozaDataDir, 0o700); err != nil {
+		return err
+	}
+
+	if err := EnsureChuboServiceTLSMaterial(ctx, r, OpenGyozaServiceID); err != nil {
 		return err
 	}
 
@@ -134,7 +138,12 @@ func (s *OpenGyoza) Runner(r runtime.Runtime) (runner.Runner, error) {
 // HealthFunc implements the HealthcheckedService interface.
 func (s *OpenGyoza) HealthFunc(runtime.Runtime) health.Check {
 	return func(ctx context.Context) error {
-		return simpleHealthCheck(ctx, "http://127.0.0.1:8500/v1/status/leader")
+		client, err := NewChuboServiceHTTPClient(OpenGyozaServiceID, 2*time.Second)
+		if err != nil {
+			return err
+		}
+
+		return simpleHealthCheckWithClient(ctx, "https://127.0.0.1:8500/v1/status/leader", client)
 	}
 }
 

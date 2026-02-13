@@ -57,7 +57,7 @@ func (s *OpenWonton) ID(runtime.Runtime) string {
 }
 
 // PreFunc implements the Service interface.
-func (s *OpenWonton) PreFunc(ctx context.Context, _ runtime.Runtime) error {
+func (s *OpenWonton) PreFunc(ctx context.Context, r runtime.Runtime) error {
 	if err := os.MkdirAll(filepath.Dir(openWontonBinaryPath), 0o755); err != nil {
 		return err
 	}
@@ -67,6 +67,10 @@ func (s *OpenWonton) PreFunc(ctx context.Context, _ runtime.Runtime) error {
 	}
 
 	if err := os.MkdirAll(openWontonDataDir, 0o700); err != nil {
+		return err
+	}
+
+	if err := EnsureChuboServiceTLSMaterial(ctx, r, OpenWontonServiceID); err != nil {
 		return err
 	}
 
@@ -136,7 +140,12 @@ func (s *OpenWonton) Runner(r runtime.Runtime) (runner.Runner, error) {
 // HealthFunc implements the HealthcheckedService interface.
 func (s *OpenWonton) HealthFunc(runtime.Runtime) health.Check {
 	return func(ctx context.Context) error {
-		return simpleHealthCheck(ctx, "http://127.0.0.1:4646/v1/status/leader")
+		client, err := NewChuboServiceHTTPClient(OpenWontonServiceID, 2*time.Second)
+		if err != nil {
+			return err
+		}
+
+		return simpleHealthCheckWithClient(ctx, "https://127.0.0.1:4646/v1/status/leader", client)
 	}
 }
 
