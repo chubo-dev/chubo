@@ -27,7 +27,9 @@ func NewRateLimitedTrigger(ctx context.Context, trigger Trigger, rateLimit rate.
 	t := &RateLimitedTrigger{
 		trigger: trigger,
 		limiter: rate.NewLimiter(rateLimit, burst),
-		ch:      make(chan struct{}),
+		// Buffer size 1 coalesces bursts while guaranteeing that we don't lose the
+		// last event when the goroutine is busy (e.g., during limiter.Wait).
+		ch: make(chan struct{}, 1),
 	}
 
 	go t.run(ctx)
@@ -47,8 +49,7 @@ func NewDefaultRateLimitedTrigger(ctx context.Context, trigger Trigger) *RateLim
 
 // QueueReconcile implements Trigger interface.
 //
-// The event is queued if the goroutine is ready to accept it (otherwise it's already
-// busy processing a previous event).
+// The event is queued if there's room (otherwise it's already busy processing a previous event).
 // This function returns immediately.
 func (t *RateLimitedTrigger) QueueReconcile() {
 	select {
