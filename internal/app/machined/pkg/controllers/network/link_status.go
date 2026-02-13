@@ -67,6 +67,13 @@ func (ctrl *LinkStatusController) Run(ctx context.Context, r controller.Runtime,
 				Type:      network.LinkSpecType,
 				Kind:      controller.InputStrong,
 			},
+			// WireGuard device reconfiguration (peers/keys/listen port) doesn't always emit a netlink
+			// link event. LinkSpecController bumps LinkRefresh to force a status reconcile in those cases.
+			{
+				Namespace: network.NamespaceName,
+				Type:      network.LinkRefreshType,
+				Kind:      controller.InputWeak,
+			},
 		},
 	); err != nil {
 		return err
