@@ -156,7 +156,6 @@ trap cleanup EXIT
 require_cmd docker
 require_cmd go
 require_cmd make
-require_cmd yq
 require_cmd openssl
 require_cmd rg
 require_cmd curl
@@ -247,20 +246,20 @@ echo "generating secrets + machine config"
 	--install-disk /dev/vdb \
 	--install-image "${INSTALLER_IMAGE_NODE}" \
 	--registry-mirror "${REGISTRY_MIRROR_NODE}" \
+	--with-chubo \
+	--chubo-role server \
+	--with-openbao \
+	--openbao-mode nomadJob \
 	-o "${MACHINECONFIG_INSTALL}"
 
-yq -i '
-	.spec.modules.chubo.enabled = true |
-	.spec.modules.chubo.nomad.enabled = true |
-	.spec.modules.chubo.nomad.role = "server" |
-	.spec.modules.chubo.consul.enabled = true |
-	.spec.modules.chubo.consul.role = "server" |
-	.spec.modules.chubo.openbao.enabled = true |
-	.spec.modules.chubo.openbao.mode = "nomadJob"
-' "${MACHINECONFIG_INSTALL}"
-
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
-yq -i '.spec.install.disk = "/dev/vda" | .spec.install.wipe = false | .spec.install.image = ""' "${MACHINECONFIG_RUNTIME}"
+runtime_tmp="${MACHINECONFIG_RUNTIME}.tmp"
+sed \
+	-e 's|^\([[:space:]]*disk:[[:space:]]*\).*$|\1"/dev/vda"|' \
+	-e 's/^\([[:space:]]*wipe:[[:space:]]*\)true$/\1false/' \
+	-e 's|^\([[:space:]]*image:[[:space:]]*\).*$|\1""|' \
+	"${MACHINECONFIG_RUNTIME}" >"${runtime_tmp}"
+mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 
 "${TALOSCTL_BASE}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
