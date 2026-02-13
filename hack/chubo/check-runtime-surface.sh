@@ -5,12 +5,15 @@ set -euo pipefail
 #
 # Usage:
 #   hack/chubo/check-runtime-surface.sh \
-#     --talosconfig /tmp/chubo-talosconfig \
+#     --chuboconfig /tmp/chubo-chuboconfig \
 #     --endpoint 192.168.0.139 \
 #     --node 192.168.0.139
+#
+# Notes:
+# - `--talosconfig` is a legacy alias for `--chuboconfig` during the rename wave.
 
 TALOSCTL="${TALOSCTL:-./_out/chuboctl-darwin-arm64}"
-TALOSCONFIG=""
+CHUBOCONFIG=""
 ENDPOINT=""
 NODE=""
 
@@ -20,8 +23,12 @@ while [[ $# -gt 0 ]]; do
 		TALOSCTL="$2"
 		shift 2
 		;;
+	--chuboconfig)
+		CHUBOCONFIG="$2"
+		shift 2
+		;;
 	--talosconfig)
-		TALOSCONFIG="$2"
+		CHUBOCONFIG="$2"
 		shift 2
 		;;
 	--endpoint)
@@ -43,8 +50,8 @@ while [[ $# -gt 0 ]]; do
 	esac
 done
 
-if [[ -z "${TALOSCONFIG}" || -z "${ENDPOINT}" || -z "${NODE}" ]]; then
-	echo "missing required args: --talosconfig, --endpoint, --node" >&2
+if [[ -z "${CHUBOCONFIG}" || -z "${ENDPOINT}" || -z "${NODE}" ]]; then
+	echo "missing required args: --chuboconfig (or --talosconfig), --endpoint, --node" >&2
 	exit 2
 fi
 
@@ -53,7 +60,7 @@ if [[ ! -x "${TALOSCTL}" ]]; then
 	exit 2
 fi
 
-common_args=(--talosconfig "${TALOSCONFIG}" -e "${ENDPOINT}" -n "${NODE}")
+common_args=(--chuboconfig "${CHUBOCONFIG}" -e "${ENDPOINT}" -n "${NODE}")
 
 check_running() {
 	local service_id="$1"
