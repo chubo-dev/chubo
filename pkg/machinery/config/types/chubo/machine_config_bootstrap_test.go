@@ -261,8 +261,8 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 		case chuboOpenWontonConfigPath:
 			foundConfig = true
 			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/openwonton"`)
-			require.Contains(t, f.FileContent, "acl {\n  enabled = true")
-			require.Contains(t, f.FileContent, `token = "`+chuboacl.WorkloadToken("token", "nomad")+`"`)
+			require.Contains(t, f.FileContent, "acl {\n  enabled = true\n}")
+			require.NotContains(t, f.FileContent, "\ntoken = ")
 			require.Contains(t, f.FileContent, "server {\n  enabled = true")
 			require.Contains(t, f.FileContent, "bootstrap_expect = 3")
 			require.Contains(t, f.FileContent, "server_join {")

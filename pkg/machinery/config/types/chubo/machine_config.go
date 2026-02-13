@@ -532,10 +532,9 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Nomad.Role)
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Nomad.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Nomad.Join)
-				aclToken := chuboacl.WorkloadToken(s.Spec.Trust.Token, "nomad")
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, aclToken),
+					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenWontonConfigPath,
 					FileOp:          "create",
@@ -718,7 +717,7 @@ func renderHCLStringArray(values []string) string {
 	return string(b)
 }
 
-func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, aclToken string) string {
+func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) string {
 	serverEnabled := role == chuboRoleServer
 	clientEnabled := role == chuboRoleClient
 
@@ -739,7 +738,6 @@ log_level = "INFO"
 
 acl {
   enabled = true
-  token = %q
 }
 
 tls {
@@ -759,7 +757,7 @@ tls {
 client {
   enabled = %t
 }
-`, aclToken, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
+`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {
