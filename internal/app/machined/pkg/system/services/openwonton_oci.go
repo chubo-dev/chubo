@@ -308,7 +308,7 @@ func extractTarToDir(archivePath, destDir string) error {
 				return fmt.Errorf("failed to create OCI parent dir for %q: %w", dst, err)
 			}
 
-			if err := writeFileAtomic(dst, tr, 0o644); err != nil {
+			if err := writeFileAtomicFromReader(dst, tr, 0o644); err != nil {
 				return err
 			}
 		default:
@@ -362,7 +362,7 @@ func extractOpenWontonLayer(layerPath, binTmp, glibcTmp string, extractedBinary 
 
 		// Extract the OpenWonton agent binary.
 		if name == "bin/wonton" && (hdr.Typeflag == tar.TypeReg || hdr.Typeflag == tar.TypeRegA) {
-			if err := writeFileAtomic(binTmp, tr, 0o755); err != nil {
+			if err := writeFileAtomicFromReader(binTmp, tr, 0o755); err != nil {
 				return err
 			}
 			*extractedBinary = true
@@ -398,7 +398,7 @@ func extractOpenWontonLayer(layerPath, binTmp, glibcTmp string, extractedBinary 
 				perm = 0o644
 			}
 
-			if err := writeFileAtomic(dst, tr, perm); err != nil {
+			if err := writeFileAtomicFromReader(dst, tr, perm); err != nil {
 				return err
 			}
 		case tar.TypeSymlink:
@@ -425,7 +425,7 @@ func extractOpenWontonLayer(layerPath, binTmp, glibcTmp string, extractedBinary 
 	return nil
 }
 
-func writeFileAtomic(dst string, r io.Reader, perm os.FileMode) error {
+func writeFileAtomicFromReader(dst string, r io.Reader, perm os.FileMode) error {
 	partial := dst + ".part"
 
 	f, err := os.OpenFile(partial, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, perm)
