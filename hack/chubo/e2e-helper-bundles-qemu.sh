@@ -164,7 +164,18 @@ if [[ ! -x "${TALOSCTL_BASE}" ]]; then
 	make talosctl
 fi
 
+rebuild_chuboctl=0
 if [[ ! -x "${TALOSCTL_CHUBO}" ]]; then
+	rebuild_chuboctl=1
+else
+	# The helper-bundles E2E depends on newer `gen machineconfig` flags.
+	# If the cached binary doesn't have them, rebuild it from source.
+	if ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
+		rebuild_chuboctl=1
+	fi
+fi
+
+if [[ "${rebuild_chuboctl}" -eq 1 ]]; then
 	GOOS="${HOST_GOOS}" GOARCH="${HOST_GOARCH}" CGO_ENABLED=0 go build \
 		-tags grpcnotrace,chubo \
 		-o "${TALOSCTL_CHUBO}" \
