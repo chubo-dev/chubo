@@ -317,8 +317,12 @@ download_helper_bundles() {
 	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 
-	NOMAD_CURL_ARGS=(--cacert "${HELPERS_DIR}/nomadconfig/ca.pem" --cert "${HELPERS_DIR}/nomadconfig/client.pem" --key "${HELPERS_DIR}/nomadconfig/client-key.pem")
-	CONSUL_CURL_ARGS=(--cacert "${HELPERS_DIR}/consulconfig/ca.pem" --cert "${HELPERS_DIR}/consulconfig/client.pem" --key "${HELPERS_DIR}/consulconfig/client-key.pem")
+	local nomad_token consul_token
+	nomad_token="$(tr -d '\r\n' <"${HELPERS_DIR}/nomadconfig/acl.token")"
+	consul_token="$(tr -d '\r\n' <"${HELPERS_DIR}/consulconfig/acl.token")"
+
+	NOMAD_CURL_ARGS=(--cacert "${HELPERS_DIR}/nomadconfig/ca.pem" --cert "${HELPERS_DIR}/nomadconfig/client.pem" --key "${HELPERS_DIR}/nomadconfig/client-key.pem" -H "X-Nomad-Token: ${nomad_token}")
+	CONSUL_CURL_ARGS=(--cacert "${HELPERS_DIR}/consulconfig/ca.pem" --cert "${HELPERS_DIR}/consulconfig/client.pem" --key "${HELPERS_DIR}/consulconfig/client-key.pem" -H "X-Consul-Token: ${consul_token}")
 }
 
 nomad_peers_ok() {
