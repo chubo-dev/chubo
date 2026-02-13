@@ -35,6 +35,28 @@ func MockEventSink(t *testing.T) func(state events.ServiceState, message string,
 	}
 }
 
+func readFileEventually(path string, timeout time.Duration) ([]byte, error) {
+	deadline := time.Now().Add(timeout)
+
+	var lastErr error
+
+	for time.Now().Before(deadline) {
+		b, err := os.ReadFile(path)
+		if err == nil && strings.TrimSpace(string(b)) != "" {
+			return b, nil
+		}
+
+		lastErr = err
+		time.Sleep(10 * time.Millisecond)
+	}
+
+	if lastErr != nil {
+		return nil, lastErr
+	}
+
+	return nil, fmt.Errorf("timed out waiting for %q", path)
+}
+
 type ProcessSuite struct {
 	suite.Suite
 
@@ -255,9 +277,7 @@ func (suite *ProcessSuite) TestPriority() {
 		done <- r.Run(MockEventSink(suite.T()))
 	}()
 
-	time.Sleep(10 * time.Millisecond)
-
-	pidString, err := os.ReadFile(pidFile)
+	pidString, err := readFileEventually(pidFile, 2*time.Second)
 	suite.Assert().NoError(err)
 
 	pid, err := strconv.ParseUint(strings.Trim(string(pidString), "\r\n"), 10, 32)
@@ -309,9 +329,7 @@ func (suite *ProcessSuite) TestIOPriority() {
 		done <- r.Run(MockEventSink(suite.T()))
 	}()
 
-	time.Sleep(10 * time.Millisecond)
-
-	pidString, err := os.ReadFile(pidFile)
+	pidString, err := readFileEventually(pidFile, 2*time.Second)
 	suite.Assert().NoError(err)
 
 	pid, err := strconv.ParseUint(strings.Trim(string(pidString), "\r\n"), 10, 32)
@@ -362,9 +380,7 @@ func (suite *ProcessSuite) TestSchedulingPolicy() {
 		done <- r.Run(MockEventSink(suite.T()))
 	}()
 
-	time.Sleep(10 * time.Millisecond)
-
-	pidString, err := os.ReadFile(pidFile)
+	pidString, err := readFileEventually(pidFile, 2*time.Second)
 	suite.Assert().NoError(err)
 
 	pid, err := strconv.ParseUint(strings.Trim(string(pidString), "\r\n"), 10, 32)
