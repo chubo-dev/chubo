@@ -11,6 +11,7 @@ import (
 	"net"
 	"net/netip"
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -240,6 +241,11 @@ func (suite *AddressSpecSuite) TestDummyAlias() {
 			},
 		),
 	)
+
+	// Sanity-check that alias is present in sysfs (this is what the controller uses as fallback).
+	aliasBytes, err := os.ReadFile(fmt.Sprintf("/sys/class/net/%s/ifalias", dummyInterface))
+	suite.Require().NoError(err)
+	suite.Require().Equal(dummyAlias, strings.TrimSpace(string(aliasBytes)))
 
 	defer conn.Link.Delete(uint32(iface.Index)) //nolint:errcheck
 

@@ -11,7 +11,9 @@ import (
 	"net"
 	"net/netip"
 	"os"
+	"path/filepath"
 	"slices"
+	"strings"
 
 	"github.com/cosi-project/runtime/pkg/controller"
 	"github.com/cosi-project/runtime/pkg/resource"
@@ -141,7 +143,31 @@ func resolveLinkName(links []rtnetlink.LinkMessage, linkName string) uint32 {
 		}
 	}
 
+	// Finally, fallback to sysfs for alias lookup.
+	//
+	// Some kernels/netlink library combos don't include IFLA_IFALIAS in link dumps,
+	// but the alias is still present in /sys/class/net/<ifname>/ifalias.
+	for _, link := range links {
+		alias, err := sysfsLinkAlias(link.Attributes.Name)
+		if err != nil {
+			continue
+		}
+
+		if alias == linkName {
+			return link.Index
+		}
+	}
+
 	return 0
+}
+
+func sysfsLinkAlias(ifName string) (string, error) {
+	b, err := os.ReadFile(filepath.Join("/sys/class/net", ifName, "ifalias"))
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSpace(string(b)), nil
 }
 
 func findAddress(addrs []rtnetlink.AddressMessage, linkIndex uint32, ipPrefix netip.Prefix) *rtnetlink.AddressMessage {
