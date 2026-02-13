@@ -36,6 +36,12 @@ type OpenWontonStatusSpec struct {
 	Healthy bool `yaml:"healthy" protobuf:"4"`
 	// BinaryMode reports whether the running binary is a fallback mock or an artifact.
 	BinaryMode string `yaml:"binaryMode,omitempty" protobuf:"5"`
+	// Leader is the observed openwonton leader address (best-effort).
+	Leader string `yaml:"leader,omitempty" protobuf:"6"`
+	// PeerCount is the observed number of openwonton peers (best-effort).
+	PeerCount int32 `yaml:"peerCount,omitempty" protobuf:"7"`
+	// LastError captures the last API query error (best-effort).
+	LastError string `yaml:"lastError,omitempty" protobuf:"8"`
 }
 
 // DeepCopy generates a deep copy of OpenWontonStatusSpec.
@@ -81,8 +87,20 @@ func (OpenWontonStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpe
 				JSONPath: `{.healthy}`,
 			},
 			{
+				Name:     "Peers",
+				JSONPath: `{.peerCount}`,
+			},
+			{
+				Name:     "Leader",
+				JSONPath: `{.leader}`,
+			},
+			{
 				Name:     "BinaryMode",
 				JSONPath: `{.binaryMode}`,
+			},
+			{
+				Name:     "LastError",
+				JSONPath: `{.lastError}`,
 			},
 		},
 	}

@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/cosi-project/runtime/pkg/controller"
 	"github.com/cosi-project/runtime/pkg/resource"
@@ -79,11 +80,15 @@ func (ctrl *OpenGyozaServiceController) Outputs() []controller.Output {
 
 // Run implements controller.Controller interface.
 func (ctrl *OpenGyozaServiceController) Run(ctx context.Context, r controller.Runtime, _ *zap.Logger) error {
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case <-ctx.Done():
 			return nil
 		case <-r.EventCh():
+		case <-ticker.C:
 		}
 
 		r.StartTrackingOutputs()
@@ -132,12 +137,29 @@ func (ctrl *OpenGyozaServiceController) Run(ctx context.Context, r controller.Ru
 			healthy = svcRes.TypedSpec().Healthy
 		}
 
+		leader := ""
+		peerCount := int32(0)
+		lastError := ""
+
+		if configured && healthy {
+			qctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+			var qerr error
+			leader, peerCount, qerr = queryOpenGyozaStatus(qctx)
+			cancel()
+			if qerr != nil {
+				lastError = qerr.Error()
+			}
+		}
+
 		if err := safe.WriterModify(ctx, r, chubores.NewOpenGyozaStatus(), func(res *chubores.OpenGyozaStatus) error {
 			res.TypedSpec().Configured = configured
 			res.TypedSpec().Role = role
 			res.TypedSpec().Running = running
 			res.TypedSpec().Healthy = healthy
 			res.TypedSpec().BinaryMode = detectServiceBinaryMode(openGyozaBinaryPath, openGyozaFallback)
+			res.TypedSpec().Leader = leader
+			res.TypedSpec().PeerCount = peerCount
+			res.TypedSpec().LastError = lastError
 
 			return nil
 		}); err != nil {

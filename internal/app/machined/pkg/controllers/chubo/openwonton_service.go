@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/cosi-project/runtime/pkg/controller"
 	"github.com/cosi-project/runtime/pkg/resource"
@@ -79,11 +80,15 @@ func (ctrl *OpenWontonServiceController) Outputs() []controller.Output {
 
 // Run implements controller.Controller interface.
 func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.Runtime, _ *zap.Logger) error {
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case <-ctx.Done():
 			return nil
 		case <-r.EventCh():
+		case <-ticker.C:
 		}
 
 		r.StartTrackingOutputs()
@@ -132,12 +137,29 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 			healthy = svcRes.TypedSpec().Healthy
 		}
 
+		leader := ""
+		peerCount := int32(0)
+		lastError := ""
+
+		if configured && healthy {
+			qctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+			var qerr error
+			leader, peerCount, qerr = queryOpenWontonStatus(qctx)
+			cancel()
+			if qerr != nil {
+				lastError = qerr.Error()
+			}
+		}
+
 		if err := safe.WriterModify(ctx, r, chubores.NewOpenWontonStatus(), func(res *chubores.OpenWontonStatus) error {
 			res.TypedSpec().Configured = configured
 			res.TypedSpec().Role = role
 			res.TypedSpec().Running = running
 			res.TypedSpec().Healthy = healthy
 			res.TypedSpec().BinaryMode = detectServiceBinaryMode(openWontonBinaryPath, openWontonFallback)
+			res.TypedSpec().Leader = leader
+			res.TypedSpec().PeerCount = peerCount
+			res.TypedSpec().LastError = lastError
 
 			return nil
 		}); err != nil {
