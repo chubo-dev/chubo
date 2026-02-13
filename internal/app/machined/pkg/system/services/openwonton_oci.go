@@ -26,10 +26,10 @@ type serviceReleaseOCITar struct {
 
 var openWontonOCIRelease = serviceReleaseOCITar{
 	ServiceName: "openwonton",
-	Version:     "v1.6.5-rc1",
+	Version:     "v1.6.5-rc2",
 	AssetURLs: map[string]string{
-		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/openwonton_release_linux_amd64_1.6.5-rc1_701cdab0b3bf3b834fbc6319ae08fddbebb42b80.docker.tar",
-		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/openwonton_release_linux_arm64_1.6.5-rc1_701cdab0b3bf3b834fbc6319ae08fddbebb42b80.docker.tar",
+		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc2/openwonton_release_linux_amd64_1.6.5-rc2_edca5a45ed4a4cc836d2e39cc71b11893e5ba70a.docker.tar",
+		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc2/openwonton_release_linux_arm64_1.6.5-rc2_edca5a45ed4a4cc836d2e39cc71b11893e5ba70a.docker.tar",
 	},
 }
 
