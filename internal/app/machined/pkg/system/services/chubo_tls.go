@@ -9,6 +9,7 @@ import (
 	"crypto/tls"
 	stdlibx509 "crypto/x509"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -136,8 +137,14 @@ func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtime.Runtime, servi
 		return fmt.Errorf("failed to parse OS issuing CA: %w", err)
 	}
 
+	ips := append([]net.IP(nil), certSANs.StdIPs()...)
+	// Chubo-managed services are accessed locally via 127.0.0.1/::1. Include loopback
+	// SANs so internal mTLS clients can verify certificates without disabling hostname
+	// verification.
+	ips = append(ips, net.IPv4(127, 0, 0, 1), net.IPv6loopback)
+
 	kp, err := x509.NewKeyPair(ca,
-		x509.IPAddresses(certSANs.StdIPs()),
+		x509.IPAddresses(ips),
 		x509.DNSNames(certSANs.DNSNames),
 		x509.CommonName(certSANs.FQDN),
 		x509.NotAfter(time.Now().Add(x509.DefaultCertificateValidityDuration)),
