@@ -25,7 +25,16 @@ for bin in zstd cpio docker; do
   fi
 done
 
-tmpdir="$(mktemp -d /tmp/chubo-rootfs-check.XXXXXX)"
+# On macOS with colima/lima, the Docker daemon typically runs in a VM and can't
+# bind-mount host paths under /tmp (they don't exist inside the VM). Use a
+# directory next to the initramfs (usually under /Users, which is shared).
+tmp_base="/tmp"
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  tmp_base="$(dirname "${INITRAMFS_PATH}")"
+fi
+
+mkdir -p "${tmp_base}"
+tmpdir="$(mktemp -d "${tmp_base}/chubo-rootfs-check.XXXXXX")"
 trap 'rm -rf "${tmpdir}"' EXIT
 
 (
