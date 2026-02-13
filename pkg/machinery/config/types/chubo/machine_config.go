@@ -22,6 +22,7 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/gen/optional"
 
+	chuboacl "github.com/chubo-dev/chubo/pkg/chubo/acl"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/internal/registry"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
@@ -531,9 +532,10 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Nomad.Role)
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Nomad.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Nomad.Join)
+				aclToken := chuboacl.WorkloadToken(s.Spec.Trust.Token, "nomad")
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join),
+					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, aclToken),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenWontonConfigPath,
 					FileOp:          "create",
@@ -555,9 +557,10 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Consul.Role)
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Consul.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Consul.Join)
+				aclToken := chuboacl.WorkloadToken(s.Spec.Trust.Token, "consul")
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenGyozaConfig(role, bootstrapExpect, join),
+					FileContent:     renderOpenGyozaConfig(role, bootstrapExpect, join, aclToken),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenGyozaConfigPath,
 					FileOp:          "create",
@@ -715,7 +718,7 @@ func renderHCLStringArray(values []string) string {
 	return string(b)
 }
 
-func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) string {
+func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, aclToken string) string {
 	serverEnabled := role == chuboRoleServer
 	clientEnabled := role == chuboRoleClient
 
@@ -734,6 +737,11 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) str
 bind_addr = "0.0.0.0"
 log_level = "INFO"
 
+acl {
+  enabled = true
+  token = %q
+}
+
 tls {
   http = true
   rpc = true
@@ -751,10 +759,10 @@ tls {
 client {
   enabled = %t
 }
-`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
+`, aclToken, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
 }
 
-func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string) string {
+func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {
 	serverEnabled := role == chuboRoleServer
 
 	joinLine := ""
@@ -770,6 +778,14 @@ ports {
   https = 8500
   http = -1
 }
+acl {
+  enabled = true
+  default_policy = "deny"
+  enable_token_persistence = true
+  tokens {
+    agent = %q
+  }
+}
 ca_file = "%s/ca.pem"
 cert_file = "%s/server.pem"
 key_file = "%s/server-key.pem"
@@ -777,7 +793,7 @@ verify_incoming = true
 verify_outgoing = true
 %sserver = %t
 bootstrap_expect = %d
-`, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, joinLine, serverEnabled, bootstrapExpect)
+`, aclToken, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, joinLine, serverEnabled, bootstrapExpect)
 }
 
 func renderOpenBaoNomadJobPayload() string {

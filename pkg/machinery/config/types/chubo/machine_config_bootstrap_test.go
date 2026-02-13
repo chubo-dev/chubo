@@ -17,6 +17,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
+	chuboacl "github.com/chubo-dev/chubo/pkg/chubo/acl"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/validation"
 )
 
@@ -260,6 +261,8 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 		case chuboOpenWontonConfigPath:
 			foundConfig = true
 			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/openwonton"`)
+			require.Contains(t, f.FileContent, "acl {\n  enabled = true")
+			require.Contains(t, f.FileContent, `token = "`+chuboacl.WorkloadToken("token", "nomad")+`"`)
 			require.Contains(t, f.FileContent, "server {\n  enabled = true")
 			require.Contains(t, f.FileContent, "bootstrap_expect = 3")
 			require.Contains(t, f.FileContent, "server_join {")
@@ -385,6 +388,8 @@ func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
 		case chuboOpenGyozaConfigPath:
 			foundConfig = true
 			require.Contains(t, f.FileContent, `data_dir = "/var/lib/chubo/opengyoza"`)
+			require.Contains(t, f.FileContent, "acl {\n  enabled = true")
+			require.Contains(t, f.FileContent, `agent = "`+chuboacl.WorkloadToken("token", "consul")+`"`)
 			require.Contains(t, f.FileContent, "server = false")
 			require.Contains(t, f.FileContent, `retry_join = ["10.0.0.20","10.0.0.21"]`)
 		case chuboOpenGyozaRolePath:
