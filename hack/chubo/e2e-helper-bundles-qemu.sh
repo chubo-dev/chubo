@@ -16,7 +16,7 @@ HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 
 TALOSCTL_BASE="${TALOSCTL_BASE:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
-TALOSCTL_CHUBO="${TALOSCTL_CHUBO:-${TALOS_ROOT}/_out/chubo/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
+TALOSCTL_CHUBO="${TALOSCTL_CHUBO:-${TALOS_ROOT}/_out/chubo/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
 
 REGISTRY_NAME="${REGISTRY_NAME:-chubo-helper-registry}"
 REGISTRY_PORT="${REGISTRY_PORT:-5001}"
@@ -176,10 +176,12 @@ else
 fi
 
 if [[ "${rebuild_chuboctl}" -eq 1 ]]; then
+	mkdir -p "$(dirname "${TALOSCTL_CHUBO}")"
+
 	GOOS="${HOST_GOOS}" GOARCH="${HOST_GOARCH}" CGO_ENABLED=0 go build \
 		-tags grpcnotrace,chubo \
 		-o "${TALOSCTL_CHUBO}" \
-		./cmd/talosctl
+		./cmd/chuboctl
 fi
 
 if ! command -v crane >/dev/null 2>&1; then

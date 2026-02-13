@@ -17,7 +17,7 @@ ARCH="${ARCH:-amd64}"
 
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
+TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
 
 CLUSTER_NAME="${CLUSTER_NAME:-chubo-e2e-docker}"
 STATE_DIR="${STATE_DIR:-/tmp/chubo-e2e-docker-state}"
@@ -110,7 +110,12 @@ require_cmd unzip
 check_host_support
 
 if [[ ! -x "${TALOSCTL}" ]]; then
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+	ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
+	if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+	fi
+
+	make "${ctl_target}"
 fi
 
 mkdir -p "${WORKDIR}" "${ARTIFACTS}" "${STATE_DIR}"

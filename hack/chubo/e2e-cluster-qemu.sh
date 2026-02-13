@@ -18,7 +18,7 @@ ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
+TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
 
 CONTROLPLANE_COUNT="${CONTROLPLANE_COUNT:-3}"
 
@@ -484,11 +484,16 @@ if ! docker version >/dev/null 2>&1; then
 	exit 1
 fi
 
+ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
+if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+fi
+
 if [[ ! -x "${TALOSCTL}" ]]; then
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 elif ! "${TALOSCTL}" gen machineconfig --help 2>/dev/null | grep -q -- '--with-chubo'; then
-	echo "existing talosctl binary is missing --with-chubo; rebuilding"
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	echo "existing CLI binary is missing --with-chubo; rebuilding"
+	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 fi
 
 if ! command -v crane >/dev/null 2>&1; then

@@ -19,7 +19,7 @@ SKIP_BUILD="${SKIP_BUILD:-0}"
 WITH_HELPERS="${WITH_HELPERS:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
+TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
 
 RUN_ID="${RUN_ID:-$RANDOM}"
 BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"
@@ -387,11 +387,16 @@ require_cmd go
 require_cmd make
 require_cmd unzip
 
+ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
+if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+fi
+
 if [[ ! -x "${TALOSCTL}" ]]; then
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
-	echo "existing talosctl binary is not chubo-tagged; rebuilding"
-	make "talosctl-${HOST_GOOS}-${HOST_GOARCH}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	echo "existing CLI binary is not chubo-tagged; rebuilding"
+	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 fi
 
 if ! command -v crane >/dev/null 2>&1; then

@@ -9,7 +9,7 @@ set -euo pipefail
 #     --endpoint 192.168.0.139 \
 #     --node 192.168.0.139
 
-TALOSCTL="${TALOSCTL:-./_out/talosctl-darwin-arm64}"
+TALOSCTL="${TALOSCTL:-./_out/chuboctl-darwin-arm64}"
 TALOSCONFIG=""
 ENDPOINT=""
 NODE=""
