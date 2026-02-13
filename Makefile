@@ -622,6 +622,10 @@ chubo-e2e-opengyoza-quorum-qemu: ## Runs dedicated QEMU fixture for opengyoza qu
 chuboos-e2e-opengyoza-quorum-qemu: ## Legacy alias for chubo-e2e-opengyoza-quorum-qemu (Wave B compatibility).
 	@$(MAKE) chubo-e2e-opengyoza-quorum-qemu
 
+.PHONY: chubo-e2e-cluster-qemu
+chubo-e2e-cluster-qemu: ## Runs multi-node QEMU fixture for real openwonton/opengyoza cluster formation (join + bootstrapExpect).
+	@./hack/chubo/e2e-cluster-qemu.sh
+
 $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true PUSH=false
 
