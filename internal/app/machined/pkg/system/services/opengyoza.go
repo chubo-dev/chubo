@@ -6,8 +6,11 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"net"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
@@ -30,6 +33,7 @@ const (
 
 	openGyozaBinaryPath = "/var/lib/chubo/bin/opengyoza"
 	openGyozaConfigPath = "/var/lib/chubo/config/opengyoza.hcl"
+	openGyozaRuntimeCfg = "/var/lib/chubo/config/opengyoza.runtime.hcl"
 	openGyozaDataDir    = "/var/lib/chubo/opengyoza"
 	openGyozaFallback   = "/usr/bin/init"
 )
@@ -76,7 +80,11 @@ func (s *OpenGyoza) PreFunc(ctx context.Context, r runtime.Runtime) error {
 
 	// Prefer real opengyoza release artifacts. Fallback to the local mock binary path
 	// if artifact install is unavailable (for example network-restricted boots).
-	return ensureServiceBinaryWithRelease(ctx, openGyozaBinaryPath, openGyozaFallback, openGyozaRelease)
+	if err := ensureServiceBinaryWithRelease(ctx, openGyozaBinaryPath, openGyozaFallback, openGyozaRelease); err != nil {
+		return err
+	}
+
+	return ensureOpenGyozaRuntimeConfig(ctx)
 }
 
 // PostFunc implements the Service interface.
@@ -117,7 +125,7 @@ func (s *OpenGyoza) Runner(r runtime.Runtime) (runner.Runner, error) {
 			openGyozaBinaryPath,
 			"agent",
 			"-config-file",
-			openGyozaConfigPath,
+			openGyozaRuntimeCfg,
 		},
 	}
 
@@ -170,4 +178,85 @@ func (s *OpenGyoza) APIStartAllowed(runtime.Runtime) bool {
 // APIStopAllowed implements APIStoppableService.
 func (s *OpenGyoza) APIStopAllowed(runtime.Runtime) bool {
 	return true
+}
+
+func ensureOpenGyozaRuntimeConfig(ctx context.Context) error {
+	base, err := os.ReadFile(openGyozaConfigPath)
+	if err != nil {
+		return fmt.Errorf("failed to read opengyoza base config %q: %w", openGyozaConfigPath, err)
+	}
+
+	ip, err := defaultOutboundIPv4(ctx)
+	if err != nil {
+		return err
+	}
+
+	lines := strings.Split(string(base), "\n")
+	out := make([]string, 0, len(lines)+2)
+
+	out = append(out, fmt.Sprintf("bind_addr = %q", ip))
+	out = append(out, fmt.Sprintf("advertise_addr = %q", ip))
+
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if strings.HasPrefix(trimmed, "bind_addr") || strings.HasPrefix(trimmed, "advertise_addr") {
+			continue
+		}
+
+		out = append(out, line)
+	}
+
+	content := strings.TrimSpace(strings.Join(out, "\n")) + "\n"
+
+	partial := openGyozaRuntimeCfg + ".part"
+	if err := os.WriteFile(partial, []byte(content), 0o600); err != nil {
+		return fmt.Errorf("failed to write opengyoza runtime config %q: %w", partial, err)
+	}
+
+	if err := os.Rename(partial, openGyozaRuntimeCfg); err != nil {
+		_ = os.Remove(partial)
+
+		return fmt.Errorf("failed to place opengyoza runtime config %q: %w", openGyozaRuntimeCfg, err)
+	}
+
+	return nil
+}
+
+func defaultOutboundIPv4(ctx context.Context) (string, error) {
+	// Consul refuses to start if it sees multiple private IPs without an explicit bind/advertise
+	// address. Pick the address used for the default route (same trick as many agents).
+	const target = "1.1.1.1:80"
+
+	deadline, hasDeadline := ctx.Deadline()
+	if !hasDeadline {
+		// Keep this bounded, but allow the network stack a moment right after boot.
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+		deadline, _ = ctx.Deadline()
+	}
+
+	for {
+		conn, err := (&net.Dialer{}).DialContext(ctx, "udp4", target)
+		if err == nil {
+			udpAddr, ok := conn.LocalAddr().(*net.UDPAddr)
+			_ = conn.Close()
+			if ok && udpAddr.IP != nil && !udpAddr.IP.IsUnspecified() {
+				return udpAddr.IP.String(), nil
+			}
+
+			return "", fmt.Errorf("failed to derive default outbound IP (local=%v)", udpAddr)
+		}
+
+		// Retry until timeout/deadline.
+		if time.Now().After(deadline) {
+			return "", fmt.Errorf("failed to derive default outbound IP: %w", err)
+		}
+
+		select {
+		case <-ctx.Done():
+			return "", fmt.Errorf("failed to derive default outbound IP: %w", ctx.Err())
+		case <-time.After(500 * time.Millisecond):
+		}
+	}
 }
