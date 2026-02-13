@@ -215,6 +215,9 @@ jobs:
       - name: chubo-e2e-full-qemu
         run: |
           sudo -E make chubo-e2e-full-qemu
+      - name: chubo-e2e-cluster-qemu
+        run: |
+          sudo -E make chubo-e2e-cluster-qemu SKIP_BUILD=1
       - name: save artifacts
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # version: v6.0.0
