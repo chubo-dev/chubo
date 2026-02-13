@@ -39,7 +39,9 @@ const (
 var openWontonRelease = serviceReleaseBinary{
 	ServiceName: "openwonton",
 	Version:     "v1.6.5-rc1",
-	ZipEntry:    "wonton",
+	// The OpenWonton release zip contains both `wonton` (glibc-linked) and `nomad` (static).
+	// Talos doesn't ship glibc, so we install the static `nomad` binary.
+	ZipEntry: "nomad",
 	AssetURLs: map[string]string{
 		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/wonton_1.6.5-rc1_linux_amd64.zip",
 		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc1/wonton_1.6.5-rc1_linux_arm64.zip",
