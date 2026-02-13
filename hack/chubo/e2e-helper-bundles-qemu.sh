@@ -34,6 +34,7 @@ TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-900}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-2}"
 RUN_DIR="${RUN_DIR:-$(mktemp -d /tmp/chubo-helper-e2e.XXXXXX)}"
 KEEP_VM="${KEEP_VM:-0}"
+PRUNE_KEEP="${PRUNE_KEEP:-3}"
 
 SECRETS_FILE="${RUN_DIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${RUN_DIR}/machineconfig-install.yaml"
@@ -56,6 +57,37 @@ require_cmd() {
 
 		exit 1
 	fi
+}
+
+prune_old_run_dirs() {
+	# These QEMU runs can allocate multi-GB qcow2 images. Keep only the most recent
+	# runs to avoid filling the host disk during tight iteration loops.
+	local keep="${PRUNE_KEEP}"
+	local current=""
+
+	if current="$(cd "${RUN_DIR}" 2>/dev/null && pwd -P)"; then
+		:
+	else
+		current="${RUN_DIR}"
+	fi
+
+	# Sort newest -> oldest. /tmp is /private/tmp on macOS, use the canonical path.
+	mapfile -t dirs < <(ls -1td /private/tmp/chubo-helper-e2e.* 2>/dev/null || true)
+
+	local kept=0
+	for dir in "${dirs[@]}"; do
+		# Never delete the active run dir.
+		if [[ "${dir}" == "${current}" || "${dir}" == "${RUN_DIR}" ]]; then
+			continue
+		fi
+
+		if ((kept < keep)); then
+			kept=$((kept + 1))
+			continue
+		fi
+
+		rm -rf -- "${dir}" >/dev/null 2>&1 || true
+	done
 }
 
 ensure_registry() {
@@ -225,6 +257,8 @@ cleanup() {
 }
 
 trap cleanup EXIT
+
+prune_old_run_dirs
 
 require_cmd docker
 require_cmd go
