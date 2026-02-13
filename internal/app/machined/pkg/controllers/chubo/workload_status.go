@@ -108,7 +108,7 @@ func queryOpenWontonStatus(ctx context.Context, token string) (leader string, pe
 	}
 
 	if len(errs) > 0 {
-		return leader, peerCount, fmt.Errorf(strings.Join(errs, "; "))
+		return leader, peerCount, fmt.Errorf("%s", strings.Join(errs, "; "))
 	}
 
 	return leader, peerCount, nil
@@ -135,7 +135,7 @@ func queryOpenGyozaStatus(ctx context.Context, token string) (leader string, pee
 	}
 
 	if len(errs) > 0 {
-		return leader, peerCount, fmt.Errorf(strings.Join(errs, "; "))
+		return leader, peerCount, fmt.Errorf("%s", strings.Join(errs, "; "))
 	}
 
 	return leader, peerCount, nil
