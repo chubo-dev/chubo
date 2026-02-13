@@ -165,6 +165,49 @@ openbao_job_ready() {
 	jq -e '.spec.configured == true and .spec.nomadReachable == true and .spec.present == true and (.spec.lastError == "" or .spec.lastError == null)' <<<"${output}" >/dev/null 2>&1 || return 1
 }
 
+dump_chubo_debug() {
+	set +e
+
+	echo
+	echo "==== chubo debug ===="
+	echo "run_dir=${RUN_DIR}"
+	echo "node_ip=${NODE_IP}"
+	echo
+
+	echo "-- openwontonstatus (json)"
+	"${TALOSCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- openwontonstatus (yaml)"
+	"${TALOSCTL_CHUBO}" get openwontonstatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- opengyozastatus (json)"
+	"${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- opengyozastatus (yaml)"
+	"${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- v1alpha1 service openwonton (yaml)"
+	"${TALOSCTL_CHUBO}" get svc --namespace v1alpha1 openwonton -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- v1alpha1 service opengyoza (yaml)"
+	"${TALOSCTL_CHUBO}" get svc --namespace v1alpha1 opengyoza -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- qemu logs (tail)"
+	echo "install_log=${LOG_INSTALL}"
+	tail -n 120 "${LOG_INSTALL}" 2>/dev/null || true
+	echo
+	echo "disk_log=${LOG_DISK}"
+	tail -n 160 "${LOG_DISK}" 2>/dev/null || true
+	echo "==== end chubo debug ===="
+	echo
+}
+
 cleanup() {
 	set +e
 
@@ -355,8 +398,15 @@ wait_until "runtime mTLS API (${NODE_IP})" "${TIMEOUT_SECONDS}" \
 	"${TALOSCTL_CHUBO}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 echo "waiting for openwonton/opengyoza health + ACL bootstrap"
-wait_until "openwontonstatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" openwonton_ready
-wait_until "opengyozastatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" opengyoza_ready
+if ! wait_until "openwontonstatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" openwonton_ready; then
+	dump_chubo_debug
+	exit 1
+fi
+
+if ! wait_until "opengyozastatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" opengyoza_ready; then
+	dump_chubo_debug
+	exit 1
+fi
 
 echo "waiting for openbao Nomad job controller"
 wait_until "openbaojobstatus (present)" "${TIMEOUT_SECONDS}" openbao_job_ready
