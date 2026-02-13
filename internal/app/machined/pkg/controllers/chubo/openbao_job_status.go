@@ -33,7 +33,7 @@ const (
 
 	openBaoModeNomadJob = "nomadJob"
 	openBaoDefaultJobID = "openbao"
-	nomadHTTPAddress    = "http://127.0.0.1:4646"
+	nomadHTTPAddress    = "https://127.0.0.1:4646"
 )
 
 var errNomadJobNotFound = errors.New("nomad job not found")
@@ -198,8 +198,9 @@ func readOpenBaoIntent(mc *config.MachineConfig) (openBaoIntent, error) {
 }
 
 func ensureOpenBaoNomadJob(ctx context.Context, jobID string, payload []byte) (reachable bool, present bool, err error) {
-	client := &http.Client{
-		Timeout: 5 * time.Second,
+	client, err := services.NewChuboServiceHTTPClient(services.OpenWontonServiceID, 5*time.Second)
+	if err != nil {
+		return false, false, err
 	}
 
 	present, err = nomadJobPresent(ctx, client, jobID)

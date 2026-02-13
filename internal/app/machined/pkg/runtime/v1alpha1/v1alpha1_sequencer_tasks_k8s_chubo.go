@@ -12,7 +12,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -20,6 +19,7 @@ import (
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaquorum"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
@@ -27,9 +27,9 @@ import (
 // Keep the Talos sequencer API shape, but make these tasks no-ops.
 
 const (
-	openGyozaHTTPAddress         = "http://127.0.0.1:8500"
+	openGyozaHTTPAddress         = "https://127.0.0.1:8500"
 	openGyozaRolePath            = "/var/lib/chubo/config/opengyoza.role"
-	openWontonHTTPAddress        = "http://127.0.0.1:4646"
+	openWontonHTTPAddress        = "https://127.0.0.1:4646"
 	openWontonRolePath           = "/var/lib/chubo/config/openwonton.role"
 	openWontonDrainDeadline      = 10 * time.Minute
 	openWontonDefaultHTTPTimeout = 5 * time.Second
@@ -41,8 +41,6 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 	}
 
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
-		client := &http.Client{Timeout: openWontonDefaultHTTPTimeout}
-
 		// Treat opengyoza quorum checks like Talos' etcd health checks: blocking by default,
 		// skippable only when the caller explicitly forces the operation.
 		force := false
@@ -73,6 +71,11 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 					err = opengyozaquorum.CheckSafeServerStopFromPeers(peers)
 				}
 			} else {
+				client, err := services.NewChuboServiceHTTPClient(services.OpenGyozaServiceID, openWontonDefaultHTTPTimeout)
+				if err != nil {
+					return fmt.Errorf("failed to create opengyoza HTTP client: %w", err)
+				}
+
 				// Retry briefly so transient readiness issues (e.g. local agent not yet listening) don't
 				// silently skip the check on the first connection attempt.
 				var lastErr error
@@ -120,6 +123,12 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 		if !openwontondrain.IsClientRole(role) {
 			logger.Printf("skipping openwonton drain: role=%q", role)
 
+			return nil
+		}
+
+		client, err := services.NewChuboServiceHTTPClient(services.OpenWontonServiceID, openWontonDefaultHTTPTimeout)
+		if err != nil {
+			logger.Printf("skipping openwonton drain: failed to create HTTP client: %v", err)
 			return nil
 		}
 
