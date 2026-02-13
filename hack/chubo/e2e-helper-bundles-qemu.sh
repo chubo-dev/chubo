@@ -135,6 +135,36 @@ parse_bridged_ip() {
 	' "${addresses_file}"
 }
 
+openwonton_ready() {
+	local output
+
+	if ! output="$("${TALOSCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+		return 1
+	fi
+
+	jq -e '.spec.configured == true and .spec.healthy == true and .spec.aclReady == true and .spec.binaryMode == "artifact"' <<<"${output}" >/dev/null 2>&1 || return 1
+}
+
+opengyoza_ready() {
+	local output
+
+	if ! output="$("${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+		return 1
+	fi
+
+	jq -e '.spec.configured == true and .spec.healthy == true and .spec.aclReady == true and .spec.binaryMode == "artifact"' <<<"${output}" >/dev/null 2>&1 || return 1
+}
+
+openbao_job_ready() {
+	local output
+
+	if ! output="$("${TALOSCTL_CHUBO}" get openbaojobstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+		return 1
+	fi
+
+	jq -e '.spec.configured == true and .spec.nomadReachable == true and .spec.present == true and (.spec.lastError == "" or .spec.lastError == null)' <<<"${output}" >/dev/null 2>&1 || return 1
+}
+
 cleanup() {
 	set +e
 
@@ -159,6 +189,7 @@ require_cmd make
 require_cmd openssl
 require_cmd rg
 require_cmd curl
+require_cmd jq
 
 if [[ ! -x "${TALOSCTL_BASE}" ]]; then
 	make talosctl
@@ -322,6 +353,13 @@ echo "applying runtime config and rebooting into runtime API"
 
 wait_until "runtime mTLS API (${NODE_IP})" "${TIMEOUT_SECONDS}" \
 	"${TALOSCTL_CHUBO}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+
+echo "waiting for openwonton/opengyoza health + ACL bootstrap"
+wait_until "openwontonstatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" openwonton_ready
+wait_until "opengyozastatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" opengyoza_ready
+
+echo "waiting for openbao Nomad job controller"
+wait_until "openbaojobstatus (present)" "${TIMEOUT_SECONDS}" openbao_job_ready
 
 echo "downloading helper bundles"
 mkdir -p "${HELPERS_DIR}"
