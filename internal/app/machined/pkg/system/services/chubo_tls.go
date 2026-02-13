@@ -6,13 +6,18 @@ package services
 
 import (
 	"context"
+	"crypto"
 	"crypto/tls"
 	stdlibx509 "crypto/x509"
+	"encoding/pem"
 	"fmt"
 	"net"
 	"net/http"
+	"net/netip"
 	"os"
 	"path/filepath"
+	"slices"
+	"strings"
 	"time"
 
 	"github.com/cosi-project/runtime/pkg/resource"
@@ -23,8 +28,17 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
 
-const (
+var (
+	// chuboTLSRootDir is intentionally a var so tests can redirect writes to a temp dir.
 	chuboTLSRootDir = "/var/lib/chubo/certs"
+)
+
+const (
+	// chuboTLSRotateBefore controls how soon before expiry we rotate leaf certificates.
+	//
+	// SideroLabs crypto defaults leaf cert validity to 24h; rotate halfway through to
+	// avoid churn while still keeping certs short-lived.
+	chuboTLSRotateBefore = x509.DefaultCertificateValidityDuration / 2
 )
 
 type chuboTLSPaths struct {
@@ -92,18 +106,173 @@ func writeFileAtomic(path string, data []byte, perm os.FileMode) error {
 	return os.Rename(tmpPath, path)
 }
 
+func readPEMCertificate(path string) (*stdlibx509.Certificate, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	block, _ := pem.Decode(raw)
+	if block == nil || block.Type != "CERTIFICATE" {
+		return nil, fmt.Errorf("failed to decode PEM certificate from %q", path)
+	}
+
+	cert, err := stdlibx509.ParseCertificate(block.Bytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse certificate from %q: %w", path, err)
+	}
+
+	return cert, nil
+}
+
+func ipAddrsToStd(ips []netip.Addr) []net.IP {
+	out := make([]net.IP, 0, len(ips))
+	for _, ip := range ips {
+		out = append(out, ip.AsSlice())
+	}
+
+	return out
+}
+
+func certHasAllIPs(cert *stdlibx509.Certificate, expected []net.IP) bool {
+	for _, want := range expected {
+		found := false
+		for _, got := range cert.IPAddresses {
+			if got.Equal(want) {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			return false
+		}
+	}
+
+	return true
+}
+
+func certHasAllDNSNames(cert *stdlibx509.Certificate, expected []string) bool {
+	if len(expected) == 0 {
+		return true
+	}
+
+	// Normalize for case-insensitive compare.
+	got := make([]string, 0, len(cert.DNSNames))
+	for _, n := range cert.DNSNames {
+		if strings.TrimSpace(n) == "" {
+			continue
+		}
+
+		got = append(got, strings.ToLower(strings.TrimRight(n, ".")))
+	}
+
+	for _, want := range expected {
+		want = strings.ToLower(strings.TrimRight(strings.TrimSpace(want), "."))
+		if want == "" {
+			continue
+		}
+
+		if !slices.Contains(got, want) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func chuboServiceTLSUpToDate(paths chuboTLSPaths, issuingCA *x509.PEMEncodedCertificateAndKey, certSANs *secrets.CertSANSpec) bool {
+	if issuingCA == nil || len(issuingCA.Crt) == 0 {
+		return false
+	}
+
+	if certSANs == nil {
+		return false
+	}
+
+	if !fileNonEmpty(paths.CA) || !fileNonEmpty(paths.Cert) || !fileNonEmpty(paths.Key) {
+		return false
+	}
+
+	// CA drift: if the OS issuing CA changed, rotate leaf material to match.
+	if caOnDisk, err := os.ReadFile(paths.CA); err != nil || !slices.Equal(caOnDisk, issuingCA.Crt) {
+		return false
+	}
+
+	cert, err := readPEMCertificate(paths.Cert)
+	if err != nil {
+		return false
+	}
+
+	// If the key is unreadable or doesn't match the cert, regenerate.
+	keyBytes, err := os.ReadFile(paths.Key)
+	if err != nil {
+		return false
+	}
+
+	key, err := (&x509.PEMEncodedCertificateAndKey{Key: keyBytes}).GetKey()
+	if err != nil {
+		return false
+	}
+
+	signer, ok := key.(crypto.Signer)
+	if !ok {
+		return false
+	}
+
+	certPubDER, err := stdlibx509.MarshalPKIXPublicKey(cert.PublicKey)
+	if err != nil {
+		return false
+	}
+
+	keyPubDER, err := stdlibx509.MarshalPKIXPublicKey(signer.Public())
+	if err != nil {
+		return false
+	}
+
+	if !slices.Equal(certPubDER, keyPubDER) {
+		return false
+	}
+
+	now := time.Now()
+	if now.Before(cert.NotBefore) {
+		return false
+	}
+
+	// Rotate if expired or close to expiry.
+	if now.After(cert.NotAfter) || now.Add(chuboTLSRotateBefore).After(cert.NotAfter) {
+		return false
+	}
+
+	expectedIPs := append([]net.IP(nil), ipAddrsToStd(certSANs.IPs)...)
+	expectedIPs = append(expectedIPs, net.IPv4(127, 0, 0, 1), net.IPv6loopback)
+	if !certHasAllIPs(cert, expectedIPs) {
+		return false
+	}
+
+	if !certHasAllDNSNames(cert, certSANs.DNSNames) {
+		return false
+	}
+
+	// Keep CommonName stable when the FQDN is known.
+	if strings.TrimSpace(certSANs.FQDN) != "" && cert.Subject.CommonName != strings.TrimSpace(certSANs.FQDN) {
+		return false
+	}
+
+	return true
+}
+
+type runtimeStateGetter interface {
+	State() runtime.State
+}
+
 // EnsureChuboServiceTLSMaterial ensures server-side TLS material exists on disk for the given service.
 //
 // The material is generated from the OS issuing CA and the API SAN resource (which includes node IPs/FQDN),
 // so external clients can verify the certificate when using the advertised node IP address.
-func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtime.Runtime, serviceID string) error {
+func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtimeStateGetter, serviceID string) error {
 	paths, ok := chuboServiceTLSPaths(serviceID)
 	if !ok {
-		return nil
-	}
-
-	// Keep it idempotent and avoid churn across reboots: generate once, then reuse.
-	if fileNonEmpty(paths.CA) && fileNonEmpty(paths.Cert) && fileNonEmpty(paths.Key) {
 		return nil
 	}
 
@@ -131,6 +300,12 @@ func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtime.Runtime, servi
 	}
 
 	certSANs := certSANRes.TypedSpec()
+
+	// Keep it idempotent and avoid churn across reboots: reuse existing material if it matches
+	// the current OS issuing CA and the current API SAN set (which may change with networking).
+	if chuboServiceTLSUpToDate(paths, rootSpec.IssuingCA, certSANs) {
+		return nil
+	}
 
 	ca, err := x509.NewCertificateAuthorityFromCertificateAndKey(rootSpec.IssuingCA)
 	if err != nil {
