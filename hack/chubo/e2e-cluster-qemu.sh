@@ -58,6 +58,10 @@ CRANE_BIN=""
 cluster_created=0
 registry_started=0
 
+HELPERS_DIR="${WORKDIR}/helpers"
+NOMAD_CURL_ARGS=()
+CONSUL_CURL_ARGS=()
+
 CLEANUP_STALE_ONLY=0
 
 while [[ $# -gt 0 ]]; do
@@ -304,12 +308,25 @@ apply_install_and_wait() {
 	fi
 }
 
+download_helper_bundles() {
+	local node_ip="$1"
+
+	mkdir -p "${HELPERS_DIR}"
+
+	# Download once and reuse for curl-based TLS probes across the cluster.
+	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+
+	NOMAD_CURL_ARGS=(--cacert "${HELPERS_DIR}/nomadconfig/ca.pem" --cert "${HELPERS_DIR}/nomadconfig/client.pem" --key "${HELPERS_DIR}/nomadconfig/client-key.pem")
+	CONSUL_CURL_ARGS=(--cacert "${HELPERS_DIR}/consulconfig/ca.pem" --cert "${HELPERS_DIR}/consulconfig/client.pem" --key "${HELPERS_DIR}/consulconfig/client-key.pem")
+}
+
 nomad_peers_ok() {
 	local node_ip="$1"
 	local expected="$2"
 
 	local count
-	count="$(curl -fsS --max-time 2 "http://${node_ip}:4646/v1/status/peers" | jq -r 'length' 2>/dev/null || true)"
+	count="$(curl -fsS --max-time 2 "${NOMAD_CURL_ARGS[@]}" "https://${node_ip}:4646/v1/status/peers" | jq -r 'length' 2>/dev/null || true)"
 	[[ "${count}" == "${expected}" ]]
 }
 
@@ -318,7 +335,7 @@ consul_peers_ok() {
 	local expected="$2"
 
 	local count
-	count="$(curl -fsS --max-time 2 "http://${node_ip}:8500/v1/status/peers" | jq -r 'length' 2>/dev/null || true)"
+	count="$(curl -fsS --max-time 2 "${CONSUL_CURL_ARGS[@]}" "https://${node_ip}:8500/v1/status/peers" | jq -r 'length' 2>/dev/null || true)"
 	[[ "${count}" == "${expected}" ]]
 }
 
@@ -617,6 +634,9 @@ for node_ip in "${controlplane_ips[@]}"; do
 	wait_for_service_up "${node_ip}" opengyoza
 done
 
+echo "downloading helper bundles for TLS probes"
+download_helper_bundles "${controlplane_ips[0]}"
+
 echo "waiting for nomad peers convergence"
 wait_for_peers nomad "${CONTROLPLANE_COUNT}" "${controlplane_ips[@]}"
 
@@ -625,8 +645,8 @@ wait_for_peers consul "${CONTROLPLANE_COUNT}" "${controlplane_ips[@]}"
 
 echo "leaders:"
 for node_ip in "${controlplane_ips[@]}"; do
-	nomad_leader="$(curl -fsS --max-time 2 "http://${node_ip}:4646/v1/status/leader" || true)"
-	consul_leader="$(curl -fsS --max-time 2 "http://${node_ip}:8500/v1/status/leader" || true)"
+	nomad_leader="$(curl -fsS --max-time 2 "${NOMAD_CURL_ARGS[@]}" "https://${node_ip}:4646/v1/status/leader" || true)"
+	consul_leader="$(curl -fsS --max-time 2 "${CONSUL_CURL_ARGS[@]}" "https://${node_ip}:8500/v1/status/leader" || true)"
 	echo "  ${node_ip}: nomad leader=${nomad_leader} consul leader=${consul_leader}"
 done
 
