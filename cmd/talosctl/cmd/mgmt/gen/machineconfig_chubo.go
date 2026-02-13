@@ -27,6 +27,14 @@ var genMachineConfigFlags struct {
 	wipe            bool
 	registryMirrors []string
 	withSecrets     string
+
+	withChubo            bool
+	chuboRole            string
+	chuboBootstrapExpect int
+	chuboJoin            []string
+
+	withOpenBao bool
+	openBaoMode string
 }
 
 func newMachineConfigCmd() *cobra.Command {
@@ -92,6 +100,62 @@ The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`
 				},
 			}
 
+			if genMachineConfigFlags.withChubo {
+				role := strings.TrimSpace(genMachineConfigFlags.chuboRole)
+				if role == "" {
+					role = "server"
+				}
+
+				var bootstrapExpect *int
+				if genMachineConfigFlags.chuboBootstrapExpect >= 0 {
+					bootstrapExpect = pointer.To(genMachineConfigFlags.chuboBootstrapExpect)
+				}
+
+				join := make([]string, 0, len(genMachineConfigFlags.chuboJoin))
+				for _, entry := range genMachineConfigFlags.chuboJoin {
+					entry = strings.TrimSpace(entry)
+					if entry == "" {
+						continue
+					}
+
+					join = append(join, entry)
+				}
+
+				if len(join) == 0 {
+					join = nil
+				}
+
+				mc.Spec.Modules = &chubotypes.ModulesSpec{
+					Chubo: &chubotypes.ChuboModuleSpec{
+						Enabled: pointer.To(true),
+						Nomad: &chubotypes.ChuboRoleSpec{
+							Enabled:         pointer.To(true),
+							Role:            role,
+							BootstrapExpect: bootstrapExpect,
+							Join:            join,
+						},
+						Consul: &chubotypes.ChuboRoleSpec{
+							Enabled:         pointer.To(true),
+							Role:            role,
+							BootstrapExpect: bootstrapExpect,
+							Join:            join,
+						},
+					},
+				}
+
+				if genMachineConfigFlags.withOpenBao {
+					mode := strings.TrimSpace(genMachineConfigFlags.openBaoMode)
+					if mode == "" {
+						mode = "nomadJob"
+					}
+
+					mc.Spec.Modules.Chubo.OpenBao = &chubotypes.ChuboOpenBaoSpec{
+						Enabled: pointer.To(true),
+						Mode:    mode,
+					}
+				}
+			}
+
 			if len(genMachineConfigFlags.registryMirrors) > 0 {
 				mc.Spec.Registry = &chubotypes.RegistrySpec{
 					Mirrors: map[string]chubotypes.RegistryMirrorSpec{},
@@ -145,6 +209,13 @@ The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`
 	cmd.Flags().BoolVar(&genMachineConfigFlags.wipe, "wipe", true, "wipe the install disk before installing")
 	cmd.Flags().StringSliceVar(&genMachineConfigFlags.registryMirrors, "registry-mirror", nil, "registry mirrors in format: <registry host>=<mirror URL>")
 	cmd.Flags().StringVar(&genMachineConfigFlags.withSecrets, "with-secrets", "", "use a secrets file generated using 'gen secrets' (optional)")
+
+	cmd.Flags().BoolVar(&genMachineConfigFlags.withChubo, "with-chubo", false, "enable modules.chubo with openwonton/opengyoza defaults")
+	cmd.Flags().StringVar(&genMachineConfigFlags.chuboRole, "chubo-role", "server", "chubo role for openwonton/opengyoza (server|client)")
+	cmd.Flags().IntVar(&genMachineConfigFlags.chuboBootstrapExpect, "chubo-bootstrap-expect", -1, "bootstrap_expect for openwonton/opengyoza (unset by default)")
+	cmd.Flags().StringSliceVar(&genMachineConfigFlags.chuboJoin, "chubo-join", nil, "peer addresses to join/retry-join for openwonton/opengyoza")
+	cmd.Flags().BoolVar(&genMachineConfigFlags.withOpenBao, "with-openbao", false, "enable modules.chubo.openbao (Nomad job controller)")
+	cmd.Flags().StringVar(&genMachineConfigFlags.openBaoMode, "openbao-mode", "nomadJob", "openbao mode when enabled (nomadJob)")
 
 	return cmd
 }
