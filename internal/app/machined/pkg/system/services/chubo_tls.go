@@ -7,8 +7,14 @@ package services
 import (
 	"context"
 	"crypto"
+	"crypto/ecdsa"
+	"crypto/ed25519"
+	"crypto/elliptic"
+	"crypto/rand"
+	"crypto/rsa"
 	"crypto/tls"
 	stdlibx509 "crypto/x509"
+	"crypto/x509/pkix"
 	"encoding/pem"
 	"fmt"
 	"net"
@@ -220,6 +226,17 @@ func chuboServiceTLSUpToDate(paths chuboTLSPaths, issuingCA *x509.PEMEncodedCert
 		return false
 	}
 
+	// Hashi stack components don't consistently support Ed25519 private keys for
+	// TLS; prefer ECDSA/RSA leaf keys even if the OS issuing CA is Ed25519.
+	switch signer.(type) {
+	case ed25519.PrivateKey:
+		return false
+	case *ecdsa.PrivateKey, *rsa.PrivateKey:
+		// ok
+	default:
+		return false
+	}
+
 	certPubDER, err := stdlibx509.MarshalPKIXPublicKey(cert.PublicKey)
 	if err != nil {
 		return false
@@ -318,32 +335,59 @@ func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtimeStateGetter, se
 	// verification.
 	ips = append(ips, net.IPv4(127, 0, 0, 1), net.IPv6loopback)
 
-	kp, err := x509.NewKeyPair(ca,
-		x509.IPAddresses(ips),
-		x509.DNSNames(certSANs.DNSNames),
-		x509.CommonName(certSANs.FQDN),
-		x509.NotAfter(time.Now().Add(x509.DefaultCertificateValidityDuration)),
-		x509.KeyUsage(stdlibx509.KeyUsageDigitalSignature),
-		x509.ExtKeyUsage([]stdlibx509.ExtKeyUsage{
-			stdlibx509.ExtKeyUsageServerAuth,
-			stdlibx509.ExtKeyUsageClientAuth,
-		}),
-	)
+	serialNumber, err := x509.NewSerialNumber()
 	if err != nil {
-		return fmt.Errorf("failed to generate %s TLS cert: %w", serviceID, err)
+		return err
 	}
 
-	certAndKey := x509.NewCertificateAndKeyFromKeyPair(kp)
+	leafKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		return fmt.Errorf("failed to generate %s ECDSA key: %w", serviceID, err)
+	}
+
+	tmpl := &stdlibx509.Certificate{
+		SerialNumber: serialNumber,
+		Subject: pkix.Name{
+			CommonName: strings.TrimSpace(certSANs.FQDN),
+		},
+		NotBefore:             time.Now(),
+		NotAfter:              time.Now().Add(x509.DefaultCertificateValidityDuration),
+		KeyUsage:              stdlibx509.KeyUsageDigitalSignature,
+		ExtKeyUsage:           []stdlibx509.ExtKeyUsage{stdlibx509.ExtKeyUsageServerAuth, stdlibx509.ExtKeyUsageClientAuth},
+		BasicConstraintsValid: false,
+		IsCA:                  false,
+		IPAddresses:           ips,
+		DNSNames:              certSANs.DNSNames,
+	}
+
+	certDER, err := stdlibx509.CreateCertificate(rand.Reader, tmpl, ca.Crt, leafKey.Public(), ca.Key)
+	if err != nil {
+		return fmt.Errorf("failed to sign %s TLS cert: %w", serviceID, err)
+	}
+
+	certPEM := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certDER})
+
+	keyDER, err := stdlibx509.MarshalPKCS8PrivateKey(leafKey)
+	if err != nil {
+		return fmt.Errorf("failed to marshal %s TLS key: %w", serviceID, err)
+	}
+
+	keyPEM := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: keyDER})
+
+	// Ensure the resulting pair is parseable and matches.
+	if _, err := tls.X509KeyPair(certPEM, keyPEM); err != nil {
+		return fmt.Errorf("failed to load %s TLS keypair: %w", serviceID, err)
+	}
 
 	if err := writeFileAtomic(paths.CA, rootSpec.IssuingCA.Crt, 0o644); err != nil {
 		return err
 	}
 
-	if err := writeFileAtomic(paths.Cert, certAndKey.Crt, 0o644); err != nil {
+	if err := writeFileAtomic(paths.Cert, certPEM, 0o644); err != nil {
 		return err
 	}
 
-	if err := writeFileAtomic(paths.Key, certAndKey.Key, 0o600); err != nil {
+	if err := writeFileAtomic(paths.Key, keyPEM, 0o600); err != nil {
 		return err
 	}
 
