@@ -32,6 +32,7 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 )
 
 var (
@@ -46,6 +47,8 @@ const (
 	// avoid churn while still keeping certs short-lived.
 	chuboTLSRotateBefore = x509.DefaultCertificateValidityDuration / 2
 )
+
+var minSaneTime = time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
 
 type chuboTLSPaths struct {
 	Dir  string
@@ -298,6 +301,24 @@ func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtimeStateGetter, se
 	}
 
 	st := r.State().V1Alpha2().Resources()
+
+	// Ensure the wall clock is sane before minting short-lived TLS material. In some boot flows
+	// time sync can be reported as "synced" via boot-timeout even though the clock is still at epoch.
+	if err := timeresource.NewSyncCondition(st).Wait(ctx); err != nil {
+		return err
+	}
+
+	// Avoid generating certs that will immediately be considered expired after a later time jump.
+	saneCtx, saneCancel := context.WithTimeout(ctx, 2*time.Minute)
+	defer saneCancel()
+
+	for time.Now().Before(minSaneTime) {
+		select {
+		case <-saneCtx.Done():
+			return fmt.Errorf("clock not sane after waiting: now=%s min=%s", time.Now().UTC().Format(time.RFC3339), minSaneTime.Format(time.RFC3339))
+		case <-time.After(200 * time.Millisecond):
+		}
+	}
 
 	rootRes, err := safe.ReaderGet[*secrets.OSRoot](ctx, st,
 		resource.NewMetadata(secrets.NamespaceName, secrets.OSRootType, secrets.OSRootID, resource.VersionUndefined))

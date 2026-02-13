@@ -23,6 +23,7 @@ import (
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	talosconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
+	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 )
 
 func TestEnsureChuboServiceTLSMaterialRotatesOnSANOrCAChange(t *testing.T) {
@@ -37,6 +38,11 @@ func TestEnsureChuboServiceTLSMaterialRotatesOnSANOrCAChange(t *testing.T) {
 	))
 
 	r := testRuntime{st: testState{v1a2: testV1Alpha2State{resources: resources}}}
+
+	// EnsureChuboServiceTLSMaterial waits on time sync; seed a synced time status.
+	timeStatus := timeresource.NewStatus()
+	timeStatus.TypedSpec().Synced = true
+	require.NoError(t, resources.Create(ctx, timeStatus))
 
 	// Seed OS issuing CA + initial SANs.
 	ca1, err := siderox509.NewSelfSignedCertificateAuthority(siderox509.Organization("chubo-test-ca1"))
