@@ -40,13 +40,12 @@ const (
 
 var openGyozaRelease = serviceReleaseBinary{
 	ServiceName: "opengyoza",
-	// opengyoza artifacts are currently not publicly downloadable (GitHub 404s unauthenticated
-	// requests). Use the upstream Consul artifact for now and swap to opengyoza once public.
-	Version:  "1.16.4",
-	ZipEntry: "consul",
+	// opengyoza publishes Consul-compatible release artifacts as the `gyoza` binary.
+	Version:  "v1.6.4",
+	ZipEntry: "gyoza",
 	AssetURLs: map[string]string{
-		"amd64": "https://releases.hashicorp.com/consul/1.16.4/consul_1.16.4_linux_amd64.zip",
-		"arm64": "https://releases.hashicorp.com/consul/1.16.4/consul_1.16.4_linux_arm64.zip",
+		"amd64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_amd64.zip",
+		"arm64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_arm64.zip",
 	},
 }
 
