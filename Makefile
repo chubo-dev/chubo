@@ -426,6 +426,17 @@ talosctl-windows-arm64:
 
 talosctl: talosctl-$(OPERATING_SYSTEM)-$(ARCH)
 
+.PHONY: chuboctl
+chuboctl: chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
+
+# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
+# Build chuboctl by reusing the talosctl artifact and renaming it.
+.PHONY: chuboctl-%
+chuboctl-%:
+	@$(MAKE) talosctl-$*
+	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
+	@chmod +x $(ARTIFACTS)/chuboctl-$*
+
 sbom:
 	@$(MAKE) local-sbom DEST=$(ARTIFACTS)
 
