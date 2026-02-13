@@ -47,22 +47,30 @@ func IsClientRole(role string) bool {
 }
 
 func DrainNode(ctx context.Context, client *http.Client, baseURL, nodeName string, deadline time.Duration) error {
-	nodeID, err := resolveNodeID(ctx, client, baseURL, nodeName)
+	return DrainNodeWithToken(ctx, client, baseURL, nodeName, deadline, "")
+}
+
+func DrainNodeWithToken(ctx context.Context, client *http.Client, baseURL, nodeName string, deadline time.Duration, token string) error {
+	nodeID, err := resolveNodeID(ctx, client, baseURL, nodeName, token)
 	if err != nil {
 		return err
 	}
 
-	if err := setNodeEligibility(ctx, client, baseURL, nodeID, "ineligible"); err != nil {
+	if err := setNodeEligibility(ctx, client, baseURL, nodeID, "ineligible", token); err != nil {
 		return err
 	}
 
-	return enableNodeDrain(ctx, client, baseURL, nodeID, deadline)
+	return enableNodeDrain(ctx, client, baseURL, nodeID, deadline, token)
 }
 
-func resolveNodeID(ctx context.Context, client *http.Client, baseURL, nodeName string) (string, error) {
+func resolveNodeID(ctx context.Context, client *http.Client, baseURL, nodeName, token string) (string, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, strings.TrimRight(baseURL, "/")+"/v1/nodes", nil)
 	if err != nil {
 		return "", err
+	}
+
+	if strings.TrimSpace(token) != "" {
+		req.Header.Set("X-Nomad-Token", token)
 	}
 
 	resp, err := client.Do(req)
@@ -103,7 +111,7 @@ func resolveNodeID(ctx context.Context, client *http.Client, baseURL, nodeName s
 	return "", fmt.Errorf("%w: %q", ErrNodeNotFound, trimmedNodeName)
 }
 
-func setNodeEligibility(ctx context.Context, client *http.Client, baseURL, nodeID, eligibility string) error {
+func setNodeEligibility(ctx context.Context, client *http.Client, baseURL, nodeID, eligibility, token string) error {
 	payload, err := json.Marshal(map[string]string{
 		"Eligibility": eligibility,
 	})
@@ -122,6 +130,9 @@ func setNodeEligibility(ctx context.Context, client *http.Client, baseURL, nodeI
 	}
 
 	req.Header.Set("Content-Type", "application/json")
+	if strings.TrimSpace(token) != "" {
+		req.Header.Set("X-Nomad-Token", token)
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -139,7 +150,7 @@ func setNodeEligibility(ctx context.Context, client *http.Client, baseURL, nodeI
 	return fmt.Errorf("openwonton node eligibility update failed: status=%d body=%s", resp.StatusCode, strings.TrimSpace(string(body)))
 }
 
-func enableNodeDrain(ctx context.Context, client *http.Client, baseURL, nodeID string, deadline time.Duration) error {
+func enableNodeDrain(ctx context.Context, client *http.Client, baseURL, nodeID string, deadline time.Duration, token string) error {
 	payload, err := json.Marshal(map[string]any{
 		"DrainSpec": map[string]any{
 			"Deadline":         deadline.Nanoseconds(),
@@ -162,6 +173,9 @@ func enableNodeDrain(ctx context.Context, client *http.Client, baseURL, nodeID s
 	}
 
 	req.Header.Set("Content-Type", "application/json")
+	if strings.TrimSpace(token) != "" {
+		req.Header.Set("X-Nomad-Token", token)
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {

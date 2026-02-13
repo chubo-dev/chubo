@@ -56,9 +56,17 @@ func CheckSafeServerStopFromPeers(peers []string) error {
 }
 
 func CheckSafeServerStop(ctx context.Context, client *http.Client, baseURL string) error {
+	return CheckSafeServerStopWithToken(ctx, client, baseURL, "")
+}
+
+func CheckSafeServerStopWithToken(ctx context.Context, client *http.Client, baseURL, token string) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, strings.TrimRight(baseURL, "/")+"/v1/status/peers", nil)
 	if err != nil {
 		return err
+	}
+
+	if strings.TrimSpace(token) != "" {
+		req.Header.Set("X-Consul-Token", token)
 	}
 
 	resp, err := client.Do(req)

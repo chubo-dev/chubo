@@ -124,7 +124,8 @@ func (ctrl *OpenBaoJobStatusController) Run(ctx context.Context, r controller.Ru
 			continue
 		}
 
-		reachable, present, reconcileErr := ensureOpenBaoNomadJob(ctx, intent.JobID, intent.NomadPayload)
+		token := deriveWorkloadACLTokenFromMachineConfig(mc, "nomad")
+		reachable, present, reconcileErr := ensureOpenBaoNomadJob(ctx, intent.JobID, intent.NomadPayload, token)
 		statusSpec.NomadReachable = reachable
 		statusSpec.Present = present
 
@@ -197,13 +198,13 @@ func readOpenBaoIntent(mc *config.MachineConfig) (openBaoIntent, error) {
 	return intent, nil
 }
 
-func ensureOpenBaoNomadJob(ctx context.Context, jobID string, payload []byte) (reachable bool, present bool, err error) {
+func ensureOpenBaoNomadJob(ctx context.Context, jobID string, payload []byte, token string) (reachable bool, present bool, err error) {
 	client, err := services.NewChuboServiceHTTPClient(services.OpenWontonServiceID, 5*time.Second)
 	if err != nil {
 		return false, false, err
 	}
 
-	present, err = nomadJobPresent(ctx, client, jobID)
+	present, err = nomadJobPresent(ctx, client, jobID, token)
 	if err == nil {
 		return true, present, nil
 	}
@@ -212,12 +213,12 @@ func ensureOpenBaoNomadJob(ctx context.Context, jobID string, payload []byte) (r
 		return false, false, err
 	}
 
-	if err := registerNomadJob(ctx, client, payload); err != nil {
+	if err := registerNomadJob(ctx, client, payload, token); err != nil {
 		return true, false, err
 	}
 
 	// Re-check after registration so status is grounded in Nomad state.
-	present, err = nomadJobPresent(ctx, client, jobID)
+	present, err = nomadJobPresent(ctx, client, jobID, token)
 	if err == nil {
 		return true, present, nil
 	}
@@ -229,12 +230,16 @@ func ensureOpenBaoNomadJob(ctx context.Context, jobID string, payload []byte) (r
 	return true, false, err
 }
 
-func nomadJobPresent(ctx context.Context, client *http.Client, jobID string) (bool, error) {
+func nomadJobPresent(ctx context.Context, client *http.Client, jobID string, token string) (bool, error) {
 	url := fmt.Sprintf("%s/v1/job/%s", nomadHTTPAddress, jobID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return false, err
+	}
+
+	if strings.TrimSpace(token) != "" {
+		req.Header.Set(nomadTokenHeader, token)
 	}
 
 	resp, err := client.Do(req)
@@ -255,13 +260,16 @@ func nomadJobPresent(ctx context.Context, client *http.Client, jobID string) (bo
 	}
 }
 
-func registerNomadJob(ctx context.Context, client *http.Client, payload []byte) error {
+func registerNomadJob(ctx context.Context, client *http.Client, payload []byte, token string) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, nomadHTTPAddress+"/v1/jobs", bytes.NewReader(payload))
 	if err != nil {
 		return err
 	}
 
 	req.Header.Set("Content-Type", "application/json")
+	if strings.TrimSpace(token) != "" {
+		req.Header.Set(nomadTokenHeader, token)
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {

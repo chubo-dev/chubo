@@ -20,6 +20,7 @@ import (
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaquorum"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	chuboacl "github.com/chubo-dev/chubo/pkg/chubo/acl"
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
@@ -54,6 +55,12 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 		}
 
 		if openGyozaConfigured && opengyozaquorum.IsServerRole(openGyozaRole) {
+			trustToken := ""
+			if r.Config() != nil && r.Config().Machine() != nil && r.Config().Machine().Security() != nil {
+				trustToken = strings.TrimSpace(r.Config().Machine().Security().Token())
+			}
+			consulToken := chuboacl.WorkloadToken(trustToken, "consul")
+
 			if force {
 				logger.Printf("skipping opengyoza quorum check: forced operation")
 				return nil
@@ -80,7 +87,7 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 				// silently skip the check on the first connection attempt.
 				var lastErr error
 				for attempt := 0; attempt < 20; attempt++ {
-					lastErr = opengyozaquorum.CheckSafeServerStop(ctx, client, openGyozaHTTPAddress)
+					lastErr = opengyozaquorum.CheckSafeServerStopWithToken(ctx, client, openGyozaHTTPAddress, consulToken)
 					if lastErr == nil || errors.Is(lastErr, opengyozaquorum.ErrUnsafeServerStop) {
 						break
 					}
@@ -132,12 +139,18 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 			return nil
 		}
 
+		trustToken := ""
+		if r.Config() != nil && r.Config().Machine() != nil && r.Config().Machine().Security() != nil {
+			trustToken = strings.TrimSpace(r.Config().Machine().Security().Token())
+		}
+		nomadToken := chuboacl.WorkloadToken(trustToken, "nomad")
+
 		nodeName, err := r.NodeName()
 		if err != nil || strings.TrimSpace(nodeName) == "" {
 			nodeName, _ = os.Hostname() //nolint:errcheck
 		}
 
-		if err := openwontondrain.DrainNode(ctx, client, openWontonHTTPAddress, nodeName, openWontonDrainDeadline); err != nil {
+		if err := openwontondrain.DrainNodeWithToken(ctx, client, openWontonHTTPAddress, nodeName, openWontonDrainDeadline, nomadToken); err != nil {
 			if ctx.Err() != nil {
 				return ctx.Err()
 			}

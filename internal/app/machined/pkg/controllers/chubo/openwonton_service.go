@@ -25,11 +25,12 @@ import (
 )
 
 const (
-	openWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
-	openWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
-	openWontonBinaryPath = "/var/lib/chubo/bin/openwonton"
-	openWontonFallback   = "/usr/bin/init"
-	openWontonRoleServer = "server"
+	openWontonConfigPath  = "/var/lib/chubo/config/openwonton.hcl"
+	openWontonRolePath    = "/var/lib/chubo/config/openwonton.role"
+	openWontonBinaryPath  = "/var/lib/chubo/bin/openwonton"
+	openWontonFallback    = "/usr/bin/init"
+	openWontonRoleServer  = "server"
+	openWontonHTTPAddress = "https://127.0.0.1:4646"
 )
 
 // OpenWontonServiceManager is the interface to v1alpha1 service manager.
@@ -140,11 +141,26 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 		leader := ""
 		peerCount := int32(0)
 		lastError := ""
+		aclReady := false
+		aclLastError := ""
 
 		if configured && healthy {
+			token := deriveWorkloadACLTokenFromMachineConfig(mc, "nomad")
+
 			qctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 			var qerr error
-			leader, peerCount, qerr = queryOpenWontonStatus(qctx)
+
+			client, err := services.NewChuboServiceHTTPClient(services.OpenWontonServiceID, 2*time.Second)
+			if err != nil {
+				aclLastError = err.Error()
+			} else {
+				aclReady, qerr = ensureNomadACL(qctx, client, openWontonHTTPAddress, token, role == openWontonRoleServer)
+				if qerr != nil {
+					aclLastError = qerr.Error()
+				}
+			}
+
+			leader, peerCount, qerr = queryOpenWontonStatus(qctx, token)
 			cancel()
 			if qerr != nil {
 				lastError = qerr.Error()
@@ -160,6 +176,8 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 			res.TypedSpec().Leader = leader
 			res.TypedSpec().PeerCount = peerCount
 			res.TypedSpec().LastError = lastError
+			res.TypedSpec().ACLReady = aclReady
+			res.TypedSpec().ACLLastError = aclLastError
 
 			return nil
 		}); err != nil {

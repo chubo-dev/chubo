@@ -25,11 +25,12 @@ import (
 )
 
 const (
-	openGyozaConfigPath = "/var/lib/chubo/config/opengyoza.hcl"
-	openGyozaRolePath   = "/var/lib/chubo/config/opengyoza.role"
-	openGyozaBinaryPath = "/var/lib/chubo/bin/opengyoza"
-	openGyozaFallback   = "/usr/bin/init"
-	openGyozaRoleServer = "server"
+	openGyozaConfigPath  = "/var/lib/chubo/config/opengyoza.hcl"
+	openGyozaRolePath    = "/var/lib/chubo/config/opengyoza.role"
+	openGyozaBinaryPath  = "/var/lib/chubo/bin/opengyoza"
+	openGyozaFallback    = "/usr/bin/init"
+	openGyozaRoleServer  = "server"
+	openGyozaHTTPAddress = "https://127.0.0.1:8500"
 )
 
 // OpenGyozaServiceManager is the interface to v1alpha1 service manager.
@@ -140,11 +141,26 @@ func (ctrl *OpenGyozaServiceController) Run(ctx context.Context, r controller.Ru
 		leader := ""
 		peerCount := int32(0)
 		lastError := ""
+		aclReady := false
+		aclLastError := ""
 
 		if configured && healthy {
+			token := deriveWorkloadACLTokenFromMachineConfig(mc, "consul")
+
 			qctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 			var qerr error
-			leader, peerCount, qerr = queryOpenGyozaStatus(qctx)
+
+			client, err := services.NewChuboServiceHTTPClient(services.OpenGyozaServiceID, 2*time.Second)
+			if err != nil {
+				aclLastError = err.Error()
+			} else {
+				aclReady, qerr = ensureConsulACL(qctx, client, openGyozaHTTPAddress, token, role == openGyozaRoleServer)
+				if qerr != nil {
+					aclLastError = qerr.Error()
+				}
+			}
+
+			leader, peerCount, qerr = queryOpenGyozaStatus(qctx, token)
 			cancel()
 			if qerr != nil {
 				lastError = qerr.Error()
@@ -160,6 +176,8 @@ func (ctrl *OpenGyozaServiceController) Run(ctx context.Context, r controller.Ru
 			res.TypedSpec().Leader = leader
 			res.TypedSpec().PeerCount = peerCount
 			res.TypedSpec().LastError = lastError
+			res.TypedSpec().ACLReady = aclReady
+			res.TypedSpec().ACLLastError = aclLastError
 
 			return nil
 		}); err != nil {

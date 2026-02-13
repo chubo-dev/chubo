@@ -42,6 +42,10 @@ type OpenGyozaStatusSpec struct {
 	PeerCount int32 `yaml:"peerCount,omitempty" protobuf:"7"`
 	// LastError captures the last API query error (best-effort).
 	LastError string `yaml:"lastError,omitempty" protobuf:"8"`
+	// ACLReady indicates whether ACL-protected API calls succeed with the OS-derived token.
+	ACLReady bool `yaml:"aclReady" protobuf:"9"`
+	// ACLLastError captures the last ACL bootstrap/verification error (best-effort).
+	ACLLastError string `yaml:"aclLastError,omitempty" protobuf:"10"`
 }
 
 // DeepCopy generates a deep copy of OpenGyozaStatusSpec.
@@ -85,6 +89,10 @@ func (OpenGyozaStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec
 			{
 				Name:     "Healthy",
 				JSONPath: `{.healthy}`,
+			},
+			{
+				Name:     "ACLReady",
+				JSONPath: `{.aclReady}`,
 			},
 			{
 				Name:     "Peers",

@@ -18,10 +18,14 @@ import (
 
 const workloadStatusHTTPTimeout = 2 * time.Second
 
-func fetchLeader(ctx context.Context, client *http.Client, url string) (string, error) {
+func fetchLeader(ctx context.Context, client *http.Client, url string, tokenHeader, token string) (string, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return "", err
+	}
+
+	if strings.TrimSpace(tokenHeader) != "" && strings.TrimSpace(token) != "" {
+		req.Header.Set(tokenHeader, token)
 	}
 
 	resp, err := client.Do(req)
@@ -50,10 +54,14 @@ func fetchLeader(ctx context.Context, client *http.Client, url string) (string, 
 	return leader, nil
 }
 
-func fetchPeers(ctx context.Context, client *http.Client, url string) ([]string, error) {
+func fetchPeers(ctx context.Context, client *http.Client, url string, tokenHeader, token string) ([]string, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
+	}
+
+	if strings.TrimSpace(tokenHeader) != "" && strings.TrimSpace(token) != "" {
+		req.Header.Set(tokenHeader, token)
 	}
 
 	resp, err := client.Do(req)
@@ -79,7 +87,7 @@ func fetchPeers(ctx context.Context, client *http.Client, url string) ([]string,
 	return peers, nil
 }
 
-func queryOpenWontonStatus(ctx context.Context) (leader string, peerCount int32, lastErr error) {
+func queryOpenWontonStatus(ctx context.Context, token string) (leader string, peerCount int32, lastErr error) {
 	var errs []string
 
 	client, err := services.NewChuboServiceHTTPClient(services.OpenWontonServiceID, workloadStatusHTTPTimeout)
@@ -87,12 +95,12 @@ func queryOpenWontonStatus(ctx context.Context) (leader string, peerCount int32,
 		return "", 0, err
 	}
 
-	leader, err = fetchLeader(ctx, client, "https://127.0.0.1:4646/v1/status/leader")
+	leader, err = fetchLeader(ctx, client, "https://127.0.0.1:4646/v1/status/leader", "X-Nomad-Token", token)
 	if err != nil {
 		errs = append(errs, "leader: "+err.Error())
 	}
 
-	peers, err := fetchPeers(ctx, client, "https://127.0.0.1:4646/v1/status/peers")
+	peers, err := fetchPeers(ctx, client, "https://127.0.0.1:4646/v1/status/peers", "X-Nomad-Token", token)
 	if err != nil {
 		errs = append(errs, "peers: "+err.Error())
 	} else {
@@ -106,7 +114,7 @@ func queryOpenWontonStatus(ctx context.Context) (leader string, peerCount int32,
 	return leader, peerCount, nil
 }
 
-func queryOpenGyozaStatus(ctx context.Context) (leader string, peerCount int32, lastErr error) {
+func queryOpenGyozaStatus(ctx context.Context, token string) (leader string, peerCount int32, lastErr error) {
 	var errs []string
 
 	client, err := services.NewChuboServiceHTTPClient(services.OpenGyozaServiceID, workloadStatusHTTPTimeout)
@@ -114,12 +122,12 @@ func queryOpenGyozaStatus(ctx context.Context) (leader string, peerCount int32, 
 		return "", 0, err
 	}
 
-	leader, err = fetchLeader(ctx, client, "https://127.0.0.1:8500/v1/status/leader")
+	leader, err = fetchLeader(ctx, client, "https://127.0.0.1:8500/v1/status/leader", "X-Consul-Token", token)
 	if err != nil {
 		errs = append(errs, "leader: "+err.Error())
 	}
 
-	peers, err := fetchPeers(ctx, client, "https://127.0.0.1:8500/v1/status/peers")
+	peers, err := fetchPeers(ctx, client, "https://127.0.0.1:8500/v1/status/peers", "X-Consul-Token", token)
 	if err != nil {
 		errs = append(errs, "peers: "+err.Error())
 	} else {
