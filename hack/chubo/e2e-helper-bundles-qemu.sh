@@ -31,6 +31,7 @@ SKIP_BUILD="${SKIP_BUILD:-0}"
 OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
 
 HOST_PORT="${HOST_PORT:-50000}"
+VMNET_ENABLE="${VMNET_ENABLE:-0}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-900}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-2}"
 RETRY_ATTEMPTS="${RETRY_ATTEMPTS:-5}"
@@ -480,9 +481,15 @@ mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 	-t talosconfig \
 	-o "${TALOSCONFIG_FILE}"
 
-VMNET_MAC="52:54:00:$(openssl rand -hex 3 | sed -E 's/(..)(..)(..)/\1:\2:\3/')"
-echo "booting install media (vmnet mac: ${VMNET_MAC})"
-VMNET_ENABLE=1 VMNET_MAC="${VMNET_MAC}" QEMU_RUNDIR="${RUN_DIR}" BOOT_FROM_DISK=0 HOST_PORT="${HOST_PORT}" \
+VMNET_MAC=""
+if [[ "${VMNET_ENABLE}" -eq 1 ]]; then
+	VMNET_MAC="52:54:00:$(openssl rand -hex 3 | sed -E 's/(..)(..)(..)/\1:\2:\3/')"
+	echo "booting install media (vmnet mac: ${VMNET_MAC})"
+else
+	echo "booting install media (slirp only)"
+fi
+
+VMNET_ENABLE="${VMNET_ENABLE}" VMNET_MAC="${VMNET_MAC}" QEMU_RUNDIR="${RUN_DIR}" BOOT_FROM_DISK=0 HOST_PORT="${HOST_PORT}" \
 	./hack/qemu/chubo-qemu.sh >"${LOG_INSTALL}" 2>&1 &
 QEMU_INSTALL_PID=$!
 
@@ -512,7 +519,7 @@ sleep 1
 
 echo "booting installed disk"
 cp -f /opt/homebrew/share/qemu/edk2-arm-vars.fd "${RUN_DIR}/edk2-vars.fd"
-VMNET_ENABLE=1 VMNET_MAC="${VMNET_MAC}" QEMU_RUNDIR="${RUN_DIR}" BOOT_FROM_DISK=1 HOST_PORT="${HOST_PORT}" \
+VMNET_ENABLE="${VMNET_ENABLE}" VMNET_MAC="${VMNET_MAC}" QEMU_RUNDIR="${RUN_DIR}" BOOT_FROM_DISK=1 HOST_PORT="${HOST_PORT}" \
 	./hack/qemu/chubo-qemu.sh >"${LOG_DISK}" 2>&1 &
 QEMU_DISK_PID=$!
 
