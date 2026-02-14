@@ -2,8 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build chubo
-
 package v1alpha1
 
 import (
@@ -26,8 +24,10 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
-// Chubo doesn't ship Kubernetes, etcd, or CRI management.
-// Keep the Talos sequencer API shape, but make these tasks no-ops.
+// Chubo OS doesn't ship Kubernetes, etcd, or CRI management.
+//
+// Keep the Talos sequencer API shape for now (upgrade/reset entry points call these tasks),
+// but implement them in terms of OpenWonton/OpenGyoza.
 
 const (
 	openGyozaHTTPAddress         = "https://127.0.0.1:8500"
@@ -111,9 +111,9 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 
 				logger.Printf("opengyoza quorum check failed: %v", err)
 				return fmt.Errorf("opengyoza quorum check failed: %w", err)
-			} else {
-				logger.Printf("opengyoza quorum check passed")
 			}
+
+			logger.Printf("opengyoza quorum check passed")
 		}
 
 		role, configured, err := openwontondrain.ReadRole(openWontonRolePath)
