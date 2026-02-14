@@ -28,6 +28,7 @@ INSTALLER_TAG="${INSTALLER_TAG:-helper$(date +%s)}"
 INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-10.0.2.2:${REGISTRY_PORT}/${USERNAME}/installer:${INSTALLER_TAG}-arm64}"
 REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-10.0.2.2:${REGISTRY_PORT}=http://10.0.2.2:${REGISTRY_PORT}}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
+OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
 
 HOST_PORT="${HOST_PORT:-50000}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-900}"
@@ -222,6 +223,20 @@ dump_chubo_debug() {
 	"${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
+	echo "-- node time (runtime API)"
+	"${TALOSCTL_CHUBO}" time --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	echo
+
+	echo "-- openwonton TLS cert (subject/dates)"
+	"${TALOSCTL_CHUBO}" read /var/lib/chubo/certs/openwonton/server.pem --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+		| openssl x509 -noout -subject -dates 2>/dev/null || true
+	echo
+
+	echo "-- opengyoza TLS cert (subject/dates)"
+	"${TALOSCTL_CHUBO}" read /var/lib/chubo/certs/opengyoza/server.pem --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+		| openssl x509 -noout -subject -dates 2>/dev/null || true
+	echo
+
 	echo "-- v1alpha1 service openwonton (yaml)"
 	"${TALOSCTL_CHUBO}" get svc --namespace v1alpha1 openwonton -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
@@ -362,16 +377,23 @@ fi
 
 echo "generating secrets + machine config"
 "${TALOSCTL_BASE}" gen secrets -o "${SECRETS_FILE}"
-"${TALOSCTL_CHUBO}" gen machineconfig \
-	--with-secrets "${SECRETS_FILE}" \
-	--install-disk /dev/vdb \
-	--install-image "${INSTALLER_IMAGE_NODE}" \
-	--registry-mirror "${REGISTRY_MIRROR_NODE}" \
-	--with-chubo \
-	--chubo-role server \
-	--with-openbao \
-	--openbao-mode nomadJob \
+gen_mc_args=(
+	--with-secrets "${SECRETS_FILE}"
+	--install-disk /dev/vdb
+	--install-image "${INSTALLER_IMAGE_NODE}"
+	--registry-mirror "${REGISTRY_MIRROR_NODE}"
+	--with-chubo
+	--chubo-role server
+	--with-openbao
+	--openbao-mode nomadJob
 	-o "${MACHINECONFIG_INSTALL}"
+)
+
+if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
+	gen_mc_args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")
+fi
+
+"${TALOSCTL_CHUBO}" gen machineconfig "${gen_mc_args[@]}"
 
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
 runtime_tmp="${MACHINECONFIG_RUNTIME}.tmp"

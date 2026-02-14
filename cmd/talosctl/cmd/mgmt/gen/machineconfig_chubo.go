@@ -28,10 +28,12 @@ var genMachineConfigFlags struct {
 	registryMirrors []string
 	withSecrets     string
 
-	withChubo            bool
-	chuboRole            string
-	chuboBootstrapExpect int
-	chuboJoin            []string
+	withChubo             bool
+	chuboRole             string
+	openWontonArtifactURL string
+	openGyozaArtifactURL  string
+	chuboBootstrapExpect  int
+	chuboJoin             []string
 
 	withOpenBao bool
 	openBaoMode string
@@ -131,12 +133,14 @@ The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`
 						Nomad: &chubotypes.ChuboRoleSpec{
 							Enabled:         pointer.To(true),
 							Role:            role,
+							ArtifactURL:     strings.TrimSpace(genMachineConfigFlags.openWontonArtifactURL),
 							BootstrapExpect: bootstrapExpect,
 							Join:            join,
 						},
 						Consul: &chubotypes.ChuboRoleSpec{
 							Enabled:         pointer.To(true),
 							Role:            role,
+							ArtifactURL:     strings.TrimSpace(genMachineConfigFlags.openGyozaArtifactURL),
 							BootstrapExpect: bootstrapExpect,
 							Join:            join,
 						},
@@ -212,6 +216,8 @@ The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`
 
 	cmd.Flags().BoolVar(&genMachineConfigFlags.withChubo, "with-chubo", false, "enable modules.chubo with openwonton/opengyoza defaults")
 	cmd.Flags().StringVar(&genMachineConfigFlags.chuboRole, "chubo-role", "server", "chubo role for openwonton/opengyoza (server|client)")
+	cmd.Flags().StringVar(&genMachineConfigFlags.openWontonArtifactURL, "openwonton-artifact-url", "", "override openwonton artifact URL (http(s)://...)")
+	cmd.Flags().StringVar(&genMachineConfigFlags.openGyozaArtifactURL, "opengyoza-artifact-url", "", "override opengyoza artifact URL (http(s)://...)")
 	cmd.Flags().IntVar(&genMachineConfigFlags.chuboBootstrapExpect, "chubo-bootstrap-expect", -1, "bootstrap_expect for openwonton/opengyoza (unset by default)")
 	cmd.Flags().StringSliceVar(&genMachineConfigFlags.chuboJoin, "chubo-join", nil, "peer addresses to join/retry-join for openwonton/opengyoza")
 	cmd.Flags().BoolVar(&genMachineConfigFlags.withOpenBao, "with-openbao", false, "enable modules.chubo.openbao (Nomad job controller)")

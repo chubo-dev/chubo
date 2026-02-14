@@ -10,6 +10,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	goruntime "runtime"
 	"strings"
 	"time"
 
@@ -31,11 +32,12 @@ const (
 	// OpenGyozaServiceID is the service ID exposed by machined.
 	OpenGyozaServiceID = "opengyoza"
 
-	openGyozaBinaryPath = "/var/lib/chubo/bin/opengyoza"
-	openGyozaConfigPath = "/var/lib/chubo/config/opengyoza.hcl"
-	openGyozaRuntimeCfg = "/var/lib/chubo/config/opengyoza.runtime.hcl"
-	openGyozaDataDir    = "/var/lib/chubo/opengyoza"
-	openGyozaFallback   = "/usr/bin/init"
+	openGyozaBinaryPath      = "/var/lib/chubo/bin/opengyoza"
+	openGyozaConfigPath      = "/var/lib/chubo/config/opengyoza.hcl"
+	openGyozaArtifactURLPath = "/var/lib/chubo/config/opengyoza.artifact_url"
+	openGyozaRuntimeCfg      = "/var/lib/chubo/config/opengyoza.runtime.hcl"
+	openGyozaDataDir         = "/var/lib/chubo/opengyoza"
+	openGyozaFallback        = "/usr/bin/init"
 )
 
 var openGyozaRelease = serviceReleaseBinary{
@@ -79,7 +81,23 @@ func (s *OpenGyoza) PreFunc(ctx context.Context, r runtime.Runtime) error {
 
 	// Prefer real opengyoza release artifacts. Fallback to the local mock binary path
 	// if artifact install is unavailable (for example network-restricted boots).
-	if err := ensureServiceBinaryWithRelease(ctx, openGyozaBinaryPath, openGyozaFallback, openGyozaRelease); err != nil {
+	release := openGyozaRelease
+
+	// Allow dev/test harnesses to override where we fetch release assets (e.g. local mirrors for private repos).
+	if raw, err := os.ReadFile(openGyozaArtifactURLPath); err == nil {
+		override := strings.TrimSpace(string(raw))
+		if override != "" {
+			release = openGyozaRelease
+			release.AssetURLs = make(map[string]string, len(openGyozaRelease.AssetURLs))
+			for k, v := range openGyozaRelease.AssetURLs {
+				release.AssetURLs[k] = v
+			}
+
+			release.AssetURLs[goruntime.GOARCH] = override
+		}
+	}
+
+	if err := ensureServiceBinaryWithRelease(ctx, openGyozaBinaryPath, openGyozaFallback, release); err != nil {
 		return err
 	}
 

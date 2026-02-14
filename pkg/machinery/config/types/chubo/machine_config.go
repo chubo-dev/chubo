@@ -41,15 +41,17 @@ const (
 	ChuboBootstrapModeSignedPayload = "signedPayload"
 
 	// chuboBootstrapPayloadPath is where the verified bootstrap payload is written.
-	chuboBootstrapPayloadPath = "/var/lib/chubo/bootstrap/bootstrap.json"
-	chuboOpenWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
-	chuboOpenWontonRolePath   = "/var/lib/chubo/config/openwonton.role"
-	chuboOpenGyozaConfigPath  = "/var/lib/chubo/config/opengyoza.hcl"
-	chuboOpenGyozaRolePath    = "/var/lib/chubo/config/opengyoza.role"
-	chuboOpenWontonTLSDir     = "/var/lib/chubo/certs/openwonton"
-	chuboOpenGyozaTLSDir      = "/var/lib/chubo/certs/opengyoza"
-	chuboOpenBaoJobPath       = "/var/lib/chubo/config/openbao.nomad.json"
-	chuboOpenBaoModePath      = "/var/lib/chubo/config/openbao.mode"
+	chuboBootstrapPayloadPath      = "/var/lib/chubo/bootstrap/bootstrap.json"
+	chuboOpenWontonConfigPath      = "/var/lib/chubo/config/openwonton.hcl"
+	chuboOpenWontonRolePath        = "/var/lib/chubo/config/openwonton.role"
+	chuboOpenWontonArtifactURLPath = "/var/lib/chubo/config/openwonton.artifact_url"
+	chuboOpenGyozaConfigPath       = "/var/lib/chubo/config/opengyoza.hcl"
+	chuboOpenGyozaRolePath         = "/var/lib/chubo/config/opengyoza.role"
+	chuboOpenGyozaArtifactURLPath  = "/var/lib/chubo/config/opengyoza.artifact_url"
+	chuboOpenWontonTLSDir          = "/var/lib/chubo/certs/openwonton"
+	chuboOpenGyozaTLSDir           = "/var/lib/chubo/certs/opengyoza"
+	chuboOpenBaoJobPath            = "/var/lib/chubo/config/openbao.nomad.json"
+	chuboOpenBaoModePath           = "/var/lib/chubo/config/openbao.mode"
 
 	chuboRoleServer = "server"
 	chuboRoleClient = "client"
@@ -231,6 +233,12 @@ type ChuboRoleSpec struct {
 	// Role selects the role (server|client).
 	Role string `yaml:"role,omitempty"`
 
+	// ArtifactURL overrides the default release artifact URL used to install the component binary.
+	//
+	// This is primarily intended for airgapped/internal mirrors and for development when upstream
+	// release assets are not publicly accessible.
+	ArtifactURL string `yaml:"artifactURL,omitempty"`
+
 	// BootstrapExpect controls the expected number of peers for quorum/bootstrap.
 	// When unset, server roles default to 1 and client roles default to 0.
 	BootstrapExpect *int `yaml:"bootstrapExpect,omitempty"`
@@ -383,6 +391,10 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 					return nil, err
 				}
 
+				if err := validateChuboArtifactURL("spec.modules.chubo.nomad.artifactURL", s.Spec.Modules.Chubo.Nomad.ArtifactURL); err != nil {
+					return nil, err
+				}
+
 				if err := validateChuboBootstrapExpect("spec.modules.chubo.nomad.bootstrapExpect", s.Spec.Modules.Chubo.Nomad.BootstrapExpect); err != nil {
 					return nil, err
 				}
@@ -394,6 +406,10 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 
 			if s.Spec.Modules.Chubo.Consul != nil && (s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled) {
 				if err := validateChuboRole("spec.modules.chubo.consul.role", s.Spec.Modules.Chubo.Consul.Role); err != nil {
+					return nil, err
+				}
+
+				if err := validateChuboArtifactURL("spec.modules.chubo.consul.artifactURL", s.Spec.Modules.Chubo.Consul.ArtifactURL); err != nil {
 					return nil, err
 				}
 
@@ -533,6 +549,15 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Nomad.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Nomad.Join)
 
+				if url := strings.TrimSpace(s.Spec.Modules.Chubo.Nomad.ArtifactURL); url != "" {
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+						FileContent:     url + "\n",
+						FilePermissions: v1alpha1.FileMode(0o644),
+						FilePath:        chuboOpenWontonArtifactURLPath,
+						FileOp:          "create",
+					})
+				}
+
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
 					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join),
 					FilePermissions: v1alpha1.FileMode(0o600),
@@ -557,6 +582,15 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Consul.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Consul.Join)
 				aclToken := chuboacl.WorkloadToken(s.Spec.Trust.Token, "consul")
+
+				if url := strings.TrimSpace(s.Spec.Modules.Chubo.Consul.ArtifactURL); url != "" {
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+						FileContent:     url + "\n",
+						FilePermissions: v1alpha1.FileMode(0o644),
+						FilePath:        chuboOpenGyozaArtifactURLPath,
+						FileOp:          "create",
+					})
+				}
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
 					FileContent:     renderOpenGyozaConfig(role, bootstrapExpect, join, aclToken),
@@ -670,6 +704,31 @@ func validateChuboJoin(path string, addrs []string) error {
 		if strings.TrimSpace(raw) == "" {
 			return fmt.Errorf("%s must not contain empty entries", path)
 		}
+	}
+
+	return nil
+}
+
+func validateChuboArtifactURL(path string, raw string) error {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return nil
+	}
+
+	u, err := url.Parse(raw)
+	if err != nil {
+		return fmt.Errorf("%s must be a valid URL: %w", path, err)
+	}
+
+	switch u.Scheme {
+	case "http", "https":
+		// ok
+	default:
+		return fmt.Errorf("%s must be an http(s) URL", path)
+	}
+
+	if strings.TrimSpace(u.Host) == "" {
+		return fmt.Errorf("%s must include a host", path)
 	}
 
 	return nil
