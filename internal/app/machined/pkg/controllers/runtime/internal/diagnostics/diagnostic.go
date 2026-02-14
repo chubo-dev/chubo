@@ -41,10 +41,5 @@ func Checks() []CheckDescription {
 			Hysteresis: 30 * time.Second,
 			Check:      AddressOverlapCheck,
 		},
-		{
-			ID:         "kubelet-csr",
-			Hysteresis: 30 * time.Second,
-			Check:      KubeletCSRNotApprovedCheck,
-		},
 	}
 }
