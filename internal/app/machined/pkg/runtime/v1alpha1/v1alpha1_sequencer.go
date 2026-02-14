@@ -292,7 +292,7 @@ func (*Sequencer) Reset(r runtime.Runtime, in runtime.ResetOptions) []runtime.Ph
 			"dbus",
 			StopDBus,
 		).AppendWhen(
-			in.GetGraceful() && (r.Config().Machine().Type() != machine.TypeWorker),
+			in.GetGraceful() && shouldRunLeavePhase(r),
 			"leave",
 			LeaveEtcd,
 		).Append(

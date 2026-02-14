@@ -17,8 +17,10 @@ import (
 	"time"
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaleave"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/opengyozaquorum"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontondrain"
+	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime/v1alpha1/internal/openwontonleave"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
 	chuboacl "github.com/chubo-dev/chubo/pkg/chubo/acl"
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
@@ -168,7 +170,69 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 
 func LeaveEtcd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
-		logger.Printf("skipping etcd leave (chubo build)")
+		// On reset, best-effort leave the Chubo control plane so peers don't retain stale
+		// membership records (analogous to Talos etcd leave).
+		trustToken := ""
+		if r.Config() != nil && r.Config().Machine() != nil && r.Config().Machine().Security() != nil {
+			trustToken = strings.TrimSpace(r.Config().Machine().Security().Token())
+		}
+
+		nomadToken := chuboacl.WorkloadToken(trustToken, "nomad")
+		consulToken := chuboacl.WorkloadToken(trustToken, "consul")
+
+		nodeName, err := r.NodeName()
+		if err != nil || strings.TrimSpace(nodeName) == "" {
+			nodeName, _ = os.Hostname() //nolint:errcheck
+		}
+
+		role, configured, err := openwontondrain.ReadRole(openWontonRolePath)
+		if err != nil {
+			logger.Printf("skipping openwonton leave: failed to read role: %v", err)
+		} else if configured {
+			client, err := services.NewChuboServiceHTTPClient(services.OpenWontonServiceID, openWontonDefaultHTTPTimeout)
+			if err != nil {
+				logger.Printf("skipping openwonton leave: failed to create HTTP client: %v", err)
+			} else {
+				leaveCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+				defer cancel()
+
+				switch {
+				case openwontonleave.IsClientRole(role):
+					if err := openwontonleave.PurgeNodeWithToken(leaveCtx, client, openWontonHTTPAddress, nodeName, nomadToken); err != nil {
+						logger.Printf("openwonton node purge skipped: %v", err)
+					} else {
+						logger.Printf("requested openwonton node purge for %q", nodeName)
+					}
+				case openwontonleave.IsServerRole(role):
+					if err := openwontonleave.RemoveServerPeerWithToken(leaveCtx, client, openWontonHTTPAddress, nodeName, nomadToken); err != nil {
+						logger.Printf("openwonton raft peer removal skipped: %v", err)
+					} else {
+						logger.Printf("requested openwonton raft peer removal for %q", nodeName)
+					}
+				default:
+					logger.Printf("skipping openwonton leave: unknown role=%q", strings.TrimSpace(role))
+				}
+			}
+		}
+
+		role, configured, err = opengyozaquorum.ReadRole(openGyozaRolePath)
+		if err != nil {
+			logger.Printf("skipping opengyoza leave: failed to read role: %v", err)
+		} else if configured {
+			client, err := services.NewChuboServiceHTTPClient(services.OpenGyozaServiceID, openWontonDefaultHTTPTimeout)
+			if err != nil {
+				logger.Printf("skipping opengyoza leave: failed to create HTTP client: %v", err)
+			} else {
+				leaveCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+				defer cancel()
+
+				if err := opengyozaleave.LeaveWithToken(leaveCtx, client, openGyozaHTTPAddress, consulToken); err != nil {
+					logger.Printf("opengyoza agent leave skipped: %v", err)
+				} else {
+					logger.Printf("requested opengyoza agent leave")
+				}
+			}
+		}
 
 		return nil
 	}, "leaveEtcd"
