@@ -840,6 +840,7 @@ acl {
   default_policy = "deny"
   enable_token_persistence = true
   tokens {
+    master = %q
     agent = %q
   }
 }
@@ -850,7 +851,7 @@ verify_incoming = true
 verify_outgoing = true
 %sserver = %t
 bootstrap_expect = %d
-`, aclToken, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, joinLine, serverEnabled, bootstrapExpect)
+`, aclToken, aclToken, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, joinLine, serverEnabled, bootstrapExpect)
 }
 
 func renderOpenBaoNomadJobPayload() string {
