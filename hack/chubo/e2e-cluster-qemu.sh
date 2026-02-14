@@ -534,15 +534,20 @@ echo "  cluster: ${CLUSTER_NAME}"
 echo "  state dir: ${STATE_DIR}"
 echo "  work dir: ${WORKDIR}"
 echo "  cidr: ${CIDR}"
-echo "  controlplanes: ${CONTROLPLANE_COUNT}"
-echo "  registry: ${REGISTRY_LOCAL_ADDR} -> ${REGISTRY_NODE_ADDR}"
+	echo "  controlplanes: ${CONTROLPLANE_COUNT}"
+	echo "  registry: ${REGISTRY_LOCAL_ADDR} -> ${REGISTRY_NODE_ADDR}"
 
 	if [[ "${SKIP_BUILD}" != "1" ]]; then
+		ensure_buildx_builder
+
 		echo "building chubo boot artifacts"
-		make initramfs kernel sd-boot ARTIFACTS="${ARTIFACTS}" GO_BUILDTAGS="${GO_BUILDTAGS}" PLATFORM="linux/${ARCH}"
+		make initramfs kernel sd-boot \
+			ARTIFACTS="${ARTIFACTS}" \
+			GO_BUILDTAGS="${GO_BUILDTAGS}" \
+			TARGET_ARGS="--builder=${BUILDX_BUILDER} ${TARGET_ARGS:-}" \
+			PLATFORM="linux/${ARCH}"
 
 		echo "building chubo installer-base and imager docker images"
-		ensure_buildx_builder
 		make docker-installer-base docker-imager \
 			DEST="${ARTIFACTS}" \
 			GO_BUILDTAGS="${GO_BUILDTAGS}" \
