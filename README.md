@@ -1,64 +1,42 @@
-<!-- markdownlint-disable MD041 -->
+# Chubo OS (Talos Fork)
 
-<p align="center">
-  <h1 align="center">Talos Linux</h1>
-  <p align="center">A modern OS for Kubernetes.</p>
-  <p align="center">
-    <a href="https://github.com/talos-systems/talos/releases/latest"><img alt="Release" src="https://img.shields.io/github/release/talos-systems/talos.svg?logo=github&logoColor=white"></a>
-    <a href="https://github.com/talos-systems/talos/releases/latest"><img alt="Pre-release" src="https://img.shields.io/github/release-pre/talos-systems/talos.svg?label=pre-release&logo=GitHub&logoColor=white"></a>
-    <a href="https://www.bestpractices.dev/projects/7340"><img src="https://www.bestpractices.dev/projects/7340/badge" alt="OpenSSF badge"></a>
-  </p>
-</p>
+This repository is a Talos-derived OS distribution which targets running the Chubo stack:
 
----
+- OpenWonton (Nomad)
+- OpenGyoza (Consul)
+- OpenBao (as a Nomad job)
 
-**Talos** is a modern OS for running Kubernetes: secure, immutable, and minimal.
-Talos is fully open source, production-ready, and supported by the people at [Sidero Labs](https://www.SideroLabs.com/).
-All system management is done via an API - there is no shell or interactive console.
-Benefits include:
+Chubo OS is API-managed and intentionally "no shell":
+- no SSH
+- no console login
+- day-2 operations happen via the OS API (mTLS), plus helper bundles to access workload-native APIs
 
-- **Security**: Talos reduces your attack surface: It's minimal, hardened, and immutable.
-  All API access is secured with mutual TLS (mTLS) authentication.
-- **Predictability**: Talos eliminates configuration drift, reduces unknown factors by employing immutable infrastructure ideology, and delivers atomic updates.
-- **Evolvability**: Talos simplifies your architecture, increases your agility, and always delivers current stable Kubernetes and Linux versions.
+Kubernetes/etcd are not part of the product surface (they are being removed from the repository in staged passes).
 
-## Documentation
+## Workspace Layout
 
-For instructions on deploying and managing Talos, see the [Documentation](https://docs.siderolabs.com/talos).
+In the `chubo-os` workspace, docs and control-plane tooling live in the sibling repo:
+- `../chubo/docs/talos/deep-fork-plan.md`
+- `../chubo/docs/talos/chubo-product-source-clean-plan.md`
+- `../chubo/docs/dev/chubo-os-qemu-devloop.md`
 
-## Community
+## Build, Test, and Fast Iteration
 
-- Support: Questions, bugs, feature requests [GitHub Discussions](https://github.com/siderolabs/talos/discussions)
-- Slack: Join our [slack channel](https://taloscommunity.slack.com/). Request access via [inviter.co](https://inviter.co/sidero-labs-community).
-- Forum: [community](https://groups.google.com/a/SideroLabs.com/forum/#!forum/community)
-- Twitter: [@SideroLabs](https://twitter.com/SideroLabs)
-- Email: [info@SideroLabs.com](mailto:info@SideroLabs.com)
+From `talos/`:
 
-If you're interested in this project and would like to help in engineering efforts or have general usage questions, we are happy to have you!
-We hold a monthly meeting that all audiences are welcome to attend.
+- Unit tests: `make unit-tests`
+- Guardrails (k8s-less deps + rootfs + CLI surface): `make chubo-guardrails`
+- QEMU core E2E (root): `sudo -n ./hack/chubo/e2e-core-qemu.sh`
+- Helper bundles smoke (root): `sudo -n ./hack/chubo/e2e-helper-bundles-qemu.sh`
+- Opengyoza quorum fixture (root): `sudo -n ./hack/chubo/e2e-opengyoza-quorum-qemu.sh`
 
-We would appreciate your feedback so that we can make Talos even better!
-To do so, you can take our [survey](https://docs.google.com/forms/d/1TUna5YTYGCKot68Y9YN_CLobY6z9JzLVCq1G7DoyNjA/edit).
+To monitor a QEMU fixture run, tail the per-node serial log in the printed state dir, e.g.:
 
-### Office Hours
+```sh
+sudo tail -f /tmp/chubo-*-e2e-state/*/*.log
+```
 
-- When: Second Monday of every month at 16:30 UTC.
-- Where: [Google Meet](https://meet.google.com/ivb-kjfm-jfc).
+## CI
 
-You can subscribe to this meeting by joining the community forum above.
-
-> Note: You can convert the meeting hours to your [local time](https://everytimezone.com/s/599e61d6).
-
-## Contributing
-
-Contributions are welcomed and appreciated!
-See [Contributing](CONTRIBUTING.md) for our guidelines.
-
-## License
-
-<a href="https://github.com/siderolabs/talos/blob/master/LICENSE">
-  <img alt="GitHub" src="https://img.shields.io/github/license/siderolabs/talos">
-</a>
-
-Some software we distribute is under the General Public License family of licenses or other licenses that require we provide you with the source code.
-If you would like a copy of the source code for this software, please contact us via email: info at SideroLabs.com.
+GitHub Actions workflows are intentionally minimal and Chubo-focused:
+- `.github/workflows/ci.yaml`
