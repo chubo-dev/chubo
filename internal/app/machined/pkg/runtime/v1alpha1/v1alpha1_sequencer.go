@@ -13,7 +13,6 @@ import (
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/pkg/imager/profile"
 	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
-	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
