@@ -76,11 +76,15 @@ func (ctrl *OpenBaoJobStatusController) Outputs() []controller.Output {
 
 // Run implements controller.Controller interface.
 func (ctrl *OpenBaoJobStatusController) Run(ctx context.Context, r controller.Runtime, _ *zap.Logger) error {
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case <-ctx.Done():
 			return nil
 		case <-r.EventCh():
+		case <-ticker.C:
 		}
 
 		r.StartTrackingOutputs()
