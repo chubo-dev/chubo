@@ -44,6 +44,10 @@ func TestEnsureChuboServiceTLSMaterialRotatesOnSANOrCAChange(t *testing.T) {
 	timeStatus.TypedSpec().Synced = true
 	require.NoError(t, resources.Create(ctx, timeStatus))
 
+	adj := timeresource.NewAdjtimeStatus()
+	adj.TypedSpec().SyncStatus = true
+	require.NoError(t, resources.Create(ctx, adj))
+
 	// Seed OS issuing CA + initial SANs.
 	ca1, err := siderox509.NewSelfSignedCertificateAuthority(siderox509.Organization("chubo-test-ca1"))
 	require.NoError(t, err)

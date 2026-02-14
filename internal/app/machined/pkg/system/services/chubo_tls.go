@@ -28,11 +28,13 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/cosi-project/runtime/pkg/safe"
+	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/siderolabs/crypto/x509"
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
+	v1alpha1res "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
 var (
@@ -308,10 +310,25 @@ func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtimeStateGetter, se
 		return err
 	}
 
-	// Avoid generating certs that will immediately be considered expired after a later time jump.
+	// Wait for the kernel adjtime status to report it is synced as well. The time sync status can be
+	// forced to "synced" to unblock boot (for example during prolonged NTP failures), but leaf TLS
+	// certs minted from an unsynced clock can become immediately invalid after a later clock jump.
 	saneCtx, saneCancel := context.WithTimeout(ctx, 2*time.Minute)
 	defer saneCancel()
 
+	_, err := st.WatchFor(
+		saneCtx,
+		resource.NewMetadata(v1alpha1res.NamespaceName, timeresource.AdjtimeStatusType, timeresource.AdjtimeStatusID, resource.VersionUndefined),
+		state.WithEventTypes(state.Created, state.Updated),
+		state.WithCondition(func(r resource.Resource) (bool, error) {
+			return r.(*timeresource.AdjtimeStatus).TypedSpec().SyncStatus, nil
+		}),
+	)
+	if err != nil {
+		return err
+	}
+
+	// Avoid generating certs that will immediately be considered expired after a later time jump.
 	for time.Now().Before(minSaneTime) {
 		select {
 		case <-saneCtx.Done():
