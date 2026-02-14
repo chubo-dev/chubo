@@ -33,6 +33,8 @@ OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
 HOST_PORT="${HOST_PORT:-50000}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-900}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-2}"
+RETRY_ATTEMPTS="${RETRY_ATTEMPTS:-5}"
+RETRY_SLEEP_SECONDS="${RETRY_SLEEP_SECONDS:-5}"
 RUN_DIR="${RUN_DIR:-$(mktemp -d /tmp/chubo-helper-e2e.XXXXXX)}"
 KEEP_VM="${KEEP_VM:-0}"
 PRUNE_KEEP="${PRUNE_KEEP:-3}"
@@ -58,6 +60,36 @@ require_cmd() {
 
 		exit 1
 	fi
+}
+
+retry() {
+	local max="${RETRY_ATTEMPTS}"
+	local sleep_seconds="${RETRY_SLEEP_SECONDS}"
+	local attempt=1
+
+	while true; do
+		if "$@"; then
+			return 0
+		fi
+
+		if ((attempt >= max)); then
+			echo "command failed after ${attempt}/${max} attempts: $*" >&2
+			return 1
+		fi
+
+		echo "command failed (attempt ${attempt}/${max}), retrying in ${sleep_seconds}s: $*" >&2
+		sleep "${sleep_seconds}"
+
+		attempt=$((attempt + 1))
+		sleep_seconds=$((sleep_seconds * 2))
+		if ((sleep_seconds > 60)); then
+			sleep_seconds=60
+		fi
+	done
+}
+
+make_with_tags() {
+	GO_BUILDTAGS="${GO_BUILDTAGS}" make "$@"
 }
 
 prune_old_run_dirs() {
@@ -333,7 +365,7 @@ if [[ "${SKIP_BUILD}" -eq 0 ]]; then
 	mkdir -p "${IMAGES_DIR}"
 
 	echo "building installer-base + imager tarballs (${INSTALLER_TAG})"
-	GO_BUILDTAGS="${GO_BUILDTAGS}" make docker-installer-base docker-imager \
+	retry make_with_tags docker-installer-base docker-imager \
 		DEST="${IMAGES_DIR}" \
 		IMAGE_REGISTRY=localhost \
 		USERNAME="${USERNAME}" \
