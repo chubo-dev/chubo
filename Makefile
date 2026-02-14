@@ -169,10 +169,16 @@ BUILD := docker buildx build
 PLATFORM ?= linux/$(ARCH)
 PROGRESS ?= auto
 PUSH ?= false
+# Buildx defaults to emitting attestations (provenance/SBOM) on some setups.
+# That breaks `--load`/`type=docker` workflows used by local E2E scripts.
+PROVENANCE ?= false
+SBOM ?= false
 COMMON_ARGS := --file=Dockerfile
 COMMON_ARGS += --progress=$(PROGRESS)
 COMMON_ARGS += --platform=$(PLATFORM)
 COMMON_ARGS += --push=$(PUSH)
+COMMON_ARGS += --provenance=$(PROVENANCE)
+COMMON_ARGS += --sbom=$(SBOM)
 
 COMMON_ARGS += --build-arg=ABBREV_TAG=$(ABBREV_TAG)
 COMMON_ARGS += --build-arg=ARTIFACTS=$(ARTIFACTS)
@@ -335,7 +341,10 @@ local-%: ## Builds the specified target defined in the Dockerfile using the loca
 
 docker-%: ## Builds the specified target defined in the Dockerfile using the docker output type. The build result will be output to the specified local destination.
 	@mkdir -p $(DEST)
-	@$(MAKE) target-$* TARGET_ARGS="--output type=docker,dest=$(DEST)/$*.tar,name=$(REGISTRY_AND_USERNAME)/$*:$(IMAGE_TAG_OUT) $(TARGET_ARGS)"
+	# `--output type=docker,dest=...` can hang on macOS+colima for large images.
+	# Load into the local engine, then `docker save` to a docker-style tarball.
+	@$(MAKE) target-$* PUSH=false TARGET_ARGS="--load --tag $(REGISTRY_AND_USERNAME)/$*:$(IMAGE_TAG_OUT) $(TARGET_ARGS)"
+	@docker save -o $(DEST)/$*.tar $(REGISTRY_AND_USERNAME)/$*:$(IMAGE_TAG_OUT)
 
 registry-%: ## Builds the specified target defined in the Dockerfile using the image/registry output type. The build result will be pushed to the registry if PUSH=true.
 	@$(MAKE) target-$* TARGET_ARGS="--output type=image,name=$(REGISTRY_AND_USERNAME)/$*:$(IMAGE_TAG_OUT),rewrite-timestamp=true $(TARGET_ARGS)"
@@ -424,7 +433,9 @@ talosctl-windows-amd64:
 talosctl-windows-arm64:
 	@$(MAKE) local-talosctl-windows-arm64 DEST=$(ARTIFACTS) PUSH=false
 
-talosctl: talosctl-$(OPERATING_SYSTEM)-$(ARCH)
+.PHONY: talosctl
+talosctl:
+	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
 
 .PHONY: chuboctl
 chuboctl: chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
@@ -433,7 +444,7 @@ chuboctl: chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
 # Build chuboctl by reusing the talosctl artifact and renaming it.
 .PHONY: chuboctl-%
 chuboctl-%:
-	@$(MAKE) talosctl-$*
+	@$(MAKE) -B talosctl-$*
 	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
 	@chmod +x $(ARTIFACTS)/chuboctl-$*
 
