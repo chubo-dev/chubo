@@ -24,7 +24,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubeaccess"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/perf"
@@ -171,7 +170,6 @@ func NewState() (*State, error) {
 		&k8s.StaticPodServerStatus{},
 		&k8s.StaticPodStatus{},
 		&k8s.SecretsStatus{},
-		&kubeaccess.Config{},
 		&kubespan.Config{},
 		&kubespan.Endpoint{},
 		&kubespan.Identity{},
