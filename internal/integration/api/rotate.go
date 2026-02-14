@@ -23,11 +23,10 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	secretsres "github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 	"github.com/chubo-dev/chubo/pkg/provision/access"
-	"github.com/chubo-dev/chubo/pkg/rotate/pki/kubernetes"
 	"github.com/chubo-dev/chubo/pkg/rotate/pki/talos"
 )
 
-// RotateCASuite verifies rotation of Talos and Kubernetes CAs.
+// RotateCASuite verifies rotation of the OS API CA.
 type RotateCASuite struct {
 	base.APISuite
 
@@ -118,62 +117,6 @@ func (suite *RotateCASuite) TestTalos() {
 	suite.AssertClusterHealthy(suite.ctx)
 
 	suite.ClearConnectionRefused(suite.ctx, suite.DiscoverNodeInternalIPsByType(suite.ctx, machine.TypeWorker)...)
-}
-
-// TestKubernetes updates Kubernetes CA in the cluster.
-func (suite *RotateCASuite) TestKubernetes() {
-	if suite.Cluster == nil {
-		suite.T().Skip("cluster information is not available")
-	}
-
-	if testing.Short() {
-		suite.T().Skip("skipping in short mode")
-	}
-
-	suite.T().Logf("capturing current Kubernetes CA")
-
-	nodeInternalIP := suite.RandomDiscoveredNodeInternalIP(machine.TypeControlPlane)
-
-	// save k8sRoot
-	k8sRoot, err := safe.StateGetByID[*secretsres.KubernetesRoot](client.WithNode(suite.ctx, nodeInternalIP), suite.Client.COSI, secretsres.KubernetesRootID)
-	suite.Require().NoError(err)
-
-	suite.T().Logf("rotating current CA -> new CA")
-
-	newBundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.TalosVersionCurrent)
-	suite.Require().NoError(err)
-
-	options := kubernetes.Options{
-		TalosClient: suite.Client,
-		ClusterInfo: access.NewAdapter(suite.Cluster),
-
-		NewKubernetesCA: newBundle.Certs.K8s,
-
-		EncoderOption: encoder.WithComments(encoder.CommentsAll),
-
-		Printf: suite.T().Logf,
-	}
-
-	suite.Require().NoError(kubernetes.Rotate(suite.ctx, options))
-
-	suite.AssertClusterHealthy(suite.ctx)
-
-	suite.T().Logf("rotating back new CA -> old CA")
-
-	options = kubernetes.Options{
-		TalosClient: suite.Client,
-		ClusterInfo: access.NewAdapter(suite.Cluster),
-
-		NewKubernetesCA: k8sRoot.TypedSpec().IssuingCA,
-
-		EncoderOption: encoder.WithComments(encoder.CommentsAll),
-
-		Printf: suite.T().Logf,
-	}
-
-	suite.Require().NoError(kubernetes.Rotate(suite.ctx, options))
-
-	suite.AssertClusterHealthy(suite.ctx)
 }
 
 func (suite *RotateCASuite) restartAPIServices(c *client.Client) {
