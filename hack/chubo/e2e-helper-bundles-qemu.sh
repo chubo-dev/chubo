@@ -30,6 +30,11 @@ REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-10.0.2.2:${REGISTRY_PORT}=http://1
 SKIP_BUILD="${SKIP_BUILD:-0}"
 OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
 
+HOST_PORT_ENV_SET=0
+if [[ -n "${HOST_PORT+x}" ]]; then
+	HOST_PORT_ENV_SET=1
+fi
+
 HOST_PORT="${HOST_PORT:-50000}"
 VMNET_ENABLE="${VMNET_ENABLE:-0}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-900}"
@@ -39,6 +44,7 @@ RETRY_SLEEP_SECONDS="${RETRY_SLEEP_SECONDS:-5}"
 RUN_DIR="${RUN_DIR:-$(mktemp -d /tmp/chubo-helper-e2e.XXXXXX)}"
 KEEP_VM="${KEEP_VM:-0}"
 PRUNE_KEEP="${PRUNE_KEEP:-3}"
+CLEANUP_ONLY="${CLEANUP_ONLY:-0}"
 
 SECRETS_FILE="${RUN_DIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${RUN_DIR}/machineconfig-install.yaml"
@@ -61,6 +67,35 @@ require_cmd() {
 
 		exit 1
 	fi
+}
+
+port_in_use() {
+	local port="$1"
+
+	# Best-effort: lsof is available by default on macOS and keeps this script dependency-light.
+	if command -v lsof >/dev/null 2>&1; then
+		lsof -nP -iTCP:"${port}" -sTCP:LISTEN >/dev/null 2>&1
+		return $?
+	fi
+
+	return 1
+}
+
+pick_free_port() {
+	local port="$1"
+	local attempts=256
+
+	for _ in $(seq 1 "${attempts}"); do
+		if ! port_in_use "${port}"; then
+			echo "${port}"
+			return 0
+		fi
+
+		port=$((port + 1))
+	done
+
+	echo "failed to find a free TCP port starting at ${1}" >&2
+	return 1
 }
 
 ensure_local_api_sans() {
@@ -352,6 +387,23 @@ require_cmd openssl
 require_cmd rg
 require_cmd curl
 require_cmd jq
+
+# Prevent accidental reuse of a stale VM when the default hostfwd port is taken.
+if port_in_use "${HOST_PORT}"; then
+	if [[ "${HOST_PORT_ENV_SET}" -eq 1 ]]; then
+		echo "HOST_PORT=${HOST_PORT} is already in use; pick a free port and retry." >&2
+		exit 1
+	fi
+
+	HOST_PORT="$(pick_free_port "${HOST_PORT}")"
+	echo "HOST_PORT is in use, using free port: ${HOST_PORT}" >&2
+fi
+
+if [[ "${CLEANUP_ONLY}" -eq 1 ]]; then
+	echo "CLEANUP_ONLY=1: killing any QEMU processes for run dir: ${RUN_DIR}" >&2
+	pkill -f "qemu-system-aarch64.*${RUN_DIR}" >/dev/null 2>&1 || true
+	exit 0
+fi
 
 if [[ ! -x "${TALOSCTL_BASE}" ]]; then
 	make talosctl
