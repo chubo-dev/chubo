@@ -31,7 +31,6 @@ func TestRootSuite(t *testing.T) {
 			Timeout: 10 * time.Second,
 			AfterSetup: func(suite *ctest.DefaultSuite) {
 				suite.Require().NoError(suite.Runtime().RegisterController(secretsctrl.NewRootEtcdController()))
-				suite.Require().NoError(suite.Runtime().RegisterController(secretsctrl.NewRootKubernetesController()))
 				suite.Require().NoError(suite.Runtime().RegisterController(secretsctrl.NewRootOSController()))
 			},
 		},
@@ -70,19 +69,6 @@ func (suite *RootSuite) TestReconcileControlPlane() {
 			asrt.Equal(res.TypedSpec().EtcdCA, cfg.Cluster().Etcd().CA())
 		},
 	)
-	rtestutils.AssertResources(suite.Ctx(), suite.T(), suite.State(), []resource.ID{secrets.KubernetesRootID},
-		func(res *secrets.KubernetesRoot, asrt *assert.Assertions) {
-			asrt.Equal(res.TypedSpec().IssuingCA, cfg.Cluster().IssuingCA())
-			asrt.Equal(
-				[]*x509.PEMEncodedCertificate{
-					{
-						Crt: cfg.Cluster().IssuingCA().Crt,
-					},
-				},
-				res.TypedSpec().AcceptedCAs,
-			)
-		},
-	)
 
 	rtestutils.AssertResources(suite.Ctx(), suite.T(), suite.State(), []resource.ID{secrets.OSRootID},
 		func(res *secrets.OSRoot, asrt *assert.Assertions) {
@@ -117,5 +103,4 @@ func (suite *RootSuite) TestReconcileWorker() {
 	)
 
 	rtestutils.AssertNoResource[*secrets.Etcd](suite.Ctx(), suite.T(), suite.State(), secrets.EtcdRootID)
-	rtestutils.AssertNoResource[*secrets.Kubernetes](suite.Ctx(), suite.T(), suite.State(), secrets.KubernetesRootID)
 }
