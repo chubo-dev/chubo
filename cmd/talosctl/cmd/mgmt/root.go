@@ -12,7 +12,6 @@ import (
 	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
 	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/debug"
 	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/gen"
-	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/inject"
 	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/machineconfig"
 )
 
@@ -32,6 +31,5 @@ func init() {
 	addCommand(cluster.Cmd)
 	addCommand(gen.Cmd)
 	addCommand(debug.Cmd)
-	addCommand(inject.Cmd)
 	addCommand(machineconfig.Cmd)
 }
