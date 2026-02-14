@@ -17,7 +17,6 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
-	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
 	"github.com/chubo-dev/chubo/pkg/machinery/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/configdiff"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/container"
@@ -218,13 +217,13 @@ func (r *Runtime) Logging() runtime.LoggingManager {
 	return r.l
 }
 
-// IsBootstrapAllowed checks for CRI to be up, checked in the bootstrap method.
+// IsBootstrapAllowed gates the Bootstrap RPC. Chubo OS doesn't ship CRI, so use
+// base runtime readiness instead.
 func (r *Runtime) IsBootstrapAllowed() bool {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	svc := &services.CRI{}
-	if err := system.WaitForService(system.StateEventUp, svc.ID(r)).Wait(ctx); err != nil {
+	if err := system.WaitForService(system.StateEventUp, "containerd").Wait(ctx); err != nil {
 		return false
 	}
 
