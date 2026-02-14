@@ -22,14 +22,17 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/cosi-project/runtime/pkg/safe"
+	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/dustin/go-humanize"
 	"github.com/spf13/cobra"
+	yaml "go.yaml.in/yaml/v4"
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	commonapi "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/formatters"
+	chubores "github.com/chubo-dev/chubo/pkg/machinery/resources/chubo"
 	clusterresource "github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
@@ -161,6 +164,48 @@ func collectNodeData(ctx context.Context, c *client.Client, zw *zip.Writer, node
 
 		if err := writeIfPresent(path.Join("chubo-config", name), func() ([]byte, error) {
 			return collectOptionalFile(ctx, c, chuboFilePath)
+		}); err != nil {
+			return err
+		}
+	}
+
+	for name, md := range map[string]resource.Metadata{
+		"bootstrapstatus.yaml": resource.NewMetadata(chubores.NamespaceName, chubores.BootstrapStatusType, chubores.BootstrapStatusID, resource.VersionUndefined),
+		"openwontonstatus.yaml": resource.NewMetadata(
+			chubores.NamespaceName,
+			chubores.OpenWontonStatusType,
+			chubores.OpenWontonStatusID,
+			resource.VersionUndefined,
+		),
+		"openwontonbootstrapstatus.yaml": resource.NewMetadata(
+			chubores.NamespaceName,
+			chubores.OpenWontonBootstrapStatusType,
+			chubores.OpenWontonBootstrapStatusID,
+			resource.VersionUndefined,
+		),
+		"opengyozastatus.yaml": resource.NewMetadata(
+			chubores.NamespaceName,
+			chubores.OpenGyozaStatusType,
+			chubores.OpenGyozaStatusID,
+			resource.VersionUndefined,
+		),
+		"opengyozabootstrapstatus.yaml": resource.NewMetadata(
+			chubores.NamespaceName,
+			chubores.OpenGyozaBootstrapStatusType,
+			chubores.OpenGyozaBootstrapStatusID,
+			resource.VersionUndefined,
+		),
+		"openbaojobstatus.yaml": resource.NewMetadata(
+			chubores.NamespaceName,
+			chubores.OpenBaoJobStatusType,
+			chubores.OpenBaoJobStatusID,
+			resource.VersionUndefined,
+		),
+	} {
+		meta := md
+
+		if err := writeIfPresent(path.Join("cosi", name), func() ([]byte, error) {
+			return collectCOSIResourceYAML(ctx, c, meta)
 		}); err != nil {
 			return err
 		}
@@ -413,6 +458,24 @@ func collectOptionalFile(ctx context.Context, c *client.Client, filePath string)
 	defer r.Close() //nolint:errcheck
 
 	return io.ReadAll(r)
+}
+
+func collectCOSIResourceYAML(ctx context.Context, c *client.Client, md resource.Metadata) ([]byte, error) {
+	res, err := c.COSI.Get(ctx, md)
+	if err != nil {
+		if state.IsNotFoundError(err) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	out, err := resource.MarshalYAML(res)
+	if err != nil {
+		return nil, err
+	}
+
+	return yaml.Marshal(out)
 }
 
 func readDataStream(recv func() (*commonapi.Data, error)) ([]byte, error) {
