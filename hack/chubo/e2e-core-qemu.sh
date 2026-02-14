@@ -17,6 +17,7 @@ GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}"
 ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 WITH_HELPERS="${WITH_HELPERS:-0}"
+BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
@@ -96,6 +97,18 @@ require_cmd() {
 
 		exit 1
 	fi
+}
+
+ensure_buildx_builder() {
+	# Buildx "docker" driver (default with colima) can hang after large builds.
+	# Prefer a docker-container builder for deterministic, non-hanging local runs.
+	if docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null 2>&1; then
+		return 0
+	fi
+
+	echo "creating buildx builder: ${BUILDX_BUILDER}"
+	docker buildx create --name "${BUILDX_BUILDER}" --driver docker-container >/dev/null
+	docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null
 }
 
 refresh_registry_refs() {
@@ -422,9 +435,11 @@ if [[ "${SKIP_BUILD}" != "1" ]]; then
 	make initramfs kernel sd-boot ARTIFACTS="${ARTIFACTS}" GO_BUILDTAGS="${GO_BUILDTAGS}" PLATFORM="linux/${ARCH}"
 
 	echo "building chubo installer-base and imager docker images"
+	ensure_buildx_builder
 	make docker-installer-base docker-imager \
 		DEST="${ARTIFACTS}" \
 		GO_BUILDTAGS="${GO_BUILDTAGS}" \
+		TARGET_ARGS="--builder=${BUILDX_BUILDER} ${TARGET_ARGS:-}" \
 		PLATFORM="linux/${ARCH}" \
 		INSTALLER_ARCH=targetarch \
 		IMAGE_REGISTRY=localhost \

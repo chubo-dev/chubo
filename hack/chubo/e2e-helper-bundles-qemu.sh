@@ -29,6 +29,7 @@ INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-10.0.2.2:${REGISTRY_PORT}/${USERNA
 REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-10.0.2.2:${REGISTRY_PORT}=http://10.0.2.2:${REGISTRY_PORT}}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
+BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 
 HOST_PORT_ENV_SET=0
 if [[ -n "${HOST_PORT+x}" ]]; then
@@ -222,6 +223,18 @@ ensure_registry() {
 	return 1
 }
 
+ensure_buildx_builder() {
+	# Buildx "docker" driver (default with colima) can hang after large builds.
+	# Prefer a docker-container builder for deterministic, non-hanging local runs.
+	if docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null 2>&1; then
+		return 0
+	fi
+
+	echo "creating buildx builder: ${BUILDX_BUILDER}"
+	docker buildx create --name "${BUILDX_BUILDER}" --driver docker-container >/dev/null
+	docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null
+}
+
 wait_until() {
 	local description="$1"
 	local timeout_seconds="$2"
@@ -409,17 +422,18 @@ if [[ "${CLEANUP_ONLY}" -eq 1 ]]; then
 	exit 0
 fi
 
-if [[ ! -x "${TALOSCTL_BASE}" ]]; then
-	make talosctl
-fi
+		# talosctl is used for PKI/secrets generation; rebuild so it always matches the worktree.
+		make talosctl
 
-rebuild_chuboctl=0
-if [[ ! -x "${TALOSCTL_CHUBO}" ]]; then
+	# When iterating locally we want the CLI to reflect the current worktree (config rendering,
+	# helper bundle surfaces, etc). The rebuild cost is small compared to the QEMU flow.
 	rebuild_chuboctl=1
-else
-	# The helper-bundles E2E depends on newer `gen machineconfig` flags.
-	# If the cached binary doesn't have them, rebuild it from source.
-	if ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
+	if [[ ! -x "${TALOSCTL_CHUBO}" ]]; then
+		rebuild_chuboctl=1
+	else
+		# The helper-bundles E2E depends on newer `gen machineconfig` flags.
+		# If the cached binary doesn't have them, rebuild it from source.
+		if ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
 		rebuild_chuboctl=1
 	elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--opengyoza-artifact-url'; then
 		rebuild_chuboctl=1
@@ -460,8 +474,11 @@ if [[ "${SKIP_BUILD}" -eq 0 ]]; then
 	IMAGES_DIR="${RUN_DIR}/images"
 	mkdir -p "${IMAGES_DIR}"
 
+	ensure_buildx_builder
+
 	echo "building installer-base + imager tarballs (${INSTALLER_TAG})"
 	retry make_with_tags docker-installer-base docker-imager \
+		TARGET_ARGS="--builder=${BUILDX_BUILDER} ${TARGET_ARGS:-}" \
 		DEST="${IMAGES_DIR}" \
 		IMAGE_REGISTRY=localhost \
 		USERNAME="${USERNAME}" \

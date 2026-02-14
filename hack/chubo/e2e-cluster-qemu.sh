@@ -19,6 +19,7 @@ SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 
 CONTROLPLANE_COUNT="${CONTROLPLANE_COUNT:-3}"
 
@@ -114,6 +115,18 @@ wait_until() {
 
 		sleep "${SLEEP_SECONDS}"
 	done
+}
+
+ensure_buildx_builder() {
+	# Buildx "docker" driver (default with colima) can hang after large builds.
+	# Prefer a docker-container builder for deterministic, non-hanging local runs.
+	if docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null 2>&1; then
+		return 0
+	fi
+
+	echo "creating buildx builder: ${BUILDX_BUILDER}"
+	docker buildx create --name "${BUILDX_BUILDER}" --driver docker-container >/dev/null
+	docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null
 }
 
 refresh_registry_refs() {
@@ -524,19 +537,21 @@ echo "  cidr: ${CIDR}"
 echo "  controlplanes: ${CONTROLPLANE_COUNT}"
 echo "  registry: ${REGISTRY_LOCAL_ADDR} -> ${REGISTRY_NODE_ADDR}"
 
-if [[ "${SKIP_BUILD}" != "1" ]]; then
-	echo "building chubo boot artifacts"
-	make initramfs kernel sd-boot ARTIFACTS="${ARTIFACTS}" GO_BUILDTAGS="${GO_BUILDTAGS}" PLATFORM="linux/${ARCH}"
+	if [[ "${SKIP_BUILD}" != "1" ]]; then
+		echo "building chubo boot artifacts"
+		make initramfs kernel sd-boot ARTIFACTS="${ARTIFACTS}" GO_BUILDTAGS="${GO_BUILDTAGS}" PLATFORM="linux/${ARCH}"
 
-	echo "building chubo installer-base and imager docker images"
-	make docker-installer-base docker-imager \
-		DEST="${ARTIFACTS}" \
-		GO_BUILDTAGS="${GO_BUILDTAGS}" \
-		PLATFORM="linux/${ARCH}" \
-		INSTALLER_ARCH=targetarch \
-		IMAGE_REGISTRY=localhost \
-		USERNAME=chubo \
-		IMAGE_TAG_OUT=dev
+		echo "building chubo installer-base and imager docker images"
+		ensure_buildx_builder
+		make docker-installer-base docker-imager \
+			DEST="${ARTIFACTS}" \
+			GO_BUILDTAGS="${GO_BUILDTAGS}" \
+			TARGET_ARGS="--builder=${BUILDX_BUILDER} ${TARGET_ARGS:-}" \
+			PLATFORM="linux/${ARCH}" \
+			INSTALLER_ARCH=targetarch \
+			IMAGE_REGISTRY=localhost \
+			USERNAME=chubo \
+			IMAGE_TAG_OUT=dev
 else
 	echo "SKIP_BUILD=1: reusing existing artifacts in ${ARTIFACTS}"
 fi
