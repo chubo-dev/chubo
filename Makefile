@@ -349,9 +349,6 @@ docker-%: ## Builds the specified target defined in the Dockerfile using the doc
 registry-%: ## Builds the specified target defined in the Dockerfile using the image/registry output type. The build result will be pushed to the registry if PUSH=true.
 	@$(MAKE) target-$* TARGET_ARGS="--output type=image,name=$(REGISTRY_AND_USERNAME)/$*:$(IMAGE_TAG_OUT),rewrite-timestamp=true $(TARGET_ARGS)"
 
-hack-test-%: ## Runs the specified script in ./hack/test with well known environment variables.
-	@./hack/test/$*.sh
-
 # Generators
 
 .PHONY: generate
