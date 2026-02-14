@@ -29,6 +29,9 @@ INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-10.0.2.2:${REGISTRY_PORT}/${USERNA
 REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-10.0.2.2:${REGISTRY_PORT}=http://10.0.2.2:${REGISTRY_PORT}}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
+OPENGYOZA_VERSION="${OPENGYOZA_VERSION:-1.6.4}"
+OPENGYOZA_MIRROR_PORT="${OPENGYOZA_MIRROR_PORT:-5010}"
+OPENGYOZA_MIRROR_PID=0
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 
 HOST_PORT_ENV_SET=0
@@ -97,6 +100,60 @@ pick_free_port() {
 
 	echo "failed to find a free TCP port starting at ${1}" >&2
 	return 1
+}
+
+ensure_opengyoza_artifact_url() {
+	# opengyoza is currently a private repo. The guest can't fetch release assets without
+	# a token, so we mirror the selected asset via a local HTTP server and point the node
+	# at 10.0.2.2 (slirp host gateway).
+	if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
+		return 0
+	fi
+
+	local tag="v${OPENGYOZA_VERSION}"
+	local asset="gyoza_${OPENGYOZA_VERSION}_linux_arm64.zip"
+	local public_url="https://github.com/opengyoza/opengyoza/releases/download/${tag}/${asset}"
+
+	if curl -fsSLI "${public_url}" >/dev/null 2>&1; then
+		OPENGYOZA_ARTIFACT_URL="${public_url}"
+		return 0
+	fi
+
+	if ! command -v gh >/dev/null 2>&1; then
+		echo "OPENGYOZA_ARTIFACT_URL is unset, and ${public_url} is not reachable. Install gh or set OPENGYOZA_ARTIFACT_URL." >&2
+		return 1
+	fi
+
+	if ! command -v python3 >/dev/null 2>&1; then
+		echo "python3 is required to mirror private opengyoza assets. Install python3 or set OPENGYOZA_ARTIFACT_URL." >&2
+		return 1
+	fi
+
+	local dir="${RUN_DIR}/opengyoza-artifacts"
+	mkdir -p "${dir}"
+	local local_path="${dir}/${asset}"
+
+	if [[ ! -f "${local_path}" ]]; then
+		echo "downloading opengyoza release asset via gh (${tag}/${asset})"
+		if [[ -n "${SUDO_USER:-}" && "${SUDO_USER}" != "root" ]]; then
+			su - "${SUDO_USER}" -c "gh release download \"${tag}\" -R opengyoza/opengyoza -p \"${asset}\" -D \"${dir}\" --clobber"
+		else
+			gh release download "${tag}" -R opengyoza/opengyoza -p "${asset}" -D "${dir}" --clobber
+		fi
+	fi
+
+	local port="${OPENGYOZA_MIRROR_PORT}"
+	if port_in_use "${port}"; then
+		port="$(pick_free_port "${port}")"
+	fi
+
+	echo "serving opengyoza artifact on :${port}"
+	python3 -m http.server "${port}" --directory "${dir}" --bind 0.0.0.0 >"${RUN_DIR}/opengyoza-mirror.log" 2>&1 &
+	OPENGYOZA_MIRROR_PID=$!
+
+	# Wait for the server to come up so the guest doesn't race.
+	retry curl -fsS --range 0-0 "http://localhost:${port}/${asset}" -o /dev/null
+	OPENGYOZA_ARTIFACT_URL="http://10.0.2.2:${port}/${asset}"
 }
 
 ensure_local_api_sans() {
@@ -378,6 +435,11 @@ dump_chubo_debug() {
 cleanup() {
 	set +e
 
+	if [[ "${OPENGYOZA_MIRROR_PID}" -gt 0 ]]; then
+		kill "${OPENGYOZA_MIRROR_PID}" >/dev/null 2>&1 || true
+		OPENGYOZA_MIRROR_PID=0
+	fi
+
 	if [[ "${QEMU_INSTALL_PID}" -gt 0 ]]; then
 		kill "${QEMU_INSTALL_PID}" >/dev/null 2>&1 || true
 	fi
@@ -421,6 +483,8 @@ if [[ "${CLEANUP_ONLY}" -eq 1 ]]; then
 	pkill -f "qemu-system-aarch64.*${RUN_DIR}" >/dev/null 2>&1 || true
 	exit 0
 fi
+
+ensure_opengyoza_artifact_url
 
 		# talosctl is used for PKI/secrets generation; rebuild so it always matches the worktree.
 		make talosctl
