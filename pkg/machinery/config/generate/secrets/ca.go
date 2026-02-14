@@ -53,10 +53,18 @@ func NewAggregatorCA(currentTime time.Time, contract *config.VersionContract) (c
 
 // NewTalosCA generates a CA for the Talos PKI.
 func NewTalosCA(currentTime time.Time) (ca *x509.CertificateAuthority, err error) {
+	// Backdate the OS CA so services with buggy or skewed clocks can still
+	// validate the chain during early boot.
+	notBefore := currentTime
+	notBeforeFloor := time.Date(2020, 1, 1, 0, 0, 0, 0, time.UTC)
+	if notBefore.After(notBeforeFloor) {
+		notBefore = notBeforeFloor
+	}
+
 	opts := []x509.Option{
 		x509.Organization("talos"),
 		x509.NotAfter(currentTime.Add(CAValidityTime)),
-		x509.NotBefore(currentTime),
+		x509.NotBefore(notBefore),
 	}
 
 	return x509.NewSelfSignedCertificateAuthority(opts...)

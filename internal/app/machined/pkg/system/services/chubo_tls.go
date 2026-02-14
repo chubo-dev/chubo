@@ -388,8 +388,10 @@ func EnsureChuboServiceTLSMaterial(ctx context.Context, r runtimeStateGetter, se
 		Subject: pkix.Name{
 			CommonName: strings.TrimSpace(certSANs.FQDN),
 		},
-		NotBefore:             time.Now(),
-		NotAfter:              time.Now().Add(x509.DefaultCertificateValidityDuration),
+		// Use the OS issuing CA validity window to avoid boot-time clock skew issues
+		// (and to avoid minting 24h leaf certs which are painful in local dev loops).
+		NotBefore:             ca.Crt.NotBefore,
+		NotAfter:              ca.Crt.NotAfter,
 		KeyUsage:              stdlibx509.KeyUsageDigitalSignature,
 		ExtKeyUsage:           []stdlibx509.ExtKeyUsage{stdlibx509.ExtKeyUsageServerAuth, stdlibx509.ExtKeyUsageClientAuth},
 		BasicConstraintsValid: false,
