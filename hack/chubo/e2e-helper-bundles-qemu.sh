@@ -327,6 +327,8 @@ else
 	# If the cached binary doesn't have them, rebuild it from source.
 	if ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
 		rebuild_chuboctl=1
+	elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--opengyoza-artifact-url'; then
+		rebuild_chuboctl=1
 	fi
 fi
 
