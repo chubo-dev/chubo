@@ -156,7 +156,9 @@ func enableNodeDrain(ctx context.Context, client *http.Client, baseURL, nodeID s
 			"Deadline":         deadline.Nanoseconds(),
 			"IgnoreSystemJobs": false,
 		},
-		"MarkEligible": false,
+		// Mark the node eligible again once draining completes so upgrades/reboots don't
+		// permanently cordon it.
+		"MarkEligible": true,
 	})
 	if err != nil {
 		return err

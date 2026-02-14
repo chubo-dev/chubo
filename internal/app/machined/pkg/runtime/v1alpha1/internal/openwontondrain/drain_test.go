@@ -105,8 +105,8 @@ func TestDrainNodeSuccess(t *testing.T) {
 				t.Fatalf("unexpected drain deadline: %#v", drainSpec["Deadline"])
 			}
 
-			if payload["MarkEligible"].(bool) {
-				t.Fatalf("expected MarkEligible=false")
+			if !payload["MarkEligible"].(bool) {
+				t.Fatalf("expected MarkEligible=true")
 			}
 
 			sawDrain = true
