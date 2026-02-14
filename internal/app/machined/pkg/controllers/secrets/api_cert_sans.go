@@ -2,13 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build !chubo && !chuboos
+//go:build !chubo
 
 package secrets
 
 import (
 	"context"
 	"fmt"
+	"net/netip"
 
 	"github.com/cosi-project/runtime/pkg/controller"
 	"github.com/cosi-project/runtime/pkg/resource"
@@ -122,9 +123,12 @@ func (ctrl *APICertSANsController) Run(ctx context.Context, r controller.Runtime
 
 			spec.AppendIPs(apiRoot.CertSANIPs...)
 			spec.AppendIPs(nodeAddresses.IPs()...)
+			// Always include loopback so local hostfwd (QEMU slirp, etc.) can verify the API endpoint.
+			spec.AppendIPs(netip.MustParseAddr("127.0.0.1"), netip.MustParseAddr("::1"))
 
 			spec.AppendDNSNames(apiRoot.CertSANDNSNames...)
 			spec.AppendDNSNames(hostnameStatus.Hostname, hostnameStatus.FQDN())
+			spec.AppendDNSNames("localhost")
 
 			spec.FQDN = hostnameStatus.FQDN()
 

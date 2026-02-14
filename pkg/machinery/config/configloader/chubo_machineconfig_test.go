@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build chubo || chuboos
+//go:build chubo
 
 package configloader_test
 
@@ -16,9 +16,9 @@ import (
 
 type installMode struct{}
 
-func (installMode) String() string      { return "install" }
+func (installMode) String() string        { return "install" }
 func (installMode) RequiresInstall() bool { return true }
-func (installMode) InContainer() bool   { return false }
+func (installMode) InContainer() bool     { return false }
 
 func TestChuboOSMachineConfigDecodesAndSynthesizesV1Alpha1(t *testing.T) {
 	t.Parallel()
@@ -77,4 +77,3 @@ spec:
 	_, err = cfg.Validate(installMode{})
 	require.NoError(t, err)
 }
-
