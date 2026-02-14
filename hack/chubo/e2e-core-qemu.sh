@@ -14,7 +14,12 @@ cd "${TALOS_ROOT}"
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
 GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}"
-ARCH="${ARCH:-amd64}"
+DEFAULT_ARCH="amd64"
+if [[ "$(uname -s)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
+	# Faster local loop on Apple Silicon (avoids amd64 TCG emulation).
+	DEFAULT_ARCH="arm64"
+fi
+ARCH="${ARCH:-${DEFAULT_ARCH}}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 WITH_HELPERS="${WITH_HELPERS:-0}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
