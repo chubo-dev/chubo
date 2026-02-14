@@ -86,8 +86,8 @@ func (suite *APICertSANsSuite) TestReconcileControlPlane() {
 
 		spec := certSANs.TypedSpec()
 
-		suite.Assert().Equal([]string{"bar", "bar.some.org", "some.org"}, spec.DNSNames)
-		suite.Assert().Equal("[10.2.1.3 10.4.3.2 172.16.0.1]", fmt.Sprintf("%v", spec.IPs))
+		suite.Assert().Equal([]string{"bar", "bar.some.org", "localhost", "some.org"}, spec.DNSNames)
+		suite.Assert().Equal("[10.2.1.3 10.4.3.2 127.0.0.1 172.16.0.1 ::1]", fmt.Sprintf("%v", spec.IPs))
 		suite.Assert().Equal("bar.some.org", spec.FQDN)
 
 		return nil
@@ -115,7 +115,7 @@ func (suite *APICertSANsSuite) TestReconcileControlPlane() {
 
 		spec := certSANs.TypedSpec()
 
-		expectedDNSNames := []string{"bar", "bar.some.org", "other.org"}
+		expectedDNSNames := []string{"bar", "bar.some.org", "localhost", "other.org"}
 
 		if !slices.Equal(expectedDNSNames, spec.DNSNames) {
 			return retry.ExpectedErrorf("expected %v, got %v", expectedDNSNames, spec.DNSNames)
