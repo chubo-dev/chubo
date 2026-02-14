@@ -62,6 +62,41 @@ require_cmd() {
 	fi
 }
 
+ensure_local_api_sans() {
+	# For slirp/usernet QEMU runs, the guest is only reachable via hostfwd (127.0.0.1:$HOST_PORT).
+	# Add 127.0.0.1/localhost to API cert SANs so runtime mTLS can work without a bridged NIC.
+	local file="$1"
+
+	if rg -q '^[[:space:]]*certSANs:' "${file}"; then
+		return 0
+	fi
+
+	local tmp="${file}.tmp"
+	awk '
+		/^machine:[[:space:]]*$/ && !done {
+			print
+			print "  certSANs:"
+			print "    - 127.0.0.1"
+			print "    - localhost"
+			done = 1
+			next
+		}
+		{ print }
+	' "${file}" >"${tmp}"
+	mv "${tmp}" "${file}"
+}
+
+chown_run_dir_to_invoker() {
+	# When running under sudo, keep artifacts readable by the invoker (debugging, iteration).
+	if [[ "$(id -u)" -ne 0 ]]; then
+		return 0
+	fi
+
+	if [[ -n "${SUDO_UID:-}" && -n "${SUDO_GID:-}" ]]; then
+		chown -R "${SUDO_UID}:${SUDO_GID}" "${RUN_DIR}" >/dev/null 2>&1 || true
+	fi
+}
+
 retry() {
 	local max="${RETRY_ATTEMPTS}"
 	local sleep_seconds="${RETRY_SLEEP_SECONDS}"
@@ -301,6 +336,8 @@ cleanup() {
 	if [[ "${KEEP_VM}" -eq 0 ]]; then
 		pkill -f "qemu-system-aarch64.*${RUN_DIR}" >/dev/null 2>&1 || true
 	fi
+
+	chown_run_dir_to_invoker
 }
 
 trap cleanup EXIT
@@ -455,9 +492,10 @@ wait_until "maintenance API (install media)" "${TIMEOUT_SECONDS}" \
 "${TALOSCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1 >"${RUN_DIR}/addresses-install.txt"
 NODE_IP="$(parse_bridged_ip "${RUN_DIR}/addresses-install.txt")"
 if [[ -z "${NODE_IP}" ]]; then
-	echo "failed to discover bridged node IP from install phase" >&2
-
-	exit 1
+	echo "no bridged node IP discovered; falling back to hostfwd runtime API (127.0.0.1:${HOST_PORT})" >&2
+	NODE_IP="127.0.0.1"
+	ensure_local_api_sans "${MACHINECONFIG_INSTALL}"
+	ensure_local_api_sans "${MACHINECONFIG_RUNTIME}"
 fi
 
 echo "applying install config"
