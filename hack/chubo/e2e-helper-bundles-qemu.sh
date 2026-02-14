@@ -176,7 +176,11 @@ prune_old_run_dirs() {
 	fi
 
 	# Sort newest -> oldest. /tmp is /private/tmp on macOS, use the canonical path.
-	mapfile -t dirs < <(ls -1td /private/tmp/chubo-helper-e2e.* 2>/dev/null || true)
+	# macOS ships Bash 3.2 by default, which doesn't have `mapfile`.
+	local dirs=()
+	while IFS= read -r dir; do
+		dirs+=("${dir}")
+	done < <(ls -1td /private/tmp/chubo-helper-e2e.* 2>/dev/null || true)
 
 	local kept=0
 	for dir in "${dirs[@]}"; do
