@@ -26,6 +26,11 @@ This repo is the Chubo-OS fork of Talos. The product goal is a Talos-like OS API
   - `./hack/chubo/e2e-opengyoza-quorum-qemu.sh`
   - `./hack/chubo/e2e-helper-bundles-qemu.sh`
 
+macOS + Colima notes:
+- Recommended sizing for amd64 boot artifacts: `colima start --cpu 6 --memory 8 --disk 80`.
+- Buildx: the default `docker` driver can hang on large `--output=type=local` builds; QEMU E2E scripts force a `docker-container` builder (`BUILDX_BUILDER=local`) for boot artifacts.
+- If a root-run fixture appears stuck in `make initramfs` with ~0% CPU and the initramfs file already exists, force-cancel by restarting Colima (`colima stop && colima start ...`) and rerun the fixture.
+
 In this workspace, the canonical operator docs and execution checklist live in the sibling repo:
 - `../chubo/docs/dev/chubo-os-qemu-devloop.md` (quick iteration, NOPASSWD sudoers, troubleshooting)
 - `../chubo/docs/talos/plan.md` (execution checklist with commit references)
