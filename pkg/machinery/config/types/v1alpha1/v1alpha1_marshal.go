@@ -11,6 +11,18 @@ import (
 // Base64Bytes implements YAML marshaling/unmarshaling via base64 encoding.
 type Base64Bytes []byte
 
+// DeepCopy returns a deep-copied slice, preserving nil vs empty.
+func (b Base64Bytes) DeepCopy() Base64Bytes {
+	if b == nil {
+		return nil
+	}
+
+	cp := make([]byte, len(b))
+	copy(cp, b)
+
+	return cp
+}
+
 // UnmarshalYAML implements the yaml.Unmarshaler interface.
 func (b *Base64Bytes) UnmarshalYAML(unmarshal func(any) error) error {
 	var data string

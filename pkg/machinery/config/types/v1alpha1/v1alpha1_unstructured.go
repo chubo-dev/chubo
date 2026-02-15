@@ -13,7 +13,6 @@ import (
 // Unstructured allows wrapping any map[string]interface{} into a config object.
 //
 // docgen: nodoc
-// +k8s:deepcopy-gen=true
 type Unstructured struct {
 	Object map[string]any `yaml:",inline"`
 }

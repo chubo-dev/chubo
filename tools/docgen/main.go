@@ -35,7 +35,9 @@ var tpl = `// This Source Code Form is subject to the terms of the Mozilla Publi
 package {{ .Package }}
 
 import (
-	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
+{{- range .Imports }}
+	"{{ . }}"
+{{- end }}
 )
 
 {{ $tick := "` + "`" + `" -}}
@@ -129,6 +131,7 @@ type Doc struct {
 	Title   string
 	Header  string
 	File    string
+	Imports []string
 	Structs []*Struct
 }
 
@@ -608,7 +611,53 @@ func packageToDoc(pkg *packageType, aliases map[string]aliasType) *Doc {
 
 	doc.File = pkg.file
 
+	doc.Imports = requiredImports(doc)
+
 	return doc
+}
+
+func requiredImports(doc *Doc) []string {
+	importSet := map[string]struct{}{
+		"github.com/chubo-dev/chubo/pkg/machinery/config/encoder": {},
+	}
+
+	addImportsForValue := func(value string) {
+		// Some docs examples reference external packages in YAML comments
+		// (e.g. `pointer.To(false)`), but the docgen input file doesn't import
+		// them because they only exist in comments. Add those imports here.
+		if strings.Contains(value, "pointer.") {
+			importSet["github.com/siderolabs/go-pointer"] = struct{}{}
+		}
+
+		if strings.Contains(value, "constants.") {
+			importSet["github.com/chubo-dev/chubo/pkg/machinery/constants"] = struct{}{}
+		}
+	}
+
+	for _, s := range doc.Structs {
+		for _, example := range s.Text.Examples {
+			addImportsForValue(example.Value)
+		}
+
+		for _, field := range s.Fields {
+			if field.Text == nil {
+				continue
+			}
+
+			for _, example := range field.Text.Examples {
+				addImportsForValue(example.Value)
+			}
+		}
+	}
+
+	imports := make([]string, 0, len(importSet))
+	for path := range importSet {
+		imports = append(imports, path)
+	}
+
+	slices.Sort(imports)
+
+	return imports
 }
 
 func sourcesWithJSONSchema(dir string) []string {

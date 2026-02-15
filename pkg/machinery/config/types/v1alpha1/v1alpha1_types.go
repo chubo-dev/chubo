@@ -15,8 +15,6 @@ package v1alpha1
 
 //go:generate go tool github.com/chubo-dev/chubo/tools/docgen -output ./v1alpha1_types_doc.go ./v1alpha1_types.go
 
-//go:generate go tool k8s.io/code-generator/cmd/deepcopy-gen --go-header-file ../../../../../hack/boilerplate.txt --bounding-dirs github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1 --output-file zz_generated.deepcopy.go .
-
 //docgen:jsonschema
 
 import (

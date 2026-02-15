@@ -3,3 +3,5 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 package v1alpha1
+
+//go:generate go tool github.com/siderolabs/deep-copy -type Config -type Device -type ArgValue -pointer-receiver -header-file ../../../../../hack/boilerplate.txt -o deep_copy.generated.go .
