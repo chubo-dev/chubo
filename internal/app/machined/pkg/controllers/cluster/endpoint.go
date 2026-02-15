@@ -15,8 +15,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+	clusterres "github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 )
 
 // EndpointController looks up control plane endpoints.
@@ -31,8 +30,8 @@ func (ctrl *EndpointController) Name() string {
 func (ctrl *EndpointController) Inputs() []controller.Input {
 	return []controller.Input{
 		{
-			Namespace: cluster.NamespaceName,
-			Type:      cluster.MemberType,
+			Namespace: clusterres.NamespaceName,
+			Type:      clusterres.MemberType,
 			Kind:      controller.InputWeak,
 		},
 	}
@@ -42,7 +41,7 @@ func (ctrl *EndpointController) Inputs() []controller.Input {
 func (ctrl *EndpointController) Outputs() []controller.Output {
 	return []controller.Output{
 		{
-			Type: k8s.EndpointType,
+			Type: clusterres.ControlPlaneEndpointType,
 			Kind: controller.OutputShared,
 		},
 	}
@@ -57,7 +56,7 @@ func (ctrl *EndpointController) Run(ctx context.Context, r controller.Runtime, l
 		case <-r.EventCh():
 		}
 
-		memberList, err := safe.ReaderListAll[*cluster.Member](ctx, r)
+		memberList, err := safe.ReaderListAll[*clusterres.Member](ctx, r)
 		if err != nil {
 			return fmt.Errorf("error listing members: %w", err)
 		}
@@ -79,8 +78,8 @@ func (ctrl *EndpointController) Run(ctx context.Context, r controller.Runtime, l
 		if err := safe.WriterModify(
 			ctx,
 			r,
-			k8s.NewEndpoint(k8s.ControlPlaneNamespaceName, k8s.ControlPlaneDiscoveredEndpointsID),
-			func(r *k8s.Endpoint) error {
+			clusterres.NewControlPlaneEndpoint(clusterres.ControlPlaneNamespaceName, clusterres.ControlPlaneDiscoveredEndpointsID),
+			func(r *clusterres.ControlPlaneEndpoint) error {
 				if !slices.Equal(r.TypedSpec().Addresses, endpoints) {
 					logger.Debug("updated controlplane endpoints", zap.Any("endpoints", endpoints))
 				}

@@ -26,6 +26,7 @@ func TestRegisterResource(t *testing.T) {
 	for _, resource := range []meta.ResourceWithRD{
 		&cluster.Affiliate{},
 		&cluster.Config{},
+		&cluster.ControlPlaneEndpoint{},
 		&cluster.Identity{},
 		&cluster.Member{},
 	} {

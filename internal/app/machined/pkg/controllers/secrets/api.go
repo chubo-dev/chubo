@@ -21,8 +21,8 @@ import (
 
 	"github.com/chubo-dev/chubo/pkg/grpc/gen"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	clusterres "github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
@@ -167,8 +167,8 @@ func (ctrl *APIController) reconcile(ctx context.Context, r controller.Runtime, 
 	if !isControlplane {
 		// worker nodes depend on endpoint list
 		inputs = append(inputs, controller.Input{
-			Namespace: k8s.ControlPlaneNamespaceName,
-			Type:      k8s.EndpointType,
+			Namespace: clusterres.ControlPlaneNamespaceName,
+			Type:      clusterres.ControlPlaneEndpointType,
 			Kind:      controller.InputWeak,
 		})
 	}
@@ -245,16 +245,16 @@ func (ctrl *APIController) reconcile(ctx context.Context, r controller.Runtime, 
 		var endpointsStr []string
 
 		if !isControlplane {
-			endpointResources, err := r.List(ctx, resource.NewMetadata(k8s.ControlPlaneNamespaceName, k8s.EndpointType, "", resource.VersionUndefined))
+			endpointResources, err := r.List(ctx, resource.NewMetadata(clusterres.ControlPlaneNamespaceName, clusterres.ControlPlaneEndpointType, "", resource.VersionUndefined))
 			if err != nil {
 				return fmt.Errorf("error getting endpoints resources: %w", err)
 			}
 
-			var endpointAddrs k8s.EndpointList
+			var endpointAddrs clusterres.ControlPlaneEndpointList
 
 			// merge all endpoints into a single list
 			for _, res := range endpointResources.Items {
-				endpointAddrs = endpointAddrs.Merge(res.(*k8s.Endpoint))
+				endpointAddrs = endpointAddrs.Merge(res.(*clusterres.ControlPlaneEndpoint))
 			}
 
 			if endpointAddrs.IsEmpty() {

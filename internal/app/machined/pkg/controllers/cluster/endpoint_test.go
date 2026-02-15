@@ -17,7 +17,6 @@ import (
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 type EndpointSuite struct {
@@ -61,7 +60,7 @@ func (suite *EndpointSuite) TestReconcileDefault() {
 	}
 
 	// control plane members should be translated to Endpoints
-	ctest.AssertResource(suite, k8s.ControlPlaneDiscoveredEndpointsID, func(r *k8s.Endpoint, asrt *assert.Assertions) {
+	ctest.AssertResource(suite, cluster.ControlPlaneDiscoveredEndpointsID, func(r *cluster.ControlPlaneEndpoint, asrt *assert.Assertions) {
 		spec := r.TypedSpec()
 
 		asrt.Equal(
