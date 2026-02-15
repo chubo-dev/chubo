@@ -18,7 +18,6 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
 	secretsctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/secrets"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
@@ -49,22 +48,12 @@ func (suite *APICertSANsSuite) TestReconcileControlPlane() {
 	hostnameStatus.TypedSpec().Domainname = "some.org"
 	suite.Require().NoError(suite.State().Create(suite.Ctx(), hostnameStatus))
 
-	nodeAddresses := network.NewNodeAddress(
-		network.NamespaceName,
-		network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s),
-	)
+	nodeAddresses := network.NewNodeAddress(network.NamespaceName, network.NodeAddressAccumulativeID)
 	nodeAddresses.TypedSpec().Addresses = []netip.Prefix{
 		netip.MustParsePrefix("10.2.1.3/24"),
 		netip.MustParsePrefix("172.16.0.1/32"),
 	}
 	suite.Require().NoError(suite.State().Create(suite.Ctx(), nodeAddresses))
-
-	// `chubo` uses the unfiltered accumulative addresses, while upstream uses
-	// the "no k8s" filtered variant. Create both so the test remains valid in
-	// either build.
-	nodeAddressesAll := network.NewNodeAddress(network.NamespaceName, network.NodeAddressAccumulativeID)
-	nodeAddressesAll.TypedSpec().Addresses = slices.Clone(nodeAddresses.TypedSpec().Addresses)
-	suite.Require().NoError(suite.State().Create(suite.Ctx(), nodeAddressesAll))
 
 	suite.AssertWithin(10*time.Second, 100*time.Millisecond, func() error {
 		certSANs, err := ctest.Get[*secrets.CertSAN](
