@@ -53,23 +53,15 @@ func ingressOnly(ips []netip.Addr) []network.IngressRule {
 
 // ControlPlane generates a default firewall for a controlplane node.
 //
-// Kubelet and Trustd are only available within the cluster.
-// Apid & Kubernetes API is wide open.
-// Etcd is only available within the controlplanes.
+// Trustd is only available within the cluster.
+// Apid is wide open (dev fixture default).
+// The provisioner control-plane endpoint port is wide open (dev fixture default).
 func ControlPlane(defaultAction nethelpers.DefaultAction, cidrs []netip.Prefix, gateways []netip.Addr, controlplanes []netip.Addr) configpatcher.Patch {
 	def := network.NewDefaultActionConfigV1Alpha1()
 	def.Ingress = defaultAction
 
-	kubeletRule := network.NewRuleConfigV1Alpha1()
-	kubeletRule.MetaName = "kubelet-ingress"
-	kubeletRule.PortSelector.Ports = []network.PortRange{
-		{
-			Lo: constants.KubeletPort,
-			Hi: constants.KubeletPort,
-		},
-	}
-	kubeletRule.PortSelector.Protocol = nethelpers.ProtocolTCP
-	kubeletRule.Ingress = ingressRuleWithinCluster(cidrs, gateways)
+	// Kept for interface compatibility with older call sites.
+	_ = controlplanes
 
 	apidRule := network.NewRuleConfigV1Alpha1()
 	apidRule.MetaName = "apid-ingress"
@@ -93,27 +85,16 @@ func ControlPlane(defaultAction nethelpers.DefaultAction, cidrs []netip.Prefix, 
 	trustdRule.PortSelector.Protocol = nethelpers.ProtocolTCP
 	trustdRule.Ingress = ingressRuleWithinCluster(cidrs, gateways)
 
-	kubeAPIRule := network.NewRuleConfigV1Alpha1()
-	kubeAPIRule.MetaName = "kubernetes-api-ingress"
-	kubeAPIRule.PortSelector.Ports = []network.PortRange{
+	controlPlaneEndpointRule := network.NewRuleConfigV1Alpha1()
+	controlPlaneEndpointRule.MetaName = "control-plane-endpoint-ingress"
+	controlPlaneEndpointRule.PortSelector.Ports = []network.PortRange{
 		{
 			Lo: constants.DefaultControlPlanePort,
 			Hi: constants.DefaultControlPlanePort,
 		},
 	}
-	kubeAPIRule.PortSelector.Protocol = nethelpers.ProtocolTCP
-	kubeAPIRule.Ingress = ingressRuleWideOpen()
-
-	etcdRule := network.NewRuleConfigV1Alpha1()
-	etcdRule.MetaName = "etcd-ingress"
-	etcdRule.PortSelector.Ports = []network.PortRange{
-		{
-			Lo: constants.EtcdClientPort,
-			Hi: constants.EtcdPeerPort,
-		},
-	}
-	etcdRule.PortSelector.Protocol = nethelpers.ProtocolTCP
-	etcdRule.Ingress = ingressOnly(controlplanes)
+	controlPlaneEndpointRule.PortSelector.Protocol = nethelpers.ProtocolTCP
+	controlPlaneEndpointRule.Ingress = ingressRuleWideOpen()
 
 	vxlanRule := network.NewRuleConfigV1Alpha1()
 	vxlanRule.MetaName = "cni-vxlan"
@@ -130,7 +111,7 @@ func ControlPlane(defaultAction nethelpers.DefaultAction, cidrs []netip.Prefix, 
 	vxlanRule.PortSelector.Protocol = nethelpers.ProtocolUDP
 	vxlanRule.Ingress = ingressRuleWithinCluster(cidrs, gateways)
 
-	provider, err := container.New(def, kubeletRule, apidRule, trustdRule, kubeAPIRule, etcdRule, vxlanRule)
+	provider, err := container.New(def, apidRule, trustdRule, controlPlaneEndpointRule, vxlanRule)
 	if err != nil { // should not fail
 		panic(err)
 	}
@@ -140,21 +121,10 @@ func ControlPlane(defaultAction nethelpers.DefaultAction, cidrs []netip.Prefix, 
 
 // Worker generates a default firewall for a worker node.
 //
-// Kubelet & apid are only available within the cluster.
+// Apid is only available within the cluster.
 func Worker(defaultAction nethelpers.DefaultAction, cidrs []netip.Prefix, gateways []netip.Addr) configpatcher.Patch {
 	def := network.NewDefaultActionConfigV1Alpha1()
 	def.Ingress = defaultAction
-
-	kubeletRule := network.NewRuleConfigV1Alpha1()
-	kubeletRule.MetaName = "kubelet-ingress"
-	kubeletRule.PortSelector.Ports = []network.PortRange{
-		{
-			Lo: constants.KubeletPort,
-			Hi: constants.KubeletPort,
-		},
-	}
-	kubeletRule.PortSelector.Protocol = nethelpers.ProtocolTCP
-	kubeletRule.Ingress = ingressRuleWithinCluster(cidrs, gateways)
 
 	apidRule := network.NewRuleConfigV1Alpha1()
 	apidRule.MetaName = "apid-ingress"
@@ -182,7 +152,7 @@ func Worker(defaultAction nethelpers.DefaultAction, cidrs []netip.Prefix, gatewa
 	vxlanRule.PortSelector.Protocol = nethelpers.ProtocolUDP
 	vxlanRule.Ingress = ingressRuleWithinCluster(cidrs, gateways)
 
-	provider, err := container.New(def, kubeletRule, apidRule, vxlanRule)
+	provider, err := container.New(def, apidRule, vxlanRule)
 	if err != nil { // should not fail
 		panic(err)
 	}
