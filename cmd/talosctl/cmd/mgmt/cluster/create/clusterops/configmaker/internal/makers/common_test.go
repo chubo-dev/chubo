@@ -160,7 +160,7 @@ func assertConfigDefaultness[ExtraOps any](t *testing.T, cOps clusterops.Common,
 		generate.WithVersionContract(versionContract),
 	)
 
-	in, err := generate.NewInput(cOps.RootOps.ClusterName, "controlplane-endpoint.test", cOps.KubernetesVersion,
+	in, err := generate.NewInput(cOps.RootOps.ClusterName, "controlplane-endpoint.test", "",
 		desiredExtraGenOps...,
 	)
 	require.NoError(t, err)

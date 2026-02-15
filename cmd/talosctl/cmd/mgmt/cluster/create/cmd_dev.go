@@ -68,12 +68,10 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		clusterWaitTimeoutFlag        = "wait-timeout"
 		forceInitNodeAsEndpointFlag   = "init-node-as-endpoint"
 		withInitNodeFlag              = "with-init-node"
-		skipKubeconfigFlag            = "skip-kubeconfig"
 		skipInjectingConfigFlag       = "skip-injecting-config"
 		configPatchFlag               = "config-patch"
 		configPatchControlPlaneFlag   = "config-patch-control-plane"
 		configPatchWorkerFlag         = "config-patch-worker"
-		skipK8sNodeReadinessCheckFlag = "skip-k8s-node-readiness-check"
 		withJSONLogsFlag              = "with-json-logs"
 		nodeVmlinuzPathFlag           = "vmlinuz-path"
 		nodeISOPathFlag               = "iso-path"
@@ -126,7 +124,6 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		encryptEphemeralPartitionFlag = "encrypt-ephemeral"
 		encryptUserVolumeFlag         = "encrypt-user-volumes"
 		forceEndpointFlag             = "endpoint"
-		kubePrismFlag                 = "kubeprism-port"
 		diskEncryptionKeyTypesFlag    = "disk-encryption-key-types"
 	)
 
@@ -164,7 +161,6 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 
 		addWorkersFlag(common, &cOps.Workers)
 		addControlplanesFlag(common, &cOps.Controlplanes)
-		addKubernetesVersionFlag(common, &cOps.KubernetesVersion)
 		addTalosconfigDestinationFlag(common, &cOps.TalosconfigDestination, talosconfigFlag)
 		addConfigPatchFlag(common, &cOps.ConfigPatch, configPatchFlag)
 		addConfigPatchControlPlaneFlag(common, &cOps.ConfigPatchControlPlane, configPatchControlPlaneFlag)
@@ -187,12 +183,9 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		common.BoolVar(&cOps.WithInitNode, withInitNodeFlag, cOps.WithInitNode, "create the cluster with an init node")
 		common.StringVar(&cOps.CustomCNIUrl, customCNIUrlFlag, cOps.CustomCNIUrl, "install custom CNI from the URL (Talos cluster)")
 		common.StringVar(&cOps.DNSDomain, dnsDomainFlag, cOps.DNSDomain, "the dns domain to use for cluster")
-		common.BoolVar(&cOps.SkipKubeconfig, skipKubeconfigFlag, cOps.SkipKubeconfig, "skip merging kubeconfig from the created cluster")
 		common.BoolVar(&cOps.SkipInjectingConfig, skipInjectingConfigFlag, cOps.SkipInjectingConfig,
 			"skip injecting config from embedded metadata server, write config files to current directory")
 		common.BoolVar(&cOps.EnableClusterDiscovery, withClusterDiscoveryFlag, cOps.EnableClusterDiscovery, "enable cluster discovery")
-		common.IntVar(&cOps.KubePrismPort, kubePrismFlag, cOps.KubePrismPort, "KubePrism port (set to 0 to disable)")
-		common.BoolVar(&cOps.SkipK8sNodeReadinessCheck, skipK8sNodeReadinessCheckFlag, cOps.SkipK8sNodeReadinessCheck, "skip k8s node readiness checks")
 		common.BoolVar(&cOps.WithJSONLogs, withJSONLogsFlag, cOps.WithJSONLogs, "enable JSON logs receiver and configure Talos to send logs there")
 		common.BoolVar(&cOps.WithUUIDHostnames, withUUIDHostnamesFlag, cOps.WithUUIDHostnames, "use machine UUIDs as default hostnames")
 		common.BoolVar(&cOps.NetworkIPv6, networkIPv6Flag, cOps.NetworkIPv6, "enable IPv6 network in the cluster")

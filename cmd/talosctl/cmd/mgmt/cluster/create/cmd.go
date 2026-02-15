@@ -20,13 +20,12 @@ import (
 )
 
 var (
-	workersFlagName           = "workers"
-	controlplanesFlagName     = "controlplanes"
-	kubernetesVersionFlagName = "kubernetes-version"
-	registryMirrorFlagName    = "registry-mirror"
-	networkMTUFlagName        = "mtu"
-	networkCIDRFlagName       = "cidr"
-	talosVersionFlagName      = "talos-version"
+	workersFlagName        = "workers"
+	controlplanesFlagName  = "controlplanes"
+	registryMirrorFlagName = "registry-mirror"
+	networkMTUFlagName     = "mtu"
+	networkCIDRFlagName    = "cidr"
+	talosVersionFlagName   = "talos-version"
 
 	// Flags that have been renamed in the user-facing commands.
 	controlPlaneCpusFlagName        = "cpus-controlplanes"
@@ -47,7 +46,6 @@ func getCommonUserFacingFlags(pointer *clusterops.Common) *pflag.FlagSet {
 	common := pflag.NewFlagSet("common", pflag.PanicOnError)
 
 	addWorkersFlag(common, &pointer.Workers)
-	addKubernetesVersionFlag(common, &pointer.KubernetesVersion)
 	addTalosconfigDestinationFlag(common, &pointer.TalosconfigDestination, talosconfigDestinationFlagName)
 	addConfigPatchFlag(common, &pointer.ConfigPatch, configPatchFlagName)
 	addConfigPatchControlPlaneFlag(common, &pointer.ConfigPatchControlPlane, configPatchControlPlaneFlagName)
@@ -115,10 +113,6 @@ func addWorkersFlag(flagset *pflag.FlagSet, bind *int) {
 
 func addControlplanesFlag(flagset *pflag.FlagSet, bind *int) {
 	flagset.IntVar(bind, controlplanesFlagName, *bind, "the number of controlplanes to create")
-}
-
-func addKubernetesVersionFlag(flagset *pflag.FlagSet, bind *string) {
-	flagset.StringVar(bind, kubernetesVersionFlagName, *bind, "desired kubernetes version to run")
 }
 
 func addRegistryMirrorFlag(flagset *pflag.FlagSet, bind *[]string) {

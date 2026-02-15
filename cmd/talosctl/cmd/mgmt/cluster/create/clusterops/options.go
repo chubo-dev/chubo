@@ -46,42 +46,38 @@ type ParsedNodeResources struct {
 // Common are the options that are not specific to a single provider.
 type Common struct {
 	// rootOps are the options from the root cluster command
-	RootOps                   *clustercmd.CmdOps
-	TalosconfigDestination    string
-	RegistryMirrors           []string
-	RegistryInsecure          []string
-	KubernetesVersion         string
-	ApplyConfigEnabled        bool
-	ConfigDebug               bool
-	NetworkCIDR               string
-	NetworkMTU                int
-	NetworkIPv4               bool
-	DNSDomain                 string
-	Workers                   int
-	Controlplanes             int
-	ControlplaneResources     NodeResources
-	WorkerResources           NodeResources
-	ClusterWait               bool
-	ClusterWaitTimeout        time.Duration
-	ForceInitNodeAsEndpoint   bool
-	ForceEndpoint             string
-	ControlPlanePort          int
-	WithInitNode              bool
-	CustomCNIUrl              string
-	SkipKubeconfig            bool
-	SkipInjectingConfig       bool
-	TalosVersion              string
-	EnableClusterDiscovery    bool
-	ConfigPatch               []string
-	ConfigPatchControlPlane   []string
-	ConfigPatchWorker         []string
-	KubePrismPort             int
-	SkipK8sNodeReadinessCheck bool
-	WithJSONLogs              bool
-	WireguardCIDR             string
-	WithUUIDHostnames         bool
-	NetworkIPv6               bool
-	OmniAPIEndpoint           string
+	RootOps                 *clustercmd.CmdOps
+	TalosconfigDestination  string
+	RegistryMirrors         []string
+	RegistryInsecure        []string
+	ApplyConfigEnabled      bool
+	ConfigDebug             bool
+	NetworkCIDR             string
+	NetworkMTU              int
+	NetworkIPv4             bool
+	DNSDomain               string
+	Workers                 int
+	Controlplanes           int
+	ControlplaneResources   NodeResources
+	WorkerResources         NodeResources
+	ClusterWait             bool
+	ClusterWaitTimeout      time.Duration
+	ForceInitNodeAsEndpoint bool
+	ForceEndpoint           string
+	ControlPlanePort        int
+	WithInitNode            bool
+	CustomCNIUrl            string
+	SkipInjectingConfig     bool
+	TalosVersion            string
+	EnableClusterDiscovery  bool
+	ConfigPatch             []string
+	ConfigPatchControlPlane []string
+	ConfigPatchWorker       []string
+	WithJSONLogs            bool
+	WireguardCIDR           string
+	WithUUIDHostnames       bool
+	NetworkIPv6             bool
+	OmniAPIEndpoint         string
 }
 
 // Docker are options specific to docker provisioner.
@@ -163,7 +159,6 @@ func GetCommon() Common {
 		WorkerResources:       defaultResources,
 
 		NetworkCIDR:            "10.5.0.0/24",
-		KubernetesVersion:      constants.DefaultKubernetesVersion,
 		NetworkMTU:             1500,
 		ClusterWaitTimeout:     20 * time.Minute,
 		ClusterWait:            true,
@@ -171,7 +166,6 @@ func GetCommon() Common {
 		ControlPlanePort:       constants.DefaultControlPlanePort,
 		RootOps:                &clustercmd.PersistentFlags, // TODO: move this elsewhere
 		NetworkIPv4:            true,
-		KubePrismPort:          constants.DefaultKubePrismPort,
 		EnableClusterDiscovery: true,
 		TalosVersion:           helpers.GetTag(),
 	}

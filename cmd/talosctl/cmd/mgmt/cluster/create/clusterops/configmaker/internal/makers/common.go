@@ -286,7 +286,9 @@ func (m *Maker[T]) finalizeMachineConfigs() (*bundle.Bundle, error) {
 			&bundle.InputOptions{
 				ClusterName: m.Ops.RootOps.ClusterName,
 				Endpoint:    m.InClusterEndpoint,
-				KubeVersion: strings.TrimPrefix(m.Ops.KubernetesVersion, "v"),
+				// Chubo doesn't bootstrap Kubernetes as part of `talosctl cluster create`.
+				// Keep this empty so the generator doesn't intentionally pin kube images.
+				KubeVersion: "",
 				GenOptions:  m.GenOps,
 			}),
 	)
@@ -436,12 +438,6 @@ func (m *Maker[T]) initGenOps() error {
 	if m.Ops.ControlPlanePort != constants.DefaultControlPlanePort {
 		genOptions = slices.Concat(genOptions, []generate.Option{
 			generate.WithLocalAPIServerPort(m.Ops.ControlPlanePort),
-		})
-	}
-
-	if m.Ops.KubePrismPort != constants.DefaultKubePrismPort {
-		genOptions = slices.Concat(genOptions, []generate.Option{
-			generate.WithKubePrismPort(m.Ops.KubePrismPort),
 		})
 	}
 
