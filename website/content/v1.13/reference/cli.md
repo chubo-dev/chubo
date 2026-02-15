@@ -94,15 +94,8 @@ chuboctl cluster create dev [flags]
 ### Options
 
 ```
-      --airgapped                                limit VM network access to the provisioning network only
-      --arch string                              cluster architecture (default "amd64")
-      --bad-rtc                                  launch VM with bad RTC state
+      --arch string                              cluster architecture (default "arm64")
       --cidr string                              CIDR of the cluster network (IPv4, ULA network for IPv6 is derived in automated way) (default "10.5.0.0/24")
-      --cni-bin-path strings                     search path for CNI binaries (default [/home/user/.chubo/cni/bin])
-      --cni-bundle-url string                    URL to download CNI bundle from (default "https://github.com/siderolabs/talos/releases/download/v1.13.0-alpha.1/talosctl-cni-bundle-${ARCH}.tar.gz")
-      --cni-cache-dir string                     CNI cache directory path (default "/home/user/.chubo/cni/cache")
-      --cni-conf-dir string                      CNI config directory path (default "/home/user/.chubo/cni/conf.d")
-      --config-injection-method string           a method to inject machine config: default is HTTP server, 'metal-iso' to mount an ISO
       --config-patch stringArray                 patch generated machineconfigs (applied to all node types), use @file to read a patch from file
       --config-patch-control-plane stringArray   patch generated machineconfigs (applied to 'controlplane' type)
       --config-patch-worker stringArray          patch generated machineconfigs (applied to 'worker' type)
@@ -136,26 +129,21 @@ chuboctl cluster create dev [flags]
       --image-cache-tls-key-file string          path to image cache TLS key
       --init-node-as-endpoint                    use init node as endpoint instead of any load balancer endpoint
       --initrd-path string                       initramfs image to use (default "_out/initramfs-${ARCH}.xz")
-      --install-image string                     the installer image to use (default "ghcr.io/siderolabs/installer:latest")
+      --install-image string                     the installer image to use (default "ghcr.io/siderolabs/installer:v1.13.0-alpha.1-240-g3ac26b8f9")
       --ipv4                                     enable IPv4 network in the cluster (default true)
       --ipv6                                     enable IPv6 network in the cluster
       --ipxe-boot-script string                  iPXE boot script (URL) to use
       --iso-path string                          the ISO path to use for the initial boot
-      --kubeprism-port int                       KubePrism port (set to 0 to disable) (default 7445)
-      --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
       --memory string(mb,gb)                     the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --mtu int                                  MTU of the cluster network (default 1500)
-      --nameservers strings                      list of nameservers to use
-      --no-masquerade-cidrs strings              list of CIDRs to exclude from NAT
+      --nameservers strings                      list of nameservers to use (default [8.8.8.8,1.1.1.1,2001:4860:4860::8888,2606:4700:4700::1111])
       --omni-api-endpoint string                 the Omni API endpoint (must include a scheme, a hostname and a join token, e.g. 'https://siderolink.omni.example?jointoken=foobar')
       --registry-insecure-skip-verify strings    list of registry hostnames to skip TLS verification for
       --registry-mirror strings                  list of registry mirrors to use in format: <registry host>=<mirror URL>
       --skip-injecting-config                    skip injecting config from embedded metadata server, write config files to current directory
       --skip-injecting-extra-cmdline             skip injecting extra kernel cmdline parameters via EFI vars through bootloader
-      --skip-k8s-node-readiness-check            skip k8s node readiness checks
-      --skip-kubeconfig                          skip merging kubeconfig from the created cluster
-      --talos-version string                     the desired Talos version to generate config for (default "latest")
+      --talos-version string                     the desired Talos version to generate config for (default "v1.13.0-alpha.1-240-g3ac26b8f9")
       --talosconfig string                       The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --uki-path string                          the UKI image path to use for the initial boot
       --usb-path string                          the USB stick image path to use for the initial boot
@@ -173,13 +161,6 @@ chuboctl cluster create dev [flags]
       --with-init-node                           create the cluster with an init node
       --with-iommu                               enable IOMMU support, this also add a new PCI root port and an interface attached to it
       --with-json-logs                           enable JSON logs receiver and configure Talos to send logs there
-      --with-network-bandwidth int               specify bandwidth restriction (in kbps) on the bridge interface
-      --with-network-chaos                       enable to use network chaos parameters
-      --with-network-jitter duration             specify jitter on the bridge interface
-      --with-network-latency duration            specify latency on the bridge interface
-      --with-network-packet-corrupt float        specify percent of corrupt packets on the bridge interface. e.g. 50% = 0.50 (default: 0.0)
-      --with-network-packet-loss float           specify percent of packet loss on the bridge interface. e.g. 50% = 0.50 (default: 0.0)
-      --with-network-packet-reorder float        specify percent of reordered packets on the bridge interface. e.g. 50% = 0.50 (default: 0.0)
       --with-siderolink true                     enables the use of siderolink agent as configuration apply mechanism. true or `wireguard` enables the agent, `tunnel` enables the agent with grpc tunneling (default none)
       --with-tpm1_2                              enable TPM 1.2 emulation support using swtpm
       --with-tpm2                                enable TPM 2.0 emulation support using swtpm
@@ -192,7 +173,7 @@ chuboctl cluster create dev [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -218,8 +199,7 @@ chuboctl cluster create docker [flags]
   -p, --exposed-ports string                     comma-separated list of ports/protocols to expose on init node. Ex -p <hostPort>:<containerPort>/<protocol (tcp or udp)>
   -h, --help                                     help for docker
       --host-ip string                           Host IP to forward exposed ports to (default "0.0.0.0")
-      --image string                             the talos image to run (default "ghcr.io/siderolabs/talos:latest")
-      --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
+      --image string                             the talos image to run (default "ghcr.io/siderolabs/talos:v1.13.0-alpha.1-240-g3ac26b8f9")
       --memory-controlplanes string(mb,gb)       the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --mount mount                              attach a mount to the container (docker --mount syntax)
@@ -232,7 +212,7 @@ chuboctl cluster create docker [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -274,13 +254,12 @@ chuboctl cluster create qemu [flags]
       --disks disks                              list of disks to create in format "<driver1>:<size1>" (disks after the first one are added only to worker machines) (default virtio:10GiB,virtio:6GiB)
   -h, --help                                     help for qemu
       --image-factory-url string                 image factory url (default "https://factory.talos.dev/")
-      --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
       --memory-controlplanes string(mb,gb)       the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --omni-api-endpoint string                 the Omni API endpoint (must include a scheme, a hostname and a join token, e.g. 'https://siderolink.omni.example?jointoken=foobar')
       --presets strings                          list of presets to apply (default [iso])
       --schematic-id string                      image factory schematic id (defaults to an empty schematic)
-      --talos-version string                     the desired talos version (default "latest")
+      --talos-version string                     the desired talos version (default "v1.13.0-alpha.1-240-g3ac26b8f9")
       --talosconfig-destination string           The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --workers int                              the number of workers to create (default 1)
 ```
@@ -289,7 +268,7 @@ chuboctl cluster create qemu [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -307,15 +286,8 @@ chuboctl cluster create dev [flags]
 ### Options
 
 ```
-      --airgapped                                limit VM network access to the provisioning network only
-      --arch string                              cluster architecture (default "amd64")
-      --bad-rtc                                  launch VM with bad RTC state
+      --arch string                              cluster architecture (default "arm64")
       --cidr string                              CIDR of the cluster network (IPv4, ULA network for IPv6 is derived in automated way) (default "10.5.0.0/24")
-      --cni-bin-path strings                     search path for CNI binaries (default [/home/user/.chubo/cni/bin])
-      --cni-bundle-url string                    URL to download CNI bundle from (default "https://github.com/siderolabs/talos/releases/download/v1.13.0-alpha.1/talosctl-cni-bundle-${ARCH}.tar.gz")
-      --cni-cache-dir string                     CNI cache directory path (default "/home/user/.chubo/cni/cache")
-      --cni-conf-dir string                      CNI config directory path (default "/home/user/.chubo/cni/conf.d")
-      --config-injection-method string           a method to inject machine config: default is HTTP server, 'metal-iso' to mount an ISO
       --config-patch stringArray                 patch generated machineconfigs (applied to all node types), use @file to read a patch from file
       --config-patch-control-plane stringArray   patch generated machineconfigs (applied to 'controlplane' type)
       --config-patch-worker stringArray          patch generated machineconfigs (applied to 'worker' type)
@@ -349,26 +321,21 @@ chuboctl cluster create dev [flags]
       --image-cache-tls-key-file string          path to image cache TLS key
       --init-node-as-endpoint                    use init node as endpoint instead of any load balancer endpoint
       --initrd-path string                       initramfs image to use (default "_out/initramfs-${ARCH}.xz")
-      --install-image string                     the installer image to use (default "ghcr.io/siderolabs/installer:latest")
+      --install-image string                     the installer image to use (default "ghcr.io/siderolabs/installer:v1.13.0-alpha.1-240-g3ac26b8f9")
       --ipv4                                     enable IPv4 network in the cluster (default true)
       --ipv6                                     enable IPv6 network in the cluster
       --ipxe-boot-script string                  iPXE boot script (URL) to use
       --iso-path string                          the ISO path to use for the initial boot
-      --kubeprism-port int                       KubePrism port (set to 0 to disable) (default 7445)
-      --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
       --memory string(mb,gb)                     the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --mtu int                                  MTU of the cluster network (default 1500)
-      --nameservers strings                      list of nameservers to use
-      --no-masquerade-cidrs strings              list of CIDRs to exclude from NAT
+      --nameservers strings                      list of nameservers to use (default [8.8.8.8,1.1.1.1,2001:4860:4860::8888,2606:4700:4700::1111])
       --omni-api-endpoint string                 the Omni API endpoint (must include a scheme, a hostname and a join token, e.g. 'https://siderolink.omni.example?jointoken=foobar')
       --registry-insecure-skip-verify strings    list of registry hostnames to skip TLS verification for
       --registry-mirror strings                  list of registry mirrors to use in format: <registry host>=<mirror URL>
       --skip-injecting-config                    skip injecting config from embedded metadata server, write config files to current directory
       --skip-injecting-extra-cmdline             skip injecting extra kernel cmdline parameters via EFI vars through bootloader
-      --skip-k8s-node-readiness-check            skip k8s node readiness checks
-      --skip-kubeconfig                          skip merging kubeconfig from the created cluster
-      --talos-version string                     the desired Talos version to generate config for (default "latest")
+      --talos-version string                     the desired Talos version to generate config for (default "v1.13.0-alpha.1-240-g3ac26b8f9")
       --talosconfig string                       The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --uki-path string                          the UKI image path to use for the initial boot
       --usb-path string                          the USB stick image path to use for the initial boot
@@ -386,13 +353,6 @@ chuboctl cluster create dev [flags]
       --with-init-node                           create the cluster with an init node
       --with-iommu                               enable IOMMU support, this also add a new PCI root port and an interface attached to it
       --with-json-logs                           enable JSON logs receiver and configure Talos to send logs there
-      --with-network-bandwidth int               specify bandwidth restriction (in kbps) on the bridge interface
-      --with-network-chaos                       enable to use network chaos parameters
-      --with-network-jitter duration             specify jitter on the bridge interface
-      --with-network-latency duration            specify latency on the bridge interface
-      --with-network-packet-corrupt float        specify percent of corrupt packets on the bridge interface. e.g. 50% = 0.50 (default: 0.0)
-      --with-network-packet-loss float           specify percent of packet loss on the bridge interface. e.g. 50% = 0.50 (default: 0.0)
-      --with-network-packet-reorder float        specify percent of reordered packets on the bridge interface. e.g. 50% = 0.50 (default: 0.0)
       --with-siderolink true                     enables the use of siderolink agent as configuration apply mechanism. true or `wireguard` enables the agent, `tunnel` enables the agent with grpc tunneling (default none)
       --with-tpm1_2                              enable TPM 1.2 emulation support using swtpm
       --with-tpm2                                enable TPM 2.0 emulation support using swtpm
@@ -405,7 +365,7 @@ chuboctl cluster create dev [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -431,8 +391,7 @@ chuboctl cluster create docker [flags]
   -p, --exposed-ports string                     comma-separated list of ports/protocols to expose on init node. Ex -p <hostPort>:<containerPort>/<protocol (tcp or udp)>
   -h, --help                                     help for docker
       --host-ip string                           Host IP to forward exposed ports to (default "0.0.0.0")
-      --image string                             the talos image to run (default "ghcr.io/siderolabs/talos:latest")
-      --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
+      --image string                             the talos image to run (default "ghcr.io/siderolabs/talos:v1.13.0-alpha.1-240-g3ac26b8f9")
       --memory-controlplanes string(mb,gb)       the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --mount mount                              attach a mount to the container (docker --mount syntax)
@@ -445,7 +404,7 @@ chuboctl cluster create docker [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -487,13 +446,12 @@ chuboctl cluster create qemu [flags]
       --disks disks                              list of disks to create in format "<driver1>:<size1>" (disks after the first one are added only to worker machines) (default virtio:10GiB,virtio:6GiB)
   -h, --help                                     help for qemu
       --image-factory-url string                 image factory url (default "https://factory.talos.dev/")
-      --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
       --memory-controlplanes string(mb,gb)       the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --omni-api-endpoint string                 the Omni API endpoint (must include a scheme, a hostname and a join token, e.g. 'https://siderolink.omni.example?jointoken=foobar')
       --presets strings                          list of presets to apply (default [iso])
       --schematic-id string                      image factory schematic id (defaults to an empty schematic)
-      --talos-version string                     the desired talos version (default "latest")
+      --talos-version string                     the desired talos version (default "v1.13.0-alpha.1-240-g3ac26b8f9")
       --talosconfig-destination string           The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --workers int                              the number of workers to create (default 1)
 ```
@@ -502,7 +460,7 @@ chuboctl cluster create qemu [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -530,7 +488,7 @@ chuboctl cluster destroy [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -556,7 +514,7 @@ chuboctl cluster show [flags]
 
 ```
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -572,7 +530,7 @@ A collection of commands for managing local docker-based or QEMU-based clusters
 ```
   -h, --help           help for cluster
       --name string    the name of the cluster (default "chubo-default")
-      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
 ```
 
 ### SEE ALSO
@@ -1277,7 +1235,7 @@ chuboctl gen config <cluster name> <cluster endpoint> [flags]
       --dns-domain string                        the dns domain to use for cluster (default "cluster.local")
   -h, --help                                     help for config
       --install-disk string                      the disk to install to (default "/dev/sda")
-      --install-image string                     the image used to perform an installation (default "ghcr.io/siderolabs/installer:latest")
+      --install-image string                     the image used to perform an installation (default "ghcr.io/siderolabs/installer:v1.13.0-alpha.1-240-g3ac26b8f9")
       --kubernetes-version string                desired kubernetes version to run (default "1.35.0")
   -o, --output string                            destination to output generated files. when multiple output types are specified, it must be a directory. for a single output type, it must either be a file path, or "-" for stdout
   -t, --output-types strings                     types of outputs to be generated. valid types are: ["controlplane" "worker" "talosconfig"] (default [controlplane,worker,talosconfig])
