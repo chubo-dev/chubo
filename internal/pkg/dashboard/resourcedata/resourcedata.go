@@ -23,7 +23,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/siderolink"
@@ -110,7 +109,6 @@ func (source *Source) runResourceWatch(ctx context.Context, node string) error {
 		runtime.NewMachineStatus().Metadata(),
 		runtime.NewSecurityStateSpec(v1alpha1.NamespaceName).Metadata(),
 		config.NewMachineType().Metadata(),
-		k8s.NewKubeletSpec(k8s.NamespaceName, k8s.KubeletID).Metadata(),
 		network.NewResolverStatus(network.NamespaceName, network.ResolverID).Metadata(),
 		network.NewTimeServerStatus(network.NamespaceName, network.TimeServerID).Metadata(),
 		hardware.NewSystemInformation(hardware.SystemInformationID).Metadata(),
@@ -128,7 +126,6 @@ func (source *Source) runResourceWatch(ctx context.Context, node string) error {
 
 	watchKindResources := []resource.Pointer{
 		runtime.NewMetaKey(runtime.NamespaceName, "").Metadata(),
-		k8s.NewStaticPodStatus(k8s.NamespaceName, "").Metadata(),
 		network.NewRouteStatus(network.NamespaceName, "").Metadata(),
 		network.NewLinkStatus(network.NamespaceName, "").Metadata(),
 		cluster.NewMember(cluster.NamespaceName, "").Metadata(),

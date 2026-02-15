@@ -40,33 +40,24 @@ func NewSummaryGrid(app *tview.Application) *SummaryGrid {
 		logViewers: make(map[string]*components.LogViewer),
 	}
 
-	widget.SetRows(summaryTopFixedRows, 0).SetColumns(-3, -2, -3)
+	widget.SetRows(summaryTopFixedRows, 0).SetColumns(-1, -1)
 
 	talosInfo := components.NewTalosInfo()
 	widget.AddItem(talosInfo, 0, 0, 1, 1, 0, 0, false)
 
-	kubernetesInfo := components.NewKubernetesInfo()
-	widget.AddItem(kubernetesInfo, 0, 1, 1, 1, 0, 0, false)
-
 	networkInfo := components.NewNetworkInfo()
-	widget.AddItem(networkInfo, 0, 2, 1, 1, 0, 0, false)
+	widget.AddItem(networkInfo, 0, 1, 1, 1, 0, 0, false)
 
 	widget.diagnostics = components.NewDiagnostics()
 
-	widget.apiDataListeners = []APIDataListener{
-		kubernetesInfo,
-	}
-
 	widget.resourceListeners = []ResourceDataListener{
 		talosInfo,
-		kubernetesInfo,
 		networkInfo,
 		widget.diagnostics,
 	}
 
 	widget.nodeSelectListeners = []NodeSelectListener{
 		talosInfo,
-		kubernetesInfo,
 		networkInfo,
 		widget.diagnostics,
 	}

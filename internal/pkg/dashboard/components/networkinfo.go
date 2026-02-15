@@ -15,14 +15,10 @@ import (
 	"github.com/siderolabs/gen/xslices"
 
 	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resourcedata"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-var (
-	zeroPrefix    = netip.Prefix{}
-	routedNoK8sID = network.FilteredNodeAddressID(network.NodeAddressRoutedID, k8s.NodeAddressFilterNoK8s)
-)
+var zeroPrefix = netip.Prefix{}
 
 type networkInfoData struct {
 	hostname     string
@@ -31,9 +27,8 @@ type networkInfoData struct {
 	resolvers    string
 	timeservers  string
 
-	addresses              string
-	nodeAddressRouted      *network.NodeAddress
-	nodeAddressRoutedNoK8s *network.NodeAddress
+	addresses         string
+	nodeAddressRouted *network.NodeAddress
 
 	routeStatusMap map[resource.ID]*network.RouteStatus
 }
@@ -184,12 +179,6 @@ func (widget *NetworkInfo) setAddresses(data resourcedata.Data, nodeAddress *net
 		} else {
 			nodeData.nodeAddressRouted = nodeAddress
 		}
-	case routedNoK8sID:
-		if data.Deleted {
-			nodeData.nodeAddressRoutedNoK8s = nil
-		} else {
-			nodeData.nodeAddressRoutedNoK8s = nodeAddress
-		}
 	}
 
 	formatIPs := func(res *network.NodeAddress) string {
@@ -204,14 +193,6 @@ func (widget *NetworkInfo) setAddresses(data resourcedata.Data, nodeAddress *net
 		return strings.Join(strs, ", ")
 	}
 
-	// if "routed-no-k8s" is available, use it
-	if nodeData.nodeAddressRoutedNoK8s != nil {
-		nodeData.addresses = formatIPs(nodeData.nodeAddressRoutedNoK8s)
-
-		return
-	}
-
-	// fallback to "routed"
 	nodeData.addresses = formatIPs(nodeData.nodeAddressRouted)
 }
 
