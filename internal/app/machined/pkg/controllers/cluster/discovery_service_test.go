@@ -31,7 +31,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
@@ -77,17 +76,11 @@ func (suite *DiscoveryServiceSuite) TestReconcile() {
 
 	localAffiliate := cluster.NewAffiliate(cluster.NamespaceName, nodeIdentity.TypedSpec().NodeID)
 	*localAffiliate.TypedSpec() = cluster.AffiliateSpec{
-		NodeID:      nodeIdentity.TypedSpec().NodeID,
-		Hostname:    "foo.com",
-		Nodename:    "bar",
-		MachineType: machine.TypeControlPlane,
-		Addresses:   []netip.Addr{netip.MustParseAddr("192.168.3.4")},
-		KubeSpan: cluster.KubeSpanAffiliateSpec{
-			PublicKey:           "PLPNBddmTgHJhtw0vxltq1ZBdPP9RNOEUd5JjJZzBRY=",
-			Address:             netip.MustParseAddr("fd50:8d60:4238:6302:f857:23ff:fe21:d1e0"),
-			AdditionalAddresses: []netip.Prefix{netip.MustParsePrefix("10.244.3.1/24")},
-			Endpoints:           []netip.AddrPort{netip.MustParseAddrPort("10.0.0.2:51820"), netip.MustParseAddrPort("192.168.3.4:51820")},
-		},
+		NodeID:       nodeIdentity.TypedSpec().NodeID,
+		Hostname:     "foo.com",
+		Nodename:     "bar",
+		MachineType:  machine.TypeControlPlane,
+		Addresses:    []netip.Addr{netip.MustParseAddr("192.168.3.4")},
 		ControlPlane: &cluster.ControlPlane{APIServerPort: 6443},
 	}
 	suite.Require().NoError(suite.state.Create(suite.ctx, localAffiliate))
@@ -124,7 +117,7 @@ func (suite *DiscoveryServiceSuite) TestReconcile() {
 				return retry.ExpectedErrorf("affiliates len %d != 1", len(affiliates))
 			}
 
-			suite.Require().Len(affiliates[0].Endpoints, 2)
+			suite.Require().Len(affiliates[0].Endpoints, 0)
 			suite.Assert().True(proto.Equal(&pb.Affiliate{
 				NodeId:          nodeIdentity.TypedSpec().NodeID,
 				Addresses:       [][]byte{[]byte("\xc0\xa8\x03\x04")},
@@ -132,30 +125,8 @@ func (suite *DiscoveryServiceSuite) TestReconcile() {
 				Nodename:        "bar",
 				MachineType:     "controlplane",
 				OperatingSystem: "",
-				Kubespan: &pb.KubeSpan{
-					PublicKey: "PLPNBddmTgHJhtw0vxltq1ZBdPP9RNOEUd5JjJZzBRY=",
-					Address:   []byte("\xfd\x50\x8d\x60\x42\x38\x63\x02\xf8\x57\x23\xff\xfe\x21\xd1\xe0"),
-					AdditionalAddresses: []*pb.IPPrefix{
-						{
-							Ip:   []byte("\x0a\xf4\x03\x01"),
-							Bits: 24,
-						},
-					},
-				},
-				ControlPlane: &pb.ControlPlane{ApiServerPort: 6443},
+				ControlPlane:    &pb.ControlPlane{ApiServerPort: 6443},
 			}, affiliates[0].Affiliate))
-			suite.Assert().True(proto.Equal(
-				&pb.Endpoint{
-					Ip:   []byte("\n\x00\x00\x02"),
-					Port: 51820,
-				},
-				affiliates[0].Endpoints[0]), "expected %v", affiliates[0].Endpoints[0])
-			suite.Assert().True(proto.Equal(
-				&pb.Endpoint{
-					Ip:   []byte("\xc0\xa8\x03\x04"),
-					Port: 51820,
-				},
-				affiliates[0].Endpoints[1]), "expected %v", affiliates[0].Endpoints[1])
 
 			return nil
 		},
@@ -170,22 +141,6 @@ func (suite *DiscoveryServiceSuite) TestReconcile() {
 			Nodename:        "some",
 			MachineType:     "worker",
 			OperatingSystem: "test OS",
-			Kubespan: &pb.KubeSpan{
-				PublicKey: "1CXkdhWBm58c36kTpchR8iGlXHG1ruHa5W8gsFqD8Qs=",
-				Address:   []byte("\xfd\x50\x8d\x60\x42\x38\x63\x02\xf8\x57\x23\xff\xfe\x21\xd1\xe1"),
-				AdditionalAddresses: []*pb.IPPrefix{
-					{
-						Ip:   []byte("\x0a\xf4\x04\x01"),
-						Bits: 24,
-					},
-				},
-			},
-		},
-		Endpoints: []*pb.Endpoint{
-			{
-				Ip:   []byte("\xc0\xa8\x03\x05"),
-				Port: 51820,
-			},
 		},
 	}, nil))
 
@@ -201,10 +156,6 @@ func (suite *DiscoveryServiceSuite) TestReconcile() {
 			suite.Assert().Equal("some", spec.Nodename)
 			suite.Assert().Equal(machine.TypeWorker, spec.MachineType)
 			suite.Assert().Equal("test OS", spec.OperatingSystem)
-			suite.Assert().Equal(netip.MustParseAddr("fd50:8d60:4238:6302:f857:23ff:fe21:d1e1"), spec.KubeSpan.Address)
-			suite.Assert().Equal("1CXkdhWBm58c36kTpchR8iGlXHG1ruHa5W8gsFqD8Qs=", spec.KubeSpan.PublicKey)
-			suite.Assert().Equal([]netip.Prefix{netip.MustParsePrefix("10.244.4.1/24")}, spec.KubeSpan.AdditionalAddresses)
-			suite.Assert().Equal([]netip.AddrPort{netip.MustParseAddrPort("192.168.3.5:51820")}, spec.KubeSpan.Endpoints)
 			suite.Assert().Zero(spec.ControlPlane)
 		},
 		rtestutils.WithNamespace(cluster.RawNamespaceName),
@@ -217,28 +168,6 @@ func (suite *DiscoveryServiceSuite) TestReconcile() {
 		assertions.True(spec.Address.IsValid())
 		assertions.True(spec.Address.IsSingleIP())
 	}, rtestutils.WithNamespace(cluster.NamespaceName))
-
-	// make controller inject additional endpoint via kubespan.Endpoint
-	endpoint := kubespan.NewEndpoint(kubespan.NamespaceName, "1CXkdhWBm58c36kTpchR8iGlXHG1ruHa5W8gsFqD8Qs=")
-	*endpoint.TypedSpec() = kubespan.EndpointSpec{
-		AffiliateID: "7x1SuC8Ege5BGXdAfTEff5iQnlWZLfv9h1LGMxA2pYkC",
-		Endpoint:    netip.MustParseAddrPort("1.1.1.1:343"),
-	}
-	suite.Require().NoError(suite.state.Create(suite.ctx, endpoint))
-
-	ctest.AssertResource(suite,
-		"service/7x1SuC8Ege5BGXdAfTEff5iQnlWZLfv9h1LGMxA2pYkC",
-		func(r *cluster.Affiliate, assertions *assert.Assertions) {
-			spec := r.TypedSpec()
-
-			assertions.Len(spec.KubeSpan.Endpoints, 2)
-			assertions.Equal([]netip.AddrPort{
-				netip.MustParseAddrPort("192.168.3.5:51820"),
-				netip.MustParseAddrPort("1.1.1.1:343"),
-			}, spec.KubeSpan.Endpoints)
-		},
-		rtestutils.WithNamespace(cluster.RawNamespaceName),
-	)
 
 	// pretend that machine is being reset
 	machineResetSignal := runtime.NewMachineResetSignal()

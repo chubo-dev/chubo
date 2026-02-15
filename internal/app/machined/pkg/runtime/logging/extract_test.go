@@ -32,7 +32,7 @@ func TestParseLogLine(t *testing.T) {
 			},
 		},
 		"controller-runtime": {
-			l: `reconfigured wireguard link {"component": "controller-runtime", "controller": "network.LinkSpecController", "link": "kubespan", "peers": 4}`,
+			l: `reconfigured wireguard link {"component": "controller-runtime", "controller": "network.LinkSpecController", "link": "siderolink", "peers": 4}`,
 			expected: &runtime.LogEvent{
 				Msg:   `reconfigured wireguard link`,
 				Time:  now,
@@ -40,7 +40,7 @@ func TestParseLogLine(t *testing.T) {
 				Fields: map[string]any{
 					"component":  "controller-runtime",
 					"controller": "network.LinkSpecController",
-					"link":       "kubespan",
+					"link":       "siderolink",
 					"peers":      float64(4),
 				},
 			},

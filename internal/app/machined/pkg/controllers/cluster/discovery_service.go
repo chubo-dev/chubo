@@ -31,7 +31,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
@@ -63,11 +62,6 @@ func (ctrl *DiscoveryServiceController) Inputs() []controller.Input {
 			Namespace: cluster.NamespaceName,
 			Type:      cluster.IdentityType,
 			ID:        optional.Some(cluster.LocalIdentity),
-			Kind:      controller.InputWeak,
-		},
-		{
-			Namespace: kubespan.NamespaceName,
-			Type:      kubespan.EndpointType,
 			Kind:      controller.InputWeak,
 		},
 		{
@@ -115,9 +109,7 @@ func (ctrl *DiscoveryServiceController) Run(ctx context.Context, r controller.Ru
 	notifyCh := make(chan struct{}, 1)
 
 	var (
-		prevLocalData      *pb.Affiliate
-		prevLocalEndpoints []*pb.Endpoint
-		prevOtherEndpoints []discoveryclient.Endpoint
+		prevLocalData *pb.Affiliate
 	)
 
 	for {
@@ -148,8 +140,6 @@ func (ctrl *DiscoveryServiceController) Run(ctx context.Context, r controller.Ru
 				client = nil
 
 				prevLocalData = nil
-				prevLocalEndpoints = nil
-				prevOtherEndpoints = nil
 			}
 		}
 
@@ -217,11 +207,6 @@ func (ctrl *DiscoveryServiceController) Run(ctx context.Context, r controller.Ru
 
 		affiliateSpec := affiliate.TypedSpec()
 
-		otherEndpointsList, err := safe.ReaderListAll[*kubespan.Endpoint](ctx, r)
-		if err != nil {
-			return fmt.Errorf("error listing endpoints: %w", err)
-		}
-
 		machineResetSginal, err := safe.ReaderGetByID[*runtime.MachineResetSignal](ctx, r, runtime.MachineResetSignalID)
 		if err != nil && !state.IsNotFoundError(err) {
 			return fmt.Errorf("error getting machine reset signal: %w", err)
@@ -277,22 +262,17 @@ func (ctrl *DiscoveryServiceController) Run(ctx context.Context, r controller.Ru
 			client.DeleteLocalAffiliate()
 		} else {
 			localData := pbAffiliate(affiliateSpec)
-			localEndpoints := pbEndpoints(affiliateSpec)
-			otherEndpoints := pbOtherEndpoints(otherEndpointsList)
 
 			// don't send updates on localData if it hasn't changed: this introduces positive feedback loop,
 			// as the watch loop will notify on self update
-			if !proto.Equal(localData, prevLocalData) || !equalEndpoints(localEndpoints, prevLocalEndpoints) || !equalOtherEndpoints(otherEndpoints, prevOtherEndpoints) {
+			if !proto.Equal(localData, prevLocalData) {
 				if err = client.SetLocalData(&discoveryclient.Affiliate{
 					Affiliate: localData,
-					Endpoints: localEndpoints,
-				}, otherEndpoints); err != nil {
+				}, nil); err != nil {
 					return fmt.Errorf("error setting local affiliate data: %w", err)
 				}
 
 				prevLocalData = localData
-				prevLocalEndpoints = localEndpoints
-				prevOtherEndpoints = otherEndpoints
 			}
 		}
 
@@ -320,7 +300,7 @@ func (ctrl *DiscoveryServiceController) Run(ctx context.Context, r controller.Ru
 			id := fmt.Sprintf("service/%s", discoveredAffiliate.Affiliate.NodeId)
 
 			if err = safe.WriterModify(ctx, r, cluster.NewAffiliate(cluster.RawNamespaceName, id), func(res *cluster.Affiliate) error {
-				*res.TypedSpec() = specAffiliate(discoveredAffiliate.Affiliate, discoveredAffiliate.Endpoints)
+				*res.TypedSpec() = specAffiliate(discoveredAffiliate.Affiliate)
 
 				return nil
 			}); err != nil {
@@ -343,21 +323,6 @@ func pbAffiliate(affiliate *cluster.AffiliateSpec) *pb.Affiliate {
 		return takeResult(address.MarshalBinary())
 	})
 
-	var kubeSpan *pb.KubeSpan
-
-	if affiliate.KubeSpan.PublicKey != "" {
-		kubeSpan = &pb.KubeSpan{
-			PublicKey: affiliate.KubeSpan.PublicKey,
-			Address:   takeResult(affiliate.KubeSpan.Address.MarshalBinary()),
-			AdditionalAddresses: xslices.Map(affiliate.KubeSpan.AdditionalAddresses, func(address netip.Prefix) *pb.IPPrefix {
-				return &pb.IPPrefix{
-					Bits: uint32(address.Bits()),
-					Ip:   takeResult(address.Addr().MarshalBinary()),
-				}
-			}),
-		}
-	}
-
 	return &pb.Affiliate{
 		NodeId:          affiliate.NodeID,
 		Addresses:       addresses,
@@ -365,7 +330,6 @@ func pbAffiliate(affiliate *cluster.AffiliateSpec) *pb.Affiliate {
 		Nodename:        affiliate.Nodename,
 		MachineType:     affiliate.MachineType.String(),
 		OperatingSystem: affiliate.OperatingSystem,
-		Kubespan:        kubeSpan,
 		ControlPlane:    toPlane(affiliate.ControlPlane),
 	}
 }
@@ -378,84 +342,7 @@ func toPlane(data *cluster.ControlPlane) *pb.ControlPlane {
 	return &pb.ControlPlane{ApiServerPort: uint32(data.APIServerPort)}
 }
 
-func pbEndpoints(affiliate *cluster.AffiliateSpec) []*pb.Endpoint {
-	if affiliate.KubeSpan.PublicKey == "" || len(affiliate.KubeSpan.Endpoints) == 0 {
-		return nil
-	}
-
-	return xslices.Map(affiliate.KubeSpan.Endpoints, func(endpoint netip.AddrPort) *pb.Endpoint {
-		return &pb.Endpoint{
-			Port: uint32(endpoint.Port()),
-			Ip:   takeResult(endpoint.Addr().MarshalBinary()),
-		}
-	})
-}
-
-func pbOtherEndpoints(otherEndpointsList safe.List[*kubespan.Endpoint]) []discoveryclient.Endpoint {
-	if otherEndpointsList.Len() == 0 {
-		return nil
-	}
-
-	result := make([]discoveryclient.Endpoint, 0, otherEndpointsList.Len())
-
-	for endpoint := range otherEndpointsList.All() {
-		endpointSpec := endpoint.TypedSpec()
-
-		result = append(result, discoveryclient.Endpoint{
-			AffiliateID: endpointSpec.AffiliateID,
-			Endpoints: []*pb.Endpoint{
-				{
-					Port: uint32(endpointSpec.Endpoint.Port()),
-					Ip:   takeResult(endpointSpec.Endpoint.Addr().MarshalBinary()),
-				},
-			},
-		})
-	}
-
-	return result
-}
-
-func equalEndpoints(a, b []*pb.Endpoint) bool {
-	if a == nil || b == nil {
-		return a == nil && b == nil
-	}
-
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i := range a {
-		if !proto.Equal(a[i], b[i]) {
-			return false
-		}
-	}
-
-	return true
-}
-
-func equalOtherEndpoints(a, b []discoveryclient.Endpoint) bool {
-	if a == nil || b == nil {
-		return a == nil && b == nil
-	}
-
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i := range a {
-		if a[i].AffiliateID != b[i].AffiliateID {
-			return false
-		}
-
-		if !equalEndpoints(a[i].Endpoints, b[i].Endpoints) {
-			return false
-		}
-	}
-
-	return true
-}
-
-func specAffiliate(affiliate *pb.Affiliate, endpoints []*pb.Endpoint) cluster.AffiliateSpec {
+func specAffiliate(affiliate *pb.Affiliate) cluster.AffiliateSpec {
 	result := cluster.AffiliateSpec{
 		NodeID:          affiliate.NodeId,
 		Hostname:        affiliate.Hostname,
@@ -472,31 +359,6 @@ func specAffiliate(affiliate *pb.Affiliate, endpoints []*pb.Endpoint) cluster.Af
 
 		if err := ip.UnmarshalBinary(affiliate.Addresses[i]); err == nil {
 			result.Addresses = append(result.Addresses, ip)
-		}
-	}
-
-	if affiliate.Kubespan != nil {
-		result.KubeSpan.PublicKey = affiliate.Kubespan.PublicKey
-		result.KubeSpan.Address.UnmarshalBinary(affiliate.Kubespan.Address) //nolint:errcheck // ignore error, address will be zero
-
-		result.KubeSpan.AdditionalAddresses = make([]netip.Prefix, 0, len(affiliate.Kubespan.AdditionalAddresses))
-
-		for i := range affiliate.Kubespan.AdditionalAddresses {
-			var ip netip.Addr
-
-			if err := ip.UnmarshalBinary(affiliate.Kubespan.AdditionalAddresses[i].Ip); err == nil {
-				result.KubeSpan.AdditionalAddresses = append(result.KubeSpan.AdditionalAddresses, netip.PrefixFrom(ip, int(affiliate.Kubespan.AdditionalAddresses[i].Bits)))
-			}
-		}
-
-		result.KubeSpan.Endpoints = make([]netip.AddrPort, 0, len(endpoints))
-
-		for i := range endpoints {
-			var ip netip.Addr
-
-			if err := ip.UnmarshalBinary(endpoints[i].Ip); err == nil {
-				result.KubeSpan.Endpoints = append(result.KubeSpan.Endpoints, netip.AddrPortFrom(ip, uint16(endpoints[i].Port)))
-			}
 		}
 	}
 

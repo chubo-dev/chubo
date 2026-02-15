@@ -58,11 +58,11 @@ for e.g. Wireguard tunnels:
 
     talosctl pcap -i eth0 --bpf-filter "$(tcpdump -dd -y EN10MB 'tcp and dst port 80')"
 
-    talosctl pcap -i kubespan --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
+	    talosctl pcap -i siderolink --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
 
-As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
-e.g. by excluding packets with the port 50000.
-   `,
+	As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
+	e.g. by excluding packets with the port 50000.
+	   `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {

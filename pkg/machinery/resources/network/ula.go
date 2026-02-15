@@ -19,9 +19,6 @@ const (
 	// ULABootstrap is the Unique Local Addressing space key for the Talos Self-Bootstrapping protocol.
 	ULABootstrap = 0x01
 
-	// ULAKubeSpan is the Unique Local Addressing space key for the Talos KubeSpan feature.
-	ULAKubeSpan = 0x02
-
 	// ULASideroLink is the Unique Local Addressing space key for the SideroLink feature.
 	ULASideroLink = 0x03
 

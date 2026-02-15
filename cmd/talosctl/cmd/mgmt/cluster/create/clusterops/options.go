@@ -71,7 +71,6 @@ type Common struct {
 	SkipKubeconfig            bool
 	SkipInjectingConfig       bool
 	TalosVersion              string
-	EnableKubeSpan            bool
 	EnableClusterDiscovery    bool
 	ConfigPatch               []string
 	ConfigPatchControlPlane   []string

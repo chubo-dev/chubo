@@ -118,13 +118,12 @@ func (ctrl *NfTablesChainConfigController) buildIngressChain(cfg *config.Machine
 
 		// preamble
 		spec.Rules = []network.NfTablesRule{
-			// trusted interfaces: loopback, siderolink and kubespan
+			// trusted interfaces: loopback and siderolink
 			{
 				MatchIIfName: &network.NfTablesIfNameMatch{
 					InterfaceNames: []string{
 						"lo",
 						constants.SideroLinkName,
-						constants.KubeSpanLinkName,
 					},
 					Operator: nethelpers.OperatorEqual,
 				},
@@ -315,13 +314,12 @@ func (ctrl *NfTablesChainConfigController) buildPreroutingChain(cfg *config.Mach
 
 		// preamble
 		spec.Rules = []network.NfTablesRule{
-			// trusted interfaces: loopback, siderolink and kubespan
+			// trusted interfaces: loopback and siderolink
 			{
 				MatchIIfName: &network.NfTablesIfNameMatch{
 					InterfaceNames: []string{
 						"lo",
 						constants.SideroLinkName,
-						constants.KubeSpanLinkName,
 					},
 					Operator: nethelpers.OperatorEqual,
 				},

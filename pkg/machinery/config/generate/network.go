@@ -30,7 +30,7 @@ func (in *Input) generateNetworkConfigs(machine *v1alpha1.MachineConfig) ([]conf
 	}
 
 	// generate empty machine.network for backwards compatibility with older Talos versions
-	if machine.MachineNetwork == nil && !in.Options.VersionContract.KubeSpanMultidocConfig() { //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+	if machine.MachineNetwork == nil && !in.Options.VersionContract.MultidocNetworkConfigSupported() { //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 		machine.MachineNetwork = &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 	}
 
@@ -43,20 +43,6 @@ func (in *Input) generateNetworkConfigs(machine *v1alpha1.MachineConfig) ([]conf
 		hostnameConfig.ConfigAuto = pointer.To(nethelpers.AutoHostnameKindStable)
 
 		documents = append(documents, hostnameConfig)
-	}
-
-	if kubeSpanEnabled, isSet := in.Options.KubeSpanEnabled.Get(); isSet {
-		if in.Options.VersionContract.KubeSpanMultidocConfig() {
-			kubeSpanConfig := network.NewKubeSpanV1Alpha1()
-			kubeSpanConfig.ConfigEnabled = pointer.To(kubeSpanEnabled)
-
-			documents = append(documents, kubeSpanConfig)
-		} else {
-			// for older Talos versions, set KubeSpan config in machine.network.kubespan
-			machine.MachineNetwork.NetworkKubeSpan = &v1alpha1.NetworkKubeSpan{ //nolint:staticcheck // using legacy NetworkKubeSpan for older Talos versions
-				KubeSpanEnabled: pointer.To(kubeSpanEnabled),
-			}
-		}
 	}
 
 	return documents, nil

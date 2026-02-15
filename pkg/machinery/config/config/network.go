@@ -316,21 +316,6 @@ type NetworkWireguardPeerConfig interface {
 	PersistentKeepalive() optional.Optional[time.Duration]
 }
 
-// NetworkKubeSpanConfig configures KubeSpan feature.
-type NetworkKubeSpanConfig interface {
-	Enabled() bool
-	ForceRouting() bool
-	AdvertiseKubernetesNetworks() bool
-	HarvestExtraEndpoints() bool
-	MTU() uint32
-	Filters() NetworkKubeSpanFilters
-}
-
-// NetworkKubeSpanFilters configures KubeSpan filters.
-type NetworkKubeSpanFilters interface {
-	Endpoints() []string
-}
-
 // NetworkCommonProbeConfig defines a network connectivity probe configuration.
 type NetworkCommonProbeConfig interface {
 	NamedDocument

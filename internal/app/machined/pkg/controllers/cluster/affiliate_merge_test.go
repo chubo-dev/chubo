@@ -29,17 +29,11 @@ func (suite *AffiliateMergeSuite) TestReconcileDefault() {
 
 	affiliate1 := cluster.NewAffiliate(cluster.RawNamespaceName, "k8s/7x1SuC8Ege5BGXdAfTEff5iQnlWZLfv9h1LGMxA2pYkC")
 	*affiliate1.TypedSpec() = cluster.AffiliateSpec{
-		NodeID:      "7x1SuC8Ege5BGXdAfTEff5iQnlWZLfv9h1LGMxA2pYkC",
-		Hostname:    "foo.com",
-		Nodename:    "bar",
-		MachineType: machine.TypeControlPlane,
-		Addresses:   []netip.Addr{netip.MustParseAddr("192.168.3.4")},
-		KubeSpan: cluster.KubeSpanAffiliateSpec{
-			PublicKey:           "PLPNBddmTgHJhtw0vxltq1ZBdPP9RNOEUd5JjJZzBRY=",
-			Address:             netip.MustParseAddr("fd50:8d60:4238:6302:f857:23ff:fe21:d1e0"),
-			AdditionalAddresses: []netip.Prefix{netip.MustParsePrefix("10.244.3.1/24")},
-			Endpoints:           []netip.AddrPort{netip.MustParseAddrPort("10.0.0.2:51820"), netip.MustParseAddrPort("192.168.3.4:51820")},
-		},
+		NodeID:       "7x1SuC8Ege5BGXdAfTEff5iQnlWZLfv9h1LGMxA2pYkC",
+		Hostname:     "foo.com",
+		Nodename:     "bar",
+		MachineType:  machine.TypeControlPlane,
+		Addresses:    []netip.Addr{netip.MustParseAddr("192.168.3.4")},
 		ControlPlane: &cluster.ControlPlane{APIServerPort: 6443},
 	}
 
@@ -77,10 +71,6 @@ func (suite *AffiliateMergeSuite) TestReconcileDefault() {
 			asrt.Equal("foo.com", spec.Hostname)
 			asrt.Equal("bar", spec.Nodename)
 			asrt.Equal(machine.TypeControlPlane, spec.MachineType)
-			asrt.Equal(netip.MustParseAddr("fd50:8d60:4238:6302:f857:23ff:fe21:d1e0"), spec.KubeSpan.Address)
-			asrt.Equal("PLPNBddmTgHJhtw0vxltq1ZBdPP9RNOEUd5JjJZzBRY=", spec.KubeSpan.PublicKey)
-			asrt.Equal([]netip.Prefix{netip.MustParsePrefix("10.244.3.1/24")}, spec.KubeSpan.AdditionalAddresses)
-			asrt.Equal([]netip.AddrPort{netip.MustParseAddrPort("10.0.0.2:51820"), netip.MustParseAddrPort("192.168.3.4:51820")}, spec.KubeSpan.Endpoints)
 			asrt.Equal(&cluster.ControlPlane{APIServerPort: 6443}, spec.ControlPlane)
 		},
 	)
@@ -96,12 +86,11 @@ func (suite *AffiliateMergeSuite) TestReconcileDefault() {
 			asrt.Equal("worker-1", spec.Hostname)
 			asrt.Equal("worker-1", spec.Nodename)
 			asrt.Equal(machine.TypeWorker, spec.MachineType)
-			asrt.Zero(spec.KubeSpan.PublicKey)
 			asrt.Nil(spec.ControlPlane)
 		},
 	)
 
-	// remove affiliate2, KubeSpan information should eventually go away
+	// remove the affiliate which provided the control plane metadata, merged affiliate should reflect it
 	suite.Require().NoError(suite.state.Destroy(suite.ctx, affiliate1.Metadata()))
 
 	ctest.AssertResource(
@@ -111,10 +100,10 @@ func (suite *AffiliateMergeSuite) TestReconcileDefault() {
 			spec := r.TypedSpec()
 
 			asrt.Equal(affiliate1.TypedSpec().NodeID, spec.NodeID)
-			asrt.Zero(spec.KubeSpan.Address)
-			asrt.Zero(spec.KubeSpan.PublicKey)
-			asrt.Zero(spec.KubeSpan.AdditionalAddresses)
-			asrt.Zero(spec.KubeSpan.Endpoints)
+			asrt.Equal([]netip.Addr{netip.MustParseAddr("192.168.3.4"), netip.MustParseAddr("10.5.0.2")}, spec.Addresses)
+			asrt.Equal("foo.com", spec.Hostname)
+			asrt.Equal("bar", spec.Nodename)
+			asrt.Equal(machine.TypeControlPlane, spec.MachineType)
 			asrt.Nil(spec.ControlPlane)
 		},
 	)

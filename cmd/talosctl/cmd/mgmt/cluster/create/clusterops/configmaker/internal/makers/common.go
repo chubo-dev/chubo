@@ -445,14 +445,6 @@ func (m *Maker[T]) initGenOps() error {
 		})
 	}
 
-	if m.Ops.EnableKubeSpan {
-		genOptions = slices.Concat(genOptions,
-			[]generate.Option{
-				generate.WithKubeSpanEnabled(m.Ops.EnableKubeSpan),
-			},
-		)
-	}
-
 	m.GenOps = genOptions
 
 	return nil

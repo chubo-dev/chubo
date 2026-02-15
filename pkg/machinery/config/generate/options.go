@@ -238,15 +238,6 @@ func WithHostDNSForwardKubeDNSToHost(forward bool) Option {
 	}
 }
 
-// WithKubeSpanEnabled specifies whether KubeSpan is enabled.
-func WithKubeSpanEnabled(enabled bool) Option {
-	return func(o *Options) error {
-		o.KubeSpanEnabled = optional.Some(enabled)
-
-		return nil
-	}
-}
-
 // Options describes generate parameters.
 type Options struct {
 	VersionContract *config.VersionContract
@@ -287,8 +278,6 @@ type Options struct {
 	KubePrismPort optional.Optional[int]
 
 	HostDNSForwardKubeDNSToHost optional.Optional[bool]
-
-	KubeSpanEnabled optional.Optional[bool]
 
 	// Client options.
 	Roles        role.Set

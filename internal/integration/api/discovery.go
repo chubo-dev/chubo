@@ -9,24 +9,18 @@ package api
 import (
 	"context"
 	"fmt"
-	"math/rand/v2"
 	"net/netip"
 	"strings"
 	"time"
 
 	"github.com/cosi-project/runtime/pkg/resource"
-	"github.com/cosi-project/runtime/pkg/resource/rtestutils"
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/siderolabs/gen/maps"
-	"github.com/siderolabs/gen/value"
 	"github.com/siderolabs/gen/xslices"
-	"github.com/stretchr/testify/assert"
 
 	"github.com/chubo-dev/chubo/internal/integration/base"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
-	"github.com/chubo-dev/chubo/pkg/machinery/config/types/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 )
 
 // DiscoverySuite verifies Discovery API.
@@ -241,95 +235,6 @@ func (suite *DiscoverySuite) TestRegistries() {
 			}
 		}
 	}
-}
-
-// TestKubeSpanPeers verifies that KubeSpan peer specs are populated, and that peer statuses are available.
-func (suite *DiscoverySuite) TestKubeSpanPeers() {
-	if !suite.Capabilities().RunsTalosKernel {
-		suite.T().Skip("not running Talos kernel")
-	}
-
-	// check that cluster has KubeSpan enabled
-	node := suite.RandomDiscoveredNodeInternalIP()
-	suite.ClearConnectionRefused(suite.ctx, node)
-
-	nodeCtx := client.WithNode(suite.ctx, node)
-	provider, err := suite.ReadConfigFromNode(nodeCtx)
-	suite.Require().NoError(err)
-
-	if kubeSpan := provider.NetworkKubeSpanConfig(); kubeSpan == nil || !kubeSpan.Enabled() {
-		suite.T().Skip("KubeSpan is disabled")
-	}
-
-	nodes := suite.DiscoverNodeInternalIPs(suite.ctx)
-
-	for _, node := range nodes {
-		nodeCtx := client.WithNode(suite.ctx, node)
-
-		rtestutils.AssertLength[*kubespan.PeerSpec](nodeCtx, suite.T(), suite.Client.COSI, len(nodes)-1)
-		rtestutils.AssertLength[*kubespan.PeerStatus](nodeCtx, suite.T(), suite.Client.COSI, len(nodes)-1)
-
-		rtestutils.AssertAll(nodeCtx, suite.T(), suite.Client.COSI,
-			func(status *kubespan.PeerStatus, asrt *assert.Assertions) {
-				asrt.Equal(kubespan.PeerStateUp, status.TypedSpec().State)
-				asrt.False(value.IsZero(status.TypedSpec().Endpoint))
-				asrt.Greater(status.TypedSpec().ReceiveBytes, int64(0))
-				asrt.Greater(status.TypedSpec().TransmitBytes, int64(0))
-			})
-	}
-}
-
-// TestKubeSpanExtraEndpoints verifies that KubeSpan peer specs are updated with extra endpoints.
-func (suite *DiscoverySuite) TestKubeSpanExtraEndpoints() {
-	if !suite.Capabilities().RunsTalosKernel {
-		suite.T().Skip("not running Talos kernel")
-	}
-
-	// check that cluster has KubeSpan enabled
-	node := suite.RandomDiscoveredNodeInternalIP()
-	suite.ClearConnectionRefused(suite.ctx, node)
-
-	nodeCtx := client.WithNode(suite.ctx, node)
-	provider, err := suite.ReadConfigFromNode(nodeCtx)
-	suite.Require().NoError(err)
-
-	if kubeSpan := provider.NetworkKubeSpanConfig(); kubeSpan == nil || !kubeSpan.Enabled() {
-		suite.T().Skip("KubeSpan is disabled")
-	}
-
-	nodes := suite.DiscoverNodeInternalIPs(suite.ctx)
-
-	if len(nodes) < 2 {
-		suite.T().Skip("need at least two nodes for this test")
-	}
-
-	perm := rand.Perm(len(nodes))
-
-	checkNode := nodes[perm[0]]
-	targetNode := nodes[perm[1]]
-
-	mockEndpoint := netip.MustParseAddrPort("169.254.121.121:5820")
-
-	// inject extra endpoint to target node
-	cfgDocument := network.NewKubespanEndpointsV1Alpha1()
-	cfgDocument.ExtraAnnouncedEndpointsConfig = []netip.AddrPort{mockEndpoint}
-
-	suite.T().Logf("injecting extra endpoint %s to node %s", mockEndpoint, targetNode)
-	suite.PatchMachineConfig(client.WithNode(suite.ctx, targetNode), cfgDocument)
-
-	targetIdentity, err := safe.ReaderGetByID[*kubespan.Identity](client.WithNode(suite.ctx, targetNode), suite.Client.COSI, kubespan.LocalIdentity)
-	suite.Require().NoError(err)
-
-	suite.T().Logf("checking extra endpoint %s on node %s", mockEndpoint, checkNode)
-	rtestutils.AssertResources(client.WithNode(suite.ctx, checkNode), suite.T(), suite.Client.COSI, []string{targetIdentity.TypedSpec().PublicKey},
-		func(peer *kubespan.PeerSpec, asrt *assert.Assertions) {
-			asrt.Contains(peer.TypedSpec().Endpoints, mockEndpoint)
-		},
-	)
-
-	// the extra endpoints disappears with a timeout from the discovery service, so can't assert on that
-	suite.T().Logf("removin extra endpoint %s from node %s", mockEndpoint, targetNode)
-	suite.RemoveMachineConfigDocuments(client.WithNode(suite.ctx, targetNode), cfgDocument.MetaKind)
 }
 
 func (suite *DiscoverySuite) getMembers(nodeCtx context.Context) []*cluster.Member {

@@ -5,7 +5,6 @@
 package cluster_test
 
 import (
-	"net"
 	"net/netip"
 	"testing"
 
@@ -14,14 +13,11 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	clusteradapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/cluster"
-	kubespanadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/kubespan"
 	clusterctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/cluster"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
-	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
@@ -35,7 +31,7 @@ func (suite *LocalAffiliateSuite) TestGeneration() {
 
 	suite.Require().NoError(suite.runtime.RegisterController(&clusterctrl.LocalAffiliateController{}))
 
-	nodeIdentity, nonK8sRoutedAddresses, discoveryConfig := suite.createResources()
+	nodeIdentity, _, discoveryConfig := suite.createResources()
 
 	machineType := config.NewMachineType()
 	machineType.SetMachineType(machine.TypeWorker)
@@ -53,83 +49,8 @@ func (suite *LocalAffiliateSuite) TestGeneration() {
 		asrt.Equal("example1.com", spec.Hostname)
 		asrt.Equal("example1.com", spec.Nodename)
 		asrt.Equal(machine.TypeWorker, spec.MachineType)
-		asrt.Equal("Talos ("+version.Tag+")", spec.OperatingSystem)
-		asrt.Equal(cluster.KubeSpanAffiliateSpec{}, spec.KubeSpan)
-	})
-
-	if fipsmode.Strict() {
-		suite.T().Skip("skipping test in strict FIPS mode (Wireguard/KubeSpan)")
-	}
-
-	// enable kubespan
-	mac, err := net.ParseMAC("ea:71:1b:b2:cc:ee")
-	suite.Require().NoError(err)
-
-	ksIdentity := kubespan.NewIdentity(kubespan.NamespaceName, kubespan.LocalIdentity)
-	suite.Require().NoError(kubespanadapter.IdentitySpec(ksIdentity.TypedSpec()).GenerateKey())
-	suite.Require().NoError(kubespanadapter.IdentitySpec(ksIdentity.TypedSpec()).UpdateAddress("8XuV9TZHW08DOk3bVxQjH9ih_TBKjnh-j44tsCLSBzo=", mac))
-	suite.Require().NoError(suite.state.Create(suite.ctx, ksIdentity))
-
-	ksConfig := kubespan.NewConfig(config.NamespaceName, kubespan.ConfigID)
-	ksConfig.TypedSpec().EndpointFilters = []string{"0.0.0.0/0", "!192.168.0.0/16", "2001::/16"}
-	ksConfig.TypedSpec().AdvertiseKubernetesNetworks = true
-	ksConfig.TypedSpec().ExtraEndpoints = []netip.AddrPort{netip.MustParseAddrPort("10.5.0.1:51820"), netip.MustParseAddrPort("1.2.3.4:5678")}
-	suite.Require().NoError(suite.state.Create(suite.ctx, ksConfig))
-
-	// add KS address to the list of node addresses, it should be ignored in the endpoints
-	nonK8sRoutedAddresses.TypedSpec().Addresses = append(nonK8sRoutedAddresses.TypedSpec().Addresses, ksIdentity.TypedSpec().Address)
-	suite.Require().NoError(suite.state.Update(suite.ctx, nonK8sRoutedAddresses))
-
-	// add discovered public IPs
-	for _, addr := range []netip.Addr{
-		netip.MustParseAddr("1.1.1.1"),
-		netip.MustParseAddr("2001:123:4567::1"), // duplicate, will be ignored
-	} {
-		discoveredAddr := network.NewAddressStatus(cluster.NamespaceName, addr.String())
-		discoveredAddr.TypedSpec().Address = netip.PrefixFrom(addr, addr.BitLen())
-		suite.Require().NoError(suite.state.Create(suite.ctx, discoveredAddr))
-	}
-
-	ctest.AssertResource(suite, nodeIdentity.TypedSpec().NodeID, func(r *cluster.Affiliate, asrt *assert.Assertions) {
-		spec := r.TypedSpec()
-
-		asrt.False(len(spec.Addresses) < 5)
-
-		asrt.Equal([]netip.Addr{
-			netip.MustParseAddr("172.20.0.2"),
-			netip.MustParseAddr("10.5.0.1"),
-			netip.MustParseAddr("192.168.192.168"),
-			netip.MustParseAddr("2001:123:4567::1"),
-			ksIdentity.TypedSpec().Address.Addr(),
-		}, spec.Addresses)
-
-		asrt.Equal("example1.com", spec.Hostname)
-		asrt.Equal("example1.com", spec.Nodename)
-		asrt.Equal(machine.TypeWorker, spec.MachineType)
-
-		asrt.NotZero(spec.KubeSpan.PublicKey)
-		asrt.Empty(spec.KubeSpan.AdditionalAddresses)
-
-		asrt.Equal(ksIdentity.TypedSpec().Address.Addr(), spec.KubeSpan.Address)
-		asrt.Equal(ksIdentity.TypedSpec().PublicKey, spec.KubeSpan.PublicKey)
-		asrt.Equal(
-			[]string{
-				"172.20.0.2:51820",
-				"10.5.0.1:51820",
-				"1.1.1.1:51820",
-				"[2001:123:4567::1]:51820",
-				"1.2.3.4:5678",
-			},
-			xslices.Map(spec.KubeSpan.Endpoints, netip.AddrPort.String),
-		)
-	})
-
-	// disable advertising K8s addresses
-	ksConfig.TypedSpec().AdvertiseKubernetesNetworks = false
-	suite.Require().NoError(suite.state.Update(suite.ctx, ksConfig))
-
-	ctest.AssertResource(suite, nodeIdentity.TypedSpec().NodeID, func(r *cluster.Affiliate, asrt *assert.Assertions) {
-		asrt.Empty(r.TypedSpec().KubeSpan.AdditionalAddresses)
+		asrt.Equal(version.Name+" ("+version.Tag+")", spec.OperatingSystem)
+		asrt.Nil(spec.ControlPlane)
 	})
 
 	// disable discovery, local affiliate should be removed
@@ -162,8 +83,7 @@ func (suite *LocalAffiliateSuite) TestCPGeneration() {
 		asrt.Equal("example1.com", spec.Hostname)
 		asrt.Equal("example1.com", spec.Nodename)
 		asrt.Equal(machine.TypeControlPlane, spec.MachineType)
-		asrt.Equal("Talos ("+version.Tag+")", spec.OperatingSystem)
-		asrt.Equal(cluster.KubeSpanAffiliateSpec{}, spec.KubeSpan)
+		asrt.Equal(version.Name+" ("+version.Tag+")", spec.OperatingSystem)
 		asrt.Nil(spec.ControlPlane)
 	})
 

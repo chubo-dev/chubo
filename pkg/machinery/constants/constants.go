@@ -980,35 +980,6 @@ const (
 	// DefaultDiscoveryServiceEndpoint is the default endpoint for Talos discovery service.
 	DefaultDiscoveryServiceEndpoint = "https://discovery.talos.dev/"
 
-	// KubeSpanIdentityFilename is the filename to cache KubeSpan identity across reboots.
-	KubeSpanIdentityFilename = "kubespan-identity.yaml"
-
-	// KubeSpanDefaultPort is the default Wireguard listening port for incoming connections.
-	KubeSpanDefaultPort = 51820
-
-	// KubeSpanDefaultRoutingTable is the default routing table for KubeSpan LAN targets.
-	//
-	// This specifies the routing table which will be used for Wireguard-available destinations.
-	KubeSpanDefaultRoutingTable = 180
-
-	// KubeSpanDefaultFirewallMark is the default firewall mark to use for Wireguard encrypted egress packets.
-	//
-	// Normal Wireguard configurations will NOT use this firewall mark.
-	KubeSpanDefaultFirewallMark = 0x20
-
-	// KubeSpanDefaultForceFirewallMark is the default firewall mark to use for packets destined to IPs serviced by KubeSpan.
-	//
-	// It is used to signal that matching packets should be forced into the Wireguard interface.
-	KubeSpanDefaultForceFirewallMark = 0x40
-
-	// KubeSpanDefaultFirewallMask is the mask applied to the packet mark when matching and setting the mark.
-	//
-	// This mask signals the bits of the firewall mark used by KubeSpan.
-	KubeSpanDefaultFirewallMask = KubeSpanDefaultFirewallMark | KubeSpanDefaultForceFirewallMark
-
-	// KubeSpanDefaultPeerKeepalive is the interval at which Wireguard Peer Keepalives should be sent.
-	KubeSpanDefaultPeerKeepalive = 25 * time.Second
-
 	// NetworkSelfIPsAnnotation is the node annotation used to list the (comma-separated) IP addresses of the host, as discovered by Talos tooling.
 	NetworkSelfIPsAnnotation = "networking.talos.dev/self-ips"
 
@@ -1017,30 +988,6 @@ const (
 
 	// ClusterNodeIDAnnotation is the node annotation used to represent node ID.
 	ClusterNodeIDAnnotation = "cluster.talos.dev/node-id"
-
-	// KubeSpanIPAnnotation is the node annotation to be used for indicating the Wireguard IP of the node.
-	KubeSpanIPAnnotation = "networking.talos.dev/kubespan-ip"
-
-	// KubeSpanPublicKeyAnnotation is the node annotation to be used for indicating the Wireguard Public Key of the node.
-	KubeSpanPublicKeyAnnotation = "networking.talos.dev/kubespan-public-key"
-
-	// KubeSpanAssignedPrefixesAnnotation is the node annotation use to list the (comma-separated) set of IP prefixes for which the annotated node should be responsible.
-	KubeSpanAssignedPrefixesAnnotation = "networking.talos.dev/assigned-prefixes"
-
-	// KubeSpanKnownEndpointsAnnotation is the node annotation used to list the (comma-separated) known-good Wireguard endpoints for the node, as seen by other peers.
-	KubeSpanKnownEndpointsAnnotation = "networking.talos.dev/kubespan-endpoints"
-
-	// KubeSpanLinkName is the link name for the KubeSpan Wireguard interface.
-	KubeSpanLinkName = "kubespan"
-
-	// KubeSpanLinkMTU is the default link MTU size for the KubeSpan Wireguard interface.
-	KubeSpanLinkMTU = 1420
-
-	// KubeSpanLinkMinimumMTU is the minimum link MTU size for the KubeSpan Wireguard interface.
-	//
-	// This is the minimum MTU size for the Wireguard interface with IPv6 enabled.
-	// See: https://lore.kernel.org/wireguard/20190321033638.1ff82682@natsu/t/
-	KubeSpanLinkMinimumMTU = 1280
 
 	// UdevDir is the path to the udev directory.
 	UdevDir = "/usr/lib/udev"

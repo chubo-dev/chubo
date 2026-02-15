@@ -7,22 +7,16 @@ package cluster
 import (
 	"context"
 	"fmt"
-	"net/netip"
-	"slices"
 
 	"github.com/cosi-project/runtime/pkg/controller"
 	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/siderolabs/gen/optional"
-	"github.com/siderolabs/gen/xslices"
-	"github.com/siderolabs/net"
 	"go.uber.org/zap"
 
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
@@ -62,26 +56,9 @@ func (ctrl *LocalAffiliateController) Inputs() []controller.Input {
 			Kind:      controller.InputWeak,
 		},
 		{
-			Namespace: kubespan.NamespaceName,
-			Type:      kubespan.IdentityType,
-			ID:        optional.Some(kubespan.LocalIdentity),
-			Kind:      controller.InputWeak,
-		},
-		{
-			Namespace: config.NamespaceName,
-			Type:      kubespan.ConfigType,
-			ID:        optional.Some(kubespan.ConfigID),
-			Kind:      controller.InputWeak,
-		},
-		{
 			Namespace: config.NamespaceName,
 			Type:      config.MachineTypeType,
 			ID:        optional.Some(config.MachineTypeID),
-			Kind:      controller.InputWeak,
-		},
-		{
-			Namespace: cluster.NamespaceName,
-			Type:      network.AddressStatusType,
 			Kind:      controller.InputWeak,
 		},
 	}
@@ -145,15 +122,6 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 			continue
 		}
 
-		currentAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.NodeAddressCurrentID)
-		if err != nil {
-			if !state.IsNotFoundError(err) {
-				return fmt.Errorf("error getting addresses: %w", err)
-			}
-
-			continue
-		}
-
 		machineType, err := safe.ReaderGetByID[*config.MachineType](ctx, r, config.MachineTypeID)
 		if err != nil {
 			if !state.IsNotFoundError(err) {
@@ -161,22 +129,6 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 			}
 
 			continue
-		}
-
-		// optional resources (kubespan)
-		kubespanIdentity, err := safe.ReaderGetByID[*kubespan.Identity](ctx, r, kubespan.LocalIdentity)
-		if err != nil && !state.IsNotFoundError(err) {
-			return fmt.Errorf("error getting kubespan identity: %w", err)
-		}
-
-		kubespanConfig, err := safe.ReaderGetByID[*kubespan.Config](ctx, r, kubespan.ConfigID)
-		if err != nil && !state.IsNotFoundError(err) {
-			return fmt.Errorf("error getting kubespan config: %w", err)
-		}
-
-		discoveredPublicIPs, err := safe.ReaderList[*network.AddressStatus](ctx, r, resource.NewMetadata(cluster.NamespaceName, network.AddressStatusType, "", resource.VersionUndefined))
-		if err != nil {
-			return fmt.Errorf("error getting discovered public IP: %w", err)
 		}
 
 		localID := identity.TypedSpec().NodeID
@@ -200,65 +152,8 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 				spec.ControlPlane = nil
 
 				routedNodeIPs := routedAddresses.TypedSpec().IPs()
-				currentNodeIPs := currentAddresses.TypedSpec().IPs()
 
 				spec.Addresses = routedNodeIPs
-
-				spec.KubeSpan = cluster.KubeSpanAffiliateSpec{}
-
-				if kubespanIdentity != nil && kubespanConfig != nil {
-					spec.KubeSpan.Address = kubespanIdentity.TypedSpec().Address.Addr()
-					spec.KubeSpan.PublicKey = kubespanIdentity.TypedSpec().PublicKey
-
-					// AdditionalAddresses used to carry Kubernetes pod/service CIDRs. Chubo has no
-					// Kubernetes network model, so it remains empty.
-					spec.KubeSpan.AdditionalAddresses = nil
-
-					endpointIPs := xslices.Filter(currentNodeIPs, func(ip netip.Addr) bool {
-						if ip == spec.KubeSpan.Address {
-							// skip kubespan local address
-							return false
-						}
-
-						if network.IsULA(ip, network.ULASideroLink) {
-							// ignore SideroLink addresses, as they are point-to-point addresses
-							return false
-						}
-
-						return true
-					})
-
-					// mix in discovered public IPs
-					for res := range discoveredPublicIPs.All() {
-						addr := res.TypedSpec().Address.Addr()
-
-						if slices.ContainsFunc(endpointIPs, func(a netip.Addr) bool { return addr == a }) {
-							// this address is already published
-							continue
-						}
-
-						endpointIPs = append(endpointIPs, addr)
-					}
-
-					// filter endpoints if configured
-					if kubespanConfig.TypedSpec().EndpointFilters != nil {
-						endpointIPs, err = net.FilterIPs(endpointIPs, kubespanConfig.TypedSpec().EndpointFilters)
-						if err != nil {
-							return fmt.Errorf("error filtering KubeSpan endpoints: %w", err)
-						}
-					}
-
-					spec.KubeSpan.Endpoints = xslices.Map(endpointIPs, func(addr netip.Addr) netip.AddrPort {
-						return netip.AddrPortFrom(addr, constants.KubeSpanDefaultPort)
-					})
-
-					// add extra announced endpoints, deduplicating on the way
-					for _, addr := range kubespanConfig.TypedSpec().ExtraEndpoints {
-						if !slices.Contains(spec.KubeSpan.Endpoints, addr) {
-							spec.KubeSpan.Endpoints = append(spec.KubeSpan.Endpoints, addr)
-						}
-					}
-				}
 
 				return nil
 			}); err != nil {

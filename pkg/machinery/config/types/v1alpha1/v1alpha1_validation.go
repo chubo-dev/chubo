@@ -219,11 +219,6 @@ func (c *Config) Validate(mode validation.RuntimeMode, options ...validation.Opt
 			result = multierror.Append(result, err)
 		}
 
-		if kcfg := c.NetworkKubeSpanConfig(); kcfg != nil && kcfg.Enabled() {
-			if kcfg.MTU() < constants.KubeSpanLinkMinimumMTU {
-				result = multierror.Append(result, fmt.Errorf("kubespan link MTU must be at least %d", constants.KubeSpanLinkMinimumMTU))
-			}
-		}
 	}
 
 	for i, disk := range c.MachineConfig.MachineDisks {
@@ -264,28 +259,6 @@ func (c *Config) Validate(mode validation.RuntimeMode, options ...validation.Opt
 				if key.NodeID() == nil && key.Static() == nil && key.KMS() == nil && key.TPM() == nil {
 					result = multierror.Append(result, fmt.Errorf("partition %q: encryption key at slot %d doesn't have the configuration parameters", label, key.Slot()))
 				}
-			}
-		}
-	}
-
-	if kcfg := c.NetworkKubeSpanConfig(); kcfg != nil && kcfg.Enabled() {
-		if !c.Cluster().Discovery().Enabled() {
-			result = multierror.Append(result, errors.New(".cluster.discovery should be enabled when .machine.network.kubespan is enabled"))
-		}
-
-		if c.Cluster().ID() == "" {
-			result = multierror.Append(result, errors.New(".cluster.id should be set when .machine.network.kubespan is enabled"))
-		}
-
-		if c.Cluster().Secret() == "" {
-			result = multierror.Append(result, errors.New(".cluster.secret should be set when .machine.network.kubespan is enabled"))
-		}
-
-		for _, cidr := range kcfg.Filters().Endpoints() {
-			cidr = strings.TrimPrefix(cidr, "!")
-
-			if _, err := sideronet.ParseSubnetOrAddress(cidr); err != nil {
-				result = multierror.Append(result, fmt.Errorf("KubeSpan endpoint filer is not valid: %q", cidr))
 			}
 		}
 	}

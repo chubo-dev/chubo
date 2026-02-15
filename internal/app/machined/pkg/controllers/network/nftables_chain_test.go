@@ -18,7 +18,6 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
 	netctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
@@ -26,6 +25,12 @@ import (
 type NfTablesChainSuite struct {
 	ctest.DefaultSuite
 }
+
+const (
+	defaultFirewallMark uint32 = 0x20
+	defaultFirewallMask uint32 = 0x60
+	defaultWireguardMTU uint16 = 1420
+)
 
 func (s *NfTablesChainSuite) nftOutput() string {
 	out, err := exec.CommandContext(s.T().Context(), "nft", "list", "table", "inet", "talos-test").CombinedOutput()
@@ -217,8 +222,8 @@ func (s *NfTablesChainSuite) TestMatchMarksSubnets() {
 	chain1.TypedSpec().Rules = []network.NfTablesRule{
 		{
 			MatchMark: &network.NfTablesMark{
-				Mask:  constants.KubeSpanDefaultFirewallMask,
-				Value: constants.KubeSpanDefaultFirewallMark,
+				Mask:  defaultFirewallMask,
+				Value: defaultFirewallMark,
 			},
 			MatchSourceAddress: &network.NfTablesAddressMatch{
 				IncludeSubnets: []netip.Prefix{
@@ -254,8 +259,8 @@ func (s *NfTablesChainSuite) TestMatchMarksSubnets() {
 				},
 			},
 			SetMark: &network.NfTablesMark{
-				Mask: ^uint32(constants.KubeSpanDefaultFirewallMask),
-				Xor:  constants.KubeSpanDefaultFirewallMark,
+				Mask: ^defaultFirewallMask,
+				Xor:  defaultFirewallMark,
 			},
 		},
 	}
@@ -323,8 +328,8 @@ func (s *NfTablesChainSuite) TestUpdateChains() {
 				Invert: true,
 			},
 			SetMark: &network.NfTablesMark{
-				Mask: ^uint32(constants.KubeSpanDefaultFirewallMask),
-				Xor:  constants.KubeSpanDefaultFirewallMark,
+				Mask: ^defaultFirewallMask,
+				Xor:  defaultFirewallMark,
 			},
 		},
 	}
@@ -357,7 +362,7 @@ func (s *NfTablesChainSuite) TestClampMSS() {
 				Invert: true, // match all addresses
 			},
 			ClampMSS: &network.NfTablesClampMSS{
-				MTU: constants.KubeSpanLinkMTU,
+				MTU: defaultWireguardMTU,
 			},
 		},
 	}

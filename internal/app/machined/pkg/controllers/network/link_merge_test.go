@@ -151,9 +151,9 @@ func (suite *LinkMergeSuite) TestMergeFlapping() {
 }
 
 func (suite *LinkMergeSuite) TestMergeWireguard() {
-	static := network.NewLinkSpec(network.ConfigNamespaceName, "configuration/kubespan")
+	static := network.NewLinkSpec(network.ConfigNamespaceName, "configuration/siderolink")
 	*static.TypedSpec() = network.LinkSpecSpec{
-		Name: "kubespan",
+		Name: "siderolink",
 		Wireguard: network.WireguardSpec{
 			ListenPort: 1234,
 			Peers: []network.WireguardPeer{
@@ -166,9 +166,9 @@ func (suite *LinkMergeSuite) TestMergeWireguard() {
 		ConfigLayer: network.ConfigMachineConfiguration,
 	}
 
-	kubespanOperator := network.NewLinkSpec(network.ConfigNamespaceName, "kubespan/kubespan")
-	*kubespanOperator.TypedSpec() = network.LinkSpecSpec{
-		Name: "kubespan",
+	siderolinkOperator := network.NewLinkSpec(network.ConfigNamespaceName, "siderolink/siderolink")
+	*siderolinkOperator.TypedSpec() = network.LinkSpecSpec{
+		Name: "siderolink",
 		Wireguard: network.WireguardSpec{
 			PrivateKey: "IG9MqCII7z54Ysof1fQ9a7WcMNG+qNJRMyRCQz3JTUY=",
 			ListenPort: 3456,
@@ -182,13 +182,13 @@ func (suite *LinkMergeSuite) TestMergeWireguard() {
 		ConfigLayer: network.ConfigOperator,
 	}
 
-	for _, res := range []resource.Resource{static, kubespanOperator} {
+	for _, res := range []resource.Resource{static, siderolinkOperator} {
 		suite.Create(res)
 	}
 
 	suite.assertLinks(
 		[]string{
-			"kubespan",
+			"siderolink",
 		}, func(r *network.LinkSpec, asrt *assert.Assertions) {
 			asrt.Equal(
 				"IG9MqCII7z54Ysof1fQ9a7WcMNG+qNJRMyRCQz3JTUY=",
@@ -219,10 +219,10 @@ func (suite *LinkMergeSuite) TestMergeWireguard() {
 		},
 	)
 
-	suite.Destroy(kubespanOperator)
+	suite.Destroy(siderolinkOperator)
 	suite.Destroy(static)
 
-	suite.assertNoLinks("kubespan")
+	suite.assertNoLinks("siderolink")
 }
 
 func TestLinkMergeSuite(t *testing.T) {

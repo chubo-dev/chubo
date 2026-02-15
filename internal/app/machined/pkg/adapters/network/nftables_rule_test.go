@@ -76,7 +76,7 @@ func TestNfTablesRuleCompile(t *testing.T) { //nolint:tparallel
 			name: "match multiple iifname",
 			spec: networkres.NfTablesRule{
 				MatchIIfName: &networkres.NfTablesIfNameMatch{
-					InterfaceNames: []string{"siderolink", "kubespan"},
+					InterfaceNames: []string{"siderolink", "eth0"},
 					Operator:       nethelpers.OperatorEqual,
 				},
 			},
@@ -94,7 +94,7 @@ func TestNfTablesRuleCompile(t *testing.T) { //nolint:tparallel
 					Kind: network.SetKindIfName,
 					Strings: [][]byte{
 						[]byte("siderolink\000\000\000\000\000\000"),
-						[]byte("kubespan\000\000\000\000\000\000\000\000"),
+						[]byte("eth0\000\000\000\000\000\000\000\000\000\000\000\000"),
 					},
 				},
 			},

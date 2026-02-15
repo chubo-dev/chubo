@@ -20,10 +20,10 @@ const ConfigType = resource.Type("DiscoveryConfigs.cluster.talos.dev")
 // ConfigID the singleton config resource ID.
 const ConfigID = resource.ID("cluster")
 
-// Config resource holds KubeSpan configuration.
+// Config resource holds cluster discovery configuration.
 type Config = typed.Resource[ConfigSpec, ConfigExtension]
 
-// ConfigSpec describes KubeSpan configuration.
+// ConfigSpec describes cluster discovery configuration.
 //
 //gotagsrewrite:gen
 type ConfigSpec struct {

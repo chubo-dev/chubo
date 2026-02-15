@@ -23,7 +23,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/perf"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
@@ -80,7 +79,6 @@ func NewState() (*State, error) {
 		{etcd.NamespaceName, "etcd resources."},
 		{files.NamespaceName, "Files and file-like resources."},
 		{hardware.NamespaceName, "Hardware resources."},
-		{kubespan.NamespaceName, "KubeSpan resources."},
 		{network.NamespaceName, "Networking resources."},
 		{network.ConfigNamespaceName, "Networking configuration resources."},
 		{cri.NamespaceName, "CRI Seccomp resources."},
@@ -138,11 +136,6 @@ func NewState() (*State, error) {
 		&hardware.PCRStatus{},
 		&hardware.Processor{},
 		&hardware.SystemInformation{},
-		&kubespan.Config{},
-		&kubespan.Endpoint{},
-		&kubespan.Identity{},
-		&kubespan.PeerSpec{},
-		&kubespan.PeerStatus{},
 		&network.AddressStatus{},
 		&network.AddressSpec{},
 		&network.DeviceConfigSpec{},

@@ -102,7 +102,6 @@ func (suite *NfTablesChainConfigTestSuite) TestDefaultAccept() {
 						InterfaceNames: []string{
 							"lo",
 							constants.SideroLinkName,
-							constants.KubeSpanLinkName,
 						},
 						Operator: nethelpers.OperatorEqual,
 					},
@@ -174,7 +173,6 @@ func (suite *NfTablesChainConfigTestSuite) TestDefaultAccept() {
 						InterfaceNames: []string{
 							"lo",
 							constants.SideroLinkName,
-							constants.KubeSpanLinkName,
 						},
 						Operator: nethelpers.OperatorEqual,
 					},
@@ -272,7 +270,6 @@ func (suite *NfTablesChainConfigTestSuite) TestDefaultBlock() {
 						InterfaceNames: []string{
 							"lo",
 							constants.SideroLinkName,
-							constants.KubeSpanLinkName,
 						},
 						Operator: nethelpers.OperatorEqual,
 					},
@@ -396,7 +393,6 @@ func (suite *NfTablesChainConfigTestSuite) TestDefaultBlock() {
 						InterfaceNames: []string{
 							"lo",
 							constants.SideroLinkName,
-							constants.KubeSpanLinkName,
 						},
 						Operator: nethelpers.OperatorEqual,
 					},

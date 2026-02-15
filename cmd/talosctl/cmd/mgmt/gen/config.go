@@ -72,7 +72,6 @@ var genConfigCmdFlags struct {
 	withExamples            bool
 	withDocs                bool
 	withClusterDiscovery    bool
-	withKubeSpan            bool
 	withSecrets             string
 }
 
@@ -201,13 +200,6 @@ func writeConfig(args []string) error {
 		}
 
 		genOptions = append(genOptions, generate.WithVersionContract(versionContract))
-	}
-
-	// Add KubeSpan configuration based on version
-	if genConfigCmdFlags.withKubeSpan {
-		genOptions = append(genOptions,
-			generate.WithKubeSpanEnabled(genConfigCmdFlags.withKubeSpan),
-		)
 	}
 
 	if genConfigCmdFlags.withSecrets != "" {
@@ -441,7 +433,6 @@ func init() {
 	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withExamples, "with-examples", "", true, "renders all machine configs with the commented examples")
 	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withDocs, "with-docs", "", true, "renders all machine configs adding the documentation for each field")
 	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withClusterDiscovery, "with-cluster-discovery", "", true, "enable cluster discovery feature")
-	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withKubeSpan, "with-kubespan", "", false, "enable KubeSpan feature")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.withSecrets, "with-secrets", "", "use a secrets file generated using 'gen secrets'")
 
 	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", allOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q", allOutputTypes))

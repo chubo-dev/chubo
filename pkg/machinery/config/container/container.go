@@ -242,11 +242,6 @@ func (container *Container) Volumes() config.VolumesConfig {
 	return config.WrapVolumesConfigList(findMatchingDocs[config.VolumeConfig](container.documents)...)
 }
 
-// KubespanConfig implements config.Config interface.
-func (container *Container) KubespanConfig() config.KubespanConfig {
-	return config.WrapKubespanConfig(findMatchingDocs[config.KubespanConfig](container.documents)...)
-}
-
 // PCIDriverRebindConfig implements config.Config interface.
 func (container *Container) PCIDriverRebindConfig() config.PCIDriverRebindConfig {
 	return config.WrapPCIDriverRebindConfig(findMatchingDocs[config.PCIDriverRebindConfig](container.documents)...)
@@ -343,22 +338,6 @@ func (container *Container) NetworkTimeSyncConfig() config.NetworkTimeSyncConfig
 	// fallback to v1alpha1
 	if container.v1alpha1Config != nil {
 		return container.v1alpha1Config.NetworkTimeSyncConfig()
-	}
-
-	return nil
-}
-
-// NetworkKubeSpanConfig implements config.Config interface.
-func (container *Container) NetworkKubeSpanConfig() config.NetworkKubeSpanConfig {
-	// first check if we have a dedicated document
-	matching := findMatchingDocs[config.NetworkKubeSpanConfig](container.documents)
-	if len(matching) > 0 {
-		return matching[0]
-	}
-
-	// fallback to v1alpha1
-	if container.v1alpha1Config != nil {
-		return container.v1alpha1Config.NetworkKubeSpanConfig()
 	}
 
 	return nil

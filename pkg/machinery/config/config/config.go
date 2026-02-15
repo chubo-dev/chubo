@@ -16,14 +16,12 @@ type Config interface { //nolint:interfacebloat
 	//  - network
 	SideroLink() SideroLinkConfig
 	NetworkRules() NetworkRuleConfig
-	KubespanConfig() KubespanConfig
 	EthernetConfigs() []EthernetConfig
 	RunDefaultDHCPOperators() bool
 	NetworkStaticHostConfig() []NetworkStaticHostConfig
 	NetworkHostnameConfig() NetworkHostnameConfig
 	NetworkResolverConfig() NetworkResolverConfig
 	NetworkTimeSyncConfig() NetworkTimeSyncConfig
-	NetworkKubeSpanConfig() NetworkKubeSpanConfig
 	NetworkCommonLinkConfigs() []NetworkCommonLinkConfig
 	NetworkLinkAliasConfigs() []NetworkLinkAliasConfig
 	NetworkDHCPConfigs() []NetworkDHCPConfig

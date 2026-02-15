@@ -15,7 +15,7 @@ package v1alpha1
 
 //go:generate go tool github.com/chubo-dev/chubo/tools/docgen -output ./v1alpha1_types_doc.go ./v1alpha1_types.go
 
-//go:generate go tool k8s.io/code-generator/cmd/deepcopy-gen --go-header-file ../../../../../hack/boilerplate.txt --bounding-dirs ../v1alpha1 --output-file zz_generated.deepcopy
+//go:generate go tool k8s.io/code-generator/cmd/deepcopy-gen --go-header-file ../../../../../hack/boilerplate.txt --bounding-dirs github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1 --output-file zz_generated.deepcopy.go .
 
 //docgen:jsonschema
 
@@ -269,7 +269,7 @@ type MachineConfig struct {
 	// docgen:nodoc
 	//
 	// Deprecated: All fields within NetworkConfig are deprecated. Use multi-document network config types instead:
-	// HostnameConfig, NetworkDeviceConfig, ResolverConfig, StaticHostConfig, KubeSpanConfig.
+	// HostnameConfig, NetworkDeviceConfig, ResolverConfig, StaticHostConfig.
 	MachineNetwork *NetworkConfig `yaml:"network,omitempty"`
 	// docgen:nodoc
 	//
@@ -794,10 +794,6 @@ type NetworkConfig struct {
 	//
 	// Deprecated: Use `StatisHostConfig` instead.
 	ExtraHostEntries []*ExtraHost `yaml:"extraHostEntries,omitempty"`
-	// docgen:nodoc
-	//
-	// Deprecated: Use `KubeSpanConfig` document instead.
-	NetworkKubeSpan *NetworkKubeSpan `yaml:"kubespan,omitempty"`
 	// docgen:nodoc
 	//
 	// Deprecated: Use `ResolverConfig` instead.
@@ -2487,63 +2483,6 @@ type ClusterInlineManifest struct {
 	//   examples:
 	//     - value: '"/etc/kubernetes/auth"'
 	InlineManifestContents string `yaml:"contents"`
-}
-
-// NetworkKubeSpan struct describes KubeSpan configuration.
-//
-// Deprecated: Use KubeSpanConfig document instead.
-//
-// docgen:nodoc
-type NetworkKubeSpan struct {
-	// description: |
-	//   Enable the KubeSpan feature.
-	//   Cluster discovery should be enabled with .cluster.discovery.enabled for KubeSpan to be enabled.
-	KubeSpanEnabled *bool `yaml:"enabled,omitempty"`
-	// description: |
-	//   Control whether Kubernetes pod CIDRs are announced over KubeSpan from the node.
-	//   If disabled, CNI handles encapsulating pod-to-pod traffic into some node-to-node tunnel,
-	//   and KubeSpan handles the node-to-node traffic.
-	//   If enabled, KubeSpan will take over pod-to-pod traffic and send it over KubeSpan directly.
-	//   When enabled, KubeSpan should have a way to detect complete pod CIDRs of the node which
-	//   is not always the case with CNIs not relying on Kubernetes for IPAM.
-	KubeSpanAdvertiseKubernetesNetworks *bool `yaml:"advertiseKubernetesNetworks,omitempty"`
-	// description: |
-	//   Skip sending traffic via KubeSpan if the peer connection state is not up.
-	//   This provides configurable choice between connectivity and security: either traffic is always
-	//   forced to go via KubeSpan (even if Wireguard peer connection is not up), or traffic can go directly
-	//   to the peer if Wireguard connection can't be established.
-	KubeSpanAllowDownPeerBypass *bool `yaml:"allowDownPeerBypass,omitempty"`
-	// description: |
-	//   KubeSpan can collect and publish extra endpoints for each member of the cluster
-	//   based on Wireguard endpoint information for each peer.
-	//   This feature is disabled by default, don't enable it
-	//   with high number of peers (>50) in the KubeSpan network (performance issues).
-	KubeSpanHarvestExtraEndpoints *bool `yaml:"harvestExtraEndpoints,omitempty"`
-	// description: |
-	//   KubeSpan link MTU size.
-	//   Default value is 1420.
-	KubeSpanMTU *uint32 `yaml:"mtu,omitempty"`
-	// description: |
-	//   KubeSpan advanced filtering of network addresses .
-	//
-	//   Settings in this section are optional, and settings apply only to the node.
-	KubeSpanFilters *KubeSpanFilters `yaml:"filters,omitempty"`
-}
-
-// KubeSpanFilters struct describes KubeSpan advanced network addresses filtering.
-//
-// docgen:nodoc
-type KubeSpanFilters struct {
-	// description: |
-	//   Filter node addresses which will be advertised as KubeSpan endpoints for peer-to-peer Wireguard connections.
-	//
-	//   By default, all addresses are advertised, and KubeSpan cycles through all endpoints until it finds one that works.
-	//
-	//   Default value: no filtering.
-	// examples:
-	//   - name: Exclude addresses in 192.168.0.0/16 subnet.
-	//     value: '[]string{"0.0.0.0/0", "!192.168.0.0/16", "::/0"}'
-	KubeSpanFiltersEndpoints []string `yaml:"endpoints,omitempty"`
 }
 
 // NetworkDeviceSelector struct describes network device selector.

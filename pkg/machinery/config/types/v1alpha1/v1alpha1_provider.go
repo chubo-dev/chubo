@@ -1138,50 +1138,6 @@ func (v *Vlan) Mode() nethelpers.VLANProtocol {
 	return nethelpers.VLANProtocol8021Q
 }
 
-// Enabled implements KubeSpan interface.
-func (k *NetworkKubeSpan) Enabled() bool {
-	return pointer.SafeDeref(k.KubeSpanEnabled)
-}
-
-// ForceRouting implements KubeSpan interface.
-func (k *NetworkKubeSpan) ForceRouting() bool {
-	return !pointer.SafeDeref(k.KubeSpanAllowDownPeerBypass)
-}
-
-// AdvertiseKubernetesNetworks implements KubeSpan interface.
-func (k *NetworkKubeSpan) AdvertiseKubernetesNetworks() bool {
-	return pointer.SafeDeref(k.KubeSpanAdvertiseKubernetesNetworks)
-}
-
-// HarvestExtraEndpoints implements KubeSpan interface.
-func (k *NetworkKubeSpan) HarvestExtraEndpoints() bool {
-	return pointer.SafeDeref(k.KubeSpanHarvestExtraEndpoints)
-}
-
-// MTU implements the KubeSpan interface.
-func (k *NetworkKubeSpan) MTU() uint32 {
-	mtu := pointer.SafeDeref(k.KubeSpanMTU)
-	if mtu == 0 {
-		mtu = constants.KubeSpanLinkMTU
-	}
-
-	return mtu
-}
-
-// Filters implements the NetworkKubeSpanConfig interface.
-func (k *NetworkKubeSpan) Filters() config.NetworkKubeSpanFilters {
-	if k.KubeSpanFilters == nil {
-		return &KubeSpanFilters{}
-	}
-
-	return k.KubeSpanFilters
-}
-
-// Endpoints implements the config.KubeSpanFilters interface.
-func (k *KubeSpanFilters) Endpoints() []string {
-	return k.KubeSpanFiltersEndpoints
-}
-
 // Disabled implements the config.Provider interface.
 func (t *TimeConfig) Disabled() bool {
 	return pointer.SafeDeref(t.TimeDisabled)

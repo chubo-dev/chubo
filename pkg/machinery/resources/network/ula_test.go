@@ -13,5 +13,5 @@ import (
 )
 
 func TestULAPrefix(t *testing.T) {
-	assert.Equal(t, "fd7f:175a:b97c:5602::/64", network.ULAPrefix("8XuV9TZHW08DOk3bVxQjH9ih_TBKjnh-j44tsCLSBzo=", network.ULAKubeSpan).String())
+	assert.Equal(t, "fd7f:175a:b97c:5603::/64", network.ULAPrefix("8XuV9TZHW08DOk3bVxQjH9ih_TBKjnh-j44tsCLSBzo=", network.ULASideroLink).String())
 }

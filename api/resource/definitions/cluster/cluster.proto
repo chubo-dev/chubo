@@ -16,11 +16,13 @@ message AffiliateSpec {
   string nodename = 4;
   string operating_system = 5;
   talos.resource.definitions.enums.MachineType machine_type = 6;
-  KubeSpanAffiliateSpec kube_span = 7;
   ControlPlane control_plane = 8;
+
+  reserved 7;
+  reserved "kube_span";
 }
 
-// ConfigSpec describes KubeSpan configuration.
+// ConfigSpec describes cluster discovery configuration.
 message ConfigSpec {
   bool discovery_enabled = 1;
   bool registry_kubernetes_enabled = 2;
@@ -56,14 +58,6 @@ message InfoSpec {
   string cluster_name = 2;
 }
 
-// KubeSpanAffiliateSpec describes additional information specific for the KubeSpan.
-message KubeSpanAffiliateSpec {
-  string public_key = 1;
-  common.NetIP address = 2;
-  repeated common.NetIPPrefix additional_addresses = 3;
-  repeated common.NetIPPort endpoints = 4;
-}
-
 // MemberSpec describes Member state.
 message MemberSpec {
   string node_id = 1;
@@ -73,4 +67,3 @@ message MemberSpec {
   string operating_system = 5;
   ControlPlane control_plane = 6;
 }
-

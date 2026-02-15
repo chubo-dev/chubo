@@ -12,7 +12,6 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/resource/protobuf"
 	"github.com/cosi-project/runtime/pkg/resource/typed"
-	"github.com/siderolabs/gen/value"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
@@ -23,20 +22,10 @@ import (
 // AffiliateType is type of Affiliate resource.
 const AffiliateType = resource.Type("Affiliates.cluster.talos.dev")
 
-// Affiliate resource holds information about cluster affiliate: it is discovered potential cluster member and/or KubeSpan peer.
+// Affiliate resource holds information about a cluster affiliate: it is a discovered potential cluster member.
 //
 // Controller builds local Affiliate structure for the node itself, other Affiliates are pulled from the registry during the discovery process.
 type Affiliate = typed.Resource[AffiliateSpec, AffiliateExtension]
-
-// KubeSpanAffiliateSpec describes additional information specific for the KubeSpan.
-//
-//gotagsrewrite:gen
-type KubeSpanAffiliateSpec struct {
-	PublicKey           string           `yaml:"publicKey" protobuf:"1"`
-	Address             netip.Addr       `yaml:"address" protobuf:"2"`
-	AdditionalAddresses []netip.Prefix   `yaml:"additionalAddresses" protobuf:"3"`
-	Endpoints           []netip.AddrPort `yaml:"endpoints" protobuf:"4"`
-}
 
 // NewAffiliate initializes the Affiliate resource.
 func NewAffiliate(namespace resource.Namespace, id resource.ID) *Affiliate {
@@ -76,14 +65,13 @@ func (r AffiliateExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 //
 //gotagsrewrite:gen
 type AffiliateSpec struct {
-	NodeID          string                `yaml:"nodeId" protobuf:"1"`
-	Addresses       []netip.Addr          `yaml:"addresses" protobuf:"2"`
-	Hostname        string                `yaml:"hostname" protobuf:"3"`
-	Nodename        string                `yaml:"nodename,omitempty" protobuf:"4"`
-	OperatingSystem string                `yaml:"operatingSystem" protobuf:"5"`
-	MachineType     machine.Type          `yaml:"machineType" protobuf:"6"`
-	KubeSpan        KubeSpanAffiliateSpec `yaml:"kubespan,omitempty" protobuf:"7"`
-	ControlPlane    *ControlPlane         `yaml:"controlPlane,omitempty" protobuf:"8"`
+	NodeID          string        `yaml:"nodeId" protobuf:"1"`
+	Addresses       []netip.Addr  `yaml:"addresses" protobuf:"2"`
+	Hostname        string        `yaml:"hostname" protobuf:"3"`
+	Nodename        string        `yaml:"nodename,omitempty" protobuf:"4"`
+	OperatingSystem string        `yaml:"operatingSystem" protobuf:"5"`
+	MachineType     machine.Type  `yaml:"machineType" protobuf:"6"`
+	ControlPlane    *ControlPlane `yaml:"controlPlane,omitempty" protobuf:"8"`
 }
 
 // ControlPlane describes ControlPlane data if any.
@@ -119,30 +107,6 @@ func (spec *AffiliateSpec) Merge(other *AffiliateSpec) {
 
 	if other.MachineType != machine.TypeUnknown {
 		spec.MachineType = other.MachineType
-	}
-
-	if other.KubeSpan.PublicKey != "" {
-		spec.KubeSpan.PublicKey = other.KubeSpan.PublicKey
-	}
-
-	if !value.IsZero(other.KubeSpan.Address) {
-		spec.KubeSpan.Address = other.KubeSpan.Address
-	}
-
-	for _, addr := range other.KubeSpan.AdditionalAddresses {
-		found := slices.Contains(spec.KubeSpan.AdditionalAddresses, addr)
-
-		if !found {
-			spec.KubeSpan.AdditionalAddresses = append(spec.KubeSpan.AdditionalAddresses, addr)
-		}
-	}
-
-	for _, addr := range other.KubeSpan.Endpoints {
-		found := slices.Contains(spec.KubeSpan.Endpoints, addr)
-
-		if !found {
-			spec.KubeSpan.Endpoints = append(spec.KubeSpan.Endpoints, addr)
-		}
 	}
 }
 

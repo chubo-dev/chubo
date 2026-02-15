@@ -125,7 +125,6 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		encryptStatePartitionFlag     = "encrypt-state"
 		encryptEphemeralPartitionFlag = "encrypt-ephemeral"
 		encryptUserVolumeFlag         = "encrypt-user-volumes"
-		enableKubeSpanFlag            = "with-kubespan"
 		forceEndpointFlag             = "endpoint"
 		kubePrismFlag                 = "kubeprism-port"
 		diskEncryptionKeyTypesFlag    = "disk-encryption-key-types"
@@ -192,7 +191,6 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		common.BoolVar(&cOps.SkipInjectingConfig, skipInjectingConfigFlag, cOps.SkipInjectingConfig,
 			"skip injecting config from embedded metadata server, write config files to current directory")
 		common.BoolVar(&cOps.EnableClusterDiscovery, withClusterDiscoveryFlag, cOps.EnableClusterDiscovery, "enable cluster discovery")
-		common.BoolVar(&cOps.EnableKubeSpan, enableKubeSpanFlag, cOps.EnableKubeSpan, "enable KubeSpan system")
 		common.IntVar(&cOps.KubePrismPort, kubePrismFlag, cOps.KubePrismPort, "KubePrism port (set to 0 to disable)")
 		common.BoolVar(&cOps.SkipK8sNodeReadinessCheck, skipK8sNodeReadinessCheckFlag, cOps.SkipK8sNodeReadinessCheck, "skip k8s node readiness checks")
 		common.BoolVar(&cOps.WithJSONLogs, withJSONLogsFlag, cOps.WithJSONLogs, "enable JSON logs receiver and configure Talos to send logs there")

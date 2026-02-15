@@ -7,10 +7,7 @@
 package v1alpha1
 
 import (
-	"github.com/siderolabs/go-pointer"
-
 	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func (Config) Doc() *encoder.Doc {
