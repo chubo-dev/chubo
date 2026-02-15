@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/siderolabs/gen/xslices"
-	"github.com/siderolabs/go-pointer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
@@ -22,7 +21,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/fipsmode"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
@@ -37,7 +35,7 @@ func (suite *LocalAffiliateSuite) TestGeneration() {
 
 	suite.Require().NoError(suite.runtime.RegisterController(&clusterctrl.LocalAffiliateController{}))
 
-	nodeIdentity, nonK8sRoutedAddresses, nodeName, discoveryConfig := suite.createResources()
+	nodeIdentity, nonK8sRoutedAddresses, discoveryConfig := suite.createResources()
 
 	machineType := config.NewMachineType()
 	machineType.SetMachineType(machine.TypeWorker)
@@ -52,7 +50,7 @@ func (suite *LocalAffiliateSuite) TestGeneration() {
 			"192.168.192.168",
 			"2001:123:4567::1",
 		}, xslices.Map(spec.Addresses, netip.Addr.String))
-		asrt.Equal("example1", spec.Hostname)
+		asrt.Equal("example1.com", spec.Hostname)
 		asrt.Equal("example1.com", spec.Nodename)
 		asrt.Equal(machine.TypeWorker, spec.MachineType)
 		asrt.Equal("Talos ("+version.Tag+")", spec.OperatingSystem)
@@ -82,10 +80,6 @@ func (suite *LocalAffiliateSuite) TestGeneration() {
 	nonK8sRoutedAddresses.TypedSpec().Addresses = append(nonK8sRoutedAddresses.TypedSpec().Addresses, ksIdentity.TypedSpec().Address)
 	suite.Require().NoError(suite.state.Update(suite.ctx, nonK8sRoutedAddresses))
 
-	nodeStatus := k8s.NewNodeStatus(k8s.NamespaceName, nodeName.TypedSpec().Nodename)
-	nodeStatus.TypedSpec().PodCIDRs = []netip.Prefix{netip.MustParsePrefix("10.244.1.0/24")}
-	suite.Require().NoError(suite.state.Create(suite.ctx, nodeStatus))
-
 	// add discovered public IPs
 	for _, addr := range []netip.Addr{
 		netip.MustParseAddr("1.1.1.1"),
@@ -109,16 +103,15 @@ func (suite *LocalAffiliateSuite) TestGeneration() {
 			ksIdentity.TypedSpec().Address.Addr(),
 		}, spec.Addresses)
 
-		asrt.Equal("example1", spec.Hostname)
+		asrt.Equal("example1.com", spec.Hostname)
 		asrt.Equal("example1.com", spec.Nodename)
 		asrt.Equal(machine.TypeWorker, spec.MachineType)
 
 		asrt.NotZero(spec.KubeSpan.PublicKey)
-		asrt.NotZero(spec.KubeSpan.AdditionalAddresses)
+		asrt.Empty(spec.KubeSpan.AdditionalAddresses)
 
 		asrt.Equal(ksIdentity.TypedSpec().Address.Addr(), spec.KubeSpan.Address)
 		asrt.Equal(ksIdentity.TypedSpec().PublicKey, spec.KubeSpan.PublicKey)
-		asrt.Equal([]netip.Prefix{netip.MustParsePrefix("10.244.1.0/24")}, spec.KubeSpan.AdditionalAddresses)
 		asrt.Equal(
 			[]string{
 				"172.20.0.2:51820",
@@ -151,15 +144,11 @@ func (suite *LocalAffiliateSuite) TestCPGeneration() {
 
 	suite.Require().NoError(suite.runtime.RegisterController(&clusterctrl.LocalAffiliateController{}))
 
-	nodeIdentity, _, _, discoveryConfig := suite.createResources()
+	nodeIdentity, _, discoveryConfig := suite.createResources()
 
 	machineType := config.NewMachineType()
 	machineType.SetMachineType(machine.TypeControlPlane)
 	suite.Require().NoError(suite.state.Create(suite.ctx, machineType))
-
-	apiServerConfig := k8s.NewAPIServerConfig()
-	apiServerConfig.TypedSpec().LocalPort = 6445
-	suite.Require().NoError(suite.state.Create(suite.ctx, apiServerConfig))
 
 	ctest.AssertResource(suite, nodeIdentity.TypedSpec().NodeID, func(r *cluster.Affiliate, asrt *assert.Assertions) {
 		spec := r.TypedSpec()
@@ -170,13 +159,12 @@ func (suite *LocalAffiliateSuite) TestCPGeneration() {
 			"192.168.192.168",
 			"2001:123:4567::1",
 		}, xslices.Map(spec.Addresses, netip.Addr.String))
-		asrt.Equal("example1", spec.Hostname)
+		asrt.Equal("example1.com", spec.Hostname)
 		asrt.Equal("example1.com", spec.Nodename)
 		asrt.Equal(machine.TypeControlPlane, spec.MachineType)
 		asrt.Equal("Talos ("+version.Tag+")", spec.OperatingSystem)
 		asrt.Equal(cluster.KubeSpanAffiliateSpec{}, spec.KubeSpan)
-		asrt.NotNil(spec.ControlPlane)
-		asrt.Equal(6445, pointer.SafeDeref(spec.ControlPlane).APIServerPort)
+		asrt.Nil(spec.ControlPlane)
 	})
 
 	discoveryConfig.TypedSpec().DiscoveryEnabled = false
@@ -185,7 +173,7 @@ func (suite *LocalAffiliateSuite) TestCPGeneration() {
 	ctest.AssertNoResource[*cluster.Affiliate](suite, nodeIdentity.TypedSpec().NodeID)
 }
 
-func (suite *LocalAffiliateSuite) createResources() (*cluster.Identity, *network.NodeAddress, *k8s.Nodename, *cluster.Config) {
+func (suite *LocalAffiliateSuite) createResources() (*cluster.Identity, *network.NodeAddress, *cluster.Config) {
 	// regular discovery affiliate
 	discoveryConfig := cluster.NewConfig(config.NamespaceName, cluster.ConfigID)
 	discoveryConfig.TypedSpec().DiscoveryEnabled = true
@@ -197,13 +185,10 @@ func (suite *LocalAffiliateSuite) createResources() (*cluster.Identity, *network
 
 	hostnameStatus := network.NewHostnameStatus(network.NamespaceName, network.HostnameID)
 	hostnameStatus.TypedSpec().Hostname = "example1"
+	hostnameStatus.TypedSpec().Domainname = "com"
 	suite.Require().NoError(suite.state.Create(suite.ctx, hostnameStatus))
 
-	nodename := k8s.NewNodename(k8s.NamespaceName, k8s.NodenameID)
-	nodename.TypedSpec().Nodename = "example1.com"
-	suite.Require().NoError(suite.state.Create(suite.ctx, nodename))
-
-	nonK8sCurrentAddresses := network.NewNodeAddress(network.NamespaceName, network.FilteredNodeAddressID(network.NodeAddressCurrentID, k8s.NodeAddressFilterNoK8s))
+	nonK8sCurrentAddresses := network.NewNodeAddress(network.NamespaceName, network.NodeAddressCurrentID)
 	nonK8sCurrentAddresses.TypedSpec().Addresses = []netip.Prefix{
 		netip.MustParsePrefix("172.20.0.2/24"),
 		netip.MustParsePrefix("10.5.0.1/32"),
@@ -214,7 +199,7 @@ func (suite *LocalAffiliateSuite) createResources() (*cluster.Identity, *network
 	}
 	suite.Require().NoError(suite.state.Create(suite.ctx, nonK8sCurrentAddresses))
 
-	nonK8sRoutedAddresses := network.NewNodeAddress(network.NamespaceName, network.FilteredNodeAddressID(network.NodeAddressRoutedID, k8s.NodeAddressFilterNoK8s))
+	nonK8sRoutedAddresses := network.NewNodeAddress(network.NamespaceName, network.NodeAddressRoutedID)
 	nonK8sRoutedAddresses.TypedSpec().Addresses = []netip.Prefix{ // routed node addresses don't contain SideroLink addresses
 		netip.MustParsePrefix("172.20.0.2/24"),
 		netip.MustParsePrefix("10.5.0.1/32"),
@@ -224,7 +209,7 @@ func (suite *LocalAffiliateSuite) createResources() (*cluster.Identity, *network
 	}
 	suite.Require().NoError(suite.state.Create(suite.ctx, nonK8sRoutedAddresses))
 
-	return nodeIdentity, nonK8sRoutedAddresses, nodename, discoveryConfig
+	return nodeIdentity, nonK8sRoutedAddresses, discoveryConfig
 }
 
 func TestLocalAffiliateSuite(t *testing.T) {

@@ -22,7 +22,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/kubespan"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
@@ -58,19 +57,8 @@ func (ctrl *LocalAffiliateController) Inputs() []controller.Input {
 			Kind:      controller.InputWeak,
 		},
 		{
-			Namespace: k8s.NamespaceName,
-			Type:      k8s.NodenameType,
-			ID:        optional.Some(k8s.NodenameID),
-			Kind:      controller.InputWeak,
-		},
-		{
 			Namespace: network.NamespaceName,
 			Type:      network.NodeAddressType,
-			Kind:      controller.InputWeak,
-		},
-		{
-			Namespace: k8s.NamespaceName,
-			Type:      k8s.NodeStatusType,
 			Kind:      controller.InputWeak,
 		},
 		{
@@ -94,12 +82,6 @@ func (ctrl *LocalAffiliateController) Inputs() []controller.Input {
 		{
 			Namespace: cluster.NamespaceName,
 			Type:      network.AddressStatusType,
-			Kind:      controller.InputWeak,
-		},
-		{
-			Namespace: k8s.ControlPlaneNamespaceName,
-			Type:      k8s.APIServerConfigType,
-			ID:        optional.Some(k8s.APIServerConfigID),
 			Kind:      controller.InputWeak,
 		},
 	}
@@ -154,16 +136,7 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 			continue
 		}
 
-		nodename, err := safe.ReaderGetByID[*k8s.Nodename](ctx, r, k8s.NodenameID)
-		if err != nil {
-			if !state.IsNotFoundError(err) {
-				return fmt.Errorf("error getting nodename: %w", err)
-			}
-
-			continue
-		}
-
-		routedAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.FilteredNodeAddressID(network.NodeAddressRoutedID, k8s.NodeAddressFilterNoK8s))
+		routedAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.NodeAddressRoutedID)
 		if err != nil {
 			if !state.IsNotFoundError(err) {
 				return fmt.Errorf("error getting addresses: %w", err)
@@ -172,7 +145,7 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 			continue
 		}
 
-		currentAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.FilteredNodeAddressID(network.NodeAddressCurrentID, k8s.NodeAddressFilterNoK8s))
+		currentAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.NodeAddressCurrentID)
 		if err != nil {
 			if !state.IsNotFoundError(err) {
 				return fmt.Errorf("error getting addresses: %w", err)
@@ -201,20 +174,9 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 			return fmt.Errorf("error getting kubespan config: %w", err)
 		}
 
-		nodeStatus, err := safe.ReaderGetByID[*k8s.NodeStatus](ctx, r, nodename.TypedSpec().Nodename)
-		if err != nil && !state.IsNotFoundError(err) {
-			return fmt.Errorf("error getting node status: %w", err)
-		}
-
 		discoveredPublicIPs, err := safe.ReaderList[*network.AddressStatus](ctx, r, resource.NewMetadata(cluster.NamespaceName, network.AddressStatusType, "", resource.VersionUndefined))
 		if err != nil {
 			return fmt.Errorf("error getting discovered public IP: %w", err)
-		}
-
-		// optional resources (kubernetes)
-		apiServerConfig, err := safe.ReaderGetByID[*k8s.APIServerConfig](ctx, r, k8s.APIServerConfigID)
-		if err != nil && !state.IsNotFoundError(err) {
-			return fmt.Errorf("error getting API server config: %w", err)
 		}
 
 		localID := identity.TypedSpec().NodeID
@@ -227,17 +189,15 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 
 				spec.NodeID = localID
 				spec.Hostname = hostname.TypedSpec().FQDN()
-				spec.Nodename = nodename.TypedSpec().Nodename
+				// In Chubo, there is no Kubernetes nodename resource. Use the machine FQDN
+				// as the stable cluster node identifier.
+				spec.Nodename = hostname.TypedSpec().FQDN()
 				spec.MachineType = machineType.MachineType()
 				spec.OperatingSystem = fmt.Sprintf("%s (%s)", version.Name, version.Tag)
 
-				if machineType.MachineType().IsControlPlane() && apiServerConfig != nil {
-					spec.ControlPlane = &cluster.ControlPlane{
-						APIServerPort: apiServerConfig.TypedSpec().LocalPort,
-					}
-				} else {
-					spec.ControlPlane = nil
-				}
+				// Control plane metadata is Kubernetes-specific (API server port), so it is not
+				// populated in Chubo.
+				spec.ControlPlane = nil
 
 				routedNodeIPs := routedAddresses.TypedSpec().IPs()
 				currentNodeIPs := currentAddresses.TypedSpec().IPs()
@@ -250,11 +210,9 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 					spec.KubeSpan.Address = kubespanIdentity.TypedSpec().Address.Addr()
 					spec.KubeSpan.PublicKey = kubespanIdentity.TypedSpec().PublicKey
 
-					if kubespanConfig.TypedSpec().AdvertiseKubernetesNetworks && nodeStatus != nil {
-						spec.KubeSpan.AdditionalAddresses = slices.Clone(nodeStatus.TypedSpec().PodCIDRs)
-					} else {
-						spec.KubeSpan.AdditionalAddresses = nil
-					}
+					// AdditionalAddresses used to carry Kubernetes pod/service CIDRs. Chubo has no
+					// Kubernetes network model, so it remains empty.
+					spec.KubeSpan.AdditionalAddresses = nil
 
 					endpointIPs := xslices.Filter(currentNodeIPs, func(ip netip.Addr) bool {
 						if ip == spec.KubeSpan.Address {
