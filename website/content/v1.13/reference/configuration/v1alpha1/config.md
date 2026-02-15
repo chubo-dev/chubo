@@ -558,7 +558,7 @@ diskSelector:
     # busPath: /pci0000:00/0000:00:17.0/ata1/host0/target0:0:0/0:0:0:0
     # busPath: /pci0000:00/*
 {{< /highlight >}}</details> | |
-|`image` |string |Allows for supplying the image used to perform the installation.<br>Image reference for each Talos release can be found on<br>[GitHub releases page](https://github.com/siderolabs/talos/releases). <details><summary>Show example(s)</summary>{{< highlight yaml >}}
+|`image` |string |Allows for supplying the image used to perform the installation.<br>Image reference for each Talos release can be found on<br>[GitHub releases page](https://github.com/chubo-dev/chubo/releases). <details><summary>Show example(s)</summary>{{< highlight yaml >}}
 image: ghcr.io/siderolabs/installer:latest
 {{< /highlight >}}</details> | |
 |`wipe` |bool |Indicates if the installation disk should be wiped at installation time.<br>Defaults to `true`.  |`true`<br />`yes`<br />`false`<br />`no`<br /> |
@@ -1863,7 +1863,7 @@ DiscoveryRegistriesConfig struct configures cluster membership discovery.
 
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
-|`kubernetes` |<a href="#Config.cluster.discovery.registries.kubernetes">RegistryKubernetesConfig</a> |Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information<br>as annotations on the Node resources.<br><br>This feature is deprecated as it is not compatible with Kubernetes 1.32+.<br>See https://github.com/siderolabs/talos/issues/9980 for more information.  | |
+|`kubernetes` |<a href="#Config.cluster.discovery.registries.kubernetes">RegistryKubernetesConfig</a> |Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information<br>as annotations on the Node resources.<br><br>This feature is deprecated as it is not compatible with Kubernetes 1.32+.<br>See https://github.com/chubo-dev/chubo/issues/9980 for more information.  | |
 |`service` |<a href="#Config.cluster.discovery.registries.service">RegistryServiceConfig</a> |Service registry is using an external service to push and pull information about cluster members.  | |
 
 

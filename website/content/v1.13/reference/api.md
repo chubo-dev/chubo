@@ -282,7 +282,6 @@ description: Talos gRPC API reference.
     - [BlockVolumeType](#talos.resource.definitions.enums.BlockVolumeType)
     - [CriImageCacheCopyStatus](#talos.resource.definitions.enums.CriImageCacheCopyStatus)
     - [CriImageCacheStatus](#talos.resource.definitions.enums.CriImageCacheStatus)
-    - [KubespanPeerState](#talos.resource.definitions.enums.KubespanPeerState)
     - [MachineType](#talos.resource.definitions.enums.MachineType)
     - [NethelpersADLACPActive](#talos.resource.definitions.enums.NethelpersADLACPActive)
     - [NethelpersADSelect](#talos.resource.definitions.enums.NethelpersADSelect)
@@ -351,13 +350,21 @@ description: Talos gRPC API reference.
     - [VolumeStatusSpec](#talos.resource.definitions.block.VolumeStatusSpec)
     - [ZswapStatusSpec](#talos.resource.definitions.block.ZswapStatusSpec)
   
+- [resource/definitions/chubo/chubo.proto](#resource/definitions/chubo/chubo.proto)
+    - [BootstrapStatusSpec](#talos.resource.definitions.chubo.BootstrapStatusSpec)
+    - [OpenBaoJobStatusSpec](#talos.resource.definitions.chubo.OpenBaoJobStatusSpec)
+    - [OpenGyozaBootstrapStatusSpec](#talos.resource.definitions.chubo.OpenGyozaBootstrapStatusSpec)
+    - [OpenGyozaStatusSpec](#talos.resource.definitions.chubo.OpenGyozaStatusSpec)
+    - [OpenWontonBootstrapStatusSpec](#talos.resource.definitions.chubo.OpenWontonBootstrapStatusSpec)
+    - [OpenWontonStatusSpec](#talos.resource.definitions.chubo.OpenWontonStatusSpec)
+  
 - [resource/definitions/cluster/cluster.proto](#resource/definitions/cluster/cluster.proto)
     - [AffiliateSpec](#talos.resource.definitions.cluster.AffiliateSpec)
     - [ConfigSpec](#talos.resource.definitions.cluster.ConfigSpec)
     - [ControlPlane](#talos.resource.definitions.cluster.ControlPlane)
+    - [ControlPlaneEndpointSpec](#talos.resource.definitions.cluster.ControlPlaneEndpointSpec)
     - [IdentitySpec](#talos.resource.definitions.cluster.IdentitySpec)
     - [InfoSpec](#talos.resource.definitions.cluster.InfoSpec)
-    - [KubeSpanAffiliateSpec](#talos.resource.definitions.cluster.KubeSpanAffiliateSpec)
     - [MemberSpec](#talos.resource.definitions.cluster.MemberSpec)
   
 - [resource/definitions/cri/cri.proto](#resource/definitions/cri/cri.proto)
@@ -398,70 +405,6 @@ description: Talos gRPC API reference.
     - [PCIDriverRebindStatusSpec](#talos.resource.definitions.hardware.PCIDriverRebindStatusSpec)
     - [ProcessorSpec](#talos.resource.definitions.hardware.ProcessorSpec)
     - [SystemInformationSpec](#talos.resource.definitions.hardware.SystemInformationSpec)
-  
-- [resource/definitions/proto/proto.proto](#resource/definitions/proto/proto.proto)
-    - [LinuxIDMapping](#talos.resource.definitions.proto.LinuxIDMapping)
-    - [Mount](#talos.resource.definitions.proto.Mount)
-  
-- [resource/definitions/k8s/k8s.proto](#resource/definitions/k8s/k8s.proto)
-    - [APIServerConfigSpec](#talos.resource.definitions.k8s.APIServerConfigSpec)
-    - [APIServerConfigSpec.EnvironmentVariablesEntry](#talos.resource.definitions.k8s.APIServerConfigSpec.EnvironmentVariablesEntry)
-    - [APIServerConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.APIServerConfigSpec.ExtraArgsEntry)
-    - [AdmissionControlConfigSpec](#talos.resource.definitions.k8s.AdmissionControlConfigSpec)
-    - [AdmissionPluginSpec](#talos.resource.definitions.k8s.AdmissionPluginSpec)
-    - [ArgValues](#talos.resource.definitions.k8s.ArgValues)
-    - [AuditPolicyConfigSpec](#talos.resource.definitions.k8s.AuditPolicyConfigSpec)
-    - [AuthorizationAuthorizersSpec](#talos.resource.definitions.k8s.AuthorizationAuthorizersSpec)
-    - [AuthorizationConfigSpec](#talos.resource.definitions.k8s.AuthorizationConfigSpec)
-    - [BootstrapManifestsConfigSpec](#talos.resource.definitions.k8s.BootstrapManifestsConfigSpec)
-    - [ConfigStatusSpec](#talos.resource.definitions.k8s.ConfigStatusSpec)
-    - [ControllerManagerConfigSpec](#talos.resource.definitions.k8s.ControllerManagerConfigSpec)
-    - [ControllerManagerConfigSpec.EnvironmentVariablesEntry](#talos.resource.definitions.k8s.ControllerManagerConfigSpec.EnvironmentVariablesEntry)
-    - [ControllerManagerConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.ControllerManagerConfigSpec.ExtraArgsEntry)
-    - [EndpointSpec](#talos.resource.definitions.k8s.EndpointSpec)
-    - [ExtraManifest](#talos.resource.definitions.k8s.ExtraManifest)
-    - [ExtraManifest.ExtraHeadersEntry](#talos.resource.definitions.k8s.ExtraManifest.ExtraHeadersEntry)
-    - [ExtraManifestsConfigSpec](#talos.resource.definitions.k8s.ExtraManifestsConfigSpec)
-    - [ExtraVolume](#talos.resource.definitions.k8s.ExtraVolume)
-    - [KubePrismConfigSpec](#talos.resource.definitions.k8s.KubePrismConfigSpec)
-    - [KubePrismEndpoint](#talos.resource.definitions.k8s.KubePrismEndpoint)
-    - [KubePrismEndpointsSpec](#talos.resource.definitions.k8s.KubePrismEndpointsSpec)
-    - [KubePrismStatusesSpec](#talos.resource.definitions.k8s.KubePrismStatusesSpec)
-    - [KubeletConfigSpec](#talos.resource.definitions.k8s.KubeletConfigSpec)
-    - [KubeletConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.KubeletConfigSpec.ExtraArgsEntry)
-    - [KubeletSpecSpec](#talos.resource.definitions.k8s.KubeletSpecSpec)
-    - [ManifestSpec](#talos.resource.definitions.k8s.ManifestSpec)
-    - [ManifestStatusSpec](#talos.resource.definitions.k8s.ManifestStatusSpec)
-    - [NodeAnnotationSpecSpec](#talos.resource.definitions.k8s.NodeAnnotationSpecSpec)
-    - [NodeIPConfigSpec](#talos.resource.definitions.k8s.NodeIPConfigSpec)
-    - [NodeIPSpec](#talos.resource.definitions.k8s.NodeIPSpec)
-    - [NodeLabelSpecSpec](#talos.resource.definitions.k8s.NodeLabelSpecSpec)
-    - [NodeStatusSpec](#talos.resource.definitions.k8s.NodeStatusSpec)
-    - [NodeStatusSpec.AnnotationsEntry](#talos.resource.definitions.k8s.NodeStatusSpec.AnnotationsEntry)
-    - [NodeStatusSpec.LabelsEntry](#talos.resource.definitions.k8s.NodeStatusSpec.LabelsEntry)
-    - [NodeTaintSpecSpec](#talos.resource.definitions.k8s.NodeTaintSpecSpec)
-    - [NodenameSpec](#talos.resource.definitions.k8s.NodenameSpec)
-    - [Resources](#talos.resource.definitions.k8s.Resources)
-    - [Resources.LimitsEntry](#talos.resource.definitions.k8s.Resources.LimitsEntry)
-    - [Resources.RequestsEntry](#talos.resource.definitions.k8s.Resources.RequestsEntry)
-    - [SchedulerConfigSpec](#talos.resource.definitions.k8s.SchedulerConfigSpec)
-    - [SchedulerConfigSpec.EnvironmentVariablesEntry](#talos.resource.definitions.k8s.SchedulerConfigSpec.EnvironmentVariablesEntry)
-    - [SchedulerConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.SchedulerConfigSpec.ExtraArgsEntry)
-    - [SecretsStatusSpec](#talos.resource.definitions.k8s.SecretsStatusSpec)
-    - [SingleManifest](#talos.resource.definitions.k8s.SingleManifest)
-    - [StaticPodServerStatusSpec](#talos.resource.definitions.k8s.StaticPodServerStatusSpec)
-    - [StaticPodSpec](#talos.resource.definitions.k8s.StaticPodSpec)
-    - [StaticPodStatusSpec](#talos.resource.definitions.k8s.StaticPodStatusSpec)
-  
-- [resource/definitions/kubeaccess/kubeaccess.proto](#resource/definitions/kubeaccess/kubeaccess.proto)
-    - [ConfigSpec](#talos.resource.definitions.kubeaccess.ConfigSpec)
-  
-- [resource/definitions/kubespan/kubespan.proto](#resource/definitions/kubespan/kubespan.proto)
-    - [ConfigSpec](#talos.resource.definitions.kubespan.ConfigSpec)
-    - [EndpointSpec](#talos.resource.definitions.kubespan.EndpointSpec)
-    - [IdentitySpec](#talos.resource.definitions.kubespan.IdentitySpec)
-    - [PeerSpecSpec](#talos.resource.definitions.kubespan.PeerSpecSpec)
-    - [PeerStatusSpec](#talos.resource.definitions.kubespan.PeerStatusSpec)
   
 - [resource/definitions/runtime/runtime.proto](#resource/definitions/runtime/runtime.proto)
     - [BootedEntrySpec](#talos.resource.definitions.runtime.BootedEntrySpec)
@@ -562,16 +505,16 @@ description: Talos gRPC API reference.
     - [CPUStat](#talos.resource.definitions.perf.CPUStat)
     - [MemorySpec](#talos.resource.definitions.perf.MemorySpec)
   
+- [resource/definitions/proto/proto.proto](#resource/definitions/proto/proto.proto)
+    - [LinuxIDMapping](#talos.resource.definitions.proto.LinuxIDMapping)
+    - [Mount](#talos.resource.definitions.proto.Mount)
+  
 - [resource/definitions/secrets/secrets.proto](#resource/definitions/secrets/secrets.proto)
     - [APICertsSpec](#talos.resource.definitions.secrets.APICertsSpec)
     - [CertSANSpec](#talos.resource.definitions.secrets.CertSANSpec)
     - [EncryptionSaltSpec](#talos.resource.definitions.secrets.EncryptionSaltSpec)
     - [EtcdCertsSpec](#talos.resource.definitions.secrets.EtcdCertsSpec)
     - [EtcdRootSpec](#talos.resource.definitions.secrets.EtcdRootSpec)
-    - [KubeletSpec](#talos.resource.definitions.secrets.KubeletSpec)
-    - [KubernetesCertsSpec](#talos.resource.definitions.secrets.KubernetesCertsSpec)
-    - [KubernetesDynamicCertsSpec](#talos.resource.definitions.secrets.KubernetesDynamicCertsSpec)
-    - [KubernetesRootSpec](#talos.resource.definitions.secrets.KubernetesRootSpec)
     - [MaintenanceRootSpec](#talos.resource.definitions.secrets.MaintenanceRootSpec)
     - [MaintenanceServiceCertsSpec](#talos.resource.definitions.secrets.MaintenanceServiceCertsSpec)
     - [OSRootSpec](#talos.resource.definitions.secrets.OSRootSpec)
@@ -4669,6 +4612,9 @@ The machine service definition.
 | EtcdDowngradeCancel | [.google.protobuf.Empty](#google.protobuf.Empty) | [EtcdDowngradeCancelResponse](#machine.EtcdDowngradeCancelResponse) | EtcdDowngradeCancel cancels etcd cluster downgrade that is in progress. This method is available only on control plane nodes (which run etcd). |
 | Hostname | [.google.protobuf.Empty](#google.protobuf.Empty) | [HostnameResponse](#machine.HostnameResponse) |  |
 | Kubeconfig | [.google.protobuf.Empty](#google.protobuf.Empty) | [.common.Data](#common.Data) stream |  |
+| NomadConfig | [.google.protobuf.Empty](#google.protobuf.Empty) | [.common.Data](#common.Data) stream | NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream). |
+| ConsulConfig | [.google.protobuf.Empty](#google.protobuf.Empty) | [.common.Data](#common.Data) stream | ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream). |
+| OpenBaoConfig | [.google.protobuf.Empty](#google.protobuf.Empty) | [.common.Data](#common.Data) stream | OpenBaoConfig downloads an OpenBao/Vault CLI client configuration bundle (returned as a .tar.gz stream). |
 | List | [ListRequest](#machine.ListRequest) | [FileInfo](#machine.FileInfo) stream |  |
 | DiskUsage | [DiskUsageRequest](#machine.DiskUsageRequest) | [DiskUsageInfo](#machine.DiskUsageInfo) stream |  |
 | LoadAvg | [.google.protobuf.Empty](#google.protobuf.Empty) | [LoadAvgResponse](#machine.LoadAvgResponse) |  |
@@ -4895,19 +4841,6 @@ CriImageCacheStatus describes image cache status type.
 | IMAGE_CACHE_STATUS_DISABLED | 1 |  |
 | IMAGE_CACHE_STATUS_PREPARING | 2 |  |
 | IMAGE_CACHE_STATUS_READY | 3 |  |
-
-
-
-<a name="talos.resource.definitions.enums.KubespanPeerState"></a>
-
-### KubespanPeerState
-KubespanPeerState is KubeSpan peer current state.
-
-| Name | Number | Description |
-| ---- | ------ | ----------- |
-| PEER_STATE_UNKNOWN | 0 |  |
-| PEER_STATE_UP | 1 |  |
-| PEER_STATE_DOWN | 2 |  |
 
 
 
@@ -6403,6 +6336,161 @@ ZswapStatusSpec is the spec for ZswapStatus resource.
 
 
 
+<a name="resource/definitions/chubo/chubo.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## resource/definitions/chubo/chubo.proto
+
+
+
+<a name="talos.resource.definitions.chubo.BootstrapStatusSpec"></a>
+
+### BootstrapStatusSpec
+BootstrapStatusSpec describes bootstrap payload status.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configured | [bool](#bool) |  |  |
+| rendered | [bool](#bool) |  |  |
+| signer_sha256 | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.chubo.OpenBaoJobStatusSpec"></a>
+
+### OpenBaoJobStatusSpec
+OpenBaoJobStatusSpec describes OpenBao job status.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configured | [bool](#bool) |  |  |
+| mode | [string](#string) |  |  |
+| job_id | [string](#string) |  |  |
+| nomad_reachable | [bool](#bool) |  |  |
+| present | [bool](#bool) |  |  |
+| last_error | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.chubo.OpenGyozaBootstrapStatusSpec"></a>
+
+### OpenGyozaBootstrapStatusSpec
+OpenGyozaBootstrapStatusSpec describes opengyoza bootstrap status.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configured | [bool](#bool) |  |  |
+| role | [string](#string) |  |  |
+| bootstrap_expect | [int32](#int32) |  |  |
+| join | [string](#string) | repeated |  |
+| running | [bool](#bool) |  |  |
+| healthy | [bool](#bool) |  |  |
+| acl_ready | [bool](#bool) |  |  |
+| acl_last_error | [string](#string) |  |  |
+| leader | [string](#string) |  |  |
+| peer_count | [int32](#int32) |  |  |
+| cluster_ready | [bool](#bool) |  |  |
+| last_error | [string](#string) |  |  |
+| acl_token_sha256 | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.chubo.OpenGyozaStatusSpec"></a>
+
+### OpenGyozaStatusSpec
+OpenGyozaStatusSpec describes opengyoza status.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configured | [bool](#bool) |  |  |
+| role | [string](#string) |  |  |
+| running | [bool](#bool) |  |  |
+| healthy | [bool](#bool) |  |  |
+| binary_mode | [string](#string) |  |  |
+| leader | [string](#string) |  |  |
+| peer_count | [int32](#int32) |  |  |
+| last_error | [string](#string) |  |  |
+| acl_ready | [bool](#bool) |  |  |
+| acl_last_error | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.chubo.OpenWontonBootstrapStatusSpec"></a>
+
+### OpenWontonBootstrapStatusSpec
+OpenWontonBootstrapStatusSpec describes openwonton bootstrap status.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configured | [bool](#bool) |  |  |
+| role | [string](#string) |  |  |
+| bootstrap_expect | [int32](#int32) |  |  |
+| join | [string](#string) | repeated |  |
+| running | [bool](#bool) |  |  |
+| healthy | [bool](#bool) |  |  |
+| acl_ready | [bool](#bool) |  |  |
+| acl_last_error | [string](#string) |  |  |
+| leader | [string](#string) |  |  |
+| peer_count | [int32](#int32) |  |  |
+| cluster_ready | [bool](#bool) |  |  |
+| last_error | [string](#string) |  |  |
+| acl_token_sha256 | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.chubo.OpenWontonStatusSpec"></a>
+
+### OpenWontonStatusSpec
+OpenWontonStatusSpec describes openwonton status.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configured | [bool](#bool) |  |  |
+| role | [string](#string) |  |  |
+| running | [bool](#bool) |  |  |
+| healthy | [bool](#bool) |  |  |
+| binary_mode | [string](#string) |  |  |
+| leader | [string](#string) |  |  |
+| peer_count | [int32](#int32) |  |  |
+| last_error | [string](#string) |  |  |
+| acl_ready | [bool](#bool) |  |  |
+| acl_last_error | [string](#string) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
 <a name="resource/definitions/cluster/cluster.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -6424,7 +6512,6 @@ AffiliateSpec describes Affiliate state.
 | nodename | [string](#string) |  |  |
 | operating_system | [string](#string) |  |  |
 | machine_type | [talos.resource.definitions.enums.MachineType](#talos.resource.definitions.enums.MachineType) |  |  |
-| kube_span | [KubeSpanAffiliateSpec](#talos.resource.definitions.cluster.KubeSpanAffiliateSpec) |  |  |
 | control_plane | [ControlPlane](#talos.resource.definitions.cluster.ControlPlane) |  |  |
 
 
@@ -6435,7 +6522,7 @@ AffiliateSpec describes Affiliate state.
 <a name="talos.resource.definitions.cluster.ConfigSpec"></a>
 
 ### ConfigSpec
-ConfigSpec describes KubeSpan configuration.
+ConfigSpec describes cluster discovery configuration.
 
 
 | Field | Type | Label | Description |
@@ -6462,6 +6549,22 @@ ControlPlane describes ControlPlane data if any.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | api_server_port | [int64](#int64) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.cluster.ControlPlaneEndpointSpec"></a>
+
+### ControlPlaneEndpointSpec
+ControlPlaneEndpointSpec describes a list of endpoints to connect to.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| addresses | [common.NetIP](#common.NetIP) | repeated |  |
+| hosts | [string](#string) | repeated |  |
 
 
 
@@ -6496,24 +6599,6 @@ InfoSpec describes cluster information.
 | ----- | ---- | ----- | ----------- |
 | cluster_id | [string](#string) |  |  |
 | cluster_name | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.cluster.KubeSpanAffiliateSpec"></a>
-
-### KubeSpanAffiliateSpec
-KubeSpanAffiliateSpec describes additional information specific for the KubeSpan.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| public_key | [string](#string) |  |  |
-| address | [common.NetIP](#common.NetIP) |  |  |
-| additional_addresses | [common.NetIPPrefix](#common.NetIPPrefix) | repeated |  |
-| endpoints | [common.NetIPPort](#common.NetIPPort) | repeated |  |
 
 
 
@@ -7119,1045 +7204,6 @@ SystemInformationSpec represents the system information obtained from smbios.
 | uuid | [string](#string) |  |  |
 | wake_up_type | [string](#string) |  |  |
 | sku_number | [string](#string) |  |  |
-
-
-
-
-
- <!-- end messages -->
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
-<a name="resource/definitions/proto/proto.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## resource/definitions/proto/proto.proto
-
-
-
-<a name="talos.resource.definitions.proto.LinuxIDMapping"></a>
-
-### LinuxIDMapping
-LinuxIDMapping specifies UID/GID mappings.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| container_id | [uint32](#uint32) |  |  |
-| host_id | [uint32](#uint32) |  |  |
-| size | [uint32](#uint32) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.proto.Mount"></a>
-
-### Mount
-Mount specifies a mount for a container.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| destination | [string](#string) |  |  |
-| type | [string](#string) |  |  |
-| source | [string](#string) |  |  |
-| options | [string](#string) | repeated |  |
-| uid_mappings | [LinuxIDMapping](#talos.resource.definitions.proto.LinuxIDMapping) | repeated |  |
-| gid_mappings | [LinuxIDMapping](#talos.resource.definitions.proto.LinuxIDMapping) | repeated |  |
-
-
-
-
-
- <!-- end messages -->
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
-<a name="resource/definitions/k8s/k8s.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## resource/definitions/k8s/k8s.proto
-
-
-
-<a name="talos.resource.definitions.k8s.APIServerConfigSpec"></a>
-
-### APIServerConfigSpec
-APIServerConfigSpec is configuration for kube-apiserver.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| image | [string](#string) |  |  |
-| cloud_provider | [string](#string) |  |  |
-| control_plane_endpoint | [string](#string) |  |  |
-| etcd_servers | [string](#string) | repeated |  |
-| local_port | [int64](#int64) |  |  |
-| service_cid_rs | [string](#string) | repeated |  |
-| extra_args | [APIServerConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.APIServerConfigSpec.ExtraArgsEntry) | repeated |  |
-| extra_volumes | [ExtraVolume](#talos.resource.definitions.k8s.ExtraVolume) | repeated |  |
-| environment_variables | [APIServerConfigSpec.EnvironmentVariablesEntry](#talos.resource.definitions.k8s.APIServerConfigSpec.EnvironmentVariablesEntry) | repeated |  |
-| advertised_address | [string](#string) |  |  |
-| resources | [Resources](#talos.resource.definitions.k8s.Resources) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.APIServerConfigSpec.EnvironmentVariablesEntry"></a>
-
-### APIServerConfigSpec.EnvironmentVariablesEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.APIServerConfigSpec.ExtraArgsEntry"></a>
-
-### APIServerConfigSpec.ExtraArgsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [ArgValues](#talos.resource.definitions.k8s.ArgValues) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.AdmissionControlConfigSpec"></a>
-
-### AdmissionControlConfigSpec
-AdmissionControlConfigSpec is configuration for kube-apiserver.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [AdmissionPluginSpec](#talos.resource.definitions.k8s.AdmissionPluginSpec) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.AdmissionPluginSpec"></a>
-
-### AdmissionPluginSpec
-AdmissionPluginSpec is a single admission plugin configuration Admission Control plugins.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| configuration | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ArgValues"></a>
-
-### ArgValues
-ArgValues represents values for a command line argument which can be specified multiple times.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| values | [string](#string) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.AuditPolicyConfigSpec"></a>
-
-### AuditPolicyConfigSpec
-AuditPolicyConfigSpec is audit policy configuration for kube-apiserver.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.AuthorizationAuthorizersSpec"></a>
-
-### AuthorizationAuthorizersSpec
-AuthorizationAuthorizersSpec is a configuration of authorization authorizers.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| type | [string](#string) |  |  |
-| name | [string](#string) |  |  |
-| webhook | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.AuthorizationConfigSpec"></a>
-
-### AuthorizationConfigSpec
-AuthorizationConfigSpec is authorization configuration for kube-apiserver.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| image | [string](#string) |  |  |
-| config | [AuthorizationAuthorizersSpec](#talos.resource.definitions.k8s.AuthorizationAuthorizersSpec) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.BootstrapManifestsConfigSpec"></a>
-
-### BootstrapManifestsConfigSpec
-BootstrapManifestsConfigSpec is configuration for bootstrap manifests.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| server | [string](#string) |  |  |
-| cluster_domain | [string](#string) |  |  |
-| pod_cid_rs | [string](#string) | repeated |  |
-| proxy_enabled | [bool](#bool) |  |  |
-| proxy_image | [string](#string) |  |  |
-| proxy_args | [string](#string) | repeated |  |
-| core_dns_enabled | [bool](#bool) |  |  |
-| core_dns_image | [string](#string) |  |  |
-| dns_service_ip | [string](#string) |  |  |
-| dns_service_i_pv6 | [string](#string) |  |  |
-| flannel_enabled | [bool](#bool) |  |  |
-| flannel_image | [string](#string) |  |  |
-| pod_security_policy_enabled | [bool](#bool) |  |  |
-| talos_api_service_enabled | [bool](#bool) |  |  |
-| flannel_extra_args | [string](#string) | repeated |  |
-| flannel_kube_service_host | [string](#string) |  |  |
-| flannel_kube_service_port | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ConfigStatusSpec"></a>
-
-### ConfigStatusSpec
-ConfigStatusSpec describes status of rendered secrets.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ready | [bool](#bool) |  |  |
-| version | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ControllerManagerConfigSpec"></a>
-
-### ControllerManagerConfigSpec
-ControllerManagerConfigSpec is configuration for kube-controller-manager.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| enabled | [bool](#bool) |  |  |
-| image | [string](#string) |  |  |
-| cloud_provider | [string](#string) |  |  |
-| pod_cid_rs | [string](#string) | repeated |  |
-| service_cid_rs | [string](#string) | repeated |  |
-| extra_args | [ControllerManagerConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.ControllerManagerConfigSpec.ExtraArgsEntry) | repeated |  |
-| extra_volumes | [ExtraVolume](#talos.resource.definitions.k8s.ExtraVolume) | repeated |  |
-| environment_variables | [ControllerManagerConfigSpec.EnvironmentVariablesEntry](#talos.resource.definitions.k8s.ControllerManagerConfigSpec.EnvironmentVariablesEntry) | repeated |  |
-| resources | [Resources](#talos.resource.definitions.k8s.Resources) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ControllerManagerConfigSpec.EnvironmentVariablesEntry"></a>
-
-### ControllerManagerConfigSpec.EnvironmentVariablesEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ControllerManagerConfigSpec.ExtraArgsEntry"></a>
-
-### ControllerManagerConfigSpec.ExtraArgsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [ArgValues](#talos.resource.definitions.k8s.ArgValues) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.EndpointSpec"></a>
-
-### EndpointSpec
-EndpointSpec describes a list of endpoints to connect to.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| addresses | [common.NetIP](#common.NetIP) | repeated |  |
-| hosts | [string](#string) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ExtraManifest"></a>
-
-### ExtraManifest
-ExtraManifest defines a single extra manifest to download.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| url | [string](#string) |  |  |
-| priority | [string](#string) |  |  |
-| extra_headers | [ExtraManifest.ExtraHeadersEntry](#talos.resource.definitions.k8s.ExtraManifest.ExtraHeadersEntry) | repeated |  |
-| inline_manifest | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ExtraManifest.ExtraHeadersEntry"></a>
-
-### ExtraManifest.ExtraHeadersEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ExtraManifestsConfigSpec"></a>
-
-### ExtraManifestsConfigSpec
-ExtraManifestsConfigSpec is configuration for extra bootstrap manifests.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| extra_manifests | [ExtraManifest](#talos.resource.definitions.k8s.ExtraManifest) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ExtraVolume"></a>
-
-### ExtraVolume
-ExtraVolume is a configuration of extra volume.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| host_path | [string](#string) |  |  |
-| mount_path | [string](#string) |  |  |
-| read_only | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubePrismConfigSpec"></a>
-
-### KubePrismConfigSpec
-KubePrismConfigSpec describes KubePrismConfig data.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| host | [string](#string) |  |  |
-| port | [int64](#int64) |  |  |
-| endpoints | [KubePrismEndpoint](#talos.resource.definitions.k8s.KubePrismEndpoint) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubePrismEndpoint"></a>
-
-### KubePrismEndpoint
-KubePrismEndpoint holds data for control plane endpoint.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| host | [string](#string) |  |  |
-| port | [uint32](#uint32) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubePrismEndpointsSpec"></a>
-
-### KubePrismEndpointsSpec
-KubePrismEndpointsSpec describes KubePrismEndpoints configuration.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| endpoints | [KubePrismEndpoint](#talos.resource.definitions.k8s.KubePrismEndpoint) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubePrismStatusesSpec"></a>
-
-### KubePrismStatusesSpec
-KubePrismStatusesSpec describes KubePrismStatuses data.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| host | [string](#string) |  |  |
-| healthy | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubeletConfigSpec"></a>
-
-### KubeletConfigSpec
-KubeletConfigSpec holds the source of kubelet configuration.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| image | [string](#string) |  |  |
-| cluster_dns | [string](#string) | repeated |  |
-| cluster_domain | [string](#string) |  |  |
-| extra_args | [KubeletConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.KubeletConfigSpec.ExtraArgsEntry) | repeated |  |
-| extra_mounts | [talos.resource.definitions.proto.Mount](#talos.resource.definitions.proto.Mount) | repeated |  |
-| extra_config | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-| cloud_provider_external | [bool](#bool) |  |  |
-| default_runtime_seccomp_enabled | [bool](#bool) |  |  |
-| skip_node_registration | [bool](#bool) |  |  |
-| static_pod_list_url | [string](#string) |  |  |
-| disable_manifests_directory | [bool](#bool) |  |  |
-| enable_fs_quota_monitoring | [bool](#bool) |  |  |
-| credential_provider_config | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-| allow_scheduling_on_control_plane | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubeletConfigSpec.ExtraArgsEntry"></a>
-
-### KubeletConfigSpec.ExtraArgsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [ArgValues](#talos.resource.definitions.k8s.ArgValues) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.KubeletSpecSpec"></a>
-
-### KubeletSpecSpec
-KubeletSpecSpec holds the source of kubelet configuration.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| image | [string](#string) |  |  |
-| args | [string](#string) | repeated |  |
-| extra_mounts | [talos.resource.definitions.proto.Mount](#talos.resource.definitions.proto.Mount) | repeated |  |
-| expected_nodename | [string](#string) |  |  |
-| config | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-| credential_provider_config | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ManifestSpec"></a>
-
-### ManifestSpec
-ManifestSpec holds the Kubernetes resources spec.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| items | [SingleManifest](#talos.resource.definitions.k8s.SingleManifest) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.ManifestStatusSpec"></a>
-
-### ManifestStatusSpec
-ManifestStatusSpec describes manifest application status.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| manifests_applied | [string](#string) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeAnnotationSpecSpec"></a>
-
-### NodeAnnotationSpecSpec
-NodeAnnotationSpecSpec represents an annoation that's attached to a Talos node.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeIPConfigSpec"></a>
-
-### NodeIPConfigSpec
-NodeIPConfigSpec holds the Node IP specification.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| valid_subnets | [string](#string) | repeated |  |
-| exclude_subnets | [string](#string) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeIPSpec"></a>
-
-### NodeIPSpec
-NodeIPSpec holds the Node IP specification.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| addresses | [common.NetIP](#common.NetIP) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeLabelSpecSpec"></a>
-
-### NodeLabelSpecSpec
-NodeLabelSpecSpec represents a label that's attached to a Talos node.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeStatusSpec"></a>
-
-### NodeStatusSpec
-NodeStatusSpec describes Kubernetes NodeStatus.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| nodename | [string](#string) |  |  |
-| node_ready | [bool](#bool) |  |  |
-| unschedulable | [bool](#bool) |  |  |
-| labels | [NodeStatusSpec.LabelsEntry](#talos.resource.definitions.k8s.NodeStatusSpec.LabelsEntry) | repeated |  |
-| annotations | [NodeStatusSpec.AnnotationsEntry](#talos.resource.definitions.k8s.NodeStatusSpec.AnnotationsEntry) | repeated |  |
-| pod_cid_rs | [common.NetIPPrefix](#common.NetIPPrefix) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeStatusSpec.AnnotationsEntry"></a>
-
-### NodeStatusSpec.AnnotationsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeStatusSpec.LabelsEntry"></a>
-
-### NodeStatusSpec.LabelsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodeTaintSpecSpec"></a>
-
-### NodeTaintSpecSpec
-NodeTaintSpecSpec represents a label that's attached to a Talos node.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| effect | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.NodenameSpec"></a>
-
-### NodenameSpec
-NodenameSpec describes Kubernetes nodename.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| nodename | [string](#string) |  |  |
-| hostname_version | [string](#string) |  |  |
-| skip_node_registration | [bool](#bool) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.Resources"></a>
-
-### Resources
-Resources is a configuration of cpu and memory resources.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| requests | [Resources.RequestsEntry](#talos.resource.definitions.k8s.Resources.RequestsEntry) | repeated |  |
-| limits | [Resources.LimitsEntry](#talos.resource.definitions.k8s.Resources.LimitsEntry) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.Resources.LimitsEntry"></a>
-
-### Resources.LimitsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.Resources.RequestsEntry"></a>
-
-### Resources.RequestsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.SchedulerConfigSpec"></a>
-
-### SchedulerConfigSpec
-SchedulerConfigSpec is configuration for kube-scheduler.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| enabled | [bool](#bool) |  |  |
-| image | [string](#string) |  |  |
-| extra_args | [SchedulerConfigSpec.ExtraArgsEntry](#talos.resource.definitions.k8s.SchedulerConfigSpec.ExtraArgsEntry) | repeated |  |
-| extra_volumes | [ExtraVolume](#talos.resource.definitions.k8s.ExtraVolume) | repeated |  |
-| environment_variables | [SchedulerConfigSpec.EnvironmentVariablesEntry](#talos.resource.definitions.k8s.SchedulerConfigSpec.EnvironmentVariablesEntry) | repeated |  |
-| resources | [Resources](#talos.resource.definitions.k8s.Resources) |  |  |
-| config | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.SchedulerConfigSpec.EnvironmentVariablesEntry"></a>
-
-### SchedulerConfigSpec.EnvironmentVariablesEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.SchedulerConfigSpec.ExtraArgsEntry"></a>
-
-### SchedulerConfigSpec.ExtraArgsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [ArgValues](#talos.resource.definitions.k8s.ArgValues) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.SecretsStatusSpec"></a>
-
-### SecretsStatusSpec
-SecretsStatusSpec describes status of rendered secrets.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ready | [bool](#bool) |  |  |
-| version | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.SingleManifest"></a>
-
-### SingleManifest
-SingleManifest is a single manifest.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| object | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.StaticPodServerStatusSpec"></a>
-
-### StaticPodServerStatusSpec
-StaticPodServerStatusSpec describes static pod spec, it contains marshaled *v1.Pod spec.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| url | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.StaticPodSpec"></a>
-
-### StaticPodSpec
-StaticPodSpec describes static pod spec, it contains marshaled *v1.Pod spec.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| pod | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.k8s.StaticPodStatusSpec"></a>
-
-### StaticPodStatusSpec
-StaticPodStatusSpec describes kubelet static pod status.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| pod_status | [google.protobuf.Struct](#google.protobuf.Struct) |  |  |
-
-
-
-
-
- <!-- end messages -->
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
-<a name="resource/definitions/kubeaccess/kubeaccess.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## resource/definitions/kubeaccess/kubeaccess.proto
-
-
-
-<a name="talos.resource.definitions.kubeaccess.ConfigSpec"></a>
-
-### ConfigSpec
-ConfigSpec describes KubeSpan configuration..
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| enabled | [bool](#bool) |  |  |
-| allowed_api_roles | [string](#string) | repeated |  |
-| allowed_kubernetes_namespaces | [string](#string) | repeated |  |
-
-
-
-
-
- <!-- end messages -->
-
- <!-- end enums -->
-
- <!-- end HasExtensions -->
-
- <!-- end services -->
-
-
-
-<a name="resource/definitions/kubespan/kubespan.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## resource/definitions/kubespan/kubespan.proto
-
-
-
-<a name="talos.resource.definitions.kubespan.ConfigSpec"></a>
-
-### ConfigSpec
-ConfigSpec describes KubeSpan configuration..
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| enabled | [bool](#bool) |  |  |
-| cluster_id | [string](#string) |  |  |
-| shared_secret | [string](#string) |  |  |
-| force_routing | [bool](#bool) |  |  |
-| advertise_kubernetes_networks | [bool](#bool) |  |  |
-| mtu | [uint32](#uint32) |  |  |
-| endpoint_filters | [string](#string) | repeated |  |
-| harvest_extra_endpoints | [bool](#bool) |  |  |
-| extra_endpoints | [common.NetIPPort](#common.NetIPPort) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.kubespan.EndpointSpec"></a>
-
-### EndpointSpec
-EndpointSpec describes Endpoint state.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| affiliate_id | [string](#string) |  |  |
-| endpoint | [common.NetIPPort](#common.NetIPPort) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.kubespan.IdentitySpec"></a>
-
-### IdentitySpec
-IdentitySpec describes KubeSpan keys and address.
-
-Note: IdentitySpec is persisted on disk in the STATE partition,
-so YAML serialization should be kept backwards compatible.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| address | [common.NetIPPrefix](#common.NetIPPrefix) |  |  |
-| subnet | [common.NetIPPrefix](#common.NetIPPrefix) |  |  |
-| private_key | [string](#string) |  |  |
-| public_key | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.kubespan.PeerSpecSpec"></a>
-
-### PeerSpecSpec
-PeerSpecSpec describes PeerSpec state.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| address | [common.NetIP](#common.NetIP) |  |  |
-| allowed_ips | [common.NetIPPrefix](#common.NetIPPrefix) | repeated |  |
-| endpoints | [common.NetIPPort](#common.NetIPPort) | repeated |  |
-| label | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.kubespan.PeerStatusSpec"></a>
-
-### PeerStatusSpec
-PeerStatusSpec describes PeerStatus state.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| endpoint | [common.NetIPPort](#common.NetIPPort) |  |  |
-| label | [string](#string) |  |  |
-| state | [talos.resource.definitions.enums.KubespanPeerState](#talos.resource.definitions.enums.KubespanPeerState) |  |  |
-| receive_bytes | [int64](#int64) |  |  |
-| transmit_bytes | [int64](#int64) |  |  |
-| last_handshake_time | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
-| last_used_endpoint | [common.NetIPPort](#common.NetIPPort) |  |  |
-| last_endpoint_change | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
 
 
 
@@ -9985,6 +9031,59 @@ MemorySpec represents the last Memory stats snapshot.
 
 
 
+<a name="resource/definitions/proto/proto.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## resource/definitions/proto/proto.proto
+
+
+
+<a name="talos.resource.definitions.proto.LinuxIDMapping"></a>
+
+### LinuxIDMapping
+LinuxIDMapping specifies UID/GID mappings.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| container_id | [uint32](#uint32) |  |  |
+| host_id | [uint32](#uint32) |  |  |
+| size | [uint32](#uint32) |  |  |
+
+
+
+
+
+
+<a name="talos.resource.definitions.proto.Mount"></a>
+
+### Mount
+Mount specifies a mount for a container.
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| destination | [string](#string) |  |  |
+| type | [string](#string) |  |  |
+| source | [string](#string) |  |  |
+| options | [string](#string) | repeated |  |
+| uid_mappings | [LinuxIDMapping](#talos.resource.definitions.proto.LinuxIDMapping) | repeated |  |
+| gid_mappings | [LinuxIDMapping](#talos.resource.definitions.proto.LinuxIDMapping) | repeated |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
 <a name="resource/definitions/secrets/secrets.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -10068,87 +9167,6 @@ EtcdRootSpec describes etcd CA secrets.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | etcd_ca | [common.PEMEncodedCertificateAndKey](#common.PEMEncodedCertificateAndKey) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.secrets.KubeletSpec"></a>
-
-### KubeletSpec
-KubeletSpec describes root Kubernetes secrets.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| endpoint | [common.URL](#common.URL) |  |  |
-| bootstrap_token_id | [string](#string) |  |  |
-| bootstrap_token_secret | [string](#string) |  |  |
-| accepted_c_as | [common.PEMEncodedCertificate](#common.PEMEncodedCertificate) | repeated |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.secrets.KubernetesCertsSpec"></a>
-
-### KubernetesCertsSpec
-KubernetesCertsSpec describes generated Kubernetes certificates.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| scheduler_kubeconfig | [string](#string) |  |  |
-| controller_manager_kubeconfig | [string](#string) |  |  |
-| localhost_admin_kubeconfig | [string](#string) |  |  |
-| admin_kubeconfig | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.secrets.KubernetesDynamicCertsSpec"></a>
-
-### KubernetesDynamicCertsSpec
-KubernetesDynamicCertsSpec describes generated KubernetesCerts certificates.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| api_server | [common.PEMEncodedCertificateAndKey](#common.PEMEncodedCertificateAndKey) |  |  |
-| api_server_kubelet_client | [common.PEMEncodedCertificateAndKey](#common.PEMEncodedCertificateAndKey) |  |  |
-| front_proxy | [common.PEMEncodedCertificateAndKey](#common.PEMEncodedCertificateAndKey) |  |  |
-
-
-
-
-
-
-<a name="talos.resource.definitions.secrets.KubernetesRootSpec"></a>
-
-### KubernetesRootSpec
-KubernetesRootSpec describes root Kubernetes secrets.
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| endpoint | [common.URL](#common.URL) |  |  |
-| local_endpoint | [common.URL](#common.URL) |  |  |
-| cert_sa_ns | [string](#string) | repeated |  |
-| dns_domain | [string](#string) |  |  |
-| issuing_ca | [common.PEMEncodedCertificateAndKey](#common.PEMEncodedCertificateAndKey) |  |  |
-| service_account | [common.PEMEncodedKey](#common.PEMEncodedKey) |  |  |
-| aggregator_ca | [common.PEMEncodedCertificateAndKey](#common.PEMEncodedCertificateAndKey) |  |  |
-| aescbc_encryption_secret | [string](#string) |  |  |
-| bootstrap_token_id | [string](#string) |  |  |
-| bootstrap_token_secret | [string](#string) |  |  |
-| secretbox_encryption_secret | [string](#string) |  |  |
-| api_server_ips | [common.NetIP](#common.NetIP) | repeated |  |
-| accepted_c_as | [common.PEMEncodedCertificate](#common.PEMEncodedCertificate) | repeated |  |
 
 
 

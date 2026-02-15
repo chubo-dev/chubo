@@ -776,6 +776,453 @@
       ],
       "description": "ZswapConfig is a zswap (compressed memory) configuration document.\\nWhen zswap is enabled, Linux kernel compresses pages that would otherwise be swapped out to disk.\\nThe compressed pages are stored in a memory pool, which is used to avoid writing to disk\\nwhen the system is under memory pressure.\\n"
     },
+    "chubo.BootstrapSpec": {
+      "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.CASpec": {
+      "properties": {
+        "crt": {
+          "type": "string",
+          "title": "crt",
+          "description": "Crt is a PEM-encoded CA certificate.\n",
+          "markdownDescription": "Crt is a PEM-encoded CA certificate.",
+          "x-intellij-html-description": "\u003cp\u003eCrt is a PEM-encoded CA certificate.\u003c/p\u003e\n"
+        },
+        "key": {
+          "type": "string",
+          "title": "key",
+          "description": "Key is a PEM-encoded CA private key.\n",
+          "markdownDescription": "Key is a PEM-encoded CA private key.",
+          "x-intellij-html-description": "\u003cp\u003eKey is a PEM-encoded CA private key.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.ChuboBootstrapSpec": {
+      "properties": {
+        "mode": {
+          "type": "string",
+          "title": "mode",
+          "markdownDescription": "",
+          "x-intellij-html-description": ""
+        },
+        "signerCert": {
+          "type": "string",
+          "title": "signerCert",
+          "description": "SignerCert is the PEM-encoded signer certificate used to verify bootstrap payloads.\n",
+          "markdownDescription": "SignerCert is the PEM-encoded signer certificate used to verify bootstrap payloads.",
+          "x-intellij-html-description": "\u003cp\u003eSignerCert is the PEM-encoded signer certificate used to verify bootstrap payloads.\u003c/p\u003e\n"
+        },
+        "payload": {
+          "type": "string",
+          "title": "payload",
+          "description": "Payload is the bootstrap payload (format depends on Mode).\n",
+          "markdownDescription": "Payload is the bootstrap payload (format depends on Mode).",
+          "x-intellij-html-description": "\u003cp\u003ePayload is the bootstrap payload (format depends on Mode).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.ChuboModuleSpec": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "enabled",
+          "description": "Enabled turns the module on/off.\n",
+          "markdownDescription": "Enabled turns the module on/off.",
+          "x-intellij-html-description": "\u003cp\u003eEnabled turns the module on/off.\u003c/p\u003e\n"
+        },
+        "bootstrap": {
+          "$ref": "#/$defs/chubo.ChuboBootstrapSpec",
+          "title": "bootstrap",
+          "description": "Bootstrap configures trust/bootstrap payload ingestion.\n",
+          "markdownDescription": "Bootstrap configures trust/bootstrap payload ingestion.",
+          "x-intellij-html-description": "\u003cp\u003eBootstrap configures trust/bootstrap payload ingestion.\u003c/p\u003e\n"
+        },
+        "nomad": {
+          "$ref": "#/$defs/chubo.ChuboRoleSpec",
+          "title": "nomad",
+          "description": "Nomad configures the openwonton role and settings.\n",
+          "markdownDescription": "Nomad configures the openwonton role and settings.",
+          "x-intellij-html-description": "\u003cp\u003eNomad configures the openwonton role and settings.\u003c/p\u003e\n"
+        },
+        "consul": {
+          "$ref": "#/$defs/chubo.ChuboRoleSpec",
+          "title": "consul",
+          "description": "Consul configures the opengyoza role and settings.\n",
+          "markdownDescription": "Consul configures the opengyoza role and settings.",
+          "x-intellij-html-description": "\u003cp\u003eConsul configures the opengyoza role and settings.\u003c/p\u003e\n"
+        },
+        "openbao": {
+          "$ref": "#/$defs/chubo.ChuboOpenBaoSpec",
+          "title": "openbao",
+          "description": "OpenBao configures OpenBao integration (currently via Nomad job).\n",
+          "markdownDescription": "OpenBao configures OpenBao integration (currently via Nomad job).",
+          "x-intellij-html-description": "\u003cp\u003eOpenBao configures OpenBao integration (currently via Nomad job).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.ChuboOpenBaoSpec": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "enabled",
+          "description": "Enabled turns OpenBao integration on/off.\n",
+          "markdownDescription": "Enabled turns OpenBao integration on/off.",
+          "x-intellij-html-description": "\u003cp\u003eEnabled turns OpenBao integration on/off.\u003c/p\u003e\n"
+        },
+        "mode": {
+          "type": "string",
+          "title": "mode",
+          "description": "Mode selects the integration mode (nomadJob).\n",
+          "markdownDescription": "Mode selects the integration mode (nomadJob).",
+          "x-intellij-html-description": "\u003cp\u003eMode selects the integration mode (nomadJob).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.ChuboRoleSpec": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "enabled",
+          "description": "Enabled turns the role on/off.\n",
+          "markdownDescription": "Enabled turns the role on/off.",
+          "x-intellij-html-description": "\u003cp\u003eEnabled turns the role on/off.\u003c/p\u003e\n"
+        },
+        "role": {
+          "type": "string",
+          "title": "role",
+          "description": "Role selects the role (server|client).\n",
+          "markdownDescription": "Role selects the role (server|client).",
+          "x-intellij-html-description": "\u003cp\u003eRole selects the role (server|client).\u003c/p\u003e\n"
+        },
+        "artifactURL": {
+          "type": "string",
+          "title": "artifactURL",
+          "description": "ArtifactURL overrides the default release artifact URL used to install the component binary.\n\nThis is primarily intended for airgapped/internal mirrors and for development when upstream\nrelease assets are not publicly accessible.\n",
+          "markdownDescription": "ArtifactURL overrides the default release artifact URL used to install the component binary.\n\nThis is primarily intended for airgapped/internal mirrors and for development when upstream\nrelease assets are not publicly accessible.",
+          "x-intellij-html-description": "\u003cp\u003eArtifactURL overrides the default release artifact URL used to install the component binary.\u003c/p\u003e\n\n\u003cp\u003eThis is primarily intended for airgapped/internal mirrors and for development when upstream\nrelease assets are not publicly accessible.\u003c/p\u003e\n"
+        },
+        "bootstrapExpect": {
+          "type": "integer",
+          "title": "bootstrapExpect",
+          "description": "BootstrapExpect controls the expected number of peers for quorum/bootstrap.\nWhen unset, server roles default to 1 and client roles default to 0.\n",
+          "markdownDescription": "BootstrapExpect controls the expected number of peers for quorum/bootstrap.\nWhen unset, server roles default to 1 and client roles default to 0.",
+          "x-intellij-html-description": "\u003cp\u003eBootstrapExpect controls the expected number of peers for quorum/bootstrap.\nWhen unset, server roles default to 1 and client roles default to 0.\u003c/p\u003e\n"
+        },
+        "join": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "join",
+          "description": "Join is the ordered list of peer addresses (IP/host) to join/retry-join.\n",
+          "markdownDescription": "Join is the ordered list of peer addresses (IP/host) to join/retry-join.",
+          "x-intellij-html-description": "\u003cp\u003eJoin is the ordered list of peer addresses (IP/host) to join/retry-join.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.InstallSpec": {
+      "properties": {
+        "disk": {
+          "type": "string",
+          "title": "disk",
+          "markdownDescription": "",
+          "x-intellij-html-description": ""
+        },
+        "wipe": {
+          "type": "boolean",
+          "title": "wipe",
+          "description": "Wipe controls whether to wipe the target disk before installing.\n",
+          "markdownDescription": "Wipe controls whether to wipe the target disk before installing.",
+          "x-intellij-html-description": "\u003cp\u003eWipe controls whether to wipe the target disk before installing.\u003c/p\u003e\n"
+        },
+        "image": {
+          "type": "string",
+          "title": "image",
+          "description": "Image is the installer image reference (OCI ref) used during install.\n",
+          "markdownDescription": "Image is the installer image reference (OCI ref) used during install.",
+          "x-intellij-html-description": "\u003cp\u003eImage is the installer image reference (OCI ref) used during install.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.LoggingSpec": {
+      "properties": {
+        "consoleLevel": {
+          "type": "string",
+          "title": "consoleLevel",
+          "description": "ConsoleLevel configures console log level (placeholder; not yet wired to runtime knobs).\n",
+          "markdownDescription": "ConsoleLevel configures console log level (placeholder; not yet wired to runtime knobs).",
+          "x-intellij-html-description": "\u003cp\u003eConsoleLevel configures console log level (placeholder; not yet wired to runtime knobs).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.MachineConfigMetadata": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "id",
+          "description": "Optional stable node ID.\n",
+          "markdownDescription": "Optional stable node ID.",
+          "x-intellij-html-description": "\u003cp\u003eOptional stable node ID.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.MachineConfigSpec": {
+      "properties": {
+        "install": {
+          "$ref": "#/$defs/chubo.InstallSpec",
+          "title": "install",
+          "description": "Install configures on-disk installation behavior.\n",
+          "markdownDescription": "Install configures on-disk installation behavior.",
+          "x-intellij-html-description": "\u003cp\u003eInstall configures on-disk installation behavior.\u003c/p\u003e\n"
+        },
+        "network": {
+          "$ref": "#/$defs/chubo.NetworkSpec",
+          "title": "network",
+          "description": "Network configures basic host networking.\n",
+          "markdownDescription": "Network configures basic host networking.",
+          "x-intellij-html-description": "\u003cp\u003eNetwork configures basic host networking.\u003c/p\u003e\n"
+        },
+        "time": {
+          "$ref": "#/$defs/chubo.TimeSpec",
+          "title": "time",
+          "description": "Time configures time synchronization settings.\n",
+          "markdownDescription": "Time configures time synchronization settings.",
+          "x-intellij-html-description": "\u003cp\u003eTime configures time synchronization settings.\u003c/p\u003e\n"
+        },
+        "logging": {
+          "$ref": "#/$defs/chubo.LoggingSpec",
+          "title": "logging",
+          "description": "Logging configures OS logging behavior.\n",
+          "markdownDescription": "Logging configures OS logging behavior.",
+          "x-intellij-html-description": "\u003cp\u003eLogging configures OS logging behavior.\u003c/p\u003e\n"
+        },
+        "trust": {
+          "$ref": "#/$defs/chubo.TrustSpec",
+          "title": "trust",
+          "description": "Trust configures OS trust primitives and API access requirements.\n",
+          "markdownDescription": "Trust configures OS trust primitives and API access requirements.",
+          "x-intellij-html-description": "\u003cp\u003eTrust configures OS trust primitives and API access requirements.\u003c/p\u003e\n"
+        },
+        "registry": {
+          "$ref": "#/$defs/chubo.RegistrySpec",
+          "title": "registry",
+          "description": "Registry configures container image registry settings.\n",
+          "markdownDescription": "Registry configures container image registry settings.",
+          "x-intellij-html-description": "\u003cp\u003eRegistry configures container image registry settings.\u003c/p\u003e\n"
+        },
+        "modules": {
+          "$ref": "#/$defs/chubo.ModulesSpec",
+          "title": "modules",
+          "description": "Modules configures optional OS-managed modules.\n",
+          "markdownDescription": "Modules configures optional OS-managed modules.",
+          "x-intellij-html-description": "\u003cp\u003eModules configures optional OS-managed modules.\u003c/p\u003e\n"
+        },
+        "bootstrap": {
+          "$ref": "#/$defs/chubo.BootstrapSpec",
+          "title": "bootstrap",
+          "description": "Bootstrap configures bootstrap behavior (payload ingestion, signer pinning).\n",
+          "markdownDescription": "Bootstrap configures bootstrap behavior (payload ingestion, signer pinning).",
+          "x-intellij-html-description": "\u003cp\u003eBootstrap configures bootstrap behavior (payload ingestion, signer pinning).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.MachineConfigV1Alpha1": {
+      "properties": {
+        "apiVersion": {
+          "enum": [
+            "chubo.dev/v1alpha1"
+          ],
+          "title": "apiVersion",
+          "description": "apiVersion is the API version of the resource.\n",
+          "markdownDescription": "apiVersion is the API version of the resource.",
+          "x-intellij-html-description": "\u003cp\u003eapiVersion is the API version of the resource.\u003c/p\u003e\n"
+        },
+        "kind": {
+          "enum": [
+            "MachineConfig"
+          ],
+          "title": "kind",
+          "description": "kind is the kind of the resource.\n",
+          "markdownDescription": "kind is the kind of the resource.",
+          "x-intellij-html-description": "\u003cp\u003ekind is the kind of the resource.\u003c/p\u003e\n"
+        },
+        "metadata": {
+          "$ref": "#/$defs/chubo.MachineConfigMetadata",
+          "title": "metadata",
+          "description": "Metadata contains stable identity information for the node.\n",
+          "markdownDescription": "Metadata contains stable identity information for the node.",
+          "x-intellij-html-description": "\u003cp\u003eMetadata contains stable identity information for the node.\u003c/p\u003e\n"
+        },
+        "spec": {
+          "$ref": "#/$defs/chubo.MachineConfigSpec",
+          "title": "spec",
+          "description": "Spec holds the desired machine configuration.\n",
+          "markdownDescription": "Spec holds the desired machine configuration.",
+          "x-intellij-html-description": "\u003cp\u003eSpec holds the desired machine configuration.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind"
+      ],
+      "description": "MachineConfigV1Alpha1 is the minimal, non-Kubernetes config document for the `chubo` fork."
+    },
+    "chubo.ModulesSpec": {
+      "properties": {
+        "chubo": {
+          "$ref": "#/$defs/chubo.ChuboModuleSpec",
+          "title": "chubo",
+          "description": "Chubo configures the Chubo module (openwonton/opengyoza/openbao bootstrap).\n",
+          "markdownDescription": "Chubo configures the Chubo module (openwonton/opengyoza/openbao bootstrap).",
+          "x-intellij-html-description": "\u003cp\u003eChubo configures the Chubo module (openwonton/opengyoza/openbao bootstrap).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.NetworkSpec": {
+      "properties": {
+        "dhcp": {
+          "type": "boolean",
+          "title": "dhcp",
+          "description": "DHCP defaults to true when unspecified.\n",
+          "markdownDescription": "DHCP defaults to true when unspecified.",
+          "x-intellij-html-description": "\u003cp\u003eDHCP defaults to true when unspecified.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.RegistryMirrorSpec": {
+      "properties": {
+        "endpoints": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "endpoints",
+          "description": "Endpoints is the ordered list of mirror endpoints (URLs).\n",
+          "markdownDescription": "Endpoints is the ordered list of mirror endpoints (URLs).",
+          "x-intellij-html-description": "\u003cp\u003eEndpoints is the ordered list of mirror endpoints (URLs).\u003c/p\u003e\n"
+        },
+        "overridePath": {
+          "type": "boolean",
+          "title": "overridePath",
+          "description": "OverridePath controls whether to override the default image path when using mirrors.\n",
+          "markdownDescription": "OverridePath controls whether to override the default image path when using mirrors.",
+          "x-intellij-html-description": "\u003cp\u003eOverridePath controls whether to override the default image path when using mirrors.\u003c/p\u003e\n"
+        },
+        "skipFallback": {
+          "type": "boolean",
+          "title": "skipFallback",
+          "description": "SkipFallback controls whether to skip fallback to the original registry.\n",
+          "markdownDescription": "SkipFallback controls whether to skip fallback to the original registry.",
+          "x-intellij-html-description": "\u003cp\u003eSkipFallback controls whether to skip fallback to the original registry.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.RegistrySpec": {
+      "properties": {
+        "mirrors": {
+          "patternProperties": {
+            ".*": {
+              "$ref": "#/$defs/chubo.RegistryMirrorSpec"
+            }
+          },
+          "type": "object",
+          "title": "mirrors",
+          "description": "Mirrors configures pull-through/caching mirrors.\nKeys are registry host[:port], values are mirror endpoints.\n",
+          "markdownDescription": "Mirrors configures pull-through/caching mirrors.\nKeys are registry host[:port], values are mirror endpoints.",
+          "x-intellij-html-description": "\u003cp\u003eMirrors configures pull-through/caching mirrors.\nKeys are registry host[:port], values are mirror endpoints.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.TimeSpec": {
+      "properties": {
+        "servers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "servers",
+          "description": "Servers is the list of NTP servers to use.\n",
+          "markdownDescription": "Servers is the list of NTP servers to use.",
+          "x-intellij-html-description": "\u003cp\u003eServers is the list of NTP servers to use.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.TrustSpec": {
+      "properties": {
+        "token": {
+          "type": "string",
+          "title": "token",
+          "description": "Token used by trustd flows (Talos-like).\n",
+          "markdownDescription": "Token used by trustd flows (Talos-like).",
+          "x-intellij-html-description": "\u003cp\u003eToken used by trustd flows (Talos-like).\u003c/p\u003e\n"
+        },
+        "ca": {
+          "$ref": "#/$defs/chubo.CASpec",
+          "title": "ca",
+          "description": "Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for chubo we start with the simple model and evolve\nit in Phase 3.\n",
+          "markdownDescription": "Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for `chubo` we start with the simple model and evolve\nit in Phase 3.",
+          "x-intellij-html-description": "\u003cp\u003eIssuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for \u003ccode\u003echubo\u003c/code\u003e we start with the simple model and evolve\nit in Phase 3.\u003c/p\u003e\n"
+        },
+        "acceptedCAs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "title": "acceptedCAs",
+          "description": "Optional extra accepted CA certificates (PEM-encoded).\n",
+          "markdownDescription": "Optional extra accepted CA certificates (PEM-encoded).",
+          "x-intellij-html-description": "\u003cp\u003eOptional extra accepted CA certificates (PEM-encoded).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "chubo.chuboBootstrapJWSHeader": {
+      "properties": {
+        "alg": {
+          "type": "string",
+          "title": "alg",
+          "description": "Alg is the JWS algorithm identifier (expected “EdDSA”).\n",
+          "markdownDescription": "Alg is the JWS algorithm identifier (expected \"EdDSA\").",
+          "x-intellij-html-description": "\u003cp\u003eAlg is the JWS algorithm identifier (expected \u0026ldquo;EdDSA\u0026rdquo;).\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "chuboBootstrapJWSHeader is the protected header for the JWS compact bootstrap payload."
+    },
     "cri.RegistryAuthConfigV1Alpha1": {
       "properties": {
         "apiVersion": {
@@ -2251,133 +2698,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "IngressRule is a ingress rule."
-    },
-    "network.KubeSpanConfigV1Alpha1": {
-      "properties": {
-        "apiVersion": {
-          "enum": [
-            "v1alpha1"
-          ],
-          "title": "apiVersion",
-          "description": "apiVersion is the API version of the resource.\n",
-          "markdownDescription": "apiVersion is the API version of the resource.",
-          "x-intellij-html-description": "\u003cp\u003eapiVersion is the API version of the resource.\u003c/p\u003e\n"
-        },
-        "kind": {
-          "enum": [
-            "KubeSpanConfig"
-          ],
-          "title": "kind",
-          "description": "kind is the kind of the resource.\n",
-          "markdownDescription": "kind is the kind of the resource.",
-          "x-intellij-html-description": "\u003cp\u003ekind is the kind of the resource.\u003c/p\u003e\n"
-        },
-        "enabled": {
-          "type": "boolean",
-          "title": "enabled",
-          "description": "Enable the KubeSpan feature.\nCluster discovery should be enabled with cluster.discovery.enabled for KubeSpan to be enabled.\n",
-          "markdownDescription": "Enable the KubeSpan feature.\nCluster discovery should be enabled with cluster.discovery.enabled for KubeSpan to be enabled.",
-          "x-intellij-html-description": "\u003cp\u003eEnable the KubeSpan feature.\nCluster discovery should be enabled with cluster.discovery.enabled for KubeSpan to be enabled.\u003c/p\u003e\n"
-        },
-        "advertiseKubernetesNetworks": {
-          "type": "boolean",
-          "title": "advertiseKubernetesNetworks",
-          "description": "Control whether Kubernetes pod CIDRs are announced over KubeSpan from the node.\nIf disabled, CNI handles pod-to-pod traffic encapsulation.\nIf enabled, KubeSpan takes over pod-to-pod traffic directly.\n",
-          "markdownDescription": "Control whether Kubernetes pod CIDRs are announced over KubeSpan from the node.\nIf disabled, CNI handles pod-to-pod traffic encapsulation.\nIf enabled, KubeSpan takes over pod-to-pod traffic directly.",
-          "x-intellij-html-description": "\u003cp\u003eControl whether Kubernetes pod CIDRs are announced over KubeSpan from the node.\nIf disabled, CNI handles pod-to-pod traffic encapsulation.\nIf enabled, KubeSpan takes over pod-to-pod traffic directly.\u003c/p\u003e\n"
-        },
-        "allowDownPeerBypass": {
-          "type": "boolean",
-          "title": "allowDownPeerBypass",
-          "description": "Skip sending traffic via KubeSpan if the peer connection state is not up.\nThis provides configurable choice between connectivity and security.\n",
-          "markdownDescription": "Skip sending traffic via KubeSpan if the peer connection state is not up.\nThis provides configurable choice between connectivity and security.",
-          "x-intellij-html-description": "\u003cp\u003eSkip sending traffic via KubeSpan if the peer connection state is not up.\nThis provides configurable choice between connectivity and security.\u003c/p\u003e\n"
-        },
-        "harvestExtraEndpoints": {
-          "type": "boolean",
-          "title": "harvestExtraEndpoints",
-          "description": "KubeSpan can collect and publish extra endpoints for each member of the cluster\nbased on Wireguard endpoint information for each peer.\nDisabled by default. Do not enable with high peer counts (\u0026gt;50).\n",
-          "markdownDescription": "KubeSpan can collect and publish extra endpoints for each member of the cluster\nbased on Wireguard endpoint information for each peer.\nDisabled by default. Do not enable with high peer counts (\u003e50).",
-          "x-intellij-html-description": "\u003cp\u003eKubeSpan can collect and publish extra endpoints for each member of the cluster\nbased on Wireguard endpoint information for each peer.\nDisabled by default. Do not enable with high peer counts (\u0026gt;50).\u003c/p\u003e\n"
-        },
-        "mtu": {
-          "type": "integer",
-          "title": "mtu",
-          "description": "KubeSpan link MTU size.\nDefault value is 1420.\n",
-          "markdownDescription": "KubeSpan link MTU size.\nDefault value is 1420.",
-          "x-intellij-html-description": "\u003cp\u003eKubeSpan link MTU size.\nDefault value is 1420.\u003c/p\u003e\n"
-        },
-        "filters": {
-          "$ref": "#/$defs/network.KubeSpanFiltersConfig",
-          "title": "filters",
-          "description": "KubeSpan advanced filtering of network addresses.\nSettings are optional and apply only to this node.\n",
-          "markdownDescription": "KubeSpan advanced filtering of network addresses.\nSettings are optional and apply only to this node.",
-          "x-intellij-html-description": "\u003cp\u003eKubeSpan advanced filtering of network addresses.\nSettings are optional and apply only to this node.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "apiVersion",
-        "kind"
-      ],
-      "description": "KubeSpanConfig is a config document to configure KubeSpan."
-    },
-    "network.KubeSpanFiltersConfig": {
-      "properties": {
-        "endpoints": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "endpoints",
-          "description": "Filter node addresses which will be advertised as KubeSpan endpoints for peer-to-peer Wireguard connections.\n\nBy default, all addresses are advertised, and KubeSpan cycles through all endpoints until it finds one that works.\n\nDefault value: no filtering.\n",
-          "markdownDescription": "Filter node addresses which will be advertised as KubeSpan endpoints for peer-to-peer Wireguard connections.\n\nBy default, all addresses are advertised, and KubeSpan cycles through all endpoints until it finds one that works.\n\nDefault value: no filtering.",
-          "x-intellij-html-description": "\u003cp\u003eFilter node addresses which will be advertised as KubeSpan endpoints for peer-to-peer Wireguard connections.\u003c/p\u003e\n\n\u003cp\u003eBy default, all addresses are advertised, and KubeSpan cycles through all endpoints until it finds one that works.\u003c/p\u003e\n\n\u003cp\u003eDefault value: no filtering.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "KubeSpanFiltersConfig configures KubeSpan endpoint filters."
-    },
-    "network.KubespanEndpointsConfigV1Alpha1": {
-      "properties": {
-        "apiVersion": {
-          "enum": [
-            "v1alpha1"
-          ],
-          "title": "apiVersion",
-          "description": "apiVersion is the API version of the resource.\n",
-          "markdownDescription": "apiVersion is the API version of the resource.",
-          "x-intellij-html-description": "\u003cp\u003eapiVersion is the API version of the resource.\u003c/p\u003e\n"
-        },
-        "kind": {
-          "enum": [
-            "KubeSpanEndpoints"
-          ],
-          "title": "kind",
-          "description": "kind is the kind of the resource.\n",
-          "markdownDescription": "kind is the kind of the resource.",
-          "x-intellij-html-description": "\u003cp\u003ekind is the kind of the resource.\u003c/p\u003e\n"
-        },
-        "extraAnnouncedEndpoints": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "extraAnnouncedEndpoints",
-          "description": "A list of extra Wireguard endpoints to announce from this machine.\n\nTalos automatically adds endpoints based on machine addresses, public IP, etc.\nThis field allows to add extra endpoints which are managed outside of Talos, e.g. NAT mapping.\n",
-          "markdownDescription": "A list of extra Wireguard endpoints to announce from this machine.\n\nTalos automatically adds endpoints based on machine addresses, public IP, etc.\nThis field allows to add extra endpoints which are managed outside of Talos, e.g. NAT mapping.",
-          "x-intellij-html-description": "\u003cp\u003eA list of extra Wireguard endpoints to announce from this machine.\u003c/p\u003e\n\n\u003cp\u003eTalos automatically adds endpoints based on machine addresses, public IP, etc.\nThis field allows to add extra endpoints which are managed outside of Talos, e.g. NAT mapping.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "apiVersion",
-        "kind"
-      ],
-      "description": "KubeSpanEndpointsConfig is a config document to configure KubeSpan endpoints."
     },
     "network.Layer2VIPConfigV1Alpha1": {
       "properties": {
@@ -4217,9 +4537,9 @@
         "kubernetes": {
           "$ref": "#/$defs/v1alpha1.RegistryKubernetesConfig",
           "title": "kubernetes",
-          "description": "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/siderolabs/talos/issues/9980 for more information.\n",
-          "markdownDescription": "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/siderolabs/talos/issues/9980 for more information.",
-          "x-intellij-html-description": "\u003cp\u003eKubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\u003c/p\u003e\n\n\u003cp\u003eThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee \u003ca href=\"https://github.com/siderolabs/talos/issues/9980\" target=\"_blank\"\u003ehttps://github.com/siderolabs/talos/issues/9980\u003c/a\u003e for more information.\u003c/p\u003e\n"
+          "description": "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/chubo-dev/chubo/issues/9980 for more information.\n",
+          "markdownDescription": "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/chubo-dev/chubo/issues/9980 for more information.",
+          "x-intellij-html-description": "\u003cp\u003eKubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\u003c/p\u003e\n\n\u003cp\u003eThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee \u003ca href=\"https://github.com/chubo-dev/chubo/issues/9980\" target=\"_blank\"\u003ehttps://github.com/chubo-dev/chubo/issues/9980\u003c/a\u003e for more information.\u003c/p\u003e\n"
         },
         "service": {
           "$ref": "#/$defs/v1alpha1.RegistryServiceConfig",
@@ -4519,8 +4839,8 @@
           "type": "string",
           "title": "image",
           "description": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\nGitHub releases page.\n",
-          "markdownDescription": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/siderolabs/talos/releases).",
-          "x-intellij-html-description": "\u003cp\u003eAllows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n\u003ca href=\"https://github.com/siderolabs/talos/releases\" target=\"_blank\"\u003eGitHub releases page\u003c/a\u003e.\u003c/p\u003e\n"
+          "markdownDescription": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
+          "x-intellij-html-description": "\u003cp\u003eAllows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n\u003ca href=\"https://github.com/chubo-dev/chubo/releases\" target=\"_blank\"\u003eGitHub releases page\u003c/a\u003e.\u003c/p\u003e\n"
         },
         "wipe": {
           "type": "boolean",
@@ -5480,6 +5800,9 @@
       "$ref": "#/$defs/block.ZswapConfigV1Alpha1"
     },
     {
+      "$ref": "#/$defs/chubo.MachineConfigV1Alpha1"
+    },
+    {
       "$ref": "#/$defs/cri.RegistryAuthConfigV1Alpha1"
     },
     {
@@ -5520,12 +5843,6 @@
     },
     {
       "$ref": "#/$defs/network.HostnameConfigV1Alpha1"
-    },
-    {
-      "$ref": "#/$defs/network.KubeSpanConfigV1Alpha1"
-    },
-    {
-      "$ref": "#/$defs/network.KubespanEndpointsConfigV1Alpha1"
     },
     {
       "$ref": "#/$defs/network.Layer2VIPConfigV1Alpha1"

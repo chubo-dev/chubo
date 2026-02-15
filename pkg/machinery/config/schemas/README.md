@@ -1,4 +1,5 @@
-# Deprecation Notice
+# Schemas
 
-The schema `v1alpha1_config.schema.json` is deprecated, kept only for backward-compatibility.
-Please use `config.schema.json` instead.
+Use `config.schema.json`.
+
+Upstream Talos kept `v1alpha1_config.schema.json` for backward compatibility; this fork does not ship it.

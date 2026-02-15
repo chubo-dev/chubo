@@ -5,75 +5,39 @@ title: CLI
 
 <!-- markdownlint-disable -->
 
-## talosctl apply-config
+## chuboctl apply-config
 
 Apply a new configuration to a node
 
 ```
-talosctl apply-config [flags]
+chuboctl apply-config [flags]
 ```
 
 ### Options
 
 ```
       --cert-fingerprint strings                    list of server certificate fingeprints to accept (defaults to no check)
+      --chuboconfig string                          The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string                              Cluster to connect to if a proxy endpoint is used.
   -p, --config-patch stringArray                    the list of config patches to apply to the local config file before sending it to the node
       --context string                              Context to be used in command
       --dry-run                                     check how the config change will be applied in dry-run mode
-  -e, --endpoints strings                           override default endpoints in Talos configuration
+  -e, --endpoints strings                           override default endpoints in client configuration
   -f, --file string                                 the filename of the updated configuration
   -h, --help                                        help for apply-config
   -i, --insecure                                    apply the config using the insecure (encrypted with no auth) maintenance service
   -m, --mode auto, no-reboot, reboot, staged, try   apply config mode (default auto)
   -n, --nodes strings                               target the specified nodes
-      --siderov1-keys-dir string                    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string                          The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string                    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string                          Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration                            the config will be rolled back after specified timeout (if try mode is selected) (default 1m0s)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl bootstrap
-
-Bootstrap the etcd cluster on the specified node.
-
-### Synopsis
-
-When Talos cluster is created etcd service on control plane nodes enter the join loop waiting
-to join etcd peers from other control plane nodes. One node should be picked as the bootstrap node.
-When bootstrap command is issued, the node aborts join process and bootstraps etcd cluster as a single node cluster.
-Other control plane nodes will join etcd cluster once Kubernetes is bootstrapped on the bootstrap node.
-
-This command should not be used when "init" type node are used.
-
-Talos etcd cluster can be recovered from a known snapshot with '--recover-from=' flag.
-
-```
-talosctl bootstrap [flags]
-```
-
-### Options
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -h, --help                       help for bootstrap
-  -n, --nodes strings              target the specified nodes
-      --recover-from string        recover etcd cluster from the snapshot
-      --recover-skip-hash-check    skip integrity check when recovering etcd (use when recovering from data directory copy)
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-
-## talosctl cgroups
+## chuboctl cgroups
 
 Retrieve cgroups usage information
 
@@ -92,38 +56,39 @@ Several presets are available to focus on specific cgroup subsystems:
 You can specify the preset using the --preset flag.
 
 Alternatively, a custom schema can be provided using the --schema-file flag.
-To see schema examples, refer to https://github.com/siderolabs/talos/tree/main/cmd/talosctl/cmd/talos/cgroupsprinter/schemas.
+To see schema examples, refer to https://github.com/chubo-dev/chubo/tree/main/cmd/talosctl/cmd/talos/cgroupsprinter/schemas.
 
 
 ```
-talosctl cgroups [flags]
+chuboctl cgroups [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for cgroups
   -n, --nodes strings              target the specified nodes
       --preset string              preset name (one of: [cpu cpuset io memory process psi swap])
       --schema-file string         path to the columns schema file
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
       --skip-cri-resolve           do not resolve cgroup names via a request to CRI
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl cluster create dev
+## chuboctl cluster create dev
 
 Creates a local QEMU-based cluster for Talos development.
 
 ```
-talosctl cluster create dev [flags]
+chuboctl cluster create dev [flags]
 ```
 
 ### Options
@@ -133,10 +98,10 @@ talosctl cluster create dev [flags]
       --arch string                              cluster architecture (default "amd64")
       --bad-rtc                                  launch VM with bad RTC state
       --cidr string                              CIDR of the cluster network (IPv4, ULA network for IPv6 is derived in automated way) (default "10.5.0.0/24")
-      --cni-bin-path strings                     search path for CNI binaries (default [/home/user/.talos/cni/bin])
+      --cni-bin-path strings                     search path for CNI binaries (default [/home/user/.chubo/cni/bin])
       --cni-bundle-url string                    URL to download CNI bundle from (default "https://github.com/siderolabs/talos/releases/download/v1.13.0-alpha.1/talosctl-cni-bundle-${ARCH}.tar.gz")
-      --cni-cache-dir string                     CNI cache directory path (default "/home/user/.talos/cni/cache")
-      --cni-conf-dir string                      CNI config directory path (default "/home/user/.talos/cni/conf.d")
+      --cni-cache-dir string                     CNI cache directory path (default "/home/user/.chubo/cni/cache")
+      --cni-conf-dir string                      CNI config directory path (default "/home/user/.chubo/cni/conf.d")
       --config-injection-method string           a method to inject machine config: default is HTTP server, 'metal-iso' to mount an ISO
       --config-patch stringArray                 patch generated machineconfigs (applied to all node types), use @file to read a patch from file
       --config-patch-control-plane stringArray   patch generated machineconfigs (applied to 'controlplane' type)
@@ -191,7 +156,7 @@ talosctl cluster create dev [flags]
       --skip-k8s-node-readiness-check            skip k8s node readiness checks
       --skip-kubeconfig                          skip merging kubeconfig from the created cluster
       --talos-version string                     the desired Talos version to generate config for (default "latest")
-      --talosconfig string                       The location to save the generated Talos configuration file to. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string                       The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --uki-path string                          the UKI image path to use for the initial boot
       --usb-path string                          the USB stick image path to use for the initial boot
       --use-vip                                  use a virtual IP for the controlplane endpoint instead of the loadbalancer
@@ -208,7 +173,6 @@ talosctl cluster create dev [flags]
       --with-init-node                           create the cluster with an init node
       --with-iommu                               enable IOMMU support, this also add a new PCI root port and an interface attached to it
       --with-json-logs                           enable JSON logs receiver and configure Talos to send logs there
-      --with-kubespan                            enable KubeSpan system
       --with-network-bandwidth int               specify bandwidth restriction (in kbps) on the bridge interface
       --with-network-chaos                       enable to use network chaos parameters
       --with-network-jitter duration             specify jitter on the bridge interface
@@ -227,20 +191,20 @@ talosctl cluster create dev [flags]
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
 
-## talosctl cluster create docker
+## chuboctl cluster create docker
 
-Create a local Docker based kubernetes cluster
+Create a local Docker based cluster
 
 ```
-talosctl cluster create docker [flags]
+chuboctl cluster create docker [flags]
 ```
 
 ### Options
@@ -260,22 +224,22 @@ talosctl cluster create docker [flags]
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --mount mount                              attach a mount to the container (docker --mount syntax)
       --subnet string                            Docker network subnet CIDR (default "10.5.0.0/24")
-      --talosconfig-destination string           The location to save the generated Talos configuration file to. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig-destination string           The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --workers int                              the number of workers to create (default 1)
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
 
-## talosctl cluster create qemu
+## chuboctl cluster create qemu
 
 Create a local QEMU based Talos cluster.
 
@@ -294,7 +258,7 @@ Note: exactly one of 'iso', 'iso-secureboot', 'pxe' or 'disk-image' presets must
 
 
 ```
-talosctl cluster create qemu [flags]
+chuboctl cluster create qemu [flags]
 ```
 
 ### Options
@@ -317,27 +281,27 @@ talosctl cluster create qemu [flags]
       --presets strings                          list of presets to apply (default [iso])
       --schematic-id string                      image factory schematic id (defaults to an empty schematic)
       --talos-version string                     the desired talos version (default "latest")
-      --talosconfig-destination string           The location to save the generated Talos configuration file to. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig-destination string           The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --workers int                              the number of workers to create (default 1)
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
 
-## talosctl cluster create dev
+## chuboctl cluster create dev
 
 Creates a local QEMU-based cluster for Talos development.
 
 ```
-talosctl cluster create dev [flags]
+chuboctl cluster create dev [flags]
 ```
 
 ### Options
@@ -347,10 +311,10 @@ talosctl cluster create dev [flags]
       --arch string                              cluster architecture (default "amd64")
       --bad-rtc                                  launch VM with bad RTC state
       --cidr string                              CIDR of the cluster network (IPv4, ULA network for IPv6 is derived in automated way) (default "10.5.0.0/24")
-      --cni-bin-path strings                     search path for CNI binaries (default [/home/user/.talos/cni/bin])
+      --cni-bin-path strings                     search path for CNI binaries (default [/home/user/.chubo/cni/bin])
       --cni-bundle-url string                    URL to download CNI bundle from (default "https://github.com/siderolabs/talos/releases/download/v1.13.0-alpha.1/talosctl-cni-bundle-${ARCH}.tar.gz")
-      --cni-cache-dir string                     CNI cache directory path (default "/home/user/.talos/cni/cache")
-      --cni-conf-dir string                      CNI config directory path (default "/home/user/.talos/cni/conf.d")
+      --cni-cache-dir string                     CNI cache directory path (default "/home/user/.chubo/cni/cache")
+      --cni-conf-dir string                      CNI config directory path (default "/home/user/.chubo/cni/conf.d")
       --config-injection-method string           a method to inject machine config: default is HTTP server, 'metal-iso' to mount an ISO
       --config-patch stringArray                 patch generated machineconfigs (applied to all node types), use @file to read a patch from file
       --config-patch-control-plane stringArray   patch generated machineconfigs (applied to 'controlplane' type)
@@ -405,7 +369,7 @@ talosctl cluster create dev [flags]
       --skip-k8s-node-readiness-check            skip k8s node readiness checks
       --skip-kubeconfig                          skip merging kubeconfig from the created cluster
       --talos-version string                     the desired Talos version to generate config for (default "latest")
-      --talosconfig string                       The location to save the generated Talos configuration file to. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string                       The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --uki-path string                          the UKI image path to use for the initial boot
       --usb-path string                          the USB stick image path to use for the initial boot
       --use-vip                                  use a virtual IP for the controlplane endpoint instead of the loadbalancer
@@ -422,7 +386,6 @@ talosctl cluster create dev [flags]
       --with-init-node                           create the cluster with an init node
       --with-iommu                               enable IOMMU support, this also add a new PCI root port and an interface attached to it
       --with-json-logs                           enable JSON logs receiver and configure Talos to send logs there
-      --with-kubespan                            enable KubeSpan system
       --with-network-bandwidth int               specify bandwidth restriction (in kbps) on the bridge interface
       --with-network-chaos                       enable to use network chaos parameters
       --with-network-jitter duration             specify jitter on the bridge interface
@@ -441,20 +404,20 @@ talosctl cluster create dev [flags]
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
 
-## talosctl cluster create docker
+## chuboctl cluster create docker
 
-Create a local Docker based kubernetes cluster
+Create a local Docker based cluster
 
 ```
-talosctl cluster create docker [flags]
+chuboctl cluster create docker [flags]
 ```
 
 ### Options
@@ -474,22 +437,22 @@ talosctl cluster create docker [flags]
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --mount mount                              attach a mount to the container (docker --mount syntax)
       --subnet string                            Docker network subnet CIDR (default "10.5.0.0/24")
-      --talosconfig-destination string           The location to save the generated Talos configuration file to. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig-destination string           The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --workers int                              the number of workers to create (default 1)
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
 
-## talosctl cluster create qemu
+## chuboctl cluster create qemu
 
 Create a local QEMU based Talos cluster.
 
@@ -508,7 +471,7 @@ Note: exactly one of 'iso', 'iso-secureboot', 'pxe' or 'disk-image' presets must
 
 
 ```
-talosctl cluster create qemu [flags]
+chuboctl cluster create qemu [flags]
 ```
 
 ### Options
@@ -531,27 +494,27 @@ talosctl cluster create qemu [flags]
       --presets strings                          list of presets to apply (default [iso])
       --schematic-id string                      image factory schematic id (defaults to an empty schematic)
       --talos-version string                     the desired talos version (default "latest")
-      --talosconfig-destination string           The location to save the generated Talos configuration file to. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig-destination string           The location to save the generated client configuration file to. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --workers int                              the number of workers to create (default 1)
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
 
-## talosctl cluster destroy
+## chuboctl cluster destroy
 
-Destroys a local Talos kubernetes cluster
+Destroys a local provisioned cluster
 
 ```
-talosctl cluster destroy [flags]
+chuboctl cluster destroy [flags]
 ```
 
 ### Options
@@ -566,41 +529,41 @@ talosctl cluster destroy [flags]
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster](#talosctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
+* [chuboctl cluster](#chuboctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
 
-## talosctl cluster show
+## chuboctl cluster show
 
-Shows info about a local provisioned kubernetes cluster
+Shows info about a local provisioned cluster
 
 ```
-talosctl cluster show [flags]
+chuboctl cluster show [flags]
 ```
 
 ### Options
 
 ```
   -h, --help                 help for show
-      --provisioner string   Talos cluster provisioner to use (default "docker")
+      --provisioner string   cluster provisioner to use (default "docker")
 ```
 
 ### Options inherited from parent commands
 
 ```
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl cluster](#talosctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
+* [chuboctl cluster](#chuboctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
 
-## talosctl cluster
+## chuboctl cluster
 
 A collection of commands for managing local docker-based or QEMU-based clusters
 
@@ -608,18 +571,18 @@ A collection of commands for managing local docker-based or QEMU-based clusters
 
 ```
   -h, --help           help for cluster
-      --name string    the name of the cluster (default "talos-default")
-      --state string   directory path to store cluster state (default "/home/user/.talos/clusters")
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/home/user/.chubo/clusters")
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl cluster create](#talosctl-cluster-create)	 - Create a local Talos cluster.
-* [talosctl cluster destroy](#talosctl-cluster-destroy)	 - Destroys a local Talos kubernetes cluster
-* [talosctl cluster show](#talosctl-cluster-show)	 - Shows info about a local provisioned kubernetes cluster
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Talos cluster.
+* [chuboctl cluster destroy](#chuboctl-cluster-destroy)	 - Destroys a local provisioned cluster
+* [chuboctl cluster show](#chuboctl-cluster-show)	 - Shows info about a local provisioned cluster
 
-## talosctl completion
+## chuboctl completion
 
 Output shell completion code for the specified shell (bash, fish or zsh)
 
@@ -627,13 +590,13 @@ Output shell completion code for the specified shell (bash, fish or zsh)
 
 Output shell completion code for the specified shell (bash, fish or zsh).
 The shell code must be evaluated to provide interactive
-completion of talosctl commands.  This can be done by sourcing it from
+completion of chuboctl commands.  This can be done by sourcing it from
 the .bash_profile.
 
 Note for zsh users: [1] zsh completions are only supported in versions of zsh >= 5.2
 
 ```
-talosctl completion SHELL [flags]
+chuboctl completion SHELL [flags]
 ```
 
 ### Examples
@@ -644,30 +607,30 @@ talosctl completion SHELL [flags]
 	brew install bash-completion
 ## or, if running Bash 4.1+
 	brew install bash-completion@2
-## If talosctl is installed via homebrew, this should start working immediately.
+## If chuboctl is installed via homebrew, this should start working immediately.
 ## If you've installed via other means, you may need add the completion to your completion directory
-	talosctl completion bash > $(brew --prefix)/etc/bash_completion.d/talosctl
+	chuboctl completion bash > $(brew --prefix)/etc/bash_completion.d/chuboctl
 
 # Installing bash completion on Linux
 ## If bash-completion is not installed on Linux, please install the 'bash-completion' package
 ## via your distribution's package manager.
-## Load the talosctl completion code for bash into the current shell
-	source <(talosctl completion bash)
+## Load the chuboctl completion code for bash into the current shell
+	source <(chuboctl completion bash)
 ## Write bash completion code to a file and source if from .bash_profile
-	talosctl completion bash > "${TALOS_HOME:-$HOME/.talos}/completion.bash.inc"
+	chuboctl completion bash > "${CHUBO_HOME:-$HOME/.chubo}/completion.bash.inc"
 	printf '
-		# talosctl shell completion
-		source "${TALOS_HOME:-$HOME/.talos}/completion.bash.inc"
+		# chuboctl shell completion
+		source "${CHUBO_HOME:-$HOME/.chubo}/completion.bash.inc"
 		' >> $HOME/.bash_profile
 	source $HOME/.bash_profile
-# Load the talosctl completion code for fish[1] into the current shell
-	talosctl completion fish | source
-# Set the talosctl completion code for fish[1] to autoload on startup
-    talosctl completion fish > ~/.config/fish/completions/talosctl.fish
-# Load the talosctl completion code for zsh[1] into the current shell
-	source <(talosctl completion zsh)
-# Set the talosctl completion code for zsh[1] to autoload on startup
-    talosctl completion zsh > "${fpath[1]}/_talosctl"
+# Load the chuboctl completion code for fish[1] into the current shell
+	chuboctl completion fish | source
+# Set the chuboctl completion code for fish[1] to autoload on startup
+    chuboctl completion fish > ~/.config/fish/completions/chuboctl.fish
+# Load the chuboctl completion code for zsh[1] into the current shell
+	source <(chuboctl completion zsh)
+# Set the chuboctl completion code for zsh[1] to autoload on startup
+    chuboctl completion zsh > "${fpath[1]}/_chuboctl"
 ```
 
 ### Options
@@ -678,14 +641,14 @@ talosctl completion SHELL [flags]
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl config add
+## chuboctl config add
 
 Add a new context
 
 ```
-talosctl config add <context> [flags]
+chuboctl config add <context> [flags]
 ```
 
 ### Options
@@ -700,24 +663,25 @@ talosctl config add <context> [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config context
+## chuboctl config context
 
 Set the current context
 
 ```
-talosctl config context <context> [flags]
+chuboctl config context <context> [flags]
 ```
 
 ### Options
@@ -729,24 +693,25 @@ talosctl config context <context> [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config contexts
+## chuboctl config contexts
 
 List defined contexts
 
 ```
-talosctl config contexts [flags]
+chuboctl config contexts [flags]
 ```
 
 ### Options
@@ -758,24 +723,25 @@ talosctl config contexts [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config endpoint
+## chuboctl config endpoint
 
 Set the endpoint(s) for the current context
 
 ```
-talosctl config endpoint <endpoint>... [flags]
+chuboctl config endpoint <endpoint>... [flags]
 ```
 
 ### Options
@@ -787,24 +753,25 @@ talosctl config endpoint <endpoint>... [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config info
+## chuboctl config info
 
 Show information about the current context
 
 ```
-talosctl config info [flags]
+chuboctl config info [flags]
 ```
 
 ### Options
@@ -817,19 +784,20 @@ talosctl config info [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config merge
+## chuboctl config merge
 
 Merge additional contexts from another client configuration file
 
@@ -838,7 +806,7 @@ Merge additional contexts from another client configuration file
 Contexts with the same name are renamed while merging configs.
 
 ```
-talosctl config merge <from> [flags]
+chuboctl config merge <from> [flags]
 ```
 
 ### Options
@@ -850,24 +818,25 @@ talosctl config merge <from> [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config new
+## chuboctl config new
 
 Generate a new client configuration file
 
 ```
-talosctl config new [<path>] [flags]
+chuboctl config new [<path>] [flags]
 ```
 
 ### Options
@@ -881,24 +850,25 @@ talosctl config new [<path>] [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config node
+## chuboctl config node
 
 Set the node(s) for the current context
 
 ```
-talosctl config node <endpoint>... [flags]
+chuboctl config node <endpoint>... [flags]
 ```
 
 ### Options
@@ -910,24 +880,25 @@ talosctl config node <endpoint>... [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config remove
+## chuboctl config remove
 
 Remove contexts
 
 ```
-talosctl config remove <context> [flags]
+chuboctl config remove <context> [flags]
 ```
 
 ### Options
@@ -941,124 +912,111 @@ talosctl config remove <context> [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
 
-## talosctl config
+## chuboctl config
 
-Manage the client configuration file (talosconfig)
+Manage the client configuration file (chuboconfig)
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for config
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl config add](#talosctl-config-add)	 - Add a new context
-* [talosctl config context](#talosctl-config-context)	 - Set the current context
-* [talosctl config contexts](#talosctl-config-contexts)	 - List defined contexts
-* [talosctl config endpoint](#talosctl-config-endpoint)	 - Set the endpoint(s) for the current context
-* [talosctl config info](#talosctl-config-info)	 - Show information about the current context
-* [talosctl config merge](#talosctl-config-merge)	 - Merge additional contexts from another client configuration file
-* [talosctl config new](#talosctl-config-new)	 - Generate a new client configuration file
-* [talosctl config node](#talosctl-config-node)	 - Set the node(s) for the current context
-* [talosctl config remove](#talosctl-config-remove)	 - Remove contexts
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl config add](#chuboctl-config-add)	 - Add a new context
+* [chuboctl config context](#chuboctl-config-context)	 - Set the current context
+* [chuboctl config contexts](#chuboctl-config-contexts)	 - List defined contexts
+* [chuboctl config endpoint](#chuboctl-config-endpoint)	 - Set the endpoint(s) for the current context
+* [chuboctl config info](#chuboctl-config-info)	 - Show information about the current context
+* [chuboctl config merge](#chuboctl-config-merge)	 - Merge additional contexts from another client configuration file
+* [chuboctl config new](#chuboctl-config-new)	 - Generate a new client configuration file
+* [chuboctl config node](#chuboctl-config-node)	 - Set the node(s) for the current context
+* [chuboctl config remove](#chuboctl-config-remove)	 - Remove contexts
 
-## talosctl conformance kubernetes
+## chuboctl consulconfig
 
-Run Kubernetes conformance tests
+Download the Consul client configuration bundle from the node
+
+### Synopsis
+
+Download the Consul client configuration bundle from the node.
+
+By default the bundle is extracted to PWD/consulconfig/.
+If [local-path] is a directory, bundle is extracted under [local-path]/consulconfig/.
+If [local-path] does not exist, it is created and used as the extraction directory.
+If [local-path] is "-", the raw .tar.gz bundle is written to stdout.
 
 ```
-talosctl conformance kubernetes [flags]
+chuboctl consulconfig [local-path] [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help          help for kubernetes
-      --mode string   conformance test mode: [fast, certified] (default "fast")
-```
-
-### Options inherited from parent commands
-
-```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
+  -f, --force                      Force overwrite if the output file already exists
+  -h, --help                       help for consulconfig
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl conformance](#talosctl-conformance)	 - Run conformance tests
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl conformance
-
-Run conformance tests
-
-### Options
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -h, --help                       help for conformance
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl conformance kubernetes](#talosctl-conformance-kubernetes)	 - Run Kubernetes conformance tests
-
-## talosctl containers
+## chuboctl containers
 
 List containers
 
 ```
-talosctl containers [flags]
+chuboctl containers [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for containers
   -k, --kubernetes                 use the k8s.io containerd namespace
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl copy
+## chuboctl copy
 
 Copy data out from the node
 
@@ -1074,26 +1032,27 @@ ownership and access mode for the files in extract mode, while  streamed .tar ar
 captures ownership and permission bits.
 
 ```
-talosctl copy <src-path> -|<local-path> [flags]
+chuboctl copy <src-path> -|<local-path> [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for copy
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl dashboard
+## chuboctl dashboard
 
 Cluster dashboard with node overview, logs and real-time metrics
 
@@ -1114,32 +1073,33 @@ Keyboard shortcuts:
 
 
 ```
-talosctl dashboard [flags]
+chuboctl dashboard [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for dashboard
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -d, --update-interval duration   interval between updates (default 3s)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl debug
+## chuboctl debug
 
 Run a debug container from an image archive or reference
 
 ```
-talosctl debug <image-tar-path|image ref> [args] [flags]
+chuboctl debug <image-tar-path|image ref> [args] [flags]
 ```
 
 ### Examples
@@ -1156,564 +1116,121 @@ talosctl debug <image-tar-path|image ref> [args] [flags]
 
 ```
       --args strings               arguments to pass to the container
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for debug
       --namespace system           namespace to use: system (CRI containerd) or `inmem` for in-memory containerd instance (default "inmem")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl dmesg
+## chuboctl dmesg
 
 Retrieve kernel logs
 
 ```
-talosctl dmesg [flags]
+chuboctl dmesg [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -f, --follow                     specify if the kernel log should be streamed
   -h, --help                       help for dmesg
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
       --tail                       specify if only new messages should be sent (makes sense only when combined with --follow)
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl edit
+## chuboctl edit
 
-Edit Talos node machine configuration with the default editor.
+Edit machine configuration with the default editor.
 
 ### Synopsis
 
 The edit command allows you to directly edit the machine configuration
 of a Talos node using your preferred text editor.
 
-It will open the editor defined by your TALOS_EDITOR,
-or EDITOR environment variables, or fall back to 'vi' for Linux
+It will open the editor defined by your CHUBO_EDITOR,
+TALOS_EDITOR, or EDITOR environment variables, or fall back to 'vi' for Linux
 or 'notepad' for Windows.
 
 ```
-talosctl edit machineconfig [flags]
+chuboctl edit machineconfig [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string                          The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string                              Cluster to connect to if a proxy endpoint is used.
       --context string                              Context to be used in command
       --dry-run                                     do not apply the change after editing and print the change summary instead
-  -e, --endpoints strings                           override default endpoints in Talos configuration
+  -e, --endpoints strings                           override default endpoints in client configuration
   -h, --help                                        help for edit
   -m, --mode auto, no-reboot, reboot, staged, try   apply config mode (default auto)
       --namespace string                            resource namespace (default is to use default namespace per resource)
   -n, --nodes strings                               target the specified nodes
-      --siderov1-keys-dir string                    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string                          The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string                    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string                          Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration                            the config will be rolled back after specified timeout (if try mode is selected) (default 1m0s)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl etcd alarm disarm
-
-Disarm the etcd alarms for the node.
-
-```
-talosctl etcd alarm disarm [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for disarm
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd alarm](#talosctl-etcd-alarm)	 - Manage etcd alarms
-
-## talosctl etcd alarm list
-
-List the etcd alarms for the node.
-
-```
-talosctl etcd alarm list [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for list
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd alarm](#talosctl-etcd-alarm)	 - Manage etcd alarms
-
-## talosctl etcd alarm
-
-Manage etcd alarms
-
-### Options
-
-```
-  -h, --help   help for alarm
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-* [talosctl etcd alarm disarm](#talosctl-etcd-alarm-disarm)	 - Disarm the etcd alarms for the node.
-* [talosctl etcd alarm list](#talosctl-etcd-alarm-list)	 - List the etcd alarms for the node.
-
-## talosctl etcd defrag
-
-Defragment etcd database on the node
-
-### Synopsis
-
-Defragmentation is a maintenance operation that releases unused space from the etcd database file.
-Defragmentation is a resource heavy operation and should be performed only when necessary on a single node at a time.
-
-```
-talosctl etcd defrag [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for defrag
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd downgrade cancel
-
-Cancel etcd storage system downgrade.
-
-```
-talosctl etcd downgrade cancel [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for cancel
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd downgrade](#talosctl-etcd-downgrade)	 - Manage etcd storage system downgrades
-
-## talosctl etcd downgrade enable
-
-Enable etcd storage system downgrade to the specified version.
-
-```
-talosctl etcd downgrade enable <version> [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for enable
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd downgrade](#talosctl-etcd-downgrade)	 - Manage etcd storage system downgrades
-
-## talosctl etcd downgrade validate
-
-Validate if the etcd storage system can be downgraded to the specified version.
-
-```
-talosctl etcd downgrade validate <version> [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for validate
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd downgrade](#talosctl-etcd-downgrade)	 - Manage etcd storage system downgrades
-
-## talosctl etcd downgrade
-
-Manage etcd storage system downgrades
-
-### Options
-
-```
-  -h, --help   help for downgrade
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-* [talosctl etcd downgrade cancel](#talosctl-etcd-downgrade-cancel)	 - Cancel etcd storage system downgrade.
-* [talosctl etcd downgrade enable](#talosctl-etcd-downgrade-enable)	 - Enable etcd storage system downgrade to the specified version.
-* [talosctl etcd downgrade validate](#talosctl-etcd-downgrade-validate)	 - Validate if the etcd storage system can be downgraded to the specified version.
-
-## talosctl etcd forfeit-leadership
-
-Tell node to forfeit etcd cluster leadership
-
-```
-talosctl etcd forfeit-leadership [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for forfeit-leadership
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd leave
-
-Tell nodes to leave etcd cluster
-
-```
-talosctl etcd leave [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for leave
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd members
-
-Get the list of etcd cluster members
-
-```
-talosctl etcd members [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for members
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd remove-member
-
-Remove the node from etcd cluster
-
-### Synopsis
-
-Use this command only if you want to remove a member which is in broken state.
-If there is no access to the node, or the node can't access etcd to call etcd leave.
-Always prefer etcd leave over this command.
-
-```
-talosctl etcd remove-member <member ID> [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for remove-member
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd snapshot
-
-Stream snapshot of the etcd node to the path.
-
-```
-talosctl etcd snapshot <path> [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for snapshot
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd status
-
-Get the status of etcd cluster member
-
-### Synopsis
-
-Returns the status of etcd member on the node, use multiple nodes to get status of all members.
-
-```
-talosctl etcd status [flags]
-```
-
-### Options
-
-```
-  -h, --help   help for status
-```
-
-### Options inherited from parent commands
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-
-## talosctl etcd
-
-Manage etcd
-
-### Options
-
-```
-  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
-      --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
-  -h, --help                       help for etcd
-  -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl etcd alarm](#talosctl-etcd-alarm)	 - Manage etcd alarms
-* [talosctl etcd defrag](#talosctl-etcd-defrag)	 - Defragment etcd database on the node
-* [talosctl etcd downgrade](#talosctl-etcd-downgrade)	 - Manage etcd storage system downgrades
-* [talosctl etcd forfeit-leadership](#talosctl-etcd-forfeit-leadership)	 - Tell node to forfeit etcd cluster leadership
-* [talosctl etcd leave](#talosctl-etcd-leave)	 - Tell nodes to leave etcd cluster
-* [talosctl etcd members](#talosctl-etcd-members)	 - Get the list of etcd cluster members
-* [talosctl etcd remove-member](#talosctl-etcd-remove-member)	 - Remove the node from etcd cluster
-* [talosctl etcd snapshot](#talosctl-etcd-snapshot)	 - Stream snapshot of the etcd node to the path.
-* [talosctl etcd status](#talosctl-etcd-status)	 - Get the status of etcd cluster member
-
-## talosctl events
+## chuboctl events
 
 Stream runtime events
 
 ```
-talosctl events [flags]
+chuboctl events [flags]
 ```
 
 ### Options
 
 ```
       --actor-id string            filter events by the specified actor ID (default is no filter)
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
       --duration duration          show events for the past duration interval (one second resolution, default is to show no history)
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for events
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
       --since string               show events after the specified event ID (default is to show no history)
       --tail int32                 show specified number of past events (use -1 to show full history, default is to show no history)
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl gen ca
+## chuboctl gen ca
 
 Generates a self-signed X.509 certificate authority
 
 ```
-talosctl gen ca [flags]
+chuboctl gen ca [flags]
 ```
 
 ### Options
@@ -1733,9 +1250,9 @@ talosctl gen ca [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen config
+## chuboctl gen config
 
 Generates a set of configuration files for Talos cluster
 
@@ -1747,7 +1264,7 @@ this is the port that the API server binds to on every control plane node. For a
 setup, usually involving a load balancer, use the IP and port of the load balancer.
 
 ```
-talosctl gen config <cluster name> <cluster endpoint> [flags]
+chuboctl gen config <cluster name> <cluster endpoint> [flags]
 ```
 
 ### Options
@@ -1770,7 +1287,6 @@ talosctl gen config <cluster name> <cluster endpoint> [flags]
       --with-cluster-discovery                   enable cluster discovery feature (default true)
       --with-docs                                renders all machine configs adding the documentation for each field (default true)
       --with-examples                            renders all machine configs with the commented examples (default true)
-      --with-kubespan                            enable KubeSpan feature
       --with-secrets string                      use a secrets file generated using 'gen secrets'
 ```
 
@@ -1782,14 +1298,14 @@ talosctl gen config <cluster name> <cluster endpoint> [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen crt
+## chuboctl gen crt
 
 Generates an X.509 Ed25519 certificate
 
 ```
-talosctl gen crt [flags]
+chuboctl gen crt [flags]
 ```
 
 ### Options
@@ -1810,14 +1326,14 @@ talosctl gen crt [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen csr
+## chuboctl gen csr
 
 Generates a CSR using an Ed25519 private key
 
 ```
-talosctl gen csr [flags]
+chuboctl gen csr [flags]
 ```
 
 ### Options
@@ -1837,14 +1353,14 @@ talosctl gen csr [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen key
+## chuboctl gen key
 
 Generates an Ed25519 private key
 
 ```
-talosctl gen key [flags]
+chuboctl gen key [flags]
 ```
 
 ### Options
@@ -1862,14 +1378,14 @@ talosctl gen key [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen keypair
+## chuboctl gen keypair
 
 Generates an X.509 Ed25519 key pair
 
 ```
-talosctl gen keypair [flags]
+chuboctl gen keypair [flags]
 ```
 
 ### Options
@@ -1888,14 +1404,63 @@ talosctl gen keypair [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen secrets
+## chuboctl gen machineconfig
+
+Generate a minimal (non-Kubernetes) machine config for Chubo
+
+### Synopsis
+
+Generates a single YAML document:
+
+  apiVersion: chubo.dev/v1alpha1
+  kind: MachineConfig
+
+The output is suitable for `talosctl apply-config` in the `chubo` build variant.
+
+
+```
+chuboctl gen machineconfig [flags]
+```
+
+### Options
+
+```
+      --chubo-bootstrap-expect int       bootstrap_expect for openwonton/opengyoza (unset by default) (default -1)
+      --chubo-join strings               peer addresses to join/retry-join for openwonton/opengyoza
+      --chubo-role string                chubo role for openwonton/opengyoza (server|client) (default "server")
+  -h, --help                             help for machineconfig
+      --id string                        optional stable node id (metadata.id)
+      --install-disk string              disk to install to (default "/dev/sda")
+      --install-image string             installer image to install from (leave empty if you set it via boot args)
+      --openbao-mode string              openbao mode when enabled (nomadJob) (default "nomadJob")
+      --opengyoza-artifact-url string    override opengyoza artifact URL (http(s)://...)
+      --openwonton-artifact-url string   override openwonton artifact URL (http(s)://...)
+  -o, --output string                    output path, or "-" for stdout (default "-")
+      --registry-mirror strings          registry mirrors in format: <registry host>=<mirror URL>
+      --wipe                             wipe the install disk before installing (default true)
+      --with-chubo                       enable modules.chubo with openwonton/opengyoza defaults
+      --with-openbao                     enable modules.chubo.openbao (Nomad job controller)
+      --with-secrets string              use a secrets file generated using 'gen secrets' (optional)
+```
+
+### Options inherited from parent commands
+
+```
+  -f, --force   will overwrite existing files
+```
+
+### SEE ALSO
+
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
+
+## chuboctl gen secrets
 
 Generates a secrets bundle file which can later be used to generate a config
 
 ```
-talosctl gen secrets [flags]
+chuboctl gen secrets [flags]
 ```
 
 ### Options
@@ -1917,14 +1482,14 @@ talosctl gen secrets [flags]
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
 
-## talosctl gen secureboot database
+## chuboctl gen secureboot database
 
 Generates a UEFI database to enroll the signing certificate
 
 ```
-talosctl gen secureboot database [flags]
+chuboctl gen secureboot database [flags]
 ```
 
 ### Options
@@ -1946,14 +1511,14 @@ talosctl gen secureboot database [flags]
 
 ### SEE ALSO
 
-* [talosctl gen secureboot](#talosctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
+* [chuboctl gen secureboot](#chuboctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
 
-## talosctl gen secureboot pcr
+## chuboctl gen secureboot pcr
 
 Generates a key which is used to sign TPM PCR values
 
 ```
-talosctl gen secureboot pcr [flags]
+chuboctl gen secureboot pcr [flags]
 ```
 
 ### Options
@@ -1971,14 +1536,14 @@ talosctl gen secureboot pcr [flags]
 
 ### SEE ALSO
 
-* [talosctl gen secureboot](#talosctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
+* [chuboctl gen secureboot](#chuboctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
 
-## talosctl gen secureboot uki
+## chuboctl gen secureboot uki
 
 Generates a certificate which is used to sign boot assets (UKI)
 
 ```
-talosctl gen secureboot uki [flags]
+chuboctl gen secureboot uki [flags]
 ```
 
 ### Options
@@ -1997,9 +1562,9 @@ talosctl gen secureboot uki [flags]
 
 ### SEE ALSO
 
-* [talosctl gen secureboot](#talosctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
+* [chuboctl gen secureboot](#chuboctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
 
-## talosctl gen secureboot
+## chuboctl gen secureboot
 
 Generates secrets for the SecureBoot process
 
@@ -2018,12 +1583,12 @@ Generates secrets for the SecureBoot process
 
 ### SEE ALSO
 
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
-* [talosctl gen secureboot database](#talosctl-gen-secureboot-database)	 - Generates a UEFI database to enroll the signing certificate
-* [talosctl gen secureboot pcr](#talosctl-gen-secureboot-pcr)	 - Generates a key which is used to sign TPM PCR values
-* [talosctl gen secureboot uki](#talosctl-gen-secureboot-uki)	 - Generates a certificate which is used to sign boot assets (UKI)
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl gen secureboot database](#chuboctl-gen-secureboot-database)	 - Generates a UEFI database to enroll the signing certificate
+* [chuboctl gen secureboot pcr](#chuboctl-gen-secureboot-pcr)	 - Generates a key which is used to sign TPM PCR values
+* [chuboctl gen secureboot uki](#chuboctl-gen-secureboot-uki)	 - Generates a certificate which is used to sign boot assets (UKI)
 
-## talosctl gen
+## chuboctl gen
 
 Generate CAs, certificates, and private keys
 
@@ -2036,17 +1601,18 @@ Generate CAs, certificates, and private keys
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl gen ca](#talosctl-gen-ca)	 - Generates a self-signed X.509 certificate authority
-* [talosctl gen config](#talosctl-gen-config)	 - Generates a set of configuration files for Talos cluster
-* [talosctl gen crt](#talosctl-gen-crt)	 - Generates an X.509 Ed25519 certificate
-* [talosctl gen csr](#talosctl-gen-csr)	 - Generates a CSR using an Ed25519 private key
-* [talosctl gen key](#talosctl-gen-key)	 - Generates an Ed25519 private key
-* [talosctl gen keypair](#talosctl-gen-keypair)	 - Generates an X.509 Ed25519 key pair
-* [talosctl gen secrets](#talosctl-gen-secrets)	 - Generates a secrets bundle file which can later be used to generate a config
-* [talosctl gen secureboot](#talosctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl gen ca](#chuboctl-gen-ca)	 - Generates a self-signed X.509 certificate authority
+* [chuboctl gen config](#chuboctl-gen-config)	 - Generates a set of configuration files for Talos cluster
+* [chuboctl gen crt](#chuboctl-gen-crt)	 - Generates an X.509 Ed25519 certificate
+* [chuboctl gen csr](#chuboctl-gen-csr)	 - Generates a CSR using an Ed25519 private key
+* [chuboctl gen key](#chuboctl-gen-key)	 - Generates an Ed25519 private key
+* [chuboctl gen keypair](#chuboctl-gen-keypair)	 - Generates an X.509 Ed25519 key pair
+* [chuboctl gen machineconfig](#chuboctl-gen-machineconfig)	 - Generate a minimal (non-Kubernetes) machine config for Chubo
+* [chuboctl gen secrets](#chuboctl-gen-secrets)	 - Generates a secrets bundle file which can later be used to generate a config
+* [chuboctl gen secureboot](#chuboctl-gen-secureboot)	 - Generates secrets for the SecureBoot process
 
-## talosctl get
+## chuboctl get
 
 Get a specific resource or list of resources (use 'talosctl get rd' to see all available resource types).
 
@@ -2056,61 +1622,31 @@ Similar to 'kubectl get', 'talosctl get' returns a set of resources from the OS.
 To get a list of all available resource definitions, issue 'talosctl get rd'
 
 ```
-talosctl get <type> [<id>] [flags]
+chuboctl get <type> [<id>] [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for get
   -i, --insecure                   get resources using the insecure (encrypted with no auth) maintenance service
       --namespace string           resource namespace (default is to use default namespace per resource)
   -n, --nodes strings              target the specified nodes
   -o, --output string              output mode (json, table, yaml, jsonpath) (default "table")
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -w, --watch                      watch resource changes
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl health
-
-Check cluster health
-
-```
-talosctl health [flags]
-```
-
-### Options
-
-```
-  -c, --cluster string                Cluster to connect to if a proxy endpoint is used.
-      --context string                Context to be used in command
-      --control-plane-nodes strings   specify IPs of control plane nodes
-  -e, --endpoints strings             override default endpoints in Talos configuration
-  -h, --help                          help for health
-      --init-node string              specify IPs of init node
-      --k8s-endpoint string           use endpoint instead of kubeconfig default
-  -n, --nodes strings                 target the specified nodes
-      --run-e2e                       run Kubernetes e2e test
-      --server                        run server-side check (default true)
-      --siderov1-keys-dir string      The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string            The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-      --wait-timeout duration         timeout to wait for the cluster to be ready (default 20m0s)
-      --worker-nodes strings          specify IPs of worker nodes
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-
-## talosctl image cache-cert-gen
+## chuboctl image cache-cert-gen
 
 Generate TLS certificates and CA patch required for securing image cache to Talos communication
 
@@ -2119,7 +1655,7 @@ Generate TLS certificates and CA patch required for securing image cache to Talo
 Generate TLS certificates and CA patch required for securing image cache to Talos communication
 
 ```
-talosctl image cache-cert-gen [flags]
+chuboctl image cache-cert-gen [flags]
 ```
 
 ### Options
@@ -2136,20 +1672,21 @@ talosctl image cache-cert-gen [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image cache-create
+## chuboctl image cache-create
 
 Create a cache of images in OCI format into a directory
 
@@ -2158,7 +1695,7 @@ Create a cache of images in OCI format into a directory
 Create a cache of images in OCI format into a directory
 
 ```
-talosctl image cache-create [flags]
+chuboctl image cache-create [flags]
 ```
 
 ### Examples
@@ -2187,20 +1724,21 @@ talosctl images default | talosctl images cache-create --image-cache-path=/tmp/t
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image cache-serve
+## chuboctl image cache-serve
 
 Serve an OCI image cache directory over HTTP(S) as a container registry
 
@@ -2209,7 +1747,7 @@ Serve an OCI image cache directory over HTTP(S) as a container registry
 Serve an OCI image cache directory over HTTP(S) as a container registry
 
 ```
-talosctl image cache-serve [flags]
+chuboctl image cache-serve [flags]
 ```
 
 ### Options
@@ -2226,25 +1764,26 @@ talosctl image cache-serve [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image k8s-bundle
+## chuboctl image k8s-bundle
 
 List the default Kubernetes images used by Talos
 
 ```
-talosctl image k8s-bundle [flags]
+chuboctl image k8s-bundle [flags]
 ```
 
 ### Options
@@ -2260,25 +1799,26 @@ talosctl image k8s-bundle [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image list
+## chuboctl image list
 
 List images in the machine's container runtime
 
 ```
-talosctl image list [flags]
+chuboctl image list [flags]
 ```
 
 ### Options
@@ -2290,25 +1830,26 @@ talosctl image list [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image pull
+## chuboctl image pull
 
 Pull an image into the machine's container runtime
 
 ```
-talosctl image pull <image> [flags]
+chuboctl image pull <image> [flags]
 ```
 
 ### Options
@@ -2320,25 +1861,26 @@ talosctl image pull <image> [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image remove
+## chuboctl image remove
 
 Remove an image from the machine's container runtime
 
 ```
-talosctl image remove <image> [flags]
+chuboctl image remove <image> [flags]
 ```
 
 ### Options
@@ -2350,25 +1892,26 @@ talosctl image remove <image> [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image talos-bundle
+## chuboctl image talos-bundle
 
 List the default system images and extensions used for Talos
 
 ```
-talosctl image talos-bundle [talos-version] [flags]
+chuboctl image talos-bundle [talos-version] [flags]
 ```
 
 ### Options
@@ -2382,94 +1925,51 @@ talosctl image talos-bundle [talos-version] [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl image](#talosctl-image)	 - Manage container images
+* [chuboctl image](#chuboctl-image)	 - Manage container images
 
-## talosctl image
+## chuboctl image
 
 Manage container images
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for image
       --namespace system           namespace to use: system (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance (default "cri")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl image cache-cert-gen](#talosctl-image-cache-cert-gen)	 - Generate TLS certificates and CA patch required for securing image cache to Talos communication
-* [talosctl image cache-create](#talosctl-image-cache-create)	 - Create a cache of images in OCI format into a directory
-* [talosctl image cache-serve](#talosctl-image-cache-serve)	 - Serve an OCI image cache directory over HTTP(S) as a container registry
-* [talosctl image k8s-bundle](#talosctl-image-k8s-bundle)	 - List the default Kubernetes images used by Talos
-* [talosctl image list](#talosctl-image-list)	 - List images in the machine's container runtime
-* [talosctl image pull](#talosctl-image-pull)	 - Pull an image into the machine's container runtime
-* [talosctl image remove](#talosctl-image-remove)	 - Remove an image from the machine's container runtime
-* [talosctl image talos-bundle](#talosctl-image-talos-bundle)	 - List the default system images and extensions used for Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl image cache-cert-gen](#chuboctl-image-cache-cert-gen)	 - Generate TLS certificates and CA patch required for securing image cache to Talos communication
+* [chuboctl image cache-create](#chuboctl-image-cache-create)	 - Create a cache of images in OCI format into a directory
+* [chuboctl image cache-serve](#chuboctl-image-cache-serve)	 - Serve an OCI image cache directory over HTTP(S) as a container registry
+* [chuboctl image k8s-bundle](#chuboctl-image-k8s-bundle)	 - List the default Kubernetes images used by Talos
+* [chuboctl image list](#chuboctl-image-list)	 - List images in the machine's container runtime
+* [chuboctl image pull](#chuboctl-image-pull)	 - Pull an image into the machine's container runtime
+* [chuboctl image remove](#chuboctl-image-remove)	 - Remove an image from the machine's container runtime
+* [chuboctl image talos-bundle](#chuboctl-image-talos-bundle)	 - List the default system images and extensions used for Talos
 
-## talosctl inject serviceaccount
-
-Inject Talos API ServiceAccount into Kubernetes manifests
-
-```
-talosctl inject serviceaccount [--roles='<ROLE_1>,<ROLE_2>'] -f <manifest.yaml> [flags]
-```
-
-### Examples
-
-```
-talosctl inject serviceaccount --roles="os:admin" -f deployment.yaml > deployment-injected.yaml
-
-Alternatively, stdin can be piped to the command:
-cat deployment.yaml | talosctl inject serviceaccount --roles="os:admin" -f - > deployment-injected.yaml
-
-```
-
-### Options
-
-```
-  -f, --file string     file with Kubernetes manifests to be injected with ServiceAccount
-  -h, --help            help for serviceaccount
-  -r, --roles strings   roles to add to the generated ServiceAccount manifests (default [os:reader])
-```
-
-### SEE ALSO
-
-* [talosctl inject](#talosctl-inject)	 - Inject Talos API resources into Kubernetes manifests
-
-## talosctl inject
-
-Inject Talos API resources into Kubernetes manifests
-
-### Options
-
-```
-  -h, --help   help for inject
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl inject serviceaccount](#talosctl-inject-serviceaccount)	 - Inject Talos API ServiceAccount into Kubernetes manifests
-
-## talosctl inspect dependencies
+## chuboctl inspect dependencies
 
 Inspect controller-resource dependencies as graphviz graph.
 
@@ -2484,7 +1984,7 @@ to render the graph:
 
 
 ```
-talosctl inspect dependencies [flags]
+chuboctl inspect dependencies [flags]
 ```
 
 ### Options
@@ -2497,96 +1997,64 @@ talosctl inspect dependencies [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl inspect](#talosctl-inspect)	 - Inspect internals of Talos
+* [chuboctl inspect](#chuboctl-inspect)	 - Inspect internals of the node OS
 
-## talosctl inspect
+## chuboctl inspect
 
-Inspect internals of Talos
+Inspect internals of the node OS
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for inspect
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl inspect dependencies](#talosctl-inspect-dependencies)	 - Inspect controller-resource dependencies as graphviz graph.
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl inspect dependencies](#chuboctl-inspect-dependencies)	 - Inspect controller-resource dependencies as graphviz graph.
 
-## talosctl kubeconfig
-
-Download the admin kubeconfig from the node
-
-### Synopsis
-
-Download the admin kubeconfig from the node.
-If merge flag is true, config will be merged with ~/.kube/config or [local-path] if specified.
-Otherwise, kubeconfig will be written to PWD or [local-path] if specified.
-
-If merge flag is false and [local-path] is "-", config will be written to stdout.
-
-```
-talosctl kubeconfig [local-path] [flags]
-```
-
-### Options
-
-```
-  -c, --cluster string              Cluster to connect to if a proxy endpoint is used.
-      --context string              Context to be used in command
-  -e, --endpoints strings           override default endpoints in Talos configuration
-  -f, --force                       Force overwrite of kubeconfig if already present, force overwrite on kubeconfig merge
-      --force-context-name string   Force context name for kubeconfig merge
-  -h, --help                        help for kubeconfig
-  -m, --merge                       Merge with existing kubeconfig (default true)
-  -n, --nodes strings               target the specified nodes
-      --siderov1-keys-dir string    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string          The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-
-## talosctl list
+## chuboctl list
 
 Retrieve a directory listing
 
 ```
-talosctl list [path] [flags]
+chuboctl list [path] [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
   -d, --depth int32                maximum recursion depth (default 1)
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for list
   -H, --humanize                   humanize size and time in the output
   -l, --long                       display additional file details
   -n, --nodes strings              target the specified nodes
   -r, --recurse                    recurse into subdirectories
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -t, --type strings               filter by specified types:
                                    f	regular file
                                    d	directory
@@ -2595,36 +2063,37 @@ talosctl list [path] [flags]
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl logs
+## chuboctl logs
 
 Retrieve logs for a service
 
 ```
-talosctl logs <service name> [flags]
+chuboctl logs <service name> [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -f, --follow                     specify if the logs should be streamed
   -h, --help                       help for logs
   -k, --kubernetes                 use the k8s.io containerd namespace
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
       --tail int32                 lines of log file to display (default is to show from the beginning) (default -1)
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl machineconfig gen
+## chuboctl machineconfig gen
 
 Generates a set of configuration files for Talos cluster
 
@@ -2636,7 +2105,7 @@ this is the port that the API server binds to on every control plane node. For a
 setup, usually involving a load balancer, use the IP and port of the load balancer.
 
 ```
-talosctl machineconfig gen <cluster name> <cluster endpoint> [flags]
+chuboctl machineconfig gen <cluster name> <cluster endpoint> [flags]
 ```
 
 ### Options
@@ -2647,14 +2116,14 @@ talosctl machineconfig gen <cluster name> <cluster endpoint> [flags]
 
 ### SEE ALSO
 
-* [talosctl machineconfig](#talosctl-machineconfig)	 - Machine config related commands
+* [chuboctl machineconfig](#chuboctl-machineconfig)	 - Machine config related commands
 
-## talosctl machineconfig patch
+## chuboctl machineconfig patch
 
 Patch a machine config
 
 ```
-talosctl machineconfig patch <machineconfig-file> [flags]
+chuboctl machineconfig patch <machineconfig-file> [flags]
 ```
 
 ### Options
@@ -2667,9 +2136,9 @@ talosctl machineconfig patch <machineconfig-file> [flags]
 
 ### SEE ALSO
 
-* [talosctl machineconfig](#talosctl-machineconfig)	 - Machine config related commands
+* [chuboctl machineconfig](#chuboctl-machineconfig)	 - Machine config related commands
 
-## talosctl machineconfig
+## chuboctl machineconfig
 
 Machine config related commands
 
@@ -2681,41 +2150,42 @@ Machine config related commands
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl machineconfig gen](#talosctl-machineconfig-gen)	 - Generates a set of configuration files for Talos cluster
-* [talosctl machineconfig patch](#talosctl-machineconfig-patch)	 - Patch a machine config
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl machineconfig gen](#chuboctl-machineconfig-gen)	 - Generates a set of configuration files for Talos cluster
+* [chuboctl machineconfig patch](#chuboctl-machineconfig-patch)	 - Patch a machine config
 
-## talosctl memory
+## chuboctl memory
 
 Show memory usage
 
 ```
-talosctl memory [flags]
+chuboctl memory [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for memory
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -v, --verbose                    display extended memory statistics
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl meta delete
+## chuboctl meta delete
 
 Delete a key from the META partition.
 
 ```
-talosctl meta delete key [flags]
+chuboctl meta delete key [flags]
 ```
 
 ### Options
@@ -2727,25 +2197,26 @@ talosctl meta delete key [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -i, --insecure                   write|delete meta using the insecure (encrypted with no auth) maintenance service
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl meta](#talosctl-meta)	 - Write and delete keys in the META partition
+* [chuboctl meta](#chuboctl-meta)	 - Write and delete keys in the META partition
 
-## talosctl meta write
+## chuboctl meta write
 
 Write a key-value pair to the META partition.
 
 ```
-talosctl meta write key value [flags]
+chuboctl meta write key value [flags]
 ```
 
 ### Options
@@ -2757,67 +2228,70 @@ talosctl meta write key value [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -i, --insecure                   write|delete meta using the insecure (encrypted with no auth) maintenance service
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl meta](#talosctl-meta)	 - Write and delete keys in the META partition
+* [chuboctl meta](#chuboctl-meta)	 - Write and delete keys in the META partition
 
-## talosctl meta
+## chuboctl meta
 
 Write and delete keys in the META partition
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for meta
   -i, --insecure                   write|delete meta using the insecure (encrypted with no auth) maintenance service
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl meta delete](#talosctl-meta-delete)	 - Delete a key from the META partition.
-* [talosctl meta write](#talosctl-meta-write)	 - Write a key-value pair to the META partition.
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl meta delete](#chuboctl-meta-delete)	 - Delete a key from the META partition.
+* [chuboctl meta write](#chuboctl-meta-write)	 - Write a key-value pair to the META partition.
 
-## talosctl mounts
+## chuboctl mounts
 
 List mounts
 
 ```
-talosctl mounts [flags]
+chuboctl mounts [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for mounts
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl netstat
+## chuboctl netstat
 
 Show network connections and sockets
 
@@ -2831,16 +2305,17 @@ Note that only pods with a pod network namespace are allowed.
 If you don't pass an argument, the command will show host connections.
 
 ```
-talosctl netstat [flags]
+chuboctl netstat [flags]
 ```
 
 ### Options
 
 ```
   -a, --all                        display all sockets states (default: connected)
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -x, --extend                     show detailed socket information
   -h, --help                       help for netstat
   -4, --ipv4                       display only ipv4 sockets
@@ -2850,8 +2325,8 @@ talosctl netstat [flags]
   -k, --pods                       show sockets used by Kubernetes pods
   -p, --programs                   show process using socket
   -w, --raw                        display only RAW sockets
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -t, --tcp                        display only TCP sockets
   -o, --timers                     display timers
   -u, --udp                        display only UDP sockets
@@ -2861,39 +2336,110 @@ talosctl netstat [flags]
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl patch
+## chuboctl nomadconfig
 
-Patch machine configuration of a Talos node with a local patch.
+Download the Nomad client configuration bundle from the node
+
+### Synopsis
+
+Download the Nomad client configuration bundle from the node.
+
+By default the bundle is extracted to PWD/nomadconfig/.
+If [local-path] is a directory, bundle is extracted under [local-path]/nomadconfig/.
+If [local-path] does not exist, it is created and used as the extraction directory.
+If [local-path] is "-", the raw .tar.gz bundle is written to stdout.
 
 ```
-talosctl patch machineconfig [flags]
+chuboctl nomadconfig [local-path] [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
+  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
+      --context string             Context to be used in command
+  -e, --endpoints strings          override default endpoints in client configuration
+  -f, --force                      Force overwrite if the output file already exists
+  -h, --help                       help for nomadconfig
+  -n, --nodes strings              target the specified nodes
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
+```
+
+### SEE ALSO
+
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+
+## chuboctl openbaoconfig
+
+Download the OpenBao client configuration bundle from the node
+
+### Synopsis
+
+Download the OpenBao client configuration bundle from the node.
+
+By default the bundle is extracted to PWD/openbaoconfig/.
+If [local-path] is a directory, bundle is extracted under [local-path]/openbaoconfig/.
+If [local-path] does not exist, it is created and used as the extraction directory.
+If [local-path] is "-", the raw .tar.gz bundle is written to stdout.
+
+```
+chuboctl openbaoconfig [local-path] [flags]
+```
+
+### Options
+
+```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
+  -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
+      --context string             Context to be used in command
+  -e, --endpoints strings          override default endpoints in client configuration
+  -f, --force                      Force overwrite if the output file already exists
+  -h, --help                       help for openbaoconfig
+  -n, --nodes strings              target the specified nodes
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
+```
+
+### SEE ALSO
+
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+
+## chuboctl patch
+
+Patch machine configuration of a node with a local patch.
+
+```
+chuboctl patch machineconfig [flags]
+```
+
+### Options
+
+```
+      --chuboconfig string                          The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string                              Cluster to connect to if a proxy endpoint is used.
       --context string                              Context to be used in command
       --dry-run                                     print the change summary and patch preview without applying the changes
-  -e, --endpoints strings                           override default endpoints in Talos configuration
+  -e, --endpoints strings                           override default endpoints in client configuration
   -h, --help                                        help for patch
   -m, --mode auto, no-reboot, reboot, staged, try   apply config mode (default auto)
       --namespace string                            resource namespace (default is to use default namespace per resource)
   -n, --nodes strings                               target the specified nodes
   -p, --patch stringArray                           the patch to be applied to the resource file, use @file to read a patch from file.
       --patch-file string                           a file containing a patch to be applied to the resource.
-      --siderov1-keys-dir string                    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string                          The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string                    The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string                          Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration                            the config will be rolled back after specified timeout (if try mode is selected) (default 1m0s)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl pcap
+## chuboctl pcap
 
 Capture the network packets from the node.
 
@@ -2902,7 +2448,7 @@ Capture the network packets from the node.
 The command launches packet capture on the node and streams back the packets as raw pcap file.
 
 ```
-talosctl pcap [flags]
+chuboctl pcap [flags]
 ```
 
 ### Examples
@@ -2926,135 +2472,140 @@ for e.g. Wireguard tunnels:
 
     talosctl pcap -i eth0 --bpf-filter "$(tcpdump -dd -y EN10MB 'tcp and dst port 80')"
 
-    talosctl pcap -i kubespan --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
+	    talosctl pcap -i siderolink --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
 
-As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
-e.g. by excluding packets with the port 50000.
-   
+	As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
+	e.g. by excluding packets with the port 50000.
+	   
 ```
 
 ### Options
 
 ```
       --bpf-filter string          bpf filter to apply, tcpdump -dd format
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
       --duration duration          duration of the capture
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for pcap
   -i, --interface string           interface name to capture packets on (default "eth0")
   -n, --nodes strings              target the specified nodes
   -o, --output string              if not set, decode packets to stdout; if set write raw pcap data to a file, use '-' for stdout
       --promiscuous                put interface into promiscuous mode
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl processes
+## chuboctl processes
 
 List running processes
 
 ```
-talosctl processes [flags]
+chuboctl processes [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for processes
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
   -s, --sort string                Column to sort output by. [rss|cpu] (default "rss")
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -w, --watch                      Stream running processes
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl read
+## chuboctl read
 
 Read a file on the machine
 
 ```
-talosctl read <path> [flags]
+chuboctl read <path> [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for read
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl reboot
+## chuboctl reboot
 
 Reboot a node
 
 ```
-talosctl reboot [flags]
+chuboctl reboot [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
       --debug                      debug operation from kernel logs. --wait is set to true when this flag is set
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for reboot
   -m, --mode string                select the reboot mode: "default", "powercycle" (skips kexec), "force" (skips graceful teardown) (default "default")
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration           time to wait for the operation is complete if --debug or --wait is set (default 30m0s)
       --wait                       wait for the operation to complete, tracking its progress. always set to true when --debug is set (default true)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl reset
+## chuboctl reset
 
 Reset a node
 
 ```
-talosctl reset [flags]
+chuboctl reset [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string                       The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string                           Cluster to connect to if a proxy endpoint is used.
       --context string                           Context to be used in command
       --debug                                    debug operation from kernel logs. --wait is set to true when this flag is set
-  -e, --endpoints strings                        override default endpoints in Talos configuration
+  -e, --endpoints strings                        override default endpoints in client configuration
       --graceful                                 if true, attempt to cordon/drain node and leave etcd (if applicable) (default true)
   -h, --help                                     help for reset
       --insecure                                 reset using the insecure (encrypted with no auth) maintenance service
   -n, --nodes strings                            target the specified nodes
       --reboot                                   if true, reboot the node after resetting instead of shutting down
-      --siderov1-keys-dir string                 The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string                 The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
       --system-labels-to-wipe strings            if set, just wipe selected system disk partitions by label but keep other partitions intact
-      --talosconfig string                       The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string                       Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration                         time to wait for the operation is complete if --debug or --wait is set (default 30m0s)
       --user-disks-to-wipe strings               if set, wipes defined devices in the list
       --wait                                     wait for the operation to complete, tracking its progress. always set to true when --debug is set (default true)
@@ -3063,101 +2614,60 @@ talosctl reset [flags]
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl restart
+## chuboctl restart
 
 Restart a process
 
 ```
-talosctl restart <id> [flags]
+chuboctl restart <id> [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for restart
   -k, --kubernetes                 use the k8s.io containerd namespace
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl rollback
+## chuboctl rollback
 
 Rollback a node to the previous installation
 
 ```
-talosctl rollback [flags]
+chuboctl rollback [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for rollback
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl rotate-ca
-
-Rotate cluster CAs (Talos and Kubernetes APIs).
-
-### Synopsis
-
-The command can rotate both Talos and Kubernetes root CAs (for the API).
-By default both CAs are rotated, but you can choose to rotate just one or another.
-The command starts by generating new CAs, and gracefully applying it to the cluster.
-
-For Kubernetes, the command only rotates the API server issuing CA, and other Kubernetes
-PKI can be rotated by applying machine config changes to the controlplane nodes.
-
-```
-talosctl rotate-ca [flags]
-```
-
-### Options
-
-```
-  -c, --cluster string                Cluster to connect to if a proxy endpoint is used.
-      --context string                Context to be used in command
-      --control-plane-nodes strings   specify IPs of control plane nodes
-      --dry-run                       dry-run mode (no changes to the cluster) (default true)
-  -e, --endpoints strings             override default endpoints in Talos configuration
-  -h, --help                          help for rotate-ca
-      --init-node string              specify IPs of init node
-      --k8s-endpoint string           use endpoint instead of kubeconfig default
-      --kubernetes                    rotate Kubernetes API CA (default true)
-  -n, --nodes strings                 target the specified nodes
-  -o, --output talosconfig            path to the output new talosconfig (default "talosconfig")
-      --siderov1-keys-dir string      The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talos                         rotate Talos API CA (default true)
-      --talosconfig string            The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-      --with-docs                     patch all machine configs adding the documentation for each field (default true)
-      --with-examples                 patch all machine configs with the commented examples (default true)
-      --worker-nodes strings          specify IPs of worker nodes
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-
-## talosctl service
+## chuboctl service
 
 Retrieve the state of a service (or all services), control service state
 
@@ -3168,79 +2678,82 @@ If service ID is specified, default action 'status' is executed which shows stat
 With actions 'start', 'stop', 'restart', service state is updated respectively.
 
 ```
-talosctl service [<id> [start|stop|restart|status]] [flags]
+chuboctl service [<id> [start|stop|restart|status]] [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for service
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl shutdown
+## chuboctl shutdown
 
 Shutdown a node
 
 ```
-talosctl shutdown [flags]
+chuboctl shutdown [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
       --debug                      debug operation from kernel logs. --wait is set to true when this flag is set
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
       --force                      if true, force a node to shutdown without a cordon/drain
   -h, --help                       help for shutdown
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration           time to wait for the operation is complete if --debug or --wait is set (default 30m0s)
       --wait                       wait for the operation to complete, tracking its progress. always set to true when --debug is set (default true)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl stats
+## chuboctl stats
 
 Get container stats
 
 ```
-talosctl stats [flags]
+chuboctl stats [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for stats
   -k, --kubernetes                 use the k8s.io containerd namespace
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl support
+## chuboctl support
 
 Dump debug information about the cluster
 
@@ -3267,165 +2780,123 @@ Generated bundle contains the following debug information:
 
 
 ```
-talosctl support [flags]
+chuboctl support [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for support
   -n, --nodes strings              target the specified nodes
   -w, --num-workers int            number of workers per node (default 1)
   -O, --output string              output file to write support archive to
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -v, --verbose                    verbose output
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl time
+## chuboctl time
 
 Gets current server time
 
 ```
-talosctl time [--check server] [flags]
+chuboctl time [--check server] [flags]
 ```
 
 ### Options
 
 ```
       --check string               checks server time against specified ntp server
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for time
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl upgrade
+## chuboctl upgrade
 
-Upgrade Talos on the target node
+Upgrade the node OS on the target node
 
 ```
-talosctl upgrade [flags]
+chuboctl upgrade [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
       --debug                      debug operation from kernel logs. --wait is set to true when this flag is set
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -f, --force                      force the upgrade (skip checks on etcd health and members, might lead to data loss)
   -h, --help                       help for upgrade
   -i, --image string               the container image to use for performing the install (default "ghcr.io/siderolabs/installer:v1.13.0-alpha.1")
       --insecure                   upgrade using the insecure (encrypted with no auth) maintenance service
   -n, --nodes strings              target the specified nodes
   -m, --reboot-mode string         select the reboot mode during upgrade. Mode "powercycle" bypasses kexec. Valid values are: ["default" "powercycle"]. (default "default")
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
   -s, --stage                      stage the upgrade to perform it after a reboot
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --timeout duration           time to wait for the operation is complete if --debug or --wait is set (default 30m0s)
       --wait                       wait for the operation to complete, tracking its progress. always set to true when --debug is set (default true)
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl upgrade-k8s
-
-Upgrade Kubernetes control plane in the Talos cluster.
-
-### Synopsis
-
-Command runs upgrade of Kubernetes control plane components between specified versions.
-
-```
-talosctl upgrade-k8s [flags]
-```
-
-### Options
-
-```
-      --apiserver-image string                 kube-apiserver image to use (default "registry.k8s.io/kube-apiserver")
-  -c, --cluster string                         Cluster to connect to if a proxy endpoint is used.
-      --context string                         Context to be used in command
-      --controller-manager-image string        kube-controller-manager image to use (default "registry.k8s.io/kube-controller-manager")
-      --dry-run                                skip the actual upgrade and show the upgrade plan instead
-      --endpoint string                        the cluster control plane endpoint
-  -e, --endpoints strings                      override default endpoints in Talos configuration
-      --from string                            the Kubernetes control plane version to upgrade from
-  -h, --help                                   help for upgrade-k8s
-      --kubelet-image string                   kubelet image to use (default "ghcr.io/siderolabs/kubelet")
-      --manifests-force-conflicts              overwrite the fields when applying even if the field manager differs
-      --manifests-inventory-policy string      kubernetes SSA inventory policy (one of 'MustMatch', 'AdoptIfNoInventory' or 'AdoptAll') (default "AdoptIfNoInventory")
-      --manifests-no-prune                     whether pruning of previously applied objects should happen after apply
-      --manifests-prune-timeout duration       how long to wait for resources to be fully deleted (set to zero to disable waiting) (default 3m0s)
-      --manifests-reconcile-timeout duration   how long to wait for resources to be fully reconciled (set to zero to disable waiting) (default 3m0s)
-  -n, --nodes strings                          target the specified nodes
-      --pre-pull-images                        pre-pull images before upgrade (default true)
-      --proxy-image string                     kube-proxy image to use (default "registry.k8s.io/kube-proxy")
-      --scheduler-image string                 kube-scheduler image to use (default "registry.k8s.io/kube-scheduler")
-      --siderov1-keys-dir string               The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string                     The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
-      --to string                              the Kubernetes control plane version to upgrade to (default "1.35.0")
-      --upgrade-kubelet                        upgrade kubelet service (default true)
-      --with-docs                              patch all machine configs adding the documentation for each field (default true)
-      --with-examples                          patch all machine configs with the commented examples (default true)
-```
-
-### SEE ALSO
-
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-
-## talosctl usage
+## chuboctl usage
 
 Retrieve a disk usage
 
 ```
-talosctl usage [path1] [path2] ... [pathN] [flags]
+chuboctl usage [path1] [path2] ... [pathN] [flags]
 ```
 
 ### Options
 
 ```
   -a, --all                        write counts for all files, not just directories
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
   -d, --depth int32                maximum recursion depth
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for usage
   -H, --humanize                   humanize size and time in the output
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -t, --threshold int              threshold exclude entries smaller than SIZE if positive, or entries greater than SIZE if negative
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl validate
+## chuboctl validate
 
 Validate config
 
 ```
-talosctl validate [flags]
+chuboctl validate [flags]
 ```
 
 ### Options
@@ -3439,36 +2910,37 @@ talosctl validate [flags]
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl version
+## chuboctl version
 
 Prints the version
 
 ```
-talosctl version [flags]
+chuboctl version [flags]
 ```
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
       --client                     Print client version only
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for version
   -i, --insecure                   use Talos maintenance mode API
   -n, --nodes strings              target the specified nodes
       --short                      Print the short version
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
 
-## talosctl wipe disk
+## chuboctl wipe disk
 
 Wipe a block device (disk or partition) which is not used as a volume
 
@@ -3479,7 +2951,7 @@ Wipe a block device (disk or partition) which is not used as a volume.
 Use device names as arguments, for example: vda or sda5.
 
 ```
-talosctl wipe disk <device names>... [flags]
+chuboctl wipe disk <device names>... [flags]
 ```
 
 ### Options
@@ -3494,98 +2966,95 @@ talosctl wipe disk <device names>... [flags]
 ### Options inherited from parent commands
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl wipe](#talosctl-wipe)	 - Wipe block device or volumes
+* [chuboctl wipe](#chuboctl-wipe)	 - Wipe block device or volumes
 
-## talosctl wipe
+## chuboctl wipe
 
 Wipe block device or volumes
 
 ### Options
 
 ```
+      --chuboconfig string         The path to the Chubo configuration file. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
   -c, --cluster string             Cluster to connect to if a proxy endpoint is used.
       --context string             Context to be used in command
-  -e, --endpoints strings          override default endpoints in Talos configuration
+  -e, --endpoints strings          override default endpoints in client configuration
   -h, --help                       help for wipe
   -n, --nodes strings              target the specified nodes
-      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
-      --talosconfig string         The path to the Talos configuration file. Defaults to 'TALOSCONFIG' env variable if set, otherwise '$HOME/.talos/config' and '/var/run/secrets/talos.dev/config' in order.
+      --siderov1-keys-dir string   The path to the SideroV1 auth PGP keys directory. Defaults to 'SIDEROV1_KEYS_DIR' env variable if set, otherwise '$HOME/.chubo/keys' and legacy '$HOME/.talos/keys'. Only valid for Contexts that use SideroV1 auth.
+      --talosconfig string         Legacy alias for --chuboconfig. Defaults to 'CHUBOCONFIG' (or legacy 'TALOSCONFIG') env variables if set, otherwise '$HOME/.chubo/config', then legacy '$HOME/.talos/config', then '/var/run/secrets/talos.dev/config'.
 ```
 
 ### SEE ALSO
 
-* [talosctl](#talosctl)	 - A CLI for out-of-band management of Kubernetes nodes created by Talos
-* [talosctl wipe disk](#talosctl-wipe-disk)	 - Wipe a block device (disk or partition) which is not used as a volume
+* [chuboctl](#chuboctl)	 - A CLI for out-of-band management of Chubo OS nodes
+* [chuboctl wipe disk](#chuboctl-wipe-disk)	 - Wipe a block device (disk or partition) which is not used as a volume
 
-## talosctl
+## chuboctl
 
-A CLI for out-of-band management of Kubernetes nodes created by Talos
+A CLI for out-of-band management of Chubo OS nodes
 
 ### Options
 
 ```
-  -h, --help   help for talosctl
+  -h, --help   help for chuboctl
 ```
 
 ### SEE ALSO
 
-* [talosctl apply-config](#talosctl-apply-config)	 - Apply a new configuration to a node
-* [talosctl bootstrap](#talosctl-bootstrap)	 - Bootstrap the etcd cluster on the specified node.
-* [talosctl cgroups](#talosctl-cgroups)	 - Retrieve cgroups usage information
-* [talosctl cluster](#talosctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
-* [talosctl completion](#talosctl-completion)	 - Output shell completion code for the specified shell (bash, fish or zsh)
-* [talosctl config](#talosctl-config)	 - Manage the client configuration file (talosconfig)
-* [talosctl conformance](#talosctl-conformance)	 - Run conformance tests
-* [talosctl containers](#talosctl-containers)	 - List containers
-* [talosctl copy](#talosctl-copy)	 - Copy data out from the node
-* [talosctl dashboard](#talosctl-dashboard)	 - Cluster dashboard with node overview, logs and real-time metrics
-* [talosctl debug](#talosctl-debug)	 - Run a debug container from an image archive or reference
-* [talosctl dmesg](#talosctl-dmesg)	 - Retrieve kernel logs
-* [talosctl edit](#talosctl-edit)	 - Edit Talos node machine configuration with the default editor.
-* [talosctl etcd](#talosctl-etcd)	 - Manage etcd
-* [talosctl events](#talosctl-events)	 - Stream runtime events
-* [talosctl gen](#talosctl-gen)	 - Generate CAs, certificates, and private keys
-* [talosctl get](#talosctl-get)	 - Get a specific resource or list of resources (use 'talosctl get rd' to see all available resource types).
-* [talosctl health](#talosctl-health)	 - Check cluster health
-* [talosctl image](#talosctl-image)	 - Manage container images
-* [talosctl inject](#talosctl-inject)	 - Inject Talos API resources into Kubernetes manifests
-* [talosctl inspect](#talosctl-inspect)	 - Inspect internals of Talos
-* [talosctl kubeconfig](#talosctl-kubeconfig)	 - Download the admin kubeconfig from the node
-* [talosctl list](#talosctl-list)	 - Retrieve a directory listing
-* [talosctl logs](#talosctl-logs)	 - Retrieve logs for a service
-* [talosctl machineconfig](#talosctl-machineconfig)	 - Machine config related commands
-* [talosctl memory](#talosctl-memory)	 - Show memory usage
-* [talosctl meta](#talosctl-meta)	 - Write and delete keys in the META partition
-* [talosctl mounts](#talosctl-mounts)	 - List mounts
-* [talosctl netstat](#talosctl-netstat)	 - Show network connections and sockets
-* [talosctl patch](#talosctl-patch)	 - Patch machine configuration of a Talos node with a local patch.
-* [talosctl pcap](#talosctl-pcap)	 - Capture the network packets from the node.
-* [talosctl processes](#talosctl-processes)	 - List running processes
-* [talosctl read](#talosctl-read)	 - Read a file on the machine
-* [talosctl reboot](#talosctl-reboot)	 - Reboot a node
-* [talosctl reset](#talosctl-reset)	 - Reset a node
-* [talosctl restart](#talosctl-restart)	 - Restart a process
-* [talosctl rollback](#talosctl-rollback)	 - Rollback a node to the previous installation
-* [talosctl rotate-ca](#talosctl-rotate-ca)	 - Rotate cluster CAs (Talos and Kubernetes APIs).
-* [talosctl service](#talosctl-service)	 - Retrieve the state of a service (or all services), control service state
-* [talosctl shutdown](#talosctl-shutdown)	 - Shutdown a node
-* [talosctl stats](#talosctl-stats)	 - Get container stats
-* [talosctl support](#talosctl-support)	 - Dump debug information about the cluster
-* [talosctl time](#talosctl-time)	 - Gets current server time
-* [talosctl upgrade](#talosctl-upgrade)	 - Upgrade Talos on the target node
-* [talosctl upgrade-k8s](#talosctl-upgrade-k8s)	 - Upgrade Kubernetes control plane in the Talos cluster.
-* [talosctl usage](#talosctl-usage)	 - Retrieve a disk usage
-* [talosctl validate](#talosctl-validate)	 - Validate config
-* [talosctl version](#talosctl-version)	 - Prints the version
-* [talosctl wipe](#talosctl-wipe)	 - Wipe block device or volumes
+* [chuboctl apply-config](#chuboctl-apply-config)	 - Apply a new configuration to a node
+* [chuboctl cgroups](#chuboctl-cgroups)	 - Retrieve cgroups usage information
+* [chuboctl cluster](#chuboctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
+* [chuboctl completion](#chuboctl-completion)	 - Output shell completion code for the specified shell (bash, fish or zsh)
+* [chuboctl config](#chuboctl-config)	 - Manage the client configuration file (chuboconfig)
+* [chuboctl consulconfig](#chuboctl-consulconfig)	 - Download the Consul client configuration bundle from the node
+* [chuboctl containers](#chuboctl-containers)	 - List containers
+* [chuboctl copy](#chuboctl-copy)	 - Copy data out from the node
+* [chuboctl dashboard](#chuboctl-dashboard)	 - Cluster dashboard with node overview, logs and real-time metrics
+* [chuboctl debug](#chuboctl-debug)	 - Run a debug container from an image archive or reference
+* [chuboctl dmesg](#chuboctl-dmesg)	 - Retrieve kernel logs
+* [chuboctl edit](#chuboctl-edit)	 - Edit machine configuration with the default editor.
+* [chuboctl events](#chuboctl-events)	 - Stream runtime events
+* [chuboctl gen](#chuboctl-gen)	 - Generate CAs, certificates, and private keys
+* [chuboctl get](#chuboctl-get)	 - Get a specific resource or list of resources (use 'talosctl get rd' to see all available resource types).
+* [chuboctl image](#chuboctl-image)	 - Manage container images
+* [chuboctl inspect](#chuboctl-inspect)	 - Inspect internals of the node OS
+* [chuboctl list](#chuboctl-list)	 - Retrieve a directory listing
+* [chuboctl logs](#chuboctl-logs)	 - Retrieve logs for a service
+* [chuboctl machineconfig](#chuboctl-machineconfig)	 - Machine config related commands
+* [chuboctl memory](#chuboctl-memory)	 - Show memory usage
+* [chuboctl meta](#chuboctl-meta)	 - Write and delete keys in the META partition
+* [chuboctl mounts](#chuboctl-mounts)	 - List mounts
+* [chuboctl netstat](#chuboctl-netstat)	 - Show network connections and sockets
+* [chuboctl nomadconfig](#chuboctl-nomadconfig)	 - Download the Nomad client configuration bundle from the node
+* [chuboctl openbaoconfig](#chuboctl-openbaoconfig)	 - Download the OpenBao client configuration bundle from the node
+* [chuboctl patch](#chuboctl-patch)	 - Patch machine configuration of a node with a local patch.
+* [chuboctl pcap](#chuboctl-pcap)	 - Capture the network packets from the node.
+* [chuboctl processes](#chuboctl-processes)	 - List running processes
+* [chuboctl read](#chuboctl-read)	 - Read a file on the machine
+* [chuboctl reboot](#chuboctl-reboot)	 - Reboot a node
+* [chuboctl reset](#chuboctl-reset)	 - Reset a node
+* [chuboctl restart](#chuboctl-restart)	 - Restart a process
+* [chuboctl rollback](#chuboctl-rollback)	 - Rollback a node to the previous installation
+* [chuboctl service](#chuboctl-service)	 - Retrieve the state of a service (or all services), control service state
+* [chuboctl shutdown](#chuboctl-shutdown)	 - Shutdown a node
+* [chuboctl stats](#chuboctl-stats)	 - Get container stats
+* [chuboctl support](#chuboctl-support)	 - Dump debug information about the cluster
+* [chuboctl time](#chuboctl-time)	 - Gets current server time
+* [chuboctl upgrade](#chuboctl-upgrade)	 - Upgrade the node OS on the target node
+* [chuboctl usage](#chuboctl-usage)	 - Retrieve a disk usage
+* [chuboctl validate](#chuboctl-validate)	 - Validate config
+* [chuboctl version](#chuboctl-version)	 - Prints the version
+* [chuboctl wipe](#chuboctl-wipe)	 - Wipe block device or volumes
 
