@@ -23,7 +23,6 @@ import (
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	networkresource "github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
@@ -122,12 +121,7 @@ func (suite *AddressEventsSuite) TestReconcile() {
 	suite.Require().Equal(hostname.TypedSpec().Hostname, event.Hostname)
 	suite.Require().Empty(event.Addresses)
 
-	nodeAddress := networkresource.NewNodeAddress(
-		networkresource.NamespaceName, networkresource.FilteredNodeAddressID(
-			networkresource.NodeAddressCurrentID,
-			k8s.NodeAddressFilterNoK8s,
-		),
-	)
+	nodeAddress := networkresource.NewNodeAddress(networkresource.NamespaceName, networkresource.NodeAddressCurrentID)
 
 	addrs := []string{
 		"10.5.0.2",

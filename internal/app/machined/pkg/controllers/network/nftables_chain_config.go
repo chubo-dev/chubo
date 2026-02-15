@@ -22,7 +22,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
@@ -83,18 +82,9 @@ func (ctrl *NfTablesChainConfigController) Run(ctx context.Context, r controller
 			return fmt.Errorf("error getting machine config: %w", err)
 		}
 
-		// try first to get filtered node addresses, if not available, use non-filtered one
-		// this handles case of being part of Kubernetes cluster and not being part of it as well
-		nodeAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.FilteredNodeAddressID(network.NodeAddressRoutedID, k8s.NodeAddressFilterNoK8s))
+		nodeAddresses, err := safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.NodeAddressRoutedID)
 		if err != nil && !state.IsNotFoundError(err) {
-			return fmt.Errorf("error getting filtered node addresses: %w", err)
-		}
-
-		if nodeAddresses == nil {
-			nodeAddresses, err = safe.ReaderGetByID[*network.NodeAddress](ctx, r, network.NodeAddressRoutedID)
-			if err != nil && !state.IsNotFoundError(err) {
-				return fmt.Errorf("error getting node addresses: %w", err)
-			}
+			return fmt.Errorf("error getting node addresses: %w", err)
 		}
 
 		r.StartTrackingOutputs()

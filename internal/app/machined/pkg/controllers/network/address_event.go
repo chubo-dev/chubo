@@ -17,12 +17,10 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-// AddressEventController reports aggregated enpoints state from hostname statuses and k8s endpoints
-// to the events stream.
+// AddressEventController reports hostname+address state to the events stream.
 type AddressEventController struct {
 	V1Alpha1Events runtime.Publisher
 }
@@ -39,9 +37,7 @@ func (ctrl *AddressEventController) Inputs() []controller.Input {
 			Namespace: network.NamespaceName,
 			Type:      network.NodeAddressType,
 			Kind:      controller.InputWeak,
-			ID: optional.Some(network.FilteredNodeAddressID(
-				network.NodeAddressCurrentID,
-				k8s.NodeAddressFilterNoK8s)),
+			ID:        optional.Some(network.NodeAddressCurrentID),
 		},
 		{
 			Namespace: network.NamespaceName,
@@ -79,9 +75,7 @@ func (ctrl *AddressEventController) Run(ctx context.Context, r controller.Runtim
 			resource.NewMetadata(
 				network.NamespaceName,
 				network.NodeAddressType,
-				network.FilteredNodeAddressID(
-					network.NodeAddressCurrentID,
-					k8s.NodeAddressFilterNoK8s),
+				network.NodeAddressCurrentID,
 				resource.VersionUndefined),
 		)
 		if err != nil {
