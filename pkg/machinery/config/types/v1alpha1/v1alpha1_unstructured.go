@@ -6,6 +6,7 @@ package v1alpha1
 
 import (
 	"fmt"
+	"reflect"
 	"slices"
 )
 
@@ -61,6 +62,74 @@ func deepCopyUnstructured(x any) any {
 	case []byte:
 		return slices.Clone(x)
 	default:
+		// Some parts of the config tree build strongly-typed slices/maps (e.g. []map[string]any),
+		// while YAML/JSON decoding often yields []any/map[string]any. Handle both.
+		v := reflect.ValueOf(x)
+
+		switch v.Kind() {
+		case reflect.Slice:
+			if v.IsNil() {
+				return x
+			}
+
+			clone := reflect.MakeSlice(v.Type(), v.Len(), v.Len())
+
+			for i := range v.Len() {
+				orig := v.Index(i).Interface()
+				copied := deepCopyUnstructured(orig)
+
+				copiedV := reflect.ValueOf(copied)
+				elemT := v.Type().Elem()
+
+				if copiedV.IsValid() && copiedV.Type().AssignableTo(elemT) {
+					clone.Index(i).Set(copiedV)
+					continue
+				}
+
+				if copiedV.IsValid() && copiedV.Type().ConvertibleTo(elemT) {
+					clone.Index(i).Set(copiedV.Convert(elemT))
+					continue
+				}
+
+				// Fall back to the original element when we can't assign the copied value.
+				clone.Index(i).Set(v.Index(i))
+			}
+
+			return clone.Interface()
+		case reflect.Map:
+			if v.IsNil() {
+				return x
+			}
+
+			// Unstructured config objects should be string-keyed. If we can't guarantee that,
+			// fail loudly instead of silently producing a malformed config tree.
+			if v.Type().Key().Kind() != reflect.String {
+				panic(fmt.Errorf("cannot deep copy %T (map key type %s)", x, v.Type().Key()))
+			}
+
+			clone := reflect.MakeMapWithSize(v.Type(), v.Len())
+
+			iter := v.MapRange()
+			for iter.Next() {
+				k := iter.Key()
+				orig := iter.Value().Interface()
+				copied := deepCopyUnstructured(orig)
+				copiedV := reflect.ValueOf(copied)
+
+				elemT := v.Type().Elem()
+				switch {
+				case copiedV.IsValid() && copiedV.Type().AssignableTo(elemT):
+					clone.SetMapIndex(k, copiedV)
+				case copiedV.IsValid() && copiedV.Type().ConvertibleTo(elemT):
+					clone.SetMapIndex(k, copiedV.Convert(elemT))
+				default:
+					clone.SetMapIndex(k, iter.Value())
+				}
+			}
+
+			return clone.Interface()
+		}
+
 		panic(fmt.Errorf("cannot deep copy %T", x))
 	}
 }

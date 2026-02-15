@@ -50,10 +50,6 @@ machine:
 
     # Provides machine specific network configuration options.
     network:
-        # Configures KubeSpan feature.
-        kubespan:
-            enabled: true # Enable the KubeSpan feature.
-        
         # # `interfaces` is used to define the network interface configuration.
         # interfaces:
         #     - interface: eth0 # The interface name.
