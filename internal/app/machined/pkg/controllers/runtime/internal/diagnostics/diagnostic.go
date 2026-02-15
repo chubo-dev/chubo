@@ -35,11 +35,7 @@ type CheckDescription struct {
 
 // Checks returns a list of checks to be run by the diagnostics engine.
 func Checks() []CheckDescription {
-	return []CheckDescription{
-		{
-			ID:         "address-overlap",
-			Hysteresis: 30 * time.Second,
-			Check:      AddressOverlapCheck,
-		},
-	}
+	// Chubo: Kubernetes/etcd product surface is removed, so legacy k8s-centric
+	// diagnostics checks are intentionally omitted.
+	return nil
 }

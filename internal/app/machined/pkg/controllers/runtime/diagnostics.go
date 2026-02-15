@@ -14,7 +14,6 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/runtime/internal/diagnostics"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
@@ -44,11 +43,6 @@ func (ctrl *DiagnosticsController) Inputs() []controller.Input {
 		{
 			Namespace: v1alpha1.NamespaceName,
 			Type:      v1alpha1.ServiceType,
-			Kind:      controller.InputWeak,
-		},
-		{
-			Namespace: k8s.NamespaceName,
-			Type:      k8s.NodenameType,
 			Kind:      controller.InputWeak,
 		},
 	}
