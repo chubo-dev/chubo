@@ -12,7 +12,6 @@ import (
 
 	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
 )
 
 // APIServerDefaultAuditPolicy is the default kube-apiserver audit policy.
@@ -25,18 +24,6 @@ var APIServerDefaultAuditPolicy = Unstructured{
 				"level": "Metadata",
 			},
 		},
-	},
-}
-
-// APIServerDefaultAuthorizationConfigAuthorizers is the default kube-apiserver authorization authorizers.
-var APIServerDefaultAuthorizationConfigAuthorizers = []k8s.AuthorizationAuthorizersSpec{
-	{
-		Type: "Node",
-		Name: "node",
-	},
-	{
-		Type: "RBAC",
-		Name: "rbac",
 	},
 }
 
