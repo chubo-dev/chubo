@@ -136,6 +136,9 @@ ensure_opengyoza_artifact_url() {
 	if [[ ! -f "${local_path}" ]]; then
 		echo "downloading opengyoza release asset via gh (${tag}/${asset})"
 		if [[ -n "${SUDO_USER:-}" && "${SUDO_USER}" != "root" ]]; then
+			# The run dir is created by root when invoked under sudo. Since we run `gh` as the
+			# invoker (to reuse its auth/token config), ensure the invoker can write into it.
+			chown_run_dir_to_invoker
 			su - "${SUDO_USER}" -c "gh release download \"${tag}\" -R opengyoza/opengyoza -p \"${asset}\" -D \"${dir}\" --clobber"
 		else
 			gh release download "${tag}" -R opengyoza/opengyoza -p "${asset}" -D "${dir}" --clobber
