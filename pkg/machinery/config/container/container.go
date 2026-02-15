@@ -130,8 +130,15 @@ func NewV1Alpha1(config *v1alpha1.Config) *Container {
 func (container *Container) Clone() coreconfig.Provider { return container.clone() }
 
 func (container *Container) clone() *Container {
+	// deep-copy generator doesn't guard nil receivers, so avoid calling DeepCopy
+	// on nil configs (containers can legitimately omit v1alpha1.Config).
+	var v1alpha1Config *v1alpha1.Config
+	if container.v1alpha1Config != nil {
+		v1alpha1Config = container.v1alpha1Config.DeepCopy()
+	}
+
 	return &Container{
-		v1alpha1Config: container.v1alpha1Config.DeepCopy(),
+		v1alpha1Config: v1alpha1Config,
 		documents:      xslices.Map(container.documents, config.Document.Clone),
 	}
 }
@@ -643,6 +650,10 @@ func (container *Container) RedactSecrets(replacement string) coreconfig.Provide
 
 // RawV1Alpha1 returns internal config representation for v1alpha1.Config.
 func (container *Container) RawV1Alpha1() *v1alpha1.Config {
+	if container == nil || container.v1alpha1Config == nil {
+		return nil
+	}
+
 	if container.readonly {
 		return container.v1alpha1Config.DeepCopy()
 	}
