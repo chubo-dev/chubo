@@ -411,8 +411,6 @@ func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (stri
 		return "resource/definitions/block/block.proto", "talos.resource.definitions.block.ParameterSpec"
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd", "ArgValues"}:
 		return "resource/definitions/etcd/etcd.proto", "talos.resource.definitions.etcd.ArgValues"
-	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s", "ArgValues"}:
-		return "resource/definitions/k8s/k8s.proto", "talos.resource.definitions.k8s.ArgValues"
 	default:
 		return "", ""
 	}
