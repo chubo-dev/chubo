@@ -414,6 +414,11 @@ if [[ ! -x "${TALOSCTL}" ]]; then
 elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
 	echo "existing CLI binary is not chubo-tagged; rebuilding"
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+elif command -v strings >/dev/null 2>&1 && strings "${TALOSCTL}" 2>/dev/null | grep -q "KUBERNETES ENDPOINT"; then
+	# We recently renamed this UX to "CONTROL PLANE ENDPOINT". Seeing the old string
+	# means the host binary is stale (even if it was built with the right tags).
+	echo "existing CLI binary is stale (contains 'KUBERNETES ENDPOINT'); rebuilding"
+	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 fi
 
 if ! command -v crane >/dev/null 2>&1; then
