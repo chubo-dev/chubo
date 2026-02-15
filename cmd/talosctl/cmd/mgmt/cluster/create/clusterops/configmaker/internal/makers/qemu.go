@@ -189,13 +189,13 @@ func (m *Qemu) AddExtraProvisionOpts() error {
 		provision.WithSiderolinkAgent(m.EOps.WithSiderolinkAgent.IsEnabled()),
 	})
 
-	externalKubernetesEndpoint := m.Provisioner.GetExternalKubernetesControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)
+	externalControlPlaneEndpoint := m.Provisioner.GetExternalControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)
 
 	if m.EOps.UseVIP {
-		externalKubernetesEndpoint = "https://" + nethelpers.JoinHostPort(m.VIP.String(), m.Ops.ControlPlanePort)
+		externalControlPlaneEndpoint = "https://" + nethelpers.JoinHostPort(m.VIP.String(), m.Ops.ControlPlanePort)
 	}
 
-	m.ProvisionOps = slices.Concat(m.ProvisionOps, []provision.Option{provision.WithKubernetesEndpoint(externalKubernetesEndpoint)})
+	m.ProvisionOps = slices.Concat(m.ProvisionOps, []provision.Option{provision.WithControlPlaneEndpoint(externalControlPlaneEndpoint)})
 
 	return nil
 }

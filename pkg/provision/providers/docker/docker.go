@@ -24,7 +24,7 @@ import (
 type provisioner struct {
 	client *client.Client
 
-	mappedKubernetesPort, mappedTalosAPIPort int
+	mappedControlPlanePort, mappedTalosAPIPort int
 }
 
 func getAvailableTCPPort(ctx context.Context) (int, error) {
@@ -64,9 +64,9 @@ func NewProvisioner(ctx context.Context) (provision.Provisioner, error) {
 		return nil, err
 	}
 
-	p.mappedKubernetesPort, err = getAvailableTCPPort(ctx)
+	p.mappedControlPlanePort, err = getAvailableTCPPort(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get available port for Kubernetes API: %w", err)
+		return nil, fmt.Errorf("failed to get available port for control plane endpoint: %w", err)
 	}
 
 	p.mappedTalosAPIPort, err = getAvailableTCPPort(ctx)
@@ -107,16 +107,16 @@ func (p *provisioner) GenOptions(networkReq provision.NetworkRequest, contract *
 	return genOptions, nil
 }
 
-// GetInClusterKubernetesControlPlaneEndpoint returns the Kubernetes control plane endpoint.
-func (p *provisioner) GetInClusterKubernetesControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
+// GetInClusterControlPlaneEndpoint returns the in-cluster control plane endpoint.
+func (p *provisioner) GetInClusterControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
 	// Docker doesn't have a loadbalancer, so use the first container IP.
 	return "https://" + nethelpers.JoinHostPort(networkReq.CIDRs[0].Addr().Next().Next().String(), controlPlanePort)
 }
 
-// GetExternalKubernetesControlPlaneEndpoint returns the Kubernetes control plane endpoint.
-func (p *provisioner) GetExternalKubernetesControlPlaneEndpoint(provision.NetworkRequest, int) string {
-	// return a mapped to the localhost first container Kubernetes API endpoint.
-	return "https://" + nethelpers.JoinHostPort("127.0.0.1", p.mappedKubernetesPort)
+// GetExternalControlPlaneEndpoint returns the external control plane endpoint.
+func (p *provisioner) GetExternalControlPlaneEndpoint(provision.NetworkRequest, int) string {
+	// return a mapped-to-localhost endpoint for the first container control plane port.
+	return "https://" + nethelpers.JoinHostPort("127.0.0.1", p.mappedControlPlanePort)
 }
 
 // GetTalosAPIEndpoints returns a list of Talos API endpoints.

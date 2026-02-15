@@ -25,8 +25,8 @@ type Provisioner interface {
 
 	GenOptions(NetworkRequest, *config.VersionContract) ([]generate.Option, []bundle.Option)
 
-	GetInClusterKubernetesControlPlaneEndpoint(req NetworkRequest, controlPlanePort int) string
-	GetExternalKubernetesControlPlaneEndpoint(req NetworkRequest, controlPlanePort int) string
+	GetInClusterControlPlaneEndpoint(req NetworkRequest, controlPlanePort int) string
+	GetExternalControlPlaneEndpoint(req NetworkRequest, controlPlanePort int) string
 	GetTalosAPIEndpoints(NetworkRequest) []string
 
 	GetFirstInterface() v1alpha1.IfaceSelector

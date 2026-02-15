@@ -25,10 +25,10 @@ func WithLogWriter(w io.Writer) Option {
 	}
 }
 
-// WithKubernetesEndpoint specifies full external Kubernetes API endpoint to use when accessing Talos cluster.
-func WithKubernetesEndpoint(endpoint string) Option {
+// WithControlPlaneEndpoint specifies full external control plane endpoint to use when accessing a provisioned cluster.
+func WithControlPlaneEndpoint(endpoint string) Option {
 	return func(o *Options) error {
-		o.KubernetesEndpoint = endpoint
+		o.ControlPlaneEndpoint = endpoint
 
 		return nil
 	}
@@ -207,11 +207,11 @@ func WithSkipInjectingExtraCmdline(v bool) Option {
 
 // Options describes Provisioner parameters.
 type Options struct {
-	LogWriter          io.Writer
-	TalosConfig        *clientconfig.Config
-	TalosClient        *client.Client
-	KubernetesEndpoint string
-	TargetArch         string
+	LogWriter            io.Writer
+	TalosConfig          *clientconfig.Config
+	TalosClient          *client.Client
+	ControlPlaneEndpoint string
+	TargetArch           string
 
 	// Enable bootloader by booting from disk image after install.
 	BootloaderEnabled bool

@@ -515,7 +515,7 @@ func (suite *BaseSuite) setupCluster(options clusterOptions) {
 		request.InitramfsPath = options.SourceInitramfsPath
 	}
 
-	suite.controlPlaneEndpoint = suite.provisioner.GetExternalKubernetesControlPlaneEndpoint(request.Network, constants.DefaultControlPlanePort)
+	suite.controlPlaneEndpoint = suite.provisioner.GetExternalControlPlaneEndpoint(request.Network, constants.DefaultControlPlanePort)
 
 	versionContract, err := config.ParseContractFromVersion(options.SourceVersion)
 	suite.Require().NoError(err)

@@ -186,7 +186,7 @@ func (m *Maker[T]) InitCommon() error {
 
 func (m *Maker[T]) initProvisionOps() error {
 	m.ProvisionOps = []provision.Option{
-		provision.WithKubernetesEndpoint(m.Provisioner.GetExternalKubernetesControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)),
+		provision.WithControlPlaneEndpoint(m.Provisioner.GetExternalControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)),
 	}
 
 	return nil
@@ -571,7 +571,7 @@ func (m *Maker[T]) initGatewayIPs() error {
 }
 
 func (m *Maker[T]) initEndpoints() error {
-	m.InClusterEndpoint = m.Provisioner.GetInClusterKubernetesControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)
+	m.InClusterEndpoint = m.Provisioner.GetInClusterControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)
 	m.Endpoints = m.Provisioner.GetTalosAPIEndpoints(m.ClusterRequest.Network)
 
 	return nil

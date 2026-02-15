@@ -59,7 +59,7 @@ func (p *provisioner) Reflect(ctx context.Context, clusterName, stateDirectory s
 		return nil, err
 	}
 
-	var mappedKubernetesPort string
+	var mappedControlPlanePort string
 
 	for _, node := range nodes {
 		t, err := machine.ParseType(node.Labels["talos.type"])
@@ -86,7 +86,7 @@ func (p *provisioner) Reflect(ctx context.Context, clusterName, stateDirectory s
 		for port, portBinding := range container.Container.HostConfig.PortBindings {
 			if port.Num() == constants.DefaultControlPlanePort {
 				for _, binding := range portBinding {
-					mappedKubernetesPort = binding.HostPort
+					mappedControlPlanePort = binding.HostPort
 				}
 			}
 		}
@@ -104,8 +104,8 @@ func (p *provisioner) Reflect(ctx context.Context, clusterName, stateDirectory s
 			})
 	}
 
-	if mappedKubernetesPort != "" {
-		res.clusterInfo.KubernetesEndpoint = "https://" + net.JoinHostPort("127.0.0.1", mappedKubernetesPort)
+	if mappedControlPlanePort != "" {
+		res.clusterInfo.ControlPlaneEndpoint = "https://" + net.JoinHostPort("127.0.0.1", mappedControlPlanePort)
 	}
 
 	return res, nil

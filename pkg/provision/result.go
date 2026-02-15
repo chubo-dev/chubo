@@ -32,8 +32,8 @@ type ClusterInfo struct {
 	// ExtraNodes are not part of the cluster.
 	ExtraNodes []NodeInfo
 
-	// KubernetesEndpoint is the endpoint of the Kubernetes API server.
-	KubernetesEndpoint string
+	// ControlPlaneEndpoint is the external endpoint for the cluster control plane load balancer (if any).
+	ControlPlaneEndpoint string
 }
 
 // NetworkInfo describes cluster network.

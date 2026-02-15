@@ -33,12 +33,12 @@ func (p testProvisioner) GetTalosAPIEndpoints(provision.NetworkRequest) []string
 	return []string{"talos-api-endpoint.test"}
 }
 
-func (p testProvisioner) GetInClusterKubernetesControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
+func (p testProvisioner) GetInClusterControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
 	return "controlplane-endpoint.test"
 }
 
-func (p testProvisioner) GetExternalKubernetesControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
-	return "external-kubernetes-controlplane-endpoint.test"
+func (p testProvisioner) GetExternalControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
+	return "external-controlplane-endpoint.test"
 }
 
 type nothingProvider struct{}

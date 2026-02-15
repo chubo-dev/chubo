@@ -167,9 +167,9 @@ func (p *provisioner) Create(ctx context.Context, request provision.ClusterReque
 			GatewayAddrs:      request.Network.GatewayAddrs,
 			MTU:               request.Network.MTU,
 		},
-		Nodes:              nodeInfo,
-		ExtraNodes:         pxeNodeInfo,
-		KubernetesEndpoint: p.GetExternalKubernetesControlPlaneEndpoint(request.Network, lbPort),
+		Nodes:                nodeInfo,
+		ExtraNodes:           pxeNodeInfo,
+		ControlPlaneEndpoint: p.GetExternalControlPlaneEndpoint(request.Network, lbPort),
 	}
 
 	if err := state.Save(); err != nil {

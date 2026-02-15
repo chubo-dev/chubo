@@ -26,7 +26,7 @@ import (
 // showCmd represents the cluster show command.
 var showCmd = &cobra.Command{
 	Use:   "show",
-	Short: "Shows info about a local provisioned kubernetes cluster",
+	Short: "Shows info about a local provisioned cluster",
 	Long:  ``,
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -65,7 +65,7 @@ func ShowCluster(cluster provision.Cluster) error {
 
 	fmt.Fprintf(w, "NETWORK GATEWAY\t%s\n", strings.Join(gateways, ","))
 	fmt.Fprintf(w, "NETWORK MTU\t%d\n", cluster.Info().Network.MTU)
-	fmt.Fprintf(w, "KUBERNETES ENDPOINT\t%s\n", cluster.Info().KubernetesEndpoint)
+	fmt.Fprintf(w, "CONTROL PLANE ENDPOINT\t%s\n", cluster.Info().ControlPlaneEndpoint)
 
 	if err := w.Flush(); err != nil {
 		return err

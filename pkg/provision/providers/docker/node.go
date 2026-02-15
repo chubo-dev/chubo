@@ -54,7 +54,7 @@ func (p *provisioner) createNodes(
 				nodeReq.Ports = append(
 					[]string{
 						fmt.Sprintf("%s%d:%d/tcp", hostPrefix, p.mappedTalosAPIPort, constants.ApidPort),
-						fmt.Sprintf("%s%d:%d/tcp", hostPrefix, p.mappedKubernetesPort, constants.DefaultControlPlanePort),
+						fmt.Sprintf("%s%d:%d/tcp", hostPrefix, p.mappedControlPlanePort, constants.DefaultControlPlanePort),
 					},
 					nodeReq.Ports...,
 				)

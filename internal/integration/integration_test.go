@@ -92,7 +92,7 @@ func TestIntegration(t *testing.T) {
 		}
 
 		if k8sEndpoint == "" && provisionerName == base.ProvisionerDocker {
-			k8sEndpoint = cluster.Info().KubernetesEndpoint
+			k8sEndpoint = cluster.Info().ControlPlaneEndpoint
 		}
 	}
 

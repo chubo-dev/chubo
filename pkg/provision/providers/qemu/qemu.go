@@ -116,16 +116,16 @@ func (p *provisioner) GenOptions(networkReq provision.NetworkRequest, contract *
 	return genOpts, bundleOpts
 }
 
-// GetInClusterKubernetesControlPlaneEndpoint returns the Kubernetes control plane endpoint.
-func (p *provisioner) GetInClusterKubernetesControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
+// GetInClusterControlPlaneEndpoint returns the in-cluster control plane endpoint.
+func (p *provisioner) GetInClusterControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
 	// QEMU provisioner always runs TCP loadbalancer on the bridge IP and port 6443.
 	return "https://" + nethelpers.JoinHostPort(networkReq.GatewayAddrs[0].String(), controlPlanePort)
 }
 
-// GetExternalKubernetesControlPlaneEndpoint returns the Kubernetes control plane endpoint.
-func (p *provisioner) GetExternalKubernetesControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
+// GetExternalControlPlaneEndpoint returns the external control plane endpoint.
+func (p *provisioner) GetExternalControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
 	// for QEMU, external and in-cluster endpoints are same.
-	return p.GetInClusterKubernetesControlPlaneEndpoint(networkReq, controlPlanePort)
+	return p.GetInClusterControlPlaneEndpoint(networkReq, controlPlanePort)
 }
 
 // GetTalosAPIEndpoints returns a list of Talos API endpoints.
