@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/go-getter/v2"
+	"github.com/siderolabs/go-retry/retry"
 
 	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
 	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
@@ -154,5 +155,55 @@ func postCreate(
 		return nil
 	}
 
-	return bootstrapCluster(ctx, clusterAccess, cOps)
+	// In chubo, `cluster create` is a dev fixture creator only:
+	// it should not bootstrap Kubernetes/etcd or attempt kubeconfig export/merge.
+	if cOps.ClusterWait {
+		if err := waitForRuntimeAPI(ctx, clusterAccess, clusterConfigs.ClusterRequest.Nodes, cOps.ClusterWaitTimeout); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func waitForRuntimeAPI(ctx context.Context, clusterAccess *access.Adapter, nodes []provision.NodeRequest, timeout time.Duration) error {
+	if timeout <= 0 {
+		return fmt.Errorf("invalid wait timeout: %s", timeout)
+	}
+
+	deadline := time.Now().Add(timeout)
+
+	for _, node := range nodes {
+		ep := node.IPs[0].String()
+
+		fmt.Fprintf(os.Stderr, "waiting for runtime OS API on %s (%s)\n", node.Name, ep)
+
+		waitNode := func(ctx context.Context) error {
+			cli, err := clusterAccess.Client(ep)
+			if err != nil {
+				return retry.ExpectedError(err)
+			}
+
+			attemptCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+			defer cancel()
+
+			_, err = cli.Version(attemptCtx)
+			if err != nil {
+				return retry.ExpectedError(err)
+			}
+
+			return nil
+		}
+
+		remaining := time.Until(deadline)
+		if remaining <= 0 {
+			return fmt.Errorf("timed out waiting for runtime OS API on %s (%s)", node.Name, ep)
+		}
+
+		if err := retry.Constant(remaining, retry.WithUnits(500*time.Millisecond), retry.WithJitter(100*time.Millisecond)).RetryWithContext(ctx, waitNode); err != nil {
+			return fmt.Errorf("timed out waiting for runtime OS API on %s (%s): %w", node.Name, ep, err)
+		}
+	}
+
+	return nil
 }
