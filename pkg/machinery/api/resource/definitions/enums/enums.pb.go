@@ -3525,56 +3525,6 @@ func (CriImageCacheCopyStatus) EnumDescriptor() ([]byte, []int) {
 	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{43}
 }
 
-// KubespanPeerState is KubeSpan peer current state.
-type KubespanPeerState int32
-
-const (
-	KubespanPeerState_PEER_STATE_UNKNOWN KubespanPeerState = 0
-	KubespanPeerState_PEER_STATE_UP      KubespanPeerState = 1
-	KubespanPeerState_PEER_STATE_DOWN    KubespanPeerState = 2
-)
-
-// Enum value maps for KubespanPeerState.
-var (
-	KubespanPeerState_name = map[int32]string{
-		0: "PEER_STATE_UNKNOWN",
-		1: "PEER_STATE_UP",
-		2: "PEER_STATE_DOWN",
-	}
-	KubespanPeerState_value = map[string]int32{
-		"PEER_STATE_UNKNOWN": 0,
-		"PEER_STATE_UP":      1,
-		"PEER_STATE_DOWN":    2,
-	}
-)
-
-func (x KubespanPeerState) Enum() *KubespanPeerState {
-	p := new(KubespanPeerState)
-	*p = x
-	return p
-}
-
-func (x KubespanPeerState) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (KubespanPeerState) Descriptor() protoreflect.EnumDescriptor {
-	return file_resource_definitions_enums_enums_proto_enumTypes[44].Descriptor()
-}
-
-func (KubespanPeerState) Type() protoreflect.EnumType {
-	return &file_resource_definitions_enums_enums_proto_enumTypes[44]
-}
-
-func (x KubespanPeerState) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use KubespanPeerState.Descriptor instead.
-func (KubespanPeerState) EnumDescriptor() ([]byte, []int) {
-	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{44}
-}
-
 // NetworkConfigLayer describes network configuration layers, with lowest priority first.
 type NetworkConfigLayer int32
 
@@ -3615,11 +3565,11 @@ func (x NetworkConfigLayer) String() string {
 }
 
 func (NetworkConfigLayer) Descriptor() protoreflect.EnumDescriptor {
-	return file_resource_definitions_enums_enums_proto_enumTypes[45].Descriptor()
+	return file_resource_definitions_enums_enums_proto_enumTypes[44].Descriptor()
 }
 
 func (NetworkConfigLayer) Type() protoreflect.EnumType {
-	return &file_resource_definitions_enums_enums_proto_enumTypes[45]
+	return &file_resource_definitions_enums_enums_proto_enumTypes[44]
 }
 
 func (x NetworkConfigLayer) Number() protoreflect.EnumNumber {
@@ -3628,7 +3578,7 @@ func (x NetworkConfigLayer) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use NetworkConfigLayer.Descriptor instead.
 func (NetworkConfigLayer) EnumDescriptor() ([]byte, []int) {
-	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{45}
+	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{44}
 }
 
 // NetworkOperator enumerates Talos network operators.
@@ -3665,11 +3615,11 @@ func (x NetworkOperator) String() string {
 }
 
 func (NetworkOperator) Descriptor() protoreflect.EnumDescriptor {
-	return file_resource_definitions_enums_enums_proto_enumTypes[46].Descriptor()
+	return file_resource_definitions_enums_enums_proto_enumTypes[45].Descriptor()
 }
 
 func (NetworkOperator) Type() protoreflect.EnumType {
-	return &file_resource_definitions_enums_enums_proto_enumTypes[46]
+	return &file_resource_definitions_enums_enums_proto_enumTypes[45]
 }
 
 func (x NetworkOperator) Number() protoreflect.EnumNumber {
@@ -3678,7 +3628,7 @@ func (x NetworkOperator) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use NetworkOperator.Descriptor instead.
 func (NetworkOperator) EnumDescriptor() ([]byte, []int) {
-	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{46}
+	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{45}
 }
 
 var File_resource_definitions_enums_enums_proto protoreflect.FileDescriptor
@@ -4328,11 +4278,7 @@ const file_resource_definitions_enums_enums_proto_rawDesc = "" +
 	"\x1fIMAGE_CACHE_COPY_STATUS_UNKNOWN\x10\x00\x12#\n" +
 	"\x1fIMAGE_CACHE_COPY_STATUS_SKIPPED\x10\x01\x12#\n" +
 	"\x1fIMAGE_CACHE_COPY_STATUS_PENDING\x10\x02\x12!\n" +
-	"\x1dIMAGE_CACHE_COPY_STATUS_READY\x10\x03*S\n" +
-	"\x11KubespanPeerState\x12\x16\n" +
-	"\x12PEER_STATE_UNKNOWN\x10\x00\x12\x11\n" +
-	"\rPEER_STATE_UP\x10\x01\x12\x13\n" +
-	"\x0fPEER_STATE_DOWN\x10\x02*\x88\x01\n" +
+	"\x1dIMAGE_CACHE_COPY_STATUS_READY\x10\x03*\x88\x01\n" +
 	"\x12NetworkConfigLayer\x12\x12\n" +
 	"\x0eCONFIG_DEFAULT\x10\x00\x12\x12\n" +
 	"\x0eCONFIG_CMDLINE\x10\x01\x12\x13\n" +
@@ -4357,7 +4303,7 @@ func file_resource_definitions_enums_enums_proto_rawDescGZIP() []byte {
 	return file_resource_definitions_enums_enums_proto_rawDescData
 }
 
-var file_resource_definitions_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 47)
+var file_resource_definitions_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 46)
 var file_resource_definitions_enums_enums_proto_goTypes = []any{
 	(RuntimeMachineStage)(0),             // 0: talos.resource.definitions.enums.RuntimeMachineStage
 	(RuntimeSELinuxState)(0),             // 1: talos.resource.definitions.enums.RuntimeSELinuxState
@@ -4403,9 +4349,8 @@ var file_resource_definitions_enums_enums_proto_goTypes = []any{
 	(BlockVolumeType)(0),                 // 41: talos.resource.definitions.enums.BlockVolumeType
 	(CriImageCacheStatus)(0),             // 42: talos.resource.definitions.enums.CriImageCacheStatus
 	(CriImageCacheCopyStatus)(0),         // 43: talos.resource.definitions.enums.CriImageCacheCopyStatus
-	(KubespanPeerState)(0),               // 44: talos.resource.definitions.enums.KubespanPeerState
-	(NetworkConfigLayer)(0),              // 45: talos.resource.definitions.enums.NetworkConfigLayer
-	(NetworkOperator)(0),                 // 46: talos.resource.definitions.enums.NetworkOperator
+	(NetworkConfigLayer)(0),              // 44: talos.resource.definitions.enums.NetworkConfigLayer
+	(NetworkOperator)(0),                 // 45: talos.resource.definitions.enums.NetworkOperator
 }
 var file_resource_definitions_enums_enums_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -4425,7 +4370,7 @@ func file_resource_definitions_enums_enums_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_definitions_enums_enums_proto_rawDesc), len(file_resource_definitions_enums_enums_proto_rawDesc)),
-			NumEnums:      47,
+			NumEnums:      46,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

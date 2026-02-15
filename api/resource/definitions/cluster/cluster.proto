@@ -17,9 +17,6 @@ message AffiliateSpec {
   string operating_system = 5;
   talos.resource.definitions.enums.MachineType machine_type = 6;
   ControlPlane control_plane = 8;
-
-  reserved 7;
-  reserved "kube_span";
 }
 
 // ConfigSpec describes cluster discovery configuration.
@@ -67,3 +64,4 @@ message MemberSpec {
   string operating_system = 5;
   ControlPlane control_plane = 6;
 }
+
