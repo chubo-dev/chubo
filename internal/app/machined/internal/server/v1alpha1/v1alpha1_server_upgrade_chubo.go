@@ -2,8 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-//go:build chubo
-
 package runtime
 
 import (
@@ -11,14 +9,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"slices"
 
 	"github.com/google/uuid"
 
 	runtimepkg "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/internal/pkg/install"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
-	machinetype "github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
@@ -96,16 +92,4 @@ func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (*mach
 			},
 		},
 	}, nil
-}
-
-func shouldRunEtcdUpgradePrechecks(machineType machinetype.Type, force bool, serviceIDs []string) bool {
-	if force {
-		return false
-	}
-
-	if machineType == machinetype.TypeWorker {
-		return false
-	}
-
-	return slices.Contains(serviceIDs, "etcd")
 }
