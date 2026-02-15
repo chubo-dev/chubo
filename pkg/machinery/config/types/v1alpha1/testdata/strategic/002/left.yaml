@@ -1,2 +1,13 @@
 version: v1alpha1
-machine: {}
+debug: false
+persist: true
+machine:
+  type: worker
+  token: tok
+  certSANs:
+    - 10.0.0.1
+cluster:
+  discovery:
+    registries:
+      kubernetes: {}
+      service: {}

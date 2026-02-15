@@ -1,7 +1,5 @@
 cluster:
-  apiServer:
-    auditPolicy:
-      apiVersion: audit.k8s.io/v1
-      kind: Policy
-      rules:
-        - level: None
+  discovery:
+    registries:
+      service:
+        endpoint: https://discovery.override.example.com/

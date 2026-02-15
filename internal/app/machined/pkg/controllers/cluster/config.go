@@ -44,13 +44,16 @@ func NewConfigController() *ConfigController {
 				res.TypedSpec().DiscoveryEnabled = c.Cluster().Discovery().Enabled()
 
 				if c.Cluster().Discovery().Enabled() {
-					res.TypedSpec().RegistryKubernetesEnabled = c.Cluster().Discovery().Registries().Kubernetes().Enabled()
-					res.TypedSpec().RegistryServiceEnabled = c.Cluster().Discovery().Registries().Service().Enabled()
+					// Chubo fork: Kubernetes discovery registry is removed.
+					res.TypedSpec().RegistryKubernetesEnabled = false
 
-					if c.Cluster().Discovery().Registries().Service().Enabled() {
+					svc := c.Cluster().Discovery().Service()
+					res.TypedSpec().RegistryServiceEnabled = svc.Enabled()
+
+					if svc.Enabled() {
 						var u *url.URL
 
-						u, err := url.ParseRequestURI(c.Cluster().Discovery().Registries().Service().Endpoint())
+						u, err := url.ParseRequestURI(svc.Endpoint())
 						if err != nil {
 							return err
 						}
@@ -84,6 +87,10 @@ func NewConfigController() *ConfigController {
 				} else {
 					res.TypedSpec().RegistryKubernetesEnabled = false
 					res.TypedSpec().RegistryServiceEnabled = false
+					res.TypedSpec().ServiceEndpoint = ""
+					res.TypedSpec().ServiceEndpointInsecure = false
+					res.TypedSpec().ServiceEncryptionKey = nil
+					res.TypedSpec().ServiceClusterID = ""
 				}
 
 				return nil

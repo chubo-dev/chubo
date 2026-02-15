@@ -1,17 +1,10 @@
-cluster:
-  inlineManifests:
-    - name: cilium
-      contents: | # the empty newline below is important
+machine:
+  files:
+    - path: /etc/chubo/test.conf
+      op: overwrite
+      permissions: 0o644
+      content: |
+        line1
+        line2
 
-        ---
-        apiVersion: v1
-        kind: ServiceAccount
-        metadata:
-          name: cilium
-          namespace: kube-system
-        ---
-        apiVersion: v1
-        kind: ServiceAccount
-        metadata:
-          name: cilium-operator
-          namespace: kube-system
+        line4

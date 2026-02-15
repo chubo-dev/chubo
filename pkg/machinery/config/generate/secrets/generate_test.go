@@ -12,12 +12,14 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.yaml.in/yaml/v4"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/config/generate"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
+	v1alpha1 "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 func TestNewBundle(t *testing.T) {
@@ -64,13 +66,41 @@ func TestNewBundleFromConfig(t *testing.T) {
 
 	assert.Equal(t, stdx509.Ed25519, osCA.Crt.PublicKeyAlgorithm, "expected Ed25519 signature algorithm")
 
-	input, err := generate.NewInput("test", "https://localhost:6443", constants.DefaultKubernetesVersion, generate.WithSecretsBundle(bundle))
+	doc := &v1alpha1.Config{
+		ConfigVersion: "v1alpha1",
+		MachineConfig: &v1alpha1.MachineConfig{
+			MachineType:  machine.TypeControlPlane.String(),
+			MachineToken: bundle.TrustdInfo.Token,
+			MachineCA:    bundle.Certs.OS,
+		},
+		ClusterConfig: &v1alpha1.ClusterConfig{
+			ClusterID:     bundle.Cluster.ID,
+			ClusterSecret: bundle.Cluster.Secret,
+			ClusterName:   "test",
+		},
+	}
+
+	raw, err := yaml.Marshal(doc)
 	require.NoError(t, err)
 
-	cfg, err := input.Config(machine.TypeControlPlane)
+	cfg, err := configloader.NewFromBytes(raw)
 	require.NoError(t, err)
 
 	bundle2 := secrets.NewBundleFromConfig(bundle.Clock, cfg)
 
-	assert.Equal(t, bundle, bundle2)
+	require.NotNil(t, bundle2.Certs)
+	require.NotNil(t, bundle2.Certs.OS)
+	assert.Equal(t, bundle.Certs.OS, bundle2.Certs.OS)
+
+	require.NotNil(t, bundle2.TrustdInfo)
+	assert.Equal(t, bundle.TrustdInfo.Token, bundle2.TrustdInfo.Token)
+
+	require.NotNil(t, bundle2.Cluster)
+	assert.Equal(t, bundle.Cluster.ID, bundle2.Cluster.ID)
+	assert.Equal(t, bundle.Cluster.Secret, bundle2.Cluster.Secret)
+
+	cert, err := bundle2.GenerateTalosAPIClientCertificate(role.MakeSet(role.Admin))
+	require.NoError(t, err)
+	require.NotEmpty(t, cert.Crt)
+	require.NotEmpty(t, cert.Key)
 }

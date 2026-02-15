@@ -1,8 +1,5 @@
-machine:
-  kubelet:
-    extraMounts:
-      - source: /var/opt
-        destination: /var/opt
-        type: bind
-        options:
-          - rshared
+cluster:
+  discovery:
+    registries:
+      service:
+        endpoint: https://discovery.override.example.com

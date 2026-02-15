@@ -276,7 +276,7 @@ func (*Sequencer) Reset(r runtime.Runtime, in runtime.ResetOptions) []runtime.Ph
 			)
 	default:
 		phases = phases.AppendWhen(
-			in.GetGraceful() && !r.Config().Machine().Kubelet().SkipNodeRegistration(),
+			in.GetGraceful(),
 			"drain",
 			taskErrorHandler(logError, CordonAndDrainNode),
 		).AppendWhen(
@@ -330,13 +330,11 @@ func (*Sequencer) Reset(r runtime.Runtime, in runtime.ResetOptions) []runtime.Ph
 
 // Shutdown is the shutdown sequence.
 func (*Sequencer) Shutdown(r runtime.Runtime, in *machineapi.ShutdownRequest) []runtime.Phase {
-	skipNodeRegistration := r.Config() != nil && r.Config().Machine() != nil && r.Config().Machine().Kubelet().SkipNodeRegistration()
-
 	phases := PhaseList{}.Append(
 		"storeShutdown",
 		StoreShutdownEmergency,
 	).AppendWhen(
-		!in.GetForce() && !skipNodeRegistration,
+		!in.GetForce(),
 		"drain",
 		CordonAndDrainNode,
 	).Append(
@@ -415,8 +413,7 @@ func (*Sequencer) Upgrade(r runtime.Runtime, in *machineapi.UpgradeRequest) []ru
 	case runtime.ModeContainer:
 		return nil
 	default:
-		phases = phases.AppendWhen(
-			!r.Config().Machine().Kubelet().SkipNodeRegistration(),
+		phases = phases.Append(
 			"drain",
 			CordonAndDrainNode,
 		).Append(

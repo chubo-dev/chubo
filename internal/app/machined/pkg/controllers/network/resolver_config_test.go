@@ -6,7 +6,6 @@ package network_test
 
 import (
 	"net/netip"
-	"net/url"
 	"testing"
 	"time"
 
@@ -59,9 +58,6 @@ func (suite *ResolverConfigSuite) TestWithHostnameStatus() {
 	hostnameStatus.TypedSpec().Domainname = "example.org"
 	suite.Create(hostnameStatus)
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -69,13 +65,7 @@ func (suite *ResolverConfigSuite) TestWithHostnameStatus() {
 				MachineConfig: &v1alpha1.MachineConfig{
 					MachineNetwork: &v1alpha1.NetworkConfig{}, //nolint:staticcheck // legacy config
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -160,9 +150,6 @@ func (suite *ResolverConfigSuite) TestCmdline() {
 func (suite *ResolverConfigSuite) TestMachineConfigurationLegacy() {
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.ResolverConfigController{}))
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -173,13 +160,7 @@ func (suite *ResolverConfigSuite) TestMachineConfigurationLegacy() {
 						Searches:    []string{"example.com", "example.org"},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)

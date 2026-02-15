@@ -7,7 +7,6 @@ package volumeconfig_test
 import (
 	"context"
 	"encoding/json"
-	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -26,16 +25,10 @@ import (
 var baseCfg v1alpha1.Config
 
 func init() {
-	u, _ := url.Parse("https://foo:6443") //nolint:errcheck
-
 	baseCfg = v1alpha1.Config{
 		ConfigVersion: "v1alpha1",
 		MachineConfig: &v1alpha1.MachineConfig{},
-		ClusterConfig: &v1alpha1.ClusterConfig{
-			ControlPlane: &v1alpha1.ControlPlaneConfig{
-				Endpoint: &v1alpha1.Endpoint{URL: u},
-			},
-		},
+		ClusterConfig: &v1alpha1.ClusterConfig{},
 	}
 }
 

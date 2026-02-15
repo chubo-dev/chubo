@@ -236,34 +236,6 @@ type MachineConfig struct {
 	//     - name: Uncomment this to enable SANs.
 	//       value: '[]string{"10.0.0.10", "172.16.0.10", "192.168.0.10"}'
 	MachineCertSANs []string `yaml:"certSANs"`
-	//   description: |
-	//     Provides machine specific control plane configuration options.
-	//   examples:
-	//     - name: ControlPlane definition example.
-	//       value: machineControlplaneExample()
-	MachineControlPlane *MachineControlPlaneConfig `yaml:"controlPlane,omitempty"`
-	//   description: |
-	//     Used to provide additional options to the kubelet.
-	//   examples:
-	//     - name: Kubelet definition example.
-	//       value: machineKubeletExample()
-	MachineKubelet *KubeletConfig `yaml:"kubelet,omitempty"`
-	//   description: |
-	//     Used to provide static pod definitions to be run by the kubelet directly bypassing the kube-apiserver.
-	//
-	//     Static pods can be used to run components which should be started before the Kubernetes control plane is up.
-	//     Talos doesn't validate the pod definition.
-	//     Updates to this field can be applied without a reboot.
-	//
-	//     See https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/.
-	//   examples:
-	//     - name: nginx static pod.
-	//       value: machinePodsExample()
-	//   schema:
-	//     type: array
-	//     items:
-	//       type: object
-	MachinePods []Unstructured `yaml:"pods,omitempty"`
 	// docgen:nodoc
 	//
 	// Deprecated: All fields within NetworkConfig are deprecated. Use multi-document network config types instead:
@@ -358,30 +330,6 @@ type MachineConfig struct {
 	//  schema:
 	//    type: object
 	MachineBaseRuntimeSpecOverrides Unstructured `yaml:"baseRuntimeSpecOverrides,omitempty"`
-	//  description: |
-	//    Configures the node labels for the machine.
-	//
-	//    Note: In the default Kubernetes configuration, worker nodes are restricted to set
-	//    labels with some prefixes (see [NodeRestriction](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction) admission plugin).
-	//  examples:
-	//    - name: node labels example.
-	//      value: 'map[string]string{"exampleLabel": "exampleLabelValue"}'
-	MachineNodeLabels map[string]string `yaml:"nodeLabels,omitempty"`
-	//  description: |
-	//    Configures the node annotations for the machine.
-	//  examples:
-	//    - name: node annotations example.
-	//      value: 'map[string]string{"customer.io/rack": "r13a25"}'
-	MachineNodeAnnotations map[string]string `yaml:"nodeAnnotations,omitempty"`
-	//  description: |
-	//    Configures the node taints for the machine. Effect is optional.
-	//
-	//    Note: In the default Kubernetes configuration, worker nodes are not allowed to
-	//    modify the taints (see [NodeRestriction](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction) admission plugin).
-	//  examples:
-	//    - name: node taints example.
-	//      value: 'map[string]string{"exampleTaint": "exampleTaintValue:NoSchedule"}'
-	MachineNodeTaints map[string]string `yaml:"nodeTaints,omitempty"`
 }
 
 // MachineSeccompProfile defines seccomp profiles for the machine.
@@ -397,200 +345,23 @@ type MachineSeccompProfile struct {
 }
 
 var (
-	_ config.ClusterConfig  = (*ClusterConfig)(nil)
-	_ config.ClusterNetwork = (*ClusterConfig)(nil)
-	_ config.Token          = (*ClusterConfig)(nil)
+	_ config.ClusterConfig = (*ClusterConfig)(nil)
 )
 
-// ClusterConfig represents the cluster-wide config values.
-//
-//	examples:
-//	   - value: clusterConfigExample()
+// ClusterConfig represents cluster identity and discovery settings.
 type ClusterConfig struct {
-	//   description: |
-	//     Globally unique identifier for this cluster (base64 encoded random 32 bytes).
+	// description: |
+	//   Unique cluster ID used for node membership and discovery.
 	ClusterID string `yaml:"id,omitempty"`
-	//   description: |
-	//     Shared secret of cluster (base64 encoded random 32 bytes).
-	//     This secret is shared among cluster members but should never be sent over the network.
+	// description: |
+	//   Shared cluster secret used to authenticate and protect membership discovery data.
 	ClusterSecret string `yaml:"secret,omitempty"`
-	//   description: |
-	//     Provides control plane specific configuration options.
-	//   examples:
-	//     - name: Setting controlplane endpoint address to 1.2.3.4 and port to 443 example.
-	//       value: clusterControlPlaneExample()
-	ControlPlane *ControlPlaneConfig `yaml:"controlPlane"`
-	//   description: |
-	//     Configures the cluster's name.
+	// description: |
+	//   Human-friendly cluster name.
 	ClusterName string `yaml:"clusterName,omitempty"`
-	//   description: |
-	//     Provides cluster specific network configuration options.
-	//   examples:
-	//     - name: Configuring with flannel CNI and setting up subnets.
-	//       value:  clusterNetworkExample()
-	ClusterNetwork *ClusterNetworkConfig `yaml:"network,omitempty"`
-	//   description: |
-	//     The [bootstrap token](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/) used to join the cluster.
-	//   examples:
-	//     - name: Bootstrap token example (do not use in production!).
-	//       value: '"wlzjyw.bei2zfylhs2by0wd"'
-	BootstrapToken string `yaml:"token,omitempty"`
-	//   description: |
-	//     A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).
-	//     Enables encryption with AESCBC.
-	//   examples:
-	//     - name: Decryption secret example (do not use in production!).
-	//       value: '"z01mye6j16bspJYtTB/5SFX8j7Ph4JXxM2Xuu4vsBPM="'
-	ClusterAESCBCEncryptionSecret string `yaml:"aescbcEncryptionSecret,omitempty"`
-	//   description: |
-	//     A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).
-	//     Enables encryption with secretbox.
-	//     Secretbox has precedence over AESCBC.
-	//   examples:
-	//     - name: Decryption secret example (do not use in production!).
-	//       value: '"z01mye6j16bspJYtTB/5SFX8j7Ph4JXxM2Xuu4vsBPM="'
-	ClusterSecretboxEncryptionSecret string `yaml:"secretboxEncryptionSecret,omitempty"`
-	//   description: |
-	//     The base64 encoded root certificate authority used by Kubernetes.
-	//   examples:
-	//     - name: ClusterCA example.
-	//       value: pemEncodedCertificateExample()
-	//   schema:
-	//     type: object
-	//     additionalProperties: false
-	//     properties:
-	//       crt:
-	//         type: string
-	//       key:
-	//         type: string
-	ClusterCA *x509.PEMEncodedCertificateAndKey `yaml:"ca,omitempty"`
-	//   description: |
-	//     The list of base64 encoded accepted certificate authorities used by Kubernetes.
-	//   schema:
-	//     type: object
-	//     additionalProperties: false
-	//     properties:
-	//       crt:
-	//         type: string
-	ClusterAcceptedCAs []*x509.PEMEncodedCertificate `yaml:"acceptedCAs,omitempty"`
-	//   description: |
-	//     The base64 encoded aggregator certificate authority used by Kubernetes for front-proxy certificate generation.
-	//
-	//     This CA can be self-signed.
-	//   examples:
-	//     - name: AggregatorCA example.
-	//       value: pemEncodedCertificateExample()
-	//   schema:
-	//     type: object
-	//     additionalProperties: false
-	//     properties:
-	//       crt:
-	//         type: string
-	//       key:
-	//         type: string
-	ClusterAggregatorCA *x509.PEMEncodedCertificateAndKey `yaml:"aggregatorCA,omitempty"`
-	//   description: |
-	//     The base64 encoded private key for service account token generation.
-	//   examples:
-	//     - name: AggregatorCA example.
-	//       value: pemEncodedKeyExample()
-	//   schema:
-	//     type: object
-	//     additionalProperties: false
-	//     properties:
-	//       key:
-	//         type: string
-	//         additionalProperties: false
-	ClusterServiceAccount *x509.PEMEncodedKey `yaml:"serviceAccount,omitempty"`
-	//   description: |
-	//     API server specific configuration options.
-	//   examples:
-	//     - value: clusterAPIServerExample()
-	APIServerConfig *APIServerConfig `yaml:"apiServer,omitempty"`
-	//   description: |
-	//     Controller manager server specific configuration options.
-	//   examples:
-	//     - value: clusterControllerManagerExample()
-	ControllerManagerConfig *ControllerManagerConfig `yaml:"controllerManager,omitempty"`
-	//   description: |
-	//     Kube-proxy server-specific configuration options
-	//   examples:
-	//     - value: clusterProxyExample()
-	ProxyConfig *ProxyConfig `yaml:"proxy,omitempty"`
-	//   description: |
-	//     Scheduler server specific configuration options.
-	//   examples:
-	//     - value: clusterSchedulerExample()
-	SchedulerConfig *SchedulerConfig `yaml:"scheduler,omitempty"`
-	//   description: |
-	//     Configures cluster member discovery.
-	//   examples:
-	//     - value: clusterDiscoveryExample()
+	// description: |
+	//   Cluster membership discovery settings.
 	ClusterDiscoveryConfig *ClusterDiscoveryConfig `yaml:"discovery,omitempty"`
-	//   description: |
-	//     Etcd specific configuration options.
-	//   examples:
-	//     - value: clusterEtcdExample()
-	EtcdConfig *EtcdConfig `yaml:"etcd,omitempty"`
-	//   description: |
-	//     Core DNS specific configuration options.
-	//   examples:
-	//     - value: clusterCoreDNSExample()
-	CoreDNSConfig *CoreDNS `yaml:"coreDNS,omitempty"`
-	//   description: |
-	//     External cloud provider configuration.
-	//   examples:
-	//     - value: clusterExternalCloudProviderConfigExample()
-	ExternalCloudProviderConfig *ExternalCloudProviderConfig `yaml:"externalCloudProvider,omitempty"`
-	//   description: |
-	//     A list of urls that point to additional manifests.
-	//     These will get automatically deployed as part of the bootstrap.
-	//   examples:
-	//     - value: >
-	//        []string{
-	//         "https://www.example.com/manifest1.yaml",
-	//         "https://www.example.com/manifest2.yaml",
-	//        }
-	ExtraManifests []string `yaml:"extraManifests,omitempty" talos:"omitonlyifnil"`
-	//   description: |
-	//     A map of key value pairs that will be added while fetching the extraManifests.
-	//   examples:
-	//     - value: >
-	//         map[string]string{
-	//           "Token": "1234567",
-	//           "X-ExtraInfo": "info",
-	//         }
-	ExtraManifestHeaders map[string]string `yaml:"extraManifestHeaders,omitempty"`
-	//   description: |
-	//     A list of inline Kubernetes manifests.
-	//     These will get automatically deployed as part of the bootstrap.
-	//   examples:
-	//     - value: clusterInlineManifestsExample()
-	//   schema:
-	//     type: array
-	//     items:
-	//       $ref: "#/$defs/v1alpha1.ClusterInlineManifest"
-	ClusterInlineManifests ClusterInlineManifests `yaml:"inlineManifests,omitempty" talos:"omitonlyifnil"`
-	//   description: |
-	//     Settings for admin kubeconfig generation.
-	//     Certificate lifetime can be configured.
-	//   examples:
-	//     - value: clusterAdminKubeconfigExample()
-	AdminKubeconfigConfig *AdminKubeconfigConfig `yaml:"adminKubeconfig,omitempty"`
-	// docgen:nodoc
-	//
-	// Deprecated: Use `AllowSchedulingOnControlPlanes` instead.
-	AllowSchedulingOnMasters *bool `yaml:"allowSchedulingOnMasters,omitempty"`
-	//   description: |
-	//     Allows running workload on control-plane nodes.
-	//   values:
-	//     - true
-	//     - yes
-	//     - false
-	//     - no
-	//   examples:
-	//     - value: true
-	AllowSchedulingOnControlPlanes *bool `yaml:"allowSchedulingOnControlPlanes,omitempty"`
 }
 
 // LinuxIDMapping represents the Linux ID mapping.
@@ -1155,8 +926,6 @@ type ControlPlaneConfig struct {
 	LocalAPIServerPort int `yaml:"localAPIServerPort,omitempty"`
 }
 
-var _ config.APIServer = (*APIServerConfig)(nil)
-
 // APIServerConfig represents the kube apiserver configuration options.
 type APIServerConfig struct {
 	//   description: |
@@ -1290,8 +1059,6 @@ type AuthorizationConfigAuthorizerConfig struct {
 	AuthorizerWebhook Unstructured `yaml:"webhook,omitempty"`
 }
 
-var _ config.ControllerManager = (*ControllerManagerConfig)(nil)
-
 // ControllerManagerConfig represents the kube controller manager configuration options.
 type ControllerManagerConfig struct {
 	//   description: |
@@ -1357,8 +1124,6 @@ type ProxyConfig struct {
 	ExtraArgsConfig Args `yaml:"extraArgs,omitempty"`
 }
 
-var _ config.Scheduler = (*SchedulerConfig)(nil)
-
 // SchedulerConfig represents the kube scheduler configuration options.
 type SchedulerConfig struct {
 	//   description: |
@@ -1399,8 +1164,6 @@ type SchedulerConfig struct {
 	//     type: object
 	SchedulerConfig Unstructured `yaml:"config,omitempty"`
 }
-
-var _ config.Etcd = (*EtcdConfig)(nil)
 
 // EtcdConfig represents the etcd configuration options.
 type EtcdConfig struct {
@@ -1541,8 +1304,6 @@ type FlannelCNIConfig struct {
 	//         []string{"--iface-can-reach=192.168.1.1"}
 	FlanneldExtraArgs []string `yaml:"extraArgs,omitempty"`
 }
-
-var _ config.ExternalCloudProvider = (*ExternalCloudProviderConfig)(nil)
 
 // ExternalCloudProviderConfig contains external cloud provider configuration.
 type ExternalCloudProviderConfig struct {

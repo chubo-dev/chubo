@@ -8,20 +8,13 @@ machine:
         interfaces:
             - interface: eth0
               dhcp: true
-cluster:
-    controlPlane: null
-    inlineManifests:
-        - name: cilium
-          contents: |
-            ---
-            apiVersion: v1
-            kind: ServiceAccount
-            metadata:
-              name: cilium
-              namespace: kube-system
-            ---
-            apiVersion: v1
-            kind: ServiceAccount
-            metadata:
-              name: cilium-operator
-              namespace: kube-system
+    files:
+        - content: |
+            line1
+            line2
+
+            line4
+          permissions: 0o644
+          path: /etc/chubo/test.conf
+          op: overwrite
+cluster: null

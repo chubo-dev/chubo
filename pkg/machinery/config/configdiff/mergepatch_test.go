@@ -50,7 +50,8 @@ func TestMergePatch(t *testing.T) {
 	appliedBytes, err := apply.Bytes()
 	require.NoError(t, err)
 
-	modifiedBytes, err := modified.Bytes()
+	// Compare canonical encoding, not the raw input bytes.
+	modifiedBytes, err := modified.EncodeBytes(encoder.WithComments(encoder.CommentsDisabled))
 	require.NoError(t, err)
 
 	require.Equal(t, string(modifiedBytes), string(appliedBytes))
@@ -58,16 +59,17 @@ func TestMergePatch(t *testing.T) {
 
 var inlineOriginal = []byte(`version: v1alpha1
 machine:
-    type: controlplane
+    type: worker
     token: 2to1o4.gtwik66aods4cznj
     certSANs:
         - example.com
-    kubelet:
-        extraArgs:
-            cloud-provider: external
 cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
+    clusterName: test
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service: {}
 ---
 apiVersion: v1alpha1
 kind: NetworkDefaultActionConfig
@@ -86,79 +88,18 @@ func TestMergePatchInline(t *testing.T) {
 			originalAsBytes: inlineOriginal,
 			modifiedAsBytes: []byte(`version: v1alpha1
 machine:
-    type: controlplane
+    type: worker
     token: 2to1o4.gtwik66aods4cznj
     certSANs:
         - example.com
-    kubelet:
-        extraArgs:
-            cloud-config: /etc/kubernetes/cloud-config
-            cloud-provider: external
 cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
----
-apiVersion: v1alpha1
-kind: NetworkDefaultActionConfig
-ingress: block
-`),
-			patchesAsBytes: [][]byte{
-				[]byte(`machine:
-  kubelet:
-    extraArgs:
-      cloud-config: /etc/kubernetes/cloud-config
-version: v1alpha1
-`),
-			},
-		},
-		{
-			name:            "test replace field",
-			originalAsBytes: inlineOriginal,
-			modifiedAsBytes: []byte(`version: v1alpha1
-machine:
-    type: controlplane
-    token: 2to1o4.gtwik66aods4cznj
-    certSANs:
-        - example.com
-    kubelet:
-        extraArgs:
-            cloud-provider: external
-cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10001
----
-apiVersion: v1alpha1
-kind: NetworkDefaultActionConfig
-ingress: block
-`),
-			patchesAsBytes: [][]byte{
-				[]byte(`cluster:
-  controlPlane:
-    endpoint: https://[fdae:41e4:649b:9303::1]:10001
-version: v1alpha1
-`),
-			},
-		},
-		{
-			name:            "test add nested field",
-			originalAsBytes: inlineOriginal,
-			modifiedAsBytes: []byte(`version: v1alpha1
-machine:
-    type: controlplane
-    token: 2to1o4.gtwik66aods4cznj
-    certSANs:
-        - example.com
-    kubelet:
-        extraArgs:
-            cloud-provider: external
-cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
+    clusterName: test
     discovery:
+        enabled: true
         registries:
-            kubernetes:
-                disabled: false
-            service: {}
+            kubernetes: {}
+            service:
+                endpoint: https://discovery.example.com
 ---
 apiVersion: v1alpha1
 kind: NetworkDefaultActionConfig
@@ -168,9 +109,68 @@ ingress: block
 				[]byte(`cluster:
   discovery:
     registries:
-      kubernetes:
+      service:
+        endpoint: https://discovery.example.com
+version: v1alpha1
+`),
+			},
+		},
+		{
+			name:            "test replace field",
+			originalAsBytes: inlineOriginal,
+			modifiedAsBytes: []byte(`version: v1alpha1
+machine:
+    type: worker
+    token: 2to1o4.gtwik66aods4cznj
+    certSANs:
+        - example.com
+cluster:
+    clusterName: test2
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service: {}
+---
+apiVersion: v1alpha1
+kind: NetworkDefaultActionConfig
+ingress: block
+`),
+			patchesAsBytes: [][]byte{
+				[]byte(`cluster:
+  clusterName: test2
+version: v1alpha1
+`),
+			},
+		},
+		{
+			name:            "test add nested field",
+			originalAsBytes: inlineOriginal,
+			modifiedAsBytes: []byte(`version: v1alpha1
+machine:
+    type: worker
+    token: 2to1o4.gtwik66aods4cznj
+    certSANs:
+        - example.com
+cluster:
+    clusterName: test
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service:
+                disabled: false
+---
+apiVersion: v1alpha1
+kind: NetworkDefaultActionConfig
+ingress: block
+`),
+			patchesAsBytes: [][]byte{
+				[]byte(`cluster:
+  discovery:
+    registries:
+      service:
         disabled: false
-      service: {}
 version: v1alpha1
 `),
 			},
@@ -180,16 +180,17 @@ version: v1alpha1
 			originalAsBytes: inlineOriginal,
 			modifiedAsBytes: []byte(`version: v1alpha1
 machine:
-    type: controlplane
+    type: worker
     token: 2to1o4.gtwik66aods4cznj
     certSANs:
         - new-example.com
-    kubelet:
-        extraArgs:
-            cloud-provider: external
 cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
+    clusterName: test
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service: {}
 ---
 apiVersion: v1alpha1
 kind: NetworkDefaultActionConfig
@@ -214,21 +215,20 @@ version: v1alpha1
 			originalAsBytes: inlineOriginal,
 			modifiedAsBytes: []byte(`version: v1alpha1
 machine:
-    type: controlplane
+    type: worker
     token: 2to1o4.gtwik66aods4cznj
     certSANs:
         - example.com
 cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
+    clusterName: test
 ---
 apiVersion: v1alpha1
 kind: NetworkDefaultActionConfig
 ingress: block
 `),
 			patchesAsBytes: [][]byte{
-				[]byte(`machine:
-  kubelet:
+				[]byte(`cluster:
+  discovery:
     $patch: delete
 version: v1alpha1
 `),
@@ -239,16 +239,17 @@ version: v1alpha1
 			originalAsBytes: inlineOriginal,
 			modifiedAsBytes: []byte(`version: v1alpha1
 machine:
-    type: controlplane
+    type: worker
     token: 2to1o4.gtwik66aods4cznj
     certSANs:
         - example.com
-    kubelet:
-        extraArgs:
-            cloud-provider: external
 cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
+    clusterName: test
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service: {}
 ---
 apiVersion: v1alpha1
 kind: NetworkDefaultActionConfig
@@ -272,16 +273,17 @@ url: tcp://[fdae:41e4:649b:9303::1]:4001/
 			originalAsBytes: inlineOriginal,
 			modifiedAsBytes: []byte(`version: v1alpha1
 machine:
-    type: controlplane
+    type: worker
     token: 2to1o4.gtwik66aods4cznj
     certSANs:
         - example.com
-    kubelet:
-        extraArgs:
-            cloud-provider: external
 cluster:
-    controlPlane:
-        endpoint: https://[fdae:41e4:649b:9303::1]:10000
+    clusterName: test
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service: {}
 `),
 			patchesAsBytes: [][]byte{
 				[]byte(`$patch: delete
@@ -318,7 +320,8 @@ kind: NetworkDefaultActionConfig
 			appliedBytes, err := apply.Bytes()
 			require.NoError(t, err)
 
-			modifiedBytes, err := modified.Bytes()
+			// Compare canonical encoding, not the raw input bytes.
+			modifiedBytes, err := modified.EncodeBytes(encoder.WithComments(encoder.CommentsDisabled))
 			require.NoError(t, err)
 
 			require.Equal(t, string(modifiedBytes), string(appliedBytes))
@@ -339,35 +342,13 @@ name: apiSink
 url: tcp://[fdae:41e4:649b:9303::1]:4001/
 `),
 	[]byte(`cluster:
-    apiServer:
-        certSANs:
-            - example.com
-        admissionControl:
-            - name: PodSecurity
-              configuration:
-                exemptions:
-                    namespaces:
-                        - kube-public
-                        - kube-node-lease
+    clusterName: patched
 `),
 	[]byte(`cluster:
-    apiServer:
-        admissionControl:
-            - name: PrivilegedPodSecurity
-              configuration:
-                apiVersion: pod-security.admission.config.k8s.io/v1alpha1
-                defaults:
-                    audit: privileged
-                    audit-version: latest
-                    enforce: privileged
-                    enforce-version: latest
-                    warn: privileged
-                    warn-version: latest
-                exemptions:
-                    namespaces: []
-                    runtimeClasses: []
-                    usernames: []
-                kind: PodSecurityConfiguration
+    discovery:
+        registries:
+            service:
+                endpoint: https://discovery.example.com
 `),
 	[]byte(`apiVersion: v1alpha1
 kind: ExtensionServiceConfig

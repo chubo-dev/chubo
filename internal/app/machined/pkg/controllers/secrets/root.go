@@ -6,11 +6,9 @@ package secrets
 
 import (
 	"context"
-	"errors"
 	"net/netip"
 
 	"github.com/cosi-project/runtime/pkg/controller"
-	"github.com/cosi-project/runtime/pkg/controller/generic"
 	"github.com/cosi-project/runtime/pkg/controller/generic/transform"
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/gen/optional"
@@ -20,49 +18,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
-
-func rootMapFunc[Output generic.ResourceWithRD](output Output, requireControlPlane bool) func(cfg *config.MachineConfig) optional.Optional[Output] {
-	return func(cfg *config.MachineConfig) optional.Optional[Output] {
-		if cfg.Metadata().ID() != config.ActiveID {
-			return optional.None[Output]()
-		}
-
-		if cfg.Config().Cluster() == nil || cfg.Config().Machine() == nil {
-			return optional.None[Output]()
-		}
-
-		if requireControlPlane && !cfg.Config().Machine().Type().IsControlPlane() {
-			return optional.None[Output]()
-		}
-
-		return optional.Some(output)
-	}
-}
-
-// RootEtcdController manages secrets.EtcdRoot based on configuration.
-type RootEtcdController = transform.Controller[*config.MachineConfig, *secrets.EtcdRoot]
-
-// NewRootEtcdController instanciates the controller.
-func NewRootEtcdController() *RootEtcdController {
-	return transform.NewController(
-		transform.Settings[*config.MachineConfig, *secrets.EtcdRoot]{
-			Name:                    "secrets.RootEtcdController",
-			MapMetadataOptionalFunc: rootMapFunc(secrets.NewEtcdRoot(secrets.EtcdRootID), true),
-			TransformFunc: func(ctx context.Context, r controller.Reader, logger *zap.Logger, cfg *config.MachineConfig, res *secrets.EtcdRoot) error {
-				cfgProvider := cfg.Config()
-				etcdSecrets := res.TypedSpec()
-
-				etcdSecrets.EtcdCA = cfgProvider.Cluster().Etcd().CA()
-
-				if etcdSecrets.EtcdCA == nil {
-					return errors.New("missing cluster.etcdCA secret")
-				}
-
-				return nil
-			},
-		},
-	)
-}
 
 // RootOSController manages secrets.OSRoot based on configuration.
 type RootOSController = transform.Controller[*config.MachineConfig, *secrets.OSRoot]

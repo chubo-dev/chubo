@@ -131,8 +131,9 @@ IMAGER_ARGS ?=
 
 CGO_ENABLED ?= 0
 GO_BUILDFLAGS ?=
-GO_BUILDTAGS ?= tcell_minimal,grpcnotrace
-GO_BUILDTAGS_TALOSCTL ?= grpcnotrace
+# This repository is the chubo OS fork; compile the chubo variant by default.
+GO_BUILDTAGS ?= tcell_minimal,grpcnotrace,chubo
+GO_BUILDTAGS_TALOSCTL ?= grpcnotrace,chubo
 GO_LDFLAGS ?=
 GO_MACHINED_LDFLAGS ?= -X golang.zx2c4.com/wireguard/ipc.socketDirectory=/system/wireguard-sock # see https://github.com/siderolabs/talos/issues/8514
 GOAMD64 ?= v2

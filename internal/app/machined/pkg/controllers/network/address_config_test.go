@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"net"
 	"net/netip"
-	"net/url"
 	"slices"
 	"testing"
 	"time"
@@ -116,9 +115,6 @@ func (suite *AddressConfigSuite) TestMachineConfigurationLegacy() {
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.AddressConfigController{}))
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.DeviceConfigController{}))
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -168,13 +164,7 @@ func (suite *AddressConfigSuite) TestMachineConfigurationLegacy() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)

@@ -6,7 +6,6 @@ package block_test
 
 import (
 	"encoding/json"
-	"net/url"
 	"os"
 	"path/filepath"
 	"testing"
@@ -98,21 +97,12 @@ func (suite *VolumeConfigSuite) TestReconcileDefaults() {
 	ctest.AssertNoResource[*block.VolumeConfig](suite, constants.EphemeralPartitionLabel)
 
 	// create a dummy machine config
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
 				ConfigVersion: "v1alpha1",
 				MachineConfig: &v1alpha1.MachineConfig{},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -237,9 +227,6 @@ func (suite *VolumeConfigSuite) TestReconcileEncryptedSTATE() {
 	})
 	ctest.AssertNoResource[*block.VolumeConfig](suite, constants.EphemeralPartitionLabel)
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -249,13 +236,7 @@ func (suite *VolumeConfigSuite) TestReconcileEncryptedSTATE() {
 						StatePartition: stateEncryption,
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -279,20 +260,11 @@ func (suite *VolumeConfigSuite) TestReconcileEncryptedSTATE() {
 func (suite *VolumeConfigSuite) TestReconcileExtraEPHEMERALConfig() {
 	ctest.AssertNoResource[*block.VolumeConfig](suite, constants.EphemeralPartitionLabel)
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	ctr, err := container.New(
 		&v1alpha1.Config{
 			ConfigVersion: "v1alpha1",
 			MachineConfig: &v1alpha1.MachineConfig{},
-			ClusterConfig: &v1alpha1.ClusterConfig{
-				ControlPlane: &v1alpha1.ControlPlaneConfig{
-					Endpoint: &v1alpha1.Endpoint{
-						URL: u,
-					},
-				},
-			},
+			ClusterConfig: &v1alpha1.ClusterConfig{},
 		},
 		&blockcfg.VolumeConfigV1Alpha1{
 			MetaName: constants.EphemeralPartitionLabel,

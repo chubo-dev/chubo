@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 	"net/netip"
-	"slices"
 
 	"github.com/cosi-project/runtime/pkg/controller"
 	"github.com/cosi-project/runtime/pkg/safe"
@@ -18,7 +17,6 @@ import (
 	"go.uber.org/zap"
 
 	talosconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
@@ -101,21 +99,6 @@ func (ctrl *HostDNSConfigController) Run(ctx context.Context, r controller.Runti
 
 			res.TypedSpec().Enabled = cfgProvider.Machine().Features().HostDNS().Enabled()
 			res.TypedSpec().ResolveMemberNames = cfgProvider.Machine().Features().HostDNS().ResolveMemberNames()
-
-			if !cfgProvider.Machine().Features().HostDNS().ForwardKubeDNSToHost() {
-				return nil
-			}
-
-			if slices.ContainsFunc(
-				cfgProvider.Cluster().Network().PodCIDRs(),
-				func(cidr string) bool { return netip.MustParsePrefix(cidr).Addr().Is4() },
-			) {
-				parsed := netip.MustParseAddr(constants.HostDNSAddress)
-				newServiceAddrs = append(newServiceAddrs, parsed)
-
-				res.TypedSpec().ListenAddresses = append(res.TypedSpec().ListenAddresses, netip.AddrPortFrom(parsed, 53))
-				res.TypedSpec().ServiceHostDNSAddress = parsed
-			}
 
 			return nil
 		}); err != nil {

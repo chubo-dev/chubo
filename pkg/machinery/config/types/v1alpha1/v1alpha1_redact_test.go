@@ -30,12 +30,6 @@ func TestRedactSecrets(t *testing.T) {
 	require.NotEmpty(t, config.MachineConfig.MachineToken)
 	require.NotEmpty(t, config.MachineConfig.MachineCA.Key)
 	require.NotEmpty(t, config.ClusterConfig.ClusterSecret)
-	require.NotEmpty(t, config.ClusterConfig.BootstrapToken)
-	require.Empty(t, config.ClusterConfig.ClusterAESCBCEncryptionSecret)
-	require.NotEmpty(t, config.ClusterConfig.ClusterSecretboxEncryptionSecret)
-	require.NotEmpty(t, config.ClusterConfig.ClusterCA.Key)
-	require.NotEmpty(t, config.ClusterConfig.EtcdConfig.RootCA.Key)
-	require.NotEmpty(t, config.ClusterConfig.ClusterServiceAccount.Key)
 
 	replacement := "**.***"
 
@@ -44,10 +38,4 @@ func TestRedactSecrets(t *testing.T) {
 	require.Equal(t, replacement, config.Machine().Security().Token())
 	require.Equal(t, replacement, string(config.Machine().Security().IssuingCA().Key))
 	require.Equal(t, replacement, config.Cluster().Secret())
-	require.Equal(t, "***", config.Cluster().Token().Secret())
-	require.Equal(t, "", config.Cluster().AESCBCEncryptionSecret())
-	require.Equal(t, replacement, config.Cluster().SecretboxEncryptionSecret())
-	require.Equal(t, replacement, string(config.Cluster().IssuingCA().Key))
-	require.Equal(t, replacement, string(config.Cluster().Etcd().CA().Key))
-	require.Equal(t, replacement, string(config.Cluster().ServiceAccount().Key))
 }

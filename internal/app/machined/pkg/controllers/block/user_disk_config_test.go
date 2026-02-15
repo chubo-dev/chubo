@@ -5,7 +5,6 @@
 package block_test
 
 import (
-	"net/url"
 	"os"
 	"path/filepath"
 	"testing"
@@ -43,22 +42,12 @@ func TestUserDiskConfigSuite(t *testing.T) {
 func (suite *UserDiskConfigSuite) TestReconcileDefaults() {
 	ctest.AssertNoResource[*block.UserDiskConfigStatus](suite, block.UserDiskConfigStatusID)
 
-	// create a dummy machine config
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
 				ConfigVersion: "v1alpha1",
 				MachineConfig: &v1alpha1.MachineConfig{},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -82,9 +71,6 @@ func (suite *UserDiskConfigSuite) TestReconcileUserDisk() {
 	suite.Require().NoError(os.WriteFile(disk2, nil, 0o644))
 
 	// create a machine config with user disks
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -115,13 +101,7 @@ func (suite *UserDiskConfigSuite) TestReconcileUserDisk() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)

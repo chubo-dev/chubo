@@ -29,7 +29,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/types/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/types/security"
-	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 )
 
 //go:embed httproot/*
@@ -78,14 +77,6 @@ var airgappedCmd = &cobra.Command{
 }
 
 func generateConfigPatch(caPEM []byte) error {
-	patch1 := &v1alpha1.Config{
-		ClusterConfig: &v1alpha1.ClusterConfig{
-			ExtraManifests: []string{
-				fmt.Sprintf("https://%s/debug.yaml", net.JoinHostPort(airgappedFlags.advertisedAddress.String(), strconv.Itoa(airgappedFlags.httpsPort))),
-			},
-		},
-	}
-
 	patch2 := runtime.NewEnvironmentV1Alpha1()
 
 	if airgappedFlags.injectHTTPProxy {
@@ -106,7 +97,7 @@ func generateConfigPatch(caPEM []byte) error {
 	patch3.MetaName = "air-gapped-ca"
 	patch3.Certificates = string(caPEM)
 
-	ctr, err := container.New(patch1, patch2, patch3)
+	ctr, err := container.New(patch2, patch3)
 	if err != nil {
 		return err
 	}

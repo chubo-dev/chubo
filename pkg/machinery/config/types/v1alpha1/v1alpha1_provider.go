@@ -8,13 +8,11 @@ import (
 	"fmt"
 	"os"
 	"slices"
-	"strings"
 	"time"
 
 	"github.com/google/cel-go/common/ast"
 	"github.com/google/cel-go/common/operators"
 	"github.com/google/cel-go/common/types"
-	"github.com/opencontainers/runtime-spec/specs-go"
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/gen/xslices"
 	"github.com/siderolabs/go-pointer"
@@ -88,21 +86,6 @@ func (m *MachineSeccompProfile) Value() map[string]any {
 	return m.MachineSeccompProfileValue.Object
 }
 
-// NodeLabels implements the config.Provider interface.
-func (m *MachineConfig) NodeLabels() config.NodeLabels {
-	return m.MachineNodeLabels
-}
-
-// NodeAnnotations implements the config.Provider interface.
-func (m *MachineConfig) NodeAnnotations() config.NodeAnnotations {
-	return m.MachineNodeAnnotations
-}
-
-// NodeTaints implements the config.Provider interface.
-func (m *MachineConfig) NodeTaints() config.NodeTaints {
-	return m.MachineNodeTaints
-}
-
 // BaseRuntimeSpecOverrides implements the config.Provider interface.
 func (m *MachineConfig) BaseRuntimeSpecOverrides() map[string]any {
 	return m.MachineBaseRuntimeSpecOverrides.Object
@@ -146,25 +129,6 @@ func (c *Config) Redact(replacement string) {
 
 	if c.ClusterConfig != nil {
 		c.ClusterConfig.ClusterSecret = redactStr(c.ClusterConfig.ClusterSecret)
-		c.ClusterConfig.BootstrapToken = redactStr(c.ClusterConfig.BootstrapToken)
-		c.ClusterConfig.ClusterAESCBCEncryptionSecret = redactStr(c.ClusterConfig.ClusterAESCBCEncryptionSecret)
-		c.ClusterConfig.ClusterSecretboxEncryptionSecret = redactStr(c.ClusterConfig.ClusterSecretboxEncryptionSecret)
-
-		if c.ClusterConfig.ClusterServiceAccount != nil {
-			c.ClusterConfig.ClusterServiceAccount.Key = redactBytes(c.ClusterConfig.ClusterServiceAccount.Key)
-		}
-
-		if c.ClusterConfig.ClusterCA != nil {
-			c.ClusterConfig.ClusterCA.Key = redactBytes(c.ClusterConfig.ClusterCA.Key)
-		}
-
-		if c.ClusterConfig.ClusterAggregatorCA != nil {
-			c.ClusterConfig.ClusterAggregatorCA.Key = redactBytes(c.ClusterConfig.ClusterAggregatorCA.Key)
-		}
-
-		if c.ClusterConfig.EtcdConfig != nil && c.ClusterConfig.EtcdConfig.RootCA != nil {
-			c.ClusterConfig.EtcdConfig.RootCA.Key = redactBytes(c.ClusterConfig.EtcdConfig.RootCA.Key)
-		}
 	}
 }
 
@@ -194,57 +158,6 @@ func (m *MachineConfig) Network() config.MachineNetwork {
 	}
 
 	return m.MachineNetwork
-}
-
-// Controlplane implements the config.Provider interface.
-func (m *MachineConfig) Controlplane() config.MachineControlPlane {
-	if m.MachineControlPlane == nil {
-		return &MachineControlPlaneConfig{}
-	}
-
-	return m.MachineControlPlane
-}
-
-// Pods implements the config.Provider interface.
-func (m *MachineConfig) Pods() []map[string]any {
-	return xslices.Map(m.MachinePods, func(u Unstructured) map[string]any { return u.Object })
-}
-
-// ControllerManager implements the config.Provider interface.
-func (m *MachineControlPlaneConfig) ControllerManager() config.MachineControllerManager {
-	if m.MachineControllerManager == nil {
-		return &MachineControllerManagerConfig{}
-	}
-
-	return m.MachineControllerManager
-}
-
-// Scheduler implements the config.Provider interface.
-func (m *MachineControlPlaneConfig) Scheduler() config.MachineScheduler {
-	if m.MachineScheduler == nil {
-		return &MachineSchedulerConfig{}
-	}
-
-	return m.MachineScheduler
-}
-
-// Disabled implements the config.Provider interface.
-func (m *MachineControllerManagerConfig) Disabled() bool {
-	return pointer.SafeDeref(m.MachineControllerManagerDisabled)
-}
-
-// Disabled implements the config.Provider interface.
-func (m *MachineSchedulerConfig) Disabled() bool {
-	return pointer.SafeDeref(m.MachineSchedulerDisabled)
-}
-
-// Kubelet implements the config.Provider interface.
-func (m *MachineConfig) Kubelet() config.Kubelet {
-	if m.MachineKubelet == nil {
-		return &KubeletConfig{}
-	}
-
-	return m.MachineKubelet
 }
 
 // Env implements the config.Provider interface.
@@ -350,110 +263,6 @@ func (m *MachineConfig) Kernel() config.Kernel {
 	}
 
 	return m.MachineKernel
-}
-
-// Image implements the config.Provider interface.
-func (k *KubeletConfig) Image() string {
-	image := k.KubeletImage
-
-	if image == "" {
-		image = fmt.Sprintf("%s:v%s", constants.KubeletImage, constants.DefaultKubernetesVersion)
-	}
-
-	return image
-}
-
-// ClusterDNS implements the config.Provider interface.
-func (k *KubeletConfig) ClusterDNS() []string {
-	if k == nil || k.KubeletClusterDNS == nil {
-		return nil
-	}
-
-	return k.KubeletClusterDNS
-}
-
-// ExtraArgs implements the config.Provider interface.
-func (k *KubeletConfig) ExtraArgs() map[string][]string {
-	if k == nil || k.KubeletExtraArgs == nil {
-		return make(map[string][]string)
-	}
-
-	return k.KubeletExtraArgs.ToMap()
-}
-
-// ExtraMounts implements the config.Provider interface.
-func (k *KubeletConfig) ExtraMounts() []specs.Mount {
-	// use the intermediate type which is assignable to specs.Mount so that
-	// we can be sure that `specs.Mount` and `Mount` have exactly same fields.
-	//
-	// as in Go []T1 is not assignable to []T2, even if T1 and T2 are assignable, we cannot
-	// use direct conversion of Mount and specs.Mount
-	type mountConverter struct {
-		Destination string
-		Type        string
-		Source      string
-		Options     []string
-		UIDMappings []specs.LinuxIDMapping
-		GIDMappings []specs.LinuxIDMapping
-	}
-
-	return xslices.Map(k.KubeletExtraMounts,
-		func(m ExtraMount) specs.Mount {
-			return specs.Mount(func() mountConverter {
-				return mountConverter{
-					Destination: m.Destination,
-					Type:        m.Type,
-					Source:      m.Source,
-					Options:     m.Options,
-					UIDMappings: xslices.Map(m.UIDMappings, func(m LinuxIDMapping) specs.LinuxIDMapping { return specs.LinuxIDMapping(m) }),
-					GIDMappings: xslices.Map(m.GIDMappings, func(m LinuxIDMapping) specs.LinuxIDMapping { return specs.LinuxIDMapping(m) }),
-				}
-			}())
-		})
-}
-
-// ExtraConfig implements the config.Provider interface.
-func (k *KubeletConfig) ExtraConfig() map[string]any {
-	return k.KubeletExtraConfig.Object
-}
-
-// CredentialProviderConfig implements the config.Provider interface.
-func (k *KubeletConfig) CredentialProviderConfig() map[string]any {
-	return k.KubeletCredentialProviderConfig.Object
-}
-
-// DefaultRuntimeSeccompProfileEnabled implements the config.Provider interface.
-func (k *KubeletConfig) DefaultRuntimeSeccompProfileEnabled() bool {
-	return pointer.SafeDeref(k.KubeletDefaultRuntimeSeccompProfileEnabled)
-}
-
-// RegisterWithFQDN implements the config.Provider interface.
-func (k *KubeletConfig) RegisterWithFQDN() bool {
-	return pointer.SafeDeref(k.KubeletRegisterWithFQDN)
-}
-
-// NodeIP implements the config.Provider interface.
-func (k *KubeletConfig) NodeIP() config.KubeletNodeIP {
-	if k.KubeletNodeIP == nil {
-		return &KubeletNodeIPConfig{}
-	}
-
-	return k.KubeletNodeIP
-}
-
-// SkipNodeRegistration implements the config.Provider interface.
-func (k *KubeletConfig) SkipNodeRegistration() bool {
-	return pointer.SafeDeref(k.KubeletSkipNodeRegistration)
-}
-
-// DisableManifestsDirectory implements the KubeletConfig interface.
-func (k *KubeletConfig) DisableManifestsDirectory() bool {
-	return pointer.SafeDeref(k.KubeletDisableManifestsDirectory)
-}
-
-// ValidSubnets implements the config.Provider interface.
-func (k *KubeletNodeIPConfig) ValidSubnets() []string {
-	return k.KubeletNodeIPValidSubnets
 }
 
 // RegistryMirrorConfigs returns a map of registry mirror configurations.
@@ -1605,28 +1414,6 @@ func (e *SystemDiskEncryptionConfig) Get(label string) config.EncryptionConfig {
 	}
 
 	return nil
-}
-
-// HostPath implements the config.VolumeMount interface.
-func (v VolumeMountConfig) HostPath() string {
-	return v.VolumeHostPath
-}
-
-// MountPath implements the config.VolumeMount interface.
-func (v VolumeMountConfig) MountPath() string {
-	return v.VolumeMountPath
-}
-
-var volumeNameSanitizer = strings.NewReplacer("/", "-", "_", "-", ".", "-")
-
-// Name implements the config.VolumeMount interface.
-func (v VolumeMountConfig) Name() string {
-	return strings.Trim(volumeNameSanitizer.Replace(v.VolumeMountPath), "-")
-}
-
-// ReadOnly implements the config.VolumeMount interface.
-func (v VolumeMountConfig) ReadOnly() bool {
-	return v.VolumeReadOnly
 }
 
 // Rules implements config.Udev interface.

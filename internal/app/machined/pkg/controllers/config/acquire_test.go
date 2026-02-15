@@ -466,7 +466,7 @@ func (suite *AcquireSuite) TestFromPlatformFailure() {
 func (suite *AcquireSuite) TestFromPlatformNotValid() {
 	suite.noStateVolume()
 
-	patchCfg, err := configloader.NewFromBytes([]byte(`{"machine": {"nodeLabels": {"/1": "2"}}}`))
+	patchCfg, err := configloader.NewFromBytes([]byte(`{"machine": {"type": "worker"}}`))
 	suite.Require().NoError(err)
 
 	out, err := configpatcher.Apply(configpatcher.WithBytes(suite.completeMachineConfig), []configpatcher.Patch{
@@ -493,16 +493,16 @@ func (suite *AcquireSuite) TestFromPlatformNotValid() {
 	ev := suite.platformEvent.getEvents()[0]
 	suite.Assert().Equal(platform.EventTypeFailure, ev.Type)
 	suite.Assert().Equal("Error loading and validating Talos machine config.", ev.Message)
-	suite.Assert().Equal(
-		"failed to validate config acquired via platform mock: 1 error occurred:\n"+
-			"\t* v1alpha1.Config: 1 error occurred:\n\t* invalid machine node labels: 1 error occurred:\n\t* prefix cannot be empty: \"/1\"\n\n\n\n\n\n",
-		ev.Error.Error(),
-	)
+	suite.Assert().Contains(ev.Error.Error(), "failed to validate config acquired via platform mock:")
+	suite.Assert().Contains(ev.Error.Error(), "chubo requires machine.type")
 
-	suite.Assert().Equal(&machineapi.ConfigLoadErrorEvent{
-		Error: "failed to validate config acquired via platform mock: 1 error occurred:" +
-			"\n\t* v1alpha1.Config: 1 error occurred:\n\t* invalid machine node labels: 1 error occurred:\n\t* prefix cannot be empty: \"/1\"\n\n\n\n\n\n",
-	}, suite.eventPublisher.getEvents()[0])
+	// Keep error payload consistent between platform event and API event.
+	loadErr, ok := suite.eventPublisher.getEvents()[0].(*machineapi.ConfigLoadErrorEvent)
+	suite.Require().True(ok)
+
+	suite.Assert().Equal(ev.Error.Error(), loadErr.Error)
+	suite.Assert().Contains(loadErr.Error, "failed to validate config acquired via platform mock:")
+	suite.Assert().Contains(loadErr.Error, "chubo requires machine.type")
 }
 
 func (suite *AcquireSuite) TestFromPlatformGzip() {

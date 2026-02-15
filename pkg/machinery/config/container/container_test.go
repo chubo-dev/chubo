@@ -163,13 +163,7 @@ func TestValidate(t *testing.T) {
 	invalidSideroLinkCfg := siderolink.NewConfigV1Alpha1()
 
 	v1alpha1Cfg := &v1alpha1.Config{
-		ClusterConfig: &v1alpha1.ClusterConfig{
-			ControlPlane: &v1alpha1.ControlPlaneConfig{
-				Endpoint: &v1alpha1.Endpoint{
-					URL: must.Value(url.Parse("https://localhost:6443"))(t),
-				},
-			},
-		},
+		ClusterConfig: &v1alpha1.ClusterConfig{},
 		MachineConfig: &v1alpha1.MachineConfig{
 			MachineType: "worker",
 			MachineCA: &x509.PEMEncodedCertificateAndKey{
@@ -242,13 +236,7 @@ func TestCrossValidateEncryption(t *testing.T) {
 	t.Parallel()
 
 	v1alpha1Cfg := &v1alpha1.Config{
-		ClusterConfig: &v1alpha1.ClusterConfig{
-			ControlPlane: &v1alpha1.ControlPlaneConfig{
-				Endpoint: &v1alpha1.Endpoint{
-					URL: must.Value(url.Parse("https://localhost:6443"))(t),
-				},
-			},
-		},
+		ClusterConfig: &v1alpha1.ClusterConfig{},
 		MachineConfig: &v1alpha1.MachineConfig{
 			MachineType: "worker",
 			MachineCA: &x509.PEMEncodedCertificateAndKey{

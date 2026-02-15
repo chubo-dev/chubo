@@ -144,15 +144,9 @@ func (r *Runtime) CanApplyImmediate(cfg config.Provider) error {
 	// * .machine.sysfs
 	// * .machine.sysctls
 	// * .machine.logging
-	// * .machine.controlplane
-	// * .machine.kubelet
 	// * .machine.kernel
 	// * .machine.registries (note that auth is not applied immediately, containerd limitation)
-	// * .machine.pods
 	// * .machine.seccompProfiles
-	// * .machine.nodeAnnotations
-	// * .machine.nodeLabels
-	// * .machine.nodeTaints
 	// * .machine.features.kubernetesTalosAPIAccess
 	// * .machine.features.kubePrism
 	// * .machine.features.hostDNS
@@ -171,15 +165,9 @@ func (r *Runtime) CanApplyImmediate(cfg config.Provider) error {
 		newConfig.MachineConfig.MachineSysfs = currentConfig.MachineConfig.MachineSysfs
 		newConfig.MachineConfig.MachineSysctls = currentConfig.MachineConfig.MachineSysctls
 		newConfig.MachineConfig.MachineLogging = currentConfig.MachineConfig.MachineLogging
-		newConfig.MachineConfig.MachineControlPlane = currentConfig.MachineConfig.MachineControlPlane
-		newConfig.MachineConfig.MachineKubelet = currentConfig.MachineConfig.MachineKubelet
 		newConfig.MachineConfig.MachineKernel = currentConfig.MachineConfig.MachineKernel
 		newConfig.MachineConfig.MachineRegistries = currentConfig.MachineConfig.MachineRegistries //nolint:staticcheck // backwards compatibility
-		newConfig.MachineConfig.MachinePods = currentConfig.MachineConfig.MachinePods
 		newConfig.MachineConfig.MachineSeccompProfiles = currentConfig.MachineConfig.MachineSeccompProfiles
-		newConfig.MachineConfig.MachineNodeAnnotations = currentConfig.MachineConfig.MachineNodeAnnotations
-		newConfig.MachineConfig.MachineNodeLabels = currentConfig.MachineConfig.MachineNodeLabels
-		newConfig.MachineConfig.MachineNodeTaints = currentConfig.MachineConfig.MachineNodeTaints
 
 		if newConfig.MachineConfig.MachineFeatures != nil && currentConfig.MachineConfig.MachineFeatures != nil {
 			newConfig.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig = currentConfig.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig

@@ -75,7 +75,7 @@ func machineControlplaneExample() *MachineControlPlaneConfig {
 
 func machineKubeletExample() *KubeletConfig {
 	return &KubeletConfig{
-		KubeletImage: (&KubeletConfig{}).Image(),
+		KubeletImage: kubeletImageExample(),
 		KubeletExtraArgs: Args{
 			"feature-gates": ArgValue{strValue: "ServerSideApply=true"},
 		},
@@ -83,7 +83,7 @@ func machineKubeletExample() *KubeletConfig {
 }
 
 func kubeletImageExample() string {
-	return (&KubeletConfig{}).Image()
+	return "registry.k8s.io/kubelet:v1.32.0"
 }
 
 func machineInstallExample() *InstallConfig {
@@ -214,7 +214,7 @@ func resourcesConfigLimitsExample() Unstructured {
 
 func clusterAPIServerExample() *APIServerConfig {
 	return &APIServerConfig{
-		ContainerImage: (&APIServerConfig{}).Image(),
+		ContainerImage: clusterAPIServerImageExample(),
 		ExtraArgsConfig: Args{
 			"feature-gates":                    ArgValue{strValue: "ServerSideApply=true"},
 			"http2-max-streams-per-connection": ArgValue{strValue: "32"},
@@ -227,12 +227,12 @@ func clusterAPIServerExample() *APIServerConfig {
 }
 
 func clusterAPIServerImageExample() string {
-	return (&APIServerConfig{}).Image()
+	return "registry.k8s.io/kube-apiserver:v1.32.0"
 }
 
 func clusterControllerManagerExample() *ControllerManagerConfig {
 	return &ControllerManagerConfig{
-		ContainerImage: (&ControllerManagerConfig{}).Image(),
+		ContainerImage: clusterControllerManagerImageExample(),
 		ExtraArgsConfig: Args{
 			"feature-gates": ArgValue{strValue: "ServerSideApply=true"},
 		},
@@ -240,12 +240,12 @@ func clusterControllerManagerExample() *ControllerManagerConfig {
 }
 
 func clusterControllerManagerImageExample() string {
-	return (&ControllerManagerConfig{}).Image()
+	return "registry.k8s.io/kube-controller-manager:v1.32.0"
 }
 
 func clusterProxyExample() *ProxyConfig {
 	return &ProxyConfig{
-		ContainerImage: (&ProxyConfig{}).Image(),
+		ContainerImage: clusterProxyImageExample(),
 		ExtraArgsConfig: Args{
 			"proxy-mode": ArgValue{strValue: "iptables"},
 		},
@@ -254,12 +254,12 @@ func clusterProxyExample() *ProxyConfig {
 }
 
 func clusterProxyImageExample() string {
-	return (&ProxyConfig{}).Image()
+	return "registry.k8s.io/kube-proxy:v1.32.0"
 }
 
 func clusterSchedulerExample() *SchedulerConfig {
 	return &SchedulerConfig{
-		ContainerImage: (&SchedulerConfig{}).Image(),
+		ContainerImage: clusterSchedulerImageExample(),
 		ExtraArgsConfig: Args{
 			"feature-gates": ArgValue{strValue: "AllBeta=true"},
 		},
@@ -267,12 +267,12 @@ func clusterSchedulerExample() *SchedulerConfig {
 }
 
 func clusterSchedulerImageExample() string {
-	return (&SchedulerConfig{}).Image()
+	return "registry.k8s.io/kube-scheduler:v1.32.0"
 }
 
 func clusterEtcdExample() *EtcdConfig {
 	return &EtcdConfig{
-		ContainerImage: (&EtcdConfig{}).Image(),
+		ContainerImage: clusterEtcdImageExample(),
 		EtcdExtraArgs: Args{
 			"election-timeout": ArgValue{strValue: "5000"},
 		},
@@ -281,7 +281,7 @@ func clusterEtcdExample() *EtcdConfig {
 }
 
 func clusterEtcdImageExample() string {
-	return (&EtcdConfig{}).Image()
+	return "registry.k8s.io/etcd:3.5.17-0"
 }
 
 func clusterEtcdAdvertisedSubnetsExample() []string {

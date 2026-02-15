@@ -13,12 +13,15 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"go.yaml.in/yaml/v4"
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/ctest"
 	secretsctrl "github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/secrets"
 	talosconfig "github.com/chubo-dev/chubo/pkg/machinery/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/config/generate"
+	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
+	gensecrets "github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
+	v1alpha1 "github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
@@ -30,7 +33,6 @@ func TestRootSuite(t *testing.T) {
 		DefaultSuite: ctest.DefaultSuite{
 			Timeout: 10 * time.Second,
 			AfterSetup: func(suite *ctest.DefaultSuite) {
-				suite.Require().NoError(suite.Runtime().RegisterController(secretsctrl.NewRootEtcdController()))
 				suite.Require().NoError(suite.Runtime().RegisterController(secretsctrl.NewRootOSController()))
 			},
 		},
@@ -41,18 +43,36 @@ type RootSuite struct {
 	ctest.DefaultSuite
 }
 
-func (suite *RootSuite) genConfig(controlplane bool) talosconfig.Config {
-	input, err := generate.NewInput("test-cluster", "http://localhost:6443", "")
+func (suite *RootSuite) genConfig(controlplane bool) talosconfig.Provider {
+	bundle, err := gensecrets.NewBundle(gensecrets.NewFixedClock(time.Now()), talosconfig.TalosVersionCurrent)
 	suite.Require().NoError(err)
 
-	var cfg talosconfig.Provider
+	nodeType := machine.TypeWorker
+	nodeCA := &x509.PEMEncodedCertificateAndKey{Crt: bundle.Certs.OS.Crt}
 
 	if controlplane {
-		cfg, err = input.Config(machine.TypeControlPlane)
-	} else {
-		cfg, err = input.Config(machine.TypeWorker)
+		nodeType = machine.TypeControlPlane
+		nodeCA = bundle.Certs.OS
 	}
 
+	cfgDoc := &v1alpha1.Config{
+		ConfigVersion: "v1alpha1",
+		MachineConfig: &v1alpha1.MachineConfig{
+			MachineType:  nodeType.String(),
+			MachineToken: bundle.TrustdInfo.Token,
+			MachineCA:    nodeCA,
+		},
+		ClusterConfig: &v1alpha1.ClusterConfig{
+			ClusterID:     bundle.Cluster.ID,
+			ClusterSecret: bundle.Cluster.Secret,
+			ClusterName:   "test-cluster",
+		},
+	}
+
+	raw, err := yaml.Marshal(cfgDoc)
+	suite.Require().NoError(err)
+
+	cfg, err := configloader.NewFromBytes(raw)
 	suite.Require().NoError(err)
 
 	machineCfg := config.NewMachineConfig(cfg)
@@ -63,12 +83,6 @@ func (suite *RootSuite) genConfig(controlplane bool) talosconfig.Config {
 
 func (suite *RootSuite) TestReconcileControlPlane() {
 	cfg := suite.genConfig(true)
-
-	rtestutils.AssertResources(suite.Ctx(), suite.T(), suite.State(), []resource.ID{secrets.EtcdRootID},
-		func(res *secrets.EtcdRoot, asrt *assert.Assertions) {
-			asrt.Equal(res.TypedSpec().EtcdCA, cfg.Cluster().Etcd().CA())
-		},
-	)
 
 	rtestutils.AssertResources(suite.Ctx(), suite.T(), suite.State(), []resource.ID{secrets.OSRootID},
 		func(res *secrets.OSRoot, asrt *assert.Assertions) {
@@ -101,6 +115,4 @@ func (suite *RootSuite) TestReconcileWorker() {
 			)
 		},
 	)
-
-	rtestutils.AssertNoResource[*secrets.Etcd](suite.Ctx(), suite.T(), suite.State(), secrets.EtcdRootID)
 }

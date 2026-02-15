@@ -7,7 +7,6 @@ package network_test
 
 import (
 	"net/netip"
-	"net/url"
 	"testing"
 	"time"
 
@@ -84,9 +83,6 @@ func (suite *LinkConfigSuite) TestMachineConfiguration() {
 	const kernelDriver = "somekerneldriver"
 
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.LinkConfigController{}))
-
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
 
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
@@ -206,13 +202,7 @@ func (suite *LinkConfigSuite) TestMachineConfiguration() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -345,9 +335,6 @@ func (suite *LinkConfigSuite) TestMachineConfiguration() {
 func (suite *LinkConfigSuite) TestMachineConfigurationWithAliases() {
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.LinkConfigController{}))
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -382,13 +369,7 @@ func (suite *LinkConfigSuite) TestMachineConfigurationWithAliases() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -660,9 +641,6 @@ func (suite *LinkConfigSuite) TestDefaultUp() {
 		suite.Create(linkStatus)
 	}
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -699,13 +677,7 @@ func (suite *LinkConfigSuite) TestDefaultUp() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)

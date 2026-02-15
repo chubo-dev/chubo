@@ -1,7 +1,9 @@
-cluster:
-    apiServer:
-        auditPolicy:
-            apiVersion: audit.k8s.io/v1
-            kind: Policy
-            rules:
-                - level: None
+machine:
+  network:
+    interfaces:
+      - interface: eth0
+        addresses:
+          - 10.0.0.2/24
+        dhcp: false
+      - interface: eth1
+        dhcp: false

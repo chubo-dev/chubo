@@ -5,10 +5,9 @@
 package v1alpha1_test
 
 import (
-	"errors"
 	"fmt"
-	"io/fs"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/blang/semver/v4"
@@ -30,8 +29,9 @@ import (
 func TestConfigEncodingStability(t *testing.T) {
 	t.Parallel()
 
-	// flip this to generate missing configs
-	const generateMode = false
+	// Regenerate stability goldens with:
+	//   CHUBO_UPDATE_STABILITY_GOLDENS=1 go test ./pkg/machinery/config/types/v1alpha1 -run TestConfigEncodingStability
+	generateMode := os.Getenv("CHUBO_UPDATE_STABILITY_GOLDENS") == "1"
 
 	secretsBundle, err := secrets.LoadBundle("testdata/stability/secrets.yaml")
 	require.NoError(t, err)
@@ -122,17 +122,19 @@ func testConfigStability(t *testing.T, in *generate.Input, versionContract *conf
 
 		expectedPath := fmt.Sprintf("testdata/stability/%s/%s-%s.yaml", versionContract, flavor, machineType)
 
-		expectedBytes, err := os.ReadFile(expectedPath)
-		if errors.Is(err, fs.ErrNotExist) && generateMode {
+		if generateMode {
+			require.NoError(t, os.MkdirAll(filepath.Dir(expectedPath), 0o755))
 			require.NoError(t, os.WriteFile(expectedPath, cfgBytes, 0o644))
 
-			t.Logf("generated %s", expectedPath)
+			t.Logf("updated %s", expectedPath)
 
 			continue
 		}
 
+		expectedBytes, err := os.ReadFile(expectedPath)
 		require.NoError(t, err)
 
 		assert.Equal(t, string(expectedBytes), string(cfgBytes), "config encoding mismatch for %s", expectedPath)
 	}
 }
+

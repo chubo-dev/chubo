@@ -16,6 +16,33 @@ func (f *FeaturesConfig) KubernetesTalosAPIAccess() config.KubernetesTalosAPIAcc
 	return f.KubernetesTalosAPIAccessConfig
 }
 
+// Enabled implements [config.KubernetesTalosAPIAccess].
+func (a *KubernetesTalosAPIAccessConfig) Enabled() bool {
+	if a == nil {
+		return false
+	}
+
+	return pointer.SafeDeref(a.AccessEnabled)
+}
+
+// AllowedRoles implements [config.KubernetesTalosAPIAccess].
+func (a *KubernetesTalosAPIAccessConfig) AllowedRoles() []string {
+	if a == nil {
+		return nil
+	}
+
+	return a.AccessAllowedRoles
+}
+
+// AllowedKubernetesNamespaces implements [config.KubernetesTalosAPIAccess].
+func (a *KubernetesTalosAPIAccessConfig) AllowedKubernetesNamespaces() []string {
+	if a == nil {
+		return nil
+	}
+
+	return a.AccessAllowedKubernetesNamespaces
+}
+
 // DiskQuotaSupportEnabled implements config.Features interface.
 func (f *FeaturesConfig) DiskQuotaSupportEnabled() bool {
 	return pointer.SafeDeref(f.DiskQuotaSupport)

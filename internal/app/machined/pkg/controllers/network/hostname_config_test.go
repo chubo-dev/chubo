@@ -6,7 +6,6 @@ package network_test
 
 import (
 	"net/netip"
-	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -105,9 +104,6 @@ func (suite *HostnameConfigSuite) TestCmdline() {
 func (suite *HostnameConfigSuite) TestLegacyMachineConfiguration() {
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.HostnameConfigController{}))
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -117,13 +113,7 @@ func (suite *HostnameConfigSuite) TestLegacyMachineConfiguration() {
 						NetworkHostname: "foo",
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
@@ -143,7 +133,6 @@ func (suite *HostnameConfigSuite) TestLegacyMachineConfiguration() {
 
 		return nil
 	})
-	suite.Require().NoError(err)
 
 	ctest.AssertNoResource[*network.HostnameSpec](suite, "configuration/hostname", rtestutils.WithNamespace(network.ConfigNamespaceName))
 }

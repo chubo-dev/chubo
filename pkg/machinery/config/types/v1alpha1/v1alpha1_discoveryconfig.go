@@ -11,29 +11,14 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
-// Enabled implements the config.ClusterDiscovery interface.
+// Enabled implements the config.Discovery interface.
 func (c *ClusterDiscoveryConfig) Enabled() bool {
 	return pointer.SafeDeref(c.DiscoveryEnabled)
 }
 
-// Registries implements the config.ClusterDiscovery interface.
-func (c *ClusterDiscoveryConfig) Registries() config.DiscoveryRegistries {
-	return c.DiscoveryRegistries
-}
-
-// Kubernetes implements the config.DiscoveryRegistries interface.
-func (c DiscoveryRegistriesConfig) Kubernetes() config.KubernetesRegistry {
-	return c.RegistryKubernetes
-}
-
-// Service implements the config.DiscoveryRegistries interface.
-func (c DiscoveryRegistriesConfig) Service() config.ServiceRegistry {
-	return c.RegistryService
-}
-
-// Enabled implements the config.KubernetesRegistry interface.
-func (c RegistryKubernetesConfig) Enabled() bool {
-	return !pointer.SafeDeref(c.RegistryDisabled)
+// Service implements the config.Discovery interface.
+func (c *ClusterDiscoveryConfig) Service() config.ServiceRegistry {
+	return c.DiscoveryRegistries.RegistryService
 }
 
 // Enabled implements the config.ServiceRegistry interface.

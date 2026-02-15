@@ -5,7 +5,6 @@
 package talos
 
 import (
-	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -48,7 +47,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/types/cri"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/types/meta"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/types/security"
-	"github.com/chubo-dev/chubo/pkg/machinery/config/types/v1alpha1"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 	"github.com/chubo-dev/chubo/pkg/reporter"
@@ -454,61 +452,6 @@ func imageRemove(imageRef string) error {
 	})
 }
 
-var imageK8sBundleCmdFlags = struct {
-	k8sVersion     pflag.Value
-	flannelVersion pflag.Value
-	corednsVersion pflag.Value
-	etcdVersion    pflag.Value
-}{
-	k8sVersion:     helpers.Semver(constants.DefaultKubernetesVersion),
-	flannelVersion: helpers.Semver(constants.FlannelVersion),
-	corednsVersion: helpers.Semver(constants.DefaultCoreDNSVersion),
-	etcdVersion:    helpers.Semver(constants.DefaultEtcdVersion),
-}
-
-// imageK8sBundleCmd represents the image k8s-bundle command.
-var imageK8sBundleCmd = &cobra.Command{
-	Use:     "k8s-bundle",
-	Aliases: []string{"default"},
-	Short:   "List the default Kubernetes images used by Talos",
-	Long:    ``,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		images := images.ListWithOptions(container.NewV1Alpha1(
-			&v1alpha1.Config{
-				MachineConfig: &v1alpha1.MachineConfig{
-					MachineKubelet: &v1alpha1.KubeletConfig{},
-				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					EtcdConfig:              &v1alpha1.EtcdConfig{},
-					APIServerConfig:         &v1alpha1.APIServerConfig{},
-					ControllerManagerConfig: &v1alpha1.ControllerManagerConfig{},
-					SchedulerConfig:         &v1alpha1.SchedulerConfig{},
-					CoreDNSConfig:           &v1alpha1.CoreDNS{},
-					ProxyConfig:             &v1alpha1.ProxyConfig{},
-				},
-			}),
-			images.VersionsListOptions{
-				KubernetesVersion: imageK8sBundleCmdFlags.k8sVersion.String(),
-				EtcdVersion:       imageK8sBundleCmdFlags.etcdVersion.String(),
-				FlannelVersion:    imageK8sBundleCmdFlags.flannelVersion.String(),
-				CoreDNSVersion:    imageK8sBundleCmdFlags.corednsVersion.String(),
-			},
-		)
-
-		fmt.Printf("%s\n", images.Flannel)
-		fmt.Printf("%s\n", images.CoreDNS)
-		fmt.Printf("%s\n", images.Etcd)
-		fmt.Printf("%s\n", images.Pause)
-		fmt.Printf("%s\n", images.KubeAPIServer)
-		fmt.Printf("%s\n", images.KubeControllerManager)
-		fmt.Printf("%s\n", images.KubeScheduler)
-		fmt.Printf("%s\n", images.KubeProxy)
-		fmt.Printf("%s\n", images.Kubelet)
-
-		return nil
-	},
-}
-
 var imageTalosBundleCmdFlags = struct {
 	extensions bool
 	overlays   bool
@@ -618,96 +561,6 @@ var imageTalosBundleCmd = &cobra.Command{
 }
 
 var minimumVersion = semver.MustParse("1.11.0-alpha.0")
-
-// imageIntegrationCmd represents the integration image command.
-var imageIntegrationCmd = &cobra.Command{
-	Use:    "integration",
-	Short:  "List the integration images used by k8s in Talos",
-	Args:   cobra.NoArgs,
-	Hidden: true,
-	RunE: func(*cobra.Command, []string) error {
-		if stat, _ := os.Stdin.Stat(); (stat.Mode() & os.ModeCharDevice) != 0 { //nolint:errcheck
-			return errors.New("input must be piped")
-		}
-
-		if imageIntegrationCmdFlags.installerTag == "" {
-			return errors.New("installer tag is required")
-		}
-
-		if imageIntegrationCmdFlags.registryAndUser == "" {
-			return errors.New("registry and user string is required")
-		}
-
-		imgs := images.List(container.NewV1Alpha1(&v1alpha1.Config{
-			MachineConfig: &v1alpha1.MachineConfig{
-				MachineKubelet: &v1alpha1.KubeletConfig{},
-			},
-			ClusterConfig: &v1alpha1.ClusterConfig{
-				EtcdConfig:              &v1alpha1.EtcdConfig{},
-				APIServerConfig:         &v1alpha1.APIServerConfig{},
-				ControllerManagerConfig: &v1alpha1.ControllerManagerConfig{},
-				SchedulerConfig:         &v1alpha1.SchedulerConfig{},
-				CoreDNSConfig:           &v1alpha1.CoreDNS{},
-				ProxyConfig:             &v1alpha1.ProxyConfig{},
-			},
-		}))
-
-		imageNames := []string{
-			imgs.Flannel.String(),
-			imgs.CoreDNS.String(),
-			imgs.Etcd.String(),
-			imgs.KubeAPIServer.String(),
-			imgs.KubeControllerManager.String(),
-			imgs.KubeScheduler.String(),
-			imgs.KubeProxy.String(),
-			imgs.Kubelet.String(),
-			imgs.Pause.String(),
-			"registry.k8s.io/conformance:v" + constants.DefaultKubernetesVersion,
-			"docker.io/library/alpine:latest",
-			"ghcr.io/siderolabs/talosctl:latest",
-			"registry.k8s.io/kube-apiserver:v1.27.0",
-			"registry.k8s.io/kube-apiserver:v1.27.1",
-			"docker.io/library/alpine:3.23",
-			imageIntegrationCmdFlags.registryAndUser + "/installer:" +
-				imageIntegrationCmdFlags.installerTag,
-			imageIntegrationCmdFlags.registryAndUser + "/talos:" +
-				imageIntegrationCmdFlags.talosTag,
-		}
-
-		sc := bufio.NewScanner(os.Stdin)
-
-		for sc.Scan() {
-			switch sc := sc.Text(); {
-			case strings.Contains(sc, "authenticated-"):
-			// skip authenticated images
-			case strings.HasPrefix(sc, "invalid.registry.k8s.io"):
-			// skip invalid images
-			default:
-				imageNames = append(imageNames, sc)
-			}
-		}
-
-		if err := sc.Err(); err != nil {
-			return fmt.Errorf("error reading from stdin: %w", err)
-		}
-
-		slices.Sort(imageNames)
-
-		imageNames = slices.Compact(imageNames)
-
-		for _, img := range imageNames {
-			fmt.Println(img)
-		}
-
-		return nil
-	},
-}
-
-var imageIntegrationCmdFlags struct {
-	installerTag    string
-	talosTag        string
-	registryAndUser string
-}
 
 // imageCacheCreate represents the image cache create command.
 var imageCacheCreateCmd = &cobra.Command{
@@ -992,12 +845,6 @@ func init() {
 	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.overlays, "overlays", true, "Include images that belong to Talos overlays")
 	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.extensions, "extensions", true, "Include images that belong to Talos extensions")
 
-	imageCmd.AddCommand(imageK8sBundleCmd)
-	imageK8sBundleCmd.PersistentFlags().Var(imageK8sBundleCmdFlags.k8sVersion, "k8s-version", "Kubernetes semantic version")
-	imageK8sBundleCmd.PersistentFlags().Var(imageK8sBundleCmdFlags.etcdVersion, "etcd-version", "ETCD semantic version")
-	imageK8sBundleCmd.PersistentFlags().Var(imageK8sBundleCmdFlags.flannelVersion, "flannel-version", "Flannel CNI semantic version")
-	imageK8sBundleCmd.PersistentFlags().Var(imageK8sBundleCmdFlags.corednsVersion, "coredns-version", "CoreDNS semantic version")
-
 	imageCmd.AddCommand(imageCacheCreateCmd)
 	imageCacheCreateCmd.PersistentFlags().StringVar(&imageCacheCreateCmdFlags.imageCachePath, "image-cache-path", "", "directory to save the image cache in OCI format")
 	imageCacheCreateCmd.MarkPersistentFlagRequired("image-cache-path") //nolint:errcheck
@@ -1025,12 +872,4 @@ func init() {
 	imageCacheCertGenCmd.PersistentFlags().StringVar(&imageCacheCertGenCmdFlags.tlsKeyFile, "tls-key-file", "tls.key", "TLS key file to use for serving")
 	imageCacheCertGenCmd.PersistentFlags().IPSliceVar(&imageCacheCertGenCmdFlags.advertisedAddresses, "advertised-address", []net.IP{}, "The addresses to advertise.")
 	imageCacheCertGenCmd.PersistentFlags().StringSliceVar(&imageCacheCertGenCmdFlags.advertisedNames, "advertised-name", []string{}, "The DNS names to advertise.")
-	imageIntegrationCmd.MarkPersistentFlagRequired("advertised-address") //nolint:errcheck
-
-	imageCmd.AddCommand(imageIntegrationCmd)
-	imageIntegrationCmd.PersistentFlags().StringVar(&imageIntegrationCmdFlags.installerTag, "installer-tag", "", "tag of the installer image to use")
-	imageIntegrationCmd.MarkPersistentFlagRequired("installer-tag") //nolint:errcheck
-	imageIntegrationCmd.PersistentFlags().StringVar(&imageIntegrationCmdFlags.talosTag, "talos-tag", version.Tag, "tag of the installer image to use")
-	imageIntegrationCmd.PersistentFlags().StringVar(&imageIntegrationCmdFlags.registryAndUser, "registry-and-user", "", "registry and user to use for the images")
-	imageIntegrationCmd.MarkPersistentFlagRequired("registry-and-user") //nolint:errcheck
 }

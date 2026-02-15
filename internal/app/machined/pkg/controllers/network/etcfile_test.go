@@ -8,7 +8,6 @@ import (
 	"context"
 	"errors"
 	"net/netip"
-	"net/url"
 	"os"
 	"path/filepath"
 	"sync"
@@ -94,9 +93,6 @@ func (suite *EtcFileConfigSuite) SetupTest() {
 		BindMountTarget: suite.bindMountTarget,
 	}))
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	suite.cfg = config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -115,13 +111,7 @@ func (suite *EtcFileConfigSuite) SetupTest() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)

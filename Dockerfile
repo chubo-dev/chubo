@@ -1211,8 +1211,9 @@ COPY --from=rootfs / /
 COPY --from=pkg-ca-certificates / /
 ARG TESTPKGS
 ENV PLATFORM=container
+ARG GO_BUILDFLAGS
 ARG GO_LDFLAGS
-RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test \
+RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test ${GO_BUILDFLAGS} \
     -ldflags "${GO_LDFLAGS}" \
     -covermode=atomic -coverprofile=coverage.txt -coverpkg=${TESTPKGS} -p 4 ${TESTPKGS}
 FROM scratch AS unit-tests
@@ -1226,8 +1227,9 @@ COPY --from=pkg-ca-certificates / /
 ARG TESTPKGS
 ENV PLATFORM=container
 ENV CGO_ENABLED=1
+ARG GO_BUILDFLAGS
 ARG GO_LDFLAGS
-RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test \
+RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test ${GO_BUILDFLAGS} \
     -ldflags "${GO_LDFLAGS}" \
     -race -p 4 ${TESTPKGS}
 
@@ -1239,8 +1241,9 @@ ARG TESTPKGS
 ENV PLATFORM=container
 ENV GOFIPS140=latest
 ENV GODEBUG=fips140=only,tlsmlkem=0
+ARG GO_BUILDFLAGS
 ARG GO_LDFLAGS
-RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test \
+RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test ${GO_BUILDFLAGS} \
     -ldflags "${GO_LDFLAGS}" \
     -p 4 ${TESTPKGS}
 

@@ -6,11 +6,10 @@ machine:
     network:
         hostname: hostname-foo
 cluster:
-    controlPlane:
-        endpoint: https://localhost:6443
-    apiServer:
-        auditPolicy:
-            apiVersion: audit.k8s.io/v1
-            kind: Policy
-            rules:
-                - level: None
+    clusterName: base
+    discovery:
+        enabled: true
+        registries:
+            kubernetes: {}
+            service:
+                endpoint: https://discovery.override.example.com/

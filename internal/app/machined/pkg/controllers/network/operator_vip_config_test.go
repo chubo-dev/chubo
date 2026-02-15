@@ -6,7 +6,6 @@ package network_test
 
 import (
 	"net/netip"
-	"net/url"
 	"testing"
 	"time"
 
@@ -55,9 +54,6 @@ func (suite *OperatorVIPConfigSuite) TestMachineConfigurationLegacyVIP() {
 		suite.Create(status)
 	}
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -101,13 +97,7 @@ func (suite *OperatorVIPConfigSuite) TestMachineConfigurationLegacyVIP() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)

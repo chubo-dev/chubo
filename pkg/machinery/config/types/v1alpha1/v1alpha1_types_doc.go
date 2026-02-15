@@ -115,27 +115,6 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Description: "Extra certificate subject alternative names for the machine's certificate.\nBy default, all non-loopback interface IPs are automatically added to the certificate's SANs.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra certificate subject alternative names for the machine's certificate." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
-			{
-				Name:        "controlPlane",
-				Type:        "MachineControlPlaneConfig",
-				Note:        "",
-				Description: "Provides machine specific control plane configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Provides machine specific control plane configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "kubelet",
-				Type:        "KubeletConfig",
-				Note:        "",
-				Description: "Used to provide additional options to the kubelet.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Used to provide additional options to the kubelet." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "pods",
-				Type:        "[]Unstructured",
-				Note:        "",
-				Description: "Used to provide static pod definitions to be run by the kubelet directly bypassing the kube-apiserver.\n\nStatic pods can be used to run components which should be started before the Kubernetes control plane is up.\nTalos doesn't validate the pod definition.\nUpdates to this field can be applied without a reboot.\n\nSee https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Used to provide static pod definitions to be run by the kubelet directly bypassing the kube-apiserver." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
 			{},
 			{},
 			{
@@ -212,27 +191,6 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Description: "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set some default container settings which are not configurable in Kubernetes,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Override (patch) settings in the default OCI runtime spec for CRI containers." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
-			{
-				Name:        "nodeLabels",
-				Type:        "map[string]string",
-				Note:        "",
-				Description: "Configures the node labels for the machine.\n\nNote: In the default Kubernetes configuration, worker nodes are restricted to set\nlabels with some prefixes (see [NodeRestriction](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction) admission plugin).",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configures the node labels for the machine." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "nodeAnnotations",
-				Type:        "map[string]string",
-				Note:        "",
-				Description: "Configures the node annotations for the machine.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configures the node annotations for the machine." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "nodeTaints",
-				Type:        "map[string]string",
-				Note:        "",
-				Description: "Configures the node taints for the machine. Effect is optional.\n\nNote: In the default Kubernetes configuration, worker nodes are not allowed to\nmodify the taints (see [NodeRestriction](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction) admission plugin).",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configures the node taints for the machine. Effect is optional." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
 		},
 	}
 
@@ -241,22 +199,16 @@ func (MachineConfig) Doc() *encoder.Doc {
 	doc.Fields[1].AddExample("example token", "328hom.uqjzh6jnn2eie9oi")
 	doc.Fields[2].AddExample("machine CA example", pemEncodedCertificateExample())
 	doc.Fields[4].AddExample("Uncomment this to enable SANs.", []string{"10.0.0.10", "172.16.0.10", "192.168.0.10"})
-	doc.Fields[5].AddExample("ControlPlane definition example.", machineControlplaneExample())
-	doc.Fields[6].AddExample("Kubelet definition example.", machineKubeletExample())
-	doc.Fields[7].AddExample("nginx static pod.", machinePodsExample())
-	doc.Fields[10].AddExample("MachineInstall config usage example.", machineInstallExample())
-	doc.Fields[11].AddExample("MachineFiles usage example.", machineFilesExample())
-	doc.Fields[14].AddExample("MachineSysctls usage example.", machineSysctlsExample())
-	doc.Fields[15].AddExample("MachineSysfs usage example.", machineSysfsExample())
-	doc.Fields[18].AddExample("", machineFeaturesExample())
-	doc.Fields[19].AddExample("", machineUdevExample())
-	doc.Fields[20].AddExample("", machineLoggingExample())
-	doc.Fields[21].AddExample("", machineKernelExample())
-	doc.Fields[22].AddExample("", machineSeccompExample())
-	doc.Fields[23].AddExample("override default open file limit", machineBaseRuntimeSpecOverridesExample())
-	doc.Fields[24].AddExample("node labels example.", map[string]string{"exampleLabel": "exampleLabelValue"})
-	doc.Fields[25].AddExample("node annotations example.", map[string]string{"customer.io/rack": "r13a25"})
-	doc.Fields[26].AddExample("node taints example.", map[string]string{"exampleTaint": "exampleTaintValue:NoSchedule"})
+	doc.Fields[7].AddExample("MachineInstall config usage example.", machineInstallExample())
+	doc.Fields[8].AddExample("MachineFiles usage example.", machineFilesExample())
+	doc.Fields[11].AddExample("MachineSysctls usage example.", machineSysctlsExample())
+	doc.Fields[12].AddExample("MachineSysfs usage example.", machineSysfsExample())
+	doc.Fields[15].AddExample("", machineFeaturesExample())
+	doc.Fields[16].AddExample("", machineUdevExample())
+	doc.Fields[17].AddExample("", machineLoggingExample())
+	doc.Fields[18].AddExample("", machineKernelExample())
+	doc.Fields[19].AddExample("", machineSeccompExample())
+	doc.Fields[20].AddExample("override default open file limit", machineBaseRuntimeSpecOverridesExample())
 
 	return doc
 }
@@ -298,8 +250,8 @@ func (MachineSeccompProfile) Doc() *encoder.Doc {
 func (ClusterConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "ClusterConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "ClusterConfig represents the cluster-wide config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "ClusterConfig represents the cluster-wide config values.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "ClusterConfig represents cluster identity and discovery settings." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "ClusterConfig represents cluster identity and discovery settings.",
 		AppearsIn: []encoder.Appearance{
 			{
 				TypeName:  "Config",
@@ -311,216 +263,32 @@ func (ClusterConfig) Doc() *encoder.Doc {
 				Name:        "id",
 				Type:        "string",
 				Note:        "",
-				Description: "Globally unique identifier for this cluster (base64 encoded random 32 bytes).",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Globally unique identifier for this cluster (base64 encoded random 32 bytes)." /* encoder.LineComment */, "" /* encoder.FootComment */},
+				Description: "Unique cluster ID used for node membership and discovery.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Unique cluster ID used for node membership and discovery." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "secret",
 				Type:        "string",
 				Note:        "",
-				Description: "Shared secret of cluster (base64 encoded random 32 bytes).\nThis secret is shared among cluster members but should never be sent over the network.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Shared secret of cluster (base64 encoded random 32 bytes)." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "controlPlane",
-				Type:        "ControlPlaneConfig",
-				Note:        "",
-				Description: "Provides control plane specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Provides control plane specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
+				Description: "Shared cluster secret used to authenticate and protect membership discovery data.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Shared cluster secret used to authenticate and protect membership discovery data." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "clusterName",
 				Type:        "string",
 				Note:        "",
-				Description: "Configures the cluster's name.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configures the cluster's name." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "network",
-				Type:        "ClusterNetworkConfig",
-				Note:        "",
-				Description: "Provides cluster specific network configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Provides cluster specific network configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "token",
-				Type:        "string",
-				Note:        "",
-				Description: "The [bootstrap token](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/) used to join the cluster.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The [bootstrap token](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/) used to join the cluster." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "aescbcEncryptionSecret",
-				Type:        "string",
-				Note:        "",
-				Description: "A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).\nEnables encryption with AESCBC.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/)." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "secretboxEncryptionSecret",
-				Type:        "string",
-				Note:        "",
-				Description: "A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).\nEnables encryption with secretbox.\nSecretbox has precedence over AESCBC.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/)." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "ca",
-				Type:        "PEMEncodedCertificateAndKey",
-				Note:        "",
-				Description: "The base64 encoded root certificate authority used by Kubernetes.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The base64 encoded root certificate authority used by Kubernetes." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "acceptedCAs",
-				Type:        "[]PEMEncodedCertificate",
-				Note:        "",
-				Description: "The list of base64 encoded accepted certificate authorities used by Kubernetes.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The list of base64 encoded accepted certificate authorities used by Kubernetes." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "aggregatorCA",
-				Type:        "PEMEncodedCertificateAndKey",
-				Note:        "",
-				Description: "The base64 encoded aggregator certificate authority used by Kubernetes for front-proxy certificate generation.\n\nThis CA can be self-signed.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The base64 encoded aggregator certificate authority used by Kubernetes for front-proxy certificate generation." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "serviceAccount",
-				Type:        "PEMEncodedKey",
-				Note:        "",
-				Description: "The base64 encoded private key for service account token generation.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The base64 encoded private key for service account token generation." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "apiServer",
-				Type:        "APIServerConfig",
-				Note:        "",
-				Description: "API server specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "API server specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "controllerManager",
-				Type:        "ControllerManagerConfig",
-				Note:        "",
-				Description: "Controller manager server specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Controller manager server specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "proxy",
-				Type:        "ProxyConfig",
-				Note:        "",
-				Description: "Kube-proxy server-specific configuration options",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Kube-proxy server-specific configuration options" /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "scheduler",
-				Type:        "SchedulerConfig",
-				Note:        "",
-				Description: "Scheduler server specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Scheduler server specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
+				Description: "Human-friendly cluster name.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Human-friendly cluster name." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "discovery",
 				Type:        "ClusterDiscoveryConfig",
 				Note:        "",
-				Description: "Configures cluster member discovery.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configures cluster member discovery." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "etcd",
-				Type:        "EtcdConfig",
-				Note:        "",
-				Description: "Etcd specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Etcd specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "coreDNS",
-				Type:        "CoreDNS",
-				Note:        "",
-				Description: "Core DNS specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Core DNS specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "externalCloudProvider",
-				Type:        "ExternalCloudProviderConfig",
-				Note:        "",
-				Description: "External cloud provider configuration.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "External cloud provider configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraManifests",
-				Type:        "[]string",
-				Note:        "",
-				Description: "A list of urls that point to additional manifests.\nThese will get automatically deployed as part of the bootstrap.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "A list of urls that point to additional manifests." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraManifestHeaders",
-				Type:        "map[string]string",
-				Note:        "",
-				Description: "A map of key value pairs that will be added while fetching the extraManifests.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "A map of key value pairs that will be added while fetching the extraManifests." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "inlineManifests",
-				Type:        "[]ClusterInlineManifest",
-				Note:        "",
-				Description: "A list of inline Kubernetes manifests.\nThese will get automatically deployed as part of the bootstrap.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "A list of inline Kubernetes manifests." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "adminKubeconfig",
-				Type:        "AdminKubeconfigConfig",
-				Note:        "",
-				Description: "Settings for admin kubeconfig generation.\nCertificate lifetime can be configured.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Settings for admin kubeconfig generation." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{},
-			{
-				Name:        "allowSchedulingOnControlPlanes",
-				Type:        "bool",
-				Note:        "",
-				Description: "Allows running workload on control-plane nodes.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Allows running workload on control-plane nodes." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"true",
-					"yes",
-					"false",
-					"no",
-				},
+				Description: "Cluster membership discovery settings.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Cluster membership discovery settings." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 		},
 	}
-
-	doc.AddExample("", clusterConfigExample())
-
-	doc.Fields[2].AddExample("Setting controlplane endpoint address to 1.2.3.4 and port to 443 example.", clusterControlPlaneExample())
-	doc.Fields[4].AddExample("Configuring with flannel CNI and setting up subnets.", clusterNetworkExample())
-	doc.Fields[5].AddExample("Bootstrap token example (do not use in production!).", "wlzjyw.bei2zfylhs2by0wd")
-	doc.Fields[6].AddExample("Decryption secret example (do not use in production!).", "z01mye6j16bspJYtTB/5SFX8j7Ph4JXxM2Xuu4vsBPM=")
-	doc.Fields[7].AddExample("Decryption secret example (do not use in production!).", "z01mye6j16bspJYtTB/5SFX8j7Ph4JXxM2Xuu4vsBPM=")
-	doc.Fields[8].AddExample("ClusterCA example.", pemEncodedCertificateExample())
-	doc.Fields[10].AddExample("AggregatorCA example.", pemEncodedCertificateExample())
-	doc.Fields[11].AddExample("AggregatorCA example.", pemEncodedKeyExample())
-	doc.Fields[12].AddExample("", clusterAPIServerExample())
-	doc.Fields[13].AddExample("", clusterControllerManagerExample())
-	doc.Fields[14].AddExample("", clusterProxyExample())
-	doc.Fields[15].AddExample("", clusterSchedulerExample())
-	doc.Fields[16].AddExample("", clusterDiscoveryExample())
-	doc.Fields[17].AddExample("", clusterEtcdExample())
-	doc.Fields[18].AddExample("", clusterCoreDNSExample())
-	doc.Fields[19].AddExample("", clusterExternalCloudProviderConfigExample())
-	doc.Fields[20].AddExample("", []string{
-		"https://www.example.com/manifest1.yaml",
-		"https://www.example.com/manifest2.yaml",
-	})
-	doc.Fields[21].AddExample("", map[string]string{
-		"Token":       "1234567",
-		"X-ExtraInfo": "info",
-	})
-	doc.Fields[22].AddExample("", clusterInlineManifestsExample())
-	doc.Fields[23].AddExample("", clusterAdminKubeconfigExample())
-	doc.Fields[25].AddExample("", true)
 
 	return doc
 }
@@ -635,12 +403,6 @@ func (MachineControlPlaneConfig) Doc() *encoder.Doc {
 		Type:        "MachineControlPlaneConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "MachineControlPlaneConfig machine specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "MachineControlPlaneConfig machine specific configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "MachineConfig",
-				FieldName: "controlPlane",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "controllerManager",
@@ -658,8 +420,6 @@ func (MachineControlPlaneConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("ControlPlane definition example.", machineControlplaneExample())
 
 	return doc
 }
@@ -719,12 +479,6 @@ func (KubeletConfig) Doc() *encoder.Doc {
 		Type:        "KubeletConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "KubeletConfig represents the kubelet config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "KubeletConfig represents the kubelet config values.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "MachineConfig",
-				FieldName: "kubelet",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "image",
@@ -829,8 +583,6 @@ func (KubeletConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("Kubelet definition example.", machineKubeletExample())
 
 	doc.Fields[0].AddExample("", kubeletImageExample())
 	doc.Fields[1].AddExample("", []string{"10.96.0.10", "169.254.2.53"})
@@ -1051,12 +803,6 @@ func (CoreDNS) Doc() *encoder.Doc {
 		Type:        "CoreDNS",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "CoreDNS represents the CoreDNS config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "CoreDNS represents the CoreDNS config values.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "coreDNS",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "disabled",
@@ -1074,8 +820,6 @@ func (CoreDNS) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("", clusterCoreDNSExample())
 
 	return doc
 }
@@ -1116,12 +860,6 @@ func (ControlPlaneConfig) Doc() *encoder.Doc {
 		Type:        "ControlPlaneConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ControlPlaneConfig represents the control plane configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ControlPlaneConfig represents the control plane configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "controlPlane",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "endpoint",
@@ -1140,8 +878,6 @@ func (ControlPlaneConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.AddExample("Setting controlplane endpoint address to 1.2.3.4 and port to 443 example.", clusterControlPlaneExample())
-
 	doc.Fields[0].AddExample("", clusterEndpointExample1())
 	doc.Fields[0].AddExample("", clusterEndpointExample2())
 
@@ -1153,12 +889,6 @@ func (APIServerConfig) Doc() *encoder.Doc {
 		Type:        "APIServerConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "APIServerConfig represents the kube apiserver configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "APIServerConfig represents the kube apiserver configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "apiServer",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "image",
@@ -1226,8 +956,6 @@ func (APIServerConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("", clusterAPIServerExample())
 
 	doc.Fields[0].AddExample("", clusterAPIServerImageExample())
 	doc.Fields[6].AddExample("", admissionControlConfigExample())
@@ -1317,12 +1045,6 @@ func (ControllerManagerConfig) Doc() *encoder.Doc {
 		Type:        "ControllerManagerConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ControllerManagerConfig represents the kube controller manager configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ControllerManagerConfig represents the kube controller manager configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "controllerManager",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "image",
@@ -1362,8 +1084,6 @@ func (ControllerManagerConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.AddExample("", clusterControllerManagerExample())
-
 	doc.Fields[0].AddExample("", clusterControllerManagerImageExample())
 
 	return doc
@@ -1374,12 +1094,6 @@ func (ProxyConfig) Doc() *encoder.Doc {
 		Type:        "ProxyConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ProxyConfig represents the kube proxy configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ProxyConfig represents the kube proxy configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "proxy",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "disabled",
@@ -1412,8 +1126,6 @@ func (ProxyConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.AddExample("", clusterProxyExample())
-
 	doc.Fields[0].AddExample("", pointer.To(false))
 	doc.Fields[1].AddExample("", clusterProxyImageExample())
 
@@ -1425,12 +1137,6 @@ func (SchedulerConfig) Doc() *encoder.Doc {
 		Type:        "SchedulerConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "SchedulerConfig represents the kube scheduler configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "SchedulerConfig represents the kube scheduler configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "scheduler",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "image",
@@ -1477,8 +1183,6 @@ func (SchedulerConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.AddExample("", clusterSchedulerExample())
-
 	doc.Fields[0].AddExample("", clusterSchedulerImageExample())
 
 	return doc
@@ -1489,12 +1193,6 @@ func (EtcdConfig) Doc() *encoder.Doc {
 		Type:        "EtcdConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "EtcdConfig represents the etcd configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "EtcdConfig represents the etcd configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "etcd",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "image",
@@ -1535,8 +1233,6 @@ func (EtcdConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.AddExample("", clusterEtcdExample())
-
 	doc.Fields[0].AddExample("", clusterEtcdImageExample())
 	doc.Fields[1].AddExample("", pemEncodedCertificateExample())
 	doc.Fields[4].AddExample("", clusterEtcdAdvertisedSubnetsExample())
@@ -1549,12 +1245,6 @@ func (ClusterNetworkConfig) Doc() *encoder.Doc {
 		Type:        "ClusterNetworkConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ClusterNetworkConfig represents kube networking configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ClusterNetworkConfig represents kube networking configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "network",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "cni",
@@ -1586,8 +1276,6 @@ func (ClusterNetworkConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("Configuring with flannel CNI and setting up subnets.", clusterNetworkExample())
 
 	doc.Fields[0].AddExample("", clusterCustomCNIExample())
 	doc.Fields[1].AddExample("", "cluster.local")
@@ -1675,12 +1363,6 @@ func (ExternalCloudProviderConfig) Doc() *encoder.Doc {
 		Type:        "ExternalCloudProviderConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ExternalCloudProviderConfig contains external cloud provider configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ExternalCloudProviderConfig contains external cloud provider configuration.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "externalCloudProvider",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "enabled",
@@ -1705,8 +1387,6 @@ func (ExternalCloudProviderConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.AddExample("", clusterExternalCloudProviderConfigExample())
-
 	doc.Fields[1].AddExample("", []string{
 		"https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/rbac.yaml",
 		"https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/aws-cloud-controller-manager-daemonset.yaml",
@@ -1720,12 +1400,6 @@ func (AdminKubeconfigConfig) Doc() *encoder.Doc {
 		Type:        "AdminKubeconfigConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "AdminKubeconfigConfig contains admin kubeconfig settings." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "AdminKubeconfigConfig contains admin kubeconfig settings.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "adminKubeconfig",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "certLifetime",
@@ -1736,8 +1410,6 @@ func (AdminKubeconfigConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("", clusterAdminKubeconfigExample())
 
 	return doc
 }
@@ -2098,12 +1770,6 @@ func (ClusterInlineManifest) Doc() *encoder.Doc {
 		Type:        "ClusterInlineManifest",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ClusterInlineManifest struct describes inline bootstrap manifests for the user." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ClusterInlineManifest struct describes inline bootstrap manifests for the user.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterConfig",
-				FieldName: "inlineManifests",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "name",
@@ -2121,8 +1787,6 @@ func (ClusterInlineManifest) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("", clusterInlineManifestsExample())
 
 	doc.Fields[0].AddExample("", "csi")
 	doc.Fields[1].AddExample("", "/etc/kubernetes/auth")
@@ -2158,8 +1822,6 @@ func (ClusterDiscoveryConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("", clusterDiscoveryExample())
 
 	return doc
 }

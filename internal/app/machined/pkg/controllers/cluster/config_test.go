@@ -46,7 +46,7 @@ func (suite *ConfigSuite) TestReconcileConfig() {
 			spec := res.TypedSpec()
 
 			asrt.True(spec.DiscoveryEnabled)
-			asrt.True(spec.RegistryKubernetesEnabled)
+			asrt.False(spec.RegistryKubernetesEnabled)
 			asrt.True(spec.RegistryServiceEnabled)
 			asrt.Equal("discovery.talos.dev:443", spec.ServiceEndpoint)
 			asrt.False(spec.ServiceEndpointInsecure)

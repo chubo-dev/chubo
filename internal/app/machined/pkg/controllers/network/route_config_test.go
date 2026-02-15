@@ -6,7 +6,6 @@ package network_test
 
 import (
 	"net/netip"
-	"net/url"
 	"testing"
 	"time"
 
@@ -100,9 +99,6 @@ func (suite *RouteConfigSuite) TestMachineConfigurationLegacy() {
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.RouteConfigController{}))
 	suite.Require().NoError(suite.Runtime().RegisterController(&netctrl.DeviceConfigController{}))
 
-	u, err := url.Parse("https://foo:6443")
-	suite.Require().NoError(err)
-
 	cfg := config.NewMachineConfig(
 		container.NewV1Alpha1(
 			&v1alpha1.Config{
@@ -175,13 +171,7 @@ func (suite *RouteConfigSuite) TestMachineConfigurationLegacy() {
 						},
 					},
 				},
-				ClusterConfig: &v1alpha1.ClusterConfig{
-					ControlPlane: &v1alpha1.ControlPlaneConfig{
-						Endpoint: &v1alpha1.Endpoint{
-							URL: u,
-						},
-					},
-				},
+				ClusterConfig: &v1alpha1.ClusterConfig{},
 			},
 		),
 	)
