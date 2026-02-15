@@ -47,7 +47,7 @@ func init() {
 
 	createDockerCmd := &cobra.Command{
 		Use:   "docker",
-		Short: "Create a local Docker based kubernetes cluster",
+		Short: "Create a local Docker based cluster",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cli.WithContext(context.Background(), func(ctx context.Context) error {

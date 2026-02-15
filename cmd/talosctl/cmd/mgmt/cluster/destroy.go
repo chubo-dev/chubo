@@ -24,7 +24,7 @@ var destroyCmdFlags struct {
 // destroyCmd represents the cluster destroy command.
 var destroyCmd = &cobra.Command{
 	Use:   "destroy",
-	Short: "Destroys a local Talos kubernetes cluster",
+	Short: "Destroys a local provisioned cluster",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return cli.WithContext(context.Background(), destroy)
