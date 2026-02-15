@@ -22,6 +22,23 @@ message OpenBaoJobStatusSpec {
   string last_error = 6;
 }
 
+// OpenGyozaBootstrapStatusSpec describes opengyoza bootstrap status.
+message OpenGyozaBootstrapStatusSpec {
+  bool configured = 1;
+  string role = 2;
+  int32 bootstrap_expect = 3;
+  repeated string join = 4;
+  bool running = 5;
+  bool healthy = 6;
+  bool acl_ready = 7;
+  string acl_last_error = 8;
+  string leader = 9;
+  int32 peer_count = 10;
+  bool cluster_ready = 11;
+  string last_error = 12;
+  string acl_token_sha256 = 13;
+}
+
 // OpenGyozaStatusSpec describes opengyoza status.
 message OpenGyozaStatusSpec {
   bool configured = 1;
@@ -29,6 +46,28 @@ message OpenGyozaStatusSpec {
   bool running = 3;
   bool healthy = 4;
   string binary_mode = 5;
+  string leader = 6;
+  int32 peer_count = 7;
+  string last_error = 8;
+  bool acl_ready = 9;
+  string acl_last_error = 10;
+}
+
+// OpenWontonBootstrapStatusSpec describes openwonton bootstrap status.
+message OpenWontonBootstrapStatusSpec {
+  bool configured = 1;
+  string role = 2;
+  int32 bootstrap_expect = 3;
+  repeated string join = 4;
+  bool running = 5;
+  bool healthy = 6;
+  bool acl_ready = 7;
+  string acl_last_error = 8;
+  string leader = 9;
+  int32 peer_count = 10;
+  bool cluster_ready = 11;
+  string last_error = 12;
+  string acl_token_sha256 = 13;
 }
 
 // OpenWontonStatusSpec describes openwonton status.
@@ -38,5 +77,10 @@ message OpenWontonStatusSpec {
   bool running = 3;
   bool healthy = 4;
   string binary_mode = 5;
+  string leader = 6;
+  int32 peer_count = 7;
+  string last_error = 8;
+  bool acl_ready = 9;
+  string acl_last_error = 10;
 }
 

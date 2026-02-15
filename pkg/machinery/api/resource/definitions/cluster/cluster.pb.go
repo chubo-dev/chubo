@@ -264,6 +264,59 @@ func (x *ControlPlane) GetApiServerPort() int64 {
 	return 0
 }
 
+// ControlPlaneEndpointSpec describes a list of endpoints to connect to.
+type ControlPlaneEndpointSpec struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Addresses     []*common.NetIP        `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	Hosts         []string               `protobuf:"bytes,2,rep,name=hosts,proto3" json:"hosts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ControlPlaneEndpointSpec) Reset() {
+	*x = ControlPlaneEndpointSpec{}
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ControlPlaneEndpointSpec) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ControlPlaneEndpointSpec) ProtoMessage() {}
+
+func (x *ControlPlaneEndpointSpec) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ControlPlaneEndpointSpec.ProtoReflect.Descriptor instead.
+func (*ControlPlaneEndpointSpec) Descriptor() ([]byte, []int) {
+	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ControlPlaneEndpointSpec) GetAddresses() []*common.NetIP {
+	if x != nil {
+		return x.Addresses
+	}
+	return nil
+}
+
+func (x *ControlPlaneEndpointSpec) GetHosts() []string {
+	if x != nil {
+		return x.Hosts
+	}
+	return nil
+}
+
 // IdentitySpec describes status of rendered secrets.
 //
 // Note: IdentitySpec is persisted on disk in the STATE partition,
@@ -277,7 +330,7 @@ type IdentitySpec struct {
 
 func (x *IdentitySpec) Reset() {
 	*x = IdentitySpec{}
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[3]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -289,7 +342,7 @@ func (x *IdentitySpec) String() string {
 func (*IdentitySpec) ProtoMessage() {}
 
 func (x *IdentitySpec) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[3]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -302,7 +355,7 @@ func (x *IdentitySpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdentitySpec.ProtoReflect.Descriptor instead.
 func (*IdentitySpec) Descriptor() ([]byte, []int) {
-	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{3}
+	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *IdentitySpec) GetNodeId() string {
@@ -323,7 +376,7 @@ type InfoSpec struct {
 
 func (x *InfoSpec) Reset() {
 	*x = InfoSpec{}
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[4]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -335,7 +388,7 @@ func (x *InfoSpec) String() string {
 func (*InfoSpec) ProtoMessage() {}
 
 func (x *InfoSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[4]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -348,7 +401,7 @@ func (x *InfoSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfoSpec.ProtoReflect.Descriptor instead.
 func (*InfoSpec) Descriptor() ([]byte, []int) {
-	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{4}
+	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *InfoSpec) GetClusterId() string {
@@ -378,7 +431,7 @@ type KubeSpanAffiliateSpec struct {
 
 func (x *KubeSpanAffiliateSpec) Reset() {
 	*x = KubeSpanAffiliateSpec{}
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[5]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -390,7 +443,7 @@ func (x *KubeSpanAffiliateSpec) String() string {
 func (*KubeSpanAffiliateSpec) ProtoMessage() {}
 
 func (x *KubeSpanAffiliateSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[5]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -403,7 +456,7 @@ func (x *KubeSpanAffiliateSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use KubeSpanAffiliateSpec.ProtoReflect.Descriptor instead.
 func (*KubeSpanAffiliateSpec) Descriptor() ([]byte, []int) {
-	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{5}
+	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *KubeSpanAffiliateSpec) GetPublicKey() string {
@@ -449,7 +502,7 @@ type MemberSpec struct {
 
 func (x *MemberSpec) Reset() {
 	*x = MemberSpec{}
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[6]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -461,7 +514,7 @@ func (x *MemberSpec) String() string {
 func (*MemberSpec) ProtoMessage() {}
 
 func (x *MemberSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[6]
+	mi := &file_resource_definitions_cluster_cluster_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -474,7 +527,7 @@ func (x *MemberSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MemberSpec.ProtoReflect.Descriptor instead.
 func (*MemberSpec) Descriptor() ([]byte, []int) {
-	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{6}
+	return file_resource_definitions_cluster_cluster_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *MemberSpec) GetNodeId() string {
@@ -543,7 +596,10 @@ const file_resource_definitions_cluster_cluster_proto_rawDesc = "" +
 	"\x16service_encryption_key\x18\x06 \x01(\fR\x14serviceEncryptionKey\x12,\n" +
 	"\x12service_cluster_id\x18\a \x01(\tR\x10serviceClusterId\"6\n" +
 	"\fControlPlane\x12&\n" +
-	"\x0fapi_server_port\x18\x01 \x01(\x03R\rapiServerPort\"'\n" +
+	"\x0fapi_server_port\x18\x01 \x01(\x03R\rapiServerPort\"]\n" +
+	"\x18ControlPlaneEndpointSpec\x12+\n" +
+	"\taddresses\x18\x01 \x03(\v2\r.common.NetIPR\taddresses\x12\x14\n" +
+	"\x05hosts\x18\x02 \x03(\tR\x05hosts\"'\n" +
 	"\fIdentitySpec\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\"L\n" +
 	"\bInfoSpec\x12\x1d\n" +
@@ -578,36 +634,38 @@ func file_resource_definitions_cluster_cluster_proto_rawDescGZIP() []byte {
 	return file_resource_definitions_cluster_cluster_proto_rawDescData
 }
 
-var file_resource_definitions_cluster_cluster_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_resource_definitions_cluster_cluster_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_resource_definitions_cluster_cluster_proto_goTypes = []any{
-	(*AffiliateSpec)(nil),         // 0: talos.resource.definitions.cluster.AffiliateSpec
-	(*ConfigSpec)(nil),            // 1: talos.resource.definitions.cluster.ConfigSpec
-	(*ControlPlane)(nil),          // 2: talos.resource.definitions.cluster.ControlPlane
-	(*IdentitySpec)(nil),          // 3: talos.resource.definitions.cluster.IdentitySpec
-	(*InfoSpec)(nil),              // 4: talos.resource.definitions.cluster.InfoSpec
-	(*KubeSpanAffiliateSpec)(nil), // 5: talos.resource.definitions.cluster.KubeSpanAffiliateSpec
-	(*MemberSpec)(nil),            // 6: talos.resource.definitions.cluster.MemberSpec
-	(*common.NetIP)(nil),          // 7: common.NetIP
-	(enums.MachineType)(0),        // 8: talos.resource.definitions.enums.MachineType
-	(*common.NetIPPrefix)(nil),    // 9: common.NetIPPrefix
-	(*common.NetIPPort)(nil),      // 10: common.NetIPPort
+	(*AffiliateSpec)(nil),            // 0: talos.resource.definitions.cluster.AffiliateSpec
+	(*ConfigSpec)(nil),               // 1: talos.resource.definitions.cluster.ConfigSpec
+	(*ControlPlane)(nil),             // 2: talos.resource.definitions.cluster.ControlPlane
+	(*ControlPlaneEndpointSpec)(nil), // 3: talos.resource.definitions.cluster.ControlPlaneEndpointSpec
+	(*IdentitySpec)(nil),             // 4: talos.resource.definitions.cluster.IdentitySpec
+	(*InfoSpec)(nil),                 // 5: talos.resource.definitions.cluster.InfoSpec
+	(*KubeSpanAffiliateSpec)(nil),    // 6: talos.resource.definitions.cluster.KubeSpanAffiliateSpec
+	(*MemberSpec)(nil),               // 7: talos.resource.definitions.cluster.MemberSpec
+	(*common.NetIP)(nil),             // 8: common.NetIP
+	(enums.MachineType)(0),           // 9: talos.resource.definitions.enums.MachineType
+	(*common.NetIPPrefix)(nil),       // 10: common.NetIPPrefix
+	(*common.NetIPPort)(nil),         // 11: common.NetIPPort
 }
 var file_resource_definitions_cluster_cluster_proto_depIdxs = []int32{
-	7,  // 0: talos.resource.definitions.cluster.AffiliateSpec.addresses:type_name -> common.NetIP
-	8,  // 1: talos.resource.definitions.cluster.AffiliateSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
-	5,  // 2: talos.resource.definitions.cluster.AffiliateSpec.kube_span:type_name -> talos.resource.definitions.cluster.KubeSpanAffiliateSpec
+	8,  // 0: talos.resource.definitions.cluster.AffiliateSpec.addresses:type_name -> common.NetIP
+	9,  // 1: talos.resource.definitions.cluster.AffiliateSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
+	6,  // 2: talos.resource.definitions.cluster.AffiliateSpec.kube_span:type_name -> talos.resource.definitions.cluster.KubeSpanAffiliateSpec
 	2,  // 3: talos.resource.definitions.cluster.AffiliateSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane
-	7,  // 4: talos.resource.definitions.cluster.KubeSpanAffiliateSpec.address:type_name -> common.NetIP
-	9,  // 5: talos.resource.definitions.cluster.KubeSpanAffiliateSpec.additional_addresses:type_name -> common.NetIPPrefix
-	10, // 6: talos.resource.definitions.cluster.KubeSpanAffiliateSpec.endpoints:type_name -> common.NetIPPort
-	7,  // 7: talos.resource.definitions.cluster.MemberSpec.addresses:type_name -> common.NetIP
-	8,  // 8: talos.resource.definitions.cluster.MemberSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
-	2,  // 9: talos.resource.definitions.cluster.MemberSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	8,  // 4: talos.resource.definitions.cluster.ControlPlaneEndpointSpec.addresses:type_name -> common.NetIP
+	8,  // 5: talos.resource.definitions.cluster.KubeSpanAffiliateSpec.address:type_name -> common.NetIP
+	10, // 6: talos.resource.definitions.cluster.KubeSpanAffiliateSpec.additional_addresses:type_name -> common.NetIPPrefix
+	11, // 7: talos.resource.definitions.cluster.KubeSpanAffiliateSpec.endpoints:type_name -> common.NetIPPort
+	8,  // 8: talos.resource.definitions.cluster.MemberSpec.addresses:type_name -> common.NetIP
+	9,  // 9: talos.resource.definitions.cluster.MemberSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
+	2,  // 10: talos.resource.definitions.cluster.MemberSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_resource_definitions_cluster_cluster_proto_init() }
@@ -621,7 +679,7 @@ func file_resource_definitions_cluster_cluster_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_definitions_cluster_cluster_proto_rawDesc), len(file_resource_definitions_cluster_cluster_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

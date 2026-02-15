@@ -168,6 +168,147 @@ func (x *OpenBaoJobStatusSpec) GetLastError() string {
 	return ""
 }
 
+// OpenGyozaBootstrapStatusSpec describes opengyoza bootstrap status.
+type OpenGyozaBootstrapStatusSpec struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Configured      bool                   `protobuf:"varint,1,opt,name=configured,proto3" json:"configured,omitempty"`
+	Role            string                 `protobuf:"bytes,2,opt,name=role,proto3" json:"role,omitempty"`
+	BootstrapExpect int32                  `protobuf:"varint,3,opt,name=bootstrap_expect,json=bootstrapExpect,proto3" json:"bootstrap_expect,omitempty"`
+	Join            []string               `protobuf:"bytes,4,rep,name=join,proto3" json:"join,omitempty"`
+	Running         bool                   `protobuf:"varint,5,opt,name=running,proto3" json:"running,omitempty"`
+	Healthy         bool                   `protobuf:"varint,6,opt,name=healthy,proto3" json:"healthy,omitempty"`
+	AclReady        bool                   `protobuf:"varint,7,opt,name=acl_ready,json=aclReady,proto3" json:"acl_ready,omitempty"`
+	AclLastError    string                 `protobuf:"bytes,8,opt,name=acl_last_error,json=aclLastError,proto3" json:"acl_last_error,omitempty"`
+	Leader          string                 `protobuf:"bytes,9,opt,name=leader,proto3" json:"leader,omitempty"`
+	PeerCount       int32                  `protobuf:"varint,10,opt,name=peer_count,json=peerCount,proto3" json:"peer_count,omitempty"`
+	ClusterReady    bool                   `protobuf:"varint,11,opt,name=cluster_ready,json=clusterReady,proto3" json:"cluster_ready,omitempty"`
+	LastError       string                 `protobuf:"bytes,12,opt,name=last_error,json=lastError,proto3" json:"last_error,omitempty"`
+	AclTokenSha256  string                 `protobuf:"bytes,13,opt,name=acl_token_sha256,json=aclTokenSha256,proto3" json:"acl_token_sha256,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) Reset() {
+	*x = OpenGyozaBootstrapStatusSpec{}
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OpenGyozaBootstrapStatusSpec) ProtoMessage() {}
+
+func (x *OpenGyozaBootstrapStatusSpec) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OpenGyozaBootstrapStatusSpec.ProtoReflect.Descriptor instead.
+func (*OpenGyozaBootstrapStatusSpec) Descriptor() ([]byte, []int) {
+	return file_resource_definitions_chubo_chubo_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetConfigured() bool {
+	if x != nil {
+		return x.Configured
+	}
+	return false
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetBootstrapExpect() int32 {
+	if x != nil {
+		return x.BootstrapExpect
+	}
+	return 0
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetJoin() []string {
+	if x != nil {
+		return x.Join
+	}
+	return nil
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetRunning() bool {
+	if x != nil {
+		return x.Running
+	}
+	return false
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetHealthy() bool {
+	if x != nil {
+		return x.Healthy
+	}
+	return false
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetAclReady() bool {
+	if x != nil {
+		return x.AclReady
+	}
+	return false
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetAclLastError() string {
+	if x != nil {
+		return x.AclLastError
+	}
+	return ""
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetLeader() string {
+	if x != nil {
+		return x.Leader
+	}
+	return ""
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetPeerCount() int32 {
+	if x != nil {
+		return x.PeerCount
+	}
+	return 0
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetClusterReady() bool {
+	if x != nil {
+		return x.ClusterReady
+	}
+	return false
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetLastError() string {
+	if x != nil {
+		return x.LastError
+	}
+	return ""
+}
+
+func (x *OpenGyozaBootstrapStatusSpec) GetAclTokenSha256() string {
+	if x != nil {
+		return x.AclTokenSha256
+	}
+	return ""
+}
+
 // OpenGyozaStatusSpec describes opengyoza status.
 type OpenGyozaStatusSpec struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -176,13 +317,18 @@ type OpenGyozaStatusSpec struct {
 	Running       bool                   `protobuf:"varint,3,opt,name=running,proto3" json:"running,omitempty"`
 	Healthy       bool                   `protobuf:"varint,4,opt,name=healthy,proto3" json:"healthy,omitempty"`
 	BinaryMode    string                 `protobuf:"bytes,5,opt,name=binary_mode,json=binaryMode,proto3" json:"binary_mode,omitempty"`
+	Leader        string                 `protobuf:"bytes,6,opt,name=leader,proto3" json:"leader,omitempty"`
+	PeerCount     int32                  `protobuf:"varint,7,opt,name=peer_count,json=peerCount,proto3" json:"peer_count,omitempty"`
+	LastError     string                 `protobuf:"bytes,8,opt,name=last_error,json=lastError,proto3" json:"last_error,omitempty"`
+	AclReady      bool                   `protobuf:"varint,9,opt,name=acl_ready,json=aclReady,proto3" json:"acl_ready,omitempty"`
+	AclLastError  string                 `protobuf:"bytes,10,opt,name=acl_last_error,json=aclLastError,proto3" json:"acl_last_error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OpenGyozaStatusSpec) Reset() {
 	*x = OpenGyozaStatusSpec{}
-	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[2]
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -194,7 +340,7 @@ func (x *OpenGyozaStatusSpec) String() string {
 func (*OpenGyozaStatusSpec) ProtoMessage() {}
 
 func (x *OpenGyozaStatusSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[2]
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -207,7 +353,7 @@ func (x *OpenGyozaStatusSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenGyozaStatusSpec.ProtoReflect.Descriptor instead.
 func (*OpenGyozaStatusSpec) Descriptor() ([]byte, []int) {
-	return file_resource_definitions_chubo_chubo_proto_rawDescGZIP(), []int{2}
+	return file_resource_definitions_chubo_chubo_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *OpenGyozaStatusSpec) GetConfigured() bool {
@@ -245,6 +391,182 @@ func (x *OpenGyozaStatusSpec) GetBinaryMode() string {
 	return ""
 }
 
+func (x *OpenGyozaStatusSpec) GetLeader() string {
+	if x != nil {
+		return x.Leader
+	}
+	return ""
+}
+
+func (x *OpenGyozaStatusSpec) GetPeerCount() int32 {
+	if x != nil {
+		return x.PeerCount
+	}
+	return 0
+}
+
+func (x *OpenGyozaStatusSpec) GetLastError() string {
+	if x != nil {
+		return x.LastError
+	}
+	return ""
+}
+
+func (x *OpenGyozaStatusSpec) GetAclReady() bool {
+	if x != nil {
+		return x.AclReady
+	}
+	return false
+}
+
+func (x *OpenGyozaStatusSpec) GetAclLastError() string {
+	if x != nil {
+		return x.AclLastError
+	}
+	return ""
+}
+
+// OpenWontonBootstrapStatusSpec describes openwonton bootstrap status.
+type OpenWontonBootstrapStatusSpec struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Configured      bool                   `protobuf:"varint,1,opt,name=configured,proto3" json:"configured,omitempty"`
+	Role            string                 `protobuf:"bytes,2,opt,name=role,proto3" json:"role,omitempty"`
+	BootstrapExpect int32                  `protobuf:"varint,3,opt,name=bootstrap_expect,json=bootstrapExpect,proto3" json:"bootstrap_expect,omitempty"`
+	Join            []string               `protobuf:"bytes,4,rep,name=join,proto3" json:"join,omitempty"`
+	Running         bool                   `protobuf:"varint,5,opt,name=running,proto3" json:"running,omitempty"`
+	Healthy         bool                   `protobuf:"varint,6,opt,name=healthy,proto3" json:"healthy,omitempty"`
+	AclReady        bool                   `protobuf:"varint,7,opt,name=acl_ready,json=aclReady,proto3" json:"acl_ready,omitempty"`
+	AclLastError    string                 `protobuf:"bytes,8,opt,name=acl_last_error,json=aclLastError,proto3" json:"acl_last_error,omitempty"`
+	Leader          string                 `protobuf:"bytes,9,opt,name=leader,proto3" json:"leader,omitempty"`
+	PeerCount       int32                  `protobuf:"varint,10,opt,name=peer_count,json=peerCount,proto3" json:"peer_count,omitempty"`
+	ClusterReady    bool                   `protobuf:"varint,11,opt,name=cluster_ready,json=clusterReady,proto3" json:"cluster_ready,omitempty"`
+	LastError       string                 `protobuf:"bytes,12,opt,name=last_error,json=lastError,proto3" json:"last_error,omitempty"`
+	AclTokenSha256  string                 `protobuf:"bytes,13,opt,name=acl_token_sha256,json=aclTokenSha256,proto3" json:"acl_token_sha256,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *OpenWontonBootstrapStatusSpec) Reset() {
+	*x = OpenWontonBootstrapStatusSpec{}
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OpenWontonBootstrapStatusSpec) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OpenWontonBootstrapStatusSpec) ProtoMessage() {}
+
+func (x *OpenWontonBootstrapStatusSpec) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OpenWontonBootstrapStatusSpec.ProtoReflect.Descriptor instead.
+func (*OpenWontonBootstrapStatusSpec) Descriptor() ([]byte, []int) {
+	return file_resource_definitions_chubo_chubo_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetConfigured() bool {
+	if x != nil {
+		return x.Configured
+	}
+	return false
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetBootstrapExpect() int32 {
+	if x != nil {
+		return x.BootstrapExpect
+	}
+	return 0
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetJoin() []string {
+	if x != nil {
+		return x.Join
+	}
+	return nil
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetRunning() bool {
+	if x != nil {
+		return x.Running
+	}
+	return false
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetHealthy() bool {
+	if x != nil {
+		return x.Healthy
+	}
+	return false
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetAclReady() bool {
+	if x != nil {
+		return x.AclReady
+	}
+	return false
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetAclLastError() string {
+	if x != nil {
+		return x.AclLastError
+	}
+	return ""
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetLeader() string {
+	if x != nil {
+		return x.Leader
+	}
+	return ""
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetPeerCount() int32 {
+	if x != nil {
+		return x.PeerCount
+	}
+	return 0
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetClusterReady() bool {
+	if x != nil {
+		return x.ClusterReady
+	}
+	return false
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetLastError() string {
+	if x != nil {
+		return x.LastError
+	}
+	return ""
+}
+
+func (x *OpenWontonBootstrapStatusSpec) GetAclTokenSha256() string {
+	if x != nil {
+		return x.AclTokenSha256
+	}
+	return ""
+}
+
 // OpenWontonStatusSpec describes openwonton status.
 type OpenWontonStatusSpec struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -253,13 +575,18 @@ type OpenWontonStatusSpec struct {
 	Running       bool                   `protobuf:"varint,3,opt,name=running,proto3" json:"running,omitempty"`
 	Healthy       bool                   `protobuf:"varint,4,opt,name=healthy,proto3" json:"healthy,omitempty"`
 	BinaryMode    string                 `protobuf:"bytes,5,opt,name=binary_mode,json=binaryMode,proto3" json:"binary_mode,omitempty"`
+	Leader        string                 `protobuf:"bytes,6,opt,name=leader,proto3" json:"leader,omitempty"`
+	PeerCount     int32                  `protobuf:"varint,7,opt,name=peer_count,json=peerCount,proto3" json:"peer_count,omitempty"`
+	LastError     string                 `protobuf:"bytes,8,opt,name=last_error,json=lastError,proto3" json:"last_error,omitempty"`
+	AclReady      bool                   `protobuf:"varint,9,opt,name=acl_ready,json=aclReady,proto3" json:"acl_ready,omitempty"`
+	AclLastError  string                 `protobuf:"bytes,10,opt,name=acl_last_error,json=aclLastError,proto3" json:"acl_last_error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OpenWontonStatusSpec) Reset() {
 	*x = OpenWontonStatusSpec{}
-	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[3]
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -271,7 +598,7 @@ func (x *OpenWontonStatusSpec) String() string {
 func (*OpenWontonStatusSpec) ProtoMessage() {}
 
 func (x *OpenWontonStatusSpec) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[3]
+	mi := &file_resource_definitions_chubo_chubo_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -284,7 +611,7 @@ func (x *OpenWontonStatusSpec) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenWontonStatusSpec.ProtoReflect.Descriptor instead.
 func (*OpenWontonStatusSpec) Descriptor() ([]byte, []int) {
-	return file_resource_definitions_chubo_chubo_proto_rawDescGZIP(), []int{3}
+	return file_resource_definitions_chubo_chubo_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *OpenWontonStatusSpec) GetConfigured() bool {
@@ -322,6 +649,41 @@ func (x *OpenWontonStatusSpec) GetBinaryMode() string {
 	return ""
 }
 
+func (x *OpenWontonStatusSpec) GetLeader() string {
+	if x != nil {
+		return x.Leader
+	}
+	return ""
+}
+
+func (x *OpenWontonStatusSpec) GetPeerCount() int32 {
+	if x != nil {
+		return x.PeerCount
+	}
+	return 0
+}
+
+func (x *OpenWontonStatusSpec) GetLastError() string {
+	if x != nil {
+		return x.LastError
+	}
+	return ""
+}
+
+func (x *OpenWontonStatusSpec) GetAclReady() bool {
+	if x != nil {
+		return x.AclReady
+	}
+	return false
+}
+
+func (x *OpenWontonStatusSpec) GetAclLastError() string {
+	if x != nil {
+		return x.AclLastError
+	}
+	return ""
+}
+
 var File_resource_definitions_chubo_chubo_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_chubo_chubo_proto_rawDesc = "" +
@@ -342,7 +704,26 @@ const file_resource_definitions_chubo_chubo_proto_rawDesc = "" +
 	"\x0fnomad_reachable\x18\x04 \x01(\bR\x0enomadReachable\x12\x18\n" +
 	"\apresent\x18\x05 \x01(\bR\apresent\x12\x1d\n" +
 	"\n" +
-	"last_error\x18\x06 \x01(\tR\tlastError\"\x9e\x01\n" +
+	"last_error\x18\x06 \x01(\tR\tlastError\"\xad\x03\n" +
+	"\x1cOpenGyozaBootstrapStatusSpec\x12\x1e\n" +
+	"\n" +
+	"configured\x18\x01 \x01(\bR\n" +
+	"configured\x12\x12\n" +
+	"\x04role\x18\x02 \x01(\tR\x04role\x12)\n" +
+	"\x10bootstrap_expect\x18\x03 \x01(\x05R\x0fbootstrapExpect\x12\x12\n" +
+	"\x04join\x18\x04 \x03(\tR\x04join\x12\x18\n" +
+	"\arunning\x18\x05 \x01(\bR\arunning\x12\x18\n" +
+	"\ahealthy\x18\x06 \x01(\bR\ahealthy\x12\x1b\n" +
+	"\tacl_ready\x18\a \x01(\bR\baclReady\x12$\n" +
+	"\x0eacl_last_error\x18\b \x01(\tR\faclLastError\x12\x16\n" +
+	"\x06leader\x18\t \x01(\tR\x06leader\x12\x1d\n" +
+	"\n" +
+	"peer_count\x18\n" +
+	" \x01(\x05R\tpeerCount\x12#\n" +
+	"\rcluster_ready\x18\v \x01(\bR\fclusterReady\x12\x1d\n" +
+	"\n" +
+	"last_error\x18\f \x01(\tR\tlastError\x12(\n" +
+	"\x10acl_token_sha256\x18\r \x01(\tR\x0eaclTokenSha256\"\xb7\x02\n" +
 	"\x13OpenGyozaStatusSpec\x12\x1e\n" +
 	"\n" +
 	"configured\x18\x01 \x01(\bR\n" +
@@ -351,7 +732,34 @@ const file_resource_definitions_chubo_chubo_proto_rawDesc = "" +
 	"\arunning\x18\x03 \x01(\bR\arunning\x12\x18\n" +
 	"\ahealthy\x18\x04 \x01(\bR\ahealthy\x12\x1f\n" +
 	"\vbinary_mode\x18\x05 \x01(\tR\n" +
-	"binaryMode\"\x9f\x01\n" +
+	"binaryMode\x12\x16\n" +
+	"\x06leader\x18\x06 \x01(\tR\x06leader\x12\x1d\n" +
+	"\n" +
+	"peer_count\x18\a \x01(\x05R\tpeerCount\x12\x1d\n" +
+	"\n" +
+	"last_error\x18\b \x01(\tR\tlastError\x12\x1b\n" +
+	"\tacl_ready\x18\t \x01(\bR\baclReady\x12$\n" +
+	"\x0eacl_last_error\x18\n" +
+	" \x01(\tR\faclLastError\"\xae\x03\n" +
+	"\x1dOpenWontonBootstrapStatusSpec\x12\x1e\n" +
+	"\n" +
+	"configured\x18\x01 \x01(\bR\n" +
+	"configured\x12\x12\n" +
+	"\x04role\x18\x02 \x01(\tR\x04role\x12)\n" +
+	"\x10bootstrap_expect\x18\x03 \x01(\x05R\x0fbootstrapExpect\x12\x12\n" +
+	"\x04join\x18\x04 \x03(\tR\x04join\x12\x18\n" +
+	"\arunning\x18\x05 \x01(\bR\arunning\x12\x18\n" +
+	"\ahealthy\x18\x06 \x01(\bR\ahealthy\x12\x1b\n" +
+	"\tacl_ready\x18\a \x01(\bR\baclReady\x12$\n" +
+	"\x0eacl_last_error\x18\b \x01(\tR\faclLastError\x12\x16\n" +
+	"\x06leader\x18\t \x01(\tR\x06leader\x12\x1d\n" +
+	"\n" +
+	"peer_count\x18\n" +
+	" \x01(\x05R\tpeerCount\x12#\n" +
+	"\rcluster_ready\x18\v \x01(\bR\fclusterReady\x12\x1d\n" +
+	"\n" +
+	"last_error\x18\f \x01(\tR\tlastError\x12(\n" +
+	"\x10acl_token_sha256\x18\r \x01(\tR\x0eaclTokenSha256\"\xb8\x02\n" +
 	"\x14OpenWontonStatusSpec\x12\x1e\n" +
 	"\n" +
 	"configured\x18\x01 \x01(\bR\n" +
@@ -360,7 +768,15 @@ const file_resource_definitions_chubo_chubo_proto_rawDesc = "" +
 	"\arunning\x18\x03 \x01(\bR\arunning\x12\x18\n" +
 	"\ahealthy\x18\x04 \x01(\bR\ahealthy\x12\x1f\n" +
 	"\vbinary_mode\x18\x05 \x01(\tR\n" +
-	"binaryModeBs\n" +
+	"binaryMode\x12\x16\n" +
+	"\x06leader\x18\x06 \x01(\tR\x06leader\x12\x1d\n" +
+	"\n" +
+	"peer_count\x18\a \x01(\x05R\tpeerCount\x12\x1d\n" +
+	"\n" +
+	"last_error\x18\b \x01(\tR\tlastError\x12\x1b\n" +
+	"\tacl_ready\x18\t \x01(\bR\baclReady\x12$\n" +
+	"\x0eacl_last_error\x18\n" +
+	" \x01(\tR\faclLastErrorBs\n" +
 	"(dev.chubo.api.resource.definitions.chuboZGgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/chubob\x06proto3"
 
 var (
@@ -375,12 +791,14 @@ func file_resource_definitions_chubo_chubo_proto_rawDescGZIP() []byte {
 	return file_resource_definitions_chubo_chubo_proto_rawDescData
 }
 
-var file_resource_definitions_chubo_chubo_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_resource_definitions_chubo_chubo_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_resource_definitions_chubo_chubo_proto_goTypes = []any{
-	(*BootstrapStatusSpec)(nil),  // 0: talos.resource.definitions.chubo.BootstrapStatusSpec
-	(*OpenBaoJobStatusSpec)(nil), // 1: talos.resource.definitions.chubo.OpenBaoJobStatusSpec
-	(*OpenGyozaStatusSpec)(nil),  // 2: talos.resource.definitions.chubo.OpenGyozaStatusSpec
-	(*OpenWontonStatusSpec)(nil), // 3: talos.resource.definitions.chubo.OpenWontonStatusSpec
+	(*BootstrapStatusSpec)(nil),           // 0: talos.resource.definitions.chubo.BootstrapStatusSpec
+	(*OpenBaoJobStatusSpec)(nil),          // 1: talos.resource.definitions.chubo.OpenBaoJobStatusSpec
+	(*OpenGyozaBootstrapStatusSpec)(nil),  // 2: talos.resource.definitions.chubo.OpenGyozaBootstrapStatusSpec
+	(*OpenGyozaStatusSpec)(nil),           // 3: talos.resource.definitions.chubo.OpenGyozaStatusSpec
+	(*OpenWontonBootstrapStatusSpec)(nil), // 4: talos.resource.definitions.chubo.OpenWontonBootstrapStatusSpec
+	(*OpenWontonStatusSpec)(nil),          // 5: talos.resource.definitions.chubo.OpenWontonStatusSpec
 }
 var file_resource_definitions_chubo_chubo_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -401,7 +819,7 @@ func file_resource_definitions_chubo_chubo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_definitions_chubo_chubo_proto_rawDesc), len(file_resource_definitions_chubo_chubo_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

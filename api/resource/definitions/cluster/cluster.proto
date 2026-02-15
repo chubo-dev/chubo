@@ -36,6 +36,12 @@ message ControlPlane {
   int64 api_server_port = 1;
 }
 
+// ControlPlaneEndpointSpec describes a list of endpoints to connect to.
+message ControlPlaneEndpointSpec {
+  repeated common.NetIP addresses = 1;
+  repeated string hosts = 2;
+}
+
 // IdentitySpec describes status of rendered secrets.
 //
 // Note: IdentitySpec is persisted on disk in the STATE partition,

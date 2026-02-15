@@ -7,8 +7,9 @@
 package secrets
 
 import (
-	"github.com/siderolabs/crypto/x509"
 	"net/netip"
+
+	"github.com/siderolabs/crypto/x509"
 )
 
 // DeepCopy generates a deep copy of APICertsSpec.

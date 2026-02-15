@@ -904,6 +904,13 @@
           "markdownDescription": "Role selects the role (server|client).",
           "x-intellij-html-description": "\u003cp\u003eRole selects the role (server|client).\u003c/p\u003e\n"
         },
+        "artifactURL": {
+          "type": "string",
+          "title": "artifactURL",
+          "description": "ArtifactURL overrides the default release artifact URL used to install the component binary.\n\nThis is primarily intended for airgapped/internal mirrors and for development when upstream\nrelease assets are not publicly accessible.\n",
+          "markdownDescription": "ArtifactURL overrides the default release artifact URL used to install the component binary.\n\nThis is primarily intended for airgapped/internal mirrors and for development when upstream\nrelease assets are not publicly accessible.",
+          "x-intellij-html-description": "\u003cp\u003eArtifactURL overrides the default release artifact URL used to install the component binary.\u003c/p\u003e\n\n\u003cp\u003eThis is primarily intended for airgapped/internal mirrors and for development when upstream\nrelease assets are not publicly accessible.\u003c/p\u003e\n"
+        },
         "bootstrapExpect": {
           "type": "integer",
           "title": "bootstrapExpect",
