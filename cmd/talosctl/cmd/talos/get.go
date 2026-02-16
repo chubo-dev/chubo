@@ -36,9 +36,9 @@ var getCmd = &cobra.Command{
 	Use:        "get <type> [<id>]",
 	Aliases:    []string{"g"},
 	SuggestFor: []string{},
-	Short:      "Get a specific resource or list of resources (use 'talosctl get rd' to see all available resource types).",
+	Short:      "Get a specific resource or list of resources (use 'get rd' to see all available resource types).",
 	Long: `Retrieve OS resources from one or more nodes.
-To list all available resource definitions, run 'talosctl get rd'`,
+To list all available resource definitions, run 'get rd'`,
 	Example: "",
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		switch len(args) {
