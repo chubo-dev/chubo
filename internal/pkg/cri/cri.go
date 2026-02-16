@@ -5,5 +5,5 @@
 // Package cri provides minimal CRI client.
 package cri
 
-// This client is based on k8s version in https://github.com/kubernetes/kubernetes/tree/master/pkg/kubelet/remote,
-// but it doesn't depend on k8s libs.
+// This client is based on the upstream remote runtime client implementation,
+// but it keeps local dependencies minimal.

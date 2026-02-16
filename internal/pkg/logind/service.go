@@ -93,7 +93,7 @@ func (mock *ServiceMock) WaitLockRelease(ctx context.Context) error {
 		return nil
 	}
 
-	// close the write side of the pipe, other fd to the write pipe is in the kubelet
+	// close the write side of the pipe, the paired descriptor is held by the workload-side client
 	if err := syscall.Close(pipe[1]); err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func (mock *ServiceMock) WaitLockRelease(ctx context.Context) error {
 	errCh := make(chan error, 1)
 
 	go func() {
-		// attempt to read from the pipe, as soon as kubelet closes its end, read should return
+		// attempt to read from the pipe; as soon as the peer closes its end, read should return
 		buf := make([]byte, 1)
 		_, err := syscall.Read(pipe[0], buf)
 

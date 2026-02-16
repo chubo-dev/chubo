@@ -818,7 +818,7 @@ func (c *Client) MetaDelete(ctx context.Context, key uint8, callOptions ...grpc.
 	return err
 }
 
-// ImageList lists images in the CRI.
+// ImageList lists images in the container runtime API.
 //
 // Deprecated: use ImageServiceClient instead.
 func (c *Client) ImageList(ctx context.Context, namespace common.ContainerdNamespace, callOptions ...grpc.CallOption) (machineapi.MachineService_ImageListClient, error) {
@@ -830,7 +830,7 @@ func (c *Client) ImageList(ctx context.Context, namespace common.ContainerdNames
 	)
 }
 
-// ImagePull pre-pulls an image to the CRI.
+// ImagePull pre-pulls an image to the container runtime API.
 //
 // Deprecated: use ImageServiceClient instead.
 func (c *Client) ImagePull(ctx context.Context, namespace common.ContainerdNamespace, imageRef string, callOptions ...grpc.CallOption) error {

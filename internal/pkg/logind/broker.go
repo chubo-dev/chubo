@@ -24,8 +24,8 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
-// DBusBroker implements simplified D-Bus broker which allows to connect
-// kubelet D-Bus connection with Talos logind mock.
+// DBusBroker implements a simplified D-Bus broker which connects the
+// workload-side D-Bus connection with the local logind mock.
 //
 // Broker doesn't actually implement auth, and it is supposed that service
 // connects on one socket, while a client connects on another socket.
