@@ -20,13 +20,6 @@ func DefaultClusterChecks() []ClusterCheck {
 	)
 }
 
-// K8sComponentsReadinessChecks returns Kubernetes component readiness checks.
-//
-// Chubo doesn't manage Kubernetes, so this is kept as a no-op compatibility hook.
-func K8sComponentsReadinessChecks() []ClusterCheck {
-	return nil
-}
-
 // ExtraClusterChecks returns a set of additional Talos cluster readiness checks which work only for newer versions of Talos.
 //
 // ExtraClusterChecks can't be used reliably in upgrade tests, as older versions might not pass the checks.

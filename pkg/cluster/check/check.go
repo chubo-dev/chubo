@@ -21,7 +21,6 @@ const updateInterval = 100 * time.Millisecond
 // ClusterInfo is interface requires by checks.
 type ClusterInfo interface {
 	cluster.ClientProvider
-	cluster.K8sProvider
 	cluster.Info
 }
 

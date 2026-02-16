@@ -30,11 +30,6 @@ type ClientProvider interface {
 	Close() error
 }
 
-// K8sProvider is intentionally empty in chubo builds.
-//
-// Chubo runtime flows avoid Kubernetes client integrations.
-type K8sProvider interface{}
-
 // CrashDumper captures Talos cluster state to the specified writer for debugging.
 type CrashDumper interface {
 	CrashDump(ctx context.Context, out io.Writer)
