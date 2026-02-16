@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/hashicorp/go-multierror"
@@ -57,99 +56,6 @@ func LoadBundle(path string) (*Bundle, error) {
 	return bundle, nil
 }
 
-// NewBundleFromKubernetesPKI creates secrets bundle by reading the contents
-// of a Kubernetes PKI directory (typically `/etc/kubernetes/pki`) and using the provided bootstrapToken as input.
-//
-//nolint:gocyclo
-func NewBundleFromKubernetesPKI(pkiDir, bootstrapToken string, versionContract *config.VersionContract) (*Bundle, error) {
-	dirStat, err := os.Stat(pkiDir)
-	if err != nil {
-		return nil, err
-	}
-
-	if !dirStat.IsDir() {
-		return nil, fmt.Errorf("%q is not a directory", pkiDir)
-	}
-
-	var (
-		ca           *x509.PEMEncodedCertificateAndKey
-		etcdCA       *x509.PEMEncodedCertificateAndKey
-		aggregatorCA *x509.PEMEncodedCertificateAndKey
-		sa           *x509.PEMEncodedKey
-	)
-
-	ca, err = x509.NewCertificateAndKeyFromFiles(filepath.Join(pkiDir, "ca.crt"), filepath.Join(pkiDir, "ca.key"))
-	if err != nil {
-		return nil, err
-	}
-
-	err = validatePEMEncodedCertificateAndKey(ca)
-	if err != nil {
-		return nil, err
-	}
-
-	etcdDir := filepath.Join(pkiDir, "etcd")
-
-	etcdCA, err = x509.NewCertificateAndKeyFromFiles(filepath.Join(etcdDir, "ca.crt"), filepath.Join(etcdDir, "ca.key"))
-	if err != nil {
-		return nil, err
-	}
-
-	err = validatePEMEncodedCertificateAndKey(etcdCA)
-	if err != nil {
-		return nil, err
-	}
-
-	aggregatorCACrtPath := filepath.Join(pkiDir, "front-proxy-ca.crt")
-
-	aggregatorCA, err = x509.NewCertificateAndKeyFromFiles(aggregatorCACrtPath, filepath.Join(pkiDir, "front-proxy-ca.key"))
-	if err != nil {
-		return nil, err
-	}
-
-	err = validatePEMEncodedCertificateAndKey(aggregatorCA)
-	if err != nil {
-		return nil, err
-	}
-
-	saKeyPath := filepath.Join(pkiDir, "sa.key")
-
-	var saBytes []byte
-
-	saBytes, err = os.ReadFile(saKeyPath)
-	if err != nil {
-		return nil, err
-	}
-
-	sa = &x509.PEMEncodedKey{
-		Key: saBytes,
-	}
-
-	_, err = sa.GetKey()
-	if err != nil {
-		return nil, err
-	}
-
-	bundle := &Bundle{
-		Secrets: &Secrets{
-			BootstrapToken: bootstrapToken,
-		},
-		Certs: &Certs{
-			Etcd:              etcdCA,
-			K8s:               ca,
-			K8sAggregator:     aggregatorCA,
-			K8sServiceAccount: sa,
-		},
-	}
-
-	err = bundle.populate(versionContract)
-	if err != nil {
-		return nil, err
-	}
-
-	return bundle, nil
-}
-
 // NewBundleFromConfig creates secrets bundle using existing config.
 func NewBundleFromConfig(clock Clock, c config.Config) *Bundle {
 	certs := &Certs{
@@ -183,10 +89,6 @@ func (bundle *Bundle) populate(versionContract *config.VersionContract) error {
 
 	if bundle.Certs == nil {
 		bundle.Certs = &Certs{}
-	}
-
-	if err := bundle.populateKubernetesEtcd(versionContract); err != nil {
-		return err
 	}
 
 	if bundle.Certs.OS == nil {
@@ -341,10 +243,6 @@ func (bundle *Bundle) validateCerts() error {
 	}
 
 	var multiErr error
-
-	if err := bundle.validateKubernetesEtcdCerts(); err != nil {
-		multiErr = multierror.Append(multiErr, err)
-	}
 
 	if bundle.Certs.OS == nil {
 		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.os is required"))

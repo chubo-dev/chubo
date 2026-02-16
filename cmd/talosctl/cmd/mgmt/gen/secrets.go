@@ -18,11 +18,9 @@ import (
 )
 
 var genSecretsCmdFlags struct {
-	outputFile               string
-	talosVersion             string
-	fromKubernetesPki        string
-	fromControlplaneConfig   string
-	kubernetesBootstrapToken string
+	outputFile             string
+	talosVersion           string
+	fromControlplaneConfig string
 }
 
 // genSecretsCmd represents the `gen secrets` command.
@@ -46,9 +44,6 @@ var genSecretsCmd = &cobra.Command{
 		}
 
 		switch {
-		case genSecretsCmdFlags.fromKubernetesPki != "":
-			secretsBundle, err = secrets.NewBundleFromKubernetesPKI(genSecretsCmdFlags.fromKubernetesPki,
-				genSecretsCmdFlags.kubernetesBootstrapToken, versionContract)
 		case genSecretsCmdFlags.fromControlplaneConfig != "":
 			var cfg config.Provider
 
@@ -95,7 +90,6 @@ func init() {
 	genSecretsCmd.Flags().StringVarP(&genSecretsCmdFlags.outputFile, "output-file", "o", "secrets.yaml", `path of the output file, or "-" for stdout`)
 	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
 	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.fromControlplaneConfig, "from-controlplane-config", "", "use the provided control-plane machine configuration as input")
-	registerKubernetesPKIFlags(genSecretsCmd)
 
 	Cmd.AddCommand(genSecretsCmd)
 }

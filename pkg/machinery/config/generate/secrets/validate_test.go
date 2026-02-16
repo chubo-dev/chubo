@@ -24,12 +24,10 @@ func TestValidate(t *testing.T) {
 
 	var invalidBundle secrets.Bundle
 	require.NoError(t, yaml.Unmarshal(invalidSecrets, &invalidBundle))
-	require.EqualError(t, invalidBundle.Validate(), `6 errors occurred:
+	require.EqualError(t, invalidBundle.Validate(), `4 errors occurred:
 	* cluster.secret is required
 	* one of [secrets.secretboxencryptionsecret, secrets.aescbcencryptionsecret] is required
 	* trustdinfo is required
-	* certs.etcd is invalid: failed to parse PEM block
-	* certs.k8saggregator is required
 	* certs.os is invalid: unsupported key type: "CERTIFICATE"
 
 `)
