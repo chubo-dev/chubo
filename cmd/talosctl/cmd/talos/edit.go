@@ -14,6 +14,7 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"os/exec"
 	"runtime"
 	"strings"
 	"time"
@@ -21,8 +22,6 @@ import (
 	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/types/known/durationpb"
-	"k8s.io/kubectl/pkg/cmd/util/editor"
-	"k8s.io/kubectl/pkg/cmd/util/editor/crlf"
 
 	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/yamlstrip"
@@ -40,6 +39,72 @@ var editCmdFlags struct {
 	configTryTimeout time.Duration
 }
 
+type editorLauncher struct {
+	env []string
+}
+
+func newEditorLauncher(env []string) *editorLauncher {
+	return &editorLauncher{
+		env: env,
+	}
+}
+
+func (l *editorLauncher) editorCommand() string {
+	for _, key := range l.env {
+		if value := strings.TrimSpace(os.Getenv(key)); value != "" {
+			return value
+		}
+	}
+
+	if runtime.GOOS == "windows" {
+		return "notepad"
+	}
+
+	return "vi"
+}
+
+func (l *editorLauncher) LaunchTempFile(prefix, suffix string, data io.Reader) ([]byte, string, error) {
+	file, err := os.CreateTemp("", prefix+"*"+suffix)
+	if err != nil {
+		return nil, "", err
+	}
+
+	path := file.Name()
+
+	if _, err = io.Copy(file, data); err != nil {
+		file.Close() //nolint:errcheck
+
+		return nil, path, err
+	}
+
+	if err = file.Close(); err != nil {
+		return nil, path, err
+	}
+
+	command := strings.Fields(l.editorCommand())
+	if len(command) == 0 {
+		return nil, path, errors.New("editor command is empty")
+	}
+
+	command = append(command, path)
+
+	cmd := exec.Command(command[0], command[1:]...) //nolint:gosec
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err = cmd.Run(); err != nil {
+		return nil, path, err
+	}
+
+	edited, err := os.ReadFile(path)
+	if err != nil {
+		return nil, path, err
+	}
+
+	return edited, path, nil
+}
+
 //nolint:gocyclo
 func editFn(c *client.Client) func(context.Context, string, resource.Resource, error) error {
 	var (
@@ -47,7 +112,7 @@ func editFn(c *client.Client) func(context.Context, string, resource.Resource, e
 		lastError string
 	)
 
-	edit := editor.NewDefaultEditor([]string{
+	edit := newEditorLauncher([]string{
 		"CHUBO_EDITOR",
 		"TALOS_EDITOR",
 		"EDITOR",
@@ -76,14 +141,9 @@ func editFn(c *client.Client) func(context.Context, string, resource.Resource, e
 		edited := body
 
 		for {
-			var (
-				buf bytes.Buffer
-				w   io.Writer = &buf
-			)
+			var buf bytes.Buffer
 
-			if runtime.GOOS == "windows" {
-				w = crlf.NewCRLFWriter(w)
-			}
+			w := io.Writer(&buf)
 
 			_, err := fmt.Fprintf(w,
 				"# Editing %s/%s at node %s\n", mc.Metadata().Type(), id, node,

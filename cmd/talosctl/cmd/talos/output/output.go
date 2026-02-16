@@ -10,13 +10,11 @@ package output
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/cosi-project/runtime/pkg/resource"
 	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/state"
 	"github.com/spf13/cobra"
-	"k8s.io/client-go/util/jsonpath"
 )
 
 // Writer interface.
@@ -37,16 +35,6 @@ func NewWriter(format string) (Writer, error) {
 		return NewYAML(writer), nil
 	case format == "json":
 		return NewJSON(writer), nil
-	case strings.HasPrefix(format, "jsonpath="):
-		path := format[len("jsonpath="):]
-
-		jp := jsonpath.New("talos")
-
-		if err := jp.Parse(path); err != nil {
-			return nil, fmt.Errorf("error parsing jsonpath: %w", err)
-		}
-
-		return NewJSONPath(writer, jp), nil
 	default:
 		return nil, fmt.Errorf("output format %q is not supported", format)
 	}
@@ -54,5 +42,5 @@ func NewWriter(format string) (Writer, error) {
 
 // CompleteOutputArg represents tab completion for `--output` argument.
 func CompleteOutputArg(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-	return []string{"json", "table", "yaml", "jsonpath"}, cobra.ShellCompDirectiveNoFileComp
+	return []string{"json", "table", "yaml"}, cobra.ShellCompDirectiveNoFileComp
 }

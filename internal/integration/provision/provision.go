@@ -9,7 +9,6 @@ package provision
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/netip"
 	"os"
@@ -27,10 +26,6 @@ import (
 	sideronet "github.com/siderolabs/net"
 	"github.com/stretchr/testify/suite"
 	"go.yaml.in/yaml/v4"
-	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/apimachinery/pkg/util/strategicpatch"
 
 	"github.com/chubo-dev/chubo/internal/integration/base"
 	"github.com/chubo-dev/chubo/pkg/cluster/check"
@@ -192,40 +187,7 @@ func (suite *BaseSuite) waitForClusterHealth() {
 }
 
 func (suite *BaseSuite) untaint(name string) {
-	client, err := suite.clusterAccess.K8sClient(suite.ctx)
-	suite.Require().NoError(err)
-
-	n, err := client.CoreV1().Nodes().Get(suite.ctx, name, metav1.GetOptions{})
-	suite.Require().NoError(err)
-
-	oldData, err := json.Marshal(n)
-	suite.Require().NoError(err)
-
-	k := 0
-
-	for _, taint := range n.Spec.Taints {
-		if taint.Key != constants.LabelNodeRoleControlPlane {
-			n.Spec.Taints[k] = taint
-			k++
-		}
-	}
-
-	n.Spec.Taints = n.Spec.Taints[:k]
-
-	newData, err := json.Marshal(n)
-	suite.Require().NoError(err)
-
-	patchBytes, err := strategicpatch.CreateTwoWayMergePatch(oldData, newData, corev1.Node{})
-	suite.Require().NoError(err)
-
-	_, err = client.CoreV1().Nodes().Patch(
-		suite.ctx,
-		n.Name,
-		types.StrategicMergePatchType,
-		patchBytes,
-		metav1.PatchOptions{},
-	)
-	suite.Require().NoError(err)
+	suite.T().Logf("skipping legacy node untaint for %q", name)
 }
 
 func (suite *BaseSuite) assertSameVersionCluster(client *talosclient.Client, expectedVersion string) {

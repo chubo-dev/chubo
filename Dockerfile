@@ -1245,7 +1245,7 @@ ARG GO_LDFLAGS
 ARG GOAMD64
 RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go test -v -c ${GO_BUILDFLAGS} \
     -ldflags "${GO_LDFLAGS}" \
-    -tags integration,integration_api,integration_cli,integration_k8s \
+    -tags integration,integration_api,integration_cli \
     ./internal/integration
 
 FROM scratch AS integration-test-linux-amd64
@@ -1256,7 +1256,7 @@ ARG GO_BUILDFLAGS
 ARG GO_LDFLAGS
 RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go test -v -c ${GO_BUILDFLAGS} \
     -ldflags "${GO_LDFLAGS}" \
-    -tags integration,integration_api,integration_cli,integration_k8s \
+    -tags integration,integration_api,integration_cli \
     ./internal/integration
 
 FROM scratch AS integration-test-linux-arm64
@@ -1267,7 +1267,7 @@ ARG GO_BUILDFLAGS
 ARG GO_LDFLAGS
 RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=arm64 go test -v -c ${GO_BUILDFLAGS} \
     -ldflags "${GO_LDFLAGS}" \
-    -tags integration,integration_api,integration_cli,integration_k8s \
+    -tags integration,integration_api,integration_cli \
     ./internal/integration
 
 FROM scratch AS integration-test-darwin-arm64
