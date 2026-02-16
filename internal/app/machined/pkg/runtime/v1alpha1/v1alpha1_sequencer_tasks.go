@@ -1195,7 +1195,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 
 			logger.Printf("waiting for the image cache")
 
-			if err = crires.WaitForImageCache(ctx, r.State().V1Alpha2().Resources()); err != nil {
+			if err = waitForInstallerImageCache(ctx, r.State().V1Alpha2().Resources()); err != nil {
 				return fmt.Errorf("failed to wait for the image cache: %w", err)
 			}
 
@@ -1269,7 +1269,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 
 			logger.Printf("waiting for the image cache copy")
 
-			if err = crires.WaitForImageCacheCopy(ctx, r.State().V1Alpha2().Resources()); err != nil {
+			if err = waitForInstallerImageCacheCopy(ctx, r.State().V1Alpha2().Resources()); err != nil {
 				return fmt.Errorf("failed to wait for the image cache: %w", err)
 			}
 		case r.State().Machine().IsInstallStaged():
@@ -1292,7 +1292,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 
 			logger.Printf("waiting for the image cache")
 
-			if err = crires.WaitForImageCache(ctx, r.State().V1Alpha2().Resources()); err != nil {
+			if err = waitForInstallerImageCache(ctx, r.State().V1Alpha2().Resources()); err != nil {
 				return fmt.Errorf("failed to wait for the image cache: %w", err)
 			}
 

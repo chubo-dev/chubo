@@ -91,11 +91,9 @@ func (ctrl *Controller) controllers(
 		},
 		&chuboctrl.OpenGyozaBootstrapStatusController{},
 		&chuboctrl.OpenBaoJobStatusController{},
-		// Installation uses containerd but relies on CRI resource controllers (image cache + registries)
-		// to unblock the installer sequence (see v1alpha1 Install task).
-		&cri.ImageCacheConfigController{
-			V1Alpha1ServiceManager: system.Services(ctrl.v1alpha1Runtime),
-		},
+		// Keep only installer-required CRI config controllers in chubo mode.
+		// TODO(chubo): remove CRI registries controller once installer pulls no
+		// longer rely on CRI registry resources.
 		&cri.RegistriesConfigController{},
 		&files.EtcFileController{
 			EtcRoot: etcRoot,
