@@ -590,7 +590,7 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image a
 	@./hack/chubo/check-rootfs.sh _out/chubo/initramfs-arm64.xz
 	@./hack/chubo/check-go-deps.sh
 	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/machined-linux-arm64 ./internal/app/machined
-	@go build -o _out/chubo/talosctl-linux-amd64 ./cmd/talosctl
+	@go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/talosctl-linux-amd64 ./cmd/talosctl
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q nomadconfig
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q consulconfig
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q openbaoconfig
@@ -598,6 +598,10 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image a
 	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+etcd\\b'
 	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
 	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
+	@docs_tmp=$$(mktemp -d /tmp/chuboctl-guardrails.XXXXXX); \
+		trap 'rm -rf "$$docs_tmp"' EXIT; \
+		_out/chubo/talosctl-linux-amd64 docs "$$docs_tmp" --cli >/dev/null; \
+		! rg -n -i 'kubernetes|kubectl|kube-system|etcd' "$$docs_tmp" >/dev/null
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 
 .PHONY: chuboos-guardrails
