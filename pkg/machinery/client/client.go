@@ -6,9 +6,6 @@
 package client
 
 import (
-	"archive/tar"
-	"bytes"
-	"compress/gzip"
 	"context"
 	"errors"
 	"fmt"
@@ -185,19 +182,6 @@ func (c *Client) Close() error {
 	return c.conn.Close()
 }
 
-// KubeconfigRaw returns K8s client config (kubeconfig).
-//
-// This method doesn't support multiplexing of the result:
-// * either client.WithNodes is not used, or it contains a single node in the list.
-func (c *Client) KubeconfigRaw(ctx context.Context) (io.ReadCloser, error) {
-	stream, err := c.MachineClient.Kubeconfig(ctx, &emptypb.Empty{})
-	if err != nil {
-		return nil, err
-	}
-
-	return ReadStream(stream)
-}
-
 // NomadConfigRaw returns Nomad CLI client configuration bundle (.tar.gz).
 //
 // This method doesn't support multiplexing of the result:
@@ -235,52 +219,6 @@ func (c *Client) OpenBaoConfigRaw(ctx context.Context) (io.ReadCloser, error) {
 	}
 
 	return ReadStream(stream)
-}
-
-func (c *Client) extractKubeconfig(r io.ReadCloser) ([]byte, error) {
-	defer r.Close() //nolint:errcheck
-
-	gzR, err := gzip.NewReader(r)
-	if err != nil {
-		return nil, err
-	}
-
-	// returned .tar.gz should contain only single file (kubeconfig)
-	var kubeconfigBuf bytes.Buffer
-
-	tar := tar.NewReader(gzR)
-
-	for {
-		_, err = tar.Next()
-		if err == io.EOF {
-			break
-		}
-
-		if err != nil {
-			return nil, err
-		}
-
-		_, err = io.Copy(&kubeconfigBuf, tar)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if err = gzR.Close(); err != nil {
-		return nil, err
-	}
-
-	return kubeconfigBuf.Bytes(), nil
-}
-
-// Kubeconfig returns K8s client config (kubeconfig).
-func (c *Client) Kubeconfig(ctx context.Context) ([]byte, error) {
-	r, err := c.KubeconfigRaw(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return c.extractKubeconfig(r)
 }
 
 // ApplyConfiguration implements proto.MachineServiceClient interface.
@@ -759,162 +697,6 @@ func (c *Client) ClusterHealthCheck(ctx context.Context, waitTimeout time.Durati
 		WaitTimeout: durationpb.New(waitTimeout),
 		ClusterInfo: clusterInfo,
 	})
-}
-
-// EtcdRemoveMemberByID removes a node from etcd cluster by etcd member ID.
-func (c *Client) EtcdRemoveMemberByID(ctx context.Context, req *machineapi.EtcdRemoveMemberByIDRequest, callOptions ...grpc.CallOption) error {
-	resp, err := c.MachineClient.EtcdRemoveMemberByID(ctx, req, callOptions...)
-	if err == nil {
-		_, err = FilterMessages(resp, err)
-	}
-
-	return err
-}
-
-// EtcdLeaveCluster makes node leave etcd cluster.
-func (c *Client) EtcdLeaveCluster(ctx context.Context, req *machineapi.EtcdLeaveClusterRequest, callOptions ...grpc.CallOption) error {
-	resp, err := c.MachineClient.EtcdLeaveCluster(ctx, req, callOptions...)
-	if err == nil {
-		_, err = FilterMessages(resp, err)
-	}
-
-	return err
-}
-
-// EtcdForfeitLeadership makes node forfeit leadership in the etcd cluster.
-func (c *Client) EtcdForfeitLeadership(ctx context.Context, req *machineapi.EtcdForfeitLeadershipRequest, callOptions ...grpc.CallOption) (*machineapi.EtcdForfeitLeadershipResponse, error) {
-	resp, err := c.MachineClient.EtcdForfeitLeadership(ctx, req, callOptions...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdMemberList lists etcd members of the cluster.
-func (c *Client) EtcdMemberList(ctx context.Context, req *machineapi.EtcdMemberListRequest, callOptions ...grpc.CallOption) (*machineapi.EtcdMemberListResponse, error) {
-	resp, err := c.MachineClient.EtcdMemberList(ctx, req, callOptions...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdSnapshot receives a snapshot of the etcd from the node.
-//
-// This method doesn't support multiplexing of the result:
-// * either client.WithNodes is not used, or it contains a single node in the list.
-func (c *Client) EtcdSnapshot(ctx context.Context, req *machineapi.EtcdSnapshotRequest, callOptions ...grpc.CallOption) (io.ReadCloser, error) {
-	stream, err := c.MachineClient.EtcdSnapshot(ctx, req, callOptions...)
-	if err != nil {
-		return nil, err
-	}
-
-	return ReadStream(stream)
-}
-
-// EtcdRecover uploads etcd snapshot created with EtcdSnapshot to the node.
-func (c *Client) EtcdRecover(ctx context.Context, snapshot io.Reader, callOptions ...grpc.CallOption) (*machineapi.EtcdRecoverResponse, error) {
-	cli, err := c.MachineClient.EtcdRecover(ctx, callOptions...)
-	if err != nil {
-		return nil, err
-	}
-
-	buf := make([]byte, 4096)
-
-	for {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
-
-		var n int
-
-		n, err = snapshot.Read(buf)
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
-
-			return nil, fmt.Errorf("error reading snapshot: %w", err)
-		}
-
-		if err = cli.Send(&common.Data{
-			Bytes: buf[:n],
-		}); err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
-
-			return nil, err
-		}
-	}
-
-	resp, err := cli.CloseAndRecv()
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdAlarmList lists etcd alarms for the current node.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdAlarmList(ctx context.Context, opts ...grpc.CallOption) (*machineapi.EtcdAlarmListResponse, error) {
-	resp, err := c.MachineClient.EtcdAlarmList(ctx, &emptypb.Empty{}, opts...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdAlarmDisarm disarms etcd alarms for the current node.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdAlarmDisarm(ctx context.Context, opts ...grpc.CallOption) (*machineapi.EtcdAlarmDisarmResponse, error) {
-	resp, err := c.MachineClient.EtcdAlarmDisarm(ctx, &emptypb.Empty{}, opts...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdDefragment defragments etcd data directory for the current node.
-//
-// Defragmentation is a resource-heavy operation, so it should only run on a specific
-// node.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdDefragment(ctx context.Context, opts ...grpc.CallOption) (*machineapi.EtcdDefragmentResponse, error) {
-	resp, err := c.MachineClient.EtcdDefragment(ctx, &emptypb.Empty{}, opts...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdStatus returns etcd status for the current member.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdStatus(ctx context.Context, opts ...grpc.CallOption) (*machineapi.EtcdStatusResponse, error) {
-	resp, err := c.MachineClient.EtcdStatus(ctx, &emptypb.Empty{}, opts...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdDowngradeCancel cancels etcd cluster downgrade that is in progress.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdDowngradeCancel(ctx context.Context, opts ...grpc.CallOption) (*machineapi.EtcdDowngradeCancelResponse, error) {
-	resp, err := c.MachineClient.EtcdDowngradeCancel(ctx, &emptypb.Empty{}, opts...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdDowngradeEnable enables etcd cluster downgrade to a specific version.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdDowngradeEnable(ctx context.Context, req *machineapi.EtcdDowngradeEnableRequest, opts ...grpc.CallOption) (*machineapi.EtcdDowngradeEnableResponse, error) {
-	resp, err := c.MachineClient.EtcdDowngradeEnable(ctx, req, opts...)
-
-	return FilterMessages(resp, err)
-}
-
-// EtcdDowngradeValidate validates etcd cluster for downgrade to a specific version.
-//
-// This method is available only on control plane nodes (which run etcd).
-func (c *Client) EtcdDowngradeValidate(ctx context.Context, req *machineapi.EtcdDowngradeValidateRequest, opts ...grpc.CallOption) (*machineapi.EtcdDowngradeValidateResponse, error) {
-	resp, err := c.MachineClient.EtcdDowngradeValidate(ctx, req, opts...)
-
-	return FilterMessages(resp, err)
 }
 
 // GenerateClientConfiguration implements proto.MachineServiceClient interface.

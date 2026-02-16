@@ -2,22 +2,19 @@ syntax = "proto3";
 
 package machine;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/machine";
-option java_package = "dev.chubo.api.machine";
-
 import "common/common.proto";
 import "google/protobuf/any.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/machine";
+option java_package = "dev.chubo.api.machine";
+
 // The machine service definition.
 service MachineService {
   rpc ApplyConfiguration(ApplyConfigurationRequest) returns (ApplyConfigurationResponse);
-  // Bootstrap method makes control plane node enter etcd bootstrap mode.
-  // Node aborts etcd join sequence and creates single-node etcd cluster.
-  // If recover_etcd argument is specified, etcd is recovered from a snapshot
-  // uploaded with EtcdRecover.
+  // Bootstrap method starts control plane bootstrap flow.
   rpc Bootstrap(BootstrapRequest) returns (BootstrapResponse);
   rpc Containers(ContainersRequest) returns (ContainersResponse);
   rpc Copy(CopyRequest) returns (stream common.Data);
@@ -26,46 +23,7 @@ service MachineService {
   rpc DiskStats(google.protobuf.Empty) returns (DiskStatsResponse);
   rpc Dmesg(DmesgRequest) returns (stream common.Data);
   rpc Events(EventsRequest) returns (stream Event);
-  rpc EtcdMemberList(EtcdMemberListRequest) returns (EtcdMemberListResponse);
-  // EtcdRemoveMemberByID removes a member from the etcd cluster identified by member ID.
-  // This API should be used to remove members which don't have an associated Talos node anymore.
-  // To remove a member with a running Talos node, use EtcdLeaveCluster API on the node to be removed.
-  rpc EtcdRemoveMemberByID(EtcdRemoveMemberByIDRequest) returns (EtcdRemoveMemberByIDResponse);
-  rpc EtcdLeaveCluster(EtcdLeaveClusterRequest) returns (EtcdLeaveClusterResponse);
-  rpc EtcdForfeitLeadership(EtcdForfeitLeadershipRequest) returns (EtcdForfeitLeadershipResponse);
-  // EtcdRecover method uploads etcd data snapshot created with EtcdSnapshot
-  // to the node.
-  // Snapshot can be later used to recover the cluster via Bootstrap method.
-  rpc EtcdRecover(stream common.Data) returns (EtcdRecoverResponse);
-  // EtcdSnapshot method creates etcd data snapshot (backup) from the local etcd instance
-  // and streams it back to the client.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdSnapshot(EtcdSnapshotRequest) returns (stream common.Data);
-  // EtcdAlarmList lists etcd alarms for the current node.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdAlarmList(google.protobuf.Empty) returns (EtcdAlarmListResponse);
-  // EtcdAlarmDisarm disarms etcd alarms for the current node.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdAlarmDisarm(google.protobuf.Empty) returns (EtcdAlarmDisarmResponse);
-  // EtcdDefragment defragments etcd data directory for the current node.
-  // Defragmentation is a resource-heavy operation, so it should only run on a specific
-  // node.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdDefragment(google.protobuf.Empty) returns (EtcdDefragmentResponse);
-  // EtcdStatus returns etcd status for the current member.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdStatus(google.protobuf.Empty) returns (EtcdStatusResponse);
-  // EtcdDowngradeValidate validates etcd cluster for downgrade to a specific version.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdDowngradeValidate(EtcdDowngradeValidateRequest) returns (EtcdDowngradeValidateResponse);
-  // EtcdDowngradeEnable enables etcd cluster downgrade to a specific version.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdDowngradeEnable(EtcdDowngradeEnableRequest) returns (EtcdDowngradeEnableResponse);
-  // EtcdDowngradeCancel cancels etcd cluster downgrade that is in progress.
-  // This method is available only on control plane nodes (which run etcd).
-  rpc EtcdDowngradeCancel(google.protobuf.Empty) returns (EtcdDowngradeCancelResponse);
   rpc Hostname(google.protobuf.Empty) returns (HostnameResponse);
-  rpc Kubeconfig(google.protobuf.Empty) returns (stream common.Data);
   // NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream).
   rpc NomadConfig(google.protobuf.Empty) returns (stream common.Data);
   // ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream).
@@ -175,10 +133,9 @@ message RebootResponse {
 
 // rpc Bootstrap
 message BootstrapRequest {
-  // Enable etcd recovery from the snapshot.
-  // Snapshot should be uploaded before this call via EtcdRecover RPC.
+  // Enable recovery from a previously uploaded snapshot.
   bool recover_etcd = 1;
-  // Skip hash check on the snapshot (etcd).
+  // Skip hash check on the snapshot.
   // Enable this when recovering from data directory copy to skip integrity check.
   bool recover_skip_hash_check = 2;
 }
@@ -988,190 +945,6 @@ message DiskStat {
   uint64 discard_merged = 14;
   uint64 discard_sectors = 15;
   uint64 discard_time_ms = 16;
-}
-
-message EtcdLeaveClusterRequest {}
-
-message EtcdLeaveCluster {
-  common.Metadata metadata = 1;
-}
-
-message EtcdLeaveClusterResponse {
-  repeated EtcdLeaveCluster messages = 1;
-}
-
-message EtcdRemoveMemberRequest {
-  string member = 1;
-}
-
-message EtcdRemoveMember {
-  common.Metadata metadata = 1;
-}
-
-message EtcdRemoveMemberResponse {
-  repeated EtcdRemoveMember messages = 1;
-}
-
-message EtcdRemoveMemberByIDRequest {
-  uint64 member_id = 1;
-}
-
-message EtcdRemoveMemberByID {
-  common.Metadata metadata = 1;
-}
-
-message EtcdRemoveMemberByIDResponse {
-  repeated EtcdRemoveMemberByID messages = 1;
-}
-
-message EtcdForfeitLeadershipRequest {}
-
-message EtcdForfeitLeadership {
-  common.Metadata metadata = 1;
-  string member = 2;
-}
-
-message EtcdForfeitLeadershipResponse {
-  repeated EtcdForfeitLeadership messages = 1;
-}
-
-message EtcdMemberListRequest {
-  bool query_local = 1;
-}
-
-// EtcdMember describes a single etcd member.
-message EtcdMember {
-  // member ID.
-  uint64 id = 2;
-  // human-readable name of the member.
-  string hostname = 3;
-  // the list of URLs the member exposes to clients for communication.
-  repeated string peer_urls = 4;
-  // the list of URLs the member exposes to the cluster for communication.
-  repeated string client_urls = 5;
-  // learner flag
-  bool is_learner = 6;
-}
-
-// EtcdMembers contains the list of members registered on the host.
-message EtcdMembers {
-  common.Metadata metadata = 1;
-  // list of member hostnames.
-  repeated string legacy_members = 2;
-  // the list of etcd members registered on the node.
-  repeated EtcdMember members = 3;
-}
-
-message EtcdMemberListResponse {
-  repeated EtcdMembers messages = 1;
-}
-
-message EtcdSnapshotRequest {}
-
-message EtcdRecover {
-  common.Metadata metadata = 1;
-}
-
-message EtcdRecoverResponse {
-  repeated EtcdRecover messages = 1;
-}
-
-message EtcdAlarmListResponse {
-  repeated EtcdAlarm messages = 1;
-}
-
-message EtcdAlarm {
-  common.Metadata metadata = 1;
-  repeated EtcdMemberAlarm member_alarms = 2;
-}
-
-message EtcdMemberAlarm {
-  enum AlarmType {
-    NONE = 0;
-    NOSPACE = 1;
-    CORRUPT = 2;
-  }
-  uint64 member_id = 1;
-  AlarmType alarm = 2;
-}
-
-message EtcdAlarmDisarmResponse {
-  repeated EtcdAlarmDisarm messages = 1;
-}
-
-message EtcdAlarmDisarm {
-  common.Metadata metadata = 1;
-  repeated EtcdMemberAlarm member_alarms = 2;
-}
-
-message EtcdDefragmentResponse {
-  repeated EtcdDefragment messages = 1;
-}
-
-message EtcdDefragment {
-  common.Metadata metadata = 1;
-}
-
-message EtcdStatusResponse {
-  repeated EtcdStatus messages = 1;
-}
-
-message EtcdStatus {
-  common.Metadata metadata = 1;
-  EtcdMemberStatus member_status = 2;
-}
-
-message EtcdMemberStatus {
-  string storage_version = 11;
-  uint64 member_id = 10;
-  string protocol_version = 1;
-  int64 db_size = 2;
-  int64 db_size_in_use = 3;
-  uint64 leader = 4;
-  uint64 raft_index = 5;
-  uint64 raft_term = 6;
-  uint64 raft_applied_index = 7;
-  repeated string errors = 8;
-  bool is_learner = 9;
-}
-
-message EtcdDowngradeValidateRequest {
-  string version = 1;
-}
-
-message EtcdDowngradeValidateResponse {
-  repeated EtcdDowngradeValidate messages = 1;
-}
-
-message EtcdDowngradeValidate {
-  common.Metadata metadata = 1;
-  EtcdClusterDowngrade cluster_downgrade = 2;
-}
-
-message EtcdDowngradeEnableRequest {
-  string version = 1;
-}
-
-message EtcdDowngradeEnableResponse {
-  repeated EtcdDowngradeEnable messages = 1;
-}
-
-message EtcdDowngradeEnable {
-  common.Metadata metadata = 1;
-  EtcdClusterDowngrade cluster_downgrade = 2;
-}
-
-message EtcdDowngradeCancelResponse {
-  repeated EtcdDowngradeCancel messages = 1;
-}
-
-message EtcdDowngradeCancel {
-  common.Metadata metadata = 1;
-  EtcdClusterDowngrade cluster_downgrade = 2;
-}
-
-message EtcdClusterDowngrade {
-  string cluster_version = 1;
 }
 
 // rpc generateConfiguration

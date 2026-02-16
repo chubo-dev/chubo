@@ -1202,13 +1202,6 @@ func (s *Server) workloadHelperACLToken(name string) string {
 	return chuboacl.WorkloadToken(trustToken, name)
 }
 
-// Kubeconfig implements machine.MachineService.
-//
-// Chubo exposes workload access via helper bundles for native workload APIs.
-func (s *Server) Kubeconfig(*emptypb.Empty, machine.MachineService_KubeconfigServer) error {
-	return status.Error(codes.Unimplemented, "kubeconfig is not available in chubo mode; use NomadConfig, ConsulConfig, or OpenBaoConfig helper APIs instead")
-}
-
 // NomadConfig implements machine.MachineService.
 func (s *Server) NomadConfig(empty *emptypb.Empty, obj machine.MachineService_NomadConfigServer) error {
 	if err := s.checkControlplane("NomadConfig"); err != nil {

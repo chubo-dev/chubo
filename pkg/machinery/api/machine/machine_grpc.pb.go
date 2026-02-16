@@ -8,13 +8,11 @@ package machine
 
 import (
 	context "context"
-
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
-
-	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -32,21 +30,7 @@ const (
 	MachineService_DiskStats_FullMethodName                   = "/machine.MachineService/DiskStats"
 	MachineService_Dmesg_FullMethodName                       = "/machine.MachineService/Dmesg"
 	MachineService_Events_FullMethodName                      = "/machine.MachineService/Events"
-	MachineService_EtcdMemberList_FullMethodName              = "/machine.MachineService/EtcdMemberList"
-	MachineService_EtcdRemoveMemberByID_FullMethodName        = "/machine.MachineService/EtcdRemoveMemberByID"
-	MachineService_EtcdLeaveCluster_FullMethodName            = "/machine.MachineService/EtcdLeaveCluster"
-	MachineService_EtcdForfeitLeadership_FullMethodName       = "/machine.MachineService/EtcdForfeitLeadership"
-	MachineService_EtcdRecover_FullMethodName                 = "/machine.MachineService/EtcdRecover"
-	MachineService_EtcdSnapshot_FullMethodName                = "/machine.MachineService/EtcdSnapshot"
-	MachineService_EtcdAlarmList_FullMethodName               = "/machine.MachineService/EtcdAlarmList"
-	MachineService_EtcdAlarmDisarm_FullMethodName             = "/machine.MachineService/EtcdAlarmDisarm"
-	MachineService_EtcdDefragment_FullMethodName              = "/machine.MachineService/EtcdDefragment"
-	MachineService_EtcdStatus_FullMethodName                  = "/machine.MachineService/EtcdStatus"
-	MachineService_EtcdDowngradeValidate_FullMethodName       = "/machine.MachineService/EtcdDowngradeValidate"
-	MachineService_EtcdDowngradeEnable_FullMethodName         = "/machine.MachineService/EtcdDowngradeEnable"
-	MachineService_EtcdDowngradeCancel_FullMethodName         = "/machine.MachineService/EtcdDowngradeCancel"
 	MachineService_Hostname_FullMethodName                    = "/machine.MachineService/Hostname"
-	MachineService_Kubeconfig_FullMethodName                  = "/machine.MachineService/Kubeconfig"
 	MachineService_NomadConfig_FullMethodName                 = "/machine.MachineService/NomadConfig"
 	MachineService_ConsulConfig_FullMethodName                = "/machine.MachineService/ConsulConfig"
 	MachineService_OpenBaoConfig_FullMethodName               = "/machine.MachineService/OpenBaoConfig"
@@ -89,10 +73,7 @@ const (
 // The machine service definition.
 type MachineServiceClient interface {
 	ApplyConfiguration(ctx context.Context, in *ApplyConfigurationRequest, opts ...grpc.CallOption) (*ApplyConfigurationResponse, error)
-	// Bootstrap method makes control plane node enter etcd bootstrap mode.
-	// Node aborts etcd join sequence and creates single-node etcd cluster.
-	// If recover_etcd argument is specified, etcd is recovered from a snapshot
-	// uploaded with EtcdRecover.
+	// Bootstrap method starts control plane bootstrap flow.
 	Bootstrap(ctx context.Context, in *BootstrapRequest, opts ...grpc.CallOption) (*BootstrapResponse, error)
 	Containers(ctx context.Context, in *ContainersRequest, opts ...grpc.CallOption) (*ContainersResponse, error)
 	Copy(ctx context.Context, in *CopyRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
@@ -101,46 +82,7 @@ type MachineServiceClient interface {
 	DiskStats(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*DiskStatsResponse, error)
 	Dmesg(ctx context.Context, in *DmesgRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
 	Events(ctx context.Context, in *EventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Event], error)
-	EtcdMemberList(ctx context.Context, in *EtcdMemberListRequest, opts ...grpc.CallOption) (*EtcdMemberListResponse, error)
-	// EtcdRemoveMemberByID removes a member from the etcd cluster identified by member ID.
-	// This API should be used to remove members which don't have an associated Talos node anymore.
-	// To remove a member with a running Talos node, use EtcdLeaveCluster API on the node to be removed.
-	EtcdRemoveMemberByID(ctx context.Context, in *EtcdRemoveMemberByIDRequest, opts ...grpc.CallOption) (*EtcdRemoveMemberByIDResponse, error)
-	EtcdLeaveCluster(ctx context.Context, in *EtcdLeaveClusterRequest, opts ...grpc.CallOption) (*EtcdLeaveClusterResponse, error)
-	EtcdForfeitLeadership(ctx context.Context, in *EtcdForfeitLeadershipRequest, opts ...grpc.CallOption) (*EtcdForfeitLeadershipResponse, error)
-	// EtcdRecover method uploads etcd data snapshot created with EtcdSnapshot
-	// to the node.
-	// Snapshot can be later used to recover the cluster via Bootstrap method.
-	EtcdRecover(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[common.Data, EtcdRecoverResponse], error)
-	// EtcdSnapshot method creates etcd data snapshot (backup) from the local etcd instance
-	// and streams it back to the client.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdSnapshot(ctx context.Context, in *EtcdSnapshotRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
-	// EtcdAlarmList lists etcd alarms for the current node.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdAlarmList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdAlarmListResponse, error)
-	// EtcdAlarmDisarm disarms etcd alarms for the current node.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdAlarmDisarm(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdAlarmDisarmResponse, error)
-	// EtcdDefragment defragments etcd data directory for the current node.
-	// Defragmentation is a resource-heavy operation, so it should only run on a specific
-	// node.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDefragment(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdDefragmentResponse, error)
-	// EtcdStatus returns etcd status for the current member.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdStatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdStatusResponse, error)
-	// EtcdDowngradeValidate validates etcd cluster for downgrade to a specific version.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDowngradeValidate(ctx context.Context, in *EtcdDowngradeValidateRequest, opts ...grpc.CallOption) (*EtcdDowngradeValidateResponse, error)
-	// EtcdDowngradeEnable enables etcd cluster downgrade to a specific version.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDowngradeEnable(ctx context.Context, in *EtcdDowngradeEnableRequest, opts ...grpc.CallOption) (*EtcdDowngradeEnableResponse, error)
-	// EtcdDowngradeCancel cancels etcd cluster downgrade that is in progress.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDowngradeCancel(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdDowngradeCancelResponse, error)
 	Hostname(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HostnameResponse, error)
-	Kubeconfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
 	// NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream).
 	NomadConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
 	// ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream).
@@ -317,148 +259,6 @@ func (c *machineServiceClient) Events(ctx context.Context, in *EventsRequest, op
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type MachineService_EventsClient = grpc.ServerStreamingClient[Event]
 
-func (c *machineServiceClient) EtcdMemberList(ctx context.Context, in *EtcdMemberListRequest, opts ...grpc.CallOption) (*EtcdMemberListResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdMemberListResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdMemberList_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdRemoveMemberByID(ctx context.Context, in *EtcdRemoveMemberByIDRequest, opts ...grpc.CallOption) (*EtcdRemoveMemberByIDResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdRemoveMemberByIDResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdRemoveMemberByID_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdLeaveCluster(ctx context.Context, in *EtcdLeaveClusterRequest, opts ...grpc.CallOption) (*EtcdLeaveClusterResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdLeaveClusterResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdLeaveCluster_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdForfeitLeadership(ctx context.Context, in *EtcdForfeitLeadershipRequest, opts ...grpc.CallOption) (*EtcdForfeitLeadershipResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdForfeitLeadershipResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdForfeitLeadership_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdRecover(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[common.Data, EtcdRecoverResponse], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[3], MachineService_EtcdRecover_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[common.Data, EtcdRecoverResponse]{ClientStream: stream}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MachineService_EtcdRecoverClient = grpc.ClientStreamingClient[common.Data, EtcdRecoverResponse]
-
-func (c *machineServiceClient) EtcdSnapshot(ctx context.Context, in *EtcdSnapshotRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[4], MachineService_EtcdSnapshot_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[EtcdSnapshotRequest, common.Data]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MachineService_EtcdSnapshotClient = grpc.ServerStreamingClient[common.Data]
-
-func (c *machineServiceClient) EtcdAlarmList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdAlarmListResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdAlarmListResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdAlarmList_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdAlarmDisarm(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdAlarmDisarmResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdAlarmDisarmResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdAlarmDisarm_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdDefragment(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdDefragmentResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdDefragmentResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdDefragment_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdStatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdStatusResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdStatusResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdStatus_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdDowngradeValidate(ctx context.Context, in *EtcdDowngradeValidateRequest, opts ...grpc.CallOption) (*EtcdDowngradeValidateResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdDowngradeValidateResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdDowngradeValidate_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdDowngradeEnable(ctx context.Context, in *EtcdDowngradeEnableRequest, opts ...grpc.CallOption) (*EtcdDowngradeEnableResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdDowngradeEnableResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdDowngradeEnable_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *machineServiceClient) EtcdDowngradeCancel(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*EtcdDowngradeCancelResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EtcdDowngradeCancelResponse)
-	err := c.cc.Invoke(ctx, MachineService_EtcdDowngradeCancel_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *machineServiceClient) Hostname(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*HostnameResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HostnameResponse)
@@ -469,28 +269,9 @@ func (c *machineServiceClient) Hostname(ctx context.Context, in *emptypb.Empty, 
 	return out, nil
 }
 
-func (c *machineServiceClient) Kubeconfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[5], MachineService_Kubeconfig_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[emptypb.Empty, common.Data]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MachineService_KubeconfigClient = grpc.ServerStreamingClient[common.Data]
-
 func (c *machineServiceClient) NomadConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[6], MachineService_NomadConfig_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[3], MachineService_NomadConfig_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -509,7 +290,7 @@ type MachineService_NomadConfigClient = grpc.ServerStreamingClient[common.Data]
 
 func (c *machineServiceClient) ConsulConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[7], MachineService_ConsulConfig_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[4], MachineService_ConsulConfig_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -528,7 +309,7 @@ type MachineService_ConsulConfigClient = grpc.ServerStreamingClient[common.Data]
 
 func (c *machineServiceClient) OpenBaoConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[8], MachineService_OpenBaoConfig_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[5], MachineService_OpenBaoConfig_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -547,7 +328,7 @@ type MachineService_OpenBaoConfigClient = grpc.ServerStreamingClient[common.Data
 
 func (c *machineServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FileInfo], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[9], MachineService_List_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[6], MachineService_List_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -566,7 +347,7 @@ type MachineService_ListClient = grpc.ServerStreamingClient[FileInfo]
 
 func (c *machineServiceClient) DiskUsage(ctx context.Context, in *DiskUsageRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DiskUsageInfo], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[10], MachineService_DiskUsage_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[7], MachineService_DiskUsage_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -595,7 +376,7 @@ func (c *machineServiceClient) LoadAvg(ctx context.Context, in *emptypb.Empty, o
 
 func (c *machineServiceClient) Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[11], MachineService_Logs_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[8], MachineService_Logs_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -664,7 +445,7 @@ func (c *machineServiceClient) Processes(ctx context.Context, in *emptypb.Empty,
 
 func (c *machineServiceClient) Read(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[12], MachineService_Read_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[9], MachineService_Read_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -823,7 +604,7 @@ func (c *machineServiceClient) GenerateClientConfiguration(ctx context.Context, 
 
 func (c *machineServiceClient) PacketCapture(ctx context.Context, in *PacketCaptureRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[13], MachineService_PacketCapture_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[10], MachineService_PacketCapture_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -873,7 +654,7 @@ func (c *machineServiceClient) MetaDelete(ctx context.Context, in *MetaDeleteReq
 // Deprecated: Do not use.
 func (c *machineServiceClient) ImageList(ctx context.Context, in *ImageListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ImageListResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[14], MachineService_ImageList_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &MachineService_ServiceDesc.Streams[11], MachineService_ImageList_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -908,10 +689,7 @@ func (c *machineServiceClient) ImagePull(ctx context.Context, in *ImagePullReque
 // The machine service definition.
 type MachineServiceServer interface {
 	ApplyConfiguration(context.Context, *ApplyConfigurationRequest) (*ApplyConfigurationResponse, error)
-	// Bootstrap method makes control plane node enter etcd bootstrap mode.
-	// Node aborts etcd join sequence and creates single-node etcd cluster.
-	// If recover_etcd argument is specified, etcd is recovered from a snapshot
-	// uploaded with EtcdRecover.
+	// Bootstrap method starts control plane bootstrap flow.
 	Bootstrap(context.Context, *BootstrapRequest) (*BootstrapResponse, error)
 	Containers(context.Context, *ContainersRequest) (*ContainersResponse, error)
 	Copy(*CopyRequest, grpc.ServerStreamingServer[common.Data]) error
@@ -920,46 +698,7 @@ type MachineServiceServer interface {
 	DiskStats(context.Context, *emptypb.Empty) (*DiskStatsResponse, error)
 	Dmesg(*DmesgRequest, grpc.ServerStreamingServer[common.Data]) error
 	Events(*EventsRequest, grpc.ServerStreamingServer[Event]) error
-	EtcdMemberList(context.Context, *EtcdMemberListRequest) (*EtcdMemberListResponse, error)
-	// EtcdRemoveMemberByID removes a member from the etcd cluster identified by member ID.
-	// This API should be used to remove members which don't have an associated Talos node anymore.
-	// To remove a member with a running Talos node, use EtcdLeaveCluster API on the node to be removed.
-	EtcdRemoveMemberByID(context.Context, *EtcdRemoveMemberByIDRequest) (*EtcdRemoveMemberByIDResponse, error)
-	EtcdLeaveCluster(context.Context, *EtcdLeaveClusterRequest) (*EtcdLeaveClusterResponse, error)
-	EtcdForfeitLeadership(context.Context, *EtcdForfeitLeadershipRequest) (*EtcdForfeitLeadershipResponse, error)
-	// EtcdRecover method uploads etcd data snapshot created with EtcdSnapshot
-	// to the node.
-	// Snapshot can be later used to recover the cluster via Bootstrap method.
-	EtcdRecover(grpc.ClientStreamingServer[common.Data, EtcdRecoverResponse]) error
-	// EtcdSnapshot method creates etcd data snapshot (backup) from the local etcd instance
-	// and streams it back to the client.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdSnapshot(*EtcdSnapshotRequest, grpc.ServerStreamingServer[common.Data]) error
-	// EtcdAlarmList lists etcd alarms for the current node.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdAlarmList(context.Context, *emptypb.Empty) (*EtcdAlarmListResponse, error)
-	// EtcdAlarmDisarm disarms etcd alarms for the current node.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdAlarmDisarm(context.Context, *emptypb.Empty) (*EtcdAlarmDisarmResponse, error)
-	// EtcdDefragment defragments etcd data directory for the current node.
-	// Defragmentation is a resource-heavy operation, so it should only run on a specific
-	// node.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDefragment(context.Context, *emptypb.Empty) (*EtcdDefragmentResponse, error)
-	// EtcdStatus returns etcd status for the current member.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdStatus(context.Context, *emptypb.Empty) (*EtcdStatusResponse, error)
-	// EtcdDowngradeValidate validates etcd cluster for downgrade to a specific version.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDowngradeValidate(context.Context, *EtcdDowngradeValidateRequest) (*EtcdDowngradeValidateResponse, error)
-	// EtcdDowngradeEnable enables etcd cluster downgrade to a specific version.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDowngradeEnable(context.Context, *EtcdDowngradeEnableRequest) (*EtcdDowngradeEnableResponse, error)
-	// EtcdDowngradeCancel cancels etcd cluster downgrade that is in progress.
-	// This method is available only on control plane nodes (which run etcd).
-	EtcdDowngradeCancel(context.Context, *emptypb.Empty) (*EtcdDowngradeCancelResponse, error)
 	Hostname(context.Context, *emptypb.Empty) (*HostnameResponse, error)
-	Kubeconfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error
 	// NomadConfig downloads a Nomad CLI client configuration bundle (returned as a .tar.gz stream).
 	NomadConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error
 	// ConsulConfig downloads a Consul CLI client configuration bundle (returned as a .tar.gz stream).
@@ -1046,50 +785,8 @@ func (UnimplementedMachineServiceServer) Dmesg(*DmesgRequest, grpc.ServerStreami
 func (UnimplementedMachineServiceServer) Events(*EventsRequest, grpc.ServerStreamingServer[Event]) error {
 	return status.Error(codes.Unimplemented, "method Events not implemented")
 }
-func (UnimplementedMachineServiceServer) EtcdMemberList(context.Context, *EtcdMemberListRequest) (*EtcdMemberListResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdMemberList not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdRemoveMemberByID(context.Context, *EtcdRemoveMemberByIDRequest) (*EtcdRemoveMemberByIDResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdRemoveMemberByID not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdLeaveCluster(context.Context, *EtcdLeaveClusterRequest) (*EtcdLeaveClusterResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdLeaveCluster not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdForfeitLeadership(context.Context, *EtcdForfeitLeadershipRequest) (*EtcdForfeitLeadershipResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdForfeitLeadership not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdRecover(grpc.ClientStreamingServer[common.Data, EtcdRecoverResponse]) error {
-	return status.Error(codes.Unimplemented, "method EtcdRecover not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdSnapshot(*EtcdSnapshotRequest, grpc.ServerStreamingServer[common.Data]) error {
-	return status.Error(codes.Unimplemented, "method EtcdSnapshot not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdAlarmList(context.Context, *emptypb.Empty) (*EtcdAlarmListResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdAlarmList not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdAlarmDisarm(context.Context, *emptypb.Empty) (*EtcdAlarmDisarmResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdAlarmDisarm not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdDefragment(context.Context, *emptypb.Empty) (*EtcdDefragmentResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdDefragment not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdStatus(context.Context, *emptypb.Empty) (*EtcdStatusResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdStatus not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdDowngradeValidate(context.Context, *EtcdDowngradeValidateRequest) (*EtcdDowngradeValidateResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdDowngradeValidate not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdDowngradeEnable(context.Context, *EtcdDowngradeEnableRequest) (*EtcdDowngradeEnableResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdDowngradeEnable not implemented")
-}
-func (UnimplementedMachineServiceServer) EtcdDowngradeCancel(context.Context, *emptypb.Empty) (*EtcdDowngradeCancelResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method EtcdDowngradeCancel not implemented")
-}
 func (UnimplementedMachineServiceServer) Hostname(context.Context, *emptypb.Empty) (*HostnameResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Hostname not implemented")
-}
-func (UnimplementedMachineServiceServer) Kubeconfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error {
-	return status.Error(codes.Unimplemented, "method Kubeconfig not implemented")
 }
 func (UnimplementedMachineServiceServer) NomadConfig(*emptypb.Empty, grpc.ServerStreamingServer[common.Data]) error {
 	return status.Error(codes.Unimplemented, "method NomadConfig not implemented")
@@ -1352,222 +1049,6 @@ func _MachineService_Events_Handler(srv interface{}, stream grpc.ServerStream) e
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type MachineService_EventsServer = grpc.ServerStreamingServer[Event]
 
-func _MachineService_EtcdMemberList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EtcdMemberListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdMemberList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdMemberList_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdMemberList(ctx, req.(*EtcdMemberListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdRemoveMemberByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EtcdRemoveMemberByIDRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdRemoveMemberByID(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdRemoveMemberByID_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdRemoveMemberByID(ctx, req.(*EtcdRemoveMemberByIDRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdLeaveCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EtcdLeaveClusterRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdLeaveCluster(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdLeaveCluster_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdLeaveCluster(ctx, req.(*EtcdLeaveClusterRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdForfeitLeadership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EtcdForfeitLeadershipRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdForfeitLeadership(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdForfeitLeadership_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdForfeitLeadership(ctx, req.(*EtcdForfeitLeadershipRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdRecover_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(MachineServiceServer).EtcdRecover(&grpc.GenericServerStream[common.Data, EtcdRecoverResponse]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MachineService_EtcdRecoverServer = grpc.ClientStreamingServer[common.Data, EtcdRecoverResponse]
-
-func _MachineService_EtcdSnapshot_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(EtcdSnapshotRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(MachineServiceServer).EtcdSnapshot(m, &grpc.GenericServerStream[EtcdSnapshotRequest, common.Data]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MachineService_EtcdSnapshotServer = grpc.ServerStreamingServer[common.Data]
-
-func _MachineService_EtcdAlarmList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdAlarmList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdAlarmList_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdAlarmList(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdAlarmDisarm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdAlarmDisarm(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdAlarmDisarm_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdAlarmDisarm(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdDefragment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdDefragment(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdDefragment_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdDefragment(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdStatus_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdStatus(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdDowngradeValidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EtcdDowngradeValidateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdDowngradeValidate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdDowngradeValidate_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdDowngradeValidate(ctx, req.(*EtcdDowngradeValidateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdDowngradeEnable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EtcdDowngradeEnableRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdDowngradeEnable(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdDowngradeEnable_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdDowngradeEnable(ctx, req.(*EtcdDowngradeEnableRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _MachineService_EtcdDowngradeCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MachineServiceServer).EtcdDowngradeCancel(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: MachineService_EtcdDowngradeCancel_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MachineServiceServer).EtcdDowngradeCancel(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _MachineService_Hostname_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -1585,17 +1066,6 @@ func _MachineService_Hostname_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	return interceptor(ctx, in, info, handler)
 }
-
-func _MachineService_Kubeconfig_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(MachineServiceServer).Kubeconfig(m, &grpc.GenericServerStream[emptypb.Empty, common.Data]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MachineService_KubeconfigServer = grpc.ServerStreamingServer[common.Data]
 
 func _MachineService_NomadConfig_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(emptypb.Empty)
@@ -2160,50 +1630,6 @@ var MachineService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MachineService_DiskStats_Handler,
 		},
 		{
-			MethodName: "EtcdMemberList",
-			Handler:    _MachineService_EtcdMemberList_Handler,
-		},
-		{
-			MethodName: "EtcdRemoveMemberByID",
-			Handler:    _MachineService_EtcdRemoveMemberByID_Handler,
-		},
-		{
-			MethodName: "EtcdLeaveCluster",
-			Handler:    _MachineService_EtcdLeaveCluster_Handler,
-		},
-		{
-			MethodName: "EtcdForfeitLeadership",
-			Handler:    _MachineService_EtcdForfeitLeadership_Handler,
-		},
-		{
-			MethodName: "EtcdAlarmList",
-			Handler:    _MachineService_EtcdAlarmList_Handler,
-		},
-		{
-			MethodName: "EtcdAlarmDisarm",
-			Handler:    _MachineService_EtcdAlarmDisarm_Handler,
-		},
-		{
-			MethodName: "EtcdDefragment",
-			Handler:    _MachineService_EtcdDefragment_Handler,
-		},
-		{
-			MethodName: "EtcdStatus",
-			Handler:    _MachineService_EtcdStatus_Handler,
-		},
-		{
-			MethodName: "EtcdDowngradeValidate",
-			Handler:    _MachineService_EtcdDowngradeValidate_Handler,
-		},
-		{
-			MethodName: "EtcdDowngradeEnable",
-			Handler:    _MachineService_EtcdDowngradeEnable_Handler,
-		},
-		{
-			MethodName: "EtcdDowngradeCancel",
-			Handler:    _MachineService_EtcdDowngradeCancel_Handler,
-		},
-		{
 			MethodName: "Hostname",
 			Handler:    _MachineService_Hostname_Handler,
 		},
@@ -2318,21 +1744,6 @@ var MachineService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Events",
 			Handler:       _MachineService_Events_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "EtcdRecover",
-			Handler:       _MachineService_EtcdRecover_Handler,
-			ClientStreams: true,
-		},
-		{
-			StreamName:    "EtcdSnapshot",
-			Handler:       _MachineService_EtcdSnapshot_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "Kubeconfig",
-			Handler:       _MachineService_Kubeconfig_Handler,
 			ServerStreams: true,
 		},
 		{

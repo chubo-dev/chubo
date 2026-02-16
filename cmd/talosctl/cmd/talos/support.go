@@ -33,9 +33,6 @@ import (
 	"go.yaml.in/yaml/v4"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/protobuf/types/known/emptypb"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8s "k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
@@ -60,7 +57,6 @@ var supportCmd = &cobra.Command{
 
 	- Kernel logs.
 	- All Talos internal services logs.
-	- All kube-system pods logs.
 	- Talos COSI resources without secrets.
 	- COSI runtime state graph.
 	- Processes snapshot.
@@ -68,10 +64,6 @@ var supportCmd = &cobra.Command{
 	- Mounts list.
 	- PCI devices info.
 	- Talos version.
-
-- For the cluster:
-
-	- Kubernetes nodes and kube-system pods manifests.
 `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -125,27 +117,8 @@ var supportCmd = &cobra.Command{
 
 func collectData(dest *os.File, progress chan bundle.Progress) error {
 	return WithClientNoNodes(func(ctx context.Context, c *client.Client) error {
-		kubernetesEnabled, err := isKubernetesEnabled(ctx, c)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to discover kubernetes service state %s\n", err)
-			// Fail open to preserve existing support behavior if service discovery is unavailable.
-			kubernetesEnabled = true
-		}
-
-		var clientset *k8s.Clientset
-
-		if kubernetesEnabled {
-			clientset, err = getKubernetesClient(ctx, c)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Failed to create kubernetes client %s\n", err)
-			}
-		} else {
-			fmt.Fprintln(os.Stderr, "Kubernetes services not present, collecting Talos-only support bundle.")
-		}
-
 		opts := []bundle.Option{
 			bundle.WithArchiveOutput(dest),
-			bundle.WithKubernetesClient(clientset),
 			bundle.WithTalosClient(c),
 			bundle.WithNodes(GlobalArgs.Nodes...),
 			bundle.WithNumWorkers(supportCmdFlags.numWorkers),
@@ -158,31 +131,14 @@ func collectData(dest *os.File, progress chan bundle.Progress) error {
 
 		options := bundle.NewOptions(opts...)
 
-		supportCollectors, err := collectors.GetForOptions(ctx, options)
+		supportCollectors, err := getTalosOnlyCollectors(ctx, c)
 		if err != nil {
-			if !kubernetesEnabled && isNoKubernetesCollectorError(err) {
-				fmt.Fprintf(os.Stderr, "Falling back to Talos-only collectors: %s\n", err)
-
-				supportCollectors, err = getTalosOnlyCollectors(ctx, c)
-			}
-
-			if err != nil {
-				return err
-			}
-
-			fmt.Fprintln(os.Stderr, "Talos-only collector mode active.")
-
-			return support.CreateSupportBundle(ctx, options, supportCollectors...)
+			return err
 		}
 
-		collectErr := support.CreateSupportBundle(ctx, options, supportCollectors...)
-		if collectErr != nil && !kubernetesEnabled && isNoKubernetesCollectorError(collectErr) {
-			fmt.Fprintf(os.Stderr, "Ignoring unsupported Kubernetes collector error in Talos-only mode: %s\n", collectErr)
+		fmt.Fprintln(os.Stderr, "Talos-only collector mode active.")
 
-			return nil
-		}
-
-		return collectErr
+		return support.CreateSupportBundle(ctx, options, supportCollectors...)
 	})
 }
 
@@ -594,65 +550,6 @@ func staticCollector(data string) collectors.Collect {
 	return func(_ context.Context, _ *bundle.Options) ([]byte, error) {
 		return []byte(data), nil
 	}
-}
-
-func isKubernetesEnabled(ctx context.Context, c *client.Client) (bool, error) {
-	resp, err := c.ServiceList(ctx)
-	if err != nil {
-		return false, err
-	}
-
-	for _, msg := range resp.Messages {
-		for _, svc := range msg.Services {
-			if svc.Id == "kubelet" || svc.Id == "cri" {
-				return true, nil
-			}
-		}
-	}
-
-	return false, nil
-}
-
-func isNoKubernetesCollectorError(err error) bool {
-	if err == nil {
-		return false
-	}
-
-	msg := err.Error()
-
-	return strings.Contains(msg, "ListPodSandbox") ||
-		strings.Contains(msg, "kube-system") ||
-		strings.Contains(msg, "dial unix /run/containerd/containerd.sock")
-}
-
-func getKubernetesClient(ctx context.Context, c *client.Client) (*k8s.Clientset, error) {
-	kubeconfig, err := c.Kubeconfig(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	config, err := clientcmd.NewClientConfigFromBytes(kubeconfig)
-	if err != nil {
-		return nil, err
-	}
-
-	restconfig, err := config.ClientConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	clientset, err := k8s.NewForConfig(restconfig)
-	if err != nil {
-		return nil, err
-	}
-
-	// just checking that k8s responds
-	_, err = clientset.CoreV1().Namespaces().Get(ctx, "kube-system", v1.GetOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	return clientset, nil
 }
 
 func getDiscoveryConfig() (*clusterresource.Config, error) {
