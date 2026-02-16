@@ -14,10 +14,10 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
-// NewEtcdCA generates a CA for the legacy store PKI.
-func NewEtcdCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
+// NewStoreCA generates a CA for the legacy datastore PKI.
+func NewStoreCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
 	opts := []x509.Option{
-		x509.Organization("etcd"),
+		x509.Organization("store"),
 		x509.NotAfter(currentTime.Add(CAValidityTime)),
 		x509.NotBefore(currentTime),
 		x509.ECDSA(true),
@@ -26,10 +26,10 @@ func NewEtcdCA(currentTime time.Time, contract *config.VersionContract) (ca *x50
 	return x509.NewSelfSignedCertificateAuthority(opts...)
 }
 
-// NewKubernetesCA generates a CA for the legacy workload PKI.
-func NewKubernetesCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
+// NewWorkloadCA generates a CA for the legacy workload PKI.
+func NewWorkloadCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
 	opts := []x509.Option{
-		x509.Organization("kubernetes"),
+		x509.Organization("workload"),
 		x509.NotAfter(currentTime.Add(CAValidityTime)),
 		x509.NotBefore(currentTime),
 		x509.ECDSA(true),

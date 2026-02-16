@@ -16,7 +16,7 @@ const CAValidityTime = 87600 * time.Hour
 
 // Bundle contains all cluster secrets required to generate machine configuration.
 //
-// NB: this structure is marhsalled/unmarshalled to/from JSON in various projects, so
+// NB: this structure is marshalled/unmarshalled to/from JSON in various projects, so
 // we need to keep representation compatible.
 type Bundle struct {
 	Clock      Clock       `yaml:"-" json:"-"`
@@ -28,14 +28,14 @@ type Bundle struct {
 
 // Certs holds the base64 encoded keys and certificates.
 type Certs struct {
-	// Etcd is etcd CA certificate and key.
-	Etcd *x509.PEMEncodedCertificateAndKey `json:"Etcd"`
-	// K8s is legacy workload CA certificate and key.
-	K8s *x509.PEMEncodedCertificateAndKey `json:"K8s"`
-	// K8sAggregator is legacy aggregator CA certificate and key.
-	K8sAggregator *x509.PEMEncodedCertificateAndKey `json:"K8sAggregator"`
-	// K8sServiceAccount is legacy service account key.
-	K8sServiceAccount *x509.PEMEncodedKey `json:"K8sServiceAccount"`
+	// Store is the legacy datastore CA certificate and key.
+	Store *x509.PEMEncodedCertificateAndKey `json:"Store"`
+	// Workload is the legacy workload CA certificate and key.
+	Workload *x509.PEMEncodedCertificateAndKey `json:"Workload"`
+	// WorkloadProxy is the legacy workload proxy CA certificate and key.
+	WorkloadProxy *x509.PEMEncodedCertificateAndKey `json:"WorkloadProxy"`
+	// WorkloadSigner is the legacy workload service account signing key.
+	WorkloadSigner *x509.PEMEncodedKey `json:"WorkloadSigner"`
 	// OS is Talos API CA certificate and key.
 	OS *x509.PEMEncodedCertificateAndKey `json:"OS"`
 }

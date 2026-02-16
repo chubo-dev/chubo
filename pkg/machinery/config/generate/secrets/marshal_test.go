@@ -49,10 +49,10 @@ func TestUnmarshalStable(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.NotNil(t, bundle.Certs)
-	assert.NotNil(t, bundle.Certs.Etcd)
-	assert.NotNil(t, bundle.Certs.K8s)
-	assert.NotNil(t, bundle.Certs.K8sAggregator)
-	assert.NotNil(t, bundle.Certs.K8sServiceAccount)
+	assert.NotNil(t, bundle.Certs.Store)
+	assert.NotNil(t, bundle.Certs.Workload)
+	assert.NotNil(t, bundle.Certs.WorkloadProxy)
+	assert.NotNil(t, bundle.Certs.WorkloadSigner)
 
 	assert.NotNil(t, bundle.Cluster)
 	assert.NotEmpty(t, bundle.Cluster.ID)
