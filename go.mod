@@ -21,9 +21,6 @@ replace (
 	// Local fork to point support bundle collectors at Chubo machinery types.
 	github.com/siderolabs/go-talos-support => ./hack/third_party/go-talos-support
 
-	// Local fork to point Kubernetes helpers at Chubo machinery types.
-	github.com/siderolabs/go-kubernetes => ./hack/third_party/go-kubernetes
-
 	// fork to add Talos-specific userspace socket location: https://github.com/siderolabs/talos/issues/8514
 	golang.zx2c4.com/wireguard/wgctrl => github.com/siderolabs/wgctrl-go v0.0.0-20251029173431-c4fd5f6a4e72
 )

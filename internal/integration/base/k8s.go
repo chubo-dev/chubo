@@ -52,7 +52,7 @@ import (
 	"k8s.io/client-go/util/jsonpath"
 	"k8s.io/kubectl/pkg/scheme"
 
-	taloskubernetes "github.com/chubo-dev/chubo/pkg/kubernetes"
+	taloskubernetes "github.com/siderolabs/go-kubernetes/kubernetes"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
