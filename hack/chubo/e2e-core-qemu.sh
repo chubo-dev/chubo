@@ -49,6 +49,8 @@ SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
 MAINTENANCE_FALLBACK_SECONDS="${MAINTENANCE_FALLBACK_SECONDS:-180}"
 ACTION_REBOOT_WAIT_SECONDS="${ACTION_REBOOT_WAIT_SECONDS:-600}"
+PROBE_TIMEOUT_SECONDS="${PROBE_TIMEOUT_SECONDS:-8}"
+TIMEOUT_BIN="${TIMEOUT_BIN:-$(command -v timeout || command -v gtimeout || true)}"
 SUPPORT_OUT="${SUPPORT_OUT:-${WORKDIR}/support.zip}"
 CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-${WORKDIR}/cluster-logs.tar.gz}"
 CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-${WORKDIR}/cluster-support.zip}"
@@ -158,7 +160,7 @@ wait_until() {
 	local deadline=$((SECONDS + timeout_seconds))
 
 	while true; do
-		if "$@" >/dev/null 2>&1; then
+		if run_probe "$@" >/dev/null 2>&1; then
 			return 0
 		fi
 
@@ -170,6 +172,14 @@ wait_until() {
 
 		sleep "${SLEEP_SECONDS}"
 	done
+}
+
+run_probe() {
+	if [[ -n "${TIMEOUT_BIN}" ]]; then
+		"${TIMEOUT_BIN}" "${PROBE_TIMEOUT_SECONDS}" "$@"
+	else
+		"$@"
+	fi
 }
 
 run_cluster_create() {
@@ -240,8 +250,8 @@ wait_for_runtime_stable() {
 	local deadline=$((SECONDS + TIMEOUT_SECONDS))
 
 	while true; do
-		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
-			"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
+		if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
+			run_probe "${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
 			consecutive=$((consecutive + 1))
 
 			if ((consecutive >= required_consecutive)); then
@@ -524,12 +534,12 @@ maintenance_reentered_at=0
 maintenance_up_since=0
 
 while true; do
-	if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		echo "runtime mTLS became available after install apply"
 		break
 	fi
 
-	if "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if run_probe "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		if ((maintenance_up_since == 0)); then
 			maintenance_up_since="${SECONDS}"
 		fi
