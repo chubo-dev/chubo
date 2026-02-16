@@ -147,8 +147,6 @@ func (r *Runtime) CanApplyImmediate(cfg config.Provider) error {
 	// * .machine.kernel
 	// * .machine.registries (note that auth is not applied immediately, containerd limitation)
 	// * .machine.seccompProfiles
-	// * .machine.features.kubernetesTalosAPIAccess
-	// * .machine.features.kubePrism
 	// * .machine.features.hostDNS
 	// * .machine.features.imageCache
 	// * .machine.features.nodeAddressSortAlgorithm
@@ -170,8 +168,6 @@ func (r *Runtime) CanApplyImmediate(cfg config.Provider) error {
 		newConfig.MachineConfig.MachineSeccompProfiles = currentConfig.MachineConfig.MachineSeccompProfiles
 
 		if newConfig.MachineConfig.MachineFeatures != nil && currentConfig.MachineConfig.MachineFeatures != nil {
-			newConfig.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig = currentConfig.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig
-			newConfig.MachineConfig.MachineFeatures.KubePrismSupport = currentConfig.MachineConfig.MachineFeatures.KubePrismSupport
 			newConfig.MachineConfig.MachineFeatures.HostDNSSupport = currentConfig.MachineConfig.MachineFeatures.HostDNSSupport
 			newConfig.MachineConfig.MachineFeatures.ImageCacheSupport = currentConfig.MachineConfig.MachineFeatures.ImageCacheSupport
 			newConfig.MachineConfig.MachineFeatures.FeatureNodeAddressSortAlgorithm = currentConfig.MachineConfig.MachineFeatures.FeatureNodeAddressSortAlgorithm

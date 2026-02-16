@@ -1558,23 +1558,11 @@ type FeaturesConfig struct {
 	//
 	// Deprecated: use HostConfig instead.
 	StableHostname *bool `yaml:"stableHostname,omitempty"`
-	//   description: |
-	//    Configure Talos API access from Kubernetes pods.
-	//
-	//    This feature is disabled if the feature config is not specified.
-	//   examples:
-	//     - value: kubernetesTalosAPIAccessConfigExample()
-	KubernetesTalosAPIAccessConfig *KubernetesTalosAPIAccessConfig `yaml:"kubernetesTalosAPIAccess,omitempty"`
 	// docgen:nodoc
 	ApidCheckExtKeyUsage *bool `yaml:"apidCheckExtKeyUsage,omitempty"`
 	//   description: |
 	//     Enable XFS project quota support for EPHEMERAL partition and user disks.
-	//     Also enables kubelet tracking of ephemeral disk usage in the kubelet via quota.
 	DiskQuotaSupport *bool `yaml:"diskQuotaSupport,omitempty"`
-	//   description: |
-	//     KubePrism - local proxy/load balancer on defined port that will distribute
-	//     requests to all API servers in the cluster.
-	KubePrismSupport *KubePrism `yaml:"kubePrism,omitempty"`
 	//   description: |
 	//     Configures host DNS caching resolver.
 	HostDNSSupport *HostDNSConfig `yaml:"hostDNS,omitempty"`
@@ -1589,16 +1577,6 @@ type FeaturesConfig struct {
 	FeatureNodeAddressSortAlgorithm string `yaml:"nodeAddressSortAlgorithm,omitempty"`
 }
 
-// KubePrism describes the configuration for the KubePrism load balancer.
-type KubePrism struct {
-	//   description: |
-	//     Enable KubePrism support - will start local load balancing proxy.
-	ServerEnabled *bool `yaml:"enabled,omitempty"`
-	//   description: |
-	//     KubePrism port.
-	ServerPort int `yaml:"port,omitempty"`
-}
-
 // ImageCacheConfig describes the configuration for the Image Cache feature.
 type ImageCacheConfig struct {
 	//   description: |
@@ -1606,32 +1584,11 @@ type ImageCacheConfig struct {
 	CacheLocalEnabled *bool `yaml:"localEnabled,omitempty"`
 }
 
-// KubernetesTalosAPIAccessConfig describes the configuration for the Talos API access from Kubernetes pods.
-type KubernetesTalosAPIAccessConfig struct {
-	//   description: |
-	//     Enable Talos API access from Kubernetes pods.
-	AccessEnabled *bool `yaml:"enabled,omitempty"`
-	//   description: |
-	//     The list of Talos API roles which can be granted for access from Kubernetes pods.
-	//
-	//     Empty list means that no roles can be granted, so access is blocked.
-	AccessAllowedRoles []string `yaml:"allowedRoles,omitempty"`
-	//   description: |
-	//     The list of Kubernetes namespaces Talos API access is available from.
-	AccessAllowedKubernetesNamespaces []string `yaml:"allowedKubernetesNamespaces,omitempty"`
-}
-
 // HostDNSConfig describes the configuration for the host DNS resolver.
 type HostDNSConfig struct {
 	//   description: |
 	//     Enable host DNS caching resolver.
 	HostDNSEnabled *bool `yaml:"enabled,omitempty"`
-	//   description: |
-	//     Use the host DNS resolver as upstream for Kubernetes CoreDNS pods.
-	//
-	//     When enabled, CoreDNS pods use host DNS server as the upstream DNS (instead of
-	//     using configured upstream DNS resolvers directly).
-	HostDNSForwardKubeDNSToHost *bool `yaml:"forwardKubeDNSToHost,omitempty"`
 	//   description: |
 	//     Resolve member hostnames using the host DNS resolver.
 	//

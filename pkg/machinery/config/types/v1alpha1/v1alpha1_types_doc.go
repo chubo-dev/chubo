@@ -745,27 +745,13 @@ func (FeaturesConfig) Doc() *encoder.Doc {
 		Fields: []encoder.Doc{
 			{},
 			{},
-			{
-				Name:        "kubernetesTalosAPIAccess",
-				Type:        "KubernetesTalosAPIAccessConfig",
-				Note:        "",
-				Description: "Configure Talos API access from Kubernetes pods.\n\nThis feature is disabled if the feature config is not specified.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure Talos API access from Kubernetes pods." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
 			{},
 			{
 				Name:        "diskQuotaSupport",
 				Type:        "bool",
 				Note:        "",
-				Description: "Enable XFS project quota support for EPHEMERAL partition and user disks.\nAlso enables kubelet tracking of ephemeral disk usage in the kubelet via quota.",
+				Description: "Enable XFS project quota support for EPHEMERAL partition and user disks.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable XFS project quota support for EPHEMERAL partition and user disks." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "kubePrism",
-				Type:        "KubePrism",
-				Note:        "",
-				Description: "KubePrism - local proxy/load balancer on defined port that will distribute\nrequests to all API servers in the cluster.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "KubePrism - local proxy/load balancer on defined port that will distribute" /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "hostDNS",
@@ -792,40 +778,6 @@ func (FeaturesConfig) Doc() *encoder.Doc {
 	}
 
 	doc.AddExample("", machineFeaturesExample())
-
-	doc.Fields[2].AddExample("", kubernetesTalosAPIAccessConfigExample())
-
-	return doc
-}
-
-func (KubePrism) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "KubePrism",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "KubePrism describes the configuration for the KubePrism load balancer." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "KubePrism describes the configuration for the KubePrism load balancer.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "FeaturesConfig",
-				FieldName: "kubePrism",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "enabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Enable KubePrism support - will start local load balancing proxy.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable KubePrism support - will start local load balancing proxy." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "port",
-				Type:        "int",
-				Note:        "",
-				Description: "KubePrism port.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "KubePrism port." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
 
 	return doc
 }
@@ -855,47 +807,6 @@ func (ImageCacheConfig) Doc() *encoder.Doc {
 	return doc
 }
 
-func (KubernetesTalosAPIAccessConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "KubernetesTalosAPIAccessConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "KubernetesTalosAPIAccessConfig describes the configuration for the Talos API access from Kubernetes pods." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "KubernetesTalosAPIAccessConfig describes the configuration for the Talos API access from Kubernetes pods.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "FeaturesConfig",
-				FieldName: "kubernetesTalosAPIAccess",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "enabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Enable Talos API access from Kubernetes pods.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable Talos API access from Kubernetes pods." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "allowedRoles",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The list of Talos API roles which can be granted for access from Kubernetes pods.\n\nEmpty list means that no roles can be granted, so access is blocked.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The list of Talos API roles which can be granted for access from Kubernetes pods." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "allowedKubernetesNamespaces",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The list of Kubernetes namespaces Talos API access is available from.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The list of Kubernetes namespaces Talos API access is available from." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.AddExample("", kubernetesTalosAPIAccessConfigExample())
-
-	return doc
-}
-
 func (HostDNSConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "HostDNSConfig",
@@ -914,13 +825,6 @@ func (HostDNSConfig) Doc() *encoder.Doc {
 				Note:        "",
 				Description: "Enable host DNS caching resolver.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable host DNS caching resolver." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "forwardKubeDNSToHost",
-				Type:        "bool",
-				Note:        "",
-				Description: "Use the host DNS resolver as upstream for Kubernetes CoreDNS pods.\n\nWhen enabled, CoreDNS pods use host DNS server as the upstream DNS (instead of\nusing configured upstream DNS resolvers directly).",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Use the host DNS resolver as upstream for Kubernetes CoreDNS pods." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "resolveMemberNames",
@@ -1270,9 +1174,7 @@ func GetFileDoc() *encoder.FileDoc {
 			ResourcesConfig{}.Doc(),
 			MachineFile{}.Doc(),
 			FeaturesConfig{}.Doc(),
-			KubePrism{}.Doc(),
 			ImageCacheConfig{}.Doc(),
-			KubernetesTalosAPIAccessConfig{}.Doc(),
 			HostDNSConfig{}.Doc(),
 			VolumeMountConfig{}.Doc(),
 			ClusterInlineManifest{}.Doc(),

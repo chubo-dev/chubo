@@ -316,22 +316,6 @@ func (o *Config) DeepCopy() *Config {
 				cp.MachineConfig.MachineFeatures.StableHostname = new(bool)
 				*cp.MachineConfig.MachineFeatures.StableHostname = *o.MachineConfig.MachineFeatures.StableHostname
 			}
-			if o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig != nil {
-				cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig = new(KubernetesTalosAPIAccessConfig)
-				*cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig = *o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig
-				if o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessEnabled != nil {
-					cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessEnabled = new(bool)
-					*cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessEnabled = *o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessEnabled
-				}
-				if o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedRoles != nil {
-					cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedRoles = make([]string, len(o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedRoles))
-					copy(cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedRoles, o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedRoles)
-				}
-				if o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedKubernetesNamespaces != nil {
-					cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedKubernetesNamespaces = make([]string, len(o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedKubernetesNamespaces))
-					copy(cp.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedKubernetesNamespaces, o.MachineConfig.MachineFeatures.KubernetesTalosAPIAccessConfig.AccessAllowedKubernetesNamespaces)
-				}
-			}
 			if o.MachineConfig.MachineFeatures.ApidCheckExtKeyUsage != nil {
 				cp.MachineConfig.MachineFeatures.ApidCheckExtKeyUsage = new(bool)
 				*cp.MachineConfig.MachineFeatures.ApidCheckExtKeyUsage = *o.MachineConfig.MachineFeatures.ApidCheckExtKeyUsage
@@ -340,24 +324,12 @@ func (o *Config) DeepCopy() *Config {
 				cp.MachineConfig.MachineFeatures.DiskQuotaSupport = new(bool)
 				*cp.MachineConfig.MachineFeatures.DiskQuotaSupport = *o.MachineConfig.MachineFeatures.DiskQuotaSupport
 			}
-			if o.MachineConfig.MachineFeatures.KubePrismSupport != nil {
-				cp.MachineConfig.MachineFeatures.KubePrismSupport = new(KubePrism)
-				*cp.MachineConfig.MachineFeatures.KubePrismSupport = *o.MachineConfig.MachineFeatures.KubePrismSupport
-				if o.MachineConfig.MachineFeatures.KubePrismSupport.ServerEnabled != nil {
-					cp.MachineConfig.MachineFeatures.KubePrismSupport.ServerEnabled = new(bool)
-					*cp.MachineConfig.MachineFeatures.KubePrismSupport.ServerEnabled = *o.MachineConfig.MachineFeatures.KubePrismSupport.ServerEnabled
-				}
-			}
 			if o.MachineConfig.MachineFeatures.HostDNSSupport != nil {
 				cp.MachineConfig.MachineFeatures.HostDNSSupport = new(HostDNSConfig)
 				*cp.MachineConfig.MachineFeatures.HostDNSSupport = *o.MachineConfig.MachineFeatures.HostDNSSupport
 				if o.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSEnabled != nil {
 					cp.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSEnabled = new(bool)
 					*cp.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSEnabled = *o.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSEnabled
-				}
-				if o.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSForwardKubeDNSToHost != nil {
-					cp.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSForwardKubeDNSToHost = new(bool)
-					*cp.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSForwardKubeDNSToHost = *o.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSForwardKubeDNSToHost
 				}
 				if o.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSResolveMemberNames != nil {
 					cp.MachineConfig.MachineFeatures.HostDNSSupport.HostDNSResolveMemberNames = new(bool)

@@ -288,18 +288,6 @@ func machinePodsExample() []Unstructured {
 	}
 }
 
-func kubernetesTalosAPIAccessConfigExample() *KubernetesTalosAPIAccessConfig {
-	return &KubernetesTalosAPIAccessConfig{
-		AccessEnabled: pointer.To(true),
-		AccessAllowedRoles: []string{
-			"os:reader",
-		},
-		AccessAllowedKubernetesNamespaces: []string{
-			"kube-system",
-		},
-	}
-}
-
 func machineBaseRuntimeSpecOverridesExample() Unstructured {
 	return Unstructured{
 		Object: map[string]any{

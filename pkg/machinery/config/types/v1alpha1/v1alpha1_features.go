@@ -11,38 +11,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 )
 
-// KubernetesTalosAPIAccess implements config.Features interface.
-func (f *FeaturesConfig) KubernetesTalosAPIAccess() config.KubernetesTalosAPIAccess {
-	return f.KubernetesTalosAPIAccessConfig
-}
-
-// Enabled implements [config.KubernetesTalosAPIAccess].
-func (a *KubernetesTalosAPIAccessConfig) Enabled() bool {
-	if a == nil {
-		return false
-	}
-
-	return pointer.SafeDeref(a.AccessEnabled)
-}
-
-// AllowedRoles implements [config.KubernetesTalosAPIAccess].
-func (a *KubernetesTalosAPIAccessConfig) AllowedRoles() []string {
-	if a == nil {
-		return nil
-	}
-
-	return a.AccessAllowedRoles
-}
-
-// AllowedKubernetesNamespaces implements [config.KubernetesTalosAPIAccess].
-func (a *KubernetesTalosAPIAccessConfig) AllowedKubernetesNamespaces() []string {
-	if a == nil {
-		return nil
-	}
-
-	return a.AccessAllowedKubernetesNamespaces
-}
-
 // DiskQuotaSupportEnabled implements config.Features interface.
 func (f *FeaturesConfig) DiskQuotaSupportEnabled() bool {
 	return pointer.SafeDeref(f.DiskQuotaSupport)
@@ -55,15 +23,6 @@ func (f *FeaturesConfig) HostDNS() config.HostDNS {
 	}
 
 	return f.HostDNSSupport
-}
-
-// KubePrism implements config.Features interface.
-func (f *FeaturesConfig) KubePrism() config.KubePrism {
-	if f.KubePrismSupport == nil {
-		return &KubePrism{}
-	}
-
-	return f.KubePrismSupport
 }
 
 // ImageCache implements config.Features interface.
@@ -89,30 +48,9 @@ func (f *FeaturesConfig) NodeAddressSortAlgorithm() nethelpers.AddressSortAlgori
 	return res
 }
 
-const defaultKubePrismPort = 7445
-
-// Enabled implements [config.KubePrism].
-func (a *KubePrism) Enabled() bool {
-	return pointer.SafeDeref(a.ServerEnabled)
-}
-
-// Port implements [config.KubePrism].
-func (a *KubePrism) Port() int {
-	if a.ServerPort == 0 {
-		return defaultKubePrismPort
-	}
-
-	return a.ServerPort
-}
-
 // Enabled implements config.HostDNS.
 func (h *HostDNSConfig) Enabled() bool {
 	return pointer.SafeDeref(h.HostDNSEnabled)
-}
-
-// ForwardKubeDNSToHost implements config.HostDNS.
-func (h *HostDNSConfig) ForwardKubeDNSToHost() bool {
-	return pointer.SafeDeref(h.HostDNSForwardKubeDNSToHost)
 }
 
 // ResolveMemberNames implements config.HostDNS.

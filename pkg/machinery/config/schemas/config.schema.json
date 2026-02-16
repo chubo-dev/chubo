@@ -4123,26 +4123,12 @@
     },
     "v1alpha1.FeaturesConfig": {
       "properties": {
-        "kubernetesTalosAPIAccess": {
-          "$ref": "#/$defs/v1alpha1.KubernetesTalosAPIAccessConfig",
-          "title": "kubernetesTalosAPIAccess",
-          "description": "Configure Talos API access from Kubernetes pods.\n\nThis feature is disabled if the feature config is not specified.\n",
-          "markdownDescription": "Configure Talos API access from Kubernetes pods.\n\nThis feature is disabled if the feature config is not specified.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure Talos API access from Kubernetes pods.\u003c/p\u003e\n\n\u003cp\u003eThis feature is disabled if the feature config is not specified.\u003c/p\u003e\n"
-        },
         "diskQuotaSupport": {
           "type": "boolean",
           "title": "diskQuotaSupport",
-          "description": "Enable XFS project quota support for EPHEMERAL partition and user disks.\nAlso enables kubelet tracking of ephemeral disk usage in the kubelet via quota.\n",
-          "markdownDescription": "Enable XFS project quota support for EPHEMERAL partition and user disks.\nAlso enables kubelet tracking of ephemeral disk usage in the kubelet via quota.",
-          "x-intellij-html-description": "\u003cp\u003eEnable XFS project quota support for EPHEMERAL partition and user disks.\nAlso enables kubelet tracking of ephemeral disk usage in the kubelet via quota.\u003c/p\u003e\n"
-        },
-        "kubePrism": {
-          "$ref": "#/$defs/v1alpha1.KubePrism",
-          "title": "kubePrism",
-          "description": "KubePrism - local proxy/load balancer on defined port that will distribute\nrequests to all API servers in the cluster.\n",
-          "markdownDescription": "KubePrism - local proxy/load balancer on defined port that will distribute\nrequests to all API servers in the cluster.",
-          "x-intellij-html-description": "\u003cp\u003eKubePrism - local proxy/load balancer on defined port that will distribute\nrequests to all API servers in the cluster.\u003c/p\u003e\n"
+          "description": "Enable XFS project quota support for EPHEMERAL partition and user disks.\n",
+          "markdownDescription": "Enable XFS project quota support for EPHEMERAL partition and user disks.",
+          "x-intellij-html-description": "\u003cp\u003eEnable XFS project quota support for EPHEMERAL partition and user disks.\u003c/p\u003e\n"
         },
         "hostDNS": {
           "$ref": "#/$defs/v1alpha1.HostDNSConfig",
@@ -4178,13 +4164,6 @@
           "description": "Enable host DNS caching resolver.\n",
           "markdownDescription": "Enable host DNS caching resolver.",
           "x-intellij-html-description": "\u003cp\u003eEnable host DNS caching resolver.\u003c/p\u003e\n"
-        },
-        "forwardKubeDNSToHost": {
-          "type": "boolean",
-          "title": "forwardKubeDNSToHost",
-          "description": "Use the host DNS resolver as upstream for Kubernetes CoreDNS pods.\n\nWhen enabled, CoreDNS pods use host DNS server as the upstream DNS (instead of\nusing configured upstream DNS resolvers directly).\n",
-          "markdownDescription": "Use the host DNS resolver as upstream for Kubernetes CoreDNS pods.\n\nWhen enabled, CoreDNS pods use host DNS server as the upstream DNS (instead of\nusing configured upstream DNS resolvers directly).",
-          "x-intellij-html-description": "\u003cp\u003eUse the host DNS resolver as upstream for Kubernetes CoreDNS pods.\u003c/p\u003e\n\n\u003cp\u003eWhen enabled, CoreDNS pods use host DNS server as the upstream DNS (instead of\nusing configured upstream DNS resolvers directly).\u003c/p\u003e\n"
         },
         "resolveMemberNames": {
           "type": "boolean",
@@ -4376,61 +4355,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "KernelModuleConfig struct configures Linux kernel modules to load."
-    },
-    "v1alpha1.KubePrism": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "enabled",
-          "description": "Enable KubePrism support - will start local load balancing proxy.\n",
-          "markdownDescription": "Enable KubePrism support - will start local load balancing proxy.",
-          "x-intellij-html-description": "\u003cp\u003eEnable KubePrism support - will start local load balancing proxy.\u003c/p\u003e\n"
-        },
-        "port": {
-          "type": "integer",
-          "title": "port",
-          "description": "KubePrism port.\n",
-          "markdownDescription": "KubePrism port.",
-          "x-intellij-html-description": "\u003cp\u003eKubePrism port.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "KubePrism describes the configuration for the KubePrism load balancer."
-    },
-    "v1alpha1.KubernetesTalosAPIAccessConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "enabled",
-          "description": "Enable Talos API access from Kubernetes pods.\n",
-          "markdownDescription": "Enable Talos API access from Kubernetes pods.",
-          "x-intellij-html-description": "\u003cp\u003eEnable Talos API access from Kubernetes pods.\u003c/p\u003e\n"
-        },
-        "allowedRoles": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "allowedRoles",
-          "description": "The list of Talos API roles which can be granted for access from Kubernetes pods.\n\nEmpty list means that no roles can be granted, so access is blocked.\n",
-          "markdownDescription": "The list of Talos API roles which can be granted for access from Kubernetes pods.\n\nEmpty list means that no roles can be granted, so access is blocked.",
-          "x-intellij-html-description": "\u003cp\u003eThe list of Talos API roles which can be granted for access from Kubernetes pods.\u003c/p\u003e\n\n\u003cp\u003eEmpty list means that no roles can be granted, so access is blocked.\u003c/p\u003e\n"
-        },
-        "allowedKubernetesNamespaces": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "allowedKubernetesNamespaces",
-          "description": "The list of Kubernetes namespaces Talos API access is available from.\n",
-          "markdownDescription": "The list of Kubernetes namespaces Talos API access is available from.",
-          "x-intellij-html-description": "\u003cp\u003eThe list of Kubernetes namespaces Talos API access is available from.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "KubernetesTalosAPIAccessConfig describes the configuration for the Talos API access from Kubernetes pods."
     },
     "v1alpha1.LinuxIDMapping": {
       "properties": {

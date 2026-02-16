@@ -314,31 +314,15 @@ type SystemDiskEncryption interface {
 
 // Features describe individual Talos features that can be switched on or off.
 type Features interface {
-	KubernetesTalosAPIAccess() KubernetesTalosAPIAccess
 	DiskQuotaSupportEnabled() bool
 	HostDNS() HostDNS
-	KubePrism() KubePrism
 	ImageCache() ImageCache
 	NodeAddressSortAlgorithm() nethelpers.AddressSortAlgorithm
-}
-
-// KubernetesTalosAPIAccess describes the Kubernetes Talos API access features.
-type KubernetesTalosAPIAccess interface {
-	Enabled() bool
-	AllowedRoles() []string
-	AllowedKubernetesNamespaces() []string
-}
-
-// KubePrism describes the API Server load balancer features.
-type KubePrism interface {
-	Enabled() bool
-	Port() int
 }
 
 // HostDNS describes the host DNS configuration.
 type HostDNS interface {
 	Enabled() bool
-	ForwardKubeDNSToHost() bool
 	ResolveMemberNames() bool
 }
 

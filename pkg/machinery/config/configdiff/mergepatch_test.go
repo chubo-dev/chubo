@@ -68,7 +68,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}
 ---
 apiVersion: v1alpha1
@@ -97,7 +96,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service:
                 endpoint: https://discovery.example.com
 ---
@@ -129,7 +127,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}
 ---
 apiVersion: v1alpha1
@@ -157,7 +154,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service:
                 disabled: false
 ---
@@ -189,7 +185,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}
 ---
 apiVersion: v1alpha1
@@ -248,7 +243,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}
 ---
 apiVersion: v1alpha1
@@ -282,7 +276,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}
 `),
 			patchesAsBytes: [][]byte{
