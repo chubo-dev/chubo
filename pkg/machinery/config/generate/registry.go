@@ -27,17 +27,6 @@ func (in *Input) generateRegistryConfigs(machine *v1alpha1.MachineConfig) ([]con
 			RegistryConfig:  map[string]*v1alpha1.RegistryConfig{},
 		}
 
-		if in.Options.VersionContract.KubernetesAlternateImageRegistries() {
-			if _, ok := machine.MachineRegistries.RegistryMirrors["k8s.gcr.io"]; !ok { //nolint:staticcheck // backwards compatibility, Talos v1.1->1.2
-				machine.MachineRegistries.RegistryMirrors["k8s.gcr.io"] = &v1alpha1.RegistryMirrorConfig{ //nolint:staticcheck // backwards compatibility, Talos v1.1->1.2
-					MirrorEndpoints: []string{
-						"https://registry.k8s.io",
-						"https://k8s.gcr.io",
-					},
-				}
-			}
-		}
-
 		for host, endpoints := range in.Options.RegistryEndpoints {
 			machine.MachineRegistries.RegistryMirrors[host] = &v1alpha1.RegistryMirrorConfig{ //nolint:staticcheck // backwards compatibility
 				MirrorEndpoints: endpoints,
