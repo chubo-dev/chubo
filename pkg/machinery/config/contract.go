@@ -158,11 +158,6 @@ func (contract *VersionContract) ClusterNameForWorkers() bool {
 	return contract.Greater(TalosVersion1_7)
 }
 
-// HostDNSForwardKubeDNSToHost returns true if version of Talos forces host dns router to be used as upstream for Kubernetes CoreDNS pods.
-func (contract *VersionContract) HostDNSForwardKubeDNSToHost() bool {
-	return contract.Greater(TalosVersion1_7)
-}
-
 // AddExcludeFromExternalLoadBalancer returns true if the label 'node.kubernetes.io/exclude-from-external-load-balancers' is automatically added
 // for controlplane nodes.
 func (contract *VersionContract) AddExcludeFromExternalLoadBalancer() bool {

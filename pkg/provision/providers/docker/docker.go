@@ -90,12 +90,6 @@ func (p *provisioner) Close() error {
 func (p *provisioner) GenOptions(networkReq provision.NetworkRequest, contract *config.VersionContract) ([]generate.Option, []bundle.Option) {
 	var genOptions []generate.Option
 
-	if contract.HostDNSEnabled() {
-		genOptions = append(genOptions,
-			generate.WithHostDNSForwardKubeDNSToHost(true),
-		)
-	}
-
 	if !contract.MultidocNetworkConfigSupported() {
 		genOptions = append(genOptions,
 			generate.WithNetworkOptions(

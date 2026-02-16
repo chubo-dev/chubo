@@ -7,7 +7,6 @@ package generate
 import (
 	"maps"
 
-	"github.com/siderolabs/gen/optional"
 	"github.com/siderolabs/go-pointer"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/config"
@@ -32,18 +31,6 @@ func WithEndpointList(endpoints []string) Option {
 func WithLocalAPIServerPort(port int) Option {
 	return func(o *Options) error {
 		o.LocalAPIServerPort = port
-
-		return nil
-	}
-}
-
-// WithKubePrismPort specifies the KubePrism port.
-//
-// If 0, load balancer is disabled.
-// If not set, defaults to enabled with Talos 1.6+.
-func WithKubePrismPort(port int) Option {
-	return func(o *Options) error {
-		o.KubePrismPort = optional.Some(port)
 
 		return nil
 	}
@@ -220,15 +207,6 @@ func WithSecretsBundle(bundle *secrets.Bundle) Option {
 	}
 }
 
-// WithHostDNSForwardKubeDNSToHost specifies whether to forward kube-dns to host.
-func WithHostDNSForwardKubeDNSToHost(forward bool) Option {
-	return func(o *Options) error {
-		o.HostDNSForwardKubeDNSToHost = optional.Some(forward)
-
-		return nil
-	}
-}
-
 // Options describes generate parameters.
 type Options struct {
 	VersionContract *config.VersionContract
@@ -264,10 +242,6 @@ type Options struct {
 	LocalAPIServerPort             int
 	AdditionalSubjectAltNames      []string
 	DiscoveryEnabled               *bool
-
-	KubePrismPort optional.Optional[int]
-
-	HostDNSForwardKubeDNSToHost optional.Optional[bool]
 
 	// Client options.
 	Roles        role.Set
