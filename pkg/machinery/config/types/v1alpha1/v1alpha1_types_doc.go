@@ -341,12 +341,6 @@ func (ExtraMount) Doc() *encoder.Doc {
 		Type:        "ExtraMount",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ExtraMount wraps OCI Mount specification." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ExtraMount wraps OCI Mount specification.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "KubeletConfig",
-				FieldName: "extraMounts",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "destination",
@@ -392,8 +386,6 @@ func (ExtraMount) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.AddExample("", kubeletExtraMountsExample())
 
 	return doc
 }
@@ -470,159 +462,6 @@ func (MachineSchedulerConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	return doc
-}
-
-func (KubeletConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "KubeletConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "KubeletConfig represents the kubelet config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "KubeletConfig represents the kubelet config values.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The `image` field is an optional reference to an alternative kubelet image.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `image` field is an optional reference to an alternative kubelet image." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "clusterDNS",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The `ClusterDNS` field is an optional reference to an alternative kubelet clusterDNS ip list.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `ClusterDNS` field is an optional reference to an alternative kubelet clusterDNS ip list." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraArgs",
-				Type:        "Args",
-				Note:        "",
-				Description: "The `extraArgs` field is used to provide additional flags to the kubelet.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `extraArgs` field is used to provide additional flags to the kubelet." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraMounts",
-				Type:        "[]ExtraMount",
-				Note:        "",
-				Description: "The `extraMounts` field is used to add additional mounts to the kubelet container.\nNote that either `bind` or `rbind` are required in the `options`.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `extraMounts` field is used to add additional mounts to the kubelet container." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraConfig",
-				Type:        "Unstructured",
-				Note:        "",
-				Description: "The `extraConfig` field is used to provide kubelet configuration overrides.\n\nSome fields are not allowed to be overridden: authentication and authorization, cgroups\nconfiguration, ports, etc.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `extraConfig` field is used to provide kubelet configuration overrides." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "credentialProviderConfig",
-				Type:        "Unstructured",
-				Note:        "",
-				Description: "The `KubeletCredentialProviderConfig` field is used to provide kubelet credential configuration.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `KubeletCredentialProviderConfig` field is used to provide kubelet credential configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "defaultRuntimeSeccompProfileEnabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Enable container runtime default Seccomp profile.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable container runtime default Seccomp profile." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"true",
-					"yes",
-					"false",
-					"no",
-				},
-			},
-			{
-				Name:        "registerWithFQDN",
-				Type:        "bool",
-				Note:        "",
-				Description: "The `registerWithFQDN` field is used to force kubelet to use the node FQDN for registration.\nThis is required in clouds like AWS.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `registerWithFQDN` field is used to force kubelet to use the node FQDN for registration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"true",
-					"yes",
-					"false",
-					"no",
-				},
-			},
-			{
-				Name:        "nodeIP",
-				Type:        "KubeletNodeIPConfig",
-				Note:        "",
-				Description: "The `nodeIP` field is used to configure `--node-ip` flag for the kubelet.\nThis is used when a node has multiple addresses to choose from.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `nodeIP` field is used to configure `--node-ip` flag for the kubelet." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "skipNodeRegistration",
-				Type:        "bool",
-				Note:        "",
-				Description: "The `skipNodeRegistration` is used to run the kubelet without registering with the apiserver.\nThis runs kubelet as standalone and only runs static pods.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `skipNodeRegistration` is used to run the kubelet without registering with the apiserver." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"true",
-					"yes",
-					"false",
-					"no",
-				},
-			},
-			{
-				Name:        "disableManifestsDirectory",
-				Type:        "bool",
-				Note:        "",
-				Description: "The `disableManifestsDirectory` field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory.\nIt's recommended to configure static pods with the \"pods\" key instead.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `disableManifestsDirectory` field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"true",
-					"yes",
-					"false",
-					"no",
-				},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", kubeletImageExample())
-	doc.Fields[1].AddExample("", []string{"10.96.0.10", "169.254.2.53"})
-	doc.Fields[2].AddExample("", Args{
-		"key": ArgValue{strValue: "value"},
-	})
-	doc.Fields[2].AddExample("", Args{
-		"key": ArgValue{listValue: []string{"value1", "value2"}},
-	})
-	doc.Fields[3].AddExample("", kubeletExtraMountsExample())
-	doc.Fields[4].AddExample("", kubeletExtraConfigExample())
-	doc.Fields[5].AddExample("", kubeletCredentialProviderConfigExample())
-	doc.Fields[8].AddExample("", kubeletNodeIPExample())
-
-	return doc
-}
-
-func (KubeletNodeIPConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "KubeletNodeIPConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "KubeletNodeIPConfig represents the kubelet node IP configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "KubeletNodeIPConfig represents the kubelet node IP configuration.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "KubeletConfig",
-				FieldName: "nodeIP",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "validSubnets",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The `validSubnets` field configures the networks to pick kubelet node IP from.\nFor dual stack configuration, there should be two subnets: one for IPv4, another for IPv6.\nIPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, node IP is picked based on cluster podCIDRs: IPv4/IPv6 address or both.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `validSubnets` field configures the networks to pick kubelet node IP from." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.AddExample("", kubeletNodeIPExample())
 
 	return doc
 }
@@ -1395,25 +1234,6 @@ func (ExternalCloudProviderConfig) Doc() *encoder.Doc {
 	return doc
 }
 
-func (AdminKubeconfigConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "AdminKubeconfigConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "AdminKubeconfigConfig contains admin kubeconfig settings." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "AdminKubeconfigConfig contains admin kubeconfig settings.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "certLifetime",
-				Type:        "Duration",
-				Note:        "",
-				Description: "Admin kubeconfig certificate lifetime (default is 1 year).\nField format accepts any Go time.Duration format ('1h' for one hour, '10m' for ten minutes).",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Admin kubeconfig certificate lifetime (default is 1 year)." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	return doc
-}
-
 func (ResourcesConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "ResourcesConfig",
@@ -2090,8 +1910,6 @@ func GetFileDoc() *encoder.FileDoc {
 			MachineControlPlaneConfig{}.Doc(),
 			MachineControllerManagerConfig{}.Doc(),
 			MachineSchedulerConfig{}.Doc(),
-			KubeletConfig{}.Doc(),
-			KubeletNodeIPConfig{}.Doc(),
 			InstallConfig{}.Doc(),
 			InstallDiskSelector{}.Doc(),
 			CoreDNS{}.Doc(),
@@ -2108,7 +1926,6 @@ func GetFileDoc() *encoder.FileDoc {
 			CNIConfig{}.Doc(),
 			FlannelCNIConfig{}.Doc(),
 			ExternalCloudProviderConfig{}.Doc(),
-			AdminKubeconfigConfig{}.Doc(),
 			ResourcesConfig{}.Doc(),
 			MachineFile{}.Doc(),
 			FeaturesConfig{}.Doc(),

@@ -65,12 +65,13 @@ func (m *MockV3) Clone() config.Document {
 	return m
 }
 
-type KubeletConfig struct {
+type MountConfig struct {
 	Meta
-	v1alpha1.KubeletConfig `yaml:",inline"`
+
+	ExtraMounts []v1alpha1.ExtraMount `yaml:"extraMounts,omitempty"`
 }
 
-func (m *KubeletConfig) Clone() config.Document {
+func (m *MountConfig) Clone() config.Document {
 	return m
 }
 
@@ -96,8 +97,8 @@ func init() {
 		return &Mock{}
 	})
 
-	registry.Register("kubelet", func(string) config.Document {
-		return &KubeletConfig{}
+	registry.Register("mounts", func(string) config.Document {
+		return &MountConfig{}
 	})
 
 	registry.Register("unstructured", func(string) config.Document {
@@ -256,9 +257,9 @@ map:
 			expectedErr: "",
 		},
 		{
-			name: "kubelet config",
+			name: "mount config",
 			source: []byte(`---
-kind: kubelet
+kind: mounts
 apiVersion: v1alpha1
 extraMounts:
  - destination: /var/local

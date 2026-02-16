@@ -428,115 +428,6 @@ type MachineSchedulerConfig struct {
 	MachineSchedulerDisabled *bool `yaml:"disabled,omitempty"`
 }
 
-// KubeletConfig represents the kubelet config values.
-type KubeletConfig struct {
-	//   description: |
-	//     The `image` field is an optional reference to an alternative kubelet image.
-	//   examples:
-	//     - value: kubeletImageExample()
-	KubeletImage string `yaml:"image,omitempty"`
-	//   description: |
-	//     The `ClusterDNS` field is an optional reference to an alternative kubelet clusterDNS ip list.
-	//   examples:
-	//     - value: '[]string{"10.96.0.10", "169.254.2.53"}'
-	KubeletClusterDNS []string `yaml:"clusterDNS,omitempty"`
-	//   description: |
-	//     The `extraArgs` field is used to provide additional flags to the kubelet.
-	//   examples:
-	//     - value: >
-	//         Args{
-	//           "key": ArgValue{strValue: "value"},
-	//         }
-	//     - value: >
-	//         Args{
-	//           "key": ArgValue{listValue: []string{"value1", "value2"}},
-	//         }
-	//   schema:
-	//     type: object
-	//     additionalProperties:
-	//       oneOf:
-	//         - type: string
-	//         - type: array
-	//           items:
-	//             type: string
-	KubeletExtraArgs Args `yaml:"extraArgs,omitempty"`
-	//   description: |
-	//     The `extraMounts` field is used to add additional mounts to the kubelet container.
-	//     Note that either `bind` or `rbind` are required in the `options`.
-	//   examples:
-	//     - value: kubeletExtraMountsExample()
-	KubeletExtraMounts []ExtraMount `yaml:"extraMounts,omitempty"`
-	//   description: |
-	//     The `extraConfig` field is used to provide kubelet configuration overrides.
-	//
-	//     Some fields are not allowed to be overridden: authentication and authorization, cgroups
-	//     configuration, ports, etc.
-	//   examples:
-	//     - value: kubeletExtraConfigExample()
-	//   schema:
-	//     type: object
-	KubeletExtraConfig Unstructured `yaml:"extraConfig,omitempty"`
-	//  description: |
-	//   The `KubeletCredentialProviderConfig` field is used to provide kubelet credential configuration.
-	//  examples:
-	//    - value: kubeletCredentialProviderConfigExample()
-	//  schema:
-	//    type: object
-	KubeletCredentialProviderConfig Unstructured `yaml:"credentialProviderConfig,omitempty"`
-	//  description: |
-	//    Enable container runtime default Seccomp profile.
-	//  values:
-	//    - true
-	//    - yes
-	//    - false
-	//    - no
-	KubeletDefaultRuntimeSeccompProfileEnabled *bool `yaml:"defaultRuntimeSeccompProfileEnabled,omitempty"`
-	//   description: |
-	//     The `registerWithFQDN` field is used to force kubelet to use the node FQDN for registration.
-	//     This is required in clouds like AWS.
-	//   values:
-	//     - true
-	//     - yes
-	//     - false
-	//     - no
-	KubeletRegisterWithFQDN *bool `yaml:"registerWithFQDN,omitempty"`
-	//   description: |
-	//     The `nodeIP` field is used to configure `--node-ip` flag for the kubelet.
-	//     This is used when a node has multiple addresses to choose from.
-	//   examples:
-	//     - value: kubeletNodeIPExample()
-	KubeletNodeIP *KubeletNodeIPConfig `yaml:"nodeIP,omitempty"`
-	//   description: |
-	//      The `skipNodeRegistration` is used to run the kubelet without registering with the apiserver.
-	//      This runs kubelet as standalone and only runs static pods.
-	//   values:
-	//     - true
-	//     - yes
-	//     - false
-	//     - no
-	KubeletSkipNodeRegistration *bool `yaml:"skipNodeRegistration,omitempty"`
-	//   description: |
-	//     The `disableManifestsDirectory` field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory.
-	//     It's recommended to configure static pods with the "pods" key instead.
-	//   values:
-	//     - true
-	//     - yes
-	//     - false
-	//     - no
-	KubeletDisableManifestsDirectory *bool `yaml:"disableManifestsDirectory,omitempty"`
-}
-
-// KubeletNodeIPConfig represents the kubelet node IP configuration.
-type KubeletNodeIPConfig struct {
-	//  description: |
-	//    The `validSubnets` field configures the networks to pick kubelet node IP from.
-	//    For dual stack configuration, there should be two subnets: one for IPv4, another for IPv6.
-	//    IPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.
-	//    Negative subnet matches should be specified last to filter out IPs picked by positive matches.
-	//    If not specified, node IP is picked based on cluster podCIDRs: IPv4/IPv6 address or both.
-	KubeletNodeIPValidSubnets []string `yaml:"validSubnets,omitempty"`
-}
-
 // NetworkConfig represents the machine's networking config values.
 //
 // Deprecated: all fields in NetworkConfig are deprecated, use corresponding multi-doc config types instead.
@@ -1325,17 +1216,6 @@ type ExternalCloudProviderConfig struct {
 	//         "https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/aws-cloud-controller-manager-daemonset.yaml",
 	//        }
 	ExternalManifests []string `yaml:"manifests,omitempty"`
-}
-
-// AdminKubeconfigConfig contains admin kubeconfig settings.
-type AdminKubeconfigConfig struct {
-	//   description: |
-	//     Admin kubeconfig certificate lifetime (default is 1 year).
-	//     Field format accepts any Go time.Duration format ('1h' for one hour, '10m' for ten minutes).
-	//   schema:
-	//     type: string
-	//     pattern: ^[-+]?(((\d+(\.\d*)?|\d*(\.\d+)+)([nuµm]?s|m|h))|0)+$
-	AdminKubeconfigCertLifetime time.Duration `yaml:"certLifetime,omitempty"`
 }
 
 // MachineDisk represents the options available for partitioning, formatting, and

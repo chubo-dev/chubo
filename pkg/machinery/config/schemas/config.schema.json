@@ -3982,21 +3982,6 @@
       "type": "object",
       "description": "APIServerConfig represents the kube apiserver configuration options."
     },
-    "v1alpha1.AdminKubeconfigConfig": {
-      "properties": {
-        "certLifetime": {
-          "type": "string",
-          "pattern": "^[-+]?(((\\d+(\\.\\d*)?|\\d*(\\.\\d+)+)([nuµm]?s|m|h))|0)+$",
-          "title": "certLifetime",
-          "description": "Admin kubeconfig certificate lifetime (default is 1 year).\nField format accepts any Go time.Duration format (‘1h’ for one hour, ‘10m’ for ten minutes).\n",
-          "markdownDescription": "Admin kubeconfig certificate lifetime (default is 1 year).\nField format accepts any Go time.Duration format ('1h' for one hour, '10m' for ten minutes).",
-          "x-intellij-html-description": "\u003cp\u003eAdmin kubeconfig certificate lifetime (default is 1 year).\nField format accepts any Go time.Duration format (\u0026lsquo;1h\u0026rsquo; for one hour, \u0026lsquo;10m\u0026rsquo; for ten minutes).\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "AdminKubeconfigConfig contains admin kubeconfig settings."
-    },
     "v1alpha1.AdmissionPluginConfig": {
       "properties": {
         "name": {
@@ -4086,224 +4071,35 @@
         "id": {
           "type": "string",
           "title": "id",
-          "description": "Globally unique identifier for this cluster (base64 encoded random 32 bytes).\n",
-          "markdownDescription": "Globally unique identifier for this cluster (base64 encoded random 32 bytes).",
-          "x-intellij-html-description": "\u003cp\u003eGlobally unique identifier for this cluster (base64 encoded random 32 bytes).\u003c/p\u003e\n"
+          "description": "Unique cluster ID used for node membership and discovery.\n",
+          "markdownDescription": "Unique cluster ID used for node membership and discovery.",
+          "x-intellij-html-description": "\u003cp\u003eUnique cluster ID used for node membership and discovery.\u003c/p\u003e\n"
         },
         "secret": {
           "type": "string",
           "title": "secret",
-          "description": "Shared secret of cluster (base64 encoded random 32 bytes).\nThis secret is shared among cluster members but should never be sent over the network.\n",
-          "markdownDescription": "Shared secret of cluster (base64 encoded random 32 bytes).\nThis secret is shared among cluster members but should never be sent over the network.",
-          "x-intellij-html-description": "\u003cp\u003eShared secret of cluster (base64 encoded random 32 bytes).\nThis secret is shared among cluster members but should never be sent over the network.\u003c/p\u003e\n"
-        },
-        "controlPlane": {
-          "$ref": "#/$defs/v1alpha1.ControlPlaneConfig",
-          "title": "controlPlane",
-          "description": "Provides control plane specific configuration options.\n",
-          "markdownDescription": "Provides control plane specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eProvides control plane specific configuration options.\u003c/p\u003e\n"
+          "description": "Shared cluster secret used to authenticate and protect membership discovery data.\n",
+          "markdownDescription": "Shared cluster secret used to authenticate and protect membership discovery data.",
+          "x-intellij-html-description": "\u003cp\u003eShared cluster secret used to authenticate and protect membership discovery data.\u003c/p\u003e\n"
         },
         "clusterName": {
           "type": "string",
           "title": "clusterName",
-          "description": "Configures the cluster’s name.\n",
-          "markdownDescription": "Configures the cluster's name.",
-          "x-intellij-html-description": "\u003cp\u003eConfigures the cluster\u0026rsquo;s name.\u003c/p\u003e\n"
-        },
-        "network": {
-          "$ref": "#/$defs/v1alpha1.ClusterNetworkConfig",
-          "title": "network",
-          "description": "Provides cluster specific network configuration options.\n",
-          "markdownDescription": "Provides cluster specific network configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eProvides cluster specific network configuration options.\u003c/p\u003e\n"
-        },
-        "token": {
-          "type": "string",
-          "title": "token",
-          "description": "The bootstrap token used to join the cluster.\n",
-          "markdownDescription": "The [bootstrap token](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/) used to join the cluster.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ca href=\"https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/\" target=\"_blank\"\u003ebootstrap token\u003c/a\u003e used to join the cluster.\u003c/p\u003e\n"
-        },
-        "aescbcEncryptionSecret": {
-          "type": "string",
-          "title": "aescbcEncryptionSecret",
-          "description": "A key used for the encryption of secret data at rest.\nEnables encryption with AESCBC.\n",
-          "markdownDescription": "A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).\nEnables encryption with AESCBC.",
-          "x-intellij-html-description": "\u003cp\u003eA key used for the \u003ca href=\"https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/\" target=\"_blank\"\u003eencryption of secret data at rest\u003c/a\u003e.\nEnables encryption with AESCBC.\u003c/p\u003e\n"
-        },
-        "secretboxEncryptionSecret": {
-          "type": "string",
-          "title": "secretboxEncryptionSecret",
-          "description": "A key used for the encryption of secret data at rest.\nEnables encryption with secretbox.\nSecretbox has precedence over AESCBC.\n",
-          "markdownDescription": "A key used for the [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).\nEnables encryption with secretbox.\nSecretbox has precedence over AESCBC.",
-          "x-intellij-html-description": "\u003cp\u003eA key used for the \u003ca href=\"https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/\" target=\"_blank\"\u003eencryption of secret data at rest\u003c/a\u003e.\nEnables encryption with secretbox.\nSecretbox has precedence over AESCBC.\u003c/p\u003e\n"
-        },
-        "ca": {
-          "properties": {
-            "crt": {
-              "type": "string"
-            },
-            "key": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "title": "ca",
-          "description": "The base64 encoded root certificate authority used by Kubernetes.\n",
-          "markdownDescription": "The base64 encoded root certificate authority used by Kubernetes.",
-          "x-intellij-html-description": "\u003cp\u003eThe base64 encoded root certificate authority used by Kubernetes.\u003c/p\u003e\n"
-        },
-        "acceptedCAs": {
-          "properties": {
-            "crt": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "title": "acceptedCAs",
-          "description": "The list of base64 encoded accepted certificate authorities used by Kubernetes.\n",
-          "markdownDescription": "The list of base64 encoded accepted certificate authorities used by Kubernetes.",
-          "x-intellij-html-description": "\u003cp\u003eThe list of base64 encoded accepted certificate authorities used by Kubernetes.\u003c/p\u003e\n"
-        },
-        "aggregatorCA": {
-          "properties": {
-            "crt": {
-              "type": "string"
-            },
-            "key": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "title": "aggregatorCA",
-          "description": "The base64 encoded aggregator certificate authority used by Kubernetes for front-proxy certificate generation.\n\nThis CA can be self-signed.\n",
-          "markdownDescription": "The base64 encoded aggregator certificate authority used by Kubernetes for front-proxy certificate generation.\n\nThis CA can be self-signed.",
-          "x-intellij-html-description": "\u003cp\u003eThe base64 encoded aggregator certificate authority used by Kubernetes for front-proxy certificate generation.\u003c/p\u003e\n\n\u003cp\u003eThis CA can be self-signed.\u003c/p\u003e\n"
-        },
-        "serviceAccount": {
-          "properties": {
-            "key": {
-              "additionalProperties": false,
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "title": "serviceAccount",
-          "description": "The base64 encoded private key for service account token generation.\n",
-          "markdownDescription": "The base64 encoded private key for service account token generation.",
-          "x-intellij-html-description": "\u003cp\u003eThe base64 encoded private key for service account token generation.\u003c/p\u003e\n"
-        },
-        "apiServer": {
-          "$ref": "#/$defs/v1alpha1.APIServerConfig",
-          "title": "apiServer",
-          "description": "API server specific configuration options.\n",
-          "markdownDescription": "API server specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eAPI server specific configuration options.\u003c/p\u003e\n"
-        },
-        "controllerManager": {
-          "$ref": "#/$defs/v1alpha1.ControllerManagerConfig",
-          "title": "controllerManager",
-          "description": "Controller manager server specific configuration options.\n",
-          "markdownDescription": "Controller manager server specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eController manager server specific configuration options.\u003c/p\u003e\n"
-        },
-        "proxy": {
-          "$ref": "#/$defs/v1alpha1.ProxyConfig",
-          "title": "proxy",
-          "description": "Kube-proxy server-specific configuration options\n",
-          "markdownDescription": "Kube-proxy server-specific configuration options",
-          "x-intellij-html-description": "\u003cp\u003eKube-proxy server-specific configuration options\u003c/p\u003e\n"
-        },
-        "scheduler": {
-          "$ref": "#/$defs/v1alpha1.SchedulerConfig",
-          "title": "scheduler",
-          "description": "Scheduler server specific configuration options.\n",
-          "markdownDescription": "Scheduler server specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eScheduler server specific configuration options.\u003c/p\u003e\n"
+          "description": "Human-friendly cluster name.\n",
+          "markdownDescription": "Human-friendly cluster name.",
+          "x-intellij-html-description": "\u003cp\u003eHuman-friendly cluster name.\u003c/p\u003e\n"
         },
         "discovery": {
           "$ref": "#/$defs/v1alpha1.ClusterDiscoveryConfig",
           "title": "discovery",
-          "description": "Configures cluster member discovery.\n",
-          "markdownDescription": "Configures cluster member discovery.",
-          "x-intellij-html-description": "\u003cp\u003eConfigures cluster member discovery.\u003c/p\u003e\n"
-        },
-        "etcd": {
-          "$ref": "#/$defs/v1alpha1.EtcdConfig",
-          "title": "etcd",
-          "description": "Etcd specific configuration options.\n",
-          "markdownDescription": "Etcd specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eEtcd specific configuration options.\u003c/p\u003e\n"
-        },
-        "coreDNS": {
-          "$ref": "#/$defs/v1alpha1.CoreDNS",
-          "title": "coreDNS",
-          "description": "Core DNS specific configuration options.\n",
-          "markdownDescription": "Core DNS specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eCore DNS specific configuration options.\u003c/p\u003e\n"
-        },
-        "externalCloudProvider": {
-          "$ref": "#/$defs/v1alpha1.ExternalCloudProviderConfig",
-          "title": "externalCloudProvider",
-          "description": "External cloud provider configuration.\n",
-          "markdownDescription": "External cloud provider configuration.",
-          "x-intellij-html-description": "\u003cp\u003eExternal cloud provider configuration.\u003c/p\u003e\n"
-        },
-        "extraManifests": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "extraManifests",
-          "description": "A list of urls that point to additional manifests.\nThese will get automatically deployed as part of the bootstrap.\n",
-          "markdownDescription": "A list of urls that point to additional manifests.\nThese will get automatically deployed as part of the bootstrap.",
-          "x-intellij-html-description": "\u003cp\u003eA list of urls that point to additional manifests.\nThese will get automatically deployed as part of the bootstrap.\u003c/p\u003e\n"
-        },
-        "extraManifestHeaders": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "extraManifestHeaders",
-          "description": "A map of key value pairs that will be added while fetching the extraManifests.\n",
-          "markdownDescription": "A map of key value pairs that will be added while fetching the extraManifests.",
-          "x-intellij-html-description": "\u003cp\u003eA map of key value pairs that will be added while fetching the extraManifests.\u003c/p\u003e\n"
-        },
-        "inlineManifests": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.ClusterInlineManifest"
-          },
-          "type": "array",
-          "title": "inlineManifests",
-          "description": "A list of inline Kubernetes manifests.\nThese will get automatically deployed as part of the bootstrap.\n",
-          "markdownDescription": "A list of inline Kubernetes manifests.\nThese will get automatically deployed as part of the bootstrap.",
-          "x-intellij-html-description": "\u003cp\u003eA list of inline Kubernetes manifests.\nThese will get automatically deployed as part of the bootstrap.\u003c/p\u003e\n"
-        },
-        "adminKubeconfig": {
-          "$ref": "#/$defs/v1alpha1.AdminKubeconfigConfig",
-          "title": "adminKubeconfig",
-          "description": "Settings for admin kubeconfig generation.\nCertificate lifetime can be configured.\n",
-          "markdownDescription": "Settings for admin kubeconfig generation.\nCertificate lifetime can be configured.",
-          "x-intellij-html-description": "\u003cp\u003eSettings for admin kubeconfig generation.\nCertificate lifetime can be configured.\u003c/p\u003e\n"
-        },
-        "allowSchedulingOnControlPlanes": {
-          "type": "boolean",
-          "title": "allowSchedulingOnControlPlanes",
-          "description": "Allows running workload on control-plane nodes.\n",
-          "markdownDescription": "Allows running workload on control-plane nodes.",
-          "x-intellij-html-description": "\u003cp\u003eAllows running workload on control-plane nodes.\u003c/p\u003e\n"
+          "description": "Cluster membership discovery settings.\n",
+          "markdownDescription": "Cluster membership discovery settings.",
+          "x-intellij-html-description": "\u003cp\u003eCluster membership discovery settings.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "ClusterConfig represents the cluster-wide config values."
+      "description": "ClusterConfig represents cluster identity and discovery settings."
     },
     "v1alpha1.ClusterDiscoveryConfig": {
       "properties": {
@@ -5005,126 +4801,6 @@
       "type": "object",
       "description": "KubePrism describes the configuration for the KubePrism load balancer."
     },
-    "v1alpha1.KubeletConfig": {
-      "properties": {
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The image field is an optional reference to an alternative kubelet image.\n",
-          "markdownDescription": "The `image` field is an optional reference to an alternative kubelet image.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eimage\u003c/code\u003e field is an optional reference to an alternative kubelet image.\u003c/p\u003e\n"
-        },
-        "clusterDNS": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "clusterDNS",
-          "description": "The ClusterDNS field is an optional reference to an alternative kubelet clusterDNS ip list.\n",
-          "markdownDescription": "The `ClusterDNS` field is an optional reference to an alternative kubelet clusterDNS ip list.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eClusterDNS\u003c/code\u003e field is an optional reference to an alternative kubelet clusterDNS ip list.\u003c/p\u003e\n"
-        },
-        "extraArgs": {
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "object",
-          "title": "extraArgs",
-          "description": "The extraArgs field is used to provide additional flags to the kubelet.\n",
-          "markdownDescription": "The `extraArgs` field is used to provide additional flags to the kubelet.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eextraArgs\u003c/code\u003e field is used to provide additional flags to the kubelet.\u003c/p\u003e\n"
-        },
-        "extraMounts": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.ExtraMount"
-          },
-          "type": "array",
-          "title": "extraMounts",
-          "description": "The extraMounts field is used to add additional mounts to the kubelet container.\nNote that either bind or rbind are required in the options.\n",
-          "markdownDescription": "The `extraMounts` field is used to add additional mounts to the kubelet container.\nNote that either `bind` or `rbind` are required in the `options`.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eextraMounts\u003c/code\u003e field is used to add additional mounts to the kubelet container.\nNote that either \u003ccode\u003ebind\u003c/code\u003e or \u003ccode\u003erbind\u003c/code\u003e are required in the \u003ccode\u003eoptions\u003c/code\u003e.\u003c/p\u003e\n"
-        },
-        "extraConfig": {
-          "type": "object",
-          "title": "extraConfig",
-          "description": "The extraConfig field is used to provide kubelet configuration overrides.\n\nSome fields are not allowed to be overridden: authentication and authorization, cgroups\nconfiguration, ports, etc.\n",
-          "markdownDescription": "The `extraConfig` field is used to provide kubelet configuration overrides.\n\nSome fields are not allowed to be overridden: authentication and authorization, cgroups\nconfiguration, ports, etc.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eextraConfig\u003c/code\u003e field is used to provide kubelet configuration overrides.\u003c/p\u003e\n\n\u003cp\u003eSome fields are not allowed to be overridden: authentication and authorization, cgroups\nconfiguration, ports, etc.\u003c/p\u003e\n"
-        },
-        "credentialProviderConfig": {
-          "type": "object",
-          "title": "credentialProviderConfig",
-          "description": "The KubeletCredentialProviderConfig field is used to provide kubelet credential configuration.\n",
-          "markdownDescription": "The `KubeletCredentialProviderConfig` field is used to provide kubelet credential configuration.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eKubeletCredentialProviderConfig\u003c/code\u003e field is used to provide kubelet credential configuration.\u003c/p\u003e\n"
-        },
-        "defaultRuntimeSeccompProfileEnabled": {
-          "type": "boolean",
-          "title": "defaultRuntimeSeccompProfileEnabled",
-          "description": "Enable container runtime default Seccomp profile.\n",
-          "markdownDescription": "Enable container runtime default Seccomp profile.",
-          "x-intellij-html-description": "\u003cp\u003eEnable container runtime default Seccomp profile.\u003c/p\u003e\n"
-        },
-        "registerWithFQDN": {
-          "type": "boolean",
-          "title": "registerWithFQDN",
-          "description": "The registerWithFQDN field is used to force kubelet to use the node FQDN for registration.\nThis is required in clouds like AWS.\n",
-          "markdownDescription": "The `registerWithFQDN` field is used to force kubelet to use the node FQDN for registration.\nThis is required in clouds like AWS.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eregisterWithFQDN\u003c/code\u003e field is used to force kubelet to use the node FQDN for registration.\nThis is required in clouds like AWS.\u003c/p\u003e\n"
-        },
-        "nodeIP": {
-          "$ref": "#/$defs/v1alpha1.KubeletNodeIPConfig",
-          "title": "nodeIP",
-          "description": "The nodeIP field is used to configure --node-ip flag for the kubelet.\nThis is used when a node has multiple addresses to choose from.\n",
-          "markdownDescription": "The `nodeIP` field is used to configure `--node-ip` flag for the kubelet.\nThis is used when a node has multiple addresses to choose from.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003enodeIP\u003c/code\u003e field is used to configure \u003ccode\u003e--node-ip\u003c/code\u003e flag for the kubelet.\nThis is used when a node has multiple addresses to choose from.\u003c/p\u003e\n"
-        },
-        "skipNodeRegistration": {
-          "type": "boolean",
-          "title": "skipNodeRegistration",
-          "description": "The skipNodeRegistration is used to run the kubelet without registering with the apiserver.\nThis runs kubelet as standalone and only runs static pods.\n",
-          "markdownDescription": "The `skipNodeRegistration` is used to run the kubelet without registering with the apiserver.\nThis runs kubelet as standalone and only runs static pods.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eskipNodeRegistration\u003c/code\u003e is used to run the kubelet without registering with the apiserver.\nThis runs kubelet as standalone and only runs static pods.\u003c/p\u003e\n"
-        },
-        "disableManifestsDirectory": {
-          "type": "boolean",
-          "title": "disableManifestsDirectory",
-          "description": "The disableManifestsDirectory field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory.\nIt’s recommended to configure static pods with the “pods” key instead.\n",
-          "markdownDescription": "The `disableManifestsDirectory` field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory.\nIt's recommended to configure static pods with the \"pods\" key instead.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003edisableManifestsDirectory\u003c/code\u003e field configures the kubelet to get static pod manifests from the /etc/kubernetes/manifests directory.\nIt\u0026rsquo;s recommended to configure static pods with the \u0026ldquo;pods\u0026rdquo; key instead.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "KubeletConfig represents the kubelet config values."
-    },
-    "v1alpha1.KubeletNodeIPConfig": {
-      "properties": {
-        "validSubnets": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "validSubnets",
-          "description": "The validSubnets field configures the networks to pick kubelet node IP from.\nFor dual stack configuration, there should be two subnets: one for IPv4, another for IPv6.\nIPs can be excluded from the list by using negative match with !, e.g !10.0.0.0/8.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, node IP is picked based on cluster podCIDRs: IPv4/IPv6 address or both.\n",
-          "markdownDescription": "The `validSubnets` field configures the networks to pick kubelet node IP from.\nFor dual stack configuration, there should be two subnets: one for IPv4, another for IPv6.\nIPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, node IP is picked based on cluster podCIDRs: IPv4/IPv6 address or both.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003evalidSubnets\u003c/code\u003e field configures the networks to pick kubelet node IP from.\nFor dual stack configuration, there should be two subnets: one for IPv4, another for IPv6.\nIPs can be excluded from the list by using negative match with \u003ccode\u003e!\u003c/code\u003e, e.g \u003ccode\u003e!10.0.0.0/8\u003c/code\u003e.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, node IP is picked based on cluster podCIDRs: IPv4/IPv6 address or both.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "KubeletNodeIPConfig represents the kubelet node IP configuration."
-    },
     "v1alpha1.KubernetesTalosAPIAccessConfig": {
       "properties": {
         "enabled": {
@@ -5297,30 +4973,6 @@
           "markdownDescription": "Extra certificate subject alternative names for the machine's certificate.\nBy default, all non-loopback interface IPs are automatically added to the certificate's SANs.",
           "x-intellij-html-description": "\u003cp\u003eExtra certificate subject alternative names for the machine\u0026rsquo;s certificate.\nBy default, all non-loopback interface IPs are automatically added to the certificate\u0026rsquo;s SANs.\u003c/p\u003e\n"
         },
-        "controlPlane": {
-          "$ref": "#/$defs/v1alpha1.MachineControlPlaneConfig",
-          "title": "controlPlane",
-          "description": "Provides machine specific control plane configuration options.\n",
-          "markdownDescription": "Provides machine specific control plane configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eProvides machine specific control plane configuration options.\u003c/p\u003e\n"
-        },
-        "kubelet": {
-          "$ref": "#/$defs/v1alpha1.KubeletConfig",
-          "title": "kubelet",
-          "description": "Used to provide additional options to the kubelet.\n",
-          "markdownDescription": "Used to provide additional options to the kubelet.",
-          "x-intellij-html-description": "\u003cp\u003eUsed to provide additional options to the kubelet.\u003c/p\u003e\n"
-        },
-        "pods": {
-          "items": {
-            "type": "object"
-          },
-          "type": "array",
-          "title": "pods",
-          "description": "Used to provide static pod definitions to be run by the kubelet directly bypassing the kube-apiserver.\n\nStatic pods can be used to run components which should be started before the Kubernetes control plane is up.\nTalos doesn’t validate the pod definition.\nUpdates to this field can be applied without a reboot.\n\nSee https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/.\n",
-          "markdownDescription": "Used to provide static pod definitions to be run by the kubelet directly bypassing the kube-apiserver.\n\nStatic pods can be used to run components which should be started before the Kubernetes control plane is up.\nTalos doesn't validate the pod definition.\nUpdates to this field can be applied without a reboot.\n\nSee https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/.",
-          "x-intellij-html-description": "\u003cp\u003eUsed to provide static pod definitions to be run by the kubelet directly bypassing the kube-apiserver.\u003c/p\u003e\n\n\u003cp\u003eStatic pods can be used to run components which should be started before the Kubernetes control plane is up.\nTalos doesn\u0026rsquo;t validate the pod definition.\nUpdates to this field can be applied without a reboot.\u003c/p\u003e\n\n\u003cp\u003eSee \u003ca href=\"https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/\" target=\"_blank\"\u003ehttps://kubernetes.io/docs/tasks/configure-pod-container/static-pod/\u003c/a\u003e.\u003c/p\u003e\n"
-        },
         "install": {
           "$ref": "#/$defs/v1alpha1.InstallConfig",
           "title": "install",
@@ -5406,42 +5058,6 @@
           "description": "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set some default container settings which are not configurable in Kubernetes,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.\n",
           "markdownDescription": "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set some default container settings which are not configurable in Kubernetes,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
           "x-intellij-html-description": "\u003cp\u003eOverride (patch) settings in the default OCI runtime spec for CRI containers.\u003c/p\u003e\n\n\u003cp\u003eIt can be used to set some default container settings which are not configurable in Kubernetes,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.\u003c/p\u003e\n"
-        },
-        "nodeLabels": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "nodeLabels",
-          "description": "Configures the node labels for the machine.\n\nNote: In the default Kubernetes configuration, worker nodes are restricted to set\nlabels with some prefixes (see NodeRestriction admission plugin).\n",
-          "markdownDescription": "Configures the node labels for the machine.\n\nNote: In the default Kubernetes configuration, worker nodes are restricted to set\nlabels with some prefixes (see [NodeRestriction](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction) admission plugin).",
-          "x-intellij-html-description": "\u003cp\u003eConfigures the node labels for the machine.\u003c/p\u003e\n\n\u003cp\u003eNote: In the default Kubernetes configuration, worker nodes are restricted to set\nlabels with some prefixes (see \u003ca href=\"https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction\" target=\"_blank\"\u003eNodeRestriction\u003c/a\u003e admission plugin).\u003c/p\u003e\n"
-        },
-        "nodeAnnotations": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "nodeAnnotations",
-          "description": "Configures the node annotations for the machine.\n",
-          "markdownDescription": "Configures the node annotations for the machine.",
-          "x-intellij-html-description": "\u003cp\u003eConfigures the node annotations for the machine.\u003c/p\u003e\n"
-        },
-        "nodeTaints": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "nodeTaints",
-          "description": "Configures the node taints for the machine. Effect is optional.\n\nNote: In the default Kubernetes configuration, worker nodes are not allowed to\nmodify the taints (see NodeRestriction admission plugin).\n",
-          "markdownDescription": "Configures the node taints for the machine. Effect is optional.\n\nNote: In the default Kubernetes configuration, worker nodes are not allowed to\nmodify the taints (see [NodeRestriction](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction) admission plugin).",
-          "x-intellij-html-description": "\u003cp\u003eConfigures the node taints for the machine. Effect is optional.\u003c/p\u003e\n\n\u003cp\u003eNote: In the default Kubernetes configuration, worker nodes are not allowed to\nmodify the taints (see \u003ca href=\"https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction\" target=\"_blank\"\u003eNodeRestriction\u003c/a\u003e admission plugin).\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,

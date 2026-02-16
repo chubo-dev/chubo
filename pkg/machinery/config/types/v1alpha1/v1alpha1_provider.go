@@ -1187,25 +1187,6 @@ func (c *CoreDNS) Image() string {
 	return coreDNSImage
 }
 
-// CertLifetime implements the config.Provider interface.
-func (a *AdminKubeconfigConfig) CertLifetime() time.Duration {
-	if a.AdminKubeconfigCertLifetime == 0 {
-		return 365 * 24 * time.Hour
-	}
-
-	return a.AdminKubeconfigCertLifetime
-}
-
-// CommonName implements the config.Provider interface.
-func (a *AdminKubeconfigConfig) CommonName() string {
-	return "admin"
-}
-
-// CertOrganization implements the config.Provider interface.
-func (a *AdminKubeconfigConfig) CertOrganization() string {
-	return "system:masters"
-}
-
 // Endpoints implements the Registries interface.
 func (r *RegistryMirrorConfig) Endpoints() []config.RegistryEndpointConfig {
 	return xslices.Map(r.MirrorEndpoints, func(e string) config.RegistryEndpointConfig {

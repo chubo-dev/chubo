@@ -7,7 +7,6 @@ package v1alpha1
 import (
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/siderolabs/crypto/x509"
 	"github.com/siderolabs/go-pointer"
@@ -71,19 +70,6 @@ func machineControlplaneExample() *MachineControlPlaneConfig {
 			MachineSchedulerDisabled: pointer.To(true),
 		},
 	}
-}
-
-func machineKubeletExample() *KubeletConfig {
-	return &KubeletConfig{
-		KubeletImage: kubeletImageExample(),
-		KubeletExtraArgs: Args{
-			"feature-gates": ArgValue{strValue: "ServerSideApply=true"},
-		},
-	}
-}
-
-func kubeletImageExample() string {
-	return "registry.k8s.io/kubelet:v1.32.0"
 }
 
 func machineInstallExample() *InstallConfig {
@@ -304,12 +290,6 @@ func clusterExternalCloudProviderConfigExample() *ExternalCloudProviderConfig {
 	}
 }
 
-func clusterAdminKubeconfigExample() *AdminKubeconfigConfig {
-	return &AdminKubeconfigConfig{
-		AdminKubeconfigCertLifetime: time.Hour,
-	}
-}
-
 func machineSeccompExample() []*MachineSeccompProfile {
 	return []*MachineSeccompProfile{
 		{
@@ -332,21 +312,6 @@ func clusterEndpointExample1() *Endpoint {
 func clusterEndpointExample2() *Endpoint {
 	return &Endpoint{
 		mustParseURL("https://cluster1.internal:6443"),
-	}
-}
-
-func kubeletExtraMountsExample() []ExtraMount {
-	return []ExtraMount{
-		{
-			Source:      "/var/lib/example",
-			Destination: "/var/lib/example",
-			Type:        "bind",
-			Options: []string{
-				"bind",
-				"rshared",
-				"rw",
-			},
-		},
 	}
 }
 
@@ -379,47 +344,6 @@ func clusterDiscoveryExample() ClusterDiscoveryConfig {
 		DiscoveryRegistries: DiscoveryRegistriesConfig{
 			RegistryService: RegistryServiceConfig{
 				RegistryEndpoint: constants.DefaultDiscoveryServiceEndpoint,
-			},
-		},
-	}
-}
-
-func kubeletNodeIPExample() *KubeletNodeIPConfig {
-	return &KubeletNodeIPConfig{
-		KubeletNodeIPValidSubnets: []string{
-			"10.0.0.0/8",
-			"!10.0.0.3/32",
-			"fdc7::/16",
-		},
-	}
-}
-
-func kubeletExtraConfigExample() Unstructured {
-	return Unstructured{
-		Object: map[string]any{
-			"serverTLSBootstrap": true,
-		},
-	}
-}
-
-func kubeletCredentialProviderConfigExample() Unstructured {
-	return Unstructured{
-		Object: map[string]any{
-			"apiVersion": "kubelet.config.k8s.io/v1",
-			"kind":       "CredentialProviderConfig",
-			"providers": []any{
-				map[string]any{
-					"name":       "ecr-credential-provider",
-					"apiVersion": "credentialprovider.kubelet.k8s.io/v1",
-					"matchImages": []any{
-						"*.dkr.ecr.*.amazonaws.com",
-						"*.dkr.ecr.*.amazonaws.com.cn",
-						"*.dkr.ecr-fips.*.amazonaws.com",
-						"*.dkr.ecr.us-iso-east-1.c2s.ic.gov",
-						"*.dkr.ecr.us-isob-east-1.sc2s.sgov.gov",
-					},
-					"defaultCacheDuration": "12h",
-				},
 			},
 		},
 	}

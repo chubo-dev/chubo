@@ -51,9 +51,9 @@ func TestSchemaValidation(t *testing.T) {
 			expectedErrorContains: `value must be "v1alpha1"`,
 		},
 		{
-			name: "v1alpha1_invalid-duration",
-			config: newV1Alpha1Config(t, nil, func(rawConfig map[string]any) {
-				setNestedField(t, rawConfig, "100y", "cluster", "adminKubeconfig", "certLifetime")
+			name: "network/TimeSyncConfigV1Alpha1_invalid-duration",
+			config: newTimeSyncConfigV1Alpha1(t, nil, func(rawConfig map[string]any) {
+				rawConfig["bootTimeout"] = "100y"
 			}),
 			expectedErrorContains: `does not match pattern`,
 		},
@@ -166,6 +166,27 @@ func newRuleConfigV1Alpha1(t *testing.T, modifications func(config *network.Rule
 			Except: network.Prefix{Prefix: netip.MustParsePrefix("10.42.43.0/24")},
 		},
 	}
+
+	if modifications != nil {
+		modifications(config)
+	}
+
+	configBytes, err := yaml.Marshal(config)
+	require.NoError(t, err)
+
+	var data map[string]any
+
+	require.NoError(t, yaml.Unmarshal(configBytes, &data))
+
+	if rawModifications != nil {
+		rawModifications(data)
+	}
+
+	return data
+}
+
+func newTimeSyncConfigV1Alpha1(t *testing.T, modifications func(config *network.TimeSyncConfigV1Alpha1), rawModifications func(rawConfig map[string]any)) map[string]any {
+	config := network.NewTimeSyncConfigV1Alpha1()
 
 	if modifications != nil {
 		modifications(config)
