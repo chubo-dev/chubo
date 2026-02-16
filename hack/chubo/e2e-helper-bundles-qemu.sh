@@ -496,22 +496,23 @@ fi
 
 ensure_opengyoza_artifact_url
 
-		# talosctl is used for PKI/secrets generation; rebuild so it always matches the worktree.
-		make talosctl
+if [[ "${SKIP_BUILD}" -eq 1 && -x "${TALOSCTL_BASE}" ]]; then
+	echo "SKIP_BUILD=1, reusing existing talosctl: ${TALOSCTL_BASE}"
+else
+	# talosctl is used for PKI/secrets generation; rebuild when not explicitly reusing artifacts.
+	make talosctl
+fi
 
-	# When iterating locally we want the CLI to reflect the current worktree (config rendering,
-	# helper bundle surfaces, etc). The rebuild cost is small compared to the QEMU flow.
+# When iterating locally we want the CLI to reflect the current worktree (config rendering,
+# helper bundle surfaces, etc). The rebuild cost is small compared to the QEMU flow.
+rebuild_chuboctl=0
+if [[ ! -x "${TALOSCTL_CHUBO}" ]]; then
 	rebuild_chuboctl=1
-	if [[ ! -x "${TALOSCTL_CHUBO}" ]]; then
-		rebuild_chuboctl=1
-	else
-		# The helper-bundles E2E depends on newer `gen machineconfig` flags.
-		# If the cached binary doesn't have them, rebuild it from source.
-		if ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
-		rebuild_chuboctl=1
-	elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--opengyoza-artifact-url'; then
-		rebuild_chuboctl=1
-	fi
+elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
+	# The helper-bundles E2E depends on newer `gen machineconfig` flags.
+	rebuild_chuboctl=1
+elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--opengyoza-artifact-url'; then
+	rebuild_chuboctl=1
 fi
 
 if [[ "${rebuild_chuboctl}" -eq 1 ]]; then
