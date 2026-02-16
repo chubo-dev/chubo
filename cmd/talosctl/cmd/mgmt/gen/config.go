@@ -79,11 +79,10 @@ var genConfigCmdFlags struct {
 func NewConfigCmd(name string) *cobra.Command {
 	return &cobra.Command{
 		Use:   fmt.Sprintf("%s <cluster name> <cluster endpoint>", name),
-		Short: "Generates a set of configuration files for Talos cluster",
-		Long: `The cluster endpoint is the URL for the Kubernetes API. If you decide to use
-a control plane node, common in a single node control plane setup, use port 6443 as
-this is the port that the API server binds to on every control plane node. For an HA
-setup, usually involving a load balancer, use the IP and port of the load balancer.`,
+		Short: "Generate configuration files for a Chubo cluster",
+		Long: `The cluster endpoint is the URL for the Chubo OS API.
+For a single-node control-plane setup, use a control-plane node address.
+For HA, use the load balancer address in front of control-plane nodes.`,
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			err := validateClusterEndpoint(args[1])
@@ -425,7 +424,7 @@ func init() {
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.dnsDomain, "dns-domain", "cluster.local", "the dns domain to use for cluster")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.configVersion, "version", "v1alpha1", "the desired machine config version to generate")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate config for (backwards compatibility, e.g. v0.8)")
-	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.kubernetesVersion, "kubernetes-version", constants.DefaultKubernetesVersion, "desired kubernetes version to run")
+	registerKubernetesVersionFlag(genConfigCmd)
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatch, "config-patch", nil, "patch generated machineconfigs (applied to all node types), use @file to read a patch from file")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchControlPlane, "config-patch-control-plane", nil, "patch generated machineconfigs (applied to 'init' and 'controlplane' types)")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchWorker, "config-patch-worker", nil, "patch generated machineconfigs (applied to 'worker' type)")

@@ -42,7 +42,7 @@ var genMachineConfigFlags struct {
 func newMachineConfigCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "machineconfig",
-		Short: "Generate a minimal (non-Kubernetes) machine config for Chubo",
+		Short: "Generate a minimal machine config for Chubo",
 		Long: `Generates a single YAML document:
 
   apiVersion: chubo.dev/v1alpha1

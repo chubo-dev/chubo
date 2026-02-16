@@ -185,7 +185,7 @@ func resetGetActorID(ctx context.Context, c *client.Client, req *machineapi.Rese
 }
 
 func init() {
-	resetCmd.Flags().BoolVar(&resetCmdFlags.graceful, "graceful", true, "if true, attempt to cordon/drain node and leave etcd (if applicable)")
+	resetCmd.Flags().BoolVar(&resetCmdFlags.graceful, "graceful", true, "if true, attempt workload drain and graceful control-plane leave (if applicable)")
 	resetCmd.Flags().BoolVar(&resetCmdFlags.reboot, "reboot", false, "if true, reboot the node after resetting instead of shutting down")
 	resetCmd.Flags().BoolVar(&resetCmdFlags.insecure, "insecure", false, "reset using the insecure (encrypted with no auth) maintenance service")
 	resetCmd.Flags().Var(&resetCmdFlags.wipeMode, "wipe-mode", "disk reset mode")
