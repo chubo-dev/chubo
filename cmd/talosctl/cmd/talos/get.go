@@ -37,8 +37,8 @@ var getCmd = &cobra.Command{
 	Aliases:    []string{"g"},
 	SuggestFor: []string{},
 	Short:      "Get a specific resource or list of resources (use 'talosctl get rd' to see all available resource types).",
-	Long: `Similar to 'kubectl get', 'talosctl get' returns a set of resources from the OS.
-To get a list of all available resource definitions, issue 'talosctl get rd'`,
+	Long: `Retrieve OS resources from one or more nodes.
+To list all available resource definitions, run 'talosctl get rd'`,
 	Example: "",
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		switch len(args) {

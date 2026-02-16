@@ -91,7 +91,7 @@ func statsRender(remotePeer *peer.Peer, resp *machineapi.StatsResponse) error {
 }
 
 func init() {
-	statsCmd.Flags().BoolVarP(&kubernetesFlag, "kubernetes", "k", false, "use the k8s.io containerd namespace")
+	registerWorkloadNamespaceFlag(statsCmd)
 
 	statsCmd.Flags().Bool("use-cri", false, "use the CRI driver")
 	statsCmd.Flags().MarkHidden("use-cri") //nolint:errcheck
