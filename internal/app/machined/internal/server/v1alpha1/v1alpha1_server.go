@@ -77,7 +77,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/nethelpers"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
-	timeresource "github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 	"github.com/chubo-dev/chubo/pkg/machinery/role"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
@@ -400,40 +399,12 @@ func (s *Server) Rollback(ctx context.Context, in *machine.RollbackRequest) (*ma
 	}, nil
 }
 
-// Bootstrap implements the machine.MachineServer interface.
-func (s *Server) Bootstrap(ctx context.Context, in *machine.BootstrapRequest) (reply *machine.BootstrapResponse, err error) {
-	log.Printf("bootstrap request received")
-
-	if !s.Controller.Runtime().IsBootstrapAllowed() {
-		return nil, status.Error(codes.FailedPrecondition, "bootstrap is not available yet")
-	}
-
-	if s.Controller.Runtime().Config().Machine().Type() == machinetype.TypeWorker {
-		return nil, status.Error(codes.FailedPrecondition, "bootstrap can only be performed on a control plane node")
-	}
-
-	timeCtx, timeCtxCancel := context.WithTimeout(ctx, 5*time.Second)
-	defer timeCtxCancel()
-
-	if err := timeresource.NewSyncCondition(s.Controller.Runtime().State().V1Alpha2().Resources()).Wait(timeCtx); err != nil {
-		return nil, status.Error(codes.FailedPrecondition, "time is not in sync yet")
-	}
-
-	if entries, _ := os.ReadDir(constants.EtcdDataPath); len(entries) > 0 { //nolint:errcheck
-		return nil, status.Error(codes.AlreadyExists, "etcd data directory is not empty")
-	}
-
-	if err := s.EtcdBootstrapper(ctx, s.Controller.Runtime(), in); err != nil {
-		return nil, err
-	}
-
-	reply = &machine.BootstrapResponse{
-		Messages: []*machine.Bootstrap{
-			{},
-		},
-	}
-
-	return reply, nil
+// Bootstrap implements machine.MachineService.
+//
+// Chubo bootstrap is configuration-driven and continuously reconciled, so there is no
+// imperative bootstrap RPC like etcd/kubernetes-era Talos used.
+func (s *Server) Bootstrap(context.Context, *machine.BootstrapRequest) (*machine.BootstrapResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "bootstrap RPC is not available in chubo mode; apply MachineConfig and monitor chubobootstrapstatus/openwontonbootstrapstatus/opengyozabootstrapstatus resources")
 }
 
 // Shutdown implements the machine.MachineServer interface.
@@ -1229,6 +1200,13 @@ func (s *Server) workloadHelperACLToken(name string) string {
 	}
 
 	return chuboacl.WorkloadToken(trustToken, name)
+}
+
+// Kubeconfig implements machine.MachineService.
+//
+// Chubo exposes workload access via helper bundles for native workload APIs.
+func (s *Server) Kubeconfig(*emptypb.Empty, machine.MachineService_KubeconfigServer) error {
+	return status.Error(codes.Unimplemented, "kubeconfig is not available in chubo mode; use NomadConfig, ConsulConfig, or OpenBaoConfig helper APIs instead")
 }
 
 // NomadConfig implements machine.MachineService.
