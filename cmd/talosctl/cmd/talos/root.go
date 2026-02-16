@@ -21,7 +21,6 @@ import (
 
 	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/global"
 	"github.com/chubo-dev/chubo/pkg/cli"
-	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
@@ -230,18 +229,7 @@ func getContainersFromNode(workloadNamespace bool) []string {
 	//nolint:errcheck
 	GlobalArgs.WithClient(
 		func(ctx context.Context, c *client.Client) error {
-			var (
-				namespace string
-				driver    common.ContainerDriver
-			)
-
-			if workloadNamespace {
-				namespace = constants.WorkloadContainerdNamespace
-				driver = common.ContainerDriver_CRI
-			} else {
-				namespace = constants.SystemContainerdNamespace
-				driver = common.ContainerDriver_CONTAINERD
-			}
+			namespace, driver := namespaceAndDriverForFlag(workloadNamespace)
 
 			resp, err := c.Containers(ctx, namespace, driver)
 			if err != nil {

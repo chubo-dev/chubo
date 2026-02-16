@@ -10,9 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // restartCmd represents the restart command.
@@ -30,18 +28,7 @@ var restartCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			var (
-				namespace string
-				driver    common.ContainerDriver
-			)
-
-			if workloadNamespaceFlag {
-				namespace = constants.WorkloadContainerdNamespace
-				driver = common.ContainerDriver_CRI
-			} else {
-				namespace = constants.SystemContainerdNamespace
-				driver = common.ContainerDriver_CONTAINERD
-			}
+			namespace, driver := namespaceAndDriverForFlag(workloadNamespaceFlag)
 
 			if err := c.Restart(ctx, namespace, driver, args[0]); err != nil {
 				return fmt.Errorf("error restarting process: %s", err)
@@ -54,9 +41,7 @@ var restartCmd = &cobra.Command{
 
 func init() {
 	registerWorkloadNamespaceFlag(restartCmd)
-
-	restartCmd.Flags().Bool("use-cri", false, "use the CRI driver")
-	restartCmd.Flags().MarkHidden("use-cri") //nolint:errcheck
+	registerLegacyWorkloadDriverFlag(restartCmd)
 
 	addCommand(restartCmd)
 }

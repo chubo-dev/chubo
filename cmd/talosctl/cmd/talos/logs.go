@@ -22,7 +22,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 var (
@@ -48,18 +47,7 @@ var logsCmd = &cobra.Command{
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			var (
-				namespace string
-				driver    common.ContainerDriver
-			)
-
-			if workloadNamespaceFlag {
-				namespace = constants.WorkloadContainerdNamespace
-				driver = common.ContainerDriver_CRI
-			} else {
-				namespace = constants.SystemContainerdNamespace
-				driver = common.ContainerDriver_CONTAINERD
-			}
+			namespace, driver := namespaceAndDriverForFlag(workloadNamespaceFlag)
 
 			stream, err := c.Logs(ctx, namespace, driver, args[0], follow, tailLines)
 			if err != nil {
@@ -234,9 +222,7 @@ func init() {
 	registerWorkloadNamespaceFlag(logsCmd)
 	logsCmd.Flags().BoolVarP(&follow, "follow", "f", false, "specify if the logs should be streamed")
 	logsCmd.Flags().Int32VarP(&tailLines, "tail", "", -1, "lines of log file to display (default is to show from the beginning)")
-
-	logsCmd.Flags().Bool("use-cri", false, "use the CRI driver")
-	logsCmd.Flags().MarkHidden("use-cri") //nolint:errcheck
+	registerLegacyWorkloadDriverFlag(logsCmd)
 
 	addCommand(logsCmd)
 }

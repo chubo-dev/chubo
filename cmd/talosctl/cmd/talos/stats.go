@@ -17,10 +17,8 @@ import (
 	"google.golang.org/grpc/peer"
 
 	"github.com/chubo-dev/chubo/pkg/cli"
-	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 // statsCmd represents the stats command.
@@ -31,18 +29,7 @@ var statsCmd = &cobra.Command{
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			var (
-				namespace string
-				driver    common.ContainerDriver
-			)
-
-			if workloadNamespaceFlag {
-				namespace = constants.WorkloadContainerdNamespace
-				driver = common.ContainerDriver_CRI
-			} else {
-				namespace = constants.SystemContainerdNamespace
-				driver = common.ContainerDriver_CONTAINERD
-			}
+			namespace, driver := namespaceAndDriverForFlag(workloadNamespaceFlag)
 
 			var remotePeer peer.Peer
 
@@ -92,9 +79,7 @@ func statsRender(remotePeer *peer.Peer, resp *machineapi.StatsResponse) error {
 
 func init() {
 	registerWorkloadNamespaceFlag(statsCmd)
-
-	statsCmd.Flags().Bool("use-cri", false, "use the CRI driver")
-	statsCmd.Flags().MarkHidden("use-cri") //nolint:errcheck
+	registerLegacyWorkloadDriverFlag(statsCmd)
 
 	addCommand(statsCmd)
 }

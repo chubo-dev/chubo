@@ -24,15 +24,14 @@ import (
 	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 	"github.com/chubo-dev/chubo/internal/pkg/cgroups"
 	"github.com/chubo-dev/chubo/pkg/cli"
-	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 var cgroupsCmdFlags struct {
-	schemaFile     string
-	presetName     string
-	skipCRIResolve bool
+	schemaFile  string
+	presetName  string
+	skipResolve bool
 }
 
 // cgroupsCmd represents the cgroups command.
@@ -107,7 +106,7 @@ To see schema examples, refer to https://github.com/chubo-dev/chubo/tree/main/cm
 				return fmt.Errorf("error reading cgroups: %w", err)
 			}
 
-			if !cgroupsCmdFlags.skipCRIResolve {
+			if !cgroupsCmdFlags.skipResolve {
 				cgroupNameResolveMap := buildCgroupResolveMap(ctx, c)
 				tree.ResolveNames(cgroupNameResolveMap)
 			}
@@ -152,7 +151,7 @@ func completeCgroupPresetArg(cmd *cobra.Command, args []string, toComplete strin
 func buildCgroupResolveMap(ctx context.Context, c *client.Client) map[string]string {
 	cgroupNameResolveMap := map[string]string{}
 
-	containersResp, err := c.Containers(ctx, constants.WorkloadContainerdNamespace, common.ContainerDriver_CRI)
+	containersResp, err := c.Containers(ctx, constants.WorkloadContainerdNamespace, workloadContainerDriver())
 	if err != nil {
 		cli.Warning("error getting containers: %s", err)
 	} else {
@@ -251,7 +250,7 @@ func init() {
 
 	cgroupsCmd.Flags().StringVar(&cgroupsCmdFlags.schemaFile, "schema-file", "", "path to the columns schema file")
 	cgroupsCmd.Flags().StringVar(&cgroupsCmdFlags.presetName, "preset", "", fmt.Sprintf("preset name (one of: %v)", presetNames))
-	cgroupsCmd.Flags().BoolVar(&cgroupsCmdFlags.skipCRIResolve, "skip-cri-resolve", false, "do not resolve cgroup names via a request to CRI")
+	registerCgroupsResolveFlag(cgroupsCmd, &cgroupsCmdFlags.skipResolve)
 	cgroupsCmd.MarkFlagsMutuallyExclusive("schema-file", "preset")
 	cgroupsCmd.RegisterFlagCompletionFunc("preset", completeCgroupPresetArg) //nolint:errcheck
 

@@ -16,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/chubo-dev/chubo/pkg/cli"
-	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
@@ -207,7 +206,7 @@ func netstatFlagsToRequest() *machine.NetstatRequest {
 }
 
 func (n *netstat) getPodNetNsFromNode(ctx context.Context) (err error) {
-	resp, err := n.client.Containers(ctx, constants.WorkloadContainerdNamespace, common.ContainerDriver_CRI)
+	resp, err := n.client.Containers(ctx, constants.WorkloadContainerdNamespace, workloadContainerDriver())
 	if err != nil {
 		cli.Warning("error getting containers: %v", err)
 

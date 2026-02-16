@@ -7,7 +7,7 @@
 package talos
 
 func imageNamespaceHelp() string {
-	return "namespace to use: `system` for OS-managed services, `cri` for workload containers, `inmem` for in-memory containerd instance"
+	return "namespace to use: `system` for OS-managed services, `workload` for workload containers, `inmem` for in-memory containerd instance"
 }
 
 func imageCacheMirrorDefaults() []string {

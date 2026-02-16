@@ -60,7 +60,7 @@ var imageCmdFlags imageCmdFlagsType
 
 func (flags imageCmdFlagsType) apiNamespace() (common.ContainerdNamespace, error) {
 	switch flags.namespace {
-	case "cri":
+	case "cri", "workload":
 		return common.ContainerdNamespace_NS_CRI, nil
 	case "system":
 		return common.ContainerdNamespace_NS_SYSTEM, nil
@@ -71,9 +71,9 @@ func (flags imageCmdFlagsType) apiNamespace() (common.ContainerdNamespace, error
 
 func (flags imageCmdFlagsType) containerdInstance() (*common.ContainerdInstance, error) {
 	switch flags.namespace {
-	case "cri":
+	case "cri", "workload":
 		return &common.ContainerdInstance{
-			Driver:    common.ContainerDriver_CRI,
+			Driver:    workloadContainerDriver(),
 			Namespace: common.ContainerdNamespace_NS_CRI,
 		}, nil
 	case "system":
@@ -832,7 +832,7 @@ var imageCacheCertGenCmdFlags struct {
 }
 
 func init() {
-	imageCmd.PersistentFlags().StringVar(&imageCmdFlags.namespace, "namespace", "cri", imageNamespaceHelp())
+	imageCmd.PersistentFlags().StringVar(&imageCmdFlags.namespace, "namespace", defaultImageNamespace(), imageNamespaceHelp())
 	addCommand(imageCmd)
 
 	imageCmd.AddCommand(imageListCmd)

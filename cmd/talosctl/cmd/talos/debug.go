@@ -35,7 +35,7 @@ var debugCmdFlags struct {
 
 func init() {
 	debugCmd.Flags().StringSliceVar(&debugCmdFlags.args, "args", nil, "arguments to pass to the container")
-	debugCmd.Flags().StringVar(&debugCmdFlags.namespace, "namespace", "inmem", "namespace to use: `system` (CRI containerd) or `inmem` for in-memory containerd instance")
+	debugCmd.Flags().StringVar(&debugCmdFlags.namespace, "namespace", "inmem", "namespace to use: `system`, `workload`, or `inmem` for in-memory containerd instance")
 
 	addCommand(debugCmd)
 }
