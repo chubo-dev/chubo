@@ -19,7 +19,6 @@ import (
 	"github.com/chubo-dev/chubo/internal/integration/api"
 	"github.com/chubo-dev/chubo/internal/integration/base"
 	"github.com/chubo-dev/chubo/internal/integration/cli"
-	"github.com/chubo-dev/chubo/internal/integration/k8s"
 	provision_test "github.com/chubo-dev/chubo/internal/integration/provision"
 	"github.com/chubo-dev/chubo/pkg/images"
 	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
