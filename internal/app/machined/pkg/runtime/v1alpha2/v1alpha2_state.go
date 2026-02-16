@@ -20,7 +20,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
@@ -76,7 +75,6 @@ func NewState() (*State, error) {
 		{cluster.NamespaceName, "Cluster configuration and discovery resources."},
 		{cluster.RawNamespaceName, "Cluster unmerged raw resources."},
 		{config.NamespaceName, "Talos node configuration."},
-		{etcd.NamespaceName, "etcd resources."},
 		{files.NamespaceName, "Files and file-like resources."},
 		{hardware.NamespaceName, "Hardware resources."},
 		{network.NamespaceName, "Networking resources."},
@@ -123,10 +121,6 @@ func NewState() (*State, error) {
 		&config.MachineType{},
 		&cri.ImageCacheConfig{},
 		&cri.SeccompProfile{},
-		&etcd.Config{},
-		&etcd.PKIStatus{},
-		&etcd.Spec{},
-		&etcd.Member{},
 		&files.EtcFileSpec{},
 		&files.EtcFileStatus{},
 		&hardware.MemoryModule{},
@@ -202,8 +196,6 @@ func NewState() (*State, error) {
 		&secrets.API{},
 		&secrets.CertSAN{},
 		&secrets.EncryptionSalt{},
-		&secrets.Etcd{},
-		&secrets.EtcdRoot{},
 		&secrets.MaintenanceServiceCerts{},
 		&secrets.MaintenanceRoot{},
 		&secrets.OSRoot{},

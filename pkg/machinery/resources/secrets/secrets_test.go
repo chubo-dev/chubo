@@ -27,8 +27,6 @@ func TestRegisterResource(t *testing.T) {
 		&secrets.API{},
 		&secrets.CertSAN{},
 		&secrets.EncryptionSalt{},
-		&secrets.Etcd{},
-		&secrets.EtcdRoot{},
 		&secrets.MaintenanceServiceCerts{},
 		&secrets.MaintenanceRoot{},
 		&secrets.OSRoot{},
