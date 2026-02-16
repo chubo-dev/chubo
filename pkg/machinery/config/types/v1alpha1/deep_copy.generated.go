@@ -447,10 +447,6 @@ func (o *Config) DeepCopy() *Config {
 				cp.ClusterConfig.ClusterDiscoveryConfig.DiscoveryEnabled = new(bool)
 				*cp.ClusterConfig.ClusterDiscoveryConfig.DiscoveryEnabled = *o.ClusterConfig.ClusterDiscoveryConfig.DiscoveryEnabled
 			}
-			if o.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryKubernetes.RegistryDisabled != nil {
-				cp.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryKubernetes.RegistryDisabled = new(bool)
-				*cp.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryKubernetes.RegistryDisabled = *o.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryKubernetes.RegistryDisabled
-			}
 			if o.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryService.RegistryDisabled != nil {
 				cp.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryService.RegistryDisabled = new(bool)
 				*cp.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryService.RegistryDisabled = *o.ClusterConfig.ClusterDiscoveryConfig.DiscoveryRegistries.RegistryService.RegistryDisabled

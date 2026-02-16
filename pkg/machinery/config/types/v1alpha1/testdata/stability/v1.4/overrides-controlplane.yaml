@@ -35,6 +35,5 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service:
                 endpoint: https://discovery.override.example.com

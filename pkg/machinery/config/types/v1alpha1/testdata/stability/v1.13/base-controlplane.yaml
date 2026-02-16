@@ -20,7 +20,6 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}
 ---
 apiVersion: v1alpha1

@@ -161,7 +161,6 @@ func clusterControlPlaneExample() *ControlPlaneConfig {
 func clusterNetworkExample() *ClusterNetworkConfig {
 	return &ClusterNetworkConfig{
 		DNSDomain:     "cluster.local",
-		PodSubnet:     []string{"10.244.0.0/16"},
 		ServiceSubnet: []string{"10.96.0.0/12"},
 	}
 }
@@ -182,24 +181,6 @@ func resourcesConfigLimitsExample() Unstructured {
 			"memory": "2500Mi",
 		},
 	}
-}
-
-func clusterEtcdExample() *EtcdConfig {
-	return &EtcdConfig{
-		ContainerImage: clusterEtcdImageExample(),
-		EtcdExtraArgs: Args{
-			"election-timeout": ArgValue{strValue: "5000"},
-		},
-		RootCA: pemEncodedCertificateExample(),
-	}
-}
-
-func clusterEtcdImageExample() string {
-	return "registry.k8s.io/etcd:3.5.17-0"
-}
-
-func clusterEtcdAdvertisedSubnetsExample() []string {
-	return []string{"10.0.0.0/8"}
 }
 
 func machineSeccompExample() []*MachineSeccompProfile {

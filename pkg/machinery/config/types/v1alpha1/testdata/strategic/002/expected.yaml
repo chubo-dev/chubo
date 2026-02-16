@@ -10,5 +10,4 @@ machine:
 cluster:
   discovery:
     registries:
-      kubernetes: {}
       service: {}

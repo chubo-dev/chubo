@@ -185,7 +185,7 @@ type MachineConfig struct {
 	//     **Control Plane**
 	//
 	//     Control Plane node type designates the node as a control plane member.
-	//     This means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.
+	//     This means it hosts the core cluster management services.
 	//
 	//     **Worker**
 	//
@@ -774,100 +774,14 @@ type ControlPlaneConfig struct {
 	LocalAPIServerPort int `yaml:"localAPIServerPort,omitempty"`
 }
 
-// EtcdConfig represents the etcd configuration options.
-type EtcdConfig struct {
-	//   description: |
-	//     The container image used to create the etcd service.
-	//   examples:
-	//     - value: clusterEtcdImageExample()
-	ContainerImage string `yaml:"image,omitempty"`
-	//   description: |
-	//     The `ca` is the root certificate authority of the PKI.
-	//     It is composed of a base64 encoded `crt` and `key`.
-	//   examples:
-	//     - value: pemEncodedCertificateExample()
-	//   schema:
-	//     type: object
-	//     additionalProperties: false
-	//     properties:
-	//       crt:
-	//         type: string
-	//       key:
-	//         type: string
-	RootCA *x509.PEMEncodedCertificateAndKey `yaml:"ca"`
-	//   description: |
-	//     Extra arguments to supply to etcd.
-	//     Note that the following args are not allowed:
-	//
-	//     - `name`
-	//     - `data-dir`
-	//     - `initial-cluster-state`
-	//     - `listen-peer-urls`
-	//     - `listen-client-urls`
-	//     - `cert-file`
-	//     - `key-file`
-	//     - `trusted-ca-file`
-	//     - `peer-client-cert-auth`
-	//     - `peer-cert-file`
-	//     - `peer-trusted-ca-file`
-	//     - `peer-key-file`
-	//   examples:
-	//     - values: >
-	//         Args{
-	//           "initial-cluster": ArgValue{strValue: "https://1.2.3.4:2380"},
-	//           "advertise-client-urls": ArgValue{strValue: "https://1.2.3.4:2379"},
-	//         }
-	//   schema:
-	//     type: object
-	//     additionalProperties:
-	//       oneOf:
-	//         - type: string
-	//         - type: array
-	//           items:
-	//             type: string
-	EtcdExtraArgs Args `yaml:"extraArgs,omitempty"`
-	// docgen:nodoc
-	//
-	// Deprecated: use EtcdAdvertistedSubnets
-	EtcdSubnet string `yaml:"subnet,omitempty"`
-	//  description: |
-	//    The `advertisedSubnets` field configures the networks to pick etcd advertised IP from.
-	//
-	//    IPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.
-	//    Negative subnet matches should be specified last to filter out IPs picked by positive matches.
-	//    If not specified, advertised IP is selected as the first routable address of the node.
-	//
-	//  examples:
-	//    - value: clusterEtcdAdvertisedSubnetsExample()
-	EtcdAdvertisedSubnets []string `yaml:"advertisedSubnets,omitempty"`
-	//  description: |
-	//    The `listenSubnets` field configures the networks for the etcd to listen for peer and client connections.
-	//
-	//    If `listenSubnets` is not set, but `advertisedSubnets` is set, `listenSubnets` defaults to
-	//    `advertisedSubnets`.
-	//
-	//    If neither `advertisedSubnets` nor `listenSubnets` is set, `listenSubnets` defaults to listen on all addresses.
-	//
-	//    IPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.
-	//    Negative subnet matches should be specified last to filter out IPs picked by positive matches.
-	//    If not specified, advertised IP is selected as the first routable address of the node.
-	EtcdListenSubnets []string `yaml:"listenSubnets,omitempty"`
-}
-
-// ClusterNetworkConfig represents kube networking configuration options.
+// ClusterNetworkConfig represents cluster networking configuration options.
 type ClusterNetworkConfig struct {
 	//   description: |
-	//     The domain used by Kubernetes DNS.
+	//     The DNS domain used for cluster service discovery.
 	//     The default is `cluster.local`
 	//   examples:
 	//     - value: '"cluster.local"'
 	DNSDomain string `yaml:"dnsDomain"`
-	//   description: |
-	//     The pod subnet CIDR.
-	//   examples:
-	//     -  value: >
-	//          []string{"10.244.0.0/16"}
-	PodSubnet []string `yaml:"podSubnets" merge:"replace"`
 	//   description: |
 	//     The service subnet CIDR.
 	//   examples:
@@ -1817,25 +1731,11 @@ type ClusterDiscoveryConfig struct {
 // DiscoveryRegistriesConfig struct configures cluster membership discovery.
 type DiscoveryRegistriesConfig struct {
 	// description: |
-	//   Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information
-	//   as annotations on the Node resources.
-	//
-	//   This feature is deprecated as it is not compatible with Kubernetes 1.32+.
-	//   See https://github.com/chubo-dev/chubo/issues/9980 for more information.
-	RegistryKubernetes RegistryKubernetesConfig `yaml:"kubernetes"`
-	// description: |
 	//   Service registry is using an external service to push and pull information about cluster members.
 	RegistryService RegistryServiceConfig `yaml:"service"`
 }
 
-// RegistryKubernetesConfig struct configures Kubernetes discovery registry.
-type RegistryKubernetesConfig struct {
-	// description: |
-	//   Disable Kubernetes discovery registry.
-	RegistryDisabled *bool `yaml:"disabled,omitempty"`
-}
-
-// RegistryServiceConfig struct configures Kubernetes discovery registry.
+// RegistryServiceConfig struct configures service discovery registry.
 type RegistryServiceConfig struct {
 	// description: |
 	//   Disable external service discovery registry.

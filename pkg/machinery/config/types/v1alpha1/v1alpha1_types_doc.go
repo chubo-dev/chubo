@@ -79,7 +79,7 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Name:        "type",
 				Type:        "string",
 				Note:        "",
-				Description: "Defines the role of the machine within the cluster.\n\n**Control Plane**\n\nControl Plane node type designates the node as a control plane member.\nThis means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.\n\n**Worker**\n\nWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\n\nThis node type was previously known as \"join\"; that value is still supported but deprecated.",
+				Description: "Defines the role of the machine within the cluster.\n\n**Control Plane**\n\nControl Plane node type designates the node as a control plane member.\nThis means it hosts the core cluster management services.\n\n**Worker**\n\nWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\n\nThis node type was previously known as \"join\"; that value is still supported but deprecated.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Defines the role of the machine within the cluster." /* encoder.LineComment */, "" /* encoder.FootComment */},
 				Values: []string{
 					"controlplane",
@@ -620,77 +620,18 @@ func (ControlPlaneConfig) Doc() *encoder.Doc {
 	return doc
 }
 
-func (EtcdConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "EtcdConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "EtcdConfig represents the etcd configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "EtcdConfig represents the etcd configuration options.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The container image used to create the etcd service.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The container image used to create the etcd service." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "ca",
-				Type:        "PEMEncodedCertificateAndKey",
-				Note:        "",
-				Description: "The `ca` is the root certificate authority of the PKI.\nIt is composed of a base64 encoded `crt` and `key`.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `ca` is the root certificate authority of the PKI." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraArgs",
-				Type:        "Args",
-				Note:        "",
-				Description: "Extra arguments to supply to etcd.\nNote that the following args are not allowed:\n\n- `name`\n- `data-dir`\n- `initial-cluster-state`\n- `listen-peer-urls`\n- `listen-client-urls`\n- `cert-file`\n- `key-file`\n- `trusted-ca-file`\n- `peer-client-cert-auth`\n- `peer-cert-file`\n- `peer-trusted-ca-file`\n- `peer-key-file`",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra arguments to supply to etcd." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{},
-			{
-				Name:        "advertisedSubnets",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The `advertisedSubnets` field configures the networks to pick etcd advertised IP from.\n\nIPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `advertisedSubnets` field configures the networks to pick etcd advertised IP from." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "listenSubnets",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The `listenSubnets` field configures the networks for the etcd to listen for peer and client connections.\n\nIf `listenSubnets` is not set, but `advertisedSubnets` is set, `listenSubnets` defaults to\n`advertisedSubnets`.\n\nIf neither `advertisedSubnets` nor `listenSubnets` is set, `listenSubnets` defaults to listen on all addresses.\n\nIPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `listenSubnets` field configures the networks for the etcd to listen for peer and client connections." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", clusterEtcdImageExample())
-	doc.Fields[1].AddExample("", pemEncodedCertificateExample())
-	doc.Fields[4].AddExample("", clusterEtcdAdvertisedSubnetsExample())
-
-	return doc
-}
-
 func (ClusterNetworkConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "ClusterNetworkConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "ClusterNetworkConfig represents kube networking configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "ClusterNetworkConfig represents kube networking configuration options.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "ClusterNetworkConfig represents cluster networking configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "ClusterNetworkConfig represents cluster networking configuration options.",
 		Fields: []encoder.Doc{
 			{
 				Name:        "dnsDomain",
 				Type:        "string",
 				Note:        "",
-				Description: "The domain used by Kubernetes DNS.\nThe default is `cluster.local`",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The domain used by Kubernetes DNS." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "podSubnets",
-				Type:        "[]string",
-				Note:        "",
-				Description: "The pod subnet CIDR.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The pod subnet CIDR." /* encoder.LineComment */, "" /* encoder.FootComment */},
+				Description: "The DNS domain used for cluster service discovery.\nThe default is `cluster.local`",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "The DNS domain used for cluster service discovery." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "serviceSubnets",
@@ -703,8 +644,7 @@ func (ClusterNetworkConfig) Doc() *encoder.Doc {
 	}
 
 	doc.Fields[0].AddExample("", "cluster.local")
-	doc.Fields[1].AddExample("", []string{"10.244.0.0/16"})
-	doc.Fields[2].AddExample("", []string{"10.96.0.0/12"})
+	doc.Fields[1].AddExample("", []string{"10.96.0.0/12"})
 
 	return doc
 }
@@ -1106,13 +1046,6 @@ func (DiscoveryRegistriesConfig) Doc() *encoder.Doc {
 		},
 		Fields: []encoder.Doc{
 			{
-				Name:        "kubernetes",
-				Type:        "RegistryKubernetesConfig",
-				Note:        "",
-				Description: "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/chubo-dev/chubo/issues/9980 for more information.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information" /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
 				Name:        "service",
 				Type:        "RegistryServiceConfig",
 				Note:        "",
@@ -1125,36 +1058,11 @@ func (DiscoveryRegistriesConfig) Doc() *encoder.Doc {
 	return doc
 }
 
-func (RegistryKubernetesConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "RegistryKubernetesConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "RegistryKubernetesConfig struct configures Kubernetes discovery registry." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "RegistryKubernetesConfig struct configures Kubernetes discovery registry.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "DiscoveryRegistriesConfig",
-				FieldName: "kubernetes",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "disabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Disable Kubernetes discovery registry.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Disable Kubernetes discovery registry." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	return doc
-}
-
 func (RegistryServiceConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "RegistryServiceConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "RegistryServiceConfig struct configures Kubernetes discovery registry." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "RegistryServiceConfig struct configures Kubernetes discovery registry.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "RegistryServiceConfig struct configures service discovery registry." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "RegistryServiceConfig struct configures service discovery registry.",
 		AppearsIn: []encoder.Appearance{
 			{
 				TypeName:  "DiscoveryRegistriesConfig",
@@ -1358,7 +1266,6 @@ func GetFileDoc() *encoder.FileDoc {
 			InstallDiskSelector{}.Doc(),
 			Endpoint{}.Doc(),
 			ControlPlaneConfig{}.Doc(),
-			EtcdConfig{}.Doc(),
 			ClusterNetworkConfig{}.Doc(),
 			ResourcesConfig{}.Doc(),
 			MachineFile{}.Doc(),
@@ -1371,7 +1278,6 @@ func GetFileDoc() *encoder.FileDoc {
 			ClusterInlineManifest{}.Doc(),
 			ClusterDiscoveryConfig{}.Doc(),
 			DiscoveryRegistriesConfig{}.Doc(),
-			RegistryKubernetesConfig{}.Doc(),
 			RegistryServiceConfig{}.Doc(),
 			UdevConfig{}.Doc(),
 			LoggingConfig{}.Doc(),

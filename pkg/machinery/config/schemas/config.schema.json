@@ -3964,19 +3964,9 @@
         "dnsDomain": {
           "type": "string",
           "title": "dnsDomain",
-          "description": "The domain used by Kubernetes DNS.\nThe default is cluster.local\n",
-          "markdownDescription": "The domain used by Kubernetes DNS.\nThe default is `cluster.local`",
-          "x-intellij-html-description": "\u003cp\u003eThe domain used by Kubernetes DNS.\nThe default is \u003ccode\u003ecluster.local\u003c/code\u003e\u003c/p\u003e\n"
-        },
-        "podSubnets": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "podSubnets",
-          "description": "The pod subnet CIDR.\n",
-          "markdownDescription": "The pod subnet CIDR.",
-          "x-intellij-html-description": "\u003cp\u003eThe pod subnet CIDR.\u003c/p\u003e\n"
+          "description": "The DNS domain used for cluster service discovery.\nThe default is cluster.local\n",
+          "markdownDescription": "The DNS domain used for cluster service discovery.\nThe default is `cluster.local`",
+          "x-intellij-html-description": "\u003cp\u003eThe DNS domain used for cluster service discovery.\nThe default is \u003ccode\u003ecluster.local\u003c/code\u003e\u003c/p\u003e\n"
         },
         "serviceSubnets": {
           "items": {
@@ -3991,7 +3981,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "ClusterNetworkConfig represents kube networking configuration options."
+      "description": "ClusterNetworkConfig represents cluster networking configuration options."
     },
     "v1alpha1.Config": {
       "properties": {
@@ -4055,13 +4045,6 @@
     },
     "v1alpha1.DiscoveryRegistriesConfig": {
       "properties": {
-        "kubernetes": {
-          "$ref": "#/$defs/v1alpha1.RegistryKubernetesConfig",
-          "title": "kubernetes",
-          "description": "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/chubo-dev/chubo/issues/9980 for more information.\n",
-          "markdownDescription": "Kubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\n\nThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee https://github.com/chubo-dev/chubo/issues/9980 for more information.",
-          "x-intellij-html-description": "\u003cp\u003eKubernetes registry uses Kubernetes API server to discover cluster members and stores additional information\nas annotations on the Node resources.\u003c/p\u003e\n\n\u003cp\u003eThis feature is deprecated as it is not compatible with Kubernetes 1.32+.\nSee \u003ca href=\"https://github.com/chubo-dev/chubo/issues/9980\" target=\"_blank\"\u003ehttps://github.com/chubo-dev/chubo/issues/9980\u003c/a\u003e for more information.\u003c/p\u003e\n"
-        },
         "service": {
           "$ref": "#/$defs/v1alpha1.RegistryServiceConfig",
           "title": "service",
@@ -4079,76 +4062,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Endpoint represents the endpoint URL parsed out of the machine config."
-    },
-    "v1alpha1.EtcdConfig": {
-      "properties": {
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The container image used to create the etcd service.\n",
-          "markdownDescription": "The container image used to create the etcd service.",
-          "x-intellij-html-description": "\u003cp\u003eThe container image used to create the etcd service.\u003c/p\u003e\n"
-        },
-        "ca": {
-          "properties": {
-            "crt": {
-              "type": "string"
-            },
-            "key": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object",
-          "title": "ca",
-          "description": "The ca is the root certificate authority of the PKI.\nIt is composed of a base64 encoded crt and key.\n",
-          "markdownDescription": "The `ca` is the root certificate authority of the PKI.\nIt is composed of a base64 encoded `crt` and `key`.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eca\u003c/code\u003e is the root certificate authority of the PKI.\nIt is composed of a base64 encoded \u003ccode\u003ecrt\u003c/code\u003e and \u003ccode\u003ekey\u003c/code\u003e.\u003c/p\u003e\n"
-        },
-        "extraArgs": {
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "object",
-          "title": "extraArgs",
-          "description": "Extra arguments to supply to etcd.\nNote that the following args are not allowed:\n\n\nname\ndata-dir\ninitial-cluster-state\nlisten-peer-urls\nlisten-client-urls\ncert-file\nkey-file\ntrusted-ca-file\npeer-client-cert-auth\npeer-cert-file\npeer-trusted-ca-file\npeer-key-file\n\n",
-          "markdownDescription": "Extra arguments to supply to etcd.\nNote that the following args are not allowed:\n\n- `name`\n- `data-dir`\n- `initial-cluster-state`\n- `listen-peer-urls`\n- `listen-client-urls`\n- `cert-file`\n- `key-file`\n- `trusted-ca-file`\n- `peer-client-cert-auth`\n- `peer-cert-file`\n- `peer-trusted-ca-file`\n- `peer-key-file`",
-          "x-intellij-html-description": "\u003cp\u003eExtra arguments to supply to etcd.\nNote that the following args are not allowed:\u003c/p\u003e\n\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003ename\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003edata-dir\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003einitial-cluster-state\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003elisten-peer-urls\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003elisten-client-urls\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ecert-file\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003ekey-file\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003etrusted-ca-file\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003epeer-client-cert-auth\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003epeer-cert-file\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003epeer-trusted-ca-file\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003epeer-key-file\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n"
-        },
-        "advertisedSubnets": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "advertisedSubnets",
-          "description": "The advertisedSubnets field configures the networks to pick etcd advertised IP from.\n\nIPs can be excluded from the list by using negative match with !, e.g !10.0.0.0/8.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.\n",
-          "markdownDescription": "The `advertisedSubnets` field configures the networks to pick etcd advertised IP from.\n\nIPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eadvertisedSubnets\u003c/code\u003e field configures the networks to pick etcd advertised IP from.\u003c/p\u003e\n\n\u003cp\u003eIPs can be excluded from the list by using negative match with \u003ccode\u003e!\u003c/code\u003e, e.g \u003ccode\u003e!10.0.0.0/8\u003c/code\u003e.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.\u003c/p\u003e\n"
-        },
-        "listenSubnets": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "listenSubnets",
-          "description": "The listenSubnets field configures the networks for the etcd to listen for peer and client connections.\n\nIf listenSubnets is not set, but advertisedSubnets is set, listenSubnets defaults to\nadvertisedSubnets.\n\nIf neither advertisedSubnets nor listenSubnets is set, listenSubnets defaults to listen on all addresses.\n\nIPs can be excluded from the list by using negative match with !, e.g !10.0.0.0/8.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.\n",
-          "markdownDescription": "The `listenSubnets` field configures the networks for the etcd to listen for peer and client connections.\n\nIf `listenSubnets` is not set, but `advertisedSubnets` is set, `listenSubnets` defaults to\n`advertisedSubnets`.\n\nIf neither `advertisedSubnets` nor `listenSubnets` is set, `listenSubnets` defaults to listen on all addresses.\n\nIPs can be excluded from the list by using negative match with `!`, e.g `!10.0.0.0/8`.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003elistenSubnets\u003c/code\u003e field configures the networks for the etcd to listen for peer and client connections.\u003c/p\u003e\n\n\u003cp\u003eIf \u003ccode\u003elistenSubnets\u003c/code\u003e is not set, but \u003ccode\u003eadvertisedSubnets\u003c/code\u003e is set, \u003ccode\u003elistenSubnets\u003c/code\u003e defaults to\n\u003ccode\u003eadvertisedSubnets\u003c/code\u003e.\u003c/p\u003e\n\n\u003cp\u003eIf neither \u003ccode\u003eadvertisedSubnets\u003c/code\u003e nor \u003ccode\u003elistenSubnets\u003c/code\u003e is set, \u003ccode\u003elistenSubnets\u003c/code\u003e defaults to listen on all addresses.\u003c/p\u003e\n\n\u003cp\u003eIPs can be excluded from the list by using negative match with \u003ccode\u003e!\u003c/code\u003e, e.g \u003ccode\u003e!10.0.0.0/8\u003c/code\u003e.\nNegative subnet matches should be specified last to filter out IPs picked by positive matches.\nIf not specified, advertised IP is selected as the first routable address of the node.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "EtcdConfig represents the etcd configuration options."
     },
     "v1alpha1.ExtraMount": {
       "properties": {
@@ -4607,9 +4520,9 @@
             "worker"
           ],
           "title": "type",
-          "description": "Defines the role of the machine within the cluster.\n\nControl Plane\n\nControl Plane node type designates the node as a control plane member.\nThis means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.\n\nWorker\n\nWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\n\nThis node type was previously known as “join”; that value is still supported but deprecated.\n",
-          "markdownDescription": "Defines the role of the machine within the cluster.\n\n**Control Plane**\n\nControl Plane node type designates the node as a control plane member.\nThis means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.\n\n**Worker**\n\nWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\n\nThis node type was previously known as \"join\"; that value is still supported but deprecated.",
-          "x-intellij-html-description": "\u003cp\u003eDefines the role of the machine within the cluster.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eControl Plane\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eControl Plane node type designates the node as a control plane member.\nThis means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eWorker\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\u003c/p\u003e\n\n\u003cp\u003eThis node type was previously known as \u0026ldquo;join\u0026rdquo;; that value is still supported but deprecated.\u003c/p\u003e\n"
+          "description": "Defines the role of the machine within the cluster.\n\nControl Plane\n\nControl Plane node type designates the node as a control plane member.\nThis means it hosts the core cluster management services.\n\nWorker\n\nWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\n\nThis node type was previously known as “join”; that value is still supported but deprecated.\n",
+          "markdownDescription": "Defines the role of the machine within the cluster.\n\n**Control Plane**\n\nControl Plane node type designates the node as a control plane member.\nThis means it hosts the core cluster management services.\n\n**Worker**\n\nWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\n\nThis node type was previously known as \"join\"; that value is still supported but deprecated.",
+          "x-intellij-html-description": "\u003cp\u003eDefines the role of the machine within the cluster.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eControl Plane\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eControl Plane node type designates the node as a control plane member.\nThis means it hosts the core cluster management services.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eWorker\u003c/strong\u003e\u003c/p\u003e\n\n\u003cp\u003eWorker node type designates the node as a worker node.\nThis means it will be an available compute node for scheduling workloads.\u003c/p\u003e\n\n\u003cp\u003eThis node type was previously known as \u0026ldquo;join\u0026rdquo;; that value is still supported but deprecated.\u003c/p\u003e\n"
         },
         "token": {
           "type": "string",
@@ -4808,20 +4721,6 @@
       "type": "object",
       "description": "MachineSeccompProfile defines seccomp profiles for the machine."
     },
-    "v1alpha1.RegistryKubernetesConfig": {
-      "properties": {
-        "disabled": {
-          "type": "boolean",
-          "title": "disabled",
-          "description": "Disable Kubernetes discovery registry.\n",
-          "markdownDescription": "Disable Kubernetes discovery registry.",
-          "x-intellij-html-description": "\u003cp\u003eDisable Kubernetes discovery registry.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "RegistryKubernetesConfig struct configures Kubernetes discovery registry."
-    },
     "v1alpha1.RegistryServiceConfig": {
       "properties": {
         "disabled": {
@@ -4841,7 +4740,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "RegistryServiceConfig struct configures Kubernetes discovery registry."
+      "description": "RegistryServiceConfig struct configures service discovery registry."
     },
     "v1alpha1.ResourcesConfig": {
       "properties": {

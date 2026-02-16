@@ -71,9 +71,6 @@ func (suite *ConfigSuite) TestReconcileConfigCustom() {
 			ClusterDiscoveryConfig: &v1alpha1.ClusterDiscoveryConfig{
 				DiscoveryEnabled: pointer.To(true),
 				DiscoveryRegistries: v1alpha1.DiscoveryRegistriesConfig{
-					RegistryKubernetes: v1alpha1.RegistryKubernetesConfig{
-						RegistryDisabled: pointer.To(true),
-					},
 					RegistryService: v1alpha1.RegistryServiceConfig{
 						RegistryEndpoint: "https://[2001:470:6d:30e:565d:e162:e2a0:cf5a]:3456/",
 					},
@@ -106,9 +103,6 @@ func (suite *ConfigSuite) TestReconcileConfigCustomInsecure() {
 			ClusterDiscoveryConfig: &v1alpha1.ClusterDiscoveryConfig{
 				DiscoveryEnabled: pointer.To(true),
 				DiscoveryRegistries: v1alpha1.DiscoveryRegistriesConfig{
-					RegistryKubernetes: v1alpha1.RegistryKubernetesConfig{
-						RegistryDisabled: pointer.To(true),
-					},
 					RegistryService: v1alpha1.RegistryServiceConfig{
 						RegistryEndpoint: "http://localhost:3000",
 					},

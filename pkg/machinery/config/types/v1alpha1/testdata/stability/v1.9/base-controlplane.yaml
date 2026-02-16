@@ -23,5 +23,4 @@ cluster:
     discovery:
         enabled: true
         registries:
-            kubernetes: {}
             service: {}

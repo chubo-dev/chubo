@@ -10,5 +10,4 @@ cluster:
   discovery:
     enabled: false
     registries:
-      kubernetes: {}
       service: {}
