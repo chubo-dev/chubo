@@ -32,8 +32,8 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // ServiceManager is the interface to the v1alpha1 services subsystems.
@@ -54,7 +54,7 @@ type ImageCacheConfigController struct {
 
 // Name implements controller.StatsController interface.
 func (ctrl *ImageCacheConfigController) Name() string {
-	return "cri.ImageCacheConfigController"
+	return "workload.ImageCacheConfigController"
 }
 
 // Inputs implements controller.StatsController interface.
@@ -94,7 +94,7 @@ func (ctrl *ImageCacheConfigController) Inputs() []controller.Input {
 func (ctrl *ImageCacheConfigController) Outputs() []controller.Output {
 	return []controller.Output{
 		{
-			Type: cri.ImageCacheConfigType,
+			Type: workload.ImageCacheConfigType,
 			Kind: controller.OutputExclusive,
 		},
 		{
@@ -144,17 +144,17 @@ func (ctrl *ImageCacheConfigController) Run(ctx context.Context, r controller.Ru
 		imageCacheDisabled := cfg == nil || cfg.Config().Machine() == nil || !cfg.Config().Machine().Features().ImageCache().LocalEnabled()
 
 		var (
-			status     cri.ImageCacheStatus
-			copyStatus cri.ImageCacheCopyStatus
+			status     workload.ImageCacheStatus
+			copyStatus workload.ImageCacheCopyStatus
 			roots      []string
 			allReady   bool
 		)
 
 		if imageCacheDisabled {
-			status = cri.ImageCacheStatusDisabled
-			copyStatus = cri.ImageCacheCopyStatusSkipped
+			status = workload.ImageCacheStatusDisabled
+			copyStatus = workload.ImageCacheCopyStatusSkipped
 		} else {
-			status = cri.ImageCacheStatusPreparing
+			status = workload.ImageCacheStatusPreparing
 
 			// image cache is enabled, so create the volume config resources to find the image cache roots
 			if err = ctrl.createVolumeConfigISO(ctx, r); err != nil {
@@ -176,11 +176,11 @@ func (ctrl *ImageCacheConfigController) Run(ctx context.Context, r controller.Ru
 
 			if allReady && len(roots) == 0 {
 				// all volumes identified, but no roots found
-				status = cri.ImageCacheStatusDisabled
+				status = workload.ImageCacheStatusDisabled
 			}
 		}
 
-		if status == cri.ImageCacheStatusPreparing && len(roots) > 0 {
+		if status == workload.ImageCacheStatusPreparing && len(roots) > 0 {
 			_, running, err := ctrl.V1Alpha1ServiceManager.IsRunning(RegistrydServiceID)
 			if err != nil {
 				ctrl.V1Alpha1ServiceManager.Load(services.NewRegistryD())
@@ -193,13 +193,13 @@ func (ctrl *ImageCacheConfigController) Run(ctx context.Context, r controller.Ru
 			}
 
 			if registryDService != nil && registryDService.TypedSpec().Running && registryDService.TypedSpec().Healthy {
-				status = cri.ImageCacheStatusReady
+				status = workload.ImageCacheStatusReady
 			}
 		}
 
 		logger.Debug("image cache status", zap.String("status", status.String()), zap.String("copy_status", copyStatus.String()))
 
-		if err = safe.WriterModify(ctx, r, cri.NewImageCacheConfig(), func(cfg *cri.ImageCacheConfig) error {
+		if err = safe.WriterModify(ctx, r, workload.NewImageCacheConfig(), func(cfg *workload.ImageCacheConfig) error {
 			cfg.TypedSpec().Status = status
 			cfg.TypedSpec().CopyStatus = copyStatus
 			cfg.TypedSpec().Roots = roots
@@ -329,7 +329,7 @@ func (ctrl *ImageCacheConfigController) createVolumeConfigDisk(ctx context.Conte
 type imageCacheVolumeStatus struct {
 	roots      []string
 	allReady   bool
-	copyStatus cri.ImageCacheCopyStatus
+	copyStatus workload.ImageCacheCopyStatus
 }
 
 //nolint:gocyclo,cyclop
@@ -426,28 +426,28 @@ func (ctrl *ImageCacheConfigController) analyzeImageCacheVolumes(ctx context.Con
 
 	logger = logger.With(zap.Bool("all_ready", allReady))
 
-	var copyStatus cri.ImageCacheCopyStatus
+	var copyStatus workload.ImageCacheCopyStatus
 
 	switch {
 	case !isoPresent:
 		// if there's no ISO, we don't need to copy anything
-		copyStatus = cri.ImageCacheCopyStatusSkipped
+		copyStatus = workload.ImageCacheCopyStatusSkipped
 	case diskMissing:
 		// if the disk volume is not configured, we can't copy the image cache
-		copyStatus = cri.ImageCacheCopyStatusSkipped
+		copyStatus = workload.ImageCacheCopyStatusSkipped
 	case ctrl.cacheCopyDone:
 		// if the copy has already been done, we don't need to do it again
-		copyStatus = cri.ImageCacheCopyStatusReady
+		copyStatus = workload.ImageCacheCopyStatusReady
 	case isoReady && diskReady && copySource != "" && copyTarget != "":
 		// ready to copy
 		if err := ctrl.copyImageCache(ctx, logger, copySource, copyTarget); err != nil {
 			return nil, fmt.Errorf("error copying image cache: %w", err)
 		}
 
-		copyStatus = cri.ImageCacheCopyStatusReady
+		copyStatus = workload.ImageCacheCopyStatusReady
 	default:
 		// waiting for copy preconditions
-		copyStatus = cri.ImageCacheCopyStatusPending
+		copyStatus = workload.ImageCacheCopyStatusPending
 	}
 
 	return &imageCacheVolumeStatus{

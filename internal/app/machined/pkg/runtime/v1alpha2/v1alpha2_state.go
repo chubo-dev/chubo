@@ -19,7 +19,6 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/chubo"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cluster"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/hardware"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
@@ -29,6 +28,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/siderolink"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/time"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // State implements runtime.V1alpha2State interface.
@@ -79,7 +79,7 @@ func NewState() (*State, error) {
 		{hardware.NamespaceName, "Hardware resources."},
 		{network.NamespaceName, "Networking resources."},
 		{network.ConfigNamespaceName, "Networking configuration resources."},
-		{cri.NamespaceName, "CRI Seccomp resources."},
+		{workload.NamespaceName, "CRI Seccomp resources."},
 		{secrets.NamespaceName, "Resources with secret material."},
 		{perf.NamespaceName, "Stats resources."},
 	} {
@@ -119,8 +119,8 @@ func NewState() (*State, error) {
 		&cluster.Member{},
 		&config.MachineConfig{},
 		&config.MachineType{},
-		&cri.ImageCacheConfig{},
-		&cri.SeccompProfile{},
+		&workload.ImageCacheConfig{},
+		&workload.SeccompProfile{},
 		&files.EtcFileSpec{},
 		&files.EtcFileStatus{},
 		&hardware.MemoryModule{},
@@ -162,7 +162,7 @@ func NewState() (*State, error) {
 		&network.TimeServerSpec{},
 		&perf.CPU{},
 		&perf.Memory{},
-		&cri.RegistriesConfig{},
+		&workload.RegistriesConfig{},
 		&runtime.BootedEntry{},
 		&runtime.DevicesStatus{},
 		&runtime.Diagnostic{},

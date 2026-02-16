@@ -18,7 +18,7 @@ import (
 	config2 "github.com/chubo-dev/chubo/pkg/machinery/config/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // RegistriesConfigController watches v1alpha1.Config, updates registry.RegistriesConfig.
@@ -26,7 +26,7 @@ type RegistriesConfigController struct{}
 
 // Name implements controller.Controller interface.
 func (ctrl *RegistriesConfigController) Name() string {
-	return "cri.RegistriesConfigController"
+	return "workload.RegistriesConfigController"
 }
 
 // Inputs implements controller.Controller interface.
@@ -39,8 +39,8 @@ func (ctrl *RegistriesConfigController) Inputs() []controller.Input {
 			Kind:      controller.InputWeak,
 		},
 		{
-			Namespace: cri.NamespaceName,
-			Type:      cri.ImageCacheConfigType,
+			Namespace: workload.NamespaceName,
+			Type:      workload.ImageCacheConfigType,
 			Kind:      controller.InputWeak,
 		},
 	}
@@ -50,7 +50,7 @@ func (ctrl *RegistriesConfigController) Inputs() []controller.Input {
 func (ctrl *RegistriesConfigController) Outputs() []controller.Output {
 	return []controller.Output{
 		{
-			Type: cri.RegistriesConfigType,
+			Type: workload.RegistriesConfigType,
 			Kind: controller.OutputExclusive,
 		},
 	}
@@ -74,12 +74,12 @@ func (ctrl *RegistriesConfigController) Run(ctx context.Context, r controller.Ru
 			return fmt.Errorf("failed to get machine config: %w", err)
 		}
 
-		imageCacheConfig, err := safe.ReaderGetByID[*cri.ImageCacheConfig](ctx, r, cri.ImageCacheConfigID)
+		imageCacheConfig, err := safe.ReaderGetByID[*workload.ImageCacheConfig](ctx, r, workload.ImageCacheConfigID)
 		if err != nil && !state.IsNotFoundError(err) {
 			return fmt.Errorf("failed to get image cache config: %w", err)
 		}
 
-		if err := safe.WriterModify(ctx, r, cri.NewRegistriesConfig(), func(res *cri.RegistriesConfig) error {
+		if err := safe.WriterModify(ctx, r, workload.NewRegistriesConfig(), func(res *workload.RegistriesConfig) error {
 			spec := res.TypedSpec()
 
 			spec.RegistryAuths = clearInit(spec.RegistryAuths)
@@ -88,11 +88,11 @@ func (ctrl *RegistriesConfigController) Run(ctx context.Context, r controller.Ru
 
 			if cfg != nil {
 				for k, v := range cfg.Config().RegistryMirrorConfigs() {
-					spec.RegistryMirrors[k] = &cri.RegistryMirrorConfig{
+					spec.RegistryMirrors[k] = &workload.RegistryMirrorConfig{
 						MirrorEndpoints: xslices.Map(
 							v.Endpoints(),
-							func(endpoint config2.RegistryEndpointConfig) cri.RegistryEndpointConfig {
-								return cri.RegistryEndpointConfig{
+							func(endpoint config2.RegistryEndpointConfig) workload.RegistryEndpointConfig {
+								return workload.RegistryEndpointConfig{
 									EndpointEndpoint:     endpoint.Endpoint(),
 									EndpointOverridePath: endpoint.OverridePath(),
 								}
@@ -103,7 +103,7 @@ func (ctrl *RegistriesConfigController) Run(ctx context.Context, r controller.Ru
 				}
 
 				for k, v := range cfg.Config().RegistryAuthConfigs() {
-					spec.RegistryAuths[k] = &cri.RegistryAuthConfig{
+					spec.RegistryAuths[k] = &workload.RegistryAuthConfig{
 						RegistryUsername:      v.Username(),
 						RegistryPassword:      v.Password(),
 						RegistryAuth:          v.Auth(),
@@ -112,7 +112,7 @@ func (ctrl *RegistriesConfigController) Run(ctx context.Context, r controller.Ru
 				}
 
 				for k, v := range cfg.Config().RegistryTLSConfigs() {
-					spec.RegistryTLSs[k] = &cri.RegistryTLSConfig{
+					spec.RegistryTLSs[k] = &workload.RegistryTLSConfig{
 						TLSCA:                 v.CA(),
 						TLSInsecureSkipVerify: v.InsecureSkipVerify(),
 						TLSClientIdentity:     v.ClientIdentity(),
@@ -120,16 +120,16 @@ func (ctrl *RegistriesConfigController) Run(ctx context.Context, r controller.Ru
 				}
 			}
 
-			if imageCacheConfig != nil && imageCacheConfig.TypedSpec().Status == cri.ImageCacheStatusReady {
+			if imageCacheConfig != nil && imageCacheConfig.TypedSpec().Status == workload.ImageCacheStatusReady {
 				// if the '*' was configured, we just use it, otherwise create it so that we can inject the registryd
 				if _, hasStar := spec.RegistryMirrors["*"]; !hasStar {
-					spec.RegistryMirrors["*"] = &cri.RegistryMirrorConfig{}
+					spec.RegistryMirrors["*"] = &workload.RegistryMirrorConfig{}
 				}
 
 				// inject the registryd mirror endpoint as the first one for all registries
 				for registry := range spec.RegistryMirrors {
 					spec.RegistryMirrors[registry].MirrorEndpoints = append(
-						[]cri.RegistryEndpointConfig{{EndpointEndpoint: "http://" + constants.RegistrydListenAddress}},
+						[]workload.RegistryEndpointConfig{{EndpointEndpoint: "http://" + constants.RegistrydListenAddress}},
 						spec.RegistryMirrors[registry].MirrorEndpoints...,
 					)
 				}
@@ -140,7 +140,7 @@ func (ctrl *RegistriesConfigController) Run(ctx context.Context, r controller.Ru
 			return fmt.Errorf("failed to write registries config: %w", err)
 		}
 
-		if err := safe.CleanupOutputs[*cri.RegistriesConfig](ctx, r); err != nil {
+		if err := safe.CleanupOutputs[*workload.RegistriesConfig](ctx, r); err != nil {
 			return fmt.Errorf("failed to clean up outputs: %w", err)
 		}
 	}

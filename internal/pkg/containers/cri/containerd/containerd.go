@@ -15,13 +15,13 @@ import (
 	"github.com/pelletier/go-toml/v2"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // GenerateCRIConfig returns a part of CRI config for registry auth.
 //
 // Once containerd supports different way of supplying auth info, this should be updated.
-func GenerateCRIConfig(r cri.Registries) ([]byte, error) {
+func GenerateCRIConfig(r workload.Registries) ([]byte, error) {
 	var ctrdCfg Config
 
 	ctrdCfg.Plugins.CRI.Registry.ConfigPath = filepath.Join(constants.EtcRuntimeConfdPath, "hosts")

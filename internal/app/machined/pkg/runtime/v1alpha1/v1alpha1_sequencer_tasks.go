@@ -58,10 +58,10 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	metamachinery "github.com/chubo-dev/chubo/pkg/machinery/meta"
 	blockres "github.com/chubo-dev/chubo/pkg/machinery/resources/block"
-	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 	resourcefiles "github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 	resourceruntime "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 	resourcev1alpha1 "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 	"github.com/chubo-dev/chubo/pkg/minimal"
 )
 
@@ -1016,7 +1016,7 @@ func Upgrade(_ runtime.Sequence, data any) (runtime.TaskExecutionFunc, string) {
 			in.GetImage(),
 			r.Config(),
 			r.ConfigContainer(),
-			crires.RegistryBuilder(r.State().V1Alpha2().Resources()),
+			workload.RegistryBuilder(r.State().V1Alpha2().Resources()),
 			install.OptionsFromUpgradeRequest(r, in)...,
 		)
 		if err != nil {
@@ -1221,7 +1221,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 				installerImage,
 				r.Config(),
 				r.ConfigContainer(),
-				crires.RegistryBuilder(r.State().V1Alpha2().Resources()),
+				workload.RegistryBuilder(r.State().V1Alpha2().Resources()),
 				install.WithForce(true),
 				install.WithZero(r.Config().Machine().Install().Zero()),
 				install.WithExtraKernelArgs(r.Config().Machine().Install().ExtraKernelArgs()),
@@ -1287,7 +1287,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 				r.State().Machine().StagedInstallImageRef(),
 				r.Config(),
 				r.ConfigContainer(),
-				crires.RegistryBuilder(r.State().V1Alpha2().Resources()),
+				workload.RegistryBuilder(r.State().V1Alpha2().Resources()),
 				install.WithOptions(options),
 			)
 			if err != nil {

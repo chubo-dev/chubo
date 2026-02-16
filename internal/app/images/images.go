@@ -26,7 +26,7 @@ import (
 	"github.com/chubo-dev/chubo/internal/pkg/containers/image"
 	"github.com/chubo-dev/chubo/internal/pkg/containers/image/progress"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // Service implements machine.ImageService.
@@ -89,7 +89,7 @@ func (svc *Service) Pull(req *machine.ImageServicePullRequest, srv grpc.ServerSt
 	defer client.Close()
 
 	img, err := image.Pull(ctx,
-		cri.RegistryBuilder(svc.controller.Runtime().State().V1Alpha2().Resources()),
+		workload.RegistryBuilder(svc.controller.Runtime().State().V1Alpha2().Resources()),
 		client,
 		req.GetImageRef(),
 		image.WithSkipIfAlreadyPulled(),

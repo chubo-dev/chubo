@@ -16,7 +16,7 @@ import (
 	"github.com/chubo-dev/chubo/internal/pkg/install"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
-	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // Upgrade initiates an upgrade.
@@ -36,7 +36,7 @@ func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (*mach
 	log.Printf("upgrade request received: staged %v, force %v, reboot mode %v", in.GetStage(), in.GetForce(), in.GetRebootMode().String())
 	log.Printf("validating %q", in.GetImage())
 
-	if err := install.PullAndValidateInstallerImage(ctx, crires.RegistryBuilder(s.Controller.Runtime().State().V1Alpha2().Resources()), in.GetImage()); err != nil {
+	if err := install.PullAndValidateInstallerImage(ctx, workload.RegistryBuilder(s.Controller.Runtime().State().V1Alpha2().Resources()), in.GetImage()); err != nil {
 		return nil, fmt.Errorf("error validating installer image %q: %w", in.GetImage(), err)
 	}
 

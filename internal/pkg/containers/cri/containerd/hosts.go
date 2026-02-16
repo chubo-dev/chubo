@@ -17,7 +17,7 @@ import (
 	"github.com/pelletier/go-toml/v2"
 	"github.com/siderolabs/gen/optional"
 
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // HostsConfig describes layout of registry configuration in "hosts" format.
@@ -44,7 +44,7 @@ type HostsFile struct {
 // GenerateHosts generates a structure describing contents of the containerd hosts configuration.
 //
 //nolint:gocyclo
-func GenerateHosts(cfg cri.Registries, basePath string) (*HostsConfig, error) {
+func GenerateHosts(cfg workload.Registries, basePath string) (*HostsConfig, error) {
 	config := &HostsConfig{
 		Directories: map[string]*HostsDirectory{},
 	}

@@ -19,11 +19,11 @@ import (
 
 	"github.com/chubo-dev/chubo/pkg/httpdefaults"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // NewResolver builds registry resolver based on Talos configuration.
-func NewResolver(reg cri.Registries) remotes.Resolver {
+func NewResolver(reg workload.Registries) remotes.Resolver {
 	return docker.NewResolver(docker.ResolverOptions{
 		Hosts: RegistryHosts(reg),
 	})
@@ -32,7 +32,7 @@ func NewResolver(reg cri.Registries) remotes.Resolver {
 // RegistryHosts returns host configuration per registry.
 //
 //nolint:gocyclo
-func RegistryHosts(reg cri.Registries) docker.RegistryHosts {
+func RegistryHosts(reg workload.Registries) docker.RegistryHosts {
 	return func(host string) ([]docker.RegistryHost, error) {
 		var registries []docker.RegistryHost
 
@@ -132,7 +132,7 @@ func RegistryEndpointEntriesFromConfig(host string, reg config.RegistryMirrorCon
 }
 
 // RegistryEndpoints returns registry endpoints per host using reg.
-func RegistryEndpoints(reg cri.Registries, host string) (endpoints []EndpointEntry, err error) {
+func RegistryEndpoints(reg workload.Registries, host string) (endpoints []EndpointEntry, err error) {
 	// direct hit by host
 	if hostConfig, ok := reg.Mirrors()[host]; ok {
 		return RegistryEndpointEntriesFromConfig(host, hostConfig)

@@ -11,13 +11,13 @@ import (
 
 	"github.com/cosi-project/runtime/pkg/state"
 
-	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 func waitForInstallerImageCache(ctx context.Context, st state.State) error {
-	return crires.WaitForImageCache(ctx, st)
+	return workload.WaitForImageCache(ctx, st)
 }
 
 func waitForInstallerImageCacheCopy(ctx context.Context, st state.State) error {
-	return crires.WaitForImageCacheCopy(ctx, st)
+	return workload.WaitForImageCacheCopy(ctx, st)
 }

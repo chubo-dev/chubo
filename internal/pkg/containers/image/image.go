@@ -23,7 +23,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/chubo-dev/chubo/internal/pkg/containers/image/progress"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // Image pull retry settings.
@@ -82,7 +82,7 @@ type ProgressReporter interface {
 type NewProgressReporter func(imageRef string) ProgressReporter
 
 // RegistriesBuilder is a function that returns registries configuration.
-type RegistriesBuilder = func(context.Context) (cri.Registries, error)
+type RegistriesBuilder = func(context.Context) (workload.Registries, error)
 
 // NewSimpleProgressReporter creates a simple progress reporter that just needs Update function.
 func NewSimpleProgressReporter(updateFn func(progress.LayerPullProgress)) NewProgressReporter {

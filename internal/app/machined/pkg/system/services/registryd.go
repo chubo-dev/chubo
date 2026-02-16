@@ -23,7 +23,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/conditions"
 	"github.com/chubo-dev/chubo/pkg/logging"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 type registryD struct{}
@@ -55,7 +55,7 @@ func (r *registryD) Runner(rt runtime.Runtime) (runner.Runner, error) {
 
 		st := r.State().V1Alpha2().Resources()
 		it := func(yield func(string) bool) {
-			imageCacheConfig, err := safe.StateGetByID[*cri.ImageCacheConfig](ctx, st, cri.ImageCacheConfigID)
+			imageCacheConfig, err := safe.StateGetByID[*workload.ImageCacheConfig](ctx, st, workload.ImageCacheConfigID)
 			if err != nil {
 				logger.Error("failed to get image cache config", zap.Error(err))
 

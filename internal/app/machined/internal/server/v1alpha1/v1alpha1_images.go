@@ -19,7 +19,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 func containerdNamespaceHelper(ctx context.Context, ns common.ContainerdNamespace) (context.Context, error) {
@@ -96,7 +96,7 @@ func (s *Server) ImagePull(ctx context.Context, req *machine.ImagePullRequest) (
 		return nil, err
 	}
 
-	_, err = image.Pull(ctx, cri.RegistryBuilder(s.Controller.Runtime().State().V1Alpha2().Resources()), client, req.Reference,
+	_, err = image.Pull(ctx, workload.RegistryBuilder(s.Controller.Runtime().State().V1Alpha2().Resources()), client, req.Reference,
 		image.WithSkipIfAlreadyPulled(),
 		image.WithMaxNotFoundRetries(0), // return an error immediately if the image is not found
 	)

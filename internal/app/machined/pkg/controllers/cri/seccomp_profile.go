@@ -15,7 +15,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // SeccompProfileController manages SeccompProfiles.
@@ -23,7 +23,7 @@ type SeccompProfileController struct{}
 
 // Name implements controller.StatsController interface.
 func (ctrl *SeccompProfileController) Name() string {
-	return "cri.SeccompProfileController"
+	return "workload.SeccompProfileController"
 }
 
 // Inputs implements controller.StatsController interface.
@@ -42,7 +42,7 @@ func (ctrl *SeccompProfileController) Inputs() []controller.Input {
 func (ctrl *SeccompProfileController) Outputs() []controller.Output {
 	return []controller.Output{
 		{
-			Type: cri.SeccompProfileType,
+			Type: workload.SeccompProfileType,
 			Kind: controller.OutputExclusive,
 		},
 	}
@@ -70,7 +70,7 @@ func (ctrl *SeccompProfileController) Run(ctx context.Context, r controller.Runt
 
 		if cfg.Config().Machine() != nil {
 			for _, profile := range cfg.Config().Machine().SeccompProfiles() {
-				if err = safe.WriterModify(ctx, r, cri.NewSeccompProfile(profile.Name()), func(cri *cri.SeccompProfile) error {
+				if err = safe.WriterModify(ctx, r, workload.NewSeccompProfile(profile.Name()), func(cri *workload.SeccompProfile) error {
 					cri.TypedSpec().Name = profile.Name()
 					cri.TypedSpec().Value = profile.Value()
 
@@ -81,7 +81,7 @@ func (ctrl *SeccompProfileController) Run(ctx context.Context, r controller.Runt
 			}
 		}
 
-		if err = safe.CleanupOutputs[*cri.SeccompProfile](ctx, r); err != nil {
+		if err = safe.CleanupOutputs[*workload.SeccompProfile](ctx, r); err != nil {
 			return err
 		}
 	}

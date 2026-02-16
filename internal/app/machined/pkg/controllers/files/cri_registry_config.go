@@ -20,8 +20,8 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/pkg/containers/cri/containerd"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
+	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 	"github.com/chubo-dev/chubo/pkg/xfs"
 )
 
@@ -44,9 +44,9 @@ func (ctrl *CRIRegistryConfigController) Name() string {
 func (ctrl *CRIRegistryConfigController) Inputs() []controller.Input {
 	return []controller.Input{
 		{
-			Namespace: cri.NamespaceName,
-			Type:      cri.RegistriesConfigType,
-			ID:        optional.Some(cri.RegistriesConfigID),
+			Namespace: workload.NamespaceName,
+			Type:      workload.RegistriesConfigType,
+			ID:        optional.Some(workload.RegistriesConfigID),
 			Kind:      controller.InputWeak,
 		},
 	}
@@ -92,7 +92,7 @@ func (ctrl *CRIRegistryConfigController) Run(ctx context.Context, r controller.R
 		case <-r.EventCh():
 		}
 
-		cfg, err := safe.ReaderGetByID[*cri.RegistriesConfig](ctx, r, cri.RegistriesConfigID)
+		cfg, err := safe.ReaderGetByID[*workload.RegistriesConfig](ctx, r, workload.RegistriesConfigID)
 		if err != nil && !state.IsNotFoundError(err) {
 			return fmt.Errorf("error getting registries config: %w", err)
 		}

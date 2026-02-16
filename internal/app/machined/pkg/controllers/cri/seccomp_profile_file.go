@@ -23,8 +23,8 @@ import (
 
 	runtimetalos "github.com/chubo-dev/chubo/internal/app/machined/pkg/runtime"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
+	workload "github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
 // SeccompProfileFileController manages the Seccomp Profiles on the host.
@@ -35,7 +35,7 @@ type SeccompProfileFileController struct {
 
 // Name implements controller.StatsController interface.
 func (ctrl *SeccompProfileFileController) Name() string {
-	return "cri.SeccompProfileFileController"
+	return "workload.SeccompProfileFileController"
 }
 
 // Inputs implements controller.StatsController interface.
@@ -90,8 +90,8 @@ func (ctrl *SeccompProfileFileController) Run(ctx context.Context, r controller.
 	// normal reconcile loop
 	if err := r.UpdateInputs([]controller.Input{
 		{
-			Namespace: cri.NamespaceName,
-			Type:      cri.SeccompProfileType,
+			Namespace: workload.NamespaceName,
+			Type:      workload.SeccompProfileType,
 			Kind:      controller.InputWeak,
 		},
 	}); err != nil {
@@ -107,7 +107,7 @@ func (ctrl *SeccompProfileFileController) Run(ctx context.Context, r controller.
 		case <-r.EventCh():
 		}
 
-		list, err := safe.ReaderListAll[*cri.SeccompProfile](ctx, r)
+		list, err := safe.ReaderListAll[*workload.SeccompProfile](ctx, r)
 		if err != nil {
 			return fmt.Errorf("error listing seccomp profiles: %w", err)
 		}
