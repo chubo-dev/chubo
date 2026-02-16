@@ -42,7 +42,7 @@ func (in *Input) init() ([]config.Document, error) {
 		machineConfig.MachineInstall.InstallGrubUseUKICmdline = pointer.To(true)
 	}
 
-	if !in.Options.VersionContract.HideRBACAndKeyUsage() {
+	if !in.Options.VersionContract.HideDeprecatedMachineFeatures() {
 		machineConfig.MachineFeatures.RBAC = pointer.To(true)
 
 		if in.Options.VersionContract.ApidExtKeyUsageCheckEnabled() {

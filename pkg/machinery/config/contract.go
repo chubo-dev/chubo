@@ -82,43 +82,13 @@ func (contract *VersionContract) Greater(other *VersionContract) bool {
 	return contract.Major > other.Major || (contract.Major == other.Major && contract.Minor > other.Minor)
 }
 
-// PodSecurityAdmissionEnabled returns true if pod security admission should be enabled by default.
-func (contract *VersionContract) PodSecurityAdmissionEnabled() bool {
-	return contract.Greater(TalosVersion1_0)
-}
-
 // StableHostnameEnabled returns true if stable hostname generation should be enabled by default.
 func (contract *VersionContract) StableHostnameEnabled() bool {
 	return contract.Greater(TalosVersion1_1)
 }
 
-// KubeletDefaultRuntimeSeccompProfileEnabled returns true if kubelet seccomp profile should be enabled by default.
-func (contract *VersionContract) KubeletDefaultRuntimeSeccompProfileEnabled() bool {
-	return contract.Greater(TalosVersion1_1)
-}
-
-// KubernetesAllowSchedulingOnControlPlanes returns true if scheduling on control planes should be enabled by default.
-func (contract *VersionContract) KubernetesAllowSchedulingOnControlPlanes() bool {
-	return contract.Greater(TalosVersion1_1)
-}
-
-// KubernetesDiscoveryBackendDisabled returns true if Kubernetes cluster discovery backend should be disabled by default.
-func (contract *VersionContract) KubernetesDiscoveryBackendDisabled() bool {
-	return contract.Greater(TalosVersion1_1)
-}
-
 // ApidExtKeyUsageCheckEnabled returns true if apid should check ext key usage of client certificates.
 func (contract *VersionContract) ApidExtKeyUsageCheckEnabled() bool {
-	return contract.Greater(TalosVersion1_2)
-}
-
-// APIServerAuditPolicySupported returns true if kube-apiserver custom audit policy is supported.
-func (contract *VersionContract) APIServerAuditPolicySupported() bool {
-	return contract.Greater(TalosVersion1_2)
-}
-
-// KubeletManifestsDirectoryDisabled returns true if the manifests directory flag is supported.
-func (contract *VersionContract) KubeletManifestsDirectoryDisabled() bool {
 	return contract.Greater(TalosVersion1_2)
 }
 
@@ -130,32 +100,6 @@ func (contract *VersionContract) SecretboxEncryptionSupported() bool {
 // DiskQuotaSupportEnabled returns true if XFS filesystems should enable project quota.
 func (contract *VersionContract) DiskQuotaSupportEnabled() bool {
 	return contract.Greater(TalosVersion1_4)
-}
-
-// KubePrismEnabled returns true if KubePrism should be enabled by default.
-func (contract *VersionContract) KubePrismEnabled() bool {
-	return contract.Greater(TalosVersion1_5)
-}
-
-// HostDNSEnabled returns true if host dns router should be enabled by default.
-func (contract *VersionContract) HostDNSEnabled() bool {
-	return contract.Greater(TalosVersion1_6)
-}
-
-// UseRSAServiceAccountKey returns true if version of Talos should use RSA Service Account key for the kube-apiserver.
-func (contract *VersionContract) UseRSAServiceAccountKey() bool {
-	return contract.Greater(TalosVersion1_6)
-}
-
-// ClusterNameForWorkers returns true if version of Talos should put cluster name to the worker machine config.
-func (contract *VersionContract) ClusterNameForWorkers() bool {
-	return contract.Greater(TalosVersion1_7)
-}
-
-// AddExcludeFromExternalLoadBalancer returns true if the label 'node.kubernetes.io/exclude-from-external-load-balancers' is automatically added
-// for controlplane nodes.
-func (contract *VersionContract) AddExcludeFromExternalLoadBalancer() bool {
-	return contract.Greater(TalosVersion1_7)
 }
 
 // SecureBootEnrollEnforcementSupported returns true if version of Talos supports SecureBoot enforcement on enroll.
@@ -173,18 +117,13 @@ func (contract *VersionContract) MultidocNetworkConfigSupported() bool {
 	return contract.Greater(TalosVersion1_11)
 }
 
-// HideDisablePSP returns true if version of Talos should hide DisablePodSecurityPolicy field from the user.
-func (contract *VersionContract) HideDisablePSP() bool {
+// HideDeprecatedMachineFeatures returns true if deprecated machine feature flags should be hidden.
+func (contract *VersionContract) HideDeprecatedMachineFeatures() bool {
 	return contract.Greater(TalosVersion1_11)
 }
 
-// HideRBACAndKeyUsage returns true if version of Talos should hide RBAC and ApidCheckExtKeyUsage fields from the user.
-func (contract *VersionContract) HideRBACAndKeyUsage() bool {
-	return contract.Greater(TalosVersion1_11)
-}
-
-// PopulateClusterSANsFromEndpoint returns true if version of Talos should populate cluster SANs from ControlPlaneEndpoint.
-func (contract *VersionContract) PopulateClusterSANsFromEndpoint() bool {
+// PopulateEndpointSANsByDefault returns true if endpoint SANs should be derived from ControlPlaneEndpoint.
+func (contract *VersionContract) PopulateEndpointSANsByDefault() bool {
 	return !contract.Greater(TalosVersion1_11)
 }
 
