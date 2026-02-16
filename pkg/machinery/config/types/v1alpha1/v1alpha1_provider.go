@@ -1203,7 +1203,7 @@ func (a *AdminKubeconfigConfig) CommonName() string {
 
 // CertOrganization implements the config.Provider interface.
 func (a *AdminKubeconfigConfig) CertOrganization() string {
-	return constants.KubernetesAdminCertOrganization
+	return "system:masters"
 }
 
 // Endpoints implements the Registries interface.

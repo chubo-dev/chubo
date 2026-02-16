@@ -202,9 +202,6 @@ const (
 	// installer.
 	ISOFilesystemLabel = "TALOS"
 
-	// KubernetesDefaultCertificateValidityDuration specifies default certificate duration for Kubernetes generated certificates.
-	KubernetesDefaultCertificateValidityDuration = time.Hour * 24 * 365
-
 	// KubernetesConfigBaseDir is the path to the base Kubernetes configuration directory.
 	KubernetesConfigBaseDir = "/etc/kubernetes"
 
@@ -217,95 +214,41 @@ const (
 	// DefaultCertificatesDir is the path the Kubernetes PKI directory.
 	DefaultCertificatesDir = KubernetesConfigBaseDir + "/" + "pki"
 
-	// KubernetesCACert is the path to the root CA certificate.
-	KubernetesCACert = DefaultCertificatesDir + "/" + "ca.crt"
-
-	// EtcdCACert is the path to the etcd CA certificate.
-	EtcdCACert = EtcdPKIPath + "/" + "ca.crt"
-
-	// EtcdCAKey is the path to the etcd CA private key.
-	EtcdCAKey = EtcdPKIPath + "/" + "ca.key"
-
-	// EtcdCert is the path to the etcd server certificate.
-	EtcdCert = EtcdPKIPath + "/" + "server.crt"
-
-	// EtcdKey is the path to the etcd server private key.
-	EtcdKey = EtcdPKIPath + "/" + "server.key"
-
-	// EtcdPeerCert is the path to the etcd peer certificate.
-	EtcdPeerCert = EtcdPKIPath + "/" + "peer.crt"
-
-	// EtcdPeerKey is the path to the etcd peer private key.
-	EtcdPeerKey = EtcdPKIPath + "/" + "peer.key"
-
-	// EtcdAdminCert is the path to the talos client certificate.
-	EtcdAdminCert = EtcdPKIPath + "/" + "admin.crt"
-
-	// EtcdAdminKey is the path to the talos client private key.
-	EtcdAdminKey = EtcdPKIPath + "/" + "admin.key"
-
-	// EtcdClientPort defines the port etcd listen on for client traffic.
-	EtcdClientPort = 2379
-
-	// EtcdPeerPort defines the port etcd listens on for peer traffic.
-	EtcdPeerPort = 2380
-
 	// KubernetesAdminCertCommonName defines CN property of Kubernetes admin certificate.
 	KubernetesAdminCertCommonName = "admin"
 
-	// KubernetesTalosAdminCertCommonName defines CN property of Kubernetes admin certificate used by Talos itself.
-	KubernetesTalosAdminCertCommonName = "talos:admin"
-
-	// KubernetesAdminCertOrganization defines Organization values of Kubernetes admin certificate.
-	KubernetesAdminCertOrganization = "system:masters"
-
-	// KubernetesAPIServerKubeletClientCommonName defines CN property of Kubernetes API server certificate to access kubelet API.
-	KubernetesAPIServerKubeletClientCommonName = "apiserver-kubelet-client"
-
-	// KubernetesControllerManagerOrganization defines Organization value of kube-controller-manager client certificate.
-	KubernetesControllerManagerOrganization = "system:kube-controller-manager"
-
-	// KubernetesSchedulerOrganization defines Organization value of kube-scheduler client certificate.
-	KubernetesSchedulerOrganization = "system:kube-scheduler"
-
 	// KubernetesAdminCertDefaultLifetime defines default lifetime for Kubernetes generated admin certificate.
 	KubernetesAdminCertDefaultLifetime = 365 * 24 * time.Hour
-
-	// KubebernetesStaticSecretsDir defines ephemeral directory which contains rendered secrets for controlplane components.
-	KubebernetesStaticSecretsDir = "/system/secrets/kubernetes"
-
-	// KubebernetesStaticConfigDir defines ephemeral directory which contains rendered configs for controlplane components.
-	KubebernetesStaticConfigDir = "/system/config/kubernetes"
 
 	// KubernetesAuditLogDir defines the ephemeral directory where the kube-apiserver will store its audit logs.
 	KubernetesAuditLogDir = EphemeralMountPoint + "/" + "log" + "/" + "audit" + "/" + "kube"
 
 	// KubernetesAPIServerSecretsDir defines directory with kube-apiserver secrets.
-	KubernetesAPIServerSecretsDir = KubebernetesStaticSecretsDir + "/" + "kube-apiserver"
+	KubernetesAPIServerSecretsDir = "/system/secrets/kubernetes/kube-apiserver"
 
 	// KubernetesAPIServerSecretsDirSELinuxLabel defines SELinux label for the directory with kube-apiserver secrets.
 	KubernetesAPIServerSecretsDirSELinuxLabel = "system_u:object_r:kube_apiserver_secret_t:s0"
 
 	// KubernetesAPIServerConfigDir defines directory with kube-apiserver configs.
-	KubernetesAPIServerConfigDir = KubebernetesStaticConfigDir + "/" + "kube-apiserver"
+	KubernetesAPIServerConfigDir = "/system/config/kubernetes/kube-apiserver"
 
 	// KubernetesAPIServerConfigDirSELinuxLabel defines SELinux label for the directory with kube-apiserver configs.
 	KubernetesAPIServerConfigDirSELinuxLabel = "system_u:object_r:kube_apiserver_config_t:s0"
 
 	// KubernetesControllerManagerSecretsDir defines ephemeral directory with kube-controller-manager secrets.
-	KubernetesControllerManagerSecretsDir = KubebernetesStaticSecretsDir + "/" + "kube-controller-manager"
+	KubernetesControllerManagerSecretsDir = "/system/secrets/kubernetes/kube-controller-manager"
 
 	// KubernetesControllerManagerSecretsDirSELinuxLabel defines SELinux label for the ephemeral directory with kube-controller-manager secrets.
 	KubernetesControllerManagerSecretsDirSELinuxLabel = "system_u:object_r:kube_controller_manager_secret_t:s0"
 
 	// KubernetesSchedulerSecretsDir defines ephemeral directory with kube-scheduler secrets.
-	KubernetesSchedulerSecretsDir = KubebernetesStaticSecretsDir + "/" + "kube-scheduler"
+	KubernetesSchedulerSecretsDir = "/system/secrets/kubernetes/kube-scheduler"
 
 	// KubernetesSchedulerSecretsDirSELinuxLabel defines SELinux label for the ephemeral directory with kube-scheduler secrets.
 	KubernetesSchedulerSecretsDirSELinuxLabel = "system_u:object_r:kube_scheduler_secret_t:s0"
 
 	// KubernetesSchedulerConfigDir defines ephemeral directory with kube-scheduler configs.
-	KubernetesSchedulerConfigDir = KubebernetesStaticConfigDir + "/" + "kube-scheduler"
+	KubernetesSchedulerConfigDir = "/system/config/kubernetes/kube-scheduler"
 
 	// KubernetesSchedulerConfigDirSELinuxLabel defines SELinux label for the ephemeral directory with kube-scheduler configs.
 	KubernetesSchedulerConfigDirSELinuxLabel = "system_u:object_r:kube_scheduler_config_t:s0"
@@ -316,25 +259,6 @@ const (
 	// KubernetesAPIServerRunGroup defines GID to run the API Server.
 	KubernetesAPIServerRunGroup = 65534
 
-	// KubernetesControllerManagerRunUser defines UID to the Controller Manager.
-	KubernetesControllerManagerRunUser = 65535
-
-	// KubernetesControllerManagerRunGroup defines GID to run the Controller Manager.
-	KubernetesControllerManagerRunGroup = 65535
-
-	// KubernetesSchedulerRunUser defines UID to the Scheduler.
-	KubernetesSchedulerRunUser = 65536
-
-	// KubernetesSchedulerRunGroup defines GID to run the Scheduler.
-	KubernetesSchedulerRunGroup = 65536
-
-	// KubeletBootstrapKubeconfig is the path to the kubeconfig required to
-	// bootstrap the kubelet.
-	KubeletBootstrapKubeconfig = KubernetesConfigBaseDir + "/" + "bootstrap-kubeconfig"
-
-	// KubeletCredentialProviderBinDir is the path to the directory where kubelet credential provider binaries are stored.
-	KubeletCredentialProviderBinDir = "/usr/local/lib/kubelet/credentialproviders"
-
 	// KubeletCredentialProviderConfig is the path to the kubelet credential provider config.
 	KubeletCredentialProviderConfig = KubernetesConfigBaseDir + "/" + "kubelet-credentialproviderconfig.yaml"
 
@@ -344,19 +268,8 @@ const (
 	// KubeletOOMScoreAdj oom_score_adj config.
 	KubeletOOMScoreAdj = -450
 
-	// KubeletPKIDir is the path to the directory where kubelet stores issued certificates and keys.
-	KubeletPKIDir = "/var/lib/kubelet/pki"
-
-	// SystemKubeletPKIDir is the path to the directory where Talos copies kubelet issued certificates and keys.
-	SystemKubeletPKIDir = "/system/secrets/kubelet"
-
 	// KubeletShutdownGracePeriod is the kubelet shutdown grace period.
 	KubeletShutdownGracePeriod = 30 * time.Second
-
-	// KubeletShutdownGracePeriodCriticalPods is the kubelet shutdown grace period for critical pods.
-	//
-	// Should be less than KubeletShutdownGracePeriod.
-	KubeletShutdownGracePeriodCriticalPods = 10 * time.Second
 
 	// SeccompProfilesDirectory is the path to the directory where user provided seccomp profiles are mounted inside Kubelet.
 	SeccompProfilesDirectory = "/var/lib/kubelet/seccomp/profiles"
@@ -405,43 +318,6 @@ const (
 	// TalosManifestPrefix is the prefix for static pod files created in ManifestsDirectory by Talos.
 	TalosManifestPrefix = "talos-"
 
-	// KubeletKubeconfig is the generated kubeconfig for kubelet.
-	KubeletKubeconfig = KubernetesConfigBaseDir + "/" + "kubeconfig-kubelet"
-
-	// KubeletSystemReservedCPU cpu system reservation value for kubelet kubeconfig.
-	KubeletSystemReservedCPU = "50m"
-
-	// KubeletSystemReservedMemoryControlPlane memory system reservation value for kubelet kubeconfig (controlplane nodes).
-	KubeletSystemReservedMemoryControlPlane = "512Mi"
-
-	// KubeletSystemReservedMemoryWorker memory system reservation value for kubelet kubeconfig (worker nodes).
-	KubeletSystemReservedMemoryWorker = "384Mi"
-
-	// KubeletSystemReservedPid pid system reservation value for kubelet kubeconfig.
-	KubeletSystemReservedPid = "100"
-
-	// KubeletSystemReservedEphemeralStorage ephemeral-storage system reservation value for kubelet kubeconfig.
-	KubeletSystemReservedEphemeralStorage = "256Mi"
-
-	// DefaultEtcdVersion is the default target version of etcd.
-	// renovate: datasource=docker depName=registry.k8s.io/etcd
-	DefaultEtcdVersion = "v3.6.7"
-
-	// EtcdRootTalosKey is the root etcd key for Talos-specific storage.
-	EtcdRootTalosKey = "talos:v1"
-
-	// EtcdTalosEtcdUpgradeMutex is the etcd mutex prefix to be used to set an etcd upgrade lock.
-	EtcdTalosEtcdUpgradeMutex = EtcdRootTalosKey + ":etcdUpgradeMutex"
-
-	// EtcdTalosManifestApplyMutex is the etcd mutex prefix used by manifest apply controller.
-	EtcdTalosManifestApplyMutex = EtcdRootTalosKey + ":manifestApplyMutex"
-
-	// EtcdTalosServiceAccountCRDControllerMutex is the etcd mutex prefix used by Talos ServiceAccount crd controller.
-	EtcdTalosServiceAccountCRDControllerMutex = EtcdRootTalosKey + ":serviceAccountCRDController"
-
-	// EtcdImage is the reposistory for the etcd image.
-	EtcdImage = "registry.k8s.io/etcd"
-
 	// EtcdPKIPath is the path to the etcd PKI directory.
 	EtcdPKIPath = "/system/secrets/etcd"
 
@@ -456,9 +332,6 @@ const (
 
 	// EtcdDataSELinuxLabel is the SELinux label for the etcd data directory.
 	EtcdDataSELinuxLabel = "system_u:object_r:etcd_data_t:s0"
-
-	// EtcdRecoverySnapshotPath is the path where etcd snapshot is uploaded for recovery.
-	EtcdRecoverySnapshotPath = "/var/lib/etcd.snapshot"
 
 	// EtcdUserID is the user ID for the etcd process.
 	EtcdUserID = 60
@@ -860,9 +733,6 @@ const (
 	// CgroupEtcdMillicores is the CPU weight for the etcd process.
 	CgroupEtcdMillicores = 2000
 
-	// SELinuxLabelEtcd is the SELinux label for etcd process.
-	SELinuxLabelEtcd = "system_u:system_r:etcd_t:s0"
-
 	// CgroupKubelet is the cgroup name for kubelet process.
 	CgroupKubelet = CgroupPodRuntimeRoot + "/kubelet"
 
@@ -919,11 +789,6 @@ const (
 
 	// FailurePauseTimeout is the timeout for the sequencer failures which can be fixed by updating the machine config.
 	FailurePauseTimeout = 35 * time.Minute
-
-	// EtcdJoinTimeout is the timeout for etcd to join the existing cluster.
-	//
-	// BootTimeout should be higher than EtcdJoinTimeout.
-	EtcdJoinTimeout = 30 * time.Minute
 
 	// NodeReadyTimeout is the timeout to wait for the node to be ready (CNI to be running).
 	// For bootstrap API, this includes time to run bootstrap.
@@ -1057,18 +922,6 @@ const (
 	// TalosconfigFilename is the legacy file name of talosconfig under TalosDir or under ServiceAccountMountPath inside a pod.
 	TalosconfigFilename = "config"
 
-	// KubernetesTalosProvider is the name of the Talos provider as a Kubernetes label.
-	KubernetesTalosProvider = "talos.dev"
-
-	// KubernetesInventoryNamespace is the namespace where Talos inventory objects are stored.
-	KubernetesInventoryNamespace = "kube-system"
-
-	// KubernetesBootstrapManifestsInventoryName is the name of the Talos bootstrap manifests inventory object.
-	KubernetesBootstrapManifestsInventoryName = "talos-bootstrap-manifests-inventory"
-
-	// KubernetesFieldManagerName is the field manager name used by Talos when applying manifests.
-	KubernetesFieldManagerName = "talos"
-
 	// ServiceAccountResourceGroup is the group name of the Talos service account CRD.
 	ServiceAccountResourceGroup = "talos.dev"
 
@@ -1136,24 +989,6 @@ const (
 
 	// GRPCMaxMessageSize is the maximum message size for Talos API.
 	GRPCMaxMessageSize = 32 * 1024 * 1024
-
-	// DefaultKubePrismPort is the default port for the KubePrism loadbalancer.
-	DefaultKubePrismPort = 7445
-
-	// KubePrismDialTimeout is the timeout for the KubePrism loadbalancer dialing an endpoint.
-	KubePrismDialTimeout = 15 * time.Second
-
-	// KubePrismKeepAlivePeriod is the TCP keepalive period for the KubePrism loadbalancer.
-	KubePrismKeepAlivePeriod = 30 * time.Second
-
-	// KubePrismTCPUserTimeout is the TCP user timeout for the KubePrism loadbalancer.
-	KubePrismTCPUserTimeout = 30 * time.Second
-
-	// KubePrismHealthCheckInterval is the interval between health checks for the KubePrism loadbalancer.
-	KubePrismHealthCheckInterval = 20 * time.Second
-
-	// KubePrismHealthCheckTimeout is the timeout for health checks for the KubePrism loadbalancer.
-	KubePrismHealthCheckTimeout = 15 * time.Second
 
 	// TalosAPIDefaultCertificateValidityDuration specifies default certificate duration for Talos API generated client certificates.
 	TalosAPIDefaultCertificateValidityDuration = time.Hour * 24 * 365
