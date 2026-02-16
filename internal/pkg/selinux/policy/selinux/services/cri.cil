@@ -55,22 +55,6 @@
 ; Shim socket
 (allow pod_containerd_t pod_containerd_socket_t (fs_classes (rw)))
 
-; System containers, not k8s pods
-
-(type etcd_t)
-(call pod_p (etcd_t))
-; FIXME: insecure as anyone with access to the pod containerd may obtain this domain
-(allow etcd_t containerd_state_t (file (entrypoint)))
-
-(type etcd_pki_t)
-(call protected_f (etcd_pki_t))
-(allow etcd_pki_t tmpfs_t (filesystem (associate)))
-(allow etcd_t etcd_pki_t (fs_classes (ro)))
-
-(type etcd_data_t)
-(call protected_f (etcd_data_t))
-(allow etcd_t etcd_data_t (fs_classes (rw)))
-
 (type cni_conf_t)
 (call filesystem_f (cni_conf_t))
 (filecon "/etc/cni(/.*)?" any (system_u object_r cni_conf_t (systemLow systemLow)))
@@ -86,34 +70,6 @@
 (type containerd_state_t)
 (call common_f (containerd_state_t))
 
-(type kube_apiserver_config_t)
-(call protected_f (kube_apiserver_config_t))
-(allow kube_apiserver_config_t tmpfs_t (filesystem (associate)))
-(type kube_scheduler_config_t)
-(call protected_f (kube_scheduler_config_t))
-(allow kube_scheduler_config_t tmpfs_t (filesystem (associate)))
-(type kube_apiserver_secret_t)
-(call protected_f (kube_apiserver_secret_t))
-(allow kube_apiserver_secret_t tmpfs_t (filesystem (associate)))
-(type kube_controller_manager_secret_t)
-(call protected_f (kube_controller_manager_secret_t))
-(allow kube_controller_manager_secret_t tmpfs_t (filesystem (associate)))
-(type kube_scheduler_secret_t)
-(call protected_f (kube_scheduler_secret_t))
-(allow kube_scheduler_secret_t tmpfs_t (filesystem (associate)))
-
-(typeattribute kube_secret_f)
-(typeattributeset kube_secret_f kube_apiserver_config_t)
-(typeattributeset kube_secret_f kube_scheduler_config_t)
-(typeattributeset kube_secret_f kube_apiserver_secret_t)
-(typeattributeset kube_secret_f kube_controller_manager_secret_t)
-(typeattributeset kube_secret_f kube_scheduler_secret_t)
-
-; Allow kubernetes pods to access their configuration and secrets
-; FIXME: insecure as anyone with access to the pod containerd may obtain these domains
-; TODO: label static pods with the correct domains
-(allow pod_p kube_secret_f (fs_classes (ro)))
-
 (type var_log_t)
 (call protected_f (var_log_t))
 (type audit_log_t)
@@ -127,8 +83,6 @@
 (allow var_lock_t tmpfs_t (filesystem (associate)))
 (type seccomp_profile_t)
 (call protected_f (seccomp_profile_t))
-(type kube_log_t)
-(call protected_f (kube_log_t))
 
 (typeattribute log_f)
 (typeattributeset log_f var_log_t)
@@ -137,7 +91,6 @@
 (typeattributeset log_f pods_log_t)
 (typeattributeset log_f var_lock_t)
 (typeattributeset log_f seccomp_profile_t)
-(typeattributeset log_f kube_log_t)
 
 ; FIXME: insecure as anyone with access to the pod containerd may obtain these domains
 ; TODO: label static pods with the correct domains
@@ -158,7 +111,7 @@
 (allow pod_containerd_t self (process (ptrace)))
 (allow pod_containerd_t self (user_namespace (create)))
 
-; Manage pseudo-terminals for containers, Kubernetes Conformance needs this
+; Manage pseudo-terminals for containers.
 (allow pod_containerd_t devpts_t (fs_classes (rw)))
 (allow pod_p devpts_t (fs_classes (rw)))
 
@@ -187,10 +140,6 @@
 
 ; Flannel calls modprobe
 (allow pod_p module_t (fs_classes (ro)))
-
-; emptyDir volumes, used e.g. by hydrophone cts
-; TODO: label
-(allow pod_p kubelet_state_t (fs_classes (rw)))
 
 ; getattr, unmount called by containers and should be guarded by their mount namespaces
 (allow pod_p fs_t (filesystem (
