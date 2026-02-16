@@ -3882,190 +3882,6 @@
       ],
       "description": "SideroLinkConfig is a SideroLink connection machine configuration document."
     },
-    "v1alpha1.APIServerConfig": {
-      "properties": {
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The container image used in the API server manifest.\n",
-          "markdownDescription": "The container image used in the API server manifest.",
-          "x-intellij-html-description": "\u003cp\u003eThe container image used in the API server manifest.\u003c/p\u003e\n"
-        },
-        "extraArgs": {
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "object",
-          "title": "extraArgs",
-          "description": "Extra arguments to supply to the API server.\n",
-          "markdownDescription": "Extra arguments to supply to the API server.",
-          "x-intellij-html-description": "\u003cp\u003eExtra arguments to supply to the API server.\u003c/p\u003e\n"
-        },
-        "extraVolumes": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.VolumeMountConfig"
-          },
-          "type": "array",
-          "title": "extraVolumes",
-          "description": "Extra volumes to mount to the API server static pod.\n",
-          "markdownDescription": "Extra volumes to mount to the API server static pod.",
-          "x-intellij-html-description": "\u003cp\u003eExtra volumes to mount to the API server static pod.\u003c/p\u003e\n"
-        },
-        "env": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "env",
-          "description": "The env field allows for the addition of environment variables for the control plane component.\n",
-          "markdownDescription": "The `env` field allows for the addition of environment variables for the control plane component.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eenv\u003c/code\u003e field allows for the addition of environment variables for the control plane component.\u003c/p\u003e\n"
-        },
-        "certSANs": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "certSANs",
-          "description": "Extra certificate subject alternative names for the API server’s certificate.\n",
-          "markdownDescription": "Extra certificate subject alternative names for the API server's certificate.",
-          "x-intellij-html-description": "\u003cp\u003eExtra certificate subject alternative names for the API server\u0026rsquo;s certificate.\u003c/p\u003e\n"
-        },
-        "admissionControl": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.AdmissionPluginConfig"
-          },
-          "type": "array",
-          "title": "admissionControl",
-          "description": "Configure the API server admission plugins.\n",
-          "markdownDescription": "Configure the API server admission plugins.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure the API server admission plugins.\u003c/p\u003e\n"
-        },
-        "auditPolicy": {
-          "type": "object",
-          "title": "auditPolicy",
-          "description": "Configure the API server audit policy.\n",
-          "markdownDescription": "Configure the API server audit policy.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure the API server audit policy.\u003c/p\u003e\n"
-        },
-        "resources": {
-          "type": "object",
-          "title": "resources",
-          "description": "Configure the API server resources.\n",
-          "markdownDescription": "Configure the API server resources.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure the API server resources.\u003c/p\u003e\n"
-        },
-        "authorizationConfig": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.AuthorizationConfigAuthorizerConfig"
-          },
-          "type": "array",
-          "title": "authorizationConfig",
-          "description": "Configure the API server authorization config. Node and RBAC authorizers are always added irrespective of the configuration.\n",
-          "markdownDescription": "Configure the API server authorization config. Node and RBAC authorizers are always added irrespective of the configuration.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure the API server authorization config. Node and RBAC authorizers are always added irrespective of the configuration.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "APIServerConfig represents the kube apiserver configuration options."
-    },
-    "v1alpha1.AdmissionPluginConfig": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "name",
-          "description": "Name is the name of the admission controller.\nIt must match the registered admission plugin name.\n",
-          "markdownDescription": "Name is the name of the admission controller.\nIt must match the registered admission plugin name.",
-          "x-intellij-html-description": "\u003cp\u003eName is the name of the admission controller.\nIt must match the registered admission plugin name.\u003c/p\u003e\n"
-        },
-        "configuration": {
-          "type": "object",
-          "title": "configuration",
-          "description": "Configuration is an embedded configuration object to be used as the plugin’s\nconfiguration.\n",
-          "markdownDescription": "Configuration is an embedded configuration object to be used as the plugin's\nconfiguration.",
-          "x-intellij-html-description": "\u003cp\u003eConfiguration is an embedded configuration object to be used as the plugin\u0026rsquo;s\nconfiguration.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "AdmissionPluginConfig represents the API server admission plugin configuration."
-    },
-    "v1alpha1.AuthorizationConfigAuthorizerConfig": {
-      "properties": {
-        "type": {
-          "type": "string",
-          "title": "type",
-          "description": "Type is the name of the authorizer. Allowed values are Node, RBAC, and Webhook.\n",
-          "markdownDescription": "Type is the name of the authorizer. Allowed values are `Node`, `RBAC`, and `Webhook`.",
-          "x-intellij-html-description": "\u003cp\u003eType is the name of the authorizer. Allowed values are \u003ccode\u003eNode\u003c/code\u003e, \u003ccode\u003eRBAC\u003c/code\u003e, and \u003ccode\u003eWebhook\u003c/code\u003e.\u003c/p\u003e\n"
-        },
-        "name": {
-          "type": "string",
-          "title": "name",
-          "description": "Name is used to describe the authorizer.\n",
-          "markdownDescription": "Name is used to describe the authorizer.",
-          "x-intellij-html-description": "\u003cp\u003eName is used to describe the authorizer.\u003c/p\u003e\n"
-        },
-        "webhook": {
-          "type": "object",
-          "title": "webhook",
-          "description": "webhook is the configuration for the webhook authorizer.\n",
-          "markdownDescription": "webhook is the configuration for the webhook authorizer.",
-          "x-intellij-html-description": "\u003cp\u003ewebhook is the configuration for the webhook authorizer.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "AuthorizationConfigAuthorizerConfig represents the API server authorization config authorizer configuration."
-    },
-    "v1alpha1.CNIConfig": {
-      "properties": {
-        "name": {
-          "enum": [
-            "flannel",
-            "custom",
-            "none"
-          ],
-          "title": "name",
-          "description": "Name of CNI to use.\n",
-          "markdownDescription": "Name of CNI to use.",
-          "x-intellij-html-description": "\u003cp\u003eName of CNI to use.\u003c/p\u003e\n"
-        },
-        "urls": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "urls",
-          "description": "URLs containing manifests to apply for the CNI.\nShould be present for “custom”, must be empty for “flannel” and “none”.\n",
-          "markdownDescription": "URLs containing manifests to apply for the CNI.\nShould be present for \"custom\", must be empty for \"flannel\" and \"none\".",
-          "x-intellij-html-description": "\u003cp\u003eURLs containing manifests to apply for the CNI.\nShould be present for \u0026ldquo;custom\u0026rdquo;, must be empty for \u0026ldquo;flannel\u0026rdquo; and \u0026ldquo;none\u0026rdquo;.\u003c/p\u003e\n"
-        },
-        "flannel": {
-          "$ref": "#/$defs/v1alpha1.FlannelCNIConfig",
-          "title": "flannel",
-          "description": "description: |\nFlannel configuration options.\n",
-          "markdownDescription": "description: |\nFlannel configuration options.",
-          "x-intellij-html-description": "\u003cp\u003edescription: |\nFlannel configuration options.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "CNIConfig represents the CNI configuration options."
-    },
     "v1alpha1.ClusterConfig": {
       "properties": {
         "id": {
@@ -4145,13 +3961,6 @@
     },
     "v1alpha1.ClusterNetworkConfig": {
       "properties": {
-        "cni": {
-          "$ref": "#/$defs/v1alpha1.CNIConfig",
-          "title": "cni",
-          "description": "The CNI used.\nComposed of “name” and “urls”.\nThe “name” key supports the following options: “flannel”, “custom”, and “none”.\n“flannel” uses Talos-managed Flannel CNI, and that’s the default option.\n“custom” uses custom manifests that should be provided in “urls”.\n“none” indicates that Talos will not manage any CNI installation.\n",
-          "markdownDescription": "The CNI used.\nComposed of \"name\" and \"urls\".\nThe \"name\" key supports the following options: \"flannel\", \"custom\", and \"none\".\n\"flannel\" uses Talos-managed Flannel CNI, and that's the default option.\n\"custom\" uses custom manifests that should be provided in \"urls\".\n\"none\" indicates that Talos will not manage any CNI installation.",
-          "x-intellij-html-description": "\u003cp\u003eThe CNI used.\nComposed of \u0026ldquo;name\u0026rdquo; and \u0026ldquo;urls\u0026rdquo;.\nThe \u0026ldquo;name\u0026rdquo; key supports the following options: \u0026ldquo;flannel\u0026rdquo;, \u0026ldquo;custom\u0026rdquo;, and \u0026ldquo;none\u0026rdquo;.\n\u0026ldquo;flannel\u0026rdquo; uses Talos-managed Flannel CNI, and that\u0026rsquo;s the default option.\n\u0026ldquo;custom\u0026rdquo; uses custom manifests that should be provided in \u0026ldquo;urls\u0026rdquo;.\n\u0026ldquo;none\u0026rdquo; indicates that Talos will not manage any CNI installation.\u003c/p\u003e\n"
-        },
         "dnsDomain": {
           "type": "string",
           "title": "dnsDomain",
@@ -4243,90 +4052,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "ControlPlaneConfig represents the control plane configuration options."
-    },
-    "v1alpha1.ControllerManagerConfig": {
-      "properties": {
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The container image used in the controller manager manifest.\n",
-          "markdownDescription": "The container image used in the controller manager manifest.",
-          "x-intellij-html-description": "\u003cp\u003eThe container image used in the controller manager manifest.\u003c/p\u003e\n"
-        },
-        "extraArgs": {
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "object",
-          "title": "extraArgs",
-          "description": "Extra arguments to supply to the controller manager.\n",
-          "markdownDescription": "Extra arguments to supply to the controller manager.",
-          "x-intellij-html-description": "\u003cp\u003eExtra arguments to supply to the controller manager.\u003c/p\u003e\n"
-        },
-        "extraVolumes": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.VolumeMountConfig"
-          },
-          "type": "array",
-          "title": "extraVolumes",
-          "description": "Extra volumes to mount to the controller manager static pod.\n",
-          "markdownDescription": "Extra volumes to mount to the controller manager static pod.",
-          "x-intellij-html-description": "\u003cp\u003eExtra volumes to mount to the controller manager static pod.\u003c/p\u003e\n"
-        },
-        "env": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "env",
-          "description": "The env field allows for the addition of environment variables for the control plane component.\n",
-          "markdownDescription": "The `env` field allows for the addition of environment variables for the control plane component.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eenv\u003c/code\u003e field allows for the addition of environment variables for the control plane component.\u003c/p\u003e\n"
-        },
-        "resources": {
-          "type": "object",
-          "title": "resources",
-          "description": "Configure the controller manager resources.\n",
-          "markdownDescription": "Configure the controller manager resources.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure the controller manager resources.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "ControllerManagerConfig represents the kube controller manager configuration options."
-    },
-    "v1alpha1.CoreDNS": {
-      "properties": {
-        "disabled": {
-          "type": "boolean",
-          "title": "disabled",
-          "description": "Disable coredns deployment on cluster bootstrap.\n",
-          "markdownDescription": "Disable coredns deployment on cluster bootstrap.",
-          "x-intellij-html-description": "\u003cp\u003eDisable coredns deployment on cluster bootstrap.\u003c/p\u003e\n"
-        },
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The image field is an override to the default coredns image.\n",
-          "markdownDescription": "The `image` field is an override to the default coredns image.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eimage\u003c/code\u003e field is an override to the default coredns image.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "CoreDNS represents the CoreDNS config values."
     },
     "v1alpha1.DiscoveryRegistriesConfig": {
       "properties": {
@@ -4424,30 +4149,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "EtcdConfig represents the etcd configuration options."
-    },
-    "v1alpha1.ExternalCloudProviderConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "title": "enabled",
-          "description": "Enable external cloud provider.\n",
-          "markdownDescription": "Enable external cloud provider.",
-          "x-intellij-html-description": "\u003cp\u003eEnable external cloud provider.\u003c/p\u003e\n"
-        },
-        "manifests": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "manifests",
-          "description": "A list of urls that point to additional manifests for an external cloud provider.\nThese will get automatically deployed as part of the bootstrap.\n",
-          "markdownDescription": "A list of urls that point to additional manifests for an external cloud provider.\nThese will get automatically deployed as part of the bootstrap.",
-          "x-intellij-html-description": "\u003cp\u003eA list of urls that point to additional manifests for an external cloud provider.\nThese will get automatically deployed as part of the bootstrap.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "ExternalCloudProviderConfig contains external cloud provider configuration."
     },
     "v1alpha1.ExtraMount": {
       "properties": {
@@ -4555,23 +4256,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "FeaturesConfig describes individual Talos features that can be switched on or off."
-    },
-    "v1alpha1.FlannelCNIConfig": {
-      "properties": {
-        "extraArgs": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "title": "extraArgs",
-          "description": "Extra arguments for ‘flanneld’.\n",
-          "markdownDescription": "Extra arguments for 'flanneld'.",
-          "x-intellij-html-description": "\u003cp\u003eExtra arguments for \u0026lsquo;flanneld\u0026rsquo;.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "FlannelCNIConfig represents the Flannel CNI configuration options."
     },
     "v1alpha1.HostDNSConfig": {
       "properties": {
@@ -5064,41 +4748,6 @@
       "type": "object",
       "description": "MachineConfig represents the machine-specific config values."
     },
-    "v1alpha1.MachineControlPlaneConfig": {
-      "properties": {
-        "controllerManager": {
-          "$ref": "#/$defs/v1alpha1.MachineControllerManagerConfig",
-          "title": "controllerManager",
-          "description": "Controller manager machine specific configuration options.\n",
-          "markdownDescription": "Controller manager machine specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eController manager machine specific configuration options.\u003c/p\u003e\n"
-        },
-        "scheduler": {
-          "$ref": "#/$defs/v1alpha1.MachineSchedulerConfig",
-          "title": "scheduler",
-          "description": "Scheduler machine specific configuration options.\n",
-          "markdownDescription": "Scheduler machine specific configuration options.",
-          "x-intellij-html-description": "\u003cp\u003eScheduler machine specific configuration options.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "MachineControlPlaneConfig machine specific configuration options."
-    },
-    "v1alpha1.MachineControllerManagerConfig": {
-      "properties": {
-        "disabled": {
-          "type": "boolean",
-          "title": "disabled",
-          "description": "Disable kube-controller-manager on the node.\n",
-          "markdownDescription": "Disable kube-controller-manager on the node.",
-          "x-intellij-html-description": "\u003cp\u003eDisable kube-controller-manager on the node.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "MachineControllerManagerConfig represents the machine specific ControllerManager config values."
-    },
     "v1alpha1.MachineFile": {
       "properties": {
         "content": {
@@ -5138,20 +4787,6 @@
       "type": "object",
       "description": "MachineFile represents a file to write to disk."
     },
-    "v1alpha1.MachineSchedulerConfig": {
-      "properties": {
-        "disabled": {
-          "type": "boolean",
-          "title": "disabled",
-          "description": "Disable kube-scheduler on the node.\n",
-          "markdownDescription": "Disable kube-scheduler on the node.",
-          "x-intellij-html-description": "\u003cp\u003eDisable kube-scheduler on the node.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "MachineSchedulerConfig represents the machine specific Scheduler config values."
-    },
     "v1alpha1.MachineSeccompProfile": {
       "properties": {
         "name": {
@@ -5172,54 +4807,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "MachineSeccompProfile defines seccomp profiles for the machine."
-    },
-    "v1alpha1.ProxyConfig": {
-      "properties": {
-        "disabled": {
-          "type": "boolean",
-          "title": "disabled",
-          "description": "Disable kube-proxy deployment on cluster bootstrap.\n",
-          "markdownDescription": "Disable kube-proxy deployment on cluster bootstrap.",
-          "x-intellij-html-description": "\u003cp\u003eDisable kube-proxy deployment on cluster bootstrap.\u003c/p\u003e\n"
-        },
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The container image used in the kube-proxy manifest.\n",
-          "markdownDescription": "The container image used in the kube-proxy manifest.",
-          "x-intellij-html-description": "\u003cp\u003eThe container image used in the kube-proxy manifest.\u003c/p\u003e\n"
-        },
-        "mode": {
-          "type": "string",
-          "title": "mode",
-          "description": "proxy mode of kube-proxy.\nThe default is ‘iptables’.\n",
-          "markdownDescription": "proxy mode of kube-proxy.\nThe default is 'iptables'.",
-          "x-intellij-html-description": "\u003cp\u003eproxy mode of kube-proxy.\nThe default is \u0026lsquo;iptables\u0026rsquo;.\u003c/p\u003e\n"
-        },
-        "extraArgs": {
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "object",
-          "title": "extraArgs",
-          "description": "Extra arguments to supply to kube-proxy.\n",
-          "markdownDescription": "Extra arguments to supply to kube-proxy.",
-          "x-intellij-html-description": "\u003cp\u003eExtra arguments to supply to kube-proxy.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "ProxyConfig represents the kube proxy configuration options."
     },
     "v1alpha1.RegistryKubernetesConfig": {
       "properties": {
@@ -5276,76 +4863,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "ResourcesConfig represents the pod resources."
-    },
-    "v1alpha1.SchedulerConfig": {
-      "properties": {
-        "image": {
-          "type": "string",
-          "title": "image",
-          "description": "The container image used in the scheduler manifest.\n",
-          "markdownDescription": "The container image used in the scheduler manifest.",
-          "x-intellij-html-description": "\u003cp\u003eThe container image used in the scheduler manifest.\u003c/p\u003e\n"
-        },
-        "extraArgs": {
-          "additionalProperties": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            ]
-          },
-          "type": "object",
-          "title": "extraArgs",
-          "description": "Extra arguments to supply to the scheduler.\n",
-          "markdownDescription": "Extra arguments to supply to the scheduler.",
-          "x-intellij-html-description": "\u003cp\u003eExtra arguments to supply to the scheduler.\u003c/p\u003e\n"
-        },
-        "extraVolumes": {
-          "items": {
-            "$ref": "#/$defs/v1alpha1.VolumeMountConfig"
-          },
-          "type": "array",
-          "title": "extraVolumes",
-          "description": "Extra volumes to mount to the scheduler static pod.\n",
-          "markdownDescription": "Extra volumes to mount to the scheduler static pod.",
-          "x-intellij-html-description": "\u003cp\u003eExtra volumes to mount to the scheduler static pod.\u003c/p\u003e\n"
-        },
-        "env": {
-          "patternProperties": {
-            ".*": {
-              "type": "string"
-            }
-          },
-          "type": "object",
-          "title": "env",
-          "description": "The env field allows for the addition of environment variables for the control plane component.\n",
-          "markdownDescription": "The `env` field allows for the addition of environment variables for the control plane component.",
-          "x-intellij-html-description": "\u003cp\u003eThe \u003ccode\u003eenv\u003c/code\u003e field allows for the addition of environment variables for the control plane component.\u003c/p\u003e\n"
-        },
-        "resources": {
-          "type": "object",
-          "title": "resources",
-          "description": "Configure the scheduler resources.\n",
-          "markdownDescription": "Configure the scheduler resources.",
-          "x-intellij-html-description": "\u003cp\u003eConfigure the scheduler resources.\u003c/p\u003e\n"
-        },
-        "config": {
-          "type": "object",
-          "title": "config",
-          "description": "Specify custom kube-scheduler configuration.\n",
-          "markdownDescription": "Specify custom kube-scheduler configuration.",
-          "x-intellij-html-description": "\u003cp\u003eSpecify custom kube-scheduler configuration.\u003c/p\u003e\n"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "SchedulerConfig represents the kube scheduler configuration options."
     },
     "v1alpha1.UdevConfig": {
       "properties": {

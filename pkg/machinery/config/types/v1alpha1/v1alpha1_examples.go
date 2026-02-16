@@ -61,17 +61,6 @@ func pemEncodedKeyExample() *x509.PEMEncodedKey {
 	}
 }
 
-func machineControlplaneExample() *MachineControlPlaneConfig {
-	return &MachineControlPlaneConfig{
-		MachineControllerManager: &MachineControllerManagerConfig{
-			MachineControllerManagerDisabled: pointer.To(false),
-		},
-		MachineScheduler: &MachineSchedulerConfig{
-			MachineSchedulerDisabled: pointer.To(true),
-		},
-	}
-}
-
 func machineInstallExample() *InstallConfig {
 	return &InstallConfig{
 		InstallDisk:              "/dev/sda",
@@ -171,9 +160,6 @@ func clusterControlPlaneExample() *ControlPlaneConfig {
 
 func clusterNetworkExample() *ClusterNetworkConfig {
 	return &ClusterNetworkConfig{
-		CNI: &CNIConfig{
-			CNIName: constants.FlannelCNI,
-		},
 		DNSDomain:     "cluster.local",
 		PodSubnet:     []string{"10.244.0.0/16"},
 		ServiceSubnet: []string{"10.96.0.0/12"},
@@ -198,64 +184,6 @@ func resourcesConfigLimitsExample() Unstructured {
 	}
 }
 
-func clusterAPIServerExample() *APIServerConfig {
-	return &APIServerConfig{
-		ContainerImage: clusterAPIServerImageExample(),
-		ExtraArgsConfig: Args{
-			"feature-gates":                    ArgValue{strValue: "ServerSideApply=true"},
-			"http2-max-streams-per-connection": ArgValue{strValue: "32"},
-		},
-		CertSANs: []string{
-			"1.2.3.4",
-			"4.5.6.7",
-		},
-	}
-}
-
-func clusterAPIServerImageExample() string {
-	return "registry.k8s.io/kube-apiserver:v1.32.0"
-}
-
-func clusterControllerManagerExample() *ControllerManagerConfig {
-	return &ControllerManagerConfig{
-		ContainerImage: clusterControllerManagerImageExample(),
-		ExtraArgsConfig: Args{
-			"feature-gates": ArgValue{strValue: "ServerSideApply=true"},
-		},
-	}
-}
-
-func clusterControllerManagerImageExample() string {
-	return "registry.k8s.io/kube-controller-manager:v1.32.0"
-}
-
-func clusterProxyExample() *ProxyConfig {
-	return &ProxyConfig{
-		ContainerImage: clusterProxyImageExample(),
-		ExtraArgsConfig: Args{
-			"proxy-mode": ArgValue{strValue: "iptables"},
-		},
-		ModeConfig: "ipvs",
-	}
-}
-
-func clusterProxyImageExample() string {
-	return "registry.k8s.io/kube-proxy:v1.32.0"
-}
-
-func clusterSchedulerExample() *SchedulerConfig {
-	return &SchedulerConfig{
-		ContainerImage: clusterSchedulerImageExample(),
-		ExtraArgsConfig: Args{
-			"feature-gates": ArgValue{strValue: "AllBeta=true"},
-		},
-	}
-}
-
-func clusterSchedulerImageExample() string {
-	return "registry.k8s.io/kube-scheduler:v1.32.0"
-}
-
 func clusterEtcdExample() *EtcdConfig {
 	return &EtcdConfig{
 		ContainerImage: clusterEtcdImageExample(),
@@ -272,22 +200,6 @@ func clusterEtcdImageExample() string {
 
 func clusterEtcdAdvertisedSubnetsExample() []string {
 	return []string{"10.0.0.0/8"}
-}
-
-func clusterCoreDNSExample() *CoreDNS {
-	return &CoreDNS{
-		CoreDNSImage: (&CoreDNS{}).Image(),
-	}
-}
-
-func clusterExternalCloudProviderConfigExample() *ExternalCloudProviderConfig {
-	return &ExternalCloudProviderConfig{
-		ExternalEnabled: pointer.To(true),
-		ExternalManifests: []string{
-			"https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/rbac.yaml",
-			"https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/aws-cloud-controller-manager-daemonset.yaml",
-		},
-	}
 }
 
 func machineSeccompExample() []*MachineSeccompProfile {
@@ -312,15 +224,6 @@ func clusterEndpointExample1() *Endpoint {
 func clusterEndpointExample2() *Endpoint {
 	return &Endpoint{
 		mustParseURL("https://cluster1.internal:6443"),
-	}
-}
-
-func clusterCustomCNIExample() *CNIConfig {
-	return &CNIConfig{
-		CNIName: constants.CustomCNI,
-		CNIUrls: []string{
-			"https://docs.projectcalico.org/archive/v3.20/manifests/canal.yaml",
-		},
 	}
 }
 
@@ -397,76 +300,6 @@ func machinePodsExample() []Unstructured {
 							"name":  "nginx",
 							"image": "nginx",
 						},
-					},
-				},
-			},
-		},
-	}
-}
-
-func admissionControlConfigExample() []*AdmissionPluginConfig {
-	return []*AdmissionPluginConfig{
-		{
-			PluginName: "PodSecurity",
-			PluginConfiguration: Unstructured{
-				Object: map[string]any{
-					"apiVersion": "pod-security.admission.config.k8s.io/v1alpha1",
-					"kind":       "PodSecurityConfiguration",
-					"defaults": map[string]any{
-						"enforce":         "baseline",
-						"enforce-version": "latest",
-						"audit":           "restricted",
-						"audit-version":   "latest",
-						"warn":            "restricted",
-						"warn-version":    "latest",
-					},
-					"exemptions": map[string]any{
-						"usernames":      []any{},
-						"runtimeClasses": []any{},
-						"namespaces":     []any{"kube-system"},
-					},
-				},
-			},
-		},
-	}
-}
-
-func authorizationConfigExample() []*AuthorizationConfigAuthorizerConfig {
-	return []*AuthorizationConfigAuthorizerConfig{
-		{
-			AuthorizerType: "Webhook",
-			AuthorizerName: "webhook",
-			AuthorizerWebhook: Unstructured{
-				Object: map[string]any{
-					"timeout":                    "3s",
-					"subjectAccessReviewVersion": "v1",
-					"matchConditionSubjectAccessReviewVersion": "v1",
-					"failurePolicy": "Deny",
-					"connectionInfo": map[string]any{
-						"type": "InClusterConfig",
-					},
-					"matchConditions": []map[string]any{
-						{
-							"expression": "has(request.resourceAttributes)",
-						},
-						{
-							"expression": "!(\\'system:serviceaccounts:kube-system\\' in request.groups)",
-						},
-					},
-				},
-			},
-		},
-		{
-			AuthorizerType: "Webhook",
-			AuthorizerName: "in-cluster-authorizer",
-			AuthorizerWebhook: Unstructured{
-				Object: map[string]any{
-					"timeout":                    "3s",
-					"subjectAccessReviewVersion": "v1",
-					"matchConditionSubjectAccessReviewVersion": "v1",
-					"failurePolicy": "NoOpinion",
-					"connectionInfo": map[string]any{
-						"type": "InClusterConfig",
 					},
 				},
 			},

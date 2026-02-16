@@ -1171,22 +1171,6 @@ func (i InstallExtensionConfig) Image() string {
 	return i.ExtensionImage
 }
 
-// Enabled implements the config.Provider interface.
-func (c *CoreDNS) Enabled() bool {
-	return c.CoreDNSDisabled == nil || !*c.CoreDNSDisabled
-}
-
-// Image implements the config.Provider interface.
-func (c *CoreDNS) Image() string {
-	coreDNSImage := fmt.Sprintf("%s:%s", constants.CoreDNSImage, constants.DefaultCoreDNSVersion)
-
-	if c.CoreDNSImage != "" {
-		coreDNSImage = c.CoreDNSImage
-	}
-
-	return coreDNSImage
-}
-
 // Endpoints implements the Registries interface.
 func (r *RegistryMirrorConfig) Endpoints() []config.RegistryEndpointConfig {
 	return xslices.Map(r.MirrorEndpoints, func(e string) config.RegistryEndpointConfig {

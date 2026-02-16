@@ -151,15 +151,6 @@ func WithDebug(enable bool) Option {
 	}
 }
 
-// WithClusterCNIConfig specifies custom cluster CNI config.
-func WithClusterCNIConfig(config *v1alpha1.CNIConfig) Option {
-	return func(o *Options) error {
-		o.CNIConfig = config
-
-		return nil
-	}
-}
-
 // WithUserDisks generates user partitions config.
 //
 // Deprecated: use block.UserVolumeConfig instead.
@@ -269,7 +260,6 @@ type Options struct {
 
 	// Cluster settings.
 	DNSDomain                      string
-	CNIConfig                      *v1alpha1.CNIConfig
 	AllowSchedulingOnControlPlanes bool
 	LocalAPIServerPort             int
 	AdditionalSubjectAltNames      []string

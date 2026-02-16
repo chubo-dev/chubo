@@ -9,7 +9,6 @@ package v1alpha1
 import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"github.com/siderolabs/go-pointer"
 )
 
 func (Config) Doc() *encoder.Doc {
@@ -390,82 +389,6 @@ func (ExtraMount) Doc() *encoder.Doc {
 	return doc
 }
 
-func (MachineControlPlaneConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "MachineControlPlaneConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "MachineControlPlaneConfig machine specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "MachineControlPlaneConfig machine specific configuration options.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "controllerManager",
-				Type:        "MachineControllerManagerConfig",
-				Note:        "",
-				Description: "Controller manager machine specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Controller manager machine specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "scheduler",
-				Type:        "MachineSchedulerConfig",
-				Note:        "",
-				Description: "Scheduler machine specific configuration options.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Scheduler machine specific configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	return doc
-}
-
-func (MachineControllerManagerConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "MachineControllerManagerConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "MachineControllerManagerConfig represents the machine specific ControllerManager config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "MachineControllerManagerConfig represents the machine specific ControllerManager config values.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "MachineControlPlaneConfig",
-				FieldName: "controllerManager",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "disabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Disable kube-controller-manager on the node.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Disable kube-controller-manager on the node." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	return doc
-}
-
-func (MachineSchedulerConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "MachineSchedulerConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "MachineSchedulerConfig represents the machine specific Scheduler config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "MachineSchedulerConfig represents the machine specific Scheduler config values.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "MachineControlPlaneConfig",
-				FieldName: "scheduler",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "disabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Disable kube-scheduler on the node.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Disable kube-scheduler on the node." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	return doc
-}
-
 func (InstallConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "InstallConfig",
@@ -637,32 +560,6 @@ func (InstallDiskSelector) Doc() *encoder.Doc {
 	return doc
 }
 
-func (CoreDNS) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "CoreDNS",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "CoreDNS represents the CoreDNS config values." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "CoreDNS represents the CoreDNS config values.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "disabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Disable coredns deployment on cluster bootstrap.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Disable coredns deployment on cluster bootstrap." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The `image` field is an override to the default coredns image.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `image` field is an override to the default coredns image." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	return doc
-}
-
 func (Endpoint) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "Endpoint",
@@ -719,310 +616,6 @@ func (ControlPlaneConfig) Doc() *encoder.Doc {
 
 	doc.Fields[0].AddExample("", clusterEndpointExample1())
 	doc.Fields[0].AddExample("", clusterEndpointExample2())
-
-	return doc
-}
-
-func (APIServerConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "APIServerConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "APIServerConfig represents the kube apiserver configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "APIServerConfig represents the kube apiserver configuration options.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The container image used in the API server manifest.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The container image used in the API server manifest." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraArgs",
-				Type:        "Args",
-				Note:        "",
-				Description: "Extra arguments to supply to the API server.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra arguments to supply to the API server." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraVolumes",
-				Type:        "[]VolumeMountConfig",
-				Note:        "",
-				Description: "Extra volumes to mount to the API server static pod.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra volumes to mount to the API server static pod." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "env",
-				Type:        "Env",
-				Note:        "",
-				Description: "The `env` field allows for the addition of environment variables for the control plane component.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `env` field allows for the addition of environment variables for the control plane component." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "certSANs",
-				Type:        "[]string",
-				Note:        "",
-				Description: "Extra certificate subject alternative names for the API server's certificate.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra certificate subject alternative names for the API server's certificate." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{},
-			{
-				Name:        "admissionControl",
-				Type:        "[]AdmissionPluginConfig",
-				Note:        "",
-				Description: "Configure the API server admission plugins.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure the API server admission plugins." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "auditPolicy",
-				Type:        "Unstructured",
-				Note:        "",
-				Description: "Configure the API server audit policy.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure the API server audit policy." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "resources",
-				Type:        "ResourcesConfig",
-				Note:        "",
-				Description: "Configure the API server resources.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure the API server resources." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "authorizationConfig",
-				Type:        "[]AuthorizationConfigAuthorizerConfig",
-				Note:        "",
-				Description: "Configure the API server authorization config. Node and RBAC authorizers are always added irrespective of the configuration.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure the API server authorization config. Node and RBAC authorizers are always added irrespective of the configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", clusterAPIServerImageExample())
-	doc.Fields[6].AddExample("", admissionControlConfigExample())
-	doc.Fields[7].AddExample("", APIServerDefaultAuditPolicy)
-	doc.Fields[9].AddExample("", authorizationConfigExample())
-
-	return doc
-}
-
-func (AdmissionPluginConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "AdmissionPluginConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "AdmissionPluginConfig represents the API server admission plugin configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "AdmissionPluginConfig represents the API server admission plugin configuration.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "APIServerConfig",
-				FieldName: "admissionControl",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "name",
-				Type:        "string",
-				Note:        "",
-				Description: "Name is the name of the admission controller.\nIt must match the registered admission plugin name.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Name is the name of the admission controller." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "configuration",
-				Type:        "Unstructured",
-				Note:        "",
-				Description: "Configuration is an embedded configuration object to be used as the plugin's\nconfiguration.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configuration is an embedded configuration object to be used as the plugin's" /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.AddExample("", admissionControlConfigExample())
-
-	return doc
-}
-
-func (AuthorizationConfigAuthorizerConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "AuthorizationConfigAuthorizerConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "AuthorizationConfigAuthorizerConfig represents the API server authorization config authorizer configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "AuthorizationConfigAuthorizerConfig represents the API server authorization config authorizer configuration.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "APIServerConfig",
-				FieldName: "authorizationConfig",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "type",
-				Type:        "string",
-				Note:        "",
-				Description: "Type is the name of the authorizer. Allowed values are `Node`, `RBAC`, and `Webhook`.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Type is the name of the authorizer. Allowed values are `Node`, `RBAC`, and `Webhook`." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "name",
-				Type:        "string",
-				Note:        "",
-				Description: "Name is used to describe the authorizer.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Name is used to describe the authorizer." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "webhook",
-				Type:        "Unstructured",
-				Note:        "",
-				Description: "webhook is the configuration for the webhook authorizer.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "webhook is the configuration for the webhook authorizer." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.AddExample("", authorizationConfigExample())
-
-	return doc
-}
-
-func (ControllerManagerConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "ControllerManagerConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "ControllerManagerConfig represents the kube controller manager configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "ControllerManagerConfig represents the kube controller manager configuration options.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The container image used in the controller manager manifest.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The container image used in the controller manager manifest." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraArgs",
-				Type:        "Args",
-				Note:        "",
-				Description: "Extra arguments to supply to the controller manager.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra arguments to supply to the controller manager." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraVolumes",
-				Type:        "[]VolumeMountConfig",
-				Note:        "",
-				Description: "Extra volumes to mount to the controller manager static pod.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra volumes to mount to the controller manager static pod." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "env",
-				Type:        "Env",
-				Note:        "",
-				Description: "The `env` field allows for the addition of environment variables for the control plane component.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `env` field allows for the addition of environment variables for the control plane component." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "resources",
-				Type:        "ResourcesConfig",
-				Note:        "",
-				Description: "Configure the controller manager resources.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure the controller manager resources." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", clusterControllerManagerImageExample())
-
-	return doc
-}
-
-func (ProxyConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "ProxyConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "ProxyConfig represents the kube proxy configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "ProxyConfig represents the kube proxy configuration options.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "disabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Disable kube-proxy deployment on cluster bootstrap.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Disable kube-proxy deployment on cluster bootstrap." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The container image used in the kube-proxy manifest.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The container image used in the kube-proxy manifest." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "mode",
-				Type:        "string",
-				Note:        "",
-				Description: "proxy mode of kube-proxy.\nThe default is 'iptables'.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "proxy mode of kube-proxy." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraArgs",
-				Type:        "Args",
-				Note:        "",
-				Description: "Extra arguments to supply to kube-proxy.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra arguments to supply to kube-proxy." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", pointer.To(false))
-	doc.Fields[1].AddExample("", clusterProxyImageExample())
-
-	return doc
-}
-
-func (SchedulerConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "SchedulerConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "SchedulerConfig represents the kube scheduler configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "SchedulerConfig represents the kube scheduler configuration options.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "image",
-				Type:        "string",
-				Note:        "",
-				Description: "The container image used in the scheduler manifest.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The container image used in the scheduler manifest." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraArgs",
-				Type:        "Args",
-				Note:        "",
-				Description: "Extra arguments to supply to the scheduler.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra arguments to supply to the scheduler." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "extraVolumes",
-				Type:        "[]VolumeMountConfig",
-				Note:        "",
-				Description: "Extra volumes to mount to the scheduler static pod.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra volumes to mount to the scheduler static pod." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "env",
-				Type:        "Env",
-				Note:        "",
-				Description: "The `env` field allows for the addition of environment variables for the control plane component.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The `env` field allows for the addition of environment variables for the control plane component." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "resources",
-				Type:        "ResourcesConfig",
-				Note:        "",
-				Description: "Configure the scheduler resources.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Configure the scheduler resources." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "config",
-				Type:        "Unstructured",
-				Note:        "",
-				Description: "Specify custom kube-scheduler configuration.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Specify custom kube-scheduler configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", clusterSchedulerImageExample())
 
 	return doc
 }
@@ -1086,13 +679,6 @@ func (ClusterNetworkConfig) Doc() *encoder.Doc {
 		Description: "ClusterNetworkConfig represents kube networking configuration options.",
 		Fields: []encoder.Doc{
 			{
-				Name:        "cni",
-				Type:        "CNIConfig",
-				Note:        "",
-				Description: "The CNI used.\nComposed of \"name\" and \"urls\".\nThe \"name\" key supports the following options: \"flannel\", \"custom\", and \"none\".\n\"flannel\" uses Talos-managed Flannel CNI, and that's the default option.\n\"custom\" uses custom manifests that should be provided in \"urls\".\n\"none\" indicates that Talos will not manage any CNI installation.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "The CNI used." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
 				Name:        "dnsDomain",
 				Type:        "string",
 				Note:        "",
@@ -1116,120 +702,9 @@ func (ClusterNetworkConfig) Doc() *encoder.Doc {
 		},
 	}
 
-	doc.Fields[0].AddExample("", clusterCustomCNIExample())
-	doc.Fields[1].AddExample("", "cluster.local")
-	doc.Fields[2].AddExample("", []string{"10.244.0.0/16"})
-	doc.Fields[3].AddExample("", []string{"10.96.0.0/12"})
-
-	return doc
-}
-
-func (CNIConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "CNIConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "CNIConfig represents the CNI configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "CNIConfig represents the CNI configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "ClusterNetworkConfig",
-				FieldName: "cni",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "name",
-				Type:        "string",
-				Note:        "",
-				Description: "Name of CNI to use.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Name of CNI to use." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"flannel",
-					"custom",
-					"none",
-				},
-			},
-			{
-				Name:        "urls",
-				Type:        "[]string",
-				Note:        "",
-				Description: "URLs containing manifests to apply for the CNI.\nShould be present for \"custom\", must be empty for \"flannel\" and \"none\".",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "URLs containing manifests to apply for the CNI." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-			{
-				Name:        "flannel",
-				Type:        "FlannelCNIConfig",
-				Note:        "",
-				Description: "description: |\nFlannel configuration options.\n",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "description: |" /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.AddExample("", clusterCustomCNIExample())
-
-	return doc
-}
-
-func (FlannelCNIConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "FlannelCNIConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "FlannelCNIConfig represents the Flannel CNI configuration options." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "FlannelCNIConfig represents the Flannel CNI configuration options.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "CNIConfig",
-				FieldName: "flannel",
-			},
-		},
-		Fields: []encoder.Doc{
-			{
-				Name:        "extraArgs",
-				Type:        "[]string",
-				Note:        "",
-				Description: "Extra arguments for 'flanneld'.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Extra arguments for 'flanneld'." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[0].AddExample("", []string{"--iface-can-reach=192.168.1.1"})
-
-	return doc
-}
-
-func (ExternalCloudProviderConfig) Doc() *encoder.Doc {
-	doc := &encoder.Doc{
-		Type:        "ExternalCloudProviderConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "ExternalCloudProviderConfig contains external cloud provider configuration." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "ExternalCloudProviderConfig contains external cloud provider configuration.",
-		Fields: []encoder.Doc{
-			{
-				Name:        "enabled",
-				Type:        "bool",
-				Note:        "",
-				Description: "Enable external cloud provider.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable external cloud provider." /* encoder.LineComment */, "" /* encoder.FootComment */},
-				Values: []string{
-					"true",
-					"yes",
-					"false",
-					"no",
-				},
-			},
-			{
-				Name:        "manifests",
-				Type:        "[]string",
-				Note:        "",
-				Description: "A list of urls that point to additional manifests for an external cloud provider.\nThese will get automatically deployed as part of the bootstrap.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "A list of urls that point to additional manifests for an external cloud provider." /* encoder.LineComment */, "" /* encoder.FootComment */},
-			},
-		},
-	}
-
-	doc.Fields[1].AddExample("", []string{
-		"https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/rbac.yaml",
-		"https://raw.githubusercontent.com/kubernetes/cloud-provider-aws/v1.20.0-alpha.0/manifests/aws-cloud-controller-manager-daemonset.yaml",
-	})
+	doc.Fields[0].AddExample("", "cluster.local")
+	doc.Fields[1].AddExample("", []string{"10.244.0.0/16"})
+	doc.Fields[2].AddExample("", []string{"10.96.0.0/12"})
 
 	return doc
 }
@@ -1239,20 +714,6 @@ func (ResourcesConfig) Doc() *encoder.Doc {
 		Type:        "ResourcesConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "ResourcesConfig represents the pod resources." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "ResourcesConfig represents the pod resources.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "APIServerConfig",
-				FieldName: "resources",
-			},
-			{
-				TypeName:  "ControllerManagerConfig",
-				FieldName: "resources",
-			},
-			{
-				TypeName:  "SchedulerConfig",
-				FieldName: "resources",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "requests",
@@ -1539,20 +1000,6 @@ func (VolumeMountConfig) Doc() *encoder.Doc {
 		Type:        "VolumeMountConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "VolumeMountConfig struct describes extra volume mount for the static pods." /* encoder.LineComment */, "" /* encoder.FootComment */},
 		Description: "VolumeMountConfig struct describes extra volume mount for the static pods.",
-		AppearsIn: []encoder.Appearance{
-			{
-				TypeName:  "APIServerConfig",
-				FieldName: "extraVolumes",
-			},
-			{
-				TypeName:  "ControllerManagerConfig",
-				FieldName: "extraVolumes",
-			},
-			{
-				TypeName:  "SchedulerConfig",
-				FieldName: "extraVolumes",
-			},
-		},
 		Fields: []encoder.Doc{
 			{
 				Name:        "hostPath",
@@ -1907,25 +1354,12 @@ func GetFileDoc() *encoder.FileDoc {
 			ClusterConfig{}.Doc(),
 			LinuxIDMapping{}.Doc(),
 			ExtraMount{}.Doc(),
-			MachineControlPlaneConfig{}.Doc(),
-			MachineControllerManagerConfig{}.Doc(),
-			MachineSchedulerConfig{}.Doc(),
 			InstallConfig{}.Doc(),
 			InstallDiskSelector{}.Doc(),
-			CoreDNS{}.Doc(),
 			Endpoint{}.Doc(),
 			ControlPlaneConfig{}.Doc(),
-			APIServerConfig{}.Doc(),
-			AdmissionPluginConfig{}.Doc(),
-			AuthorizationConfigAuthorizerConfig{}.Doc(),
-			ControllerManagerConfig{}.Doc(),
-			ProxyConfig{}.Doc(),
-			SchedulerConfig{}.Doc(),
 			EtcdConfig{}.Doc(),
 			ClusterNetworkConfig{}.Doc(),
-			CNIConfig{}.Doc(),
-			FlannelCNIConfig{}.Doc(),
-			ExternalCloudProviderConfig{}.Doc(),
 			ResourcesConfig{}.Doc(),
 			MachineFile{}.Doc(),
 			FeaturesConfig{}.Doc(),
