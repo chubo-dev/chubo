@@ -59,10 +59,10 @@ type imageCmdFlagsType struct {
 var imageCmdFlags imageCmdFlagsType
 
 func (flags imageCmdFlagsType) apiNamespace() (common.ContainerdNamespace, error) {
-	switch flags.namespace {
-	case "cri", "workload":
+	switch {
+	case isWorkloadImageNamespace(flags.namespace):
 		return common.ContainerdNamespace_NS_CRI, nil
-	case "system":
+	case flags.namespace == "system":
 		return common.ContainerdNamespace_NS_SYSTEM, nil
 	default:
 		return 0, fmt.Errorf("unsupported namespace %q", flags.namespace)
@@ -70,18 +70,18 @@ func (flags imageCmdFlagsType) apiNamespace() (common.ContainerdNamespace, error
 }
 
 func (flags imageCmdFlagsType) containerdInstance() (*common.ContainerdInstance, error) {
-	switch flags.namespace {
-	case "cri", "workload":
+	switch {
+	case isWorkloadImageNamespace(flags.namespace):
 		return &common.ContainerdInstance{
 			Driver:    workloadContainerDriver(),
 			Namespace: common.ContainerdNamespace_NS_CRI,
 		}, nil
-	case "system":
+	case flags.namespace == "system":
 		return &common.ContainerdInstance{
 			Driver:    systemContainerDriver(),
 			Namespace: common.ContainerdNamespace_NS_SYSTEM,
 		}, nil
-	case "inmem":
+	case flags.namespace == "inmem":
 		return &common.ContainerdInstance{
 			Driver:    common.ContainerDriver_CONTAINERD,
 			Namespace: common.ContainerdNamespace_NS_SYSTEM,
