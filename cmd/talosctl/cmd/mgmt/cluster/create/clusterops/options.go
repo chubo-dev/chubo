@@ -66,7 +66,6 @@ type Common struct {
 	ForceEndpoint           string
 	ControlPlanePort        int
 	WithInitNode            bool
-	CustomCNIUrl            string
 	SkipInjectingConfig     bool
 	TalosVersion            string
 	EnableClusterDiscovery  bool

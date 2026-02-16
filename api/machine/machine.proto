@@ -947,38 +947,6 @@ message DiskStat {
   uint64 discard_time_ms = 16;
 }
 
-// rpc generateConfiguration
-
-message RouteConfig {
-  string network = 1;
-  string gateway = 2;
-  uint32 metric = 3;
-}
-
-message DHCPOptionsConfig {
-  uint32 route_metric = 1;
-}
-
-message NetworkDeviceConfig {
-  string interface = 1;
-  string cidr = 2;
-  int32 mtu = 3;
-  bool dhcp = 4;
-  bool ignore = 5;
-  DHCPOptionsConfig dhcp_options = 6;
-  repeated RouteConfig routes = 7;
-}
-
-message NetworkConfig {
-  string hostname = 1;
-  repeated NetworkDeviceConfig interfaces = 2;
-}
-
-message InstallConfig {
-  string install_disk = 1;
-  string install_image = 2;
-}
-
 message MachineConfig {
   enum MachineType {
     TYPE_UNKNOWN = 0;
@@ -987,30 +955,6 @@ message MachineConfig {
     TYPE_WORKER = 3;
   }
   MachineType type = 1;
-  InstallConfig install_config = 2;
-  NetworkConfig network_config = 3;
-  string kubernetes_version = 4;
-}
-
-message ControlPlaneConfig {
-  string endpoint = 1;
-}
-
-message CNIConfig {
-  string name = 1;
-  repeated string urls = 2;
-}
-
-message ClusterNetworkConfig {
-  string dns_domain = 1;
-  CNIConfig cni_config = 2;
-}
-
-message ClusterConfig {
-  string name = 1;
-  ControlPlaneConfig control_plane = 2;
-  ClusterNetworkConfig cluster_network = 3;
-  bool allow_scheduling_on_control_planes = 4;
 }
 
 message GenerateClientConfigurationRequest {

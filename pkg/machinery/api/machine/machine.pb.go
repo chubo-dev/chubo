@@ -7,16 +7,18 @@
 package machine
 
 import (
-	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
+	reflect "reflect"
+	sync "sync"
+	unsafe "unsafe"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
 	durationpb "google.golang.org/protobuf/types/known/durationpb"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
+
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -602,7 +604,7 @@ func (x MachineConfig_MachineType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use MachineConfig_MachineType.Descriptor instead.
 func (MachineConfig_MachineType) EnumDescriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{109, 0}
+	return file_machine_machine_proto_rawDescGZIP(), []int{104, 0}
 }
 
 type NetstatRequest_Filter int32
@@ -651,7 +653,7 @@ func (x NetstatRequest_Filter) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use NetstatRequest_Filter.Descriptor instead.
 func (NetstatRequest_Filter) EnumDescriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{119, 0}
+	return file_machine_machine_proto_rawDescGZIP(), []int{110, 0}
 }
 
 type ConnectRecord_State int32
@@ -727,7 +729,7 @@ func (x ConnectRecord_State) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ConnectRecord_State.Descriptor instead.
 func (ConnectRecord_State) EnumDescriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{120, 0}
+	return file_machine_machine_proto_rawDescGZIP(), []int{111, 0}
 }
 
 type ConnectRecord_TimerActive int32
@@ -782,7 +784,7 @@ func (x ConnectRecord_TimerActive) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ConnectRecord_TimerActive.Descriptor instead.
 func (ConnectRecord_TimerActive) EnumDescriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{120, 1}
+	return file_machine_machine_proto_rawDescGZIP(), []int{111, 1}
 }
 
 // rpc applyConfiguration
@@ -7585,319 +7587,16 @@ func (x *DiskStat) GetDiscardTimeMs() uint64 {
 	return 0
 }
 
-type RouteConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
-	Gateway       string                 `protobuf:"bytes,2,opt,name=gateway,proto3" json:"gateway,omitempty"`
-	Metric        uint32                 `protobuf:"varint,3,opt,name=metric,proto3" json:"metric,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *RouteConfig) Reset() {
-	*x = RouteConfig{}
-	mi := &file_machine_machine_proto_msgTypes[104]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *RouteConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RouteConfig) ProtoMessage() {}
-
-func (x *RouteConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[104]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RouteConfig.ProtoReflect.Descriptor instead.
-func (*RouteConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{104}
-}
-
-func (x *RouteConfig) GetNetwork() string {
-	if x != nil {
-		return x.Network
-	}
-	return ""
-}
-
-func (x *RouteConfig) GetGateway() string {
-	if x != nil {
-		return x.Gateway
-	}
-	return ""
-}
-
-func (x *RouteConfig) GetMetric() uint32 {
-	if x != nil {
-		return x.Metric
-	}
-	return 0
-}
-
-type DHCPOptionsConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RouteMetric   uint32                 `protobuf:"varint,1,opt,name=route_metric,json=routeMetric,proto3" json:"route_metric,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DHCPOptionsConfig) Reset() {
-	*x = DHCPOptionsConfig{}
-	mi := &file_machine_machine_proto_msgTypes[105]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DHCPOptionsConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DHCPOptionsConfig) ProtoMessage() {}
-
-func (x *DHCPOptionsConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[105]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DHCPOptionsConfig.ProtoReflect.Descriptor instead.
-func (*DHCPOptionsConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{105}
-}
-
-func (x *DHCPOptionsConfig) GetRouteMetric() uint32 {
-	if x != nil {
-		return x.RouteMetric
-	}
-	return 0
-}
-
-type NetworkDeviceConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Interface     string                 `protobuf:"bytes,1,opt,name=interface,proto3" json:"interface,omitempty"`
-	Cidr          string                 `protobuf:"bytes,2,opt,name=cidr,proto3" json:"cidr,omitempty"`
-	Mtu           int32                  `protobuf:"varint,3,opt,name=mtu,proto3" json:"mtu,omitempty"`
-	Dhcp          bool                   `protobuf:"varint,4,opt,name=dhcp,proto3" json:"dhcp,omitempty"`
-	Ignore        bool                   `protobuf:"varint,5,opt,name=ignore,proto3" json:"ignore,omitempty"`
-	DhcpOptions   *DHCPOptionsConfig     `protobuf:"bytes,6,opt,name=dhcp_options,json=dhcpOptions,proto3" json:"dhcp_options,omitempty"`
-	Routes        []*RouteConfig         `protobuf:"bytes,7,rep,name=routes,proto3" json:"routes,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *NetworkDeviceConfig) Reset() {
-	*x = NetworkDeviceConfig{}
-	mi := &file_machine_machine_proto_msgTypes[106]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *NetworkDeviceConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*NetworkDeviceConfig) ProtoMessage() {}
-
-func (x *NetworkDeviceConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[106]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use NetworkDeviceConfig.ProtoReflect.Descriptor instead.
-func (*NetworkDeviceConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{106}
-}
-
-func (x *NetworkDeviceConfig) GetInterface() string {
-	if x != nil {
-		return x.Interface
-	}
-	return ""
-}
-
-func (x *NetworkDeviceConfig) GetCidr() string {
-	if x != nil {
-		return x.Cidr
-	}
-	return ""
-}
-
-func (x *NetworkDeviceConfig) GetMtu() int32 {
-	if x != nil {
-		return x.Mtu
-	}
-	return 0
-}
-
-func (x *NetworkDeviceConfig) GetDhcp() bool {
-	if x != nil {
-		return x.Dhcp
-	}
-	return false
-}
-
-func (x *NetworkDeviceConfig) GetIgnore() bool {
-	if x != nil {
-		return x.Ignore
-	}
-	return false
-}
-
-func (x *NetworkDeviceConfig) GetDhcpOptions() *DHCPOptionsConfig {
-	if x != nil {
-		return x.DhcpOptions
-	}
-	return nil
-}
-
-func (x *NetworkDeviceConfig) GetRoutes() []*RouteConfig {
-	if x != nil {
-		return x.Routes
-	}
-	return nil
-}
-
-type NetworkConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Hostname      string                 `protobuf:"bytes,1,opt,name=hostname,proto3" json:"hostname,omitempty"`
-	Interfaces    []*NetworkDeviceConfig `protobuf:"bytes,2,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *NetworkConfig) Reset() {
-	*x = NetworkConfig{}
-	mi := &file_machine_machine_proto_msgTypes[107]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *NetworkConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*NetworkConfig) ProtoMessage() {}
-
-func (x *NetworkConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[107]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use NetworkConfig.ProtoReflect.Descriptor instead.
-func (*NetworkConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{107}
-}
-
-func (x *NetworkConfig) GetHostname() string {
-	if x != nil {
-		return x.Hostname
-	}
-	return ""
-}
-
-func (x *NetworkConfig) GetInterfaces() []*NetworkDeviceConfig {
-	if x != nil {
-		return x.Interfaces
-	}
-	return nil
-}
-
-type InstallConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	InstallDisk   string                 `protobuf:"bytes,1,opt,name=install_disk,json=installDisk,proto3" json:"install_disk,omitempty"`
-	InstallImage  string                 `protobuf:"bytes,2,opt,name=install_image,json=installImage,proto3" json:"install_image,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *InstallConfig) Reset() {
-	*x = InstallConfig{}
-	mi := &file_machine_machine_proto_msgTypes[108]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *InstallConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*InstallConfig) ProtoMessage() {}
-
-func (x *InstallConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[108]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use InstallConfig.ProtoReflect.Descriptor instead.
-func (*InstallConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{108}
-}
-
-func (x *InstallConfig) GetInstallDisk() string {
-	if x != nil {
-		return x.InstallDisk
-	}
-	return ""
-}
-
-func (x *InstallConfig) GetInstallImage() string {
-	if x != nil {
-		return x.InstallImage
-	}
-	return ""
-}
-
 type MachineConfig struct {
-	state             protoimpl.MessageState    `protogen:"open.v1"`
-	Type              MachineConfig_MachineType `protobuf:"varint,1,opt,name=type,proto3,enum=machine.MachineConfig_MachineType" json:"type,omitempty"`
-	InstallConfig     *InstallConfig            `protobuf:"bytes,2,opt,name=install_config,json=installConfig,proto3" json:"install_config,omitempty"`
-	NetworkConfig     *NetworkConfig            `protobuf:"bytes,3,opt,name=network_config,json=networkConfig,proto3" json:"network_config,omitempty"`
-	KubernetesVersion string                    `protobuf:"bytes,4,opt,name=kubernetes_version,json=kubernetesVersion,proto3" json:"kubernetes_version,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Type          MachineConfig_MachineType `protobuf:"varint,1,opt,name=type,proto3,enum=machine.MachineConfig_MachineType" json:"type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *MachineConfig) Reset() {
 	*x = MachineConfig{}
-	mi := &file_machine_machine_proto_msgTypes[109]
+	mi := &file_machine_machine_proto_msgTypes[104]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7909,7 +7608,7 @@ func (x *MachineConfig) String() string {
 func (*MachineConfig) ProtoMessage() {}
 
 func (x *MachineConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[109]
+	mi := &file_machine_machine_proto_msgTypes[104]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7922,7 +7621,7 @@ func (x *MachineConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MachineConfig.ProtoReflect.Descriptor instead.
 func (*MachineConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{109}
+	return file_machine_machine_proto_rawDescGZIP(), []int{104}
 }
 
 func (x *MachineConfig) GetType() MachineConfig_MachineType {
@@ -7930,243 +7629,6 @@ func (x *MachineConfig) GetType() MachineConfig_MachineType {
 		return x.Type
 	}
 	return MachineConfig_TYPE_UNKNOWN
-}
-
-func (x *MachineConfig) GetInstallConfig() *InstallConfig {
-	if x != nil {
-		return x.InstallConfig
-	}
-	return nil
-}
-
-func (x *MachineConfig) GetNetworkConfig() *NetworkConfig {
-	if x != nil {
-		return x.NetworkConfig
-	}
-	return nil
-}
-
-func (x *MachineConfig) GetKubernetesVersion() string {
-	if x != nil {
-		return x.KubernetesVersion
-	}
-	return ""
-}
-
-type ControlPlaneConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Endpoint      string                 `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ControlPlaneConfig) Reset() {
-	*x = ControlPlaneConfig{}
-	mi := &file_machine_machine_proto_msgTypes[110]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ControlPlaneConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ControlPlaneConfig) ProtoMessage() {}
-
-func (x *ControlPlaneConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[110]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ControlPlaneConfig.ProtoReflect.Descriptor instead.
-func (*ControlPlaneConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{110}
-}
-
-func (x *ControlPlaneConfig) GetEndpoint() string {
-	if x != nil {
-		return x.Endpoint
-	}
-	return ""
-}
-
-type CNIConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Urls          []string               `protobuf:"bytes,2,rep,name=urls,proto3" json:"urls,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CNIConfig) Reset() {
-	*x = CNIConfig{}
-	mi := &file_machine_machine_proto_msgTypes[111]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CNIConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CNIConfig) ProtoMessage() {}
-
-func (x *CNIConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[111]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CNIConfig.ProtoReflect.Descriptor instead.
-func (*CNIConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{111}
-}
-
-func (x *CNIConfig) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *CNIConfig) GetUrls() []string {
-	if x != nil {
-		return x.Urls
-	}
-	return nil
-}
-
-type ClusterNetworkConfig struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	DnsDomain     string                 `protobuf:"bytes,1,opt,name=dns_domain,json=dnsDomain,proto3" json:"dns_domain,omitempty"`
-	CniConfig     *CNIConfig             `protobuf:"bytes,2,opt,name=cni_config,json=cniConfig,proto3" json:"cni_config,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ClusterNetworkConfig) Reset() {
-	*x = ClusterNetworkConfig{}
-	mi := &file_machine_machine_proto_msgTypes[112]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ClusterNetworkConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ClusterNetworkConfig) ProtoMessage() {}
-
-func (x *ClusterNetworkConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[112]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ClusterNetworkConfig.ProtoReflect.Descriptor instead.
-func (*ClusterNetworkConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{112}
-}
-
-func (x *ClusterNetworkConfig) GetDnsDomain() string {
-	if x != nil {
-		return x.DnsDomain
-	}
-	return ""
-}
-
-func (x *ClusterNetworkConfig) GetCniConfig() *CNIConfig {
-	if x != nil {
-		return x.CniConfig
-	}
-	return nil
-}
-
-type ClusterConfig struct {
-	state                          protoimpl.MessageState `protogen:"open.v1"`
-	Name                           string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	ControlPlane                   *ControlPlaneConfig    `protobuf:"bytes,2,opt,name=control_plane,json=controlPlane,proto3" json:"control_plane,omitempty"`
-	ClusterNetwork                 *ClusterNetworkConfig  `protobuf:"bytes,3,opt,name=cluster_network,json=clusterNetwork,proto3" json:"cluster_network,omitempty"`
-	AllowSchedulingOnControlPlanes bool                   `protobuf:"varint,4,opt,name=allow_scheduling_on_control_planes,json=allowSchedulingOnControlPlanes,proto3" json:"allow_scheduling_on_control_planes,omitempty"`
-	unknownFields                  protoimpl.UnknownFields
-	sizeCache                      protoimpl.SizeCache
-}
-
-func (x *ClusterConfig) Reset() {
-	*x = ClusterConfig{}
-	mi := &file_machine_machine_proto_msgTypes[113]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ClusterConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ClusterConfig) ProtoMessage() {}
-
-func (x *ClusterConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[113]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ClusterConfig.ProtoReflect.Descriptor instead.
-func (*ClusterConfig) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{113}
-}
-
-func (x *ClusterConfig) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *ClusterConfig) GetControlPlane() *ControlPlaneConfig {
-	if x != nil {
-		return x.ControlPlane
-	}
-	return nil
-}
-
-func (x *ClusterConfig) GetClusterNetwork() *ClusterNetworkConfig {
-	if x != nil {
-		return x.ClusterNetwork
-	}
-	return nil
-}
-
-func (x *ClusterConfig) GetAllowSchedulingOnControlPlanes() bool {
-	if x != nil {
-		return x.AllowSchedulingOnControlPlanes
-	}
-	return false
 }
 
 type GenerateClientConfigurationRequest struct {
@@ -8181,7 +7643,7 @@ type GenerateClientConfigurationRequest struct {
 
 func (x *GenerateClientConfigurationRequest) Reset() {
 	*x = GenerateClientConfigurationRequest{}
-	mi := &file_machine_machine_proto_msgTypes[114]
+	mi := &file_machine_machine_proto_msgTypes[105]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8193,7 +7655,7 @@ func (x *GenerateClientConfigurationRequest) String() string {
 func (*GenerateClientConfigurationRequest) ProtoMessage() {}
 
 func (x *GenerateClientConfigurationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[114]
+	mi := &file_machine_machine_proto_msgTypes[105]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8206,7 +7668,7 @@ func (x *GenerateClientConfigurationRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use GenerateClientConfigurationRequest.ProtoReflect.Descriptor instead.
 func (*GenerateClientConfigurationRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{114}
+	return file_machine_machine_proto_rawDescGZIP(), []int{105}
 }
 
 func (x *GenerateClientConfigurationRequest) GetRoles() []string {
@@ -8240,7 +7702,7 @@ type GenerateClientConfiguration struct {
 
 func (x *GenerateClientConfiguration) Reset() {
 	*x = GenerateClientConfiguration{}
-	mi := &file_machine_machine_proto_msgTypes[115]
+	mi := &file_machine_machine_proto_msgTypes[106]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8252,7 +7714,7 @@ func (x *GenerateClientConfiguration) String() string {
 func (*GenerateClientConfiguration) ProtoMessage() {}
 
 func (x *GenerateClientConfiguration) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[115]
+	mi := &file_machine_machine_proto_msgTypes[106]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8265,7 +7727,7 @@ func (x *GenerateClientConfiguration) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GenerateClientConfiguration.ProtoReflect.Descriptor instead.
 func (*GenerateClientConfiguration) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{115}
+	return file_machine_machine_proto_rawDescGZIP(), []int{106}
 }
 
 func (x *GenerateClientConfiguration) GetMetadata() *common.Metadata {
@@ -8312,7 +7774,7 @@ type GenerateClientConfigurationResponse struct {
 
 func (x *GenerateClientConfigurationResponse) Reset() {
 	*x = GenerateClientConfigurationResponse{}
-	mi := &file_machine_machine_proto_msgTypes[116]
+	mi := &file_machine_machine_proto_msgTypes[107]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8324,7 +7786,7 @@ func (x *GenerateClientConfigurationResponse) String() string {
 func (*GenerateClientConfigurationResponse) ProtoMessage() {}
 
 func (x *GenerateClientConfigurationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[116]
+	mi := &file_machine_machine_proto_msgTypes[107]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8337,7 +7799,7 @@ func (x *GenerateClientConfigurationResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use GenerateClientConfigurationResponse.ProtoReflect.Descriptor instead.
 func (*GenerateClientConfigurationResponse) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{116}
+	return file_machine_machine_proto_rawDescGZIP(), []int{107}
 }
 
 func (x *GenerateClientConfigurationResponse) GetMessages() []*GenerateClientConfiguration {
@@ -8363,7 +7825,7 @@ type PacketCaptureRequest struct {
 
 func (x *PacketCaptureRequest) Reset() {
 	*x = PacketCaptureRequest{}
-	mi := &file_machine_machine_proto_msgTypes[117]
+	mi := &file_machine_machine_proto_msgTypes[108]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8375,7 +7837,7 @@ func (x *PacketCaptureRequest) String() string {
 func (*PacketCaptureRequest) ProtoMessage() {}
 
 func (x *PacketCaptureRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[117]
+	mi := &file_machine_machine_proto_msgTypes[108]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8388,7 +7850,7 @@ func (x *PacketCaptureRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PacketCaptureRequest.ProtoReflect.Descriptor instead.
 func (*PacketCaptureRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{117}
+	return file_machine_machine_proto_rawDescGZIP(), []int{108}
 }
 
 func (x *PacketCaptureRequest) GetInterface() string {
@@ -8431,7 +7893,7 @@ type BPFInstruction struct {
 
 func (x *BPFInstruction) Reset() {
 	*x = BPFInstruction{}
-	mi := &file_machine_machine_proto_msgTypes[118]
+	mi := &file_machine_machine_proto_msgTypes[109]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8443,7 +7905,7 @@ func (x *BPFInstruction) String() string {
 func (*BPFInstruction) ProtoMessage() {}
 
 func (x *BPFInstruction) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[118]
+	mi := &file_machine_machine_proto_msgTypes[109]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8456,7 +7918,7 @@ func (x *BPFInstruction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BPFInstruction.ProtoReflect.Descriptor instead.
 func (*BPFInstruction) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{118}
+	return file_machine_machine_proto_rawDescGZIP(), []int{109}
 }
 
 func (x *BPFInstruction) GetOp() uint32 {
@@ -8499,7 +7961,7 @@ type NetstatRequest struct {
 
 func (x *NetstatRequest) Reset() {
 	*x = NetstatRequest{}
-	mi := &file_machine_machine_proto_msgTypes[119]
+	mi := &file_machine_machine_proto_msgTypes[110]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8511,7 +7973,7 @@ func (x *NetstatRequest) String() string {
 func (*NetstatRequest) ProtoMessage() {}
 
 func (x *NetstatRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[119]
+	mi := &file_machine_machine_proto_msgTypes[110]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8524,7 +7986,7 @@ func (x *NetstatRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NetstatRequest.ProtoReflect.Descriptor instead.
 func (*NetstatRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{119}
+	return file_machine_machine_proto_rawDescGZIP(), []int{110}
 }
 
 func (x *NetstatRequest) GetFilter() NetstatRequest_Filter {
@@ -8581,7 +8043,7 @@ type ConnectRecord struct {
 
 func (x *ConnectRecord) Reset() {
 	*x = ConnectRecord{}
-	mi := &file_machine_machine_proto_msgTypes[120]
+	mi := &file_machine_machine_proto_msgTypes[111]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8593,7 +8055,7 @@ func (x *ConnectRecord) String() string {
 func (*ConnectRecord) ProtoMessage() {}
 
 func (x *ConnectRecord) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[120]
+	mi := &file_machine_machine_proto_msgTypes[111]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8606,7 +8068,7 @@ func (x *ConnectRecord) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConnectRecord.ProtoReflect.Descriptor instead.
 func (*ConnectRecord) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{120}
+	return file_machine_machine_proto_rawDescGZIP(), []int{111}
 }
 
 func (x *ConnectRecord) GetL4Proto() string {
@@ -8745,7 +8207,7 @@ type Netstat struct {
 
 func (x *Netstat) Reset() {
 	*x = Netstat{}
-	mi := &file_machine_machine_proto_msgTypes[121]
+	mi := &file_machine_machine_proto_msgTypes[112]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8757,7 +8219,7 @@ func (x *Netstat) String() string {
 func (*Netstat) ProtoMessage() {}
 
 func (x *Netstat) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[121]
+	mi := &file_machine_machine_proto_msgTypes[112]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8770,7 +8232,7 @@ func (x *Netstat) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Netstat.ProtoReflect.Descriptor instead.
 func (*Netstat) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{121}
+	return file_machine_machine_proto_rawDescGZIP(), []int{112}
 }
 
 func (x *Netstat) GetMetadata() *common.Metadata {
@@ -8796,7 +8258,7 @@ type NetstatResponse struct {
 
 func (x *NetstatResponse) Reset() {
 	*x = NetstatResponse{}
-	mi := &file_machine_machine_proto_msgTypes[122]
+	mi := &file_machine_machine_proto_msgTypes[113]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8808,7 +8270,7 @@ func (x *NetstatResponse) String() string {
 func (*NetstatResponse) ProtoMessage() {}
 
 func (x *NetstatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[122]
+	mi := &file_machine_machine_proto_msgTypes[113]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8821,7 +8283,7 @@ func (x *NetstatResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NetstatResponse.ProtoReflect.Descriptor instead.
 func (*NetstatResponse) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{122}
+	return file_machine_machine_proto_rawDescGZIP(), []int{113}
 }
 
 func (x *NetstatResponse) GetMessages() []*Netstat {
@@ -8841,7 +8303,7 @@ type MetaWriteRequest struct {
 
 func (x *MetaWriteRequest) Reset() {
 	*x = MetaWriteRequest{}
-	mi := &file_machine_machine_proto_msgTypes[123]
+	mi := &file_machine_machine_proto_msgTypes[114]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8853,7 +8315,7 @@ func (x *MetaWriteRequest) String() string {
 func (*MetaWriteRequest) ProtoMessage() {}
 
 func (x *MetaWriteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[123]
+	mi := &file_machine_machine_proto_msgTypes[114]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8866,7 +8328,7 @@ func (x *MetaWriteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaWriteRequest.ProtoReflect.Descriptor instead.
 func (*MetaWriteRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{123}
+	return file_machine_machine_proto_rawDescGZIP(), []int{114}
 }
 
 func (x *MetaWriteRequest) GetKey() uint32 {
@@ -8892,7 +8354,7 @@ type MetaWrite struct {
 
 func (x *MetaWrite) Reset() {
 	*x = MetaWrite{}
-	mi := &file_machine_machine_proto_msgTypes[124]
+	mi := &file_machine_machine_proto_msgTypes[115]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8904,7 +8366,7 @@ func (x *MetaWrite) String() string {
 func (*MetaWrite) ProtoMessage() {}
 
 func (x *MetaWrite) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[124]
+	mi := &file_machine_machine_proto_msgTypes[115]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8917,7 +8379,7 @@ func (x *MetaWrite) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaWrite.ProtoReflect.Descriptor instead.
 func (*MetaWrite) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{124}
+	return file_machine_machine_proto_rawDescGZIP(), []int{115}
 }
 
 func (x *MetaWrite) GetMetadata() *common.Metadata {
@@ -8936,7 +8398,7 @@ type MetaWriteResponse struct {
 
 func (x *MetaWriteResponse) Reset() {
 	*x = MetaWriteResponse{}
-	mi := &file_machine_machine_proto_msgTypes[125]
+	mi := &file_machine_machine_proto_msgTypes[116]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8948,7 +8410,7 @@ func (x *MetaWriteResponse) String() string {
 func (*MetaWriteResponse) ProtoMessage() {}
 
 func (x *MetaWriteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[125]
+	mi := &file_machine_machine_proto_msgTypes[116]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8961,7 +8423,7 @@ func (x *MetaWriteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaWriteResponse.ProtoReflect.Descriptor instead.
 func (*MetaWriteResponse) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{125}
+	return file_machine_machine_proto_rawDescGZIP(), []int{116}
 }
 
 func (x *MetaWriteResponse) GetMessages() []*MetaWrite {
@@ -8980,7 +8442,7 @@ type MetaDeleteRequest struct {
 
 func (x *MetaDeleteRequest) Reset() {
 	*x = MetaDeleteRequest{}
-	mi := &file_machine_machine_proto_msgTypes[126]
+	mi := &file_machine_machine_proto_msgTypes[117]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8992,7 +8454,7 @@ func (x *MetaDeleteRequest) String() string {
 func (*MetaDeleteRequest) ProtoMessage() {}
 
 func (x *MetaDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[126]
+	mi := &file_machine_machine_proto_msgTypes[117]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9005,7 +8467,7 @@ func (x *MetaDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaDeleteRequest.ProtoReflect.Descriptor instead.
 func (*MetaDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{126}
+	return file_machine_machine_proto_rawDescGZIP(), []int{117}
 }
 
 func (x *MetaDeleteRequest) GetKey() uint32 {
@@ -9024,7 +8486,7 @@ type MetaDelete struct {
 
 func (x *MetaDelete) Reset() {
 	*x = MetaDelete{}
-	mi := &file_machine_machine_proto_msgTypes[127]
+	mi := &file_machine_machine_proto_msgTypes[118]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9036,7 +8498,7 @@ func (x *MetaDelete) String() string {
 func (*MetaDelete) ProtoMessage() {}
 
 func (x *MetaDelete) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[127]
+	mi := &file_machine_machine_proto_msgTypes[118]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9049,7 +8511,7 @@ func (x *MetaDelete) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaDelete.ProtoReflect.Descriptor instead.
 func (*MetaDelete) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{127}
+	return file_machine_machine_proto_rawDescGZIP(), []int{118}
 }
 
 func (x *MetaDelete) GetMetadata() *common.Metadata {
@@ -9068,7 +8530,7 @@ type MetaDeleteResponse struct {
 
 func (x *MetaDeleteResponse) Reset() {
 	*x = MetaDeleteResponse{}
-	mi := &file_machine_machine_proto_msgTypes[128]
+	mi := &file_machine_machine_proto_msgTypes[119]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9080,7 +8542,7 @@ func (x *MetaDeleteResponse) String() string {
 func (*MetaDeleteResponse) ProtoMessage() {}
 
 func (x *MetaDeleteResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[128]
+	mi := &file_machine_machine_proto_msgTypes[119]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9093,7 +8555,7 @@ func (x *MetaDeleteResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaDeleteResponse.ProtoReflect.Descriptor instead.
 func (*MetaDeleteResponse) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{128}
+	return file_machine_machine_proto_rawDescGZIP(), []int{119}
 }
 
 func (x *MetaDeleteResponse) GetMessages() []*MetaDelete {
@@ -9113,7 +8575,7 @@ type ImageListRequest struct {
 
 func (x *ImageListRequest) Reset() {
 	*x = ImageListRequest{}
-	mi := &file_machine_machine_proto_msgTypes[129]
+	mi := &file_machine_machine_proto_msgTypes[120]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9125,7 +8587,7 @@ func (x *ImageListRequest) String() string {
 func (*ImageListRequest) ProtoMessage() {}
 
 func (x *ImageListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[129]
+	mi := &file_machine_machine_proto_msgTypes[120]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9138,7 +8600,7 @@ func (x *ImageListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImageListRequest.ProtoReflect.Descriptor instead.
 func (*ImageListRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{129}
+	return file_machine_machine_proto_rawDescGZIP(), []int{120}
 }
 
 func (x *ImageListRequest) GetNamespace() common.ContainerdNamespace {
@@ -9161,7 +8623,7 @@ type ImageListResponse struct {
 
 func (x *ImageListResponse) Reset() {
 	*x = ImageListResponse{}
-	mi := &file_machine_machine_proto_msgTypes[130]
+	mi := &file_machine_machine_proto_msgTypes[121]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9173,7 +8635,7 @@ func (x *ImageListResponse) String() string {
 func (*ImageListResponse) ProtoMessage() {}
 
 func (x *ImageListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[130]
+	mi := &file_machine_machine_proto_msgTypes[121]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9186,7 +8648,7 @@ func (x *ImageListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImageListResponse.ProtoReflect.Descriptor instead.
 func (*ImageListResponse) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{130}
+	return file_machine_machine_proto_rawDescGZIP(), []int{121}
 }
 
 func (x *ImageListResponse) GetMetadata() *common.Metadata {
@@ -9236,7 +8698,7 @@ type ImagePullRequest struct {
 
 func (x *ImagePullRequest) Reset() {
 	*x = ImagePullRequest{}
-	mi := &file_machine_machine_proto_msgTypes[131]
+	mi := &file_machine_machine_proto_msgTypes[122]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9248,7 +8710,7 @@ func (x *ImagePullRequest) String() string {
 func (*ImagePullRequest) ProtoMessage() {}
 
 func (x *ImagePullRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[131]
+	mi := &file_machine_machine_proto_msgTypes[122]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9261,7 +8723,7 @@ func (x *ImagePullRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImagePullRequest.ProtoReflect.Descriptor instead.
 func (*ImagePullRequest) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{131}
+	return file_machine_machine_proto_rawDescGZIP(), []int{122}
 }
 
 func (x *ImagePullRequest) GetNamespace() common.ContainerdNamespace {
@@ -9287,7 +8749,7 @@ type ImagePull struct {
 
 func (x *ImagePull) Reset() {
 	*x = ImagePull{}
-	mi := &file_machine_machine_proto_msgTypes[132]
+	mi := &file_machine_machine_proto_msgTypes[123]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9299,7 +8761,7 @@ func (x *ImagePull) String() string {
 func (*ImagePull) ProtoMessage() {}
 
 func (x *ImagePull) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[132]
+	mi := &file_machine_machine_proto_msgTypes[123]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9312,7 +8774,7 @@ func (x *ImagePull) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImagePull.ProtoReflect.Descriptor instead.
 func (*ImagePull) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{132}
+	return file_machine_machine_proto_rawDescGZIP(), []int{123}
 }
 
 func (x *ImagePull) GetMetadata() *common.Metadata {
@@ -9331,7 +8793,7 @@ type ImagePullResponse struct {
 
 func (x *ImagePullResponse) Reset() {
 	*x = ImagePullResponse{}
-	mi := &file_machine_machine_proto_msgTypes[133]
+	mi := &file_machine_machine_proto_msgTypes[124]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9343,7 +8805,7 @@ func (x *ImagePullResponse) String() string {
 func (*ImagePullResponse) ProtoMessage() {}
 
 func (x *ImagePullResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[133]
+	mi := &file_machine_machine_proto_msgTypes[124]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9356,7 +8818,7 @@ func (x *ImagePullResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImagePullResponse.ProtoReflect.Descriptor instead.
 func (*ImagePullResponse) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{133}
+	return file_machine_machine_proto_rawDescGZIP(), []int{124}
 }
 
 func (x *ImagePullResponse) GetMessages() []*ImagePull {
@@ -9376,7 +8838,7 @@ type MachineStatusEvent_MachineStatus struct {
 
 func (x *MachineStatusEvent_MachineStatus) Reset() {
 	*x = MachineStatusEvent_MachineStatus{}
-	mi := &file_machine_machine_proto_msgTypes[134]
+	mi := &file_machine_machine_proto_msgTypes[125]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9388,7 +8850,7 @@ func (x *MachineStatusEvent_MachineStatus) String() string {
 func (*MachineStatusEvent_MachineStatus) ProtoMessage() {}
 
 func (x *MachineStatusEvent_MachineStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[134]
+	mi := &file_machine_machine_proto_msgTypes[125]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9428,7 +8890,7 @@ type MachineStatusEvent_MachineStatus_UnmetCondition struct {
 
 func (x *MachineStatusEvent_MachineStatus_UnmetCondition) Reset() {
 	*x = MachineStatusEvent_MachineStatus_UnmetCondition{}
-	mi := &file_machine_machine_proto_msgTypes[135]
+	mi := &file_machine_machine_proto_msgTypes[126]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9440,7 +8902,7 @@ func (x *MachineStatusEvent_MachineStatus_UnmetCondition) String() string {
 func (*MachineStatusEvent_MachineStatus_UnmetCondition) ProtoMessage() {}
 
 func (x *MachineStatusEvent_MachineStatus_UnmetCondition) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[135]
+	mi := &file_machine_machine_proto_msgTypes[126]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9479,7 +8941,7 @@ type NetstatRequest_Feature struct {
 
 func (x *NetstatRequest_Feature) Reset() {
 	*x = NetstatRequest_Feature{}
-	mi := &file_machine_machine_proto_msgTypes[136]
+	mi := &file_machine_machine_proto_msgTypes[127]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9491,7 +8953,7 @@ func (x *NetstatRequest_Feature) String() string {
 func (*NetstatRequest_Feature) ProtoMessage() {}
 
 func (x *NetstatRequest_Feature) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[136]
+	mi := &file_machine_machine_proto_msgTypes[127]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9504,7 +8966,7 @@ func (x *NetstatRequest_Feature) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NetstatRequest_Feature.ProtoReflect.Descriptor instead.
 func (*NetstatRequest_Feature) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{119, 0}
+	return file_machine_machine_proto_rawDescGZIP(), []int{110, 0}
 }
 
 func (x *NetstatRequest_Feature) GetPid() bool {
@@ -9530,7 +8992,7 @@ type NetstatRequest_L4Proto struct {
 
 func (x *NetstatRequest_L4Proto) Reset() {
 	*x = NetstatRequest_L4Proto{}
-	mi := &file_machine_machine_proto_msgTypes[137]
+	mi := &file_machine_machine_proto_msgTypes[128]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9542,7 +9004,7 @@ func (x *NetstatRequest_L4Proto) String() string {
 func (*NetstatRequest_L4Proto) ProtoMessage() {}
 
 func (x *NetstatRequest_L4Proto) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[137]
+	mi := &file_machine_machine_proto_msgTypes[128]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9555,7 +9017,7 @@ func (x *NetstatRequest_L4Proto) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NetstatRequest_L4Proto.ProtoReflect.Descriptor instead.
 func (*NetstatRequest_L4Proto) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{119, 1}
+	return file_machine_machine_proto_rawDescGZIP(), []int{110, 1}
 }
 
 func (x *NetstatRequest_L4Proto) GetTcp() bool {
@@ -9625,7 +9087,7 @@ type NetstatRequest_NetNS struct {
 
 func (x *NetstatRequest_NetNS) Reset() {
 	*x = NetstatRequest_NetNS{}
-	mi := &file_machine_machine_proto_msgTypes[138]
+	mi := &file_machine_machine_proto_msgTypes[129]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9637,7 +9099,7 @@ func (x *NetstatRequest_NetNS) String() string {
 func (*NetstatRequest_NetNS) ProtoMessage() {}
 
 func (x *NetstatRequest_NetNS) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[138]
+	mi := &file_machine_machine_proto_msgTypes[129]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9650,7 +9112,7 @@ func (x *NetstatRequest_NetNS) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NetstatRequest_NetNS.ProtoReflect.Descriptor instead.
 func (*NetstatRequest_NetNS) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{119, 2}
+	return file_machine_machine_proto_rawDescGZIP(), []int{110, 2}
 }
 
 func (x *NetstatRequest_NetNS) GetHostnetwork() bool {
@@ -9684,7 +9146,7 @@ type ConnectRecord_Process struct {
 
 func (x *ConnectRecord_Process) Reset() {
 	*x = ConnectRecord_Process{}
-	mi := &file_machine_machine_proto_msgTypes[139]
+	mi := &file_machine_machine_proto_msgTypes[130]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9696,7 +9158,7 @@ func (x *ConnectRecord_Process) String() string {
 func (*ConnectRecord_Process) ProtoMessage() {}
 
 func (x *ConnectRecord_Process) ProtoReflect() protoreflect.Message {
-	mi := &file_machine_machine_proto_msgTypes[139]
+	mi := &file_machine_machine_proto_msgTypes[130]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9709,7 +9171,7 @@ func (x *ConnectRecord_Process) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConnectRecord_Process.ProtoReflect.Descriptor instead.
 func (*ConnectRecord_Process) Descriptor() ([]byte, []int) {
-	return file_machine_machine_proto_rawDescGZIP(), []int{120, 0}
+	return file_machine_machine_proto_rawDescGZIP(), []int{111, 0}
 }
 
 func (x *ConnectRecord_Process) GetPid() uint32 {
@@ -10318,54 +9780,14 @@ const file_machine_machine_proto_rawDesc = "" +
 	"\x11discard_completed\x18\r \x01(\x04R\x10discardCompleted\x12%\n" +
 	"\x0ediscard_merged\x18\x0e \x01(\x04R\rdiscardMerged\x12'\n" +
 	"\x0fdiscard_sectors\x18\x0f \x01(\x04R\x0ediscardSectors\x12&\n" +
-	"\x0fdiscard_time_ms\x18\x10 \x01(\x04R\rdiscardTimeMs\"Y\n" +
-	"\vRouteConfig\x12\x18\n" +
-	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x18\n" +
-	"\agateway\x18\x02 \x01(\tR\agateway\x12\x16\n" +
-	"\x06metric\x18\x03 \x01(\rR\x06metric\"6\n" +
-	"\x11DHCPOptionsConfig\x12!\n" +
-	"\froute_metric\x18\x01 \x01(\rR\vrouteMetric\"\xf2\x01\n" +
-	"\x13NetworkDeviceConfig\x12\x1c\n" +
-	"\tinterface\x18\x01 \x01(\tR\tinterface\x12\x12\n" +
-	"\x04cidr\x18\x02 \x01(\tR\x04cidr\x12\x10\n" +
-	"\x03mtu\x18\x03 \x01(\x05R\x03mtu\x12\x12\n" +
-	"\x04dhcp\x18\x04 \x01(\bR\x04dhcp\x12\x16\n" +
-	"\x06ignore\x18\x05 \x01(\bR\x06ignore\x12=\n" +
-	"\fdhcp_options\x18\x06 \x01(\v2\x1a.machine.DHCPOptionsConfigR\vdhcpOptions\x12,\n" +
-	"\x06routes\x18\a \x03(\v2\x14.machine.RouteConfigR\x06routes\"i\n" +
-	"\rNetworkConfig\x12\x1a\n" +
-	"\bhostname\x18\x01 \x01(\tR\bhostname\x12<\n" +
-	"\n" +
-	"interfaces\x18\x02 \x03(\v2\x1c.machine.NetworkDeviceConfigR\n" +
-	"interfaces\"W\n" +
-	"\rInstallConfig\x12!\n" +
-	"\finstall_disk\x18\x01 \x01(\tR\vinstallDisk\x12#\n" +
-	"\rinstall_image\x18\x02 \x01(\tR\finstallImage\"\xcd\x02\n" +
+	"\x0fdiscard_time_ms\x18\x10 \x01(\x04R\rdiscardTimeMs\"\xa0\x01\n" +
 	"\rMachineConfig\x126\n" +
-	"\x04type\x18\x01 \x01(\x0e2\".machine.MachineConfig.MachineTypeR\x04type\x12=\n" +
-	"\x0einstall_config\x18\x02 \x01(\v2\x16.machine.InstallConfigR\rinstallConfig\x12=\n" +
-	"\x0enetwork_config\x18\x03 \x01(\v2\x16.machine.NetworkConfigR\rnetworkConfig\x12-\n" +
-	"\x12kubernetes_version\x18\x04 \x01(\tR\x11kubernetesVersion\"W\n" +
+	"\x04type\x18\x01 \x01(\x0e2\".machine.MachineConfig.MachineTypeR\x04type\"W\n" +
 	"\vMachineType\x12\x10\n" +
 	"\fTYPE_UNKNOWN\x10\x00\x12\r\n" +
 	"\tTYPE_INIT\x10\x01\x12\x16\n" +
 	"\x12TYPE_CONTROL_PLANE\x10\x02\x12\x0f\n" +
-	"\vTYPE_WORKER\x10\x03\"0\n" +
-	"\x12ControlPlaneConfig\x12\x1a\n" +
-	"\bendpoint\x18\x01 \x01(\tR\bendpoint\"3\n" +
-	"\tCNIConfig\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
-	"\x04urls\x18\x02 \x03(\tR\x04urls\"h\n" +
-	"\x14ClusterNetworkConfig\x12\x1d\n" +
-	"\n" +
-	"dns_domain\x18\x01 \x01(\tR\tdnsDomain\x121\n" +
-	"\n" +
-	"cni_config\x18\x02 \x01(\v2\x12.machine.CNIConfigR\tcniConfig\"\xf9\x01\n" +
-	"\rClusterConfig\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12@\n" +
-	"\rcontrol_plane\x18\x02 \x01(\v2\x1b.machine.ControlPlaneConfigR\fcontrolPlane\x12F\n" +
-	"\x0fcluster_network\x18\x03 \x01(\v2\x1d.machine.ClusterNetworkConfigR\x0eclusterNetwork\x12J\n" +
-	"\"allow_scheduling_on_control_planes\x18\x04 \x01(\bR\x1eallowSchedulingOnControlPlanes\"n\n" +
+	"\vTYPE_WORKER\x10\x03\"n\n" +
 	"\"GenerateClientConfigurationRequest\x12\x14\n" +
 	"\x05roles\x18\x01 \x03(\tR\x05roles\x122\n" +
 	"\acrt_ttl\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\x06crtTtl\"\xa1\x01\n" +
@@ -10555,7 +9977,7 @@ func file_machine_machine_proto_rawDescGZIP() []byte {
 }
 
 var file_machine_machine_proto_enumTypes = make([]protoimpl.EnumInfo, 14)
-var file_machine_machine_proto_msgTypes = make([]protoimpl.MessageInfo, 140)
+var file_machine_machine_proto_msgTypes = make([]protoimpl.MessageInfo, 131)
 var file_machine_machine_proto_goTypes = []any{
 	(ApplyConfigurationRequest_Mode)(0),         // 0: machine.ApplyConfigurationRequest.Mode
 	(RebootRequest_Mode)(0),                     // 1: machine.RebootRequest.Mode
@@ -10675,278 +10097,261 @@ var file_machine_machine_proto_goTypes = []any{
 	(*DiskStatsResponse)(nil),                   // 115: machine.DiskStatsResponse
 	(*DiskStats)(nil),                           // 116: machine.DiskStats
 	(*DiskStat)(nil),                            // 117: machine.DiskStat
-	(*RouteConfig)(nil),                         // 118: machine.RouteConfig
-	(*DHCPOptionsConfig)(nil),                   // 119: machine.DHCPOptionsConfig
-	(*NetworkDeviceConfig)(nil),                 // 120: machine.NetworkDeviceConfig
-	(*NetworkConfig)(nil),                       // 121: machine.NetworkConfig
-	(*InstallConfig)(nil),                       // 122: machine.InstallConfig
-	(*MachineConfig)(nil),                       // 123: machine.MachineConfig
-	(*ControlPlaneConfig)(nil),                  // 124: machine.ControlPlaneConfig
-	(*CNIConfig)(nil),                           // 125: machine.CNIConfig
-	(*ClusterNetworkConfig)(nil),                // 126: machine.ClusterNetworkConfig
-	(*ClusterConfig)(nil),                       // 127: machine.ClusterConfig
-	(*GenerateClientConfigurationRequest)(nil),  // 128: machine.GenerateClientConfigurationRequest
-	(*GenerateClientConfiguration)(nil),         // 129: machine.GenerateClientConfiguration
-	(*GenerateClientConfigurationResponse)(nil), // 130: machine.GenerateClientConfigurationResponse
-	(*PacketCaptureRequest)(nil),                // 131: machine.PacketCaptureRequest
-	(*BPFInstruction)(nil),                      // 132: machine.BPFInstruction
-	(*NetstatRequest)(nil),                      // 133: machine.NetstatRequest
-	(*ConnectRecord)(nil),                       // 134: machine.ConnectRecord
-	(*Netstat)(nil),                             // 135: machine.Netstat
-	(*NetstatResponse)(nil),                     // 136: machine.NetstatResponse
-	(*MetaWriteRequest)(nil),                    // 137: machine.MetaWriteRequest
-	(*MetaWrite)(nil),                           // 138: machine.MetaWrite
-	(*MetaWriteResponse)(nil),                   // 139: machine.MetaWriteResponse
-	(*MetaDeleteRequest)(nil),                   // 140: machine.MetaDeleteRequest
-	(*MetaDelete)(nil),                          // 141: machine.MetaDelete
-	(*MetaDeleteResponse)(nil),                  // 142: machine.MetaDeleteResponse
-	(*ImageListRequest)(nil),                    // 143: machine.ImageListRequest
-	(*ImageListResponse)(nil),                   // 144: machine.ImageListResponse
-	(*ImagePullRequest)(nil),                    // 145: machine.ImagePullRequest
-	(*ImagePull)(nil),                           // 146: machine.ImagePull
-	(*ImagePullResponse)(nil),                   // 147: machine.ImagePullResponse
-	(*MachineStatusEvent_MachineStatus)(nil),    // 148: machine.MachineStatusEvent.MachineStatus
-	(*MachineStatusEvent_MachineStatus_UnmetCondition)(nil), // 149: machine.MachineStatusEvent.MachineStatus.UnmetCondition
-	(*NetstatRequest_Feature)(nil),                          // 150: machine.NetstatRequest.Feature
-	(*NetstatRequest_L4Proto)(nil),                          // 151: machine.NetstatRequest.L4proto
-	(*NetstatRequest_NetNS)(nil),                            // 152: machine.NetstatRequest.NetNS
-	(*ConnectRecord_Process)(nil),                           // 153: machine.ConnectRecord.Process
-	(*durationpb.Duration)(nil),                             // 154: google.protobuf.Duration
-	(*common.Metadata)(nil),                                 // 155: common.Metadata
-	(*common.Error)(nil),                                    // 156: common.Error
-	(*anypb.Any)(nil),                                       // 157: google.protobuf.Any
-	(*timestamppb.Timestamp)(nil),                           // 158: google.protobuf.Timestamp
-	(common.ContainerDriver)(0),                             // 159: common.ContainerDriver
-	(common.ContainerdNamespace)(0),                         // 160: common.ContainerdNamespace
-	(*emptypb.Empty)(nil),                                   // 161: google.protobuf.Empty
-	(*common.Data)(nil),                                     // 162: common.Data
+	(*MachineConfig)(nil),                       // 118: machine.MachineConfig
+	(*GenerateClientConfigurationRequest)(nil),  // 119: machine.GenerateClientConfigurationRequest
+	(*GenerateClientConfiguration)(nil),         // 120: machine.GenerateClientConfiguration
+	(*GenerateClientConfigurationResponse)(nil), // 121: machine.GenerateClientConfigurationResponse
+	(*PacketCaptureRequest)(nil),                // 122: machine.PacketCaptureRequest
+	(*BPFInstruction)(nil),                      // 123: machine.BPFInstruction
+	(*NetstatRequest)(nil),                      // 124: machine.NetstatRequest
+	(*ConnectRecord)(nil),                       // 125: machine.ConnectRecord
+	(*Netstat)(nil),                             // 126: machine.Netstat
+	(*NetstatResponse)(nil),                     // 127: machine.NetstatResponse
+	(*MetaWriteRequest)(nil),                    // 128: machine.MetaWriteRequest
+	(*MetaWrite)(nil),                           // 129: machine.MetaWrite
+	(*MetaWriteResponse)(nil),                   // 130: machine.MetaWriteResponse
+	(*MetaDeleteRequest)(nil),                   // 131: machine.MetaDeleteRequest
+	(*MetaDelete)(nil),                          // 132: machine.MetaDelete
+	(*MetaDeleteResponse)(nil),                  // 133: machine.MetaDeleteResponse
+	(*ImageListRequest)(nil),                    // 134: machine.ImageListRequest
+	(*ImageListResponse)(nil),                   // 135: machine.ImageListResponse
+	(*ImagePullRequest)(nil),                    // 136: machine.ImagePullRequest
+	(*ImagePull)(nil),                           // 137: machine.ImagePull
+	(*ImagePullResponse)(nil),                   // 138: machine.ImagePullResponse
+	(*MachineStatusEvent_MachineStatus)(nil),    // 139: machine.MachineStatusEvent.MachineStatus
+	(*MachineStatusEvent_MachineStatus_UnmetCondition)(nil), // 140: machine.MachineStatusEvent.MachineStatus.UnmetCondition
+	(*NetstatRequest_Feature)(nil),                          // 141: machine.NetstatRequest.Feature
+	(*NetstatRequest_L4Proto)(nil),                          // 142: machine.NetstatRequest.L4proto
+	(*NetstatRequest_NetNS)(nil),                            // 143: machine.NetstatRequest.NetNS
+	(*ConnectRecord_Process)(nil),                           // 144: machine.ConnectRecord.Process
+	(*durationpb.Duration)(nil),                             // 145: google.protobuf.Duration
+	(*common.Metadata)(nil),                                 // 146: common.Metadata
+	(*common.Error)(nil),                                    // 147: common.Error
+	(*anypb.Any)(nil),                                       // 148: google.protobuf.Any
+	(*timestamppb.Timestamp)(nil),                           // 149: google.protobuf.Timestamp
+	(common.ContainerDriver)(0),                             // 150: common.ContainerDriver
+	(common.ContainerdNamespace)(0),                         // 151: common.ContainerdNamespace
+	(*emptypb.Empty)(nil),                                   // 152: google.protobuf.Empty
+	(*common.Data)(nil),                                     // 153: common.Data
 }
 var file_machine_machine_proto_depIdxs = []int32{
 	0,   // 0: machine.ApplyConfigurationRequest.mode:type_name -> machine.ApplyConfigurationRequest.Mode
-	154, // 1: machine.ApplyConfigurationRequest.try_mode_timeout:type_name -> google.protobuf.Duration
-	155, // 2: machine.ApplyConfiguration.metadata:type_name -> common.Metadata
+	145, // 1: machine.ApplyConfigurationRequest.try_mode_timeout:type_name -> google.protobuf.Duration
+	146, // 2: machine.ApplyConfiguration.metadata:type_name -> common.Metadata
 	0,   // 3: machine.ApplyConfiguration.mode:type_name -> machine.ApplyConfigurationRequest.Mode
 	15,  // 4: machine.ApplyConfigurationResponse.messages:type_name -> machine.ApplyConfiguration
 	1,   // 5: machine.RebootRequest.mode:type_name -> machine.RebootRequest.Mode
-	155, // 6: machine.Reboot.metadata:type_name -> common.Metadata
+	146, // 6: machine.Reboot.metadata:type_name -> common.Metadata
 	18,  // 7: machine.RebootResponse.messages:type_name -> machine.Reboot
-	155, // 8: machine.Bootstrap.metadata:type_name -> common.Metadata
+	146, // 8: machine.Bootstrap.metadata:type_name -> common.Metadata
 	21,  // 9: machine.BootstrapResponse.messages:type_name -> machine.Bootstrap
 	2,   // 10: machine.SequenceEvent.action:type_name -> machine.SequenceEvent.Action
-	156, // 11: machine.SequenceEvent.error:type_name -> common.Error
+	147, // 11: machine.SequenceEvent.error:type_name -> common.Error
 	3,   // 12: machine.PhaseEvent.action:type_name -> machine.PhaseEvent.Action
 	4,   // 13: machine.TaskEvent.action:type_name -> machine.TaskEvent.Action
 	5,   // 14: machine.ServiceStateEvent.action:type_name -> machine.ServiceStateEvent.Action
 	49,  // 15: machine.ServiceStateEvent.health:type_name -> machine.ServiceHealth
 	6,   // 16: machine.MachineStatusEvent.stage:type_name -> machine.MachineStatusEvent.MachineStage
-	148, // 17: machine.MachineStatusEvent.status:type_name -> machine.MachineStatusEvent.MachineStatus
-	155, // 18: machine.Event.metadata:type_name -> common.Metadata
-	157, // 19: machine.Event.data:type_name -> google.protobuf.Any
+	139, // 17: machine.MachineStatusEvent.status:type_name -> machine.MachineStatusEvent.MachineStatus
+	146, // 18: machine.Event.metadata:type_name -> common.Metadata
+	148, // 19: machine.Event.data:type_name -> google.protobuf.Any
 	34,  // 20: machine.ResetRequest.system_partitions_to_wipe:type_name -> machine.ResetPartitionSpec
 	7,   // 21: machine.ResetRequest.mode:type_name -> machine.ResetRequest.WipeMode
-	155, // 22: machine.Reset.metadata:type_name -> common.Metadata
+	146, // 22: machine.Reset.metadata:type_name -> common.Metadata
 	36,  // 23: machine.ResetResponse.messages:type_name -> machine.Reset
-	155, // 24: machine.Shutdown.metadata:type_name -> common.Metadata
+	146, // 24: machine.Shutdown.metadata:type_name -> common.Metadata
 	38,  // 25: machine.ShutdownResponse.messages:type_name -> machine.Shutdown
 	8,   // 26: machine.UpgradeRequest.reboot_mode:type_name -> machine.UpgradeRequest.RebootMode
-	155, // 27: machine.Upgrade.metadata:type_name -> common.Metadata
+	146, // 27: machine.Upgrade.metadata:type_name -> common.Metadata
 	42,  // 28: machine.UpgradeResponse.messages:type_name -> machine.Upgrade
-	155, // 29: machine.ServiceList.metadata:type_name -> common.Metadata
+	146, // 29: machine.ServiceList.metadata:type_name -> common.Metadata
 	46,  // 30: machine.ServiceList.services:type_name -> machine.ServiceInfo
 	44,  // 31: machine.ServiceListResponse.messages:type_name -> machine.ServiceList
 	47,  // 32: machine.ServiceInfo.events:type_name -> machine.ServiceEvents
 	49,  // 33: machine.ServiceInfo.health:type_name -> machine.ServiceHealth
 	48,  // 34: machine.ServiceEvents.events:type_name -> machine.ServiceEvent
-	158, // 35: machine.ServiceEvent.ts:type_name -> google.protobuf.Timestamp
-	158, // 36: machine.ServiceHealth.last_change:type_name -> google.protobuf.Timestamp
-	155, // 37: machine.ServiceStart.metadata:type_name -> common.Metadata
+	149, // 35: machine.ServiceEvent.ts:type_name -> google.protobuf.Timestamp
+	149, // 36: machine.ServiceHealth.last_change:type_name -> google.protobuf.Timestamp
+	146, // 37: machine.ServiceStart.metadata:type_name -> common.Metadata
 	51,  // 38: machine.ServiceStartResponse.messages:type_name -> machine.ServiceStart
-	155, // 39: machine.ServiceStop.metadata:type_name -> common.Metadata
+	146, // 39: machine.ServiceStop.metadata:type_name -> common.Metadata
 	54,  // 40: machine.ServiceStopResponse.messages:type_name -> machine.ServiceStop
-	155, // 41: machine.ServiceRestart.metadata:type_name -> common.Metadata
+	146, // 41: machine.ServiceRestart.metadata:type_name -> common.Metadata
 	57,  // 42: machine.ServiceRestartResponse.messages:type_name -> machine.ServiceRestart
 	9,   // 43: machine.ListRequest.types:type_name -> machine.ListRequest.Type
-	155, // 44: machine.FileInfo.metadata:type_name -> common.Metadata
+	146, // 44: machine.FileInfo.metadata:type_name -> common.Metadata
 	63,  // 45: machine.FileInfo.xattrs:type_name -> machine.Xattr
-	155, // 46: machine.DiskUsageInfo.metadata:type_name -> common.Metadata
-	155, // 47: machine.Mounts.metadata:type_name -> common.Metadata
+	146, // 46: machine.DiskUsageInfo.metadata:type_name -> common.Metadata
+	146, // 47: machine.Mounts.metadata:type_name -> common.Metadata
 	67,  // 48: machine.Mounts.stats:type_name -> machine.MountStat
 	65,  // 49: machine.MountsResponse.messages:type_name -> machine.Mounts
-	155, // 50: machine.Version.metadata:type_name -> common.Metadata
+	146, // 50: machine.Version.metadata:type_name -> common.Metadata
 	70,  // 51: machine.Version.version:type_name -> machine.VersionInfo
 	71,  // 52: machine.Version.platform:type_name -> machine.PlatformInfo
 	72,  // 53: machine.Version.features:type_name -> machine.FeaturesInfo
 	68,  // 54: machine.VersionResponse.messages:type_name -> machine.Version
-	159, // 55: machine.LogsRequest.driver:type_name -> common.ContainerDriver
-	155, // 56: machine.LogsContainer.metadata:type_name -> common.Metadata
+	150, // 55: machine.LogsRequest.driver:type_name -> common.ContainerDriver
+	146, // 56: machine.LogsContainer.metadata:type_name -> common.Metadata
 	75,  // 57: machine.LogsContainersResponse.messages:type_name -> machine.LogsContainer
-	155, // 58: machine.Rollback.metadata:type_name -> common.Metadata
+	146, // 58: machine.Rollback.metadata:type_name -> common.Metadata
 	78,  // 59: machine.RollbackResponse.messages:type_name -> machine.Rollback
-	159, // 60: machine.ContainersRequest.driver:type_name -> common.ContainerDriver
-	155, // 61: machine.Container.metadata:type_name -> common.Metadata
+	150, // 60: machine.ContainersRequest.driver:type_name -> common.ContainerDriver
+	146, // 61: machine.Container.metadata:type_name -> common.Metadata
 	81,  // 62: machine.Container.containers:type_name -> machine.ContainerInfo
 	82,  // 63: machine.ContainersResponse.messages:type_name -> machine.Container
 	86,  // 64: machine.ProcessesResponse.messages:type_name -> machine.Process
-	155, // 65: machine.Process.metadata:type_name -> common.Metadata
+	146, // 65: machine.Process.metadata:type_name -> common.Metadata
 	87,  // 66: machine.Process.processes:type_name -> machine.ProcessInfo
-	159, // 67: machine.RestartRequest.driver:type_name -> common.ContainerDriver
-	155, // 68: machine.Restart.metadata:type_name -> common.Metadata
+	150, // 67: machine.RestartRequest.driver:type_name -> common.ContainerDriver
+	146, // 68: machine.Restart.metadata:type_name -> common.Metadata
 	89,  // 69: machine.RestartResponse.messages:type_name -> machine.Restart
-	159, // 70: machine.StatsRequest.driver:type_name -> common.ContainerDriver
-	155, // 71: machine.Stats.metadata:type_name -> common.Metadata
+	150, // 70: machine.StatsRequest.driver:type_name -> common.ContainerDriver
+	146, // 71: machine.Stats.metadata:type_name -> common.Metadata
 	94,  // 72: machine.Stats.stats:type_name -> machine.Stat
 	92,  // 73: machine.StatsResponse.messages:type_name -> machine.Stats
-	155, // 74: machine.Memory.metadata:type_name -> common.Metadata
+	146, // 74: machine.Memory.metadata:type_name -> common.Metadata
 	97,  // 75: machine.Memory.meminfo:type_name -> machine.MemInfo
 	95,  // 76: machine.MemoryResponse.messages:type_name -> machine.Memory
 	99,  // 77: machine.HostnameResponse.messages:type_name -> machine.Hostname
-	155, // 78: machine.Hostname.metadata:type_name -> common.Metadata
+	146, // 78: machine.Hostname.metadata:type_name -> common.Metadata
 	101, // 79: machine.LoadAvgResponse.messages:type_name -> machine.LoadAvg
-	155, // 80: machine.LoadAvg.metadata:type_name -> common.Metadata
+	146, // 80: machine.LoadAvg.metadata:type_name -> common.Metadata
 	103, // 81: machine.SystemStatResponse.messages:type_name -> machine.SystemStat
-	155, // 82: machine.SystemStat.metadata:type_name -> common.Metadata
+	146, // 82: machine.SystemStat.metadata:type_name -> common.Metadata
 	104, // 83: machine.SystemStat.cpu_total:type_name -> machine.CPUStat
 	104, // 84: machine.SystemStat.cpu:type_name -> machine.CPUStat
 	105, // 85: machine.SystemStat.soft_irq:type_name -> machine.SoftIRQStat
 	107, // 86: machine.CPUFreqStatsResponse.messages:type_name -> machine.CPUsFreqStats
-	155, // 87: machine.CPUsFreqStats.metadata:type_name -> common.Metadata
+	146, // 87: machine.CPUsFreqStats.metadata:type_name -> common.Metadata
 	108, // 88: machine.CPUsFreqStats.cpu_freq_stats:type_name -> machine.CPUFreqStats
 	110, // 89: machine.CPUInfoResponse.messages:type_name -> machine.CPUsInfo
-	155, // 90: machine.CPUsInfo.metadata:type_name -> common.Metadata
+	146, // 90: machine.CPUsInfo.metadata:type_name -> common.Metadata
 	111, // 91: machine.CPUsInfo.cpu_info:type_name -> machine.CPUInfo
 	113, // 92: machine.NetworkDeviceStatsResponse.messages:type_name -> machine.NetworkDeviceStats
-	155, // 93: machine.NetworkDeviceStats.metadata:type_name -> common.Metadata
+	146, // 93: machine.NetworkDeviceStats.metadata:type_name -> common.Metadata
 	114, // 94: machine.NetworkDeviceStats.total:type_name -> machine.NetDev
 	114, // 95: machine.NetworkDeviceStats.devices:type_name -> machine.NetDev
 	116, // 96: machine.DiskStatsResponse.messages:type_name -> machine.DiskStats
-	155, // 97: machine.DiskStats.metadata:type_name -> common.Metadata
+	146, // 97: machine.DiskStats.metadata:type_name -> common.Metadata
 	117, // 98: machine.DiskStats.total:type_name -> machine.DiskStat
 	117, // 99: machine.DiskStats.devices:type_name -> machine.DiskStat
-	119, // 100: machine.NetworkDeviceConfig.dhcp_options:type_name -> machine.DHCPOptionsConfig
-	118, // 101: machine.NetworkDeviceConfig.routes:type_name -> machine.RouteConfig
-	120, // 102: machine.NetworkConfig.interfaces:type_name -> machine.NetworkDeviceConfig
-	10,  // 103: machine.MachineConfig.type:type_name -> machine.MachineConfig.MachineType
-	122, // 104: machine.MachineConfig.install_config:type_name -> machine.InstallConfig
-	121, // 105: machine.MachineConfig.network_config:type_name -> machine.NetworkConfig
-	125, // 106: machine.ClusterNetworkConfig.cni_config:type_name -> machine.CNIConfig
-	124, // 107: machine.ClusterConfig.control_plane:type_name -> machine.ControlPlaneConfig
-	126, // 108: machine.ClusterConfig.cluster_network:type_name -> machine.ClusterNetworkConfig
-	154, // 109: machine.GenerateClientConfigurationRequest.crt_ttl:type_name -> google.protobuf.Duration
-	155, // 110: machine.GenerateClientConfiguration.metadata:type_name -> common.Metadata
-	129, // 111: machine.GenerateClientConfigurationResponse.messages:type_name -> machine.GenerateClientConfiguration
-	132, // 112: machine.PacketCaptureRequest.bpf_filter:type_name -> machine.BPFInstruction
-	11,  // 113: machine.NetstatRequest.filter:type_name -> machine.NetstatRequest.Filter
-	150, // 114: machine.NetstatRequest.feature:type_name -> machine.NetstatRequest.Feature
-	151, // 115: machine.NetstatRequest.l4proto:type_name -> machine.NetstatRequest.L4proto
-	152, // 116: machine.NetstatRequest.netns:type_name -> machine.NetstatRequest.NetNS
-	12,  // 117: machine.ConnectRecord.state:type_name -> machine.ConnectRecord.State
-	13,  // 118: machine.ConnectRecord.tr:type_name -> machine.ConnectRecord.TimerActive
-	153, // 119: machine.ConnectRecord.process:type_name -> machine.ConnectRecord.Process
-	155, // 120: machine.Netstat.metadata:type_name -> common.Metadata
-	134, // 121: machine.Netstat.connectrecord:type_name -> machine.ConnectRecord
-	135, // 122: machine.NetstatResponse.messages:type_name -> machine.Netstat
-	155, // 123: machine.MetaWrite.metadata:type_name -> common.Metadata
-	138, // 124: machine.MetaWriteResponse.messages:type_name -> machine.MetaWrite
-	155, // 125: machine.MetaDelete.metadata:type_name -> common.Metadata
-	141, // 126: machine.MetaDeleteResponse.messages:type_name -> machine.MetaDelete
-	160, // 127: machine.ImageListRequest.namespace:type_name -> common.ContainerdNamespace
-	155, // 128: machine.ImageListResponse.metadata:type_name -> common.Metadata
-	158, // 129: machine.ImageListResponse.created_at:type_name -> google.protobuf.Timestamp
-	160, // 130: machine.ImagePullRequest.namespace:type_name -> common.ContainerdNamespace
-	155, // 131: machine.ImagePull.metadata:type_name -> common.Metadata
-	146, // 132: machine.ImagePullResponse.messages:type_name -> machine.ImagePull
-	149, // 133: machine.MachineStatusEvent.MachineStatus.unmet_conditions:type_name -> machine.MachineStatusEvent.MachineStatus.UnmetCondition
-	14,  // 134: machine.MachineService.ApplyConfiguration:input_type -> machine.ApplyConfigurationRequest
-	20,  // 135: machine.MachineService.Bootstrap:input_type -> machine.BootstrapRequest
-	80,  // 136: machine.MachineService.Containers:input_type -> machine.ContainersRequest
-	59,  // 137: machine.MachineService.Copy:input_type -> machine.CopyRequest
-	161, // 138: machine.MachineService.CPUFreqStats:input_type -> google.protobuf.Empty
-	161, // 139: machine.MachineService.CPUInfo:input_type -> google.protobuf.Empty
-	161, // 140: machine.MachineService.DiskStats:input_type -> google.protobuf.Empty
-	84,  // 141: machine.MachineService.Dmesg:input_type -> machine.DmesgRequest
-	32,  // 142: machine.MachineService.Events:input_type -> machine.EventsRequest
-	161, // 143: machine.MachineService.Hostname:input_type -> google.protobuf.Empty
-	161, // 144: machine.MachineService.NomadConfig:input_type -> google.protobuf.Empty
-	161, // 145: machine.MachineService.ConsulConfig:input_type -> google.protobuf.Empty
-	161, // 146: machine.MachineService.OpenBaoConfig:input_type -> google.protobuf.Empty
-	60,  // 147: machine.MachineService.List:input_type -> machine.ListRequest
-	61,  // 148: machine.MachineService.DiskUsage:input_type -> machine.DiskUsageRequest
-	161, // 149: machine.MachineService.LoadAvg:input_type -> google.protobuf.Empty
-	73,  // 150: machine.MachineService.Logs:input_type -> machine.LogsRequest
-	161, // 151: machine.MachineService.LogsContainers:input_type -> google.protobuf.Empty
-	161, // 152: machine.MachineService.Memory:input_type -> google.protobuf.Empty
-	161, // 153: machine.MachineService.Mounts:input_type -> google.protobuf.Empty
-	161, // 154: machine.MachineService.NetworkDeviceStats:input_type -> google.protobuf.Empty
-	161, // 155: machine.MachineService.Processes:input_type -> google.protobuf.Empty
-	74,  // 156: machine.MachineService.Read:input_type -> machine.ReadRequest
-	17,  // 157: machine.MachineService.Reboot:input_type -> machine.RebootRequest
-	88,  // 158: machine.MachineService.Restart:input_type -> machine.RestartRequest
-	77,  // 159: machine.MachineService.Rollback:input_type -> machine.RollbackRequest
-	35,  // 160: machine.MachineService.Reset:input_type -> machine.ResetRequest
-	161, // 161: machine.MachineService.ServiceList:input_type -> google.protobuf.Empty
-	56,  // 162: machine.MachineService.ServiceRestart:input_type -> machine.ServiceRestartRequest
-	50,  // 163: machine.MachineService.ServiceStart:input_type -> machine.ServiceStartRequest
-	53,  // 164: machine.MachineService.ServiceStop:input_type -> machine.ServiceStopRequest
-	39,  // 165: machine.MachineService.Shutdown:input_type -> machine.ShutdownRequest
-	91,  // 166: machine.MachineService.Stats:input_type -> machine.StatsRequest
-	161, // 167: machine.MachineService.SystemStat:input_type -> google.protobuf.Empty
-	41,  // 168: machine.MachineService.Upgrade:input_type -> machine.UpgradeRequest
-	161, // 169: machine.MachineService.Version:input_type -> google.protobuf.Empty
-	128, // 170: machine.MachineService.GenerateClientConfiguration:input_type -> machine.GenerateClientConfigurationRequest
-	131, // 171: machine.MachineService.PacketCapture:input_type -> machine.PacketCaptureRequest
-	133, // 172: machine.MachineService.Netstat:input_type -> machine.NetstatRequest
-	137, // 173: machine.MachineService.MetaWrite:input_type -> machine.MetaWriteRequest
-	140, // 174: machine.MachineService.MetaDelete:input_type -> machine.MetaDeleteRequest
-	143, // 175: machine.MachineService.ImageList:input_type -> machine.ImageListRequest
-	145, // 176: machine.MachineService.ImagePull:input_type -> machine.ImagePullRequest
-	16,  // 177: machine.MachineService.ApplyConfiguration:output_type -> machine.ApplyConfigurationResponse
-	22,  // 178: machine.MachineService.Bootstrap:output_type -> machine.BootstrapResponse
-	83,  // 179: machine.MachineService.Containers:output_type -> machine.ContainersResponse
-	162, // 180: machine.MachineService.Copy:output_type -> common.Data
-	106, // 181: machine.MachineService.CPUFreqStats:output_type -> machine.CPUFreqStatsResponse
-	109, // 182: machine.MachineService.CPUInfo:output_type -> machine.CPUInfoResponse
-	115, // 183: machine.MachineService.DiskStats:output_type -> machine.DiskStatsResponse
-	162, // 184: machine.MachineService.Dmesg:output_type -> common.Data
-	33,  // 185: machine.MachineService.Events:output_type -> machine.Event
-	98,  // 186: machine.MachineService.Hostname:output_type -> machine.HostnameResponse
-	162, // 187: machine.MachineService.NomadConfig:output_type -> common.Data
-	162, // 188: machine.MachineService.ConsulConfig:output_type -> common.Data
-	162, // 189: machine.MachineService.OpenBaoConfig:output_type -> common.Data
-	62,  // 190: machine.MachineService.List:output_type -> machine.FileInfo
-	64,  // 191: machine.MachineService.DiskUsage:output_type -> machine.DiskUsageInfo
-	100, // 192: machine.MachineService.LoadAvg:output_type -> machine.LoadAvgResponse
-	162, // 193: machine.MachineService.Logs:output_type -> common.Data
-	76,  // 194: machine.MachineService.LogsContainers:output_type -> machine.LogsContainersResponse
-	96,  // 195: machine.MachineService.Memory:output_type -> machine.MemoryResponse
-	66,  // 196: machine.MachineService.Mounts:output_type -> machine.MountsResponse
-	112, // 197: machine.MachineService.NetworkDeviceStats:output_type -> machine.NetworkDeviceStatsResponse
-	85,  // 198: machine.MachineService.Processes:output_type -> machine.ProcessesResponse
-	162, // 199: machine.MachineService.Read:output_type -> common.Data
-	19,  // 200: machine.MachineService.Reboot:output_type -> machine.RebootResponse
-	90,  // 201: machine.MachineService.Restart:output_type -> machine.RestartResponse
-	79,  // 202: machine.MachineService.Rollback:output_type -> machine.RollbackResponse
-	37,  // 203: machine.MachineService.Reset:output_type -> machine.ResetResponse
-	45,  // 204: machine.MachineService.ServiceList:output_type -> machine.ServiceListResponse
-	58,  // 205: machine.MachineService.ServiceRestart:output_type -> machine.ServiceRestartResponse
-	52,  // 206: machine.MachineService.ServiceStart:output_type -> machine.ServiceStartResponse
-	55,  // 207: machine.MachineService.ServiceStop:output_type -> machine.ServiceStopResponse
-	40,  // 208: machine.MachineService.Shutdown:output_type -> machine.ShutdownResponse
-	93,  // 209: machine.MachineService.Stats:output_type -> machine.StatsResponse
-	102, // 210: machine.MachineService.SystemStat:output_type -> machine.SystemStatResponse
-	43,  // 211: machine.MachineService.Upgrade:output_type -> machine.UpgradeResponse
-	69,  // 212: machine.MachineService.Version:output_type -> machine.VersionResponse
-	130, // 213: machine.MachineService.GenerateClientConfiguration:output_type -> machine.GenerateClientConfigurationResponse
-	162, // 214: machine.MachineService.PacketCapture:output_type -> common.Data
-	136, // 215: machine.MachineService.Netstat:output_type -> machine.NetstatResponse
-	139, // 216: machine.MachineService.MetaWrite:output_type -> machine.MetaWriteResponse
-	142, // 217: machine.MachineService.MetaDelete:output_type -> machine.MetaDeleteResponse
-	144, // 218: machine.MachineService.ImageList:output_type -> machine.ImageListResponse
-	147, // 219: machine.MachineService.ImagePull:output_type -> machine.ImagePullResponse
-	177, // [177:220] is the sub-list for method output_type
-	134, // [134:177] is the sub-list for method input_type
-	134, // [134:134] is the sub-list for extension type_name
-	134, // [134:134] is the sub-list for extension extendee
-	0,   // [0:134] is the sub-list for field type_name
+	10,  // 100: machine.MachineConfig.type:type_name -> machine.MachineConfig.MachineType
+	145, // 101: machine.GenerateClientConfigurationRequest.crt_ttl:type_name -> google.protobuf.Duration
+	146, // 102: machine.GenerateClientConfiguration.metadata:type_name -> common.Metadata
+	120, // 103: machine.GenerateClientConfigurationResponse.messages:type_name -> machine.GenerateClientConfiguration
+	123, // 104: machine.PacketCaptureRequest.bpf_filter:type_name -> machine.BPFInstruction
+	11,  // 105: machine.NetstatRequest.filter:type_name -> machine.NetstatRequest.Filter
+	141, // 106: machine.NetstatRequest.feature:type_name -> machine.NetstatRequest.Feature
+	142, // 107: machine.NetstatRequest.l4proto:type_name -> machine.NetstatRequest.L4proto
+	143, // 108: machine.NetstatRequest.netns:type_name -> machine.NetstatRequest.NetNS
+	12,  // 109: machine.ConnectRecord.state:type_name -> machine.ConnectRecord.State
+	13,  // 110: machine.ConnectRecord.tr:type_name -> machine.ConnectRecord.TimerActive
+	144, // 111: machine.ConnectRecord.process:type_name -> machine.ConnectRecord.Process
+	146, // 112: machine.Netstat.metadata:type_name -> common.Metadata
+	125, // 113: machine.Netstat.connectrecord:type_name -> machine.ConnectRecord
+	126, // 114: machine.NetstatResponse.messages:type_name -> machine.Netstat
+	146, // 115: machine.MetaWrite.metadata:type_name -> common.Metadata
+	129, // 116: machine.MetaWriteResponse.messages:type_name -> machine.MetaWrite
+	146, // 117: machine.MetaDelete.metadata:type_name -> common.Metadata
+	132, // 118: machine.MetaDeleteResponse.messages:type_name -> machine.MetaDelete
+	151, // 119: machine.ImageListRequest.namespace:type_name -> common.ContainerdNamespace
+	146, // 120: machine.ImageListResponse.metadata:type_name -> common.Metadata
+	149, // 121: machine.ImageListResponse.created_at:type_name -> google.protobuf.Timestamp
+	151, // 122: machine.ImagePullRequest.namespace:type_name -> common.ContainerdNamespace
+	146, // 123: machine.ImagePull.metadata:type_name -> common.Metadata
+	137, // 124: machine.ImagePullResponse.messages:type_name -> machine.ImagePull
+	140, // 125: machine.MachineStatusEvent.MachineStatus.unmet_conditions:type_name -> machine.MachineStatusEvent.MachineStatus.UnmetCondition
+	14,  // 126: machine.MachineService.ApplyConfiguration:input_type -> machine.ApplyConfigurationRequest
+	20,  // 127: machine.MachineService.Bootstrap:input_type -> machine.BootstrapRequest
+	80,  // 128: machine.MachineService.Containers:input_type -> machine.ContainersRequest
+	59,  // 129: machine.MachineService.Copy:input_type -> machine.CopyRequest
+	152, // 130: machine.MachineService.CPUFreqStats:input_type -> google.protobuf.Empty
+	152, // 131: machine.MachineService.CPUInfo:input_type -> google.protobuf.Empty
+	152, // 132: machine.MachineService.DiskStats:input_type -> google.protobuf.Empty
+	84,  // 133: machine.MachineService.Dmesg:input_type -> machine.DmesgRequest
+	32,  // 134: machine.MachineService.Events:input_type -> machine.EventsRequest
+	152, // 135: machine.MachineService.Hostname:input_type -> google.protobuf.Empty
+	152, // 136: machine.MachineService.NomadConfig:input_type -> google.protobuf.Empty
+	152, // 137: machine.MachineService.ConsulConfig:input_type -> google.protobuf.Empty
+	152, // 138: machine.MachineService.OpenBaoConfig:input_type -> google.protobuf.Empty
+	60,  // 139: machine.MachineService.List:input_type -> machine.ListRequest
+	61,  // 140: machine.MachineService.DiskUsage:input_type -> machine.DiskUsageRequest
+	152, // 141: machine.MachineService.LoadAvg:input_type -> google.protobuf.Empty
+	73,  // 142: machine.MachineService.Logs:input_type -> machine.LogsRequest
+	152, // 143: machine.MachineService.LogsContainers:input_type -> google.protobuf.Empty
+	152, // 144: machine.MachineService.Memory:input_type -> google.protobuf.Empty
+	152, // 145: machine.MachineService.Mounts:input_type -> google.protobuf.Empty
+	152, // 146: machine.MachineService.NetworkDeviceStats:input_type -> google.protobuf.Empty
+	152, // 147: machine.MachineService.Processes:input_type -> google.protobuf.Empty
+	74,  // 148: machine.MachineService.Read:input_type -> machine.ReadRequest
+	17,  // 149: machine.MachineService.Reboot:input_type -> machine.RebootRequest
+	88,  // 150: machine.MachineService.Restart:input_type -> machine.RestartRequest
+	77,  // 151: machine.MachineService.Rollback:input_type -> machine.RollbackRequest
+	35,  // 152: machine.MachineService.Reset:input_type -> machine.ResetRequest
+	152, // 153: machine.MachineService.ServiceList:input_type -> google.protobuf.Empty
+	56,  // 154: machine.MachineService.ServiceRestart:input_type -> machine.ServiceRestartRequest
+	50,  // 155: machine.MachineService.ServiceStart:input_type -> machine.ServiceStartRequest
+	53,  // 156: machine.MachineService.ServiceStop:input_type -> machine.ServiceStopRequest
+	39,  // 157: machine.MachineService.Shutdown:input_type -> machine.ShutdownRequest
+	91,  // 158: machine.MachineService.Stats:input_type -> machine.StatsRequest
+	152, // 159: machine.MachineService.SystemStat:input_type -> google.protobuf.Empty
+	41,  // 160: machine.MachineService.Upgrade:input_type -> machine.UpgradeRequest
+	152, // 161: machine.MachineService.Version:input_type -> google.protobuf.Empty
+	119, // 162: machine.MachineService.GenerateClientConfiguration:input_type -> machine.GenerateClientConfigurationRequest
+	122, // 163: machine.MachineService.PacketCapture:input_type -> machine.PacketCaptureRequest
+	124, // 164: machine.MachineService.Netstat:input_type -> machine.NetstatRequest
+	128, // 165: machine.MachineService.MetaWrite:input_type -> machine.MetaWriteRequest
+	131, // 166: machine.MachineService.MetaDelete:input_type -> machine.MetaDeleteRequest
+	134, // 167: machine.MachineService.ImageList:input_type -> machine.ImageListRequest
+	136, // 168: machine.MachineService.ImagePull:input_type -> machine.ImagePullRequest
+	16,  // 169: machine.MachineService.ApplyConfiguration:output_type -> machine.ApplyConfigurationResponse
+	22,  // 170: machine.MachineService.Bootstrap:output_type -> machine.BootstrapResponse
+	83,  // 171: machine.MachineService.Containers:output_type -> machine.ContainersResponse
+	153, // 172: machine.MachineService.Copy:output_type -> common.Data
+	106, // 173: machine.MachineService.CPUFreqStats:output_type -> machine.CPUFreqStatsResponse
+	109, // 174: machine.MachineService.CPUInfo:output_type -> machine.CPUInfoResponse
+	115, // 175: machine.MachineService.DiskStats:output_type -> machine.DiskStatsResponse
+	153, // 176: machine.MachineService.Dmesg:output_type -> common.Data
+	33,  // 177: machine.MachineService.Events:output_type -> machine.Event
+	98,  // 178: machine.MachineService.Hostname:output_type -> machine.HostnameResponse
+	153, // 179: machine.MachineService.NomadConfig:output_type -> common.Data
+	153, // 180: machine.MachineService.ConsulConfig:output_type -> common.Data
+	153, // 181: machine.MachineService.OpenBaoConfig:output_type -> common.Data
+	62,  // 182: machine.MachineService.List:output_type -> machine.FileInfo
+	64,  // 183: machine.MachineService.DiskUsage:output_type -> machine.DiskUsageInfo
+	100, // 184: machine.MachineService.LoadAvg:output_type -> machine.LoadAvgResponse
+	153, // 185: machine.MachineService.Logs:output_type -> common.Data
+	76,  // 186: machine.MachineService.LogsContainers:output_type -> machine.LogsContainersResponse
+	96,  // 187: machine.MachineService.Memory:output_type -> machine.MemoryResponse
+	66,  // 188: machine.MachineService.Mounts:output_type -> machine.MountsResponse
+	112, // 189: machine.MachineService.NetworkDeviceStats:output_type -> machine.NetworkDeviceStatsResponse
+	85,  // 190: machine.MachineService.Processes:output_type -> machine.ProcessesResponse
+	153, // 191: machine.MachineService.Read:output_type -> common.Data
+	19,  // 192: machine.MachineService.Reboot:output_type -> machine.RebootResponse
+	90,  // 193: machine.MachineService.Restart:output_type -> machine.RestartResponse
+	79,  // 194: machine.MachineService.Rollback:output_type -> machine.RollbackResponse
+	37,  // 195: machine.MachineService.Reset:output_type -> machine.ResetResponse
+	45,  // 196: machine.MachineService.ServiceList:output_type -> machine.ServiceListResponse
+	58,  // 197: machine.MachineService.ServiceRestart:output_type -> machine.ServiceRestartResponse
+	52,  // 198: machine.MachineService.ServiceStart:output_type -> machine.ServiceStartResponse
+	55,  // 199: machine.MachineService.ServiceStop:output_type -> machine.ServiceStopResponse
+	40,  // 200: machine.MachineService.Shutdown:output_type -> machine.ShutdownResponse
+	93,  // 201: machine.MachineService.Stats:output_type -> machine.StatsResponse
+	102, // 202: machine.MachineService.SystemStat:output_type -> machine.SystemStatResponse
+	43,  // 203: machine.MachineService.Upgrade:output_type -> machine.UpgradeResponse
+	69,  // 204: machine.MachineService.Version:output_type -> machine.VersionResponse
+	121, // 205: machine.MachineService.GenerateClientConfiguration:output_type -> machine.GenerateClientConfigurationResponse
+	153, // 206: machine.MachineService.PacketCapture:output_type -> common.Data
+	127, // 207: machine.MachineService.Netstat:output_type -> machine.NetstatResponse
+	130, // 208: machine.MachineService.MetaWrite:output_type -> machine.MetaWriteResponse
+	133, // 209: machine.MachineService.MetaDelete:output_type -> machine.MetaDeleteResponse
+	135, // 210: machine.MachineService.ImageList:output_type -> machine.ImageListResponse
+	138, // 211: machine.MachineService.ImagePull:output_type -> machine.ImagePullResponse
+	169, // [169:212] is the sub-list for method output_type
+	126, // [126:169] is the sub-list for method input_type
+	126, // [126:126] is the sub-list for extension type_name
+	126, // [126:126] is the sub-list for extension extendee
+	0,   // [0:126] is the sub-list for field type_name
 }
 
 func init() { file_machine_machine_proto_init() }
@@ -10960,7 +10365,7 @@ func file_machine_machine_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_machine_machine_proto_rawDesc), len(file_machine_machine_proto_rawDesc)),
 			NumEnums:      14,
-			NumMessages:   140,
+			NumMessages:   131,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

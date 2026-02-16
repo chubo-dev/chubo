@@ -119,7 +119,6 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		dnsDomainFlag                 = "dns-domain"
 		withClusterDiscoveryFlag      = "with-cluster-discovery"
 		registryInsecureFlag          = "registry-insecure-skip-verify"
-		customCNIUrlFlag              = "custom-cni-url"
 		encryptStatePartitionFlag     = "encrypt-state"
 		encryptEphemeralPartitionFlag = "encrypt-ephemeral"
 		encryptUserVolumeFlag         = "encrypt-user-volumes"
@@ -181,7 +180,6 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		common.BoolVar(&cOps.ForceInitNodeAsEndpoint, forceInitNodeAsEndpointFlag, cOps.ForceInitNodeAsEndpoint, "use init node as endpoint instead of any load balancer endpoint")
 		common.StringVar(&cOps.ForceEndpoint, forceEndpointFlag, cOps.ForceEndpoint, "use endpoint instead of provider defaults")
 		common.BoolVar(&cOps.WithInitNode, withInitNodeFlag, cOps.WithInitNode, "create the cluster with an init node")
-		common.StringVar(&cOps.CustomCNIUrl, customCNIUrlFlag, cOps.CustomCNIUrl, "install custom CNI from the URL (Talos cluster)")
 		common.StringVar(&cOps.DNSDomain, dnsDomainFlag, cOps.DNSDomain, "the dns domain to use for cluster")
 		common.BoolVar(&cOps.SkipInjectingConfig, skipInjectingConfigFlag, cOps.SkipInjectingConfig,
 			"skip injecting config from embedded metadata server, write config files to current directory")
