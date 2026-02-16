@@ -21,9 +21,15 @@ func getContainerInspector(ctx context.Context, namespace string, driver common.
 		return nil, fmt.Errorf("driver %q is not available in chubo mode", driver)
 	}
 
-	addr := constants.WorkloadContainerdAddress
-	if namespace == constants.SystemContainerdNamespace {
+	var addr string
+
+	switch namespace {
+	case constants.WorkloadContainerdNamespace:
+		addr = constants.WorkloadContainerdAddress
+	case constants.SystemContainerdNamespace:
 		addr = constants.SystemContainerdAddress
+	default:
+		return nil, fmt.Errorf("namespace %q is not available in chubo mode", namespace)
 	}
 
 	return taloscontainerd.NewInspector(ctx, namespace, taloscontainerd.WithContainerdAddress(addr))
