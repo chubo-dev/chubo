@@ -30,7 +30,7 @@ import (
 type Input struct {
 	Options Options
 
-	// ControlplaneEndpoint is the canonical address of the kubernetes control
+	// ControlplaneEndpoint is the canonical address of the workload control
 	// plane.  It can be a DNS name, the IP address of a load balancer, or
 	// (default) the IP address of the first controlplane node.  It is NOT
 	// multi-valued.  It may optionally specify the port.
@@ -39,10 +39,9 @@ type Input struct {
 	AdditionalSubjectAltNames []string
 	AdditionalMachineCertSANs []string
 
-	ClusterName       string
-	PodNet            []string
-	ServiceNet        []string
-	KubernetesVersion string
+	ClusterName string
+	PodNet      []string
+	ServiceNet  []string
 }
 
 // GetAPIServerSANs returns the formatted list of Subject Alt Name addresses for the API Server.
@@ -62,7 +61,7 @@ func (in *Input) GetAPIServerSANs() []string {
 }
 
 // NewInput prepares a new Input struct to perform machine config generation.
-func NewInput(clustername, endpoint, kubernetesVersion string, opts ...Option) (*Input, error) {
+func NewInput(clustername, endpoint, _ string, opts ...Option) (*Input, error) {
 	input := &Input{}
 	input.Options = DefaultOptions()
 
@@ -98,13 +97,11 @@ func NewInput(clustername, endpoint, kubernetesVersion string, opts ...Option) (
 	}
 
 	input.ClusterName = clustername
-	input.KubernetesVersion = kubernetesVersion
 	input.AdditionalMachineCertSANs = additionalSubjectAltNames
 	input.AdditionalSubjectAltNames = additionalSubjectAltNames
 	input.PodNet = []string{podNet}
 	input.ServiceNet = []string{serviceNet}
 	input.ControlPlaneEndpoint = endpoint
-	input.KubernetesVersion = kubernetesVersion
 
 	return input, nil
 }

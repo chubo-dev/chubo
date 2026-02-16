@@ -288,8 +288,8 @@ func (m *Maker[T]) finalizeMachineConfigs() (*bundle.Bundle, error) {
 				Endpoint:    m.InClusterEndpoint,
 				// Chubo doesn't bootstrap Kubernetes as part of `talosctl cluster create`.
 				// Keep this empty so the generator doesn't intentionally pin kube images.
-				KubeVersion: "",
-				GenOptions:  m.GenOps,
+				WorkloadVersion: "",
+				GenOptions:      m.GenOps,
 			}),
 	)
 

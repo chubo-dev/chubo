@@ -14,10 +14,10 @@ type Option func(o *Options) error
 
 // InputOptions holds necessary params for generating an input.
 type InputOptions struct {
-	ClusterName string
-	Endpoint    string
-	KubeVersion string
-	GenOptions  []generate.Option
+	ClusterName     string
+	Endpoint        string
+	WorkloadVersion string
+	GenOptions      []generate.Option
 }
 
 // Options describes generate parameters.

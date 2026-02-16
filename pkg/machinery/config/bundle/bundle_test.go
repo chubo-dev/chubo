@@ -25,9 +25,9 @@ func TestGenerateConfig(t *testing.T) {
 	configBundleOpts := []bundle.Option{ //nolint:prealloc // this is a test
 		bundle.WithInputOptions(
 			&bundle.InputOptions{
-				ClusterName: "test-cluster",
-				Endpoint:    "https://127.0.0.1:6443",
-				KubeVersion: "1.222.2",
+				ClusterName:     "test-cluster",
+				Endpoint:        "https://127.0.0.1:6443",
+				WorkloadVersion: "1.222.2",
 			},
 		),
 	}

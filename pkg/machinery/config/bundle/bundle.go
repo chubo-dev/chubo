@@ -115,7 +115,7 @@ func NewBundle(opts ...Option) (*Bundle, error) {
 	input, err := generate.NewInput(
 		options.InputOptions.ClusterName,
 		options.InputOptions.Endpoint,
-		options.InputOptions.KubeVersion,
+		options.InputOptions.WorkloadVersion,
 		options.InputOptions.GenOptions...,
 	)
 	if err != nil {

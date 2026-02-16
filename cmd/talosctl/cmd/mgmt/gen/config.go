@@ -52,13 +52,12 @@ type configOutputPaths struct {
 }
 
 var genConfigCmdFlags struct {
-	additionalSANs    []string
-	configVersion     string
-	dnsDomain         string
-	kubernetesVersion string
-	talosVersion      string
-	installDisk       string
-	installImage      string
+	additionalSANs []string
+	configVersion  string
+	dnsDomain      string
+	talosVersion   string
+	installDisk    string
+	installImage   string
 
 	// outputDir is a hidden flag kept for backwards compatibility
 	outputDir string
@@ -122,7 +121,6 @@ func fixControlPlaneEndpoint(u *url.URL) *url.URL {
 func GenerateConfigBundle(genOptions []generate.Option,
 	clusterName string,
 	endpoint string,
-	kubernetesVersion string,
 	configPatch []string,
 	configPatchControlPlane []string,
 	configPatchWorker []string,
@@ -130,10 +128,10 @@ func GenerateConfigBundle(genOptions []generate.Option,
 	configBundleOpts := []bundle.Option{
 		bundle.WithInputOptions(
 			&bundle.InputOptions{
-				ClusterName: clusterName,
-				Endpoint:    endpoint,
-				KubeVersion: strings.TrimPrefix(kubernetesVersion, "v"),
-				GenOptions:  genOptions,
+				ClusterName:     clusterName,
+				Endpoint:        endpoint,
+				WorkloadVersion: constants.DefaultWorkloadVersion,
+				GenOptions:      genOptions,
 			},
 		),
 	}
@@ -237,7 +235,6 @@ func writeConfig(args []string) error {
 		genOptions,
 		args[0],
 		args[1],
-		genConfigCmdFlags.kubernetesVersion,
 		genConfigCmdFlags.configPatch,
 		genConfigCmdFlags.configPatchControlPlane,
 		genConfigCmdFlags.configPatchWorker)
@@ -424,7 +421,6 @@ func init() {
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.dnsDomain, "dns-domain", "cluster.local", "the dns domain to use for cluster")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.configVersion, "version", "v1alpha1", "the desired machine config version to generate")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate config for (backwards compatibility, e.g. v0.8)")
-	registerKubernetesVersionFlag(genConfigCmd)
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatch, "config-patch", nil, "patch generated machineconfigs (applied to all node types), use @file to read a patch from file")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchControlPlane, "config-patch-control-plane", nil, "patch generated machineconfigs (applied to 'init' and 'controlplane' types)")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchWorker, "config-patch-worker", nil, "patch generated machineconfigs (applied to 'worker' type)")

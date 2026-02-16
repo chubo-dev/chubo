@@ -618,9 +618,9 @@ func (suite *BaseSuite) setupCluster(options clusterOptions) {
 		append([]bundle.Option{
 			bundle.WithInputOptions(
 				&bundle.InputOptions{
-					ClusterName: options.ClusterName,
-					Endpoint:    suite.controlPlaneEndpoint,
-					KubeVersion: options.SourceK8sVersion,
+					ClusterName:     options.ClusterName,
+					Endpoint:        suite.controlPlaneEndpoint,
+					WorkloadVersion: options.SourceK8sVersion,
 					GenOptions: append(
 						genOptions,
 						generate.WithEndpointList(controlplaneEndpoints),
