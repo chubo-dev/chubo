@@ -5,10 +5,10 @@
 package v1alpha1
 
 // APIServerDefaultAuditPolicy is used by doc/schema generation as an example
-// value for the (legacy) Kubernetes API server audit policy field.
+// value for the legacy API server audit policy field.
 //
-// Chubo OS does not manage Kubernetes, but we keep the symbol until the v1alpha1
-// schema surface is fully purged.
+// Chubo OS does not manage this surface, but we keep the symbol until the
+// v1alpha1 schema is fully purged.
 var APIServerDefaultAuditPolicy = Unstructured{
 	Object: map[string]any{},
 }

@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package client provides Talos API client.
+// Package client provides the Chubo OS API client.
 package client
 
 import (
@@ -361,7 +361,7 @@ func (c *Client) Bootstrap(ctx context.Context, req *machineapi.BootstrapRequest
 // ShutdownOption provides shutdown API options.
 type ShutdownOption func(*machineapi.ShutdownRequest)
 
-// WithShutdownForce forces the shutdown even if the Kubernetes API is down.
+// WithShutdownForce forces the shutdown even if API checks fail.
 func WithShutdownForce(force bool) ShutdownOption {
 	return func(req *machineapi.ShutdownRequest) {
 		req.Force = force
@@ -543,7 +543,7 @@ func WithUpgradeGRPCCallOptions(opts ...grpc.CallOption) UpgradeOption {
 	}
 }
 
-// Upgrade initiates a Talos upgrade and implements the proto.MachineServiceClient interface.
+// Upgrade initiates an OS upgrade and implements the proto.MachineServiceClient interface.
 func (c *Client) Upgrade(ctx context.Context, image string, stage, force bool, callOptions ...grpc.CallOption) (*machineapi.UpgradeResponse, error) {
 	return c.UpgradeWithOptions(
 		ctx,
@@ -555,7 +555,7 @@ func (c *Client) Upgrade(ctx context.Context, image string, stage, force bool, c
 	)
 }
 
-// UpgradeWithOptions initiates a Talos upgrade with the given options.
+// UpgradeWithOptions initiates an OS upgrade with the given options.
 func (c *Client) UpgradeWithOptions(ctx context.Context, opts ...UpgradeOption) (*machineapi.UpgradeResponse, error) {
 	var options UpgradeOptions
 
@@ -691,7 +691,7 @@ func (c *Client) Read(ctx context.Context, path string) (io.ReadCloser, error) {
 	return ReadStream(stream)
 }
 
-// ClusterHealthCheck runs a Talos cluster health check.
+// ClusterHealthCheck runs a cluster health check.
 func (c *Client) ClusterHealthCheck(ctx context.Context, waitTimeout time.Duration, clusterInfo *clusterapi.ClusterInfo) (clusterapi.ClusterService_HealthCheckClient, error) {
 	return c.ClusterClient.HealthCheck(ctx, &clusterapi.HealthCheckRequest{
 		WaitTimeout: durationpb.New(waitTimeout),

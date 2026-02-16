@@ -55,8 +55,7 @@ type ResolverConfigV1Alpha1 struct {
 	//   description: |
 	//     A list of nameservers (DNS servers) to use for resolving domain names.
 	//
-	//     Nameservers are used to resolve domain names on the host, and they are also
-	//     propagated to Kubernetes DNS (CoreDNS) for use by pods running on the cluster.
+	//     Nameservers are used to resolve domain names on the host and by local workloads.
 	//
 	//     This overrides any nameservers obtained via DHCP or platform configuration.
 	//     Default configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.

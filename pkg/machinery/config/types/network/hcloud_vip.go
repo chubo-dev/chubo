@@ -42,7 +42,7 @@ var (
 // HCloudVIPConfigV1Alpha1 is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.
 //
 //	description: |
-//	 Virtual IP configuration should be used only on controlplane nodes to provide virtual IP for Kubernetes API server.
+//	 Virtual IP configuration should be used only on controlplane nodes to provide a virtual IP for the cluster API endpoint.
 //	 Any other use cases are not supported and may lead to unexpected behavior.
 //	 Virtual IP will be announced from only one node at a time using Hetzner Cloud APIs.
 //	examples:

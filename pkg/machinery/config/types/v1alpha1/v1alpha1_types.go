@@ -5,7 +5,7 @@
 /*
 Package v1alpha1 contains definition of the `v1alpha1` configuration document.
 
-Even though the machine configuration in Talos Linux is multi-document, at the moment
+Even though the machine configuration in Chubo OS is multi-document, at the moment
 this configuration document contains most of the configuration options.
 
 It is expected that new configuration options will be added as new documents, and existing ones
@@ -138,7 +138,7 @@ func (a *ArgValue) UnmarshalYAML(unmarshal func(any) error) error {
 	return fmt.Errorf("arg value must be a string or list of strings")
 }
 
-// Config defines the v1alpha1.Config Talos machine configuration document.
+// Config defines the v1alpha1.Config machine configuration document.
 //
 //	examples:
 //	   - value: configExample()
@@ -153,7 +153,7 @@ type Config struct {
 	//     Enable verbose logging to the console.
 	//     All system containers logs will flow into serial console.
 	//
-	//     **Note:** To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.
+	//     **Note:** To avoid breaking bootstrap flow enable this option only if serial console can handle high message throughput.
 	//   values:
 	//     - true
 	//     - yes
@@ -248,8 +248,8 @@ type MachineConfig struct {
 	//   description: |
 	//     Used to provide instructions for installations.
 	//
-	//     Note that this configuration section gets silently ignored by Talos images that are considered pre-installed.
-	//     To make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.
+	//     Note that this configuration section gets silently ignored by images that are considered pre-installed.
+	//     To make sure installation uses this configuration, boot from ISO or PXE.
 	//   examples:
 	//     - name: MachineInstall config usage example.
 	//       value: machineInstallExample()
@@ -294,7 +294,7 @@ type MachineConfig struct {
 	// Deprecated: Use `VolumeConfig` instead.
 	MachineSystemDiskEncryption *SystemDiskEncryptionConfig `yaml:"systemDiskEncryption,omitempty"`
 	//   description: |
-	//     Features describe individual Talos features that can be switched on or off.
+	//     Features describe individual OS features that can be switched on or off.
 	//   examples:
 	//     - value: machineFeaturesExample()
 	MachineFeatures *FeaturesConfig `yaml:"features,omitempty"`
@@ -321,7 +321,7 @@ type MachineConfig struct {
 	//  description: |
 	//    Override (patch) settings in the default OCI runtime spec for CRI containers.
 	//
-	//    It can be used to set some default container settings which are not configurable in Kubernetes,
+	//    It can be used to set default container settings that are not configurable at the scheduler layer,
 	//    for example default ulimits.
 	//    Note: this change applies to all newly created containers, and it requires a reboot to take effect.
 	//  examples:
@@ -508,7 +508,7 @@ type InstallConfig struct {
 	InstallExtraKernelArgs []string `yaml:"extraKernelArgs,omitempty"`
 	//   description: |
 	//     Allows for supplying the image used to perform the installation.
-	//     Image reference for each Talos release can be found on
+	//     Image reference for each Chubo OS release can be found on
 	//     [GitHub releases page](https://github.com/chubo-dev/chubo/releases).
 	//   examples:
 	//     - value: '"ghcr.io/siderolabs/installer:latest"'
@@ -660,7 +660,7 @@ type TimeConfig struct {
 	//     Specifies time (NTP) servers to use for setting the system time.
 	//     Defaults to `time.cloudflare.com`.
 	//
-	//	   Talos can also sync to the PTP time source (e.g provided by the hypervisor),
+	//	   The OS can also sync to the PTP time source (e.g provided by the hypervisor),
 	//     provide the path to the PTP device as "/dev/ptp0" or "/dev/ptp_kvm".
 	TimeServers []string `yaml:"servers,omitempty"`
 	//   description: |
@@ -1550,7 +1550,7 @@ type SystemDiskEncryptionConfig struct {
 
 var _ config.Features = (*FeaturesConfig)(nil)
 
-// FeaturesConfig describes individual Talos features that can be switched on or off.
+// FeaturesConfig describes individual OS features that can be switched on or off.
 type FeaturesConfig struct {
 	// docgen:nodoc
 	RBAC *bool `yaml:"rbac,omitempty"`
@@ -1711,14 +1711,14 @@ type UdevConfig struct {
 	UdevRules []string `yaml:"rules,omitempty"`
 }
 
-// LoggingConfig struct configures Talos logging.
+// LoggingConfig struct configures OS logging.
 type LoggingConfig struct {
 	// description: |
 	//   Logging destination.
 	LoggingDestinations []LoggingDestination `yaml:"destinations"`
 }
 
-// LoggingDestination struct configures Talos logging destination.
+// LoggingDestination struct configures logging destinations.
 type LoggingDestination struct {
 	// description: |
 	//   Where to send logs. Supported protocols are "tcp" and "udp".
@@ -1736,7 +1736,7 @@ type LoggingDestination struct {
 	LoggingExtraTags map[string]string `yaml:"extraTags,omitempty"`
 }
 
-// KernelConfig struct configures Talos Linux kernel.
+// KernelConfig struct configures the Linux kernel.
 type KernelConfig struct {
 	// description: |
 	//   Kernel modules to load.

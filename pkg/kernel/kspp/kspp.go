@@ -96,7 +96,7 @@ func GetKernelParams() []*kernel.Param {
 		},
 		{
 			// Bumping this to 3 (https://www.kernel.org/doc/Documentation/security/Yama.txt)
-			// breaks Kubernetes pods with user namespaces, which are not enabled by default, but still supported.
+			// breaks workloads that rely on user namespaces, which are not enabled by default, but still supported.
 			Key:   "proc.sys.kernel.yama.ptrace_scope",
 			Value: "2",
 		},

@@ -24,7 +24,7 @@ const (
 	TypeInit // init
 
 	// TypeControlPlane designates the node as a control plane member.
-	// This means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.
+	// This means it will host the control-plane services required to manage cluster state.
 	TypeControlPlane // controlplane
 
 	// TypeWorker designates the node as a worker node.

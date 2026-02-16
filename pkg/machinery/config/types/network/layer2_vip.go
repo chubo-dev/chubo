@@ -42,7 +42,7 @@ var (
 // Layer2VIPConfigV1Alpha1 is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.
 //
 //	description: |
-//	 Virtual IP configuration should be used only on controlplane nodes to provide virtual IP for Kubernetes API server.
+//	 Virtual IP configuration should be used only on controlplane nodes to provide a virtual IP for the cluster API endpoint.
 //	 Any other use cases are not supported and may lead to unexpected behavior.
 //	 Virtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.
 //	examples:

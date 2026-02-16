@@ -13,7 +13,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MemoryType is type of Etcd resource.
+// MemoryType is the resource type for memory statistics.
 const MemoryType = resource.Type("MemoryStats.perf.talos.dev")
 
 // MemoryID is a resource ID of singleton instance.

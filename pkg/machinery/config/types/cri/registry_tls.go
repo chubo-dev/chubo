@@ -60,7 +60,7 @@ type RegistryTLSConfigV1Alpha1 struct {
 	//
 	//     The TLS configuration makes sense only for HTTPS endpoints.
 	//     The TLS configuration will apply to all image pulls for this
-	//     registry endpoint, by Talos or any Kubernetes workloads.
+	//     registry endpoint, by the OS and any scheduled workloads.
 	//   schemaRequired: true
 	MetaName string `yaml:"name"`
 	//   description: |

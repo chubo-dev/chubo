@@ -54,7 +54,7 @@ type RegistryAuthConfigV1Alpha1 struct {
 	//     e.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.
 	//
 	//     The authentication configuration will apply to all image pulls for this
-	//     registry endpoint, by Talos or any Kubernetes workloads.
+	//     registry endpoint, by the OS and any scheduled workloads.
 	//   schemaRequired: true
 	MetaName string `yaml:"name"`
 	//   description: |

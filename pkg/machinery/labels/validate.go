@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package labels contains adapter label validation functions from Kubernetes.
+// Package labels contains label validation adapted from upstream conventions.
 //
-// We want to avoid dependency of machinery on Kubernetes packages.
+// This avoids adding a dependency from machinery to orchestration packages.
 package labels
 
 import (
@@ -102,8 +102,7 @@ const (
 
 var qualifiedNameRegexp = regexp.MustCompile("^" + qualifiedNameFmt + "$")
 
-// ValidateQualifiedName tests whether the value passed is what Kubernetes calls a
-// "qualified name".
+// ValidateQualifiedName tests whether the value passed is a valid qualified name.
 //
 // This is a format used in various places throughout the
 // system.  If the value is not valid, a list of error strings is returned.

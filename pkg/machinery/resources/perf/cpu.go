@@ -15,7 +15,7 @@ import (
 
 //go:generate go tool github.com/siderolabs/deep-copy -type CPUSpec -type MemorySpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .
 
-// CPUType is type of Etcd resource.
+// CPUType is the resource type for CPU statistics.
 const CPUType = resource.Type("CPUStats.perf.talos.dev")
 
 // CPUID is a resource ID of singleton instance.
