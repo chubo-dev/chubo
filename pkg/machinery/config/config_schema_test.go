@@ -120,7 +120,7 @@ func gatherValidationErrors(t *testing.T, err error) []string {
 }
 
 func newV1Alpha1Config(t *testing.T, modifications func(config *v1alpha1.Config), rawModifications func(rawConfig map[string]any)) map[string]any {
-	input, err := generate.NewInput("test", "https://doesntmatter:6443", constants.DefaultKubernetesVersion)
+	input, err := generate.NewInput("test", "https://doesntmatter:6443", constants.DefaultWorkloadVersion)
 	require.NoError(t, err)
 
 	config, err := input.Config(machine.TypeControlPlane)

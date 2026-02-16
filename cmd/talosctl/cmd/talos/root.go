@@ -236,7 +236,7 @@ func getContainersFromNode(kubernetes bool) []string {
 			)
 
 			if kubernetes {
-				namespace = constants.K8sContainerdNamespace
+				namespace = constants.WorkloadContainerdNamespace
 				driver = common.ContainerDriver_CRI
 			} else {
 				namespace = constants.SystemContainerdNamespace

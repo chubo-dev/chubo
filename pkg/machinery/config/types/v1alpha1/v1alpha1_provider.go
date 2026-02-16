@@ -1190,7 +1190,7 @@ func (c *CoreDNS) Image() string {
 // CertLifetime implements the config.Provider interface.
 func (a *AdminKubeconfigConfig) CertLifetime() time.Duration {
 	if a.AdminKubeconfigCertLifetime == 0 {
-		return constants.KubernetesAdminCertDefaultLifetime
+		return 365 * 24 * time.Hour
 	}
 
 	return a.AdminKubeconfigCertLifetime
@@ -1198,7 +1198,7 @@ func (a *AdminKubeconfigConfig) CertLifetime() time.Duration {
 
 // CommonName implements the config.Provider interface.
 func (a *AdminKubeconfigConfig) CommonName() string {
-	return constants.KubernetesAdminCertCommonName
+	return "admin"
 }
 
 // CertOrganization implements the config.Provider interface.

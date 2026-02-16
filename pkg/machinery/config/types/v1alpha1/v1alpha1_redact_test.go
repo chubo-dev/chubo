@@ -17,7 +17,7 @@ import (
 )
 
 func TestRedactSecrets(t *testing.T) {
-	input, err := generate.NewInput("test", "https://doesntmatter:6443", constants.DefaultKubernetesVersion)
+	input, err := generate.NewInput("test", "https://doesntmatter:6443", constants.DefaultWorkloadVersion)
 	require.NoError(t, err)
 
 	container, err := input.Config(machine.TypeControlPlane)

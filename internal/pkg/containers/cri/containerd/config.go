@@ -23,14 +23,14 @@ type Registry struct {
 	Configs    map[string]RegistryConfig `toml:"configs"`
 }
 
-// CRIConfig represents the CRI config.
-type CRIConfig struct {
+// RuntimeConfig represents the CRI config.
+type RuntimeConfig struct {
 	Registry Registry `toml:"registry"`
 }
 
 // PluginsConfig represents the CRI plugins config.
 type PluginsConfig struct {
-	CRI CRIConfig `toml:"io.containerd.cri.v1.images"`
+	CRI RuntimeConfig `toml:"io.containerd.cri.v1.images"`
 }
 
 // Config represnts the containerd config.

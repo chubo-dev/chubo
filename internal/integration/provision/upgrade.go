@@ -62,9 +62,9 @@ const (
 	// Command to find Kubernetes version for past releases:
 	//
 	//  git show ${TAG}:pkg/machinery/constants/constants.go | grep KubernetesVersion
-	previousK8sVersion = "1.34.1" // constants.DefaultKubernetesVersion in the previousRelease
-	stableK8sVersion   = "1.35.0" // constants.DefaultKubernetesVersion in the stableRelease
-	currentK8sVersion  = constants.DefaultKubernetesVersion
+	previousK8sVersion = "1.34.1" // constants.DefaultWorkloadVersion in the previousRelease
+	stableK8sVersion   = "1.35.0" // constants.DefaultWorkloadVersion in the stableRelease
+	currentK8sVersion  = constants.DefaultWorkloadVersion
 )
 
 // upgradePreviousToStable upgrades from the previous Talos release to the stable release.

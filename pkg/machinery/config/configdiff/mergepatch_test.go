@@ -411,7 +411,7 @@ func TestMergePatchDynamic(t *testing.T) {
 	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.TalosVersionCurrent)
 	require.NoError(t, err)
 
-	input, err := generate.NewInput("test", "https://localhost:6443", constants.DefaultKubernetesVersion, generate.WithSecretsBundle(bundle))
+	input, err := generate.NewInput("test", "https://localhost:6443", constants.DefaultWorkloadVersion, generate.WithSecretsBundle(bundle))
 	require.NoError(t, err)
 
 	original, err := input.Config(machine.TypeControlPlane)

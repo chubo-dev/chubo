@@ -24,7 +24,7 @@ import (
 func GenerateCRIConfig(r cri.Registries) ([]byte, error) {
 	var ctrdCfg Config
 
-	ctrdCfg.Plugins.CRI.Registry.ConfigPath = filepath.Join(constants.EtcCRIConfdPath, "hosts")
+	ctrdCfg.Plugins.CRI.Registry.ConfigPath = filepath.Join(constants.EtcRuntimeConfdPath, "hosts")
 	ctrdCfg.Plugins.CRI.Registry.Configs = make(map[string]RegistryConfig)
 
 	for _, registryHost := range slices.Sorted(maps.Keys(r.Auths())) {

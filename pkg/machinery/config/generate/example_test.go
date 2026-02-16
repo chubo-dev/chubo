@@ -28,7 +28,7 @@ func Example() {
 	controlPlaneEndpoint := "https://kubernetes.example.com:6443"
 
 	// * Kubernetes version to install, using the latest here
-	kubernetesVersion := constants.DefaultKubernetesVersion
+	kubernetesVersion := constants.DefaultWorkloadVersion
 
 	// * version contract defines the version of the Talos cluster configuration is generated for
 	//   generate package can generate machine configuration compatible with current and previous versions of Talos

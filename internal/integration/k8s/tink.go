@@ -144,7 +144,7 @@ func (suite *TinkSuite) TestDeploy() {
 
 	in, err := generate.NewInput(namespace,
 		fmt.Sprintf("https://%s", net.JoinHostPort(lbNode, strconv.Itoa(k8sPort))),
-		constants.DefaultKubernetesVersion,
+		constants.DefaultWorkloadVersion,
 		generate.WithAdditionalSubjectAltNames([]string{lbNode}),
 		generate.WithHostDNSForwardKubeDNSToHost(true),
 	)

@@ -23,7 +23,7 @@ import (
 // CRIConfigPartsController merges parts of the CRI config from /etc/cri/conf.d/*.part into final /etc/cri/conf.d/cri.toml.
 type CRIConfigPartsController struct {
 	// Path to /etc/cri/conf.d directory.
-	CRIConfdPath string
+	RuntimeConfdPath string
 }
 
 // Name implements controller.Controller interface.
@@ -54,8 +54,8 @@ func (ctrl *CRIConfigPartsController) Outputs() []controller.Output {
 
 // Run implements controller.Controller interface.
 func (ctrl *CRIConfigPartsController) Run(ctx context.Context, r controller.Runtime, _ *zap.Logger) error {
-	if ctrl.CRIConfdPath == "" {
-		ctrl.CRIConfdPath = constants.EtcCRIConfdPath
+	if ctrl.RuntimeConfdPath == "" {
+		ctrl.RuntimeConfdPath = constants.EtcRuntimeConfdPath
 	}
 
 	for {
@@ -66,7 +66,7 @@ func (ctrl *CRIConfigPartsController) Run(ctx context.Context, r controller.Runt
 		}
 
 		// scan conf.d directory for config parts and merge them together into final configuration
-		parts, err := filepath.Glob(filepath.Join(ctrl.CRIConfdPath, "*.part"))
+		parts, err := filepath.Glob(filepath.Join(ctrl.RuntimeConfdPath, "*.part"))
 		if err != nil {
 			return err
 		}
@@ -78,7 +78,7 @@ func (ctrl *CRIConfigPartsController) Run(ctx context.Context, r controller.Runt
 			return err
 		}
 
-		if err := safe.WriterModify(ctx, r, files.NewEtcFileSpec(files.NamespaceName, constants.CRIConfig),
+		if err := safe.WriterModify(ctx, r, files.NewEtcFileSpec(files.NamespaceName, constants.RuntimeConfig),
 			func(r *files.EtcFileSpec) error {
 				for _, key := range r.Metadata().Annotations().Raw() {
 					r.Metadata().Annotations().Delete(key)

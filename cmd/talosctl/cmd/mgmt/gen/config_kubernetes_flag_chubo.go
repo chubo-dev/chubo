@@ -9,6 +9,6 @@ import (
 )
 
 func registerKubernetesVersionFlag(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&genConfigCmdFlags.kubernetesVersion, "kubernetes-version", constants.DefaultKubernetesVersion, "compatibility alias (ignored in Chubo)")
+	cmd.Flags().StringVar(&genConfigCmdFlags.kubernetesVersion, "kubernetes-version", constants.DefaultWorkloadVersion, "compatibility alias (ignored in Chubo)")
 	cmd.Flags().MarkHidden("kubernetes-version") //nolint:errcheck
 }

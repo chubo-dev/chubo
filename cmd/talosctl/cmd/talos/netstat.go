@@ -207,7 +207,7 @@ func netstatFlagsToRequest() *machine.NetstatRequest {
 }
 
 func (n *netstat) getPodNetNsFromNode(ctx context.Context) (err error) {
-	resp, err := n.client.Containers(ctx, constants.K8sContainerdNamespace, common.ContainerDriver_CRI)
+	resp, err := n.client.Containers(ctx, constants.WorkloadContainerdNamespace, common.ContainerDriver_CRI)
 	if err != nil {
 		cli.Warning("error getting containers: %v", err)
 

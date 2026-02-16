@@ -38,7 +38,7 @@ var containersCmd = &cobra.Command{
 			)
 
 			if kubernetesFlag {
-				namespace = constants.K8sContainerdNamespace
+				namespace = constants.WorkloadContainerdNamespace
 				driver = common.ContainerDriver_CRI
 			} else {
 				namespace = constants.SystemContainerdNamespace

@@ -292,14 +292,6 @@ var standardVolumeDefinitions = []struct {
 		SELinuxLabel: "system_u:object_r:audit_log_t:s0",
 	},
 	{
-		Path:         constants.KubernetesAuditLogDir,
-		Mode:         0o700,
-		UID:          constants.KubernetesAPIServerRunUser,
-		GID:          constants.KubernetesAPIServerRunGroup,
-		Recursive:    true,
-		SELinuxLabel: "system_u:object_r:kube_log_t:s0",
-	},
-	{
 		Path:         "/var/log/containers",
 		Mode:         0o755,
 		SELinuxLabel: "system_u:object_r:containers_log_t:s0",
@@ -316,23 +308,9 @@ var standardVolumeDefinitions = []struct {
 		SELinuxLabel: constants.EphemeralSelinuxLabel,
 	},
 	{
-		ID:           constants.EtcdDataVolumeID,
-		Path:         constants.EtcdDataPath,
-		SELinuxLabel: constants.EtcdDataSELinuxLabel,
-		Mode:         0o700,
-		UID:          constants.EtcdUserID,
-		GID:          constants.EtcdUserID,
-		Recursive:    true,
-	},
-	{
 		Path:         "/var/lib/containerd",
 		Mode:         0o000,
 		SELinuxLabel: "system_u:object_r:containerd_state_t:s0",
-	},
-	{
-		Path:         "/var/lib/kubelet",
-		Mode:         0o700,
-		SELinuxLabel: "system_u:object_r:kubelet_state_t:s0",
 	},
 	{
 		Path:         "/var/lib/cni",
@@ -341,12 +319,7 @@ var standardVolumeDefinitions = []struct {
 		SELinuxLabel: "system_u:object_r:cni_state_t:s0",
 	},
 	{
-		Path:         "/var/lib/kubelet/seccomp",
-		Mode:         0o700,
-		SELinuxLabel: "system_u:object_r:seccomp_profile_t:s0",
-	},
-	{
-		Path:         constants.SeccompProfilesDirectory,
+		Path:         constants.WorkloadSeccompProfilesDirectory,
 		Mode:         0o700,
 		Recursive:    true,
 		SELinuxLabel: "system_u:object_r:seccomp_profile_t:s0",

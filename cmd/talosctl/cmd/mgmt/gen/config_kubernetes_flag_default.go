@@ -9,5 +9,5 @@ import (
 )
 
 func registerKubernetesVersionFlag(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&genConfigCmdFlags.kubernetesVersion, "kubernetes-version", constants.DefaultKubernetesVersion, "desired kubernetes version to run")
+	cmd.Flags().StringVar(&genConfigCmdFlags.kubernetesVersion, "kubernetes-version", constants.DefaultWorkloadVersion, "desired kubernetes version to run")
 }

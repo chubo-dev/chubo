@@ -84,7 +84,7 @@ func (ctrl *CRIBaseRuntimeSpecController) Run(ctx context.Context, r controller.
 		platform := platforms.DefaultString()
 
 		defaultSpec, err := oci.GenerateSpecWithPlatform(
-			namespaces.WithNamespace(ctx, constants.K8sContainerdNamespace),
+			namespaces.WithNamespace(ctx, constants.WorkloadContainerdNamespace),
 			nil,
 			platform,
 			&containers.Container{},
@@ -119,7 +119,7 @@ func (ctrl *CRIBaseRuntimeSpecController) Run(ctx context.Context, r controller.
 			return fmt.Errorf("error marshaling runtime spec: %w", err)
 		}
 
-		if err := safe.WriterModify(ctx, r, files.NewEtcFileSpec(files.NamespaceName, constants.CRIBaseRuntimeSpec),
+		if err := safe.WriterModify(ctx, r, files.NewEtcFileSpec(files.NamespaceName, constants.RuntimeBaseSpec),
 			func(r *files.EtcFileSpec) error {
 				spec := r.TypedSpec()
 

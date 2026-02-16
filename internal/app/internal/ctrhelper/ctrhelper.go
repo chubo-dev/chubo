@@ -33,14 +33,14 @@ func ContainerdInstanceHelper(ctx context.Context, req *common.ContainerdInstanc
 	case common.ContainerDriver_CONTAINERD:
 		containerdAddress = constants.SystemContainerdAddress
 	case common.ContainerDriver_CRI:
-		containerdAddress = constants.CRIContainerdAddress
+		containerdAddress = constants.WorkloadContainerdAddress
 	default:
 		return nil, nil, nil, status.Errorf(codes.InvalidArgument, "invalid containerd driver %s", req.GetDriver())
 	}
 
 	switch req.GetNamespace() {
 	case common.ContainerdNamespace_NS_CRI:
-		containerdNamespace = constants.K8sContainerdNamespace
+		containerdNamespace = constants.WorkloadContainerdNamespace
 	case common.ContainerdNamespace_NS_SYSTEM:
 		containerdNamespace = constants.SystemContainerdNamespace
 	case common.ContainerdNamespace_NS_UNKNOWN:

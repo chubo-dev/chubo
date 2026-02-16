@@ -1,7 +1,7 @@
 [plugins]
   [plugins.'io.containerd.cri.v1.images']
     [plugins.'io.containerd.cri.v1.images'.registry]
-      config_path = '/etc/cri/conf.d/hosts'
+      config_path = '/etc/workload/conf.d/hosts'
 
       [plugins.'io.containerd.cri.v1.images'.registry.configs]
         [plugins.'io.containerd.cri.v1.images'.registry.configs.'registry-1.docker.io']

@@ -32,7 +32,7 @@ func (suite *PatchSuite) TestSuccess() {
 	patch := map[string]any{
 		"cluster": map[string]any{
 			"proxy": map[string]any{
-				"image": fmt.Sprintf("%s:v%s", constants.KubeProxyImage, constants.DefaultKubernetesVersion),
+				"image": fmt.Sprintf("%s:v%s", constants.KubeProxyImage, constants.DefaultWorkloadVersion),
 			},
 		},
 	}
@@ -59,7 +59,7 @@ func (suite *PatchSuite) TestError() {
 			"op":   "crash",
 			"path": "/cluster/proxy",
 			"value": map[string]any{
-				"image": fmt.Sprintf("%s:v%s", constants.KubeProxyImage, constants.DefaultKubernetesVersion),
+				"image": fmt.Sprintf("%s:v%s", constants.KubeProxyImage, constants.DefaultWorkloadVersion),
 			},
 		},
 	}

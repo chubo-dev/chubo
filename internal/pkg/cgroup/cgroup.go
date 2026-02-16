@@ -147,27 +147,6 @@ func getCgroupV2Resources(name string) *cgroup2.Resources {
 				Weight: pointer.To[uint64](MillicoresToCPUWeight(MilliCores(constants.CgroupPodRuntimeMillicores))),
 			},
 		}
-	case constants.CgroupKubelet:
-		return &cgroup2.Resources{
-			Memory: &cgroup2.Memory{
-				Min:  pointer.To[int64](constants.CgroupKubeletReservedMemory),
-				Low:  pointer.To[int64](constants.CgroupKubeletReservedMemory * 2),
-				Swap: pointer.To[int64](0),
-			},
-			CPU: &cgroup2.CPU{
-				Weight: pointer.To[uint64](MillicoresToCPUWeight(MilliCores(constants.CgroupKubeletMillicores))),
-			},
-		}
-	case constants.CgroupEtcd:
-		return &cgroup2.Resources{
-			Memory: &cgroup2.Memory{
-				Low:  pointer.To[int64](constants.CgroupEtcdReservedMemory),
-				Swap: pointer.To[int64](0),
-			},
-			CPU: &cgroup2.CPU{
-				Weight: pointer.To[uint64](MillicoresToCPUWeight(MilliCores(constants.CgroupEtcdMillicores))),
-			},
-		}
 	case constants.CgroupDashboard:
 		return &cgroup2.Resources{
 			Memory: &cgroup2.Memory{

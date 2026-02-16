@@ -45,7 +45,7 @@ func NewInspector(ctx context.Context, options ...Option) (ctrs.Inspector, error
 	var err error
 
 	opt := inspectorOptions{
-		criEndpoint: "unix:" + constants.CRIContainerdAddress,
+		criEndpoint: "unix:" + constants.WorkloadContainerdAddress,
 	}
 
 	for _, o := range options {

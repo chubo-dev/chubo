@@ -40,7 +40,7 @@ func (suite *CRIBaseRuntimeSpecSuite) TestDefaults() {
 
 	suite.Require().NoError(suite.State().Create(suite.Ctx(), cfg))
 
-	ctest.AssertResource(suite, constants.CRIBaseRuntimeSpec, func(etcFile *files.EtcFileSpec, asrt *assert.Assertions) {
+	ctest.AssertResource(suite, constants.RuntimeBaseSpec, func(etcFile *files.EtcFileSpec, asrt *assert.Assertions) {
 		contents := etcFile.TypedSpec().Contents
 
 		var ociSpec oci.Spec
@@ -78,7 +78,7 @@ func (suite *CRIBaseRuntimeSpecSuite) TestOverrides() {
 
 	suite.Require().NoError(suite.State().Create(suite.Ctx(), cfg))
 
-	ctest.AssertResource(suite, constants.CRIBaseRuntimeSpec, func(etcFile *files.EtcFileSpec, asrt *assert.Assertions) {
+	ctest.AssertResource(suite, constants.RuntimeBaseSpec, func(etcFile *files.EtcFileSpec, asrt *assert.Assertions) {
 		contents := etcFile.TypedSpec().Contents
 
 		var ociSpec oci.Spec

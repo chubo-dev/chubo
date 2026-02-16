@@ -202,139 +202,25 @@ const (
 	// installer.
 	ISOFilesystemLabel = "TALOS"
 
-	// KubernetesConfigBaseDir is the path to the base Kubernetes configuration directory.
-	KubernetesConfigBaseDir = "/etc/kubernetes"
+	// WorkloadShutdownGracePeriod is the shutdown grace period for workload containers.
+	WorkloadShutdownGracePeriod = 30 * time.Second
 
-	// KubernetesConfigSELinuxLabel is the SELinux label to be set for the Kubernetes configuration directory overlay mount.
-	KubernetesConfigSELinuxLabel = "system_u:object_r:k8s_conf_t:s0"
+	// WorkloadSeccompProfilesDirectory is where user-provided seccomp profiles are mounted.
+	WorkloadSeccompProfilesDirectory = "/var/lib/workload/seccomp/profiles"
 
-	// KubeletPluginsSELinuxLabel is the SELinux label to be set for the Kubernetes plugin directory overlay mount.
-	KubeletPluginsSELinuxLabel = "system_u:object_r:k8s_plugin_t:s0"
-
-	// DefaultCertificatesDir is the path the Kubernetes PKI directory.
-	DefaultCertificatesDir = KubernetesConfigBaseDir + "/" + "pki"
-
-	// KubernetesAdminCertCommonName defines CN property of Kubernetes admin certificate.
-	KubernetesAdminCertCommonName = "admin"
-
-	// KubernetesAdminCertDefaultLifetime defines default lifetime for Kubernetes generated admin certificate.
-	KubernetesAdminCertDefaultLifetime = 365 * 24 * time.Hour
-
-	// KubernetesAuditLogDir defines the ephemeral directory where the kube-apiserver will store its audit logs.
-	KubernetesAuditLogDir = EphemeralMountPoint + "/" + "log" + "/" + "audit" + "/" + "kube"
-
-	// KubernetesAPIServerSecretsDir defines directory with kube-apiserver secrets.
-	KubernetesAPIServerSecretsDir = "/system/secrets/kubernetes/kube-apiserver"
-
-	// KubernetesAPIServerSecretsDirSELinuxLabel defines SELinux label for the directory with kube-apiserver secrets.
-	KubernetesAPIServerSecretsDirSELinuxLabel = "system_u:object_r:kube_apiserver_secret_t:s0"
-
-	// KubernetesAPIServerConfigDir defines directory with kube-apiserver configs.
-	KubernetesAPIServerConfigDir = "/system/config/kubernetes/kube-apiserver"
-
-	// KubernetesAPIServerConfigDirSELinuxLabel defines SELinux label for the directory with kube-apiserver configs.
-	KubernetesAPIServerConfigDirSELinuxLabel = "system_u:object_r:kube_apiserver_config_t:s0"
-
-	// KubernetesControllerManagerSecretsDir defines ephemeral directory with kube-controller-manager secrets.
-	KubernetesControllerManagerSecretsDir = "/system/secrets/kubernetes/kube-controller-manager"
-
-	// KubernetesControllerManagerSecretsDirSELinuxLabel defines SELinux label for the ephemeral directory with kube-controller-manager secrets.
-	KubernetesControllerManagerSecretsDirSELinuxLabel = "system_u:object_r:kube_controller_manager_secret_t:s0"
-
-	// KubernetesSchedulerSecretsDir defines ephemeral directory with kube-scheduler secrets.
-	KubernetesSchedulerSecretsDir = "/system/secrets/kubernetes/kube-scheduler"
-
-	// KubernetesSchedulerSecretsDirSELinuxLabel defines SELinux label for the ephemeral directory with kube-scheduler secrets.
-	KubernetesSchedulerSecretsDirSELinuxLabel = "system_u:object_r:kube_scheduler_secret_t:s0"
-
-	// KubernetesSchedulerConfigDir defines ephemeral directory with kube-scheduler configs.
-	KubernetesSchedulerConfigDir = "/system/config/kubernetes/kube-scheduler"
-
-	// KubernetesSchedulerConfigDirSELinuxLabel defines SELinux label for the ephemeral directory with kube-scheduler configs.
-	KubernetesSchedulerConfigDirSELinuxLabel = "system_u:object_r:kube_scheduler_config_t:s0"
-
-	// KubernetesAPIServerRunUser defines UID to the API Server.
-	KubernetesAPIServerRunUser = 65534
-
-	// KubernetesAPIServerRunGroup defines GID to run the API Server.
-	KubernetesAPIServerRunGroup = 65534
-
-	// KubeletCredentialProviderConfig is the path to the kubelet credential provider config.
-	KubeletCredentialProviderConfig = KubernetesConfigBaseDir + "/" + "kubelet-credentialproviderconfig.yaml"
-
-	// KubeletPort is the kubelet port for secure API.
-	KubeletPort = 10250
-
-	// KubeletOOMScoreAdj oom_score_adj config.
-	KubeletOOMScoreAdj = -450
-
-	// KubeletShutdownGracePeriod is the kubelet shutdown grace period.
-	KubeletShutdownGracePeriod = 30 * time.Second
-
-	// SeccompProfilesDirectory is the path to the directory where user provided seccomp profiles are mounted inside Kubelet.
-	SeccompProfilesDirectory = "/var/lib/kubelet/seccomp/profiles"
-
-	// DefaultKubernetesVersion is the default target version of the control plane.
+	// DefaultWorkloadVersion is the default target version of the control plane.
 	// renovate: datasource=github-releases depName=kubernetes/kubernetes
-	DefaultKubernetesVersion = "1.35.0"
-
-	// SupportedKubernetesVersions is the number of Kubernetes versions supported by Talos starting from DefaultKubernesVersion going backwards.
-	SupportedKubernetesVersions = 6
+	DefaultWorkloadVersion = "1.35.0"
 
 	// DefaultControlPlanePort is the default port to use for the control plane.
 	DefaultControlPlanePort = 6443
 
-	// KubeletImage is the enforced kubelet image to use.
-	KubeletImage = "ghcr.io/siderolabs/kubelet"
-
-	// KubeProxyImage is the enforced kube-proxy image to use for the control plane.
-	KubeProxyImage = "registry.k8s.io/kube-proxy"
-
-	// KubernetesAPIServerImage is the enforced apiserver image to use for the control plane.
-	KubernetesAPIServerImage = "registry.k8s.io/kube-apiserver"
-
-	// KubernetesControllerManagerImage is the enforced controllermanager image to use for the control plane.
-	KubernetesControllerManagerImage = "registry.k8s.io/kube-controller-manager"
-
-	// KubernetesSchedulerImage is the enforced scheduler image to use for the control plane.
-	KubernetesSchedulerImage = "registry.k8s.io/kube-scheduler"
-
 	// CoreDNSImage is the enforced CoreDNS image to use.
-	CoreDNSImage = "registry.k8s.io/coredns/coredns"
+	CoreDNSImage = "docker.io/coredns/coredns"
 
 	// DefaultCoreDNSVersion is the default version for the CoreDNS.
-	// renovate: datasource=docker depName=registry.k8s.io/coredns/coredns
+	// renovate: datasource=docker depName=docker.io/coredns/coredns
 	DefaultCoreDNSVersion = "v1.13.2"
-
-	// LabelNodeRoleControlPlane is the node label required by a control plane node.
-	LabelNodeRoleControlPlane = "node-role.kubernetes.io/control-plane"
-
-	// LabelExcludeFromExternalLB can be set on a node to exclude it from external load balancers.
-	LabelExcludeFromExternalLB = "node.kubernetes.io/exclude-from-external-load-balancers"
-
-	// ManifestsDirectory is the directory that contains all static manifests.
-	ManifestsDirectory = KubernetesConfigBaseDir + "/" + "manifests"
-
-	// TalosManifestPrefix is the prefix for static pod files created in ManifestsDirectory by Talos.
-	TalosManifestPrefix = "talos-"
-
-	// EtcdPKIPath is the path to the etcd PKI directory.
-	EtcdPKIPath = "/system/secrets/etcd"
-
-	// EtcdPKISELinuxLabel is the SELinux label for the etcd PKI directory.
-	EtcdPKISELinuxLabel = "system_u:object_r:etcd_pki_t:s0"
-
-	// EtcdDataPath is the path where etcd stores its' data.
-	EtcdDataPath = "/var/lib/etcd"
-
-	// EtcdDataVolumeID is the ID of the etcd data volume.
-	EtcdDataVolumeID = "ETCD"
-
-	// EtcdDataSELinuxLabel is the SELinux label for the etcd data directory.
-	EtcdDataSELinuxLabel = "system_u:object_r:etcd_data_t:s0"
-
-	// EtcdUserID is the user ID for the etcd process.
-	EtcdUserID = 60
 
 	// ConfigFilename is the filename of the saved config in STATE partition.
 	ConfigFilename = "config.yaml"
@@ -365,15 +251,6 @@ const (
 
 	// VMwareGuestInfoOvfEnvKey is the guestinfo key used to provide the OVF environment.
 	VMwareGuestInfoOvfEnvKey = "ovfenv"
-
-	// AuditPolicyPath is the path to the audit-policy.yaml relative to initramfs.
-	AuditPolicyPath = KubernetesConfigBaseDir + "/" + "audit-policy.yaml"
-
-	// EncryptionConfigPath is the path to the EncryptionConfig relative to initramfs.
-	EncryptionConfigPath = KubernetesConfigBaseDir + "/" + "encryptionconfig.yaml"
-
-	// EncryptionConfigRootfsPath is the path to the EncryptionConfig relative to rootfs.
-	EncryptionConfigRootfsPath = KubernetesConfigBaseDir + "/" + "encryptionconfig.yaml"
 
 	// ApidPort is the port for the apid service.
 	ApidPort = 50000
@@ -407,32 +284,29 @@ const (
 	// SystemContainerdAddress is the path to the system containerd socket.
 	SystemContainerdAddress = SystemRunPath + "/containerd/containerd.sock"
 
-	// K8sContainerdNamespace is the Containerd namespace for CRI pods.
-	K8sContainerdNamespace = "k8s.io"
+	// WorkloadContainerdNamespace is the containerd namespace for workload pods.
+	WorkloadContainerdNamespace = "k8s.io"
 
-	// CRIContainerdAddress is the path to the CRI containerd socket address.
-	CRIContainerdAddress = "/run/containerd/containerd.sock"
+	// WorkloadContainerdAddress is the path to the workload containerd socket.
+	WorkloadContainerdAddress = "/run/containerd/containerd.sock"
 
-	// CRIContainerdConfig is the path to the config for the containerd instance that provides the CRI.
-	CRIContainerdConfig = "/etc/cri/containerd.toml"
+	// EtcRuntimeConfdPath is the path to the directory providing runtime plugin config fragments.
+	EtcRuntimeConfdPath = "/etc/workload/conf.d"
 
-	// EtcCRIConfdPath is the path to the directory providing parts of CRI plugin configuration.
-	EtcCRIConfdPath = "/etc/cri/conf.d"
+	// RuntimeConfdPath is the path to the runtime config fragments relative to /etc.
+	RuntimeConfdPath = "workload/conf.d"
 
-	// CRIConfdPath is the path to the subdirectory providing parts of CRI plugin configuration.
-	CRIConfdPath = "cri/conf.d"
+	// RuntimeConfig is the path to the merged runtime configuration file relative to /etc.
+	RuntimeConfig = "workload/conf.d/runtime.toml"
 
-	// CRIConfig is the path to the CRI merged configuration file relative to /etc.
-	CRIConfig = "cri/conf.d/cri.toml"
+	// RuntimeRegistryConfigPart is the path to the generated registry config fragment relative to /etc.
+	RuntimeRegistryConfigPart = "workload/conf.d/01-registries.part"
 
-	// CRIRegistryConfigPart is the path to the CRI generated registry configuration relative to /etc.
-	CRIRegistryConfigPart = "cri/conf.d/01-registries.part"
+	// RuntimeCustomizationConfigPart is the path to the generated customization config fragment relative to /etc.
+	RuntimeCustomizationConfigPart = "workload/conf.d/20-customization.part"
 
-	// CRICustomizationConfigPart is the path to the CRI generated registry configuration relative to /etc.
-	CRICustomizationConfigPart = "cri/conf.d/20-customization.part"
-
-	// CRIBaseRuntimeSpec is the path to the base runtime spec for the CRI.
-	CRIBaseRuntimeSpec = "cri/conf.d/base-spec.json"
+	// RuntimeBaseSpec is the path to the base runtime specification fragment.
+	RuntimeBaseSpec = "workload/conf.d/base-spec.json"
 
 	// ChuboConfigEnvVar is the environment variable for setting the Chubo configuration file path.
 	ChuboConfigEnvVar = "CHUBOCONFIG"
@@ -706,44 +580,23 @@ const (
 	// SelinuxLabelDashboard is the SELinux label for dashboard process.
 	SelinuxLabelDashboard = "system_u:system_r:dashboard_t:s0"
 
-	// CgroupPodRuntimeRoot is the cgroup containing Kubernetes runtime components.
+	// CgroupPodRuntimeRoot is the cgroup containing workload runtime components.
 	CgroupPodRuntimeRoot = "/podruntime"
 
 	// CgroupPodRuntimeRootMillicores is the CPU weight for the pod runtime cgroup.
 	CgroupPodRuntimeRootMillicores = 4000
 
-	// CgroupPodRuntime is the cgroup name for kubernetes containerd runtime processes.
+	// CgroupPodRuntime is the cgroup name for workload runtime processes.
 	CgroupPodRuntime = CgroupPodRuntimeRoot + "/runtime"
 
 	// CgroupPodRuntimeMillicores is the CPU weight for the pod runtime cgroup.
 	CgroupPodRuntimeMillicores = 1000
 
-	// SelinuxLabelPodRuntime is the SELinux label for kubernetes containerd runtime processes.
+	// SelinuxLabelPodRuntime is the SELinux label for workload runtime processes.
 	SelinuxLabelPodRuntime = "system_u:system_r:pod_containerd_t:s0"
 
-	// CgroupPodRuntimeReservedMemory is the hard memory protection for the cri runtime processes.
+	// CgroupPodRuntimeReservedMemory is the hard memory protection for runtime processes.
 	CgroupPodRuntimeReservedMemory = 196 * 1024 * 1024
-
-	// CgroupEtcd is the cgroup name for etcd process.
-	CgroupEtcd = CgroupPodRuntimeRoot + "/etcd"
-
-	// CgroupEtcdReservedMemory is the soft memory protection for the etcd processes.
-	CgroupEtcdReservedMemory = 256 * 1024 * 1024
-
-	// CgroupEtcdMillicores is the CPU weight for the etcd process.
-	CgroupEtcdMillicores = 2000
-
-	// CgroupKubelet is the cgroup name for kubelet process.
-	CgroupKubelet = CgroupPodRuntimeRoot + "/kubelet"
-
-	// SelinuxLabelKubelet is the SELinux label for kubelet process.
-	SelinuxLabelKubelet = "system_u:system_r:kubelet_t:s0"
-
-	// CgroupKubeletReservedMemory is the hard memory protection for the kubelet processes.
-	CgroupKubeletReservedMemory = 96 * 1024 * 1024
-
-	// CgroupKubeletMillicores is the CPU weight for the kubelet process.
-	CgroupKubeletMillicores = 1000
 
 	// CgroupDashboardMaxMemory is the hard memory limit for the dashboard process.
 	CgroupDashboardMaxMemory = 196 * 1024 * 1024
@@ -763,16 +616,16 @@ const (
 	// CNISELinuxLabel is the SELinux label to be set for CNI configuration overlay mount.
 	CNISELinuxLabel = "system_u:object_r:cni_conf_t:s0"
 
-	// DefaultIPv4PodNet is the IPv4 network to be used for kubernetes Pods.
+	// DefaultIPv4PodNet is the default IPv4 network range used for workloads.
 	DefaultIPv4PodNet = "10.244.0.0/16"
 
-	// DefaultIPv4ServiceNet is the IPv4 network to be used for kubernetes Services.
+	// DefaultIPv4ServiceNet is the default IPv4 service network range.
 	DefaultIPv4ServiceNet = "10.96.0.0/12"
 
-	// DefaultIPv6PodNet is the IPv6 network to be used for kubernetes Pods.
+	// DefaultIPv6PodNet is the default IPv6 network range used for workloads.
 	DefaultIPv6PodNet = "fc00:db8:10::/56"
 
-	// DefaultIPv6ServiceNet is the IPv6 network to be used for kubernetes Services.
+	// DefaultIPv6ServiceNet is the default IPv6 service network range.
 	DefaultIPv6ServiceNet = "fc00:db8:20::/112"
 
 	// DefaultDNSDomain is the default DNS domain.
@@ -817,9 +670,6 @@ const (
 
 	// AnnotationOwnedTaints is the annotation key for the list of node taints owned by Talos.
 	AnnotationOwnedTaints = "talos.dev/owned-taints"
-
-	// K8sExtensionPrefix is the prefix for node labels/annotations listing extensions.
-	K8sExtensionPrefix = "extensions.talos.dev/"
 
 	// DefaultNTPServer is the NTP server to use if not configured explicitly.
 	DefaultNTPServer = "time.cloudflare.com"
@@ -895,20 +745,14 @@ const (
 	// DBusServiceSocketLabel is the SELinux label for the D-Bus socket for the logind mock to connect to.
 	DBusServiceSocketLabel = "system_u:object_r:dbus_service_socket_t:s0"
 
-	// DBusClientSocketPath is the path to the D-Bus socket for the kubelet to connect to.
+	// DBusClientSocketPath is the path to the D-Bus socket for workload runtime helpers.
 	DBusClientSocketPath = "/run/dbus/system_bus_socket"
 
-	// DBusClientSocketLabel is the SELinux label for the D-Bus socket for the kubelet to connect to.
+	// DBusClientSocketLabel is the SELinux label for the D-Bus client socket.
 	DBusClientSocketLabel = "system_u:object_r:dbus_client_socket_t:s0"
 
 	// GoVersion is the version of Go compiler this release was built with.
 	GoVersion = "go1.25.7"
-
-	// KubernetesTalosAPIServiceName is the name of the Kubernetes service to access Talos API.
-	KubernetesTalosAPIServiceName = "talos"
-
-	// KubernetesTalosAPIServiceNamespace is the namespace of the Kubernetes service to access Talos API.
-	KubernetesTalosAPIServiceNamespace = "default"
 
 	// ChuboDir is the default name of the Chubo directory under user home.
 	ChuboDir = ".chubo"
@@ -1028,9 +872,6 @@ const (
 	// RegistrydListenAddress is the address to listen on for the registryd service.
 	RegistrydListenAddress = "127.0.0.1:3172"
 
-	// KubernetesInformerDefaultResyncPeriod is the default resync period for Kubernetes informers.
-	KubernetesInformerDefaultResyncPeriod = 30 * time.Second
-
 	// UserVolumeMountPoint is the path to the volume mount point for the user volumes.
 	UserVolumeMountPoint = "/var/mnt"
 
@@ -1119,8 +960,6 @@ type SELinuxLabeledPath struct {
 // Overlays is the set of paths to create overlay mounts for.
 var Overlays = []SELinuxLabeledPath{
 	{"/etc/cni", CNISELinuxLabel},
-	{KubernetesConfigBaseDir, KubernetesConfigSELinuxLabel},
-	{"/usr/libexec/kubernetes", KubeletPluginsSELinuxLabel},
 	{"/opt", OptSELinuxLabel},
 }
 

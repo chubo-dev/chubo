@@ -27,7 +27,7 @@ func containerdNamespaceHelper(ctx context.Context, ns common.ContainerdNamespac
 
 	switch ns {
 	case common.ContainerdNamespace_NS_CRI:
-		namespaceName = constants.K8sContainerdNamespace
+		namespaceName = constants.WorkloadContainerdNamespace
 	case common.ContainerdNamespace_NS_SYSTEM:
 		namespaceName = constants.SystemContainerdNamespace
 	case common.ContainerdNamespace_NS_UNKNOWN:
@@ -43,7 +43,7 @@ func containerdNamespaceHelper(ctx context.Context, ns common.ContainerdNamespac
 //
 // Deprecated: use ImageService.List instead.
 func (s *Server) ImageList(req *machine.ImageListRequest, srv machine.MachineService_ImageListServer) error {
-	client, err := containerdapi.New(constants.CRIContainerdAddress)
+	client, err := containerdapi.New(constants.WorkloadContainerdAddress)
 	if err != nil {
 		return status.Errorf(codes.Unavailable, "error connecting to containerd: %s", err)
 	}
@@ -84,7 +84,7 @@ func (s *Server) ImageList(req *machine.ImageListRequest, srv machine.MachineSer
 //
 // Deprecated: use ImageService.Pull instead.
 func (s *Server) ImagePull(ctx context.Context, req *machine.ImagePullRequest) (*machine.ImagePullResponse, error) {
-	client, err := containerdapi.New(constants.CRIContainerdAddress)
+	client, err := containerdapi.New(constants.WorkloadContainerdAddress)
 	if err != nil {
 		return nil, status.Errorf(codes.Unavailable, "error connecting to containerd: %s", err)
 	}

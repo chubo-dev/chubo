@@ -40,18 +40,18 @@ func (suite *K8sCompatibilitySuite) SuiteName() string {
 // SetupSuite ...
 func (suite *K8sCompatibilitySuite) SetupSuite() {
 	// figure out Kubernetes versions to go through, the calculation is based on:
-	//  * DefaultKubernetesVersion, e.g. 1.29.0
+	//  * DefaultWorkloadVersion, e.g. 1.29.0
 	//  * SupportedKubernetesVersions, e.g. 6
 	//  * available `kubelet` images (tags)
 	//
 	// E.g. with example values above, upgrade will go through:
 	// 1.24 -> 1.25 -> 1.26 -> 1.27 -> 1.28 -> 1.29 (6 versions)
 	// For each past Kubernetes release, latest patch release will be used,
-	// for the latest version (DefaultKubernetesVersion), the exact version will be used
+	// for the latest version (DefaultWorkloadVersion), the exact version will be used
 	kubeletRepository, err := name.NewRepository(constants.KubeletImage)
 	suite.Require().NoError(err)
 
-	maxVersion, err := semver.Parse(constants.DefaultKubernetesVersion)
+	maxVersion, err := semver.Parse(constants.DefaultWorkloadVersion)
 	suite.Require().NoError(err)
 
 	minVersion := semver.Version{
@@ -60,7 +60,7 @@ func (suite *K8sCompatibilitySuite) SetupSuite() {
 		Patch: 0,
 	}
 
-	// while Talos is in alpha stage, DefaultKubernetesVersion might be 1 minor behind the latest alpha Kubernetes version,
+	// while Talos is in alpha stage, DefaultWorkloadVersion might be 1 minor behind the latest alpha Kubernetes version,
 	// so we need to ensure that minVersion fits into compatibility range
 	minVersionAdjusted := false
 

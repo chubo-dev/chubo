@@ -573,7 +573,7 @@ var imageCacheCreateCmd = &cobra.Command{
 Alternatively, stdin can be piped to the command:
 talosctl images default | talosctl images cache-create --image-cache-path=/tmp/talos-image-cache --images=-
 `,
-		constants.DefaultKubernetesVersion,
+		constants.DefaultWorkloadVersion,
 	),
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {

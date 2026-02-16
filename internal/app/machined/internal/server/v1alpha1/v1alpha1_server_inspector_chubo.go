@@ -21,7 +21,7 @@ func getContainerInspector(ctx context.Context, namespace string, driver common.
 		return nil, fmt.Errorf("driver %q is not available in chubo mode", driver)
 	}
 
-	addr := constants.CRIContainerdAddress
+	addr := constants.WorkloadContainerdAddress
 	if namespace == constants.SystemContainerdNamespace {
 		addr = constants.SystemContainerdAddress
 	}

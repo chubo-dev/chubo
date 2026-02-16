@@ -152,7 +152,7 @@ func completeCgroupPresetArg(cmd *cobra.Command, args []string, toComplete strin
 func buildCgroupResolveMap(ctx context.Context, c *client.Client) map[string]string {
 	cgroupNameResolveMap := map[string]string{}
 
-	containersResp, err := c.Containers(ctx, constants.K8sContainerdNamespace, common.ContainerDriver_CRI)
+	containersResp, err := c.Containers(ctx, constants.WorkloadContainerdNamespace, common.ContainerDriver_CRI)
 	if err != nil {
 		cli.Warning("error getting containers: %s", err)
 	} else {

@@ -32,7 +32,7 @@ func (suite *VersionSuite) TestExpectedVersion() {
 	apiServerVersion, err := suite.DiscoveryClient.ServerVersion()
 	suite.Require().NoError(err)
 
-	expectedAPIServerVersion := fmt.Sprintf("v%s", constants.DefaultKubernetesVersion)
+	expectedAPIServerVersion := fmt.Sprintf("v%s", constants.DefaultWorkloadVersion)
 	suite.Assert().Equal(expectedAPIServerVersion, apiServerVersion.GitVersion)
 
 	checkKernelVersion := suite.Capabilities().RunsTalosKernel
@@ -43,7 +43,7 @@ func (suite *VersionSuite) TestExpectedVersion() {
 
 	expectedTalosVersion := fmt.Sprintf("Talos (%s)", suite.Version)
 	expectedContainerRuntimeVersion := fmt.Sprintf("containerd://%s", constants.DefaultContainerdVersion)
-	expectedKubeletVersion := fmt.Sprintf("v%s", constants.DefaultKubernetesVersion)
+	expectedKubeletVersion := fmt.Sprintf("v%s", constants.DefaultWorkloadVersion)
 	expectedKernelVersion := constants.DefaultKernelVersion
 
 	for _, node := range nodes.Items {

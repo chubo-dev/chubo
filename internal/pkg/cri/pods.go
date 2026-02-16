@@ -175,7 +175,7 @@ func stopAndRemove(ctx context.Context, stopAction StopAction, client *Client, p
 			if container.State == runtimeapi.ContainerState_CONTAINER_RUNNING || container.State == runtimeapi.ContainerState_CONTAINER_UNKNOWN {
 				log.Printf("stopping container %s/%s:%s", pod.Metadata.Namespace, pod.Metadata.Name, container.Metadata.Name)
 
-				if criErr := client.StopContainer(ctx, container.Id, int64(constants.KubeletShutdownGracePeriod.Seconds())); criErr != nil {
+				if criErr := client.StopContainer(ctx, container.Id, int64(constants.WorkloadShutdownGracePeriod.Seconds())); criErr != nil {
 					if talosclient.StatusCode(criErr) == codes.NotFound {
 						return nil
 					}
@@ -187,7 +187,7 @@ func stopAndRemove(ctx context.Context, stopAction StopAction, client *Client, p
 			if stopAction == StopAndRemove {
 				log.Printf("removing container %s/%s:%s", pod.Metadata.Namespace, pod.Metadata.Name, container.Metadata.Name)
 
-				if removeErr := retry.Constant(constants.KubeletShutdownGracePeriod, retry.WithUnits(time.Second), retry.WithErrorLogging(true)).RetryWithContext(ctx,
+				if removeErr := retry.Constant(constants.WorkloadShutdownGracePeriod, retry.WithUnits(time.Second), retry.WithErrorLogging(true)).RetryWithContext(ctx,
 					func(ctx context.Context) error {
 						if criErr := client.RemoveContainer(ctx, container.Id); criErr != nil {
 							if talosclient.StatusCode(criErr) == codes.NotFound {

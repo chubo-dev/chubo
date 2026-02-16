@@ -500,24 +500,8 @@ func WriteUserFiles(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 				continue
 			}
 
-			if filepath.Dir(f.Path()) == constants.ManifestsDirectory {
-				if err = os.WriteFile(f.Path(), []byte(content), f.Permissions()); err != nil {
-					result = multierror.Append(result, err)
-
-					continue
-				}
-
-				if err = os.Chmod(f.Path(), f.Permissions()); err != nil {
-					result = multierror.Append(result, err)
-
-					continue
-				}
-
-				continue
-			}
-
 			// CRI configuration customization
-			if f.Path() == filepath.Join("/etc", constants.CRICustomizationConfigPart) {
+			if f.Path() == filepath.Join("/etc", constants.RuntimeCustomizationConfigPart) {
 				if err = injectCRIConfigPatch(ctx, r.State().V1Alpha2().Resources(), []byte(f.Content())); err != nil {
 					result = multierror.Append(result, err)
 				}
@@ -579,7 +563,7 @@ func injectCRIConfigPatch(ctx context.Context, st state.State, content []byte) e
 	ctx, cancel := context.WithTimeout(ctx, time.Minute)
 	defer cancel()
 
-	etcFileSpec := resourcefiles.NewEtcFileSpec(resourcefiles.NamespaceName, constants.CRICustomizationConfigPart)
+	etcFileSpec := resourcefiles.NewEtcFileSpec(resourcefiles.NamespaceName, constants.RuntimeCustomizationConfigPart)
 	etcFileSpec.TypedSpec().Mode = 0o600
 	etcFileSpec.TypedSpec().Contents = content
 	etcFileSpec.TypedSpec().SelinuxLabel = constants.EtcSelinuxLabel
@@ -592,7 +576,7 @@ func injectCRIConfigPatch(ctx context.Context, st state.State, content []byte) e
 	expectedChecksum := hex.EncodeToString(checksumRaw[:])
 	expectedAnnotation := resourcefiles.SourceFileAnnotation + ":" + filepath.Join("/etc", etcFileSpec.Metadata().ID())
 
-	fileSpec, err := st.WatchFor(ctx, resourcefiles.NewEtcFileSpec(resourcefiles.NamespaceName, constants.CRIConfig).Metadata(),
+	fileSpec, err := st.WatchFor(ctx, resourcefiles.NewEtcFileSpec(resourcefiles.NamespaceName, constants.RuntimeConfig).Metadata(),
 		state.WithCondition(func(r resource.Resource) (bool, error) {
 			spec, ok := r.(*resourcefiles.EtcFileSpec)
 			if !ok {
@@ -604,11 +588,11 @@ func injectCRIConfigPatch(ctx context.Context, st state.State, content []byte) e
 			return ok && value == expectedChecksum, nil
 		}))
 	if err != nil {
-		return fmt.Errorf("error waiting for file %q to be updated: %w", constants.CRIConfig, err)
+		return fmt.Errorf("error waiting for file %q to be updated: %w", constants.RuntimeConfig, err)
 	}
 
 	// wait for the file to be rendered
-	_, err = st.WatchFor(ctx, resourcefiles.NewEtcFileStatus(resourcefiles.NamespaceName, constants.CRIConfig).Metadata(), state.WithCondition(func(r resource.Resource) (bool, error) {
+	_, err = st.WatchFor(ctx, resourcefiles.NewEtcFileStatus(resourcefiles.NamespaceName, constants.RuntimeConfig).Metadata(), state.WithCondition(func(r resource.Resource) (bool, error) {
 		fileStatus, ok := r.(*resourcefiles.EtcFileStatus)
 		if !ok {
 			return false, nil

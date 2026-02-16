@@ -24,7 +24,7 @@ const (
 )
 
 // InhibitMaxDelay is the maximum delay for graceful shutdown.
-const InhibitMaxDelay = 40 * constants.KubeletShutdownGracePeriod
+const InhibitMaxDelay = 40 * constants.WorkloadShutdownGracePeriod
 
 type logindMock struct {
 	mu          sync.Mutex

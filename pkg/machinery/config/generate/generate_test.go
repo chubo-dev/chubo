@@ -89,7 +89,7 @@ func TestGenerateSuite(t *testing.T) {
 func (suite *GenerateSuite) SetupSuite() {
 	var err error
 
-	suite.input, err = generate.NewInput("test", "https://10.0.1.5", constants.DefaultKubernetesVersion, suite.genOptions...)
+	suite.input, err = generate.NewInput("test", "https://10.0.1.5", constants.DefaultWorkloadVersion, suite.genOptions...)
 	suite.Require().NoError(err)
 
 	var opts generate.Options
@@ -142,7 +142,7 @@ func (suite *GenerateSuite) TestGenerateTalosconfigSuccess() {
 func TestGenerateRegistryMirrorsOrder(t *testing.T) {
 	t.Parallel()
 
-	input, err := generate.NewInput("test", "https://10.0.1.5", constants.DefaultKubernetesVersion,
+	input, err := generate.NewInput("test", "https://10.0.1.5", constants.DefaultWorkloadVersion,
 		generate.WithRegistryMirror("b.com", "http://127.0.0.1:5004"),
 		generate.WithRegistryMirror("a.com", "http://127.0.0.1:5005"),
 	)

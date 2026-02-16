@@ -66,7 +66,7 @@ func (ctrl *CRIRegistryConfigController) Outputs() []controller.Output {
 //
 //nolint:gocyclo
 func (ctrl *CRIRegistryConfigController) Run(ctx context.Context, r controller.Runtime, logger *zap.Logger) error {
-	src := filepath.Join(constants.CRIConfdPath, "hosts")
+	src := filepath.Join(constants.RuntimeConfdPath, "hosts")
 	dest := filepath.Join(ctrl.EtcPath, src)
 
 	if !ctrl.bindMountCreated {
@@ -116,7 +116,7 @@ func (ctrl *CRIRegistryConfigController) Run(ctx context.Context, r controller.R
 			criHosts = &containerd.HostsConfig{}
 		}
 
-		if err := safe.WriterModify(ctx, r, files.NewEtcFileSpec(files.NamespaceName, constants.CRIRegistryConfigPart),
+		if err := safe.WriterModify(ctx, r, files.NewEtcFileSpec(files.NamespaceName, constants.RuntimeRegistryConfigPart),
 			func(r *files.EtcFileSpec) error {
 				spec := r.TypedSpec()
 

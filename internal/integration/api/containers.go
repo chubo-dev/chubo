@@ -48,7 +48,7 @@ func (suite *ContainersSuite) TestSandboxImage() {
 	node := suite.RandomDiscoveredNodeInternalIP(machine.TypeControlPlane)
 	ctx := client.WithNode(suite.ctx, node)
 
-	resp, err := suite.Client.Containers(ctx, constants.K8sContainerdNamespace, common.ContainerDriver_CRI)
+	resp, err := suite.Client.Containers(ctx, constants.WorkloadContainerdNamespace, common.ContainerDriver_CRI)
 	suite.Require().NoError(err)
 
 	suite.Assert().NotEmpty(resp.GetMessages())

@@ -14,7 +14,6 @@ import (
 	"github.com/siderolabs/gen/optional"
 	"go.uber.org/zap"
 
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 )
@@ -68,14 +67,6 @@ func NewRootOSController() *RootOSController {
 					} else {
 						osSecrets.CertSANDNSNames = append(osSecrets.CertSANDNSNames, san)
 					}
-				}
-
-				if cfgProvider.Machine().Features().KubernetesTalosAPIAccess().Enabled() {
-					// add Kubernetes Talos service name to the list of SANs
-					osSecrets.CertSANDNSNames = append(osSecrets.CertSANDNSNames,
-						constants.KubernetesTalosAPIServiceName,
-						constants.KubernetesTalosAPIServiceName+"."+constants.KubernetesTalosAPIServiceNamespace,
-					)
 				}
 
 				osSecrets.Token = cfgProvider.Machine().Security().Token()
