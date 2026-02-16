@@ -409,7 +409,7 @@ func StartUdevd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 // StopServicesEphemeral represents the StopServicesEphemeral task.
 func StopServicesEphemeral(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) (err error) {
-		// stopping 'cri' service stops everything which depends on it (kubelet, etcd, ...)
+		// stopping 'cri' service stops everything which depends on it.
 		return system.Services(nil).StopWithRevDepenencies(ctx, "cri", "trustd")
 	}, "stopServicesForUpgrade"
 }

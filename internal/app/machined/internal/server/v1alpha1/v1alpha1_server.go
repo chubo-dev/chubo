@@ -400,7 +400,7 @@ func (s *Server) Rollback(ctx context.Context, in *machine.RollbackRequest) (*ma
 // Bootstrap implements machine.MachineService.
 //
 // Chubo bootstrap is configuration-driven and continuously reconciled, so there is no
-// imperative bootstrap RPC like etcd/kubernetes-era Talos used.
+// imperative bootstrap RPC like legacy Talos used.
 func (s *Server) Bootstrap(context.Context, *machine.BootstrapRequest) (*machine.BootstrapResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "bootstrap RPC is not available in chubo mode; apply MachineConfig and monitor chubobootstrapstatus/openwontonbootstrapstatus/opengyozabootstrapstatus resources")
 }
@@ -1324,7 +1324,7 @@ func (s *Server) Logs(req *machine.LogsRequest, l machine.MachineService_LogsSer
 	var chunk chunker.Chunker
 
 	switch {
-	case req.Namespace == constants.SystemContainerdNamespace || req.Id == "kubelet":
+	case req.Namespace == constants.SystemContainerdNamespace:
 		var options []runtime.LogOption
 
 		if req.Follow {
@@ -1349,7 +1349,7 @@ func (s *Server) Logs(req *machine.LogsRequest, l machine.MachineService_LogsSer
 	default:
 		var file io.Closer
 
-		if chunk, file, err = k8slogs(l.Context(), req); err != nil {
+		if chunk, file, err = workloadLogs(l.Context(), req); err != nil {
 			return err
 		}
 		//nolint:errcheck
@@ -1376,7 +1376,7 @@ func (s *Server) LogsContainers(context.Context, *emptypb.Empty) (*machine.LogsC
 	}, nil
 }
 
-func k8slogs(ctx context.Context, req *machine.LogsRequest) (chunker.Chunker, io.Closer, error) {
+func workloadLogs(ctx context.Context, req *machine.LogsRequest) (chunker.Chunker, io.Closer, error) {
 	inspector, err := getContainerInspector(ctx, req.Namespace, req.Driver)
 	if err != nil {
 		return nil, nil, err

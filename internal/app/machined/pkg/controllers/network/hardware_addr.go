@@ -16,7 +16,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-// HardwareAddrController manages secrets.Etcd based on configuration.
+// HardwareAddrController publishes the first physical link hardware address.
 type HardwareAddrController struct{}
 
 // Name implements controller.Controller interface.

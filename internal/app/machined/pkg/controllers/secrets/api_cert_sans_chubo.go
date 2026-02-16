@@ -22,8 +22,8 @@ import (
 
 // APICertSANsController manages secrets.APICertSANs based on configuration.
 //
-// Talos upstream uses a filtered NodeAddress resource (excluding Kubernetes pod/service CIDRs),
-// but `chubo` has no Kubernetes stack and doesn't create that filter. Use the unfiltered
+// Talos upstream uses a filtered NodeAddress resource (excluding workload pod/service CIDRs),
+// but `chubo` doesn't create that filter. Use the unfiltered
 // accumulative addresses so OS API cert generation can proceed.
 type APICertSANsController struct{}
 

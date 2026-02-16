@@ -7,7 +7,7 @@
 package talos
 
 func imageNamespaceHelp() string {
-	return "namespace to use: `system` (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance"
+	return "namespace to use: `system` (core system images), `cri` (workload runtime images), or `inmem` (in-memory containerd instance)"
 }
 
 func imageCacheMirrorDefaults() []string {

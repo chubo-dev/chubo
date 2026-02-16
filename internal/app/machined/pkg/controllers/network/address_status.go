@@ -20,7 +20,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-// AddressStatusController manages secrets.Etcd based on configuration.
+// AddressStatusController tracks address state based on netlink events.
 type AddressStatusController struct{}
 
 // Name implements controller.Controller interface.

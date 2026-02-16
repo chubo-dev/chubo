@@ -35,7 +35,6 @@ type CheckDescription struct {
 
 // Checks returns a list of checks to be run by the diagnostics engine.
 func Checks() []CheckDescription {
-	// Chubo: Kubernetes/etcd product surface is removed, so legacy k8s-centric
-	// diagnostics checks are intentionally omitted.
+	// Chubo: legacy control-plane product surface is removed, so legacy diagnostics checks are omitted.
 	return nil
 }

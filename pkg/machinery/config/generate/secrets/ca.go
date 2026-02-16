@@ -14,7 +14,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
-// NewEtcdCA generates a CA for the Etcd PKI.
+// NewEtcdCA generates a CA for the legacy store PKI.
 func NewEtcdCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
 	opts := []x509.Option{
 		x509.Organization("etcd"),
@@ -26,7 +26,7 @@ func NewEtcdCA(currentTime time.Time, contract *config.VersionContract) (ca *x50
 	return x509.NewSelfSignedCertificateAuthority(opts...)
 }
 
-// NewKubernetesCA generates a CA for the Kubernetes PKI.
+// NewKubernetesCA generates a CA for the legacy workload PKI.
 func NewKubernetesCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
 	opts := []x509.Option{
 		x509.Organization("kubernetes"),
@@ -38,7 +38,7 @@ func NewKubernetesCA(currentTime time.Time, contract *config.VersionContract) (c
 	return x509.NewSelfSignedCertificateAuthority(opts...)
 }
 
-// NewAggregatorCA generates a CA for the Kubernetes aggregator/front-proxy.
+// NewAggregatorCA generates a CA for the legacy aggregator/front-proxy.
 func NewAggregatorCA(currentTime time.Time, contract *config.VersionContract) (ca *x509.CertificateAuthority, err error) {
 	opts := []x509.Option{
 		x509.ECDSA(true),

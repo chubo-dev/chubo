@@ -23,7 +23,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-// NodeAddressController manages secrets.Etcd based on configuration.
+// NodeAddressController derives node address views from link/address state.
 type NodeAddressController struct{}
 
 // Name implements controller.Controller interface.

@@ -85,11 +85,11 @@ var defaultTriggerExpr = sync.OnceValue(func() cel.Expression {
 
 // Sort processes by the following hierarchy:
 // First, sort by high-level group:
-//     kubepods (workloads)
-//     podruntime (CRI, kubelet, etcd)
+//     workload pods
+//     pod runtime (CRI and related services)
 //     runtime (core containerd, system services)
 //     init
-// Second, inside kubepods we have QoS groups:
+// Second, inside workload pods we have QoS groups:
 //     first priority: BestEffort
 //     second: Burstable
 //     last: Guaranteed

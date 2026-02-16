@@ -187,7 +187,7 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Name:        "baseRuntimeSpecOverrides",
 				Type:        "Unstructured",
 				Note:        "",
-				Description: "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set some default container settings which are not configurable in Kubernetes,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
+				Description: "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set default container settings which are not configurable via higher-level workload APIs,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Override (patch) settings in the default OCI runtime spec for CRI containers." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 		},
@@ -870,7 +870,7 @@ func (VolumeMountConfig) Doc() *encoder.Doc {
 	}
 
 	doc.Fields[0].AddExample("", "/var/lib/auth")
-	doc.Fields[1].AddExample("", "/etc/kubernetes/auth")
+	doc.Fields[1].AddExample("", "/etc/workload/auth")
 	doc.Fields[2].AddExample("", true)
 
 	return doc
@@ -900,7 +900,7 @@ func (ClusterInlineManifest) Doc() *encoder.Doc {
 	}
 
 	doc.Fields[0].AddExample("", "csi")
-	doc.Fields[1].AddExample("", "/etc/kubernetes/auth")
+	doc.Fields[1].AddExample("", "/etc/workload/auth")
 
 	return doc
 }

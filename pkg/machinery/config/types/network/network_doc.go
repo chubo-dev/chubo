@@ -829,7 +829,7 @@ func (HCloudVIPConfigV1Alpha1) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "HCloudVIPConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.\nVirtual IP configuration should be used only on controlplane nodes to provide virtual IP for Kubernetes API server.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using Hetzner Cloud APIs.\n",
+		Description: "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual control-plane endpoint.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using Hetzner Cloud APIs.\n",
 		Fields: []encoder.Doc{
 			{
 				Type:   "Meta",
@@ -912,7 +912,7 @@ func (Layer2VIPConfigV1Alpha1) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "Layer2VIPConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.\nVirtual IP configuration should be used only on controlplane nodes to provide virtual IP for Kubernetes API server.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.\n",
+		Description: "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual control-plane endpoint.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.\n",
 		Fields: []encoder.Doc{
 			{
 				Type:   "Meta",
@@ -1224,7 +1224,7 @@ func (ResolverConfigV1Alpha1) Doc() *encoder.Doc {
 				Name:        "nameservers",
 				Type:        "[]NameserverConfig",
 				Note:        "",
-				Description: "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host, and they are also\npropagated to Kubernetes DNS (CoreDNS) for use by pods running on the cluster.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.",
+				Description: "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host, and they can also be\npropagated to workload DNS resolvers.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "A list of nameservers (DNS servers) to use for resolving domain names." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{

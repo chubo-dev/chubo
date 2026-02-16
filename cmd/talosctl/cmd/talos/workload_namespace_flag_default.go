@@ -9,5 +9,5 @@ package talos
 import "github.com/spf13/cobra"
 
 func registerWorkloadNamespaceFlag(cmd *cobra.Command) {
-	cmd.Flags().BoolVarP(&kubernetesFlag, "kubernetes", "k", false, "use the k8s.io containerd namespace")
+	cmd.Flags().BoolVarP(&workloadNamespaceFlag, "kubernetes", "k", false, "use the k8s.io containerd namespace")
 }

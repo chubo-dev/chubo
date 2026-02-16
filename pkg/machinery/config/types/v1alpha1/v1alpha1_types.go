@@ -1607,7 +1607,7 @@ type VolumeMountConfig struct {
 	//   description: |
 	//     Path in the container.
 	//   examples:
-	//     - value: '"/etc/kubernetes/auth"'
+	//     - value: '"/etc/workload/auth"'
 	VolumeMountPath string `yaml:"mountPath"`
 	//   description: |
 	//     Mount the volume read only.
@@ -1649,7 +1649,7 @@ type ClusterInlineManifest struct {
 	//   description: |
 	//     Manifest contents as a string.
 	//   examples:
-	//     - value: '"/etc/kubernetes/auth"'
+	//     - value: '"/etc/workload/auth"'
 	InlineManifestContents string `yaml:"contents"`
 }
 

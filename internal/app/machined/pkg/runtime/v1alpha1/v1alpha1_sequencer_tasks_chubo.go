@@ -24,7 +24,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/meta"
 )
 
-// Chubo OS doesn't ship Kubernetes, etcd, or CRI management.
+// Chubo OS doesn't ship legacy control-plane services.
 //
 // Keep the Talos sequencer API shape for now (upgrade/reset entry points call these tasks),
 // but implement them in terms of OpenWonton/OpenGyoza.
@@ -44,7 +44,7 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 	}
 
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
-		// Treat opengyoza quorum checks like Talos' etcd health checks: blocking by default,
+		// Treat opengyoza quorum checks like legacy health checks: blocking by default,
 		// skippable only when the caller explicitly forces the operation.
 		force := false
 		if fg, ok := in.(forceGetter); ok {
@@ -168,10 +168,10 @@ func CordonAndDrainNode(_ runtime.Sequence, in any) (runtime.TaskExecutionFunc, 
 	}, "cordonAndDrainNode"
 }
 
-func LeaveEtcd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
+func LeaveClusterMembership(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
 		// On reset, best-effort leave the Chubo control plane so peers don't retain stale
-		// membership records (analogous to Talos etcd leave).
+		// membership records (analogous to legacy leave behavior).
 		trustToken := ""
 		if r.Config() != nil && r.Config().Machine() != nil && r.Config().Machine().Security() != nil {
 			trustToken = strings.TrimSpace(r.Config().Machine().Security().Token())
@@ -235,7 +235,7 @@ func LeaveEtcd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 		}
 
 		return nil
-	}, "leaveEtcd"
+	}, "leaveClusterMembership"
 }
 
 func RemoveAllPods(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {

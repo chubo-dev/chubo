@@ -40,11 +40,11 @@ var logsCmd = &cobra.Command{
 			return nil, cobra.ShellCompDirectiveError | cobra.ShellCompDirectiveNoFileComp
 		}
 
-		if kubernetesFlag {
-			return getContainersFromNode(kubernetesFlag), cobra.ShellCompDirectiveNoFileComp
+		if workloadNamespaceFlag {
+			return getContainersFromNode(workloadNamespaceFlag), cobra.ShellCompDirectiveNoFileComp
 		}
 
-		return mergeSuggestions(getServiceFromNode(), getContainersFromNode(kubernetesFlag), getLogsContainers()), cobra.ShellCompDirectiveNoFileComp
+		return mergeSuggestions(getServiceFromNode(), getContainersFromNode(workloadNamespaceFlag), getLogsContainers()), cobra.ShellCompDirectiveNoFileComp
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
@@ -53,7 +53,7 @@ var logsCmd = &cobra.Command{
 				driver    common.ContainerDriver
 			)
 
-			if kubernetesFlag {
+			if workloadNamespaceFlag {
 				namespace = constants.WorkloadContainerdNamespace
 				driver = common.ContainerDriver_CRI
 			} else {

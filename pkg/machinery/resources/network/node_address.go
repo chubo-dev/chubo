@@ -29,7 +29,7 @@ type NodeAddress = typed.Resource[NodeAddressSpec, NodeAddressExtension]
 const (
 	// Default node address (should be a single address in the spec).
 	//
-	// Used to set for example published etcd peer address.
+	// Used to set for example a published control-plane peer address.
 	NodeAddressDefaultID = "default"
 	// Current node addresses (as seen at the moment).
 	//

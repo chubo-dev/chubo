@@ -22,7 +22,7 @@ func getContainerInspector(ctx context.Context, namespace string, driver common.
 	switch driver {
 	case common.ContainerDriver_CRI:
 		if namespace != constants.WorkloadContainerdNamespace {
-			return nil, errors.New("CRI inspector is supported only for K8s namespace")
+			return nil, errors.New("CRI inspector is supported only for the workload namespace")
 		}
 
 		return cri.NewInspector(ctx)

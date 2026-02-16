@@ -30,11 +30,11 @@ type Bundle struct {
 type Certs struct {
 	// Etcd is etcd CA certificate and key.
 	Etcd *x509.PEMEncodedCertificateAndKey `json:"Etcd"`
-	// K8s is Kubernetes CA certificate and key.
+	// K8s is legacy workload CA certificate and key.
 	K8s *x509.PEMEncodedCertificateAndKey `json:"K8s"`
-	// K8sAggregator is Kubernetes aggregator CA certificate and key.
+	// K8sAggregator is legacy aggregator CA certificate and key.
 	K8sAggregator *x509.PEMEncodedCertificateAndKey `json:"K8sAggregator"`
-	// K8sServiceAccount is Kubernetes service account key.
+	// K8sServiceAccount is legacy service account key.
 	K8sServiceAccount *x509.PEMEncodedKey `json:"K8sServiceAccount"`
 	// OS is Talos API CA certificate and key.
 	OS *x509.PEMEncodedCertificateAndKey `json:"OS"`
@@ -46,7 +46,7 @@ type Cluster struct {
 	Secret string `json:"Secret"`
 }
 
-// Secrets holds the sensitive kubeadm data.
+// Secrets holds sensitive bootstrap data.
 type Secrets struct {
 	BootstrapToken            string `json:"BootstrapToken"`
 	AESCBCEncryptionSecret    string `json:"AESCBCEncryptionSecret,omitempty" yaml:",omitempty"`

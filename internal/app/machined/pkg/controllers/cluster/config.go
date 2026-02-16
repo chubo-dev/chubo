@@ -44,7 +44,7 @@ func NewConfigController() *ConfigController {
 				res.TypedSpec().DiscoveryEnabled = c.Cluster().Discovery().Enabled()
 
 				if c.Cluster().Discovery().Enabled() {
-					// Chubo fork: Kubernetes discovery registry is removed.
+					// Chubo fork: legacy discovery registry is removed.
 					res.TypedSpec().RegistryKubernetesEnabled = false
 
 					svc := c.Cluster().Discovery().Service()

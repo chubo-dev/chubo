@@ -75,7 +75,7 @@ func randBootstrapTokenString(length int) (string, error) {
 	return string(token), err
 }
 
-// genToken will generate a token of the format abc.123 (like kubeadm/trustd), where the length of the first string (before the dot)
+// genToken will generate a token of the format abc.123 (like legacy bootstrap/trustd), where the length of the first string (before the dot)
 // and length of the second string (after dot) are specified as inputs.
 func genToken(lenFirst, lenSecond int) (string, error) {
 	var err error

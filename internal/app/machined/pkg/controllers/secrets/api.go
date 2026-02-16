@@ -226,7 +226,7 @@ func (ctrl *APIController) reconcile(ctx context.Context, r controller.Runtime, 
 				continue
 			}
 
-			return fmt.Errorf("error getting etcd root secrets: %w", err)
+			return fmt.Errorf("error getting OS root secrets: %w", err)
 		}
 
 		rootSpec := rootResource.TypedSpec()

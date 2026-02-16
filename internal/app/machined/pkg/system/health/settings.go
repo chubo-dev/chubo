@@ -8,7 +8,7 @@ import "time"
 
 // Settings configures health check
 //
-// Fields are similar to k8s pod probe definitions.
+// Fields are similar to common container health probe definitions.
 type Settings struct {
 	InitialDelay time.Duration
 	Period       time.Duration

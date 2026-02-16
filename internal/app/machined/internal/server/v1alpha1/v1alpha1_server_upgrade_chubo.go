@@ -21,7 +21,7 @@ import (
 
 // Upgrade initiates an upgrade.
 //
-// Chubo mode skips etcd upgrade prechecks.
+// Chubo mode skips legacy control-plane upgrade prechecks.
 //
 //nolint:gocyclo
 func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (*machine.UpgradeResponse, error) {

@@ -21,7 +21,7 @@ import (
 )
 
 // NetworkConfig maps to VMware GuestInfo metadata.
-// See also definition of GuestInfo in CAPV https://github.com/kubernetes-sigs/cluster-api-provider-vsphere/blob/main/pkg/util/constants.go
+// See also the upstream Cluster API vSphere GuestInfo constant definitions.
 type NetworkConfig struct {
 	InstanceID    string `yaml:"instance-id"`
 	LocalHostname string `yaml:"local-hostname"`

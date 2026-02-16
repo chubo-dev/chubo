@@ -117,9 +117,9 @@ func (ctrl *DNSResolveCacheController) run(ctx context.Context, r controller.Run
 	}
 
 	pairs := allAddressPairs(cfg.TypedSpec().ListenAddresses)
-	forwardKubeDNSToHost := cfg.TypedSpec().ServiceHostDNSAddress.IsValid()
+	forwardServiceDNSToHost := cfg.TypedSpec().ServiceHostDNSAddress.IsValid()
 
-	for runCfg, runErr := range ctrl.manager.RunAll(pairs, forwardKubeDNSToHost) {
+	for runCfg, runErr := range ctrl.manager.RunAll(pairs, forwardServiceDNSToHost) {
 		switch {
 		case runErr != nil && (runCfg.Network == "tcp6" || runCfg.Network == "udp6"):
 			// Ignore ipv6 errors

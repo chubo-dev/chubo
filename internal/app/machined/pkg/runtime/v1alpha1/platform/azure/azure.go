@@ -375,9 +375,8 @@ func (a *Azure) NetworkConfiguration(ctx context.Context, _ state.State, ch chan
 }
 
 // convertResourceGroupNameToLower converts the resource group name in the resource ID to be lowered.
-// https://github.com/kubernetes-sigs/cloud-provider-azure/blob/4192b264611aebef8070505dd56680a862acfbbf/pkg/provider/azure_wrap.go#L91
+// Adapted from upstream cloud-provider implementation.
 func convertResourceGroupNameToLower(resourceID string) (string, error) {
-	// https://github.com/kubernetes-sigs/cloud-provider-azure/blob/4192b264611aebef8070505dd56680a862acfbbf/pkg/provider/azure_wrap.go#L37
 	azureResourceGroupNameRE := regexp.MustCompile(`.*/subscriptions/(?:.*)/resourceGroups/(.+)/providers/(?:.*)`)
 
 	matches := azureResourceGroupNameRE.FindStringSubmatch(resourceID)

@@ -28,7 +28,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/formatters"
 )
 
-var kubernetesFlag bool
+var workloadNamespaceFlag bool
 
 // GlobalArgs is the common arguments for the root command.
 var GlobalArgs global.Args
@@ -224,7 +224,7 @@ func getServiceFromNode() []string {
 	return svcIDs
 }
 
-func getContainersFromNode(kubernetes bool) []string {
+func getContainersFromNode(workloadNamespace bool) []string {
 	var containerIDs []string
 
 	//nolint:errcheck
@@ -235,7 +235,7 @@ func getContainersFromNode(kubernetes bool) []string {
 				driver    common.ContainerDriver
 			)
 
-			if kubernetes {
+			if workloadNamespace {
 				namespace = constants.WorkloadContainerdNamespace
 				driver = common.ContainerDriver_CRI
 			} else {
@@ -254,7 +254,7 @@ func getContainersFromNode(kubernetes bool) []string {
 						continue
 					}
 
-					if kubernetes && p.Id == p.PodId {
+					if workloadNamespace && p.Id == p.PodId {
 						continue
 					}
 

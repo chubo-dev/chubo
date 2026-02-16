@@ -36,7 +36,7 @@ var statsCmd = &cobra.Command{
 				driver    common.ContainerDriver
 			)
 
-			if kubernetesFlag {
+			if workloadNamespaceFlag {
 				namespace = constants.WorkloadContainerdNamespace
 				driver = common.ContainerDriver_CRI
 			} else {

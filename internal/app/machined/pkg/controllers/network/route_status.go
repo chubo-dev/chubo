@@ -20,7 +20,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-// RouteStatusController manages secrets.Etcd based on configuration.
+// RouteStatusController tracks route state based on netlink events.
 type RouteStatusController struct{}
 
 // Name implements controller.Controller interface.

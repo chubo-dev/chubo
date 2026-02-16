@@ -54,7 +54,7 @@ func (c *Container) GetProcessStderr() (string, error) {
 	return c.Inspector.GetProcessStderr(c.ID)
 }
 
-// GetLogFile returns path to log file, k8s-style.
+// GetLogFile returns path to log file using workload sandbox layout.
 func (c *Container) GetLogFile() string {
 	if c.LogPath != "" {
 		return c.LogPath

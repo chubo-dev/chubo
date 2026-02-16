@@ -2,6 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package chubo provides the minimal, non-Kubernetes configuration surface for
+// Package chubo provides the minimal workload-focused configuration surface for
 // the Chubo Talos fork.
 package chubo

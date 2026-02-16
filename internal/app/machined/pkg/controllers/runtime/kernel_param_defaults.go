@@ -152,7 +152,7 @@ func (ctrl *KernelParamDefaultsController) getKernelParams() []*kernel.Param {
 		},
 	}...)
 
-	// kernel optimization for kubernetes workloads.
+	// kernel optimization for containerized workloads.
 	res = append(res, []*kernel.Param{
 		// configs inotify.
 		{

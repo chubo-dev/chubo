@@ -14,7 +14,7 @@ import (
 
 // HealthCheck implements the cluster.ClusterServer interface.
 //
-// Chubo-OS intentionally disables Kubernetes-oriented cluster checks.
+// Chubo-OS intentionally disables legacy cluster health checks.
 func (s *Server) HealthCheck(_ *clusterapi.HealthCheckRequest, _ clusterapi.ClusterService_HealthCheckServer) error {
 	return status.Error(codes.Unimplemented, "cluster health checks are not available in chubo mode")
 }

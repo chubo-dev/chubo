@@ -28,9 +28,6 @@ const CertSANAPIID = resource.ID("api")
 // CertSANMaintenanceID is a resource ID of singleton instance for the Talos Maintenance API.
 const CertSANMaintenanceID = resource.ID("maintenance")
 
-// CertSANKubernetesID is a resource ID of singleton instance for the Kubernetes API Server.
-const CertSANKubernetesID = resource.ID("k8s")
-
 // CertSAN contains certficiate subject alternative names.
 type CertSAN = typed.Resource[CertSANSpec, CertSANExtension]
 
@@ -43,7 +40,7 @@ type CertSANSpec struct {
 	FQDN     string       `yaml:"fqdn" protobuf:"3"`
 }
 
-// NewCertSAN initializes a Etc resource.
+// NewCertSAN initializes a CertSAN resource.
 func NewCertSAN(namespace resource.Namespace, id resource.ID) *CertSAN {
 	return typed.NewResource[CertSANSpec, CertSANExtension](
 		resource.NewMetadata(namespace, CertSANType, id, resource.VersionUndefined),

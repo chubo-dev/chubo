@@ -40,7 +40,7 @@ enum MachineType {
   // This node will perform the initial steps to bootstrap the cluster -- generation of TLS assets, starting of the control plane, etc.
   TYPE_INIT = 1;
   // TypeControlPlane designates the node as a control plane member.
-  // This means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.
+  // This means it will host control-plane services.
   TYPE_CONTROL_PLANE = 2;
   // TypeWorker designates the node as a worker node.
   // This means it will be an available compute node for scheduling workloads.
@@ -769,4 +769,3 @@ enum NetworkOperator {
   OPERATOR_DHCP6 = 1;
   OPERATOR_VIP = 2;
 }
-

@@ -293,7 +293,7 @@ func (*Sequencer) Reset(r runtime.Runtime, in runtime.ResetOptions) []runtime.Ph
 		).AppendWhen(
 			in.GetGraceful() && shouldRunLeavePhase(r),
 			"leave",
-			LeaveEtcd,
+			LeaveClusterMembership,
 		).Append(
 			"preReset",
 			SendResetSignal,

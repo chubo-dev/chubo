@@ -141,13 +141,13 @@ func (ctrl *LocalAffiliateController) Run(ctx context.Context, r controller.Runt
 
 				spec.NodeID = localID
 				spec.Hostname = hostname.TypedSpec().FQDN()
-				// In Chubo, there is no Kubernetes nodename resource. Use the machine FQDN
+				// In Chubo, there is no dedicated nodename resource. Use the machine FQDN
 				// as the stable cluster node identifier.
 				spec.Nodename = hostname.TypedSpec().FQDN()
 				spec.MachineType = machineType.MachineType()
 				spec.OperatingSystem = fmt.Sprintf("%s (%s)", version.Name, version.Tag)
 
-				// Control plane metadata is Kubernetes-specific (API server port), so it is not
+				// Control plane metadata is legacy control-plane specific (API server port), so it is not
 				// populated in Chubo.
 				spec.ControlPlane = nil
 

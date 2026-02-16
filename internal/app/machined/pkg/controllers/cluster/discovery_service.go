@@ -38,7 +38,7 @@ import (
 
 const defaultDiscoveryTTL = 30 * time.Minute
 
-// DiscoveryServiceController pushes Affiliate resource to the Kubernetes registry.
+// DiscoveryServiceController pushes Affiliate resources to the configured discovery registry.
 type DiscoveryServiceController struct {
 	localAffiliateID       resource.ID
 	discoveryConfigVersion resource.Version

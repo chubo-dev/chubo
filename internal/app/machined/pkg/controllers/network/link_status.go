@@ -32,7 +32,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/network"
 )
 
-// LinkStatusController manages secrets.Etcd based on configuration.
+// LinkStatusController tracks link state based on netlink and ethtool data.
 type LinkStatusController struct{}
 
 // Name implements controller.Controller interface.

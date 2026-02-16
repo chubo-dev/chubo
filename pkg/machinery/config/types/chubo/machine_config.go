@@ -84,7 +84,7 @@ var (
 	_ config.Validator = &MachineConfigV1Alpha1{}
 )
 
-// MachineConfigV1Alpha1 is the minimal, non-Kubernetes config document for the `chubo` fork.
+// MachineConfigV1Alpha1 is the minimal config document for the `chubo` fork.
 //
 // schemaRoot: true
 // schemaMeta: chubo.dev/v1alpha1/MachineConfig
@@ -457,7 +457,7 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 // ToV1Alpha1 synthesizes a minimal internal v1alpha1.Config suitable for the current `chubo` boot pipeline.
 //
 // This preserves Talos' internal config.Provider interface contract (which still depends on v1alpha1.Config),
-// while allowing the external config surface to remain small and non-Kubernetes.
+// while allowing the external config surface to remain small and workload-focused.
 func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 	cfg := &v1alpha1.Config{
 		ConfigVersion: v1alpha1.Version,

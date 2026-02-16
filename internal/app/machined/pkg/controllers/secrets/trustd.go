@@ -193,7 +193,7 @@ func (ctrl *TrustdController) reconcile(ctx context.Context, r controller.Runtim
 				continue
 			}
 
-			return fmt.Errorf("error getting etcd root secrets: %w", err)
+			return fmt.Errorf("error getting OS root secrets: %w", err)
 		}
 
 		rootSpec := rootResource.TypedSpec()

@@ -26,7 +26,7 @@ var restartCmd = &cobra.Command{
 			return nil, cobra.ShellCompDirectiveError | cobra.ShellCompDirectiveNoFileComp
 		}
 
-		return getContainersFromNode(kubernetesFlag), cobra.ShellCompDirectiveNoFileComp
+		return getContainersFromNode(workloadNamespaceFlag), cobra.ShellCompDirectiveNoFileComp
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
@@ -35,7 +35,7 @@ var restartCmd = &cobra.Command{
 				driver    common.ContainerDriver
 			)
 
-			if kubernetesFlag {
+			if workloadNamespaceFlag {
 				namespace = constants.WorkloadContainerdNamespace
 				driver = common.ContainerDriver_CRI
 			} else {
