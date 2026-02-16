@@ -56,6 +56,7 @@ CLUSTER_LOGS_OUT="${CLUSTER_LOGS_OUT:-${WORKDIR}/cluster-logs.tar.gz}"
 CLUSTER_SUPPORT_OUT="${CLUSTER_SUPPORT_OUT:-${WORKDIR}/cluster-support.zip}"
 HELPERS_DIR="${HELPERS_DIR:-${WORKDIR}/helpers}"
 HELPERS_VALIDATION_OUT="${HELPERS_VALIDATION_OUT:-${WORKDIR}/helpers-validation.txt}"
+CLEANUP_STALE_ONLY=0
 
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
@@ -77,13 +78,16 @@ while [[ $# -gt 0 ]]; do
 	--with-helpers)
 		WITH_HELPERS=1
 		;;
+	--cleanup-stale | --cleanup-stale-only)
+		CLEANUP_STALE_ONLY=1
+		;;
 	-h | --help)
-		echo "usage: $0 [--skip-build] [--with-helpers]"
+		echo "usage: $0 [--skip-build] [--with-helpers] [--cleanup-stale]"
 		exit 0
 		;;
 	*)
 		echo "unknown argument: $1" >&2
-		echo "usage: $0 [--skip-build] [--with-helpers]" >&2
+		echo "usage: $0 [--skip-build] [--with-helpers] [--cleanup-stale]" >&2
 		exit 2
 		;;
 	esac
@@ -386,6 +390,46 @@ wait_for_boot_id_change() {
 	done
 }
 
+cleanup_stale_clusters() {
+	local stale_qemu_pids=""
+	local pid=""
+	local state_root=""
+	local cluster_dir=""
+	local cluster_name=""
+
+	# Kill orphaned QEMU processes bound to stale chubo-core state directories.
+	stale_qemu_pids="$(/bin/ps -ax -o pid=,command= | /usr/bin/awk '$0 ~ /qemu-system-/ && index($0, "/tmp/chubo-core-state-") { print $1 }' 2>/dev/null || true)"
+	if [[ -n "${stale_qemu_pids}" ]]; then
+		echo "killing stale QEMU processes: ${stale_qemu_pids}"
+		/bin/kill ${stale_qemu_pids} >/dev/null 2>&1 || true
+
+		for pid in ${stale_qemu_pids}; do
+			/bin/kill -0 "${pid}" >/dev/null 2>&1 || continue
+			/bin/kill -9 "${pid}" >/dev/null 2>&1 || true
+		done
+	fi
+
+	# Remove stale local registries from previous runs.
+	for pid in $(docker ps -aq --filter "name=^chubo-core-reg-" 2>/dev/null || true); do
+		docker rm -f "${pid}" >/dev/null 2>&1 || true
+	done
+
+	# Best-effort graceful destroy for stale cluster state roots.
+	for state_root in /tmp/chubo-core-state-*; do
+		[[ -d "${state_root}" ]] || continue
+
+		for cluster_dir in "${state_root}"/chubo-core-*; do
+			[[ -d "${cluster_dir}" ]] || continue
+			cluster_name="$(basename "${cluster_dir}")"
+
+			echo "destroying stale cluster ${cluster_name} (state dir ${state_root})"
+			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+		done
+	done
+
+	rm -rf /tmp/chubo-core-state-* /tmp/chubo-core-work-* >/dev/null 2>&1 || true
+}
+
 cleanup() {
 	set +e
 
@@ -397,9 +441,15 @@ cleanup() {
 	fi
 
 	if ((registry_started == 1)); then
-		docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1
+	docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1
 	fi
 }
+
+if ((CLEANUP_STALE_ONLY == 1)); then
+	cleanup_stale_clusters
+	echo "stale chubo-core E2E resources cleaned"
+	exit 0
+fi
 
 trap cleanup EXIT
 
