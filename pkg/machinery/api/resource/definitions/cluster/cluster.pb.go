@@ -120,16 +120,15 @@ func (x *AffiliateSpec) GetControlPlane() *ControlPlane {
 
 // ConfigSpec describes cluster discovery configuration.
 type ConfigSpec struct {
-	state                     protoimpl.MessageState `protogen:"open.v1"`
-	DiscoveryEnabled          bool                   `protobuf:"varint,1,opt,name=discovery_enabled,json=discoveryEnabled,proto3" json:"discovery_enabled,omitempty"`
-	RegistryKubernetesEnabled bool                   `protobuf:"varint,2,opt,name=registry_kubernetes_enabled,json=registryKubernetesEnabled,proto3" json:"registry_kubernetes_enabled,omitempty"`
-	RegistryServiceEnabled    bool                   `protobuf:"varint,3,opt,name=registry_service_enabled,json=registryServiceEnabled,proto3" json:"registry_service_enabled,omitempty"`
-	ServiceEndpoint           string                 `protobuf:"bytes,4,opt,name=service_endpoint,json=serviceEndpoint,proto3" json:"service_endpoint,omitempty"`
-	ServiceEndpointInsecure   bool                   `protobuf:"varint,5,opt,name=service_endpoint_insecure,json=serviceEndpointInsecure,proto3" json:"service_endpoint_insecure,omitempty"`
-	ServiceEncryptionKey      []byte                 `protobuf:"bytes,6,opt,name=service_encryption_key,json=serviceEncryptionKey,proto3" json:"service_encryption_key,omitempty"`
-	ServiceClusterId          string                 `protobuf:"bytes,7,opt,name=service_cluster_id,json=serviceClusterId,proto3" json:"service_cluster_id,omitempty"`
-	unknownFields             protoimpl.UnknownFields
-	sizeCache                 protoimpl.SizeCache
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	DiscoveryEnabled        bool                   `protobuf:"varint,1,opt,name=discovery_enabled,json=discoveryEnabled,proto3" json:"discovery_enabled,omitempty"`
+	RegistryServiceEnabled  bool                   `protobuf:"varint,3,opt,name=registry_service_enabled,json=registryServiceEnabled,proto3" json:"registry_service_enabled,omitempty"`
+	ServiceEndpoint         string                 `protobuf:"bytes,4,opt,name=service_endpoint,json=serviceEndpoint,proto3" json:"service_endpoint,omitempty"`
+	ServiceEndpointInsecure bool                   `protobuf:"varint,5,opt,name=service_endpoint_insecure,json=serviceEndpointInsecure,proto3" json:"service_endpoint_insecure,omitempty"`
+	ServiceEncryptionKey    []byte                 `protobuf:"bytes,6,opt,name=service_encryption_key,json=serviceEncryptionKey,proto3" json:"service_encryption_key,omitempty"`
+	ServiceClusterId        string                 `protobuf:"bytes,7,opt,name=service_cluster_id,json=serviceClusterId,proto3" json:"service_cluster_id,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *ConfigSpec) Reset() {
@@ -165,13 +164,6 @@ func (*ConfigSpec) Descriptor() ([]byte, []int) {
 func (x *ConfigSpec) GetDiscoveryEnabled() bool {
 	if x != nil {
 		return x.DiscoveryEnabled
-	}
-	return false
-}
-
-func (x *ConfigSpec) GetRegistryKubernetesEnabled() bool {
-	if x != nil {
-		return x.RegistryKubernetesEnabled
 	}
 	return false
 }
@@ -507,11 +499,10 @@ const file_resource_definitions_cluster_cluster_proto_rawDesc = "" +
 	"\bnodename\x18\x04 \x01(\tR\bnodename\x12)\n" +
 	"\x10operating_system\x18\x05 \x01(\tR\x0foperatingSystem\x12P\n" +
 	"\fmachine_type\x18\x06 \x01(\x0e2-.talos.resource.definitions.enums.MachineTypeR\vmachineType\x12U\n" +
-	"\rcontrol_plane\x18\b \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlane\"\xfe\x02\n" +
+	"\rcontrol_plane\x18\b \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlane\"\xbe\x02\n" +
 	"\n" +
 	"ConfigSpec\x12+\n" +
-	"\x11discovery_enabled\x18\x01 \x01(\bR\x10discoveryEnabled\x12>\n" +
-	"\x1bregistry_kubernetes_enabled\x18\x02 \x01(\bR\x19registryKubernetesEnabled\x128\n" +
+	"\x11discovery_enabled\x18\x01 \x01(\bR\x10discoveryEnabled\x128\n" +
 	"\x18registry_service_enabled\x18\x03 \x01(\bR\x16registryServiceEnabled\x12)\n" +
 	"\x10service_endpoint\x18\x04 \x01(\tR\x0fserviceEndpoint\x12:\n" +
 	"\x19service_endpoint_insecure\x18\x05 \x01(\bR\x17serviceEndpointInsecure\x124\n" +

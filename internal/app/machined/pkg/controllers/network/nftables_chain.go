@@ -199,13 +199,13 @@ func (ctrl *NfTablesChainController) preCreateIptablesNFTable(logger *zap.Logger
 	conn.AddTable(table)
 
 	chain := &nftables.Chain{
-		Name:  "KUBE-IPTABLES-HINT",
+		Name:  "CHUBO-IPTABLES-HINT",
 		Table: table,
 		Type:  nftables.ChainTypeNAT,
 	}
 	conn.AddChain(chain)
 
-	logger.Info("pre-created iptables-nft table 'mangle'/'KUBE-IPTABLES-HINT'")
+	logger.Info("pre-created iptables-nft table 'mangle'/'CHUBO-IPTABLES-HINT'")
 
 	return nil
 }

@@ -1451,7 +1451,6 @@ rpc Bootstrap
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| recover_etcd | [bool](#bool) |  | Enable etcd recovery from the snapshot. Snapshot should be uploaded before this call via EtcdRecover RPC. |
 | recover_skip_hash_check | [bool](#bool) |  | Skip hash check on the snapshot (etcd). Enable this when recovering from data directory copy to skip integrity check. |
 
 
@@ -4589,7 +4588,7 @@ The machine service definition.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | ApplyConfiguration | [ApplyConfigurationRequest](#machine.ApplyConfigurationRequest) | [ApplyConfigurationResponse](#machine.ApplyConfigurationResponse) |  |
-| Bootstrap | [BootstrapRequest](#machine.BootstrapRequest) | [BootstrapResponse](#machine.BootstrapResponse) | Bootstrap method makes control plane node enter etcd bootstrap mode. Node aborts etcd join sequence and creates single-node etcd cluster. If recover_etcd argument is specified, etcd is recovered from a snapshot uploaded with EtcdRecover. |
+| Bootstrap | [BootstrapRequest](#machine.BootstrapRequest) | [BootstrapResponse](#machine.BootstrapResponse) | Bootstrap RPC is retained for API compatibility. In chubo mode it is not implemented and machine bring-up is config-driven. |
 | Containers | [ContainersRequest](#machine.ContainersRequest) | [ContainersResponse](#machine.ContainersResponse) |  |
 | Copy | [CopyRequest](#machine.CopyRequest) | [.common.Data](#common.Data) stream |  |
 | CPUFreqStats | [.google.protobuf.Empty](#google.protobuf.Empty) | [CPUFreqStatsResponse](#machine.CPUFreqStatsResponse) |  |
@@ -6528,7 +6527,6 @@ ConfigSpec describes cluster discovery configuration.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | discovery_enabled | [bool](#bool) |  |  |
-| registry_kubernetes_enabled | [bool](#bool) |  |  |
 | registry_service_enabled | [bool](#bool) |  |  |
 | service_endpoint | [string](#string) |  |  |
 | service_endpoint_insecure | [bool](#bool) |  |  |
@@ -9774,4 +9772,3 @@ The time service definition.
 | <a name="bool" /> bool |  | bool | boolean | boolean | bool | bool | boolean | TrueClass/FalseClass |
 | <a name="string" /> string | A string must always contain UTF-8 encoded or 7-bit ASCII text. | string | String | str/unicode | string | string | string | String (UTF-8) |
 | <a name="bytes" /> bytes | May contain any arbitrary sequence of bytes. | string | ByteString | str | []byte | ByteString | string | String (ASCII-8BIT) |
-

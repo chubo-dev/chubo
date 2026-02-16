@@ -194,16 +194,6 @@ func (m *ConfigSpec) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x18
 	}
-	if m.RegistryKubernetesEnabled {
-		i--
-		if m.RegistryKubernetesEnabled {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
 	if m.DiscoveryEnabled {
 		i--
 		if m.DiscoveryEnabled {
@@ -553,9 +543,6 @@ func (m *ConfigSpec) SizeVT() (n int) {
 	var l int
 	_ = l
 	if m.DiscoveryEnabled {
-		n += 2
-	}
-	if m.RegistryKubernetesEnabled {
 		n += 2
 	}
 	if m.RegistryServiceEnabled {
@@ -1019,26 +1006,6 @@ func (m *ConfigSpec) UnmarshalVT(dAtA []byte) error {
 				}
 			}
 			m.DiscoveryEnabled = bool(v != 0)
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RegistryKubernetesEnabled", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protohelpers.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.RegistryKubernetesEnabled = bool(v != 0)
 		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field RegistryServiceEnabled", wireType)

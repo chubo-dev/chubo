@@ -46,7 +46,6 @@ func (suite *ConfigSuite) TestReconcileConfig() {
 			spec := res.TypedSpec()
 
 			asrt.True(spec.DiscoveryEnabled)
-			asrt.False(spec.RegistryKubernetesEnabled)
 			asrt.True(spec.RegistryServiceEnabled)
 			asrt.Equal("discovery.talos.dev:443", spec.ServiceEndpoint)
 			asrt.False(spec.ServiceEndpointInsecure)
@@ -86,7 +85,6 @@ func (suite *ConfigSuite) TestReconcileConfigCustom() {
 			spec := res.TypedSpec()
 
 			asrt.True(spec.DiscoveryEnabled)
-			asrt.False(spec.RegistryKubernetesEnabled)
 			asrt.True(spec.RegistryServiceEnabled)
 			asrt.Equal("[2001:470:6d:30e:565d:e162:e2a0:cf5a]:3456", spec.ServiceEndpoint)
 			asrt.False(spec.ServiceEndpointInsecure)
@@ -118,7 +116,6 @@ func (suite *ConfigSuite) TestReconcileConfigCustomInsecure() {
 			spec := res.TypedSpec()
 
 			asrt.True(spec.DiscoveryEnabled)
-			asrt.False(spec.RegistryKubernetesEnabled)
 			asrt.True(spec.RegistryServiceEnabled)
 			asrt.Equal("localhost:3000", spec.ServiceEndpoint)
 			asrt.True(spec.ServiceEndpointInsecure)
@@ -140,7 +137,6 @@ func (suite *ConfigSuite) TestReconcileDisabled() {
 			spec := res.TypedSpec()
 
 			asrt.False(spec.DiscoveryEnabled)
-			asrt.False(spec.RegistryKubernetesEnabled)
 		},
 	)
 }
@@ -159,7 +155,6 @@ func (suite *ConfigSuite) TestReconcilePartial() {
 			spec := res.TypedSpec()
 
 			asrt.False(spec.DiscoveryEnabled)
-			asrt.False(spec.RegistryKubernetesEnabled)
 		},
 	)
 

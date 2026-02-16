@@ -75,14 +75,14 @@ func TestRankCgroups(t *testing.T) {
 			expect: map[oom.RankedCgroup]float64{
 				{
 					Class:         runtime.QoSCgroupClassBesteffort,
-					Path:          "testdata/rank1/kubepods/besteffort/pod123",
+					Path:          "testdata/rank1/workloads/besteffort/pod123",
 					MemoryCurrent: cgroups.Value{Val: 222593024, IsSet: true},
 					MemoryPeak:    cgroups.Value{Val: 371011584, IsSet: true},
 					MemoryMax:     cgroups.Value{IsMax: true, IsSet: true},
 				}: 2.22593024e+08,
 				{
 					Class:         runtime.QoSCgroupClassBurstable,
-					Path:          "testdata/rank1/kubepods/burstable/podABC",
+					Path:          "testdata/rank1/workloads/burstable/podABC",
 					MemoryCurrent: cgroups.Value{Val: 42, IsSet: true},
 					MemoryPeak:    cgroups.Value{Val: 50, IsSet: true},
 					MemoryMax:     cgroups.Value{IsSet: true, IsMax: true},
@@ -803,12 +803,12 @@ func TestListCgroupProcs(t *testing.T) {
 	}{
 		{
 			name:   "pod123",
-			dir:    "testdata/rank1/kubepods/besteffort/pod123",
+			dir:    "testdata/rank1/workloads/besteffort/pod123",
 			expect: []int{1},
 		},
 		{
 			name:   "podABC",
-			dir:    "testdata/rank1/kubepods/burstable/podABC",
+			dir:    "testdata/rank1/workloads/burstable/podABC",
 			expect: []int{132, 142536},
 		},
 	} {

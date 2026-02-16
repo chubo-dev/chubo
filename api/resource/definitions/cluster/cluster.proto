@@ -22,7 +22,6 @@ message AffiliateSpec {
 // ConfigSpec describes cluster discovery configuration.
 message ConfigSpec {
   bool discovery_enabled = 1;
-  bool registry_kubernetes_enabled = 2;
   bool registry_service_enabled = 3;
   string service_endpoint = 4;
   bool service_endpoint_insecure = 5;

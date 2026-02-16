@@ -3,8 +3,6 @@
 ./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
 ./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
 ./Makefile:chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
-./api/machine/machine.proto:  bool recover_etcd = 1;
-./api/resource/definitions/cluster/cluster.proto:  bool registry_kubernetes_enabled = 2;
 ./go.mod:	sigs.k8s.io/knftables v0.0.18 // indirect
 ./go.mod:// Kubernetes dependencies sharing the same version.
 ./go.mod:require k8s.io/cri-api v0.35.0
@@ -44,12 +42,6 @@
 ./hack/start-registry-proxies.sh:    --name registry-registry.k8s.io registry:2
 ./hack/start-registry-proxies.sh:    -e REGISTRY_PROXY_REMOTEURL=https://registry.k8s.io \
 ./hack/third_party/go-talos-support/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
-./internal/app/machined/pkg/controllers/cluster/config.go:					res.TypedSpec().RegistryKubernetesEnabled = false
-./internal/app/machined/pkg/controllers/network/nftables_chain.go:		Name:  "KUBE-IPTABLES-HINT",
-./internal/app/machined/pkg/controllers/network/nftables_chain.go:	logger.Info("pre-created iptables-nft table 'mangle'/'KUBE-IPTABLES-HINT'")
-./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:		{"kubepods/besteffort", runtime.QoSCgroupClassBesteffort},
-./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:		{"kubepods/burstable", runtime.QoSCgroupClassBurstable},
-./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:		{"kubepods/guaranteed", runtime.QoSCgroupClassGuaranteed},
 ./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:DgQWBBQahGK8SEwzJQTU7tD2A8QZRtGUazBuBgNVHSMEZzBlgBQahGK8SEwzJQTU7tD2A8QZRtGU
 ./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:bjPsMZ57k8HkyWkaPcBrTiJt7qtYTcbQQcEr6k8Sh17rRdhs9ZgC06DYVYoGmRmioHfRMJ6szHXu
 ./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:hsI6yLETcDbYz+70CjTVW0z9B5yiutkBclzzTcHdDrEcDcRjvq30FPuJ7KJBDkzMyFdA0G4Dqs0M
@@ -68,7 +60,6 @@
 ./internal/pkg/cri/pods.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 ./pkg/machinery/constants/constants.go:	WorkloadContainerdNamespace = "k8s.io"
 ./pkg/machinery/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
-./pkg/machinery/resources/cluster/config.go:	RegistryKubernetesEnabled bool   `yaml:"registryKubernetesEnabled" protobuf:"2"`
 ./tools/go.mod:	go.etcd.io/bbolt v1.4.3 // indirect
 ./tools/go.mod:	k8s.io/code-generator v0.35.0 // indirect
 ./tools/go.mod:	k8s.io/code-generator/cmd/deepcopy-gen

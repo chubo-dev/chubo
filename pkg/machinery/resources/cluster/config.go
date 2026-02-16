@@ -27,13 +27,12 @@ type Config = typed.Resource[ConfigSpec, ConfigExtension]
 //
 //gotagsrewrite:gen
 type ConfigSpec struct {
-	DiscoveryEnabled          bool   `yaml:"discoveryEnabled" protobuf:"1"`
-	RegistryKubernetesEnabled bool   `yaml:"registryKubernetesEnabled" protobuf:"2"`
-	RegistryServiceEnabled    bool   `yaml:"registryServiceEnabled" protobuf:"3"`
-	ServiceEndpoint           string `yaml:"serviceEndpoint" protobuf:"4"`
-	ServiceEndpointInsecure   bool   `yaml:"serviceEndpointInsecure,omitempty" protobuf:"5"`
-	ServiceEncryptionKey      []byte `yaml:"serviceEncryptionKey" protobuf:"6"`
-	ServiceClusterID          string `yaml:"serviceClusterID" protobuf:"7"`
+	DiscoveryEnabled        bool   `yaml:"discoveryEnabled" protobuf:"1"`
+	RegistryServiceEnabled  bool   `yaml:"registryServiceEnabled" protobuf:"3"`
+	ServiceEndpoint         string `yaml:"serviceEndpoint" protobuf:"4"`
+	ServiceEndpointInsecure bool   `yaml:"serviceEndpointInsecure,omitempty" protobuf:"5"`
+	ServiceEncryptionKey    []byte `yaml:"serviceEncryptionKey" protobuf:"6"`
+	ServiceClusterID        string `yaml:"serviceClusterID" protobuf:"7"`
 }
 
 // NewConfig initializes a Config resource.

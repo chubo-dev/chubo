@@ -582,6 +582,18 @@ const (
 	// CgroupPodRuntimeRoot is the cgroup containing workload runtime components.
 	CgroupPodRuntimeRoot = "/podruntime"
 
+	// CgroupWorkloadsRoot is the cgroup root for workload QoS classes.
+	CgroupWorkloadsRoot = "/workloads"
+
+	// CgroupWorkloadBestEffort is the cgroup for best-effort workload pods.
+	CgroupWorkloadBestEffort = CgroupWorkloadsRoot + "/besteffort"
+
+	// CgroupWorkloadBurstable is the cgroup for burstable workload pods.
+	CgroupWorkloadBurstable = CgroupWorkloadsRoot + "/burstable"
+
+	// CgroupWorkloadGuaranteed is the cgroup for guaranteed workload pods.
+	CgroupWorkloadGuaranteed = CgroupWorkloadsRoot + "/guaranteed"
+
 	// CgroupPodRuntimeRootMillicores is the CPU weight for the pod runtime cgroup.
 	CgroupPodRuntimeRootMillicores = 4000
 

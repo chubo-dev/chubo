@@ -1119,8 +1119,6 @@ func (x *RebootResponse) GetMessages() []*Reboot {
 // rpc Bootstrap
 type BootstrapRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Enable recovery from a previously uploaded snapshot.
-	RecoverEtcd bool `protobuf:"varint,1,opt,name=recover_etcd,json=recoverEtcd,proto3" json:"recover_etcd,omitempty"`
 	// Skip hash check on the snapshot.
 	// Enable this when recovering from data directory copy to skip integrity check.
 	RecoverSkipHashCheck bool `protobuf:"varint,2,opt,name=recover_skip_hash_check,json=recoverSkipHashCheck,proto3" json:"recover_skip_hash_check,omitempty"`
@@ -1156,13 +1154,6 @@ func (x *BootstrapRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use BootstrapRequest.ProtoReflect.Descriptor instead.
 func (*BootstrapRequest) Descriptor() ([]byte, []int) {
 	return file_machine_machine_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *BootstrapRequest) GetRecoverEtcd() bool {
-	if x != nil {
-		return x.RecoverEtcd
-	}
-	return false
 }
 
 func (x *BootstrapRequest) GetRecoverSkipHashCheck() bool {
@@ -1628,7 +1619,7 @@ func (x *ConfigValidationErrorEvent) GetError() string {
 	return ""
 }
 
-// AddressEvent reports node endpoints aggregated from k8s.Endpoints and network.Hostname.
+// AddressEvent reports node endpoints aggregated from endpoint discovery and network.Hostname.
 type AddressEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Hostname      string                 `protobuf:"bytes,1,opt,name=hostname,proto3" json:"hostname,omitempty"`
@@ -1925,8 +1916,8 @@ func (x *ResetPartitionSpec) GetWipe() bool {
 
 type ResetRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Graceful indicates whether node should leave etcd before the upgrade, it also
-	// enforces etcd checks before leaving.
+	// Graceful indicates whether node should leave managed control-plane services
+	// before reset and enforce graceful prechecks.
 	Graceful bool `protobuf:"varint,1,opt,name=graceful,proto3" json:"graceful,omitempty"`
 	// Reboot indicates whether node should reboot or halt after resetting.
 	Reboot bool `protobuf:"varint,2,opt,name=reboot,proto3" json:"reboot,omitempty"`
@@ -4139,7 +4130,7 @@ type LogsRequest struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	Namespace string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	Id        string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	// driver might be default "containerd" or "cri"
+	// Driver selects the runtime backend.
 	Driver        common.ContainerDriver `protobuf:"varint,3,opt,name=driver,proto3,enum=common.ContainerDriver" json:"driver,omitempty"`
 	Follow        bool                   `protobuf:"varint,4,opt,name=follow,proto3" json:"follow,omitempty"`
 	TailLines     int32                  `protobuf:"varint,5,opt,name=tail_lines,json=tailLines,proto3" json:"tail_lines,omitempty"`
@@ -4481,7 +4472,7 @@ func (x *RollbackResponse) GetMessages() []*Rollback {
 type ContainersRequest struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	Namespace string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// driver might be default "containerd" or "cri"
+	// Driver selects the runtime backend.
 	Driver        common.ContainerDriver `protobuf:"varint,2,opt,name=driver,proto3,enum=common.ContainerDriver" json:"driver,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -5025,7 +5016,7 @@ type RestartRequest struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	Namespace string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	Id        string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	// driver might be default "containerd" or "cri"
+	// Driver selects the runtime backend.
 	Driver        common.ContainerDriver `protobuf:"varint,3,opt,name=driver,proto3,enum=common.ContainerDriver" json:"driver,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -5175,7 +5166,7 @@ func (x *RestartResponse) GetMessages() []*Restart {
 type StatsRequest struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	Namespace string                 `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// driver might be default "containerd" or "cri"
+	// Driver selects the runtime backend.
 	Driver        common.ContainerDriver `protobuf:"varint,2,opt,name=driver,proto3,enum=common.ContainerDriver" json:"driver,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -9224,10 +9215,9 @@ const file_machine_machine_proto_rawDesc = "" +
 	"\bmetadata\x18\x01 \x01(\v2\x10.common.MetadataR\bmetadata\x12\x19\n" +
 	"\bactor_id\x18\x02 \x01(\tR\aactorId\"=\n" +
 	"\x0eRebootResponse\x12+\n" +
-	"\bmessages\x18\x01 \x03(\v2\x0f.machine.RebootR\bmessages\"l\n" +
-	"\x10BootstrapRequest\x12!\n" +
-	"\frecover_etcd\x18\x01 \x01(\bR\vrecoverEtcd\x125\n" +
-	"\x17recover_skip_hash_check\x18\x02 \x01(\bR\x14recoverSkipHashCheck\"9\n" +
+	"\bmessages\x18\x01 \x03(\v2\x0f.machine.RebootR\bmessages\"O\n" +
+	"\x10BootstrapRequest\x125\n" +
+	"\x17recover_skip_hash_check\x18\x02 \x01(\bR\x14recoverSkipHashCheckJ\x04\b\x01\x10\x02\"9\n" +
 	"\tBootstrap\x12,\n" +
 	"\bmetadata\x18\x01 \x01(\v2\x10.common.MetadataR\bmetadata\"C\n" +
 	"\x11BootstrapResponse\x12.\n" +

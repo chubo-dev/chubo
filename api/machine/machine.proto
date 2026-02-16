@@ -133,8 +133,7 @@ message RebootResponse {
 
 // rpc Bootstrap
 message BootstrapRequest {
-  // Enable recovery from a previously uploaded snapshot.
-  bool recover_etcd = 1;
+  reserved 1;
   // Skip hash check on the snapshot.
   // Enable this when recovering from data directory copy to skip integrity check.
   bool recover_skip_hash_check = 2;
