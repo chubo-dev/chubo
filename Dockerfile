@@ -782,12 +782,7 @@ RUN <<END
     cleanup.sh /rootfs
     mkdir -pv /rootfs/{boot/EFI,etc/{iscsi,nvme,cri/conf.d/hosts},usr/lib/firmware,usr/etc,usr/local/share,usr/share/zoneinfo/Etc,mnt,system,opt,.extra}
     mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
-    if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
-        echo "chubo build: skipping Kubernetes directories"
-        rm -f /rootfs/opt/cni/bin/flannel
-    else
-        mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
-    fi
+    rm -f /rootfs/opt/cni/bin/flannel
     mkdir -pv /rootfs/opt/{containerd/bin,containerd/lib}
 END
 COPY --chmod=0644 hack/zoneinfo/Etc/UTC /rootfs/usr/share/zoneinfo/Etc/UTC
@@ -883,12 +878,7 @@ RUN <<END
     cleanup.sh /rootfs
     mkdir -pv /rootfs/{boot/EFI,etc/{iscsi,nvme,cri/conf.d/hosts},usr/lib/firmware,usr/etc,usr/local/share,usr/share/zoneinfo/Etc,mnt,system,opt,.extra}
     mkdir -pv /rootfs/{etc/cni/net.d,etc/ssl/certs,etc/selinux/targeted/contexts/files}
-    if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
-        echo "chubo build: skipping Kubernetes directories"
-        rm -f /rootfs/opt/cni/bin/flannel
-    else
-        mkdir -pv /rootfs/{etc/kubernetes/manifests,usr/libexec/kubernetes,/usr/local/lib/kubelet/credentialproviders}
-    fi
+    rm -f /rootfs/opt/cni/bin/flannel
     mkdir -pv /rootfs/opt/{containerd/bin,containerd/lib}
 END
 COPY --chmod=0644 hack/zoneinfo/Etc/UTC /rootfs/usr/share/zoneinfo/Etc/UTC

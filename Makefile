@@ -105,10 +105,6 @@ TALOSCTL_EXECUTABLE := $(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-$(ARCH)
 INTEGRATION_TEST := integration-test
 INTEGRATION_TEST_DEFAULT_TARGET := $(INTEGRATION_TEST)-$(OPERATING_SYSTEM)
 INTEGRATION_TEST_PROVISION_DEFAULT_TARGET := integration-test-provision-$(OPERATING_SYSTEM)
-# renovate: datasource=github-releases depName=kubernetes/kubernetes
-KUBECTL_VERSION ?= v1.35.0
-# renovate: datasource=github-releases depName=kastenhq/kubestr
-KUBESTR_VERSION ?= v0.4.49
 # renovate: datasource=github-releases depName=helm/helm
 HELM_VERSION ?= v4.0.4
 # renovate: datasource=github-releases depName=cilium/cilium-cli
@@ -116,8 +112,6 @@ CILIUM_CLI_VERSION ?= v0.18.9
 # renovate: datasource=github-releases depName=microsoft/secureboot_objects
 MICROSOFT_SECUREBOOT_RELEASE ?= v1.1.3
 
-KUBECTL_URL ?= https://dl.k8s.io/release/$(KUBECTL_VERSION)/bin/$(OPERATING_SYSTEM)/amd64/kubectl
-KUBESTR_URL ?= https://github.com/kastenhq/kubestr/releases/download/$(KUBESTR_VERSION)/kubestr_$(subst v,,$(KUBESTR_VERSION))_Linux_amd64.tar.gz
 HELM_URL ?= https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz
 CILIUM_CLI_URL ?= https://github.com/cilium/cilium-cli/releases/download/$(CILIUM_CLI_VERSION)/cilium-$(OPERATING_SYSTEM)-amd64.tar.gz
 TESTPKGS ?= github.com/chubo-dev/chubo/...
@@ -534,9 +528,7 @@ uki-certs: talosctl ## Generate test certificates for SecureBoot/PCR Signing
 
 .PHONY: integration-images-list
 integration-images-list: ## Generate list of integration images.
-	@docker run --entrypoint /usr/local/bin/e2e.test registry.k8s.io/conformance:$(KUBECTL_VERSION) --list-images | \
-		$(TALOSCTL_EXECUTABLE) images integration --installer-tag=$(IMAGE_TAG_IN) --registry-and-user=$(REGISTRY_AND_USERNAME) \
-		> $(ARTIFACTS)/integration-images.txt
+	@$(TALOSCTL_EXECUTABLE) images integration --installer-tag=$(IMAGE_TAG_IN) --registry-and-user=$(REGISTRY_AND_USERNAME) > $(ARTIFACTS)/integration-images.txt
 
 .PHONY: cache-create
 cache-create: installer imager integration-images-list ## Generate image cache.
@@ -664,14 +656,6 @@ $(ARTIFACTS)/$(INTEGRATION_TEST):
 $(ARTIFACTS)/$(INTEGRATION_TEST_PROVISION_DEFAULT_TARGET)-amd64:
 	@$(MAKE) local-$(INTEGRATION_TEST_PROVISION_DEFAULT_TARGET) DEST=$(ARTIFACTS) PLATFORM=linux/amd64 WITH_RACE=true
 
-$(ARTIFACTS)/kubectl: $(ARTIFACTS)
-	@curl -L -o $(ARTIFACTS)/kubectl "$(KUBECTL_URL)"
-	@chmod +x $(ARTIFACTS)/kubectl
-
-$(ARTIFACTS)/kubestr: $(ARTIFACTS)
-	@curl -L "$(KUBESTR_URL)" | tar xzf - -C $(ARTIFACTS) kubestr
-	@chmod +x $(ARTIFACTS)/kubestr
-
 $(ARTIFACTS)/helm: $(ARTIFACTS)
 	@curl -L "$(HELM_URL)" | tar xzf - -C $(ARTIFACTS) --strip-components=1 linux-amd64/helm
 	@chmod +x $(ARTIFACTS)/helm
@@ -680,7 +664,7 @@ $(ARTIFACTS)/cilium: $(ARTIFACTS)
 	@curl -L "$(CILIUM_CLI_URL)" | tar xzf - -C $(ARTIFACTS) cilium
 	@chmod +x $(ARTIFACTS)/cilium
 
-external-artifacts: $(ARTIFACTS)/kubectl $(ARTIFACTS)/kubestr $(ARTIFACTS)/helm $(ARTIFACTS)/cilium
+external-artifacts: $(ARTIFACTS)/helm $(ARTIFACTS)/cilium
 
 e2e-%: $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 external-artifacts ## Runs the E2E test for the specified platform (e.g. e2e-docker).
 	@$(MAKE) hack-test-$@ \
@@ -695,8 +679,6 @@ e2e-%: $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 external-artifacts 
 		INTEGRATION_TEST=$(PWD)/$(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 \
 		SHORT_INTEGRATION_TEST=$(SHORT_INTEGRATION_TEST) \
 		CUSTOM_CNI_URL=$(CUSTOM_CNI_URL) \
-		KUBECTL=$(PWD)/$(ARTIFACTS)/kubectl \
-		KUBESTR=$(PWD)/$(ARTIFACTS)/kubestr \
 		HELM=$(PWD)/$(ARTIFACTS)/helm \
 		CILIUM_CLI=$(PWD)/$(ARTIFACTS)/cilium
 
@@ -724,9 +706,6 @@ installer-with-extensions: $(ARTIFACTS)/extensions/_out/extensions-metadata
 		IMAGER_ARGS="--base-installer-image=$(REGISTRY_AND_USERNAME)/installer-base:$(IMAGE_TAG_IN) $(shell cat $(ARTIFACTS)/extensions/_out/extensions-metadata | $(EXTENSIONS_FILTER_COMMAND) | xargs -n 1 echo --system-extension-image)"
 	$(CRANE) $(CRANE_FLAGS) push $(ARTIFACTS)/installer-amd64.tar $(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-amd64-extensions
 	INSTALLER_IMAGE_EXTENSIONS="$(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_OUT)-amd64-extensions" yq eval -n '.machine.install.image = strenv(INSTALLER_IMAGE_EXTENSIONS)' > $(ARTIFACTS)/installer-extensions-patch.yaml
-
-kubelet-fat-patch:
-	K8S_VERSION=$(KUBECTL_VERSION) yq eval -n '.machine.kubelet.image = "ghcr.io/siderolabs/kubelet:" + strenv(K8S_VERSION) + "-fat"' > $(ARTIFACTS)/kubelet-fat-patch.yaml
 
 # Assets for releases
 

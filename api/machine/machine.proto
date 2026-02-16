@@ -211,7 +211,7 @@ message ConfigValidationErrorEvent {
   string error = 1;
 }
 
-// AddressEvent reports node endpoints aggregated from k8s.Endpoints and network.Hostname.
+// AddressEvent reports node endpoints aggregated from endpoint discovery and network.Hostname.
 message AddressEvent {
   string hostname = 1;
   repeated string addresses = 2;
@@ -268,8 +268,8 @@ message ResetRequest {
     SYSTEM_DISK = 1;
     USER_DISKS = 2;
   }
-  // Graceful indicates whether node should leave etcd before the upgrade, it also
-  // enforces etcd checks before leaving.
+  // Graceful indicates whether node should leave managed control-plane services
+  // before reset and enforce graceful prechecks.
   bool graceful = 1;
   // Reboot indicates whether node should reboot or halt after resetting.
   bool reboot = 2;
@@ -555,7 +555,7 @@ message FeaturesInfo {
 message LogsRequest {
   string namespace = 1;
   string id = 2;
-  // driver might be default "containerd" or "cri"
+  // Driver selects the runtime backend.
   common.ContainerDriver driver = 3;
   bool follow = 4;
   int32 tail_lines = 5;
@@ -590,7 +590,7 @@ message RollbackResponse {
 
 message ContainersRequest {
   string namespace = 1;
-  // driver might be default "containerd" or "cri"
+  // Driver selects the runtime backend.
   common.ContainerDriver driver = 2;
 }
 
@@ -653,7 +653,7 @@ message ProcessInfo {
 message RestartRequest {
   string namespace = 1;
   string id = 2;
-  // driver might be default "containerd" or "cri"
+  // Driver selects the runtime backend.
   common.ContainerDriver driver = 3;
 }
 
@@ -671,7 +671,7 @@ message RestartResponse {
 // The request message containing the containerd namespace.
 message StatsRequest {
   string namespace = 1;
-  // driver might be default "containerd" or "cri"
+  // Driver selects the runtime backend.
   common.ContainerDriver driver = 2;
 }
 
