@@ -91,8 +91,6 @@ type Server struct {
 	machine.UnimplementedMachineServiceServer
 
 	Controller runtime.Controller
-	// breaking the import loop cycle between services/ package and v1alpha1_server.go
-	EtcdBootstrapper func(context.Context, runtime.Runtime, *machine.BootstrapRequest) error
 
 	// ShutdownCtx signals that the server is shutting down.
 	ShutdownCtx context.Context //nolint:containedctx
