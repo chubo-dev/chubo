@@ -15,15 +15,15 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/cosi-project/runtime/pkg/resource"
-	"github.com/cosi-project/runtime/pkg/resource/meta"
-	"github.com/dustin/go-humanize"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/formatters"
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
+	"github.com/cosi-project/runtime/pkg/resource"
+	"github.com/cosi-project/runtime/pkg/resource/meta"
+	"github.com/dustin/go-humanize"
 	"go.yaml.in/yaml/v4"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -61,21 +61,15 @@ func dmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	return data, nil
 }
 
-func logs(service string, kubernetes bool) Collect {
+func logs(service string) Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
 		var (
 			namespace string
 			driver    common.ContainerDriver
-			err       error
 		)
 
-		if kubernetes {
-			namespace = constants.K8sContainerdNamespace
-			driver = common.ContainerDriver_CRI
-		} else {
-			namespace = constants.SystemContainerdNamespace
-			driver = common.ContainerDriver_CONTAINERD
-		}
+		namespace = constants.SystemContainerdNamespace
+		driver = common.ContainerDriver_CONTAINERD
 
 		options.Log("getting %s/%s service logs", namespace, service)
 

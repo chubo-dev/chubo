@@ -12,17 +12,15 @@ import (
 	"sync"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
-	"k8s.io/client-go/kubernetes"
 )
 
 // Options defines GetSupportBundle options.
 type Options struct {
-	TalosClient      *client.Client
-	KubernetesClient *kubernetes.Clientset
-	Archive          Archive
-	LogOutput        io.Writer
-	Progress         chan Progress
-	Nodes            []string
+	TalosClient *client.Client
+	Archive     Archive
+	LogOutput   io.Writer
+	Progress    chan Progress
+	Nodes       []string
 
 	NumWorkers int
 }

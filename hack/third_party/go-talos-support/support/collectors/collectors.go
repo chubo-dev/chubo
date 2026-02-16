@@ -2,22 +2,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package collectors contains all standard Talos/Kubernetes state collectors used in the support bundle generator.
+// Package collectors contains standard Talos state collectors used in the support bundle generator.
 package collectors
 
 import (
 	"context"
 	"fmt"
 	"path/filepath"
-	"strings"
 
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/cosi-project/runtime/pkg/resource/meta"
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/cosi-project/runtime/pkg/state"
-	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
-	"github.com/chubo-dev/chubo/pkg/machinery/client"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
-	"k8s.io/client-go/kubernetes"
 
 	"github.com/siderolabs/go-talos-support/support/bundle"
 )
@@ -106,10 +102,6 @@ func WithSource(collectors []*Collector, source string) []*Collector {
 func GetForOptions(ctx context.Context, options *bundle.Options) ([]*Collector, error) {
 	var collectors []*Collector
 
-	if options.KubernetesClient != nil {
-		collectors = append(collectors, WithSource(GetKubernetesCollectors(options.KubernetesClient), Cluster)...)
-	}
-
 	if options.TalosClient != nil && len(options.Nodes) > 0 {
 		for _, node := range options.Nodes {
 			nodeCollectors, err := GetTalosNodeCollectors(client.WithNode(ctx, node), options.TalosClient)
@@ -128,8 +120,8 @@ func GetForOptions(ctx context.Context, options *bundle.Options) ([]*Collector, 
 func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Collector, error) {
 	base := []*Collector{
 		NewCollector("dmesg.log", dmesg),
-		NewCollector("controller-runtime.log", logs("controller-runtime", false)),
-		NewCollector("dns-resolve-cache.log", logs("dns-resolve-cache", false)),
+		NewCollector("controller-runtime.log", logs("controller-runtime")),
+		NewCollector("dns-resolve-cache.log", logs("dns-resolve-cache")),
 		NewCollector("dependencies.dot", dependencies),
 		NewCollector("mounts", mounts),
 		NewCollector("devices", devices),
@@ -145,13 +137,6 @@ func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Coll
 
 	base = append(base, WithFolder(collectors, "resources")...)
 
-	collectors, err = getKubernetesLogCollectors(ctx, client)
-	if err != nil {
-		return nil, err
-	}
-
-	base = append(base, WithFolder(collectors, "kubernetes-logs")...)
-
 	collectors, err = getServiceLogCollectors(ctx, client)
 	if err != nil {
 		return nil, err
@@ -160,14 +145,6 @@ func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Coll
 	base = append(base, WithFolder(collectors, "service-logs")...)
 
 	return base, nil
-}
-
-// GetKubernetesCollectors creates all kubernetes API related collectors.
-func GetKubernetesCollectors(client *kubernetes.Clientset) []*Collector {
-	return []*Collector{
-		NewCollector("kubernetesResources/nodes.yaml", kubernetesNodes(client)),
-		NewCollector("kubernetesResources/systemPods.yaml", systemPods(client)),
-	}
 }
 
 func getTalosResources(ctx context.Context, state state.State) ([]*Collector, error) {
@@ -200,52 +177,11 @@ func getServiceLogCollectors(ctx context.Context, c *client.Client) ([]*Collecto
 		for _, s := range msg.Services {
 			collectors = append(
 				collectors,
-				NewCollector(fmt.Sprintf("%s.log", s.Id), logs(s.Id, false)),
+				NewCollector(fmt.Sprintf("%s.log", s.Id), logs(s.Id)),
 				NewCollector(fmt.Sprintf("%s.state", s.Id), serviceInfo(s.Id)),
 			)
 		}
 	}
 
 	return collectors, nil
-}
-
-func getKubernetesLogCollectors(ctx context.Context, c *client.Client) ([]*Collector, error) {
-	namespace := constants.K8sContainerdNamespace
-	driver := common.ContainerDriver_CRI
-
-	resp, err := c.Containers(ctx, namespace, driver)
-	if err != nil {
-		return nil, err
-	}
-
-	var collectors []*Collector
-
-	for _, msg := range resp.Messages {
-		for _, container := range msg.Containers {
-			parts := strings.Split(container.PodId, "/")
-
-			// skip pause containers
-			if container.Status == "SANDBOX_READY" {
-				continue
-			}
-
-			exited := ""
-
-			if container.Pid == 0 {
-				exited = "-exited"
-			}
-
-			if parts[0] == "kube-system" {
-				collectors = append(
-					collectors,
-					NewCollector(
-						fmt.Sprintf("%s/%s%s.log", parts[0], parts[1], exited),
-						logs(container.Id, true),
-					),
-				)
-			}
-		}
-	}
-
-	return collectors, err
 }
