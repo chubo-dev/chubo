@@ -20,9 +20,3 @@ var MaximumHostDowngradeVersion = semver.MustParse("1.12.0")
 
 // DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.10.
 var DeniedHostUpgradeVersions []semver.Version
-
-// MinimumKubernetesVersion is the minimum version of Kubernetes is supported with 1.10.
-var MinimumKubernetesVersion = semver.MustParse("1.28.0")
-
-// MaximumKubernetesVersion is the maximum version of Kubernetes is supported with 1.10.
-var MaximumKubernetesVersion = semver.MustParse("1.33.99")
