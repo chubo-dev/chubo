@@ -9,5 +9,5 @@ package talos
 import "github.com/spf13/cobra"
 
 func registerNetstatWorkloadFlag(cmd *cobra.Command, target *bool) {
-	cmd.Flags().BoolVarP(target, "pods", "k", false, "show sockets used by Kubernetes pods")
+	cmd.Flags().BoolVarP(target, "workloads", "P", false, "show sockets used by workload tasks")
 }

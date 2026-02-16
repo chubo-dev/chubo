@@ -11,7 +11,7 @@ func imageNamespaceHelp() string {
 }
 
 func imageCacheMirrorDefaults() []string {
-	return []string{"docker.io", "ghcr.io", "registry.k8s.io"}
+	return []string{"docker.io", "ghcr.io"}
 }
 
 func registerImageBundleCommand() {

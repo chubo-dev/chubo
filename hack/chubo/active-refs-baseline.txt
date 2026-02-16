@@ -1,0 +1,89 @@
+./Makefile:		! rg -n -i 'kubernetes|kubectl|kube-system|etcd' "$$docs_tmp" >/dev/null
+./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+etcd\\b'
+./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
+./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
+./Makefile:chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
+./api/machine/machine.proto:  bool recover_etcd = 1;
+./api/resource/definitions/cluster/cluster.proto:  bool registry_kubernetes_enabled = 2;
+./go.mod:	sigs.k8s.io/knftables v0.0.18 // indirect
+./go.mod:// Kubernetes dependencies sharing the same version.
+./go.mod:require k8s.io/cri-api v0.35.0
+./go.sum:github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+./go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
+./go.sum:k8s.io/cri-api v0.35.0 h1:fxLSKyJHqbyCSUsg1rW4DRpmjSEM/elZ1GXzYTSLoDQ=
+./go.sum:k8s.io/cri-api v0.35.0/go.mod h1:Cnt29u/tYl1Se1cBRL30uSZ/oJ5TaIp4sZm1xDLvcMc=
+./go.sum:sigs.k8s.io/knftables v0.0.18 h1:6Duvmu0s/HwGifKrtl6G3AyAPYlWiZqTgS8bkVMiyaE=
+./go.sum:sigs.k8s.io/knftables v0.0.18/go.mod h1:f/5ZLKYEUPUhVjUCg6l80ACdL7CIIyeL0DxfgojGRTk=
+./hack/chubo/check-go-deps.sh:		echo "# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*"
+./hack/chubo/check-go-deps.sh:	sort -u "${target_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${target_forbidden}" || true
+./hack/chubo/check-go-deps.sh:# - forbidden prefixes: k8s.io/* and go.etcd.io/etcd/*
+./hack/chubo/check-go-deps.sh:# Verifies that chubo build targets don't introduce new Kubernetes/etcd Go package deps.
+./hack/chubo/check-go-deps.sh:grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' "${BASELINE}" | sort -u >"${baseline_file}" || true
+./hack/chubo/check-go-deps.sh:sort -u "${current_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${current_file}" || true
+./hack/chubo/check-rootfs.sh:  'unsquashfs -l rootfs.sqsh | grep -Ei "kube|kubernetes|etcd|opt/cni/bin/flannel" || true' \
+./hack/chubo/check-rootfs.sh:# Verifies the `chubo` rootfs doesn't accidentally ship Kubernetes/etcd bits.
+./hack/chubo/check-rootfs.sh:# does not link Kubernetes/etcd client libraries in the `chubo` build.
+./hack/chubo/check-rootfs.sh:echo "OK: init binary doesn't link k8s.io/go.etcd.io modules"
+./hack/chubo/check-rootfs.sh:echo "OK: no kube/etcd/flannel artifacts found in rootfs"
+./hack/chubo/check-rootfs.sh:forbidden_mods="$(printf '%s\n' "${init_mods}" | grep -E '^dep (k8s\\.io/|go\\.etcd\\.io/)' || true)"
+./hack/chubo/check-runtime-surface.sh:	etcd
+./hack/chubo/check-runtime-surface.sh:	kubelet
+./hack/chubo/check-runtime-surface.sh:# Kubernetes/etcd listeners must stay absent in chubo baseline.
+./hack/chubo/e2e-core-qemu.sh:	echo "existing CLI binary is stale (contains 'KUBERNETES ENDPOINT'); rebuilding"
+./hack/chubo/e2e-core-qemu.sh:elif command -v strings >/dev/null 2>&1 && strings "${TALOSCTL}" 2>/dev/null | grep -q "KUBERNETES ENDPOINT"; then
+./hack/chubo/forbidden-go-deps-baseline.txt:# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*
+./hack/release.sh:  ${ARTIFACTS}/talosctl-linux-amd64 image k8s-bundle >> ${1}
+./hack/release.toml:        title = "Kubernetes server-side apply"
+./hack/release.toml:        title = "Talosctl images k8s-bundle subcommand accepts version parameter"
+./hack/release.toml:    [notes.images_k8s_bundle]
+./hack/release.toml:    [notes.k8s_ssa]
+./hack/release.toml:BREAKING: If you were relying on the resources EtcdConfigs, KubeletConfigs, ControllerManagerConfigs, SchedulerConfigs or APIServerConfigs, the protobuf format has changed from `map<string,string>` to `map<string,message>`.
+./hack/release.toml:Kubernetes: 1.35.0
+./hack/release.toml:The `talosctl images k8s-bundle` command now accepts an optional version overrides arguments.
+./hack/release.toml:etcd: 3.6.7
+./hack/start-registry-proxies.sh:    --name registry-registry.k8s.io registry:2
+./hack/start-registry-proxies.sh:    -e REGISTRY_PROXY_REMOTEURL=https://registry.k8s.io \
+./hack/third_party/go-talos-support/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
+./internal/app/machined/pkg/controllers/cluster/config.go:					res.TypedSpec().RegistryKubernetesEnabled = false
+./internal/app/machined/pkg/controllers/network/nftables_chain.go:		Name:  "KUBE-IPTABLES-HINT",
+./internal/app/machined/pkg/controllers/network/nftables_chain.go:	logger.Info("pre-created iptables-nft table 'mangle'/'KUBE-IPTABLES-HINT'")
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:		{"kubepods/besteffort", runtime.QoSCgroupClassBesteffort},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:		{"kubepods/burstable", runtime.QoSCgroupClassBurstable},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:		{"kubepods/guaranteed", runtime.QoSCgroupClassGuaranteed},
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:DgQWBBQahGK8SEwzJQTU7tD2A8QZRtGUazBuBgNVHSMEZzBlgBQahGK8SEwzJQTU7tD2A8QZRtGU
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:bjPsMZ57k8HkyWkaPcBrTiJt7qtYTcbQQcEr6k8Sh17rRdhs9ZgC06DYVYoGmRmioHfRMJ6szHXu
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:hsI6yLETcDbYz+70CjTVW0z9B5yiutkBclzzTcHdDrEcDcRjvq30FPuJ7KJBDkzMyFdA0G4Dqs0M
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:ywaK8SJJ6ejqkX/GM15oGQOGO0MBzwdw5AgeZYWR5hEit/UCI46uuR59H35s5r0l1ZUa8gWmr4UC
+./internal/pkg/containers/cri/cri.go:					"io.kubernetes.pod.name":      pod,
+./internal/pkg/containers/cri/cri.go:					"io.kubernetes.pod.namespace": namespace,
+./internal/pkg/containers/cri/cri.go:				"io.kubernetes.container.name": name,
+./internal/pkg/containers/cri/cri.go:				"io.kubernetes.pod.name":       pod,
+./internal/pkg/containers/cri/cri.go:				"io.kubernetes.pod.namespace":  namespace,
+./internal/pkg/containers/cri/cri.go:		RestartCount: container.Annotations["io.kubernetes.container.restartCount"],
+./internal/pkg/containers/cri/cri.go:	podName := container.Labels["io.kubernetes.pod.namespace"] + "/" + container.Labels["io.kubernetes.pod.name"]
+./internal/pkg/containers/cri/cri.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/cri/client.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/cri/containers.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/cri/images.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/cri/pods.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./pkg/machinery/constants/constants.go:	WorkloadContainerdNamespace = "k8s.io"
+./pkg/machinery/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
+./pkg/machinery/resources/cluster/config.go:	RegistryKubernetesEnabled bool   `yaml:"registryKubernetesEnabled" protobuf:"2"`
+./tools/go.mod:	go.etcd.io/bbolt v1.4.3 // indirect
+./tools/go.mod:	k8s.io/code-generator v0.35.0 // indirect
+./tools/go.mod:	k8s.io/code-generator/cmd/deepcopy-gen
+./tools/go.mod:	k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b // indirect
+./tools/go.mod:	k8s.io/klog/v2 v2.130.1 // indirect
+./tools/go.sum:github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+./tools/go.sum:github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
+./tools/go.sum:go.etcd.io/bbolt v1.4.3 h1:dEadXpI6G79deX5prL3QRNP6JB8UxVkqo4UPnHaNXJo=
+./tools/go.sum:go.etcd.io/bbolt v1.4.3/go.mod h1:tKQlpPaYCVFctUIgFKFnAlvbmB3tpy1vkTnDWohtc0E=
+./tools/go.sum:go.etcd.io/etcd/api/v3 v3.5.1/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
+./tools/go.sum:go.etcd.io/etcd/client/pkg/v3 v3.5.1/go.mod h1:IJHfcCEKxYu1Os13ZdwCwIUTUVGYTSAM3YSwc9/Ac1g=
+./tools/go.sum:go.etcd.io/etcd/client/v2 v2.305.1/go.mod h1:pMEacxZW7o8pg4CrFE7pquyCJJzZvkvdD2RibOCCCGs=
+./tools/go.sum:k8s.io/code-generator v0.35.0 h1:TvrtfKYZTm9oDF2z+veFKSCcgZE3Igv0svY+ehCmjHQ=
+./tools/go.sum:k8s.io/code-generator v0.35.0/go.mod h1:iS1gvVf3c/T71N5DOGYO+Gt3PdJ6B9LYSvIyQ4FHzgc=
+./tools/go.sum:k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b h1:gMplByicHV/TJBizHd9aVEsTYoJBnnUAT5MHlTkbjhQ=
+./tools/go.sum:k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b/go.mod h1:CgujABENc3KuTrcsdpGmrrASjtQsWCT7R99mEV4U/fM=
+./tools/go.sum:k8s.io/klog/v2 v2.130.1 h1:n9Xl7H1Xvksem4KFG4PYbdQCQxqc/tTUyrgXaOhHSzk=
+./tools/go.sum:k8s.io/klog/v2 v2.130.1/go.mod h1:3Jpz1GvMt720eyJH1ckRHK1EDfpxISzJ7I9OYgaDtPE=

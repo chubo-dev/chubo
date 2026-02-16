@@ -156,7 +156,7 @@ func postCreate(
 	}
 
 	// In chubo, `cluster create` is a dev fixture creator only:
-	// it should not bootstrap legacy control-plane services or attempt kubeconfig export/merge.
+	// it should not bootstrap legacy control-plane services or attempt legacy client-config export/merge.
 	if cOps.ClusterWait {
 		if err := waitForRuntimeAPI(ctx, clusterAccess, clusterConfigs.ClusterRequest.Nodes, cOps.ClusterWaitTimeout); err != nil {
 			return err

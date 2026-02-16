@@ -23,7 +23,7 @@ const TrustdID = resource.ID("trustd")
 // Trustd contains trustd generated secrets.
 type Trustd = typed.Resource[TrustdCertsSpec, TrustdExtension]
 
-// TrustdCertsSpec describes etcd certs secrets.
+// TrustdCertsSpec describes trustd certificate secrets.
 //
 //gotagsrewrite:gen
 type TrustdCertsSpec struct {

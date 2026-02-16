@@ -567,14 +567,11 @@ var imageCacheCreateCmd = &cobra.Command{
 	Use:   "cache-create",
 	Short: "Create a cache of images in OCI format into a directory",
 	Long:  `Create a cache of images in OCI format into a directory`,
-	Example: fmt.Sprintf(
-		`talosctl images cache-create --images=ghcr.io/siderolabs/kubelet:v%s --image-cache-path=/tmp/talos-image-cache
+	Example: `talosctl images cache-create --images=docker.io/library/alpine:latest --image-cache-path=/tmp/talos-image-cache
 
 Alternatively, stdin can be piped to the command:
 talosctl images default | talosctl images cache-create --image-cache-path=/tmp/talos-image-cache --images=-
 `,
-		constants.DefaultWorkloadVersion,
-	),
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(imageCacheCreateCmdFlags.images) == 0 {

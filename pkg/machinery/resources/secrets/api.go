@@ -23,7 +23,7 @@ const APIID = resource.ID("api")
 // API contains apid generated secrets.
 type API = typed.Resource[APICertsSpec, APIExtension]
 
-// APICertsSpec describes etcd certs secrets.
+// APICertsSpec describes API certificate secrets.
 //
 //gotagsrewrite:gen
 type APICertsSpec struct {

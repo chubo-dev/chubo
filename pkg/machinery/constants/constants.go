@@ -208,8 +208,7 @@ const (
 	// WorkloadSeccompProfilesDirectory is where user-provided seccomp profiles are mounted.
 	WorkloadSeccompProfilesDirectory = "/var/lib/workload/seccomp/profiles"
 
-	// DefaultWorkloadVersion is the default target version of the control plane.
-	// renovate: datasource=github-releases depName=kubernetes/kubernetes
+	// DefaultWorkloadVersion is the legacy default version used by image helper commands.
 	DefaultWorkloadVersion = "1.35.0"
 
 	// DefaultControlPlanePort is the default port to use for the control plane.
@@ -284,7 +283,7 @@ const (
 	// SystemContainerdAddress is the path to the system containerd socket.
 	SystemContainerdAddress = SystemRunPath + "/containerd/containerd.sock"
 
-	// WorkloadContainerdNamespace is the containerd namespace for workload pods.
+	// WorkloadContainerdNamespace is the containerd namespace for workload tasks.
 	WorkloadContainerdNamespace = "k8s.io"
 
 	// WorkloadContainerdAddress is the path to the workload containerd socket.
