@@ -832,18 +832,14 @@ var imageCacheCertGenCmdFlags struct {
 }
 
 func init() {
-	imageCmd.PersistentFlags().StringVar(&imageCmdFlags.namespace, "namespace", "cri",
-		"namespace to use: `system` (etcd and kubelet images) or `cri` for all Kubernetes workloads, `inmem` for in-memory containerd instance",
-	)
+	imageCmd.PersistentFlags().StringVar(&imageCmdFlags.namespace, "namespace", "cri", imageNamespaceHelp())
 	addCommand(imageCmd)
 
 	imageCmd.AddCommand(imageListCmd)
 	imageCmd.AddCommand(imagePullCmd)
 	imageCmd.AddCommand(imageRemoveCmd)
 
-	imageCmd.AddCommand(imageTalosBundleCmd)
-	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.overlays, "overlays", true, "Include images that belong to Talos overlays")
-	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.extensions, "extensions", true, "Include images that belong to Talos extensions")
+	registerImageBundleCommand()
 
 	imageCmd.AddCommand(imageCacheCreateCmd)
 	imageCacheCreateCmd.PersistentFlags().StringVar(&imageCacheCreateCmdFlags.imageCachePath, "image-cache-path", "", "directory to save the image cache in OCI format")
@@ -861,8 +857,8 @@ func init() {
 	imageCacheServeCmd.PersistentFlags().StringVar(&imageCacheServeCmdFlags.imageCachePath, "image-cache-path", "", "directory to save the image cache in flat format")
 	imageCacheServeCmd.MarkPersistentFlagRequired("image-cache-path") //nolint:errcheck
 	imageCacheServeCmd.PersistentFlags().StringVar(&imageCacheServeCmdFlags.address, "address", constants.RegistrydListenAddress, "address to serve the registry on")
-	imageCacheServeCmd.PersistentFlags().StringSliceVar(&imageCacheServeCmdFlags.mirrors, "mirror", []string{"docker.io", "ghcr.io", "registry.k8s.io"},
-		"list of registry mirrors to add to the Talos config patch")
+	imageCacheServeCmd.PersistentFlags().StringSliceVar(&imageCacheServeCmdFlags.mirrors, "mirror", imageCacheMirrorDefaults(),
+		"list of registry mirrors to add to the OS config patch")
 	imageCacheServeCmd.PersistentFlags().StringVar(&imageCacheServeCmdFlags.tlsCertFile, "tls-cert-file", "", "TLS certificate file to use for serving")
 	imageCacheServeCmd.PersistentFlags().StringVar(&imageCacheServeCmdFlags.tlsKeyFile, "tls-key-file", "", "TLS key file to use for serving")
 
