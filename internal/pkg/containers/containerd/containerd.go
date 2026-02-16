@@ -8,7 +8,6 @@ package containerd
 import (
 	"context"
 	"fmt"
-	"path"
 	"strings"
 	"syscall"
 	"time"
@@ -104,11 +103,6 @@ func (i *inspector) containerInfo(
 ) (*ctrs.Container, error) {
 	cp := &ctrs.Container{}
 
-	info, err := cntr.Info(i.nsctx)
-	if err != nil {
-		return nil, fmt.Errorf("error getting container info for %q: %w", cntr.ID(), err)
-	}
-
 	spec, err := cntr.Spec(i.nsctx)
 	if err != nil {
 		return nil, fmt.Errorf("error getting container spec for %q: %w", cntr.ID(), err)
@@ -157,17 +151,6 @@ func (i *inspector) containerInfo(
 	cp.Pid = task.Pid()
 	cp.Status = strings.ToUpper(string(status.Status))
 
-	var (
-		cname, cns string
-		ok         bool
-	)
-
-	if cname, ok = info.Labels["io.kubernetes.pod.name"]; ok {
-		if cns, ok = info.Labels["io.kubernetes.pod.namespace"]; ok {
-			cp.Display = path.Join(cns, cname)
-		}
-	}
-
 	if status.Status == containerd.Running {
 		metrics, err := task.Metrics(i.nsctx)
 		if err != nil {
@@ -209,52 +192,11 @@ func (i *inspector) containerInfo(
 		}
 	}
 
-	// Save off an identifier for the pod
-	// this is typically the container name (non-k8s namespace)
-	// or will be k8s namespace"/"k8s pod name":"container name
+	// Save off an identifier for the pod.
 	cp.PodName = cp.Display
 
-	// Pull restart count
-	// TODO: this doesn't work as CRI doesn't publish this to containerd annotations
-	if _, ok := spec.Annotations["io.kubernetes.container.restartCount"]; ok {
-		cp.RestartCount = spec.Annotations["io.kubernetes.container.restartCount"]
-	}
-
-	// Typically on the 'infrastructure' container, aka k8s.gcr.io/pause
-	if _, ok := spec.Annotations["io.kubernetes.cri.sandbox-log-directory"]; ok {
-		cp.Sandbox = spec.Annotations["io.kubernetes.cri.sandbox-log-directory"]
-		cp.IsPodSandbox = true
-	} else if singleLookup && cns != "" && cname != "" {
-		// try to find matching infrastructure container and pull sandbox from it
-		query := fmt.Sprintf(
-			"labels.\"io.kubernetes.pod.namespace\"==%q,labels.\"io.kubernetes.pod.name\"==%q",
-			cns,
-			cname,
-		)
-
-		infraContainers, err := i.client.Containers(i.nsctx, query)
-		if err == nil {
-			for j := range infraContainers {
-				if infraSpec, err := infraContainers[j].Spec(i.nsctx); err == nil {
-					if spec.Annotations["io.kubernetes.sandbox-id"] != infraSpec.Annotations["io.kubernetes.sandbox-id"] {
-						continue
-					}
-
-					if sandbox, found := infraSpec.Annotations["io.kubernetes.cri.sandbox-log-directory"]; found {
-						cp.Sandbox = sandbox
-
-						break
-					}
-				}
-			}
-		}
-	}
-
-	// Typically on actual application containers inside the pod/sandbox
-	if _, ok := info.Labels["io.kubernetes.container.name"]; ok {
-		cp.Name = info.Labels["io.kubernetes.container.name"]
-		cp.Display = cp.Display + ":" + info.Labels["io.kubernetes.container.name"]
-	}
+	_ = spec
+	_ = singleLookup
 
 	return cp, nil
 }
@@ -265,39 +207,7 @@ func (i *inspector) containerInfo(
 //
 //nolint:gocyclo
 func (i *inspector) Container(id string) (*ctrs.Container, error) {
-	var (
-		query           string
-		skipWithK8sName bool
-	)
-
-	// if id looks like k8s one, ns/pod:container, parse it and build query
-	slashIdx := strings.Index(id, "/") //nolint:modernize
-	if slashIdx > 0 {
-		name := ""
-		namespace, pod := id[:slashIdx], id[slashIdx+1:]
-
-		semicolonIdx := strings.LastIndex(pod, ":")
-		if semicolonIdx > 0 {
-			name = pod[semicolonIdx+1:]
-			pod = pod[:semicolonIdx]
-		}
-
-		query = fmt.Sprintf(
-			"labels.\"io.kubernetes.pod.namespace\"==%q,labels.\"io.kubernetes.pod.name\"==%q",
-			namespace,
-			pod,
-		)
-
-		if name != "" {
-			query += fmt.Sprintf(",labels.\"io.kubernetes.container.name\"==%q", name)
-		} else {
-			skipWithK8sName = true
-		}
-	} else {
-		query = fmt.Sprintf("id==%q", id)
-	}
-
-	containers, err := i.client.Containers(i.nsctx, query)
+	containers, err := i.client.Containers(i.nsctx, fmt.Sprintf("id==%q", id))
 	if err != nil {
 		return nil, err
 	}
@@ -309,16 +219,6 @@ func (i *inspector) Container(id string) (*ctrs.Container, error) {
 	var cntr *ctrs.Container
 
 	for j := range containers {
-		if skipWithK8sName {
-			var labels map[string]string
-
-			if labels, err = containers[j].Labels(i.nsctx); err == nil {
-				if _, found := labels["io.kubernetes.container.name"]; found {
-					continue
-				}
-			}
-		}
-
 		cntr, err = i.containerInfo(containers[j], nil, true)
 		if err == nil && cntr != nil {
 			break
