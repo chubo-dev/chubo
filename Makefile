@@ -584,7 +584,9 @@ unit-tests-fips: ## Performs unit tests with FIPS strict mode.
 
 .PHONY: chubo-guardrails
 chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
-	@$(MAKE) initramfs kernel sd-boot ARTIFACTS=_out/chubo GO_BUILDTAGS=tcell_minimal,grpcnotrace,chubo
+	@if [ "$(CHUBO_GUARDRAILS_SKIP_BUILD)" != "1" ]; then \
+		$(MAKE) $(if $(CHUBO_GUARDRAILS_BUILD_TARGETS),$(CHUBO_GUARDRAILS_BUILD_TARGETS),initramfs) ARTIFACTS=_out/chubo GO_BUILDTAGS=tcell_minimal,grpcnotrace,chubo; \
+	fi
 	@./hack/chubo/check-rootfs.sh _out/chubo/initramfs-arm64.xz
 	@./hack/chubo/check-go-deps.sh
 	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/machined-linux-arm64 ./internal/app/machined
