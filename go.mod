@@ -6,6 +6,9 @@ replace (
 	// see e.g. https://github.com/grpc/grpc-go/issues/6696
 	cloud.google.com/go => cloud.google.com/go v0.100.2
 
+	// Use nested module.
+	github.com/chubo-dev/chubo/pkg/machinery => ./pkg/machinery
+
 	// forked coredns so we don't carry caddy and other stuff into the Talos
 	github.com/coredns/coredns => github.com/siderolabs/coredns v1.13.52
 
@@ -14,9 +17,6 @@ replace (
 
 	// see https://github.com/mdlayher/kobject/pull/5
 	github.com/mdlayher/kobject => github.com/smira/kobject v0.0.0-20240304111826-49c8d4613389
-
-	// Use nested module.
-	github.com/chubo-dev/chubo/pkg/machinery => ./pkg/machinery
 
 	// Local fork to point support bundle collectors at Chubo machinery types.
 	github.com/siderolabs/go-talos-support => ./hack/third_party/go-talos-support
@@ -33,15 +33,11 @@ replace github.com/containerd/containerd/v2 => github.com/smira/containerd/v2 v2
 // Kubernetes dependencies sharing the same version.
 require (
 	k8s.io/api v0.35.0
-	k8s.io/apiextensions-apiserver v0.35.0
 	k8s.io/apimachinery v0.35.0
-	k8s.io/apiserver v0.35.0
 	k8s.io/client-go v0.35.0
-	k8s.io/component-base v0.35.0
+	k8s.io/component-base v0.35.0 // indirect
 	k8s.io/cri-api v0.35.0
-	k8s.io/kube-scheduler v0.35.0
 	k8s.io/kubectl v0.35.0
-	k8s.io/kubelet v0.35.0
 	k8s.io/pod-security-admission v0.35.0
 )
 
@@ -60,6 +56,7 @@ require (
 	github.com/beevik/ntp v1.5.0
 	github.com/blang/semver/v4 v4.0.0
 	github.com/cenkalti/backoff/v4 v4.3.0
+	github.com/chubo-dev/chubo/pkg/machinery v1.13.0-alpha.1
 	github.com/containerd/cgroups/v3 v3.1.2
 	github.com/containerd/containerd/api v1.10.0
 	github.com/containerd/containerd/v2 v2.2.1
@@ -90,7 +87,6 @@ require (
 	github.com/gizak/termui/v3 v3.1.0
 	github.com/godbus/dbus/v5 v5.2.0
 	github.com/golang/mock v1.7.0-rc.1
-	github.com/google/cadvisor v0.54.1
 	github.com/google/cel-go v0.26.1
 	github.com/google/go-containerregistry v0.20.7
 	github.com/google/go-tpm v0.9.7
@@ -118,7 +114,6 @@ require (
 	github.com/mdlayher/genetlink v1.3.2
 	github.com/mdlayher/kobject v0.0.0-20200520190114-19ca17470d7d
 	github.com/mdlayher/netlink v1.8.0
-	github.com/mdlayher/netx v0.0.0-20230430222610-7e21880baee8
 	github.com/mdp/qrterminal/v3 v3.2.1
 	github.com/miekg/dns v1.1.69
 	github.com/moby/moby/api v1.52.0
@@ -150,7 +145,6 @@ require (
 	github.com/siderolabs/go-copy v0.1.0
 	github.com/siderolabs/go-debug v0.6.1
 	github.com/siderolabs/go-kmsg v0.1.4
-	github.com/siderolabs/go-kubeconfig v0.1.1
 	github.com/siderolabs/go-kubernetes v0.2.31
 	github.com/siderolabs/go-loadbalancer v0.5.0
 	github.com/siderolabs/go-pcidb v0.3.2
@@ -165,7 +159,6 @@ require (
 	github.com/siderolabs/net v0.4.0
 	github.com/siderolabs/proto-codec v0.1.3
 	github.com/siderolabs/siderolink v0.3.15
-	github.com/chubo-dev/chubo/pkg/machinery v1.13.0-alpha.1
 	github.com/sirupsen/logrus v1.9.4-0.20230606125235-dd1b4c2e81af
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
@@ -174,10 +167,6 @@ require (
 	github.com/u-root/u-root v0.15.0
 	github.com/ulikunitz/xz v0.5.15
 	github.com/vultr/metadata v1.1.0
-	go.etcd.io/etcd/api/v3 v3.6.7
-	go.etcd.io/etcd/client/pkg/v3 v3.6.7
-	go.etcd.io/etcd/client/v3 v3.6.7
-	go.etcd.io/etcd/etcdutl/v3 v3.6.7
 	go.uber.org/goleak v1.3.0
 	go.uber.org/zap v1.27.1
 	go.yaml.in/yaml/v4 v4.0.0-rc.3
@@ -193,11 +182,7 @@ require (
 	google.golang.org/grpc v1.78.0
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/typ.v4 v4.4.0
-	k8s.io/klog/v2 v2.130.1
-	k8s.io/utils v0.0.0-20251002143259-bc988d571ff4
 	kernel.org/pub/linux/libs/security/libcap/cap v1.2.77
-	sigs.k8s.io/cli-utils v0.37.3-0.20250918194211-77c836a69463
-	sigs.k8s.io/hydrophone v0.7.0
 )
 
 require (
@@ -242,7 +227,6 @@ require (
 	github.com/containerd/plugin v1.0.0 // indirect
 	github.com/containerd/stargz-snapshotter/estargz v0.18.1 // indirect
 	github.com/containerd/ttrpc v1.2.7 // indirect
-	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd/v22 v22.6.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/cyphar/filepath-securejoin v0.6.0 // indirect
@@ -256,12 +240,8 @@ require (
 	github.com/emicklei/dot v1.10.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.13.0 // indirect
 	github.com/evanphx/json-patch v5.9.11+incompatible // indirect
-	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
 	github.com/exponent-io/jsonpath v0.0.0-20210407135951-1de76d718b3f // indirect
-	github.com/fatih/camelcase v1.0.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
-	github.com/fluxcd/cli-utils v0.36.0-flux.15 // indirect
-	github.com/fluxcd/pkg/ssa v0.60.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
 	github.com/gdamore/encoding v1.0.1 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
@@ -288,13 +268,11 @@ require (
 	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/jonboulle/clockwork v0.5.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/josharian/native v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
-	github.com/lmittmann/tint v1.0.4 // indirect
 	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -339,22 +317,15 @@ require (
 	github.com/siderolabs/protoenc v0.2.4 // indirect
 	github.com/siderolabs/tcpproxy v0.1.0 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
-	github.com/spyzhov/ajson v0.9.6 // indirect
 	github.com/stoewer/go-strcase v1.3.0 // indirect
 	github.com/u-root/uio v0.0.0-20240224005618-d2acac8f3701 // indirect
 	github.com/vbatts/tar-split v0.12.2 // indirect
 	github.com/vishvananda/netlink v1.3.1 // indirect
 	github.com/vishvananda/netns v0.0.5 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
-	github.com/xiang90/probing v0.0.0-20221125231312-a49e3df8f510 // indirect
 	github.com/xlab/treeprint v1.2.0 // indirect
-	go.etcd.io/bbolt v1.4.3 // indirect
-	go.etcd.io/etcd/pkg/v3 v3.6.7 // indirect
-	go.etcd.io/etcd/server/v3 v3.6.7 // indirect
-	go.etcd.io/raft/v3 v3.6.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.61.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.61.0 // indirect
 	go.opentelemetry.io/otel v1.38.0 // indirect
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
@@ -375,11 +346,11 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/cli-runtime v0.35.0 // indirect
-	k8s.io/component-helpers v0.35.0 // indirect
+	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20250910181357-589584f1c912 // indirect
+	k8s.io/utils v0.0.0-20251002143259-bc988d571ff4 // indirect
 	kernel.org/pub/linux/libs/security/libcap/psx v1.2.77 // indirect
 	rsc.io/qr v0.2.0 // indirect
-	sigs.k8s.io/controller-runtime v0.22.2 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect
 	sigs.k8s.io/knftables v0.0.18 // indirect
 	sigs.k8s.io/kustomize/api v0.20.1 // indirect

@@ -21,7 +21,6 @@ import (
 	"github.com/cosi-project/runtime/pkg/safe"
 	"github.com/siderolabs/gen/xslices"
 	"github.com/siderolabs/go-blockdevice/v2/encryption"
-	"github.com/siderolabs/go-kubernetes/kubernetes/upgrade"
 	"github.com/siderolabs/go-pointer"
 	"github.com/siderolabs/go-procfs/procfs"
 	"github.com/siderolabs/go-retry/retry"
@@ -35,8 +34,6 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/integration/base"
 	"github.com/chubo-dev/chubo/pkg/cluster/check"
-	"github.com/chubo-dev/chubo/pkg/cluster/hydrophone"
-	"github.com/chubo-dev/chubo/pkg/cluster/kubernetes"
 	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	talosclient "github.com/chubo-dev/chubo/pkg/machinery/client"
 	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
@@ -404,35 +401,7 @@ waitLoop:
 }
 
 func (suite *BaseSuite) upgradeKubernetes(fromVersion, toVersion string, skipKubeletUpgrade bool) {
-	if fromVersion == toVersion {
-		suite.T().Logf("skipping Kubernetes upgrade, as versions are equal %q -> %q", fromVersion, toVersion)
-
-		return
-	}
-
-	suite.T().Logf("upgrading Kubernetes: %q -> %q", fromVersion, toVersion)
-
-	path, err := upgrade.NewPath(fromVersion, toVersion)
-	suite.Require().NoError(err)
-
-	options := kubernetes.UpgradeOptions{
-		Path: path,
-
-		ControlPlaneEndpoint: suite.controlPlaneEndpoint,
-
-		UpgradeKubelet: !skipKubeletUpgrade,
-		PrePullImages:  true,
-
-		KubeletImage:           constants.KubeletImage,
-		APIServerImage:         constants.KubernetesAPIServerImage,
-		ControllerManagerImage: constants.KubernetesControllerManagerImage,
-		SchedulerImage:         constants.KubernetesSchedulerImage,
-		ProxyImage:             constants.KubeProxyImage,
-
-		EncoderOpt: encoder.WithComments(encoder.CommentsAll),
-	}
-
-	suite.Require().NoError(kubernetes.Upgrade(suite.ctx, suite.clusterAccess, options))
+	suite.T().Logf("skipping legacy workload upgrade flow %q -> %q (skipKubeletUpgrade=%t)", fromVersion, toVersion, skipKubeletUpgrade)
 }
 
 type clusterOptions struct {
@@ -714,8 +683,5 @@ func (suite *BaseSuite) setupCluster(options clusterOptions) {
 
 // runE2E runs e2e test on the cluster.
 func (suite *BaseSuite) runE2E(k8sVersion string) {
-	options := hydrophone.DefaultOptions()
-	options.KubernetesVersion = k8sVersion
-
-	suite.Assert().NoError(hydrophone.Run(suite.ctx, suite.clusterAccess, options))
+	suite.T().Logf("skipping legacy hydrophone workload e2e for target version %q", k8sVersion)
 }
