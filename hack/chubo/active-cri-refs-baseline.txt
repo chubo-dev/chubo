@@ -1,6 +1,4 @@
 ./go.mod:require k8s.io/cri-api v0.35.0
-./go.sum:k8s.io/cri-api v0.35.0 h1:fxLSKyJHqbyCSUsg1rW4DRpmjSEM/elZ1GXzYTSLoDQ=
-./go.sum:k8s.io/cri-api v0.35.0/go.mod h1:Cnt29u/tYl1Se1cBRL30uSZ/oJ5TaIp4sZm1xDLvcMc=
 ./hack/chubo/check-runtime-surface.sh:	cri
 ./internal/pkg/containers/cri/containerd/config.go:	CRI RuntimeConfig `toml:"io.containerd.cri.v1.images"`
 ./internal/pkg/containers/cri/containerd/config.go:// PluginsConfig represents the CRI plugins config.

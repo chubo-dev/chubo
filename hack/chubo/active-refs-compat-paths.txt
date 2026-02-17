@@ -2,7 +2,6 @@
 # Any match outside this list is treated as forbidden by check-active-refs.sh.
 ./Makefile
 ./go.mod
-./go.sum
 ./hack/chubo/check-go-deps.sh
 ./hack/chubo/check-rootfs.sh
 ./hack/chubo/check-runtime-surface.sh
@@ -11,11 +10,7 @@
 ./hack/release.sh
 ./hack/release.toml
 ./hack/start-registry-proxies.sh
-./hack/third_party/go-talos-support/go.sum
-./internal/app/machined/pkg/controllers/secrets/data/ca-certificates
 ./internal/pkg/containers/cri
 ./internal/pkg/cri
 ./pkg/machinery/constants/constants.go
-./pkg/machinery/go.sum
 ./tools/go.mod
-./tools/go.sum

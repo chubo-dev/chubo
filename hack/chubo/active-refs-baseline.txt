@@ -6,12 +6,6 @@
 ./go.mod:	sigs.k8s.io/knftables v0.0.18 // indirect
 ./go.mod:// Kubernetes dependencies sharing the same version.
 ./go.mod:require k8s.io/cri-api v0.35.0
-./go.sum:github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
-./go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
-./go.sum:k8s.io/cri-api v0.35.0 h1:fxLSKyJHqbyCSUsg1rW4DRpmjSEM/elZ1GXzYTSLoDQ=
-./go.sum:k8s.io/cri-api v0.35.0/go.mod h1:Cnt29u/tYl1Se1cBRL30uSZ/oJ5TaIp4sZm1xDLvcMc=
-./go.sum:sigs.k8s.io/knftables v0.0.18 h1:6Duvmu0s/HwGifKrtl6G3AyAPYlWiZqTgS8bkVMiyaE=
-./go.sum:sigs.k8s.io/knftables v0.0.18/go.mod h1:f/5ZLKYEUPUhVjUCg6l80ACdL7CIIyeL0DxfgojGRTk=
 ./hack/chubo/check-go-deps.sh:		echo "# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*"
 ./hack/chubo/check-go-deps.sh:	sort -u "${target_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${target_forbidden}" || true
 ./hack/chubo/check-go-deps.sh:# - forbidden prefixes: k8s.io/* and go.etcd.io/etcd/*
@@ -28,11 +22,6 @@
 ./hack/chubo/check-runtime-surface.sh:	kubelet
 ./hack/chubo/check-runtime-surface.sh:# Kubernetes/etcd listeners must stay absent in chubo baseline.
 ./hack/chubo/forbidden-go-deps-baseline.txt:# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*
-./hack/third_party/go-talos-support/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
-./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:DgQWBBQahGK8SEwzJQTU7tD2A8QZRtGUazBuBgNVHSMEZzBlgBQahGK8SEwzJQTU7tD2A8QZRtGU
-./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:bjPsMZ57k8HkyWkaPcBrTiJt7qtYTcbQQcEr6k8Sh17rRdhs9ZgC06DYVYoGmRmioHfRMJ6szHXu
-./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:hsI6yLETcDbYz+70CjTVW0z9B5yiutkBclzzTcHdDrEcDcRjvq30FPuJ7KJBDkzMyFdA0G4Dqs0M
-./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:ywaK8SJJ6ejqkX/GM15oGQOGO0MBzwdw5AgeZYWR5hEit/UCI46uuR59H35s5r0l1ZUa8gWmr4UC
 ./internal/pkg/containers/cri/cri.go:					"io.kubernetes.pod.name":      pod,
 ./internal/pkg/containers/cri/cri.go:					"io.kubernetes.pod.namespace": namespace,
 ./internal/pkg/containers/cri/cri.go:				"io.kubernetes.container.name": name,
@@ -46,12 +35,4 @@
 ./internal/pkg/cri/images.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 ./internal/pkg/cri/pods.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 ./pkg/machinery/constants/constants.go:	WorkloadContainerdNamespace = "k8s.io"
-./pkg/machinery/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
 ./tools/go.mod:	go.etcd.io/bbolt v1.4.3 // indirect
-./tools/go.sum:github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
-./tools/go.sum:github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
-./tools/go.sum:go.etcd.io/bbolt v1.4.3 h1:dEadXpI6G79deX5prL3QRNP6JB8UxVkqo4UPnHaNXJo=
-./tools/go.sum:go.etcd.io/bbolt v1.4.3/go.mod h1:tKQlpPaYCVFctUIgFKFnAlvbmB3tpy1vkTnDWohtc0E=
-./tools/go.sum:go.etcd.io/etcd/api/v3 v3.5.1/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
-./tools/go.sum:go.etcd.io/etcd/client/pkg/v3 v3.5.1/go.mod h1:IJHfcCEKxYu1Os13ZdwCwIUTUVGYTSAM3YSwc9/Ac1g=
-./tools/go.sum:go.etcd.io/etcd/client/v2 v2.305.1/go.mod h1:pMEacxZW7o8pg4CrFE7pquyCJJzZvkvdD2RibOCCCGs=

@@ -45,6 +45,8 @@ rg_common_excludes=(
 	--glob '!**/*.pb.go'
 	--glob '!**/*_vtproto.pb.go'
 	--glob '!**/*.binpb'
+	--glob '!**/go.sum'
+	--glob '!internal/app/machined/pkg/controllers/secrets/data/ca-certificates'
 	--glob '!hack/chubo/check-active-refs.sh'
 	--glob '!hack/chubo/active-refs-compat-paths.txt'
 	--glob '!hack/chubo/active-refs-baseline.txt'
