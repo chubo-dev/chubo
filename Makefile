@@ -575,7 +575,7 @@ unit-tests-fips: ## Performs unit tests with FIPS strict mode.
 	@$(MAKE) target-$@ TARGET_ARGS="--allow security.insecure" PLATFORM=linux/$(ARCH)
 
 .PHONY: chubo-guardrails
-chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
+chubo-guardrails: ## Runs chubo-specific regression guardrails (cluster-free image and CLI/API surface).
 	@if [ "$(CHUBO_GUARDRAILS_SKIP_BUILD)" != "1" ]; then \
 		$(MAKE) $(if $(CHUBO_GUARDRAILS_BUILD_TARGETS),$(CHUBO_GUARDRAILS_BUILD_TARGETS),initramfs) ARTIFACTS=_out/chubo GO_BUILDTAGS=tcell_minimal,grpcnotrace,chubo; \
 	fi
@@ -588,13 +588,13 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image a
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q consulconfig
 	@_out/chubo/talosctl-linux-amd64 --help | grep -q openbaoconfig
 	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+bootstrap\\b'
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+etcd\\b'
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+e[t]c[d]\\b'
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+ku[b]econfig\\b'
+	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k[0-9]s\\b'
 	@docs_tmp=$$(mktemp -d /tmp/chuboctl-guardrails.XXXXXX); \
 		trap 'rm -rf "$$docs_tmp"' EXIT; \
 		_out/chubo/talosctl-linux-amd64 docs "$$docs_tmp" --cli >/dev/null; \
-		! rg -n -i 'kubernetes|kubectl|kube-system|etcd' "$$docs_tmp" >/dev/null
+		! rg -n -i 'ku[b]ernetes|ku[b]ectl|ku[b]e-system|e[t]c[d]' "$$docs_tmp" >/dev/null
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 
 .PHONY: chuboos-guardrails

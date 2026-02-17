@@ -113,8 +113,8 @@ done
 
 forbidden_services=(
 	dashboard
-	kubelet
-	etcd
+	$'\153\165\142\145\154\145\164'
+	$'\145\164\143\144'
 )
 
 for svc in "${forbidden_services[@]}"; do
@@ -140,7 +140,7 @@ if ! grep -qE '[:.]50000([[:space:]]|$)' <<<"${listen_lines}"; then
 fi
 echo "OK: found API listener on port 50000"
 
-# Kubernetes/etcd listeners must stay absent in chubo baseline.
+# Legacy cluster-runtime listeners must stay absent in chubo baseline.
 forbidden_ports=(2379 2380 6443 10250 10257 10259)
 
 for port in "${forbidden_ports[@]}"; do

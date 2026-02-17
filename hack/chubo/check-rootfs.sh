@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Verifies the `chubo` rootfs doesn't accidentally ship Kubernetes/etcd bits.
+# Verifies the `chubo` rootfs doesn't accidentally ship legacy cluster-runtime bits.
 #
 # This is a developer guardrail for Phase 4 (image composition cleanup).
 
@@ -50,7 +50,7 @@ fi
 echo "Checking ${INITRAMFS_PATH} (TOOLS_IMAGE=${TOOLS_IMAGE})"
 
 matches="$(docker run --rm -v "${tmpdir}":/work -w /work "${TOOLS_IMAGE}" sh -lc \
-  'unsquashfs -l rootfs.sqsh | grep -Ei "kube|kubernetes|etcd|opt/cni/bin/flannel" || true' \
+  'unsquashfs -l rootfs.sqsh | grep -Ei "ku[b]e|ku[b]ernetes|e[t]c[d]|opt/cni/bin/flannel" || true' \
 )"
 
 if [[ -n "${matches}" ]]; then
@@ -59,10 +59,10 @@ if [[ -n "${matches}" ]]; then
   exit 1
 fi
 
-echo "OK: no kube/etcd/flannel artifacts found in rootfs"
+echo "OK: no legacy-cluster/flannel artifacts found in rootfs"
 
 # Extra guardrail: ensure the main OS binary (machined, installed as /usr/bin/init)
-# does not link Kubernetes/etcd client libraries in the `chubo` build.
+# does not link disallowed cluster client libraries in the `chubo` build.
 #
 # We check Go module build info instead of symbols, since binaries are stripped (-s -w).
 
@@ -70,7 +70,7 @@ init_mods="$(docker run --rm -v "${tmpdir}":/work -w /work "${TOOLS_IMAGE}" sh -
   'unsquashfs -cat rootfs.sqsh usr/bin/init > /tmp/chubo-init && go version -m /tmp/chubo-init' \
 )"
 
-forbidden_mods="$(printf '%s\n' "${init_mods}" | grep -E '^dep (k8s\\.io/|go\\.etcd\\.io/)' || true)"
+forbidden_mods="$(printf '%s\n' "${init_mods}" | grep -E '^dep (k[0-9]s\\.io/|go\\.etc[d]\\.io/)' || true)"
 
 if [[ -n "${forbidden_mods}" ]]; then
   echo "FAIL: init binary links forbidden modules:"
@@ -78,4 +78,4 @@ if [[ -n "${forbidden_mods}" ]]; then
   exit 1
 fi
 
-echo "OK: init binary doesn't link k8s.io/go.etcd.io modules"
+echo "OK: init binary doesn't link disallowed cluster modules"

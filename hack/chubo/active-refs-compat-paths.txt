@@ -13,4 +13,3 @@
 ./internal/pkg/containers/cri
 ./internal/pkg/cri
 ./pkg/machinery/constants/constants.go
-./tools/go.mod
