@@ -30,9 +30,6 @@ replace (
 // this a fork with containerd 2.2 branch + the commit from the PR above
 replace github.com/containerd/containerd/v2 => github.com/smira/containerd/v2 v2.2.2-0.20260206164215-4ccae6e909bc
 
-// Kubernetes dependencies sharing the same version.
-require k8s.io/cri-api v0.35.0
-
 require (
 	cloud.google.com/go/compute/metadata v0.9.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0
@@ -267,8 +264,6 @@ require (
 	github.com/moby/sys/userns v0.1.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/nsf/termbox-go v0.0.0-20190121233118-02980233997d // indirect
-	github.com/onsi/ginkgo/v2 v2.27.2 // indirect
-	github.com/onsi/gomega v1.38.2 // indirect
 	github.com/opencontainers/selinux v1.13.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/petermattis/goid v0.0.0-20250508124226-395b08cebbdb // indirect

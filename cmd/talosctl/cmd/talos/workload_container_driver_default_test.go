@@ -15,7 +15,7 @@ import (
 func TestWorkloadContainerDriverDefault(t *testing.T) {
 	t.Parallel()
 
-	if got := workloadContainerDriver(); got != common.ContainerDriver_CRI {
-		t.Fatalf("expected CRI driver, got %v", got)
+	if got := workloadContainerDriver(); got != common.ContainerDriver_CONTAINERD {
+		t.Fatalf("expected containerd driver, got %v", got)
 	}
 }

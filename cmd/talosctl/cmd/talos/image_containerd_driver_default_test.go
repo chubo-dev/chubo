@@ -15,7 +15,7 @@ import (
 func TestSystemContainerDriverDefault(t *testing.T) {
 	t.Parallel()
 
-	if got := systemContainerDriver(); got != common.ContainerDriver_CRI {
-		t.Fatalf("expected CRI driver, got %v", got)
+	if got := systemContainerDriver(); got != common.ContainerDriver_CONTAINERD {
+		t.Fatalf("expected containerd driver, got %v", got)
 	}
 }

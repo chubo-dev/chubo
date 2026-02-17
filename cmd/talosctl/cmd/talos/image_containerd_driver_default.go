@@ -9,5 +9,5 @@ package talos
 import "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 
 func systemContainerDriver() common.ContainerDriver {
-	return common.ContainerDriver_CRI
+	return common.ContainerDriver_CONTAINERD
 }

@@ -1,4 +1,3 @@
-./go.mod:require k8s.io/cri-api v0.35.0
 ./hack/chubo/check-runtime-surface.sh:	cri
 ./internal/pkg/containers/cri/containerd/config.go:	CRI RuntimeConfig `toml:"io.containerd.cri.v1.images"`
 ./internal/pkg/containers/cri/containerd/config.go:// PluginsConfig represents the CRI plugins config.
@@ -8,25 +7,3 @@
 ./internal/pkg/containers/cri/containerd/containerd.go:	ctrdCfg.Plugins.CRI.Registry.Configs = make(map[string]RegistryConfig)
 ./internal/pkg/containers/cri/containerd/containerd.go:// GenerateCRIConfig returns a part of CRI config for registry auth.
 ./internal/pkg/containers/cri/containerd/containerd.go:// Package containerd provides support for containerd CRI plugin
-./internal/pkg/containers/cri/cri.go:	// CRI doesn't seem to have an easy way to do that
-./internal/pkg/containers/cri/cri.go:	// I'm sure that we can proabably find container using CRI labels, but
-./internal/pkg/containers/cri/cri.go:	criclient "github.com/chubo-dev/chubo/internal/pkg/cri"
-./internal/pkg/containers/cri/cri.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-./internal/pkg/containers/cri/cri.go:// NewInspector builds new Inspector instance for CRI.
-./internal/pkg/containers/cri/cri.go:// Package cri implements containers.Inspector via CRI
-./internal/pkg/containers/cri/cri.go:// WithCRIEndpoint configures CRI endpoint to use.
-./internal/pkg/containers/cri/cri.go:package cri
-./internal/pkg/cri/client.go:		return nil, fmt.Errorf("error connecting to CRI: %w", err)
-./internal/pkg/cri/client.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-./internal/pkg/cri/client.go:// Client is a lightweight implementation of CRI client.
-./internal/pkg/cri/client.go:// NewClient builds CRI client.
-./internal/pkg/cri/client.go:package cri
-./internal/pkg/cri/client.go:var newClientPprof = pprof.NewProfile("internal/pkg/cri.NewClient")
-./internal/pkg/cri/containers.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-./internal/pkg/cri/containers.go:package cri
-./internal/pkg/cri/cri.go:// Package cri provides minimal CRI client.
-./internal/pkg/cri/cri.go:package cri
-./internal/pkg/cri/images.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-./internal/pkg/cri/images.go:package cri
-./internal/pkg/cri/pods.go:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-./internal/pkg/cri/pods.go:package cri

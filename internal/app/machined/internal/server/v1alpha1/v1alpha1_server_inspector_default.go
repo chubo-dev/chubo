@@ -8,32 +8,25 @@ package runtime
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/chubo-dev/chubo/internal/pkg/containers"
 	taloscontainerd "github.com/chubo-dev/chubo/internal/pkg/containers/containerd"
-	"github.com/chubo-dev/chubo/internal/pkg/containers/cri"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/common"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func getContainerInspector(ctx context.Context, namespace string, driver common.ContainerDriver) (containers.Inspector, error) {
-	switch driver {
-	case common.ContainerDriver_CRI:
-		if namespace != constants.WorkloadContainerdNamespace {
-			return nil, errors.New("CRI inspector is supported only for the workload namespace")
-		}
-
-		return cri.NewInspector(ctx)
-	case common.ContainerDriver_CONTAINERD:
-		addr := constants.WorkloadContainerdAddress
-		if namespace == constants.SystemContainerdNamespace {
-			addr = constants.SystemContainerdAddress
-		}
-
-		return taloscontainerd.NewInspector(ctx, namespace, taloscontainerd.WithContainerdAddress(addr))
-	default:
+	if driver != common.ContainerDriver_CONTAINERD {
 		return nil, fmt.Errorf("unsupported driver %q", driver)
+	}
+
+	switch namespace {
+	case constants.WorkloadContainerdNamespace:
+		return taloscontainerd.NewInspector(ctx, namespace, taloscontainerd.WithContainerdAddress(constants.WorkloadContainerdAddress))
+	case constants.SystemContainerdNamespace:
+		return taloscontainerd.NewInspector(ctx, namespace, taloscontainerd.WithContainerdAddress(constants.SystemContainerdAddress))
+	default:
+		return nil, fmt.Errorf("unsupported namespace %q", namespace)
 	}
 }
