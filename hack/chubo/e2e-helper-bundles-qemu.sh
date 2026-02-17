@@ -445,10 +445,7 @@ dump_chubo_debug() {
 cleanup() {
 	set +e
 
-	if [[ "${OPENGYOZA_MIRROR_PID}" -gt 0 ]]; then
-		kill "${OPENGYOZA_MIRROR_PID}" >/dev/null 2>&1 || true
-		OPENGYOZA_MIRROR_PID=0
-	fi
+	stop_opengyoza_mirror
 
 	if [[ "${QEMU_INSTALL_PID}" -gt 0 ]]; then
 		kill "${QEMU_INSTALL_PID}" >/dev/null 2>&1 || true
@@ -463,6 +460,16 @@ cleanup() {
 	fi
 
 	chown_run_dir_to_invoker
+}
+
+stop_opengyoza_mirror() {
+	if [[ "${OPENGYOZA_MIRROR_PID}" -le 0 ]]; then
+		return 0
+	fi
+
+	kill "${OPENGYOZA_MIRROR_PID}" >/dev/null 2>&1 || true
+	wait "${OPENGYOZA_MIRROR_PID}" >/dev/null 2>&1 || true
+	OPENGYOZA_MIRROR_PID=0
 }
 
 trap cleanup EXIT
@@ -693,6 +700,9 @@ fi
 
 echo "waiting for openbao Nomad job controller"
 wait_until "openbaojobstatus (present)" "${TIMEOUT_SECONDS}" openbao_job_ready
+
+# Artifact download is complete once services are healthy; stop mirror to avoid hanging on shell exit.
+stop_opengyoza_mirror
 
 echo "downloading helper bundles"
 mkdir -p "${HELPERS_DIR}"

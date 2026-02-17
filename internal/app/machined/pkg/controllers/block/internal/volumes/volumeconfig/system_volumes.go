@@ -319,6 +319,16 @@ var standardVolumeDefinitions = []struct {
 		SELinuxLabel: "system_u:object_r:cni_state_t:s0",
 	},
 	{
+		Path:         "/var/lib/workload",
+		Mode:         0o700,
+		SELinuxLabel: constants.EphemeralSelinuxLabel,
+	},
+	{
+		Path:         "/var/lib/workload/seccomp",
+		Mode:         0o700,
+		SELinuxLabel: "system_u:object_r:seccomp_profile_t:s0",
+	},
+	{
 		Path:         constants.WorkloadSeccompProfilesDirectory,
 		Mode:         0o700,
 		Recursive:    true,
