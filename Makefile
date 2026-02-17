@@ -583,17 +583,17 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (cluster-free ima
 	@./hack/chubo/check-go-deps.sh
 	@./hack/chubo/check-active-refs.sh
 	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/machined-linux-arm64 ./internal/app/machined
-	@go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/talosctl-linux-amd64 ./cmd/talosctl
-	@_out/chubo/talosctl-linux-amd64 --help | grep -q nomadconfig
-	@_out/chubo/talosctl-linux-amd64 --help | grep -q consulconfig
-	@_out/chubo/talosctl-linux-amd64 --help | grep -q openbaoconfig
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+bootstrap\\b'
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+e[t]c[d]\\b'
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+ku[b]econfig\\b'
-	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k[0-9]s\\b'
+	@go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/chuboctl-linux-amd64 ./cmd/chuboctl
+	@_out/chubo/chuboctl-linux-amd64 --help | grep -q nomadconfig
+	@_out/chubo/chuboctl-linux-amd64 --help | grep -q consulconfig
+	@_out/chubo/chuboctl-linux-amd64 --help | grep -q openbaoconfig
+	@! _out/chubo/chuboctl-linux-amd64 --help | grep -qE '^[[:space:]]+bootstrap\\b'
+	@! _out/chubo/chuboctl-linux-amd64 --help | grep -qE '^[[:space:]]+e[t]c[d]\\b'
+	@! _out/chubo/chuboctl-linux-amd64 --help | grep -qE '^[[:space:]]+ku[b]econfig\\b'
+	@! _out/chubo/chuboctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k[0-9]s\\b'
 	@docs_tmp=$$(mktemp -d /tmp/chuboctl-guardrails.XXXXXX); \
 		trap 'rm -rf "$$docs_tmp"' EXIT; \
-		_out/chubo/talosctl-linux-amd64 docs "$$docs_tmp" --cli >/dev/null; \
+		_out/chubo/chuboctl-linux-amd64 docs "$$docs_tmp" --cli >/dev/null; \
 		! rg -n -i 'ku[b]ernetes|ku[b]ectl|ku[b]e-system|e[t]c[d]' "$$docs_tmp" >/dev/null
 	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 

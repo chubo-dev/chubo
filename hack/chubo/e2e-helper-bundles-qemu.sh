@@ -15,8 +15,8 @@ GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 
-TALOSCTL_BASE="${TALOSCTL_BASE:-${TALOS_ROOT}/_out/talosctl-${HOST_GOOS}-${HOST_GOARCH}}"
-TALOSCTL_CHUBO="${TALOSCTL_CHUBO:-${TALOS_ROOT}/_out/chubo/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+CHUBOCTL_BASE="${CHUBOCTL_BASE:-${TALOSCTL_BASE:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL_CHUBO="${CHUBOCTL_CHUBO:-${TALOSCTL_CHUBO:-${TALOS_ROOT}/_out/chubo/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 
 REGISTRY_NAME="${REGISTRY_NAME:-chubo-helper-registry}"
 REGISTRY_PORT="${REGISTRY_PORT:-5001}"
@@ -330,7 +330,7 @@ parse_bridged_ip() {
 	awk '
 		{
 			for (i = 1; i <= NF; i++) {
-				# talosctl prints addresses as either "<ip>/<cidr>" or "<iface>/<ip>/<cidr>".
+				# chuboctl prints addresses as either "<ip>/<cidr>" or "<iface>/<ip>/<cidr>".
 				if ($i ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\/[0-9]+$/) {
 					ip = $i
 					sub(/\/.*/, "", ip)
@@ -358,7 +358,7 @@ parse_bridged_ip() {
 openwonton_ready() {
 	local output
 
-	if ! output="$("${TALOSCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+	if ! output="$("${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -368,7 +368,7 @@ openwonton_ready() {
 opengyoza_ready() {
 	local output
 
-	if ! output="$("${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+	if ! output="$("${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -378,7 +378,7 @@ opengyoza_ready() {
 openbao_job_ready() {
 	local output
 
-	if ! output="$("${TALOSCTL_CHUBO}" get openbaojobstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+	if ! output="$("${CHUBOCTL_CHUBO}" get openbaojobstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -395,41 +395,41 @@ dump_chubo_debug() {
 	echo
 
 	echo "-- openwontonstatus (json)"
-	"${TALOSCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- openwontonstatus (yaml)"
-	"${TALOSCTL_CHUBO}" get openwontonstatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- opengyozastatus (json)"
-	"${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- opengyozastatus (yaml)"
-	"${TALOSCTL_CHUBO}" get opengyozastatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- node time (runtime API)"
-	"${TALOSCTL_CHUBO}" time --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" time --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- openwonton TLS cert (subject/dates)"
-	"${TALOSCTL_CHUBO}" read /var/lib/chubo/certs/openwonton/server.pem --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+	"${CHUBOCTL_CHUBO}" read /var/lib/chubo/certs/openwonton/server.pem --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
 		| openssl x509 -noout -subject -dates 2>/dev/null || true
 	echo
 
 	echo "-- opengyoza TLS cert (subject/dates)"
-	"${TALOSCTL_CHUBO}" read /var/lib/chubo/certs/opengyoza/server.pem --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+	"${CHUBOCTL_CHUBO}" read /var/lib/chubo/certs/opengyoza/server.pem --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
 		| openssl x509 -noout -subject -dates 2>/dev/null || true
 	echo
 
 	echo "-- v1alpha1 service openwonton (yaml)"
-	"${TALOSCTL_CHUBO}" get svc --namespace v1alpha1 openwonton -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get svc --namespace v1alpha1 openwonton -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- v1alpha1 service opengyoza (yaml)"
-	"${TALOSCTL_CHUBO}" get svc --namespace v1alpha1 opengyoza -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get svc --namespace v1alpha1 opengyoza -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- qemu logs (tail)"
@@ -503,31 +503,31 @@ fi
 
 ensure_opengyoza_artifact_url
 
-if [[ "${SKIP_BUILD}" -eq 1 && -x "${TALOSCTL_BASE}" ]]; then
-	echo "SKIP_BUILD=1, reusing existing talosctl: ${TALOSCTL_BASE}"
+if [[ "${SKIP_BUILD}" -eq 1 && -x "${CHUBOCTL_BASE}" ]]; then
+	echo "SKIP_BUILD=1, reusing existing chuboctl: ${CHUBOCTL_BASE}"
 else
-	# talosctl is used for PKI/secrets generation; rebuild when not explicitly reusing artifacts.
-	make talosctl
+	# chuboctl is used for PKI/secrets generation; rebuild when not explicitly reusing artifacts.
+	make chuboctl
 fi
 
 # When iterating locally we want the CLI to reflect the current worktree (config rendering,
 # helper bundle surfaces, etc). The rebuild cost is small compared to the QEMU flow.
 rebuild_chuboctl=0
-if [[ ! -x "${TALOSCTL_CHUBO}" ]]; then
+if [[ ! -x "${CHUBOCTL_CHUBO}" ]]; then
 	rebuild_chuboctl=1
-elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
+elif ! "${CHUBOCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--with-chubo'; then
 	# The helper-bundles E2E depends on newer `gen machineconfig` flags.
 	rebuild_chuboctl=1
-elif ! "${TALOSCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--opengyoza-artifact-url'; then
+elif ! "${CHUBOCTL_CHUBO}" gen machineconfig --help 2>&1 | rg -q -- '--opengyoza-artifact-url'; then
 	rebuild_chuboctl=1
 fi
 
 if [[ "${rebuild_chuboctl}" -eq 1 ]]; then
-	mkdir -p "$(dirname "${TALOSCTL_CHUBO}")"
+	mkdir -p "$(dirname "${CHUBOCTL_CHUBO}")"
 
 	GOOS="${HOST_GOOS}" GOARCH="${HOST_GOARCH}" CGO_ENABLED=0 go build \
 		-tags grpcnotrace,chubo \
-		-o "${TALOSCTL_CHUBO}" \
+		-o "${CHUBOCTL_CHUBO}" \
 		./cmd/chuboctl
 fi
 
@@ -603,7 +603,7 @@ else
 fi
 
 echo "generating secrets + machine config"
-"${TALOSCTL_BASE}" gen secrets -o "${SECRETS_FILE}"
+"${CHUBOCTL_BASE}" gen secrets -o "${SECRETS_FILE}"
 gen_mc_args=(
 	--with-secrets "${SECRETS_FILE}"
 	--install-disk /dev/vdb
@@ -620,7 +620,7 @@ if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
 	gen_mc_args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")
 fi
 
-"${TALOSCTL_CHUBO}" gen machineconfig "${gen_mc_args[@]}"
+"${CHUBOCTL_CHUBO}" gen machineconfig "${gen_mc_args[@]}"
 
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
 runtime_tmp="${MACHINECONFIG_RUNTIME}.tmp"
@@ -631,7 +631,7 @@ sed \
 	"${MACHINECONFIG_RUNTIME}" >"${runtime_tmp}"
 mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 
-"${TALOSCTL_BASE}" gen config chubo https://0.0.0.0:6443 \
+"${CHUBOCTL_BASE}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
 	-o "${TALOSCONFIG_FILE}"
@@ -649,9 +649,9 @@ VMNET_ENABLE="${VMNET_ENABLE}" VMNET_MAC="${VMNET_MAC}" QEMU_RUNDIR="${RUN_DIR}"
 QEMU_INSTALL_PID=$!
 
 wait_until "maintenance API (install media)" "${TIMEOUT_SECONDS}" \
-	"${TALOSCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1
+	"${CHUBOCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1
 
-"${TALOSCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1 >"${RUN_DIR}/addresses-install.txt"
+"${CHUBOCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1 >"${RUN_DIR}/addresses-install.txt"
 NODE_IP="$(parse_bridged_ip "${RUN_DIR}/addresses-install.txt")"
 if [[ -z "${NODE_IP}" ]]; then
 	echo "no bridged node IP discovered; falling back to hostfwd runtime API (127.0.0.1:${HOST_PORT})" >&2
@@ -661,7 +661,7 @@ if [[ -z "${NODE_IP}" ]]; then
 fi
 
 echo "applying install config"
-"${TALOSCTL_CHUBO}" apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f "${MACHINECONFIG_INSTALL}" || true
+"${CHUBOCTL_CHUBO}" apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f "${MACHINECONFIG_INSTALL}" || true
 
 wait_until "installer completion marker" "${TIMEOUT_SECONDS}" \
 	rg -q "installation of .* complete" "${LOG_INSTALL}"
@@ -679,13 +679,13 @@ VMNET_ENABLE="${VMNET_ENABLE}" VMNET_MAC="${VMNET_MAC}" QEMU_RUNDIR="${RUN_DIR}"
 QEMU_DISK_PID=$!
 
 wait_until "maintenance API (installed disk)" "${TIMEOUT_SECONDS}" \
-	"${TALOSCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1
+	"${CHUBOCTL_CHUBO}" get addresses --insecure -e 127.0.0.1 -n 127.0.0.1
 
 echo "applying runtime config and rebooting into runtime API"
-"${TALOSCTL_CHUBO}" apply-config -i -m reboot -e 127.0.0.1 -n 127.0.0.1 -f "${MACHINECONFIG_RUNTIME}" || true
+"${CHUBOCTL_CHUBO}" apply-config -i -m reboot -e 127.0.0.1 -n 127.0.0.1 -f "${MACHINECONFIG_RUNTIME}" || true
 
 wait_until "runtime mTLS API (${NODE_IP})" "${TIMEOUT_SECONDS}" \
-	"${TALOSCTL_CHUBO}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL_CHUBO}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 echo "waiting for openwonton/opengyoza health + ACL bootstrap"
 if ! wait_until "openwontonstatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" openwonton_ready; then
@@ -706,9 +706,9 @@ stop_opengyoza_mirror
 
 echo "downloading helper bundles"
 mkdir -p "${HELPERS_DIR}"
-"${TALOSCTL_CHUBO}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-"${TALOSCTL_CHUBO}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-"${TALOSCTL_CHUBO}" openbaoconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL_CHUBO}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL_CHUBO}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL_CHUBO}" openbaoconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 for bundle in nomadconfig consulconfig openbaoconfig; do
 	dir="${HELPERS_DIR}/${bundle}"
@@ -740,7 +740,7 @@ done
 	echo "run=${RUN_DIR}"
 	echo "node_ip=${NODE_IP}"
 	echo "installer_tag=${INSTALLER_TAG}"
-	"${TALOSCTL_CHUBO}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+	"${CHUBOCTL_CHUBO}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
 		| awk 'BEGIN{s=0} /^Server:/{s=1; next} s && /^\tTag:/{print "server_tag=" $2} s && /^\tSHA:/{print "server_sha=" $2}'
 	echo "nomad_addr=$(awk -F= '/^NOMAD_ADDR=/{print $2}' "${HELPERS_DIR}/nomadconfig/nomad.env")"
 	echo "consul_addr=$(awk -F= '/^CONSUL_HTTP_ADDR=/{print $2}' "${HELPERS_DIR}/consulconfig/consul.env")"

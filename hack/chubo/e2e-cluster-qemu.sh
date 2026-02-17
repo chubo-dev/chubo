@@ -18,7 +18,7 @@ ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 
 CONTROLPLANE_COUNT="${CONTROLPLANE_COUNT:-3}"
@@ -180,8 +180,12 @@ start_registry() {
 cleanup() {
 	set +e
 
+	if [[ -n "${NOMAD_API_NODE_IP:-}" && ${#NOMAD_CURL_ARGS[@]} -gt 0 ]]; then
+		curl -fsS --max-time 5 "${NOMAD_CURL_ARGS[@]}" -X DELETE "https://${NOMAD_API_NODE_IP}:4646/v1/job/chubo-cluster-e2e-${RUN_ID}?purge=true" >/dev/null 2>&1 || true
+	fi
+
 	if ((cluster_created == 1)); then
-		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
+		"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
 			--provisioner qemu >/dev/null 2>&1
 	fi
 
@@ -218,7 +222,7 @@ cleanup_stale_clusters() {
 			cluster_name="$(basename "${cluster_dir}")"
 
 			echo "destroying stale cluster ${cluster_name} (state dir ${state_root})"
-			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			"${CHUBOCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
 		done
 	done
 
@@ -232,7 +236,7 @@ service_is_up() {
 	local node_ip="$1"
 	local service_name="$2"
 
-	"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" service "${service_name}" 2>/dev/null |
+	"${CHUBOCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" service "${service_name}" 2>/dev/null |
 		grep -qi "Health check successful"
 }
 
@@ -248,14 +252,14 @@ wait_for_maintenance() {
 	local node_ip="$1"
 
 	wait_until "maintenance API on ${node_ip}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" get addresses --insecure -e "${node_ip}" -n "${node_ip}"
+		"${CHUBOCTL}" get addresses --insecure -e "${node_ip}" -n "${node_ip}"
 }
 
 wait_for_runtime() {
 	local node_ip="$1"
 
 	wait_until "runtime mTLS API on ${node_ip}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+		"${CHUBOCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 }
 
 apply_install_and_wait() {
@@ -264,7 +268,7 @@ apply_install_and_wait() {
 	local runtime_cfg="$3"
 
 	echo "applying install config to ${node_ip}"
-	"${TALOSCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${install_cfg}"
+	"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${install_cfg}"
 
 	echo "waiting for post-install transition on ${node_ip}"
 	local transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
@@ -274,12 +278,12 @@ apply_install_and_wait() {
 	local runtime_config_applied=0
 
 	while true; do
-		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
+		if "${CHUBOCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
 			echo "${node_ip}: runtime mTLS became available after install apply"
 			break
 		fi
 
-		if "${TALOSCTL}" get addresses --insecure -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
+		if "${CHUBOCTL}" get addresses --insecure -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
 			if ((maintenance_up_since == 0)); then
 				maintenance_up_since="${SECONDS}"
 			fi
@@ -291,13 +295,13 @@ apply_install_and_wait() {
 
 				if ((SECONDS - maintenance_reentered_at >= MAINTENANCE_PERSIST_SECONDS)); then
 					echo "${node_ip}: maintenance persisted after reboot; applying runtime config and rebooting"
-					"${TALOSCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
+					"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
 					runtime_config_applied=1
 					break
 				fi
 			elif ((runtime_config_applied == 0)) && ((SECONDS - maintenance_up_since >= MAINTENANCE_FALLBACK_SECONDS)); then
 				echo "${node_ip}: maintenance persisted for ${MAINTENANCE_FALLBACK_SECONDS}s; forcing runtime config and reboot"
-				"${TALOSCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
+				"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
 				runtime_config_applied=1
 				break
 			fi
@@ -319,7 +323,7 @@ apply_install_and_wait() {
 		if ((runtime_config_applied == 0)); then
 			echo "${node_ip}: runtime mTLS did not come up after install; applying runtime config and rebooting"
 			wait_for_maintenance "${node_ip}"
-			"${TALOSCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
+			"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
 		else
 			echo "${node_ip}: runtime mTLS did not come up after runtime config apply; retrying runtime wait"
 		fi
@@ -334,8 +338,8 @@ download_helper_bundles() {
 	mkdir -p "${HELPERS_DIR}"
 
 	# Download once and reuse for curl-based TLS probes across the cluster.
-	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
-	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 
 	local nomad_token consul_token
 	nomad_token="$(tr -d '\r\n' <"${HELPERS_DIR}/nomadconfig/acl.token")"
@@ -343,6 +347,70 @@ download_helper_bundles() {
 
 	NOMAD_CURL_ARGS=(--cacert "${HELPERS_DIR}/nomadconfig/ca.pem" --cert "${HELPERS_DIR}/nomadconfig/client.pem" --key "${HELPERS_DIR}/nomadconfig/client-key.pem" -H "X-Nomad-Token: ${nomad_token}")
 	CONSUL_CURL_ARGS=(--cacert "${HELPERS_DIR}/consulconfig/ca.pem" --cert "${HELPERS_DIR}/consulconfig/client.pem" --key "${HELPERS_DIR}/consulconfig/client-key.pem" -H "X-Consul-Token: ${consul_token}")
+	NOMAD_API_NODE_IP="${node_ip}"
+}
+
+nomad_job_reaches_terminal_success() {
+	local node_ip="$1"
+	local job_id="$2"
+
+	local allocs
+	allocs="$(curl -fsS --max-time 5 "${NOMAD_CURL_ARGS[@]}" "https://${node_ip}:4646/v1/job/${job_id}/allocations" 2>/dev/null || true)"
+	if [[ -z "${allocs}" ]]; then
+		return 1
+	fi
+
+	jq -e 'length > 0 and any(.[]; .ClientStatus == "complete") and all(.[]; .ClientStatus != "failed" and .ClientStatus != "lost")' <<<"${allocs}" >/dev/null
+}
+
+submit_and_verify_nomad_probe_job() {
+	local node_ip="$1"
+	local job_id="chubo-cluster-e2e-${RUN_ID}"
+	local payload_file="${WORKDIR}/${job_id}.json"
+
+	cat >"${payload_file}" <<EOF
+{
+  "Job": {
+    "ID": "${job_id}",
+    "Name": "${job_id}",
+    "Type": "batch",
+    "Datacenters": ["dc1"],
+    "TaskGroups": [
+      {
+        "Name": "probe",
+        "Count": 1,
+        "Tasks": [
+          {
+            "Name": "probe",
+            "Driver": "exec",
+            "Config": {
+              "command": "/bin/sh",
+              "args": ["-c", "echo chubo cluster e2e > /tmp/chubo-cluster-e2e.txt"]
+            },
+            "Resources": {
+              "CPU": 100,
+              "MemoryMB": 64
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+EOF
+
+	echo "submitting Nomad probe job (${job_id})"
+	curl -fsS --max-time 10 "${NOMAD_CURL_ARGS[@]}" \
+		-H "Content-Type: application/json" \
+		-X POST \
+		--data @"${payload_file}" \
+		"https://${node_ip}:4646/v1/jobs" >/dev/null
+
+	wait_until "nomad probe job ${job_id} complete" "${TIMEOUT_SECONDS}" \
+		nomad_job_reaches_terminal_success "${node_ip}" "${job_id}"
+
+	echo "purging Nomad probe job (${job_id})"
+	curl -fsS --max-time 5 "${NOMAD_CURL_ARGS[@]}" -X DELETE "https://${node_ip}:4646/v1/job/${job_id}?purge=true" >/dev/null || true
 }
 
 nomad_peers_ok() {
@@ -408,7 +476,7 @@ run_cluster_create() {
 		return 1
 	fi
 
-	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+	"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
 		--arch "${ARCH}" \
 		--cidr "${CIDR}" \
 		--control-plane-port "${CONTROL_PLANE_PORT}" \
@@ -437,12 +505,12 @@ create_cluster_with_retry() {
 			return 0
 		fi
 
-		if grep -Eq 'interface bridge[0-9]+ not found' "${CLUSTER_CREATE_LOG}" && ((attempt < CLUSTER_CREATE_MAX_ATTEMPTS)); then
-			echo "cluster create hit bridge bring-up race; destroying partial state and retrying"
-			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
-			rm -rf "${STATE_DIR:?}/${CLUSTER_NAME}"
-			attempt=$((attempt + 1))
-			sleep 2
+			if grep -Eq 'interface bridge[0-9]+ not found' "${CLUSTER_CREATE_LOG}" && ((attempt < CLUSTER_CREATE_MAX_ATTEMPTS)); then
+				echo "cluster create hit bridge bring-up race; destroying partial state and retrying"
+				"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+				rm -rf "${STATE_DIR:?}/${CLUSTER_NAME}"
+				attempt=$((attempt + 1))
+				sleep 2
 			continue
 		fi
 
@@ -506,13 +574,13 @@ if ! docker version >/dev/null 2>&1; then
 fi
 
 ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
-if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 fi
 
-if [[ ! -x "${TALOSCTL}" ]]; then
+if [[ ! -x "${CHUBOCTL}" ]]; then
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
-elif ! "${TALOSCTL}" gen machineconfig --help 2>/dev/null | grep -q -- '--with-chubo'; then
+elif ! "${CHUBOCTL}" gen machineconfig --help 2>/dev/null | grep -q -- '--with-chubo'; then
 	echo "existing CLI binary is missing --with-chubo; rebuilding"
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
 fi
@@ -590,8 +658,8 @@ installer_arch_ref="$("${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-${A
 "${CRANE_BIN}" --insecure index append -t "${INSTALLER_IMAGE_LOCAL}" -m "${installer_arch_ref}" >/dev/null
 
 echo "generating secrets and talosconfig"
-"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
-"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
+"${CHUBOCTL}" gen secrets -o "${SECRETS_FILE}"
+"${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
 	-o "${TALOSCONFIG_FILE}"
@@ -628,10 +696,10 @@ for idx in "${!controlplane_ips[@]}"; do
 	install_cfg="${WORKDIR}/machineconfig-${idx}-install.yaml"
 	runtime_cfg="${WORKDIR}/machineconfig-${idx}-runtime.yaml"
 
-	"${TALOSCTL}" gen machineconfig \
-		--with-secrets "${SECRETS_FILE}" \
-		--install-disk "${INSTALL_DISK}" \
-		--install-image "${INSTALLER_IMAGE_NODE}" \
+		"${CHUBOCTL}" gen machineconfig \
+			--with-secrets "${SECRETS_FILE}" \
+			--install-disk "${INSTALL_DISK}" \
+			--install-image "${INSTALLER_IMAGE_NODE}" \
 		--registry-mirror "${REGISTRY_MIRROR_NODE}" \
 		--with-chubo \
 		--chubo-role server \
@@ -675,6 +743,8 @@ wait_for_peers nomad "${CONTROLPLANE_COUNT}" "${controlplane_ips[@]}"
 
 echo "waiting for consul peers convergence"
 wait_for_peers consul "${CONTROLPLANE_COUNT}" "${controlplane_ips[@]}"
+
+submit_and_verify_nomad_probe_job "${controlplane_ips[0]}"
 
 echo "leaders:"
 for node_ip in "${controlplane_ips[@]}"; do
