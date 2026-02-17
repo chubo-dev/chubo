@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-package containerd
+package runtimecfg
 
 // AuthConfig represents the registry auth options.
 type AuthConfig struct {
@@ -23,14 +23,14 @@ type Registry struct {
 	Configs    map[string]RegistryConfig `toml:"configs"`
 }
 
-// RuntimeConfig represents the CRI config.
+// ImagePluginConfig represents the containerd image plugin config.
 type RuntimeConfig struct {
 	Registry Registry `toml:"registry"`
 }
 
-// PluginsConfig represents the CRI plugins config.
+// PluginsConfig represents the containerd plugin configuration relevant to registry auth.
 type PluginsConfig struct {
-	CRI RuntimeConfig `toml:"io.containerd.cri.v1.images"`
+	Images RuntimeConfig `toml:"io.containerd.cri.v1.images"`
 }
 
 // Config represnts the containerd config.

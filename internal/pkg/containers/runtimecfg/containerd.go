@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package containerd provides support for containerd CRI plugin
-package containerd
+// Package runtimecfg provides support for containerd registry auth configuration.
+package runtimecfg
 
 import (
 	"bytes"
@@ -18,14 +18,14 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
-// GenerateCRIConfig returns a part of CRI config for registry auth.
+// GenerateRegistryConfig returns the containerd registry auth snippet.
 //
 // Once containerd supports different way of supplying auth info, this should be updated.
-func GenerateCRIConfig(r workload.Registries) ([]byte, error) {
+func GenerateRegistryConfig(r workload.Registries) ([]byte, error) {
 	var ctrdCfg Config
 
-	ctrdCfg.Plugins.CRI.Registry.ConfigPath = filepath.Join(constants.EtcRuntimeConfdPath, "hosts")
-	ctrdCfg.Plugins.CRI.Registry.Configs = make(map[string]RegistryConfig)
+	ctrdCfg.Plugins.Images.Registry.ConfigPath = filepath.Join(constants.EtcRuntimeConfdPath, "hosts")
+	ctrdCfg.Plugins.Images.Registry.Configs = make(map[string]RegistryConfig)
 
 	for _, registryHost := range slices.Sorted(maps.Keys(r.Auths())) {
 		authConfig := r.Auths()[registryHost]
@@ -40,7 +40,7 @@ func GenerateCRIConfig(r workload.Registries) ([]byte, error) {
 
 		configHost, _ := docker.DefaultHost(registryHost) //nolint:errcheck // doesn't return an error
 
-		ctrdCfg.Plugins.CRI.Registry.Configs[configHost] = cfg
+		ctrdCfg.Plugins.Images.Registry.Configs[configHost] = cfg
 	}
 
 	var buf bytes.Buffer

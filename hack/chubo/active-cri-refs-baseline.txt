@@ -1,9 +1,1 @@
 ./hack/chubo/check-runtime-surface.sh:	cri
-./internal/pkg/containers/cri/containerd/config.go:	CRI RuntimeConfig `toml:"io.containerd.cri.v1.images"`
-./internal/pkg/containers/cri/containerd/config.go:// PluginsConfig represents the CRI plugins config.
-./internal/pkg/containers/cri/containerd/config.go:// RuntimeConfig represents the CRI config.
-./internal/pkg/containers/cri/containerd/containerd.go:		ctrdCfg.Plugins.CRI.Registry.Configs[configHost] = cfg
-./internal/pkg/containers/cri/containerd/containerd.go:	ctrdCfg.Plugins.CRI.Registry.ConfigPath = filepath.Join(constants.EtcRuntimeConfdPath, "hosts")
-./internal/pkg/containers/cri/containerd/containerd.go:	ctrdCfg.Plugins.CRI.Registry.Configs = make(map[string]RegistryConfig)
-./internal/pkg/containers/cri/containerd/containerd.go:// GenerateCRIConfig returns a part of CRI config for registry auth.
-./internal/pkg/containers/cri/containerd/containerd.go:// Package containerd provides support for containerd CRI plugin

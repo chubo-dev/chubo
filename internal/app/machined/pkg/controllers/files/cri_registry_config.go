@@ -18,7 +18,7 @@ import (
 	"github.com/siderolabs/gen/xslices"
 	"go.uber.org/zap"
 
-	"github.com/chubo-dev/chubo/internal/pkg/containers/cri/containerd"
+	containerd "github.com/chubo-dev/chubo/internal/pkg/containers/runtimecfg"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/files"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
@@ -103,7 +103,7 @@ func (ctrl *CRIRegistryConfigController) Run(ctx context.Context, r controller.R
 		)
 
 		if cfg != nil {
-			criRegistryContents, err = containerd.GenerateCRIConfig(cfg.TypedSpec())
+			criRegistryContents, err = containerd.GenerateRegistryConfig(cfg.TypedSpec())
 			if err != nil {
 				return err
 			}

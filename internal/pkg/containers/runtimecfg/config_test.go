@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-package containerd_test
+package runtimecfg_test
 
 import (
 	_ "embed"
@@ -11,7 +11,7 @@ import (
 	"github.com/siderolabs/crypto/x509"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/chubo-dev/chubo/internal/pkg/containers/cri/containerd"
+	containerd "github.com/chubo-dev/chubo/internal/pkg/containers/runtimecfg"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
 )
@@ -96,7 +96,7 @@ func (suite *ConfigSuite) TestGenerateRegistriesConfig() {
 		},
 	}
 
-	criConfig, err := containerd.GenerateCRIConfig(cfg)
+	criConfig, err := containerd.GenerateRegistryConfig(cfg)
 	suite.Require().NoError(err)
 
 	suite.Assert().Equal(expectedCRIConfig, string(criConfig))
