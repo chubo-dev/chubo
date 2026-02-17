@@ -284,7 +284,7 @@ const (
 	SystemContainerdAddress = SystemRunPath + "/containerd/containerd.sock"
 
 	// WorkloadContainerdNamespace is the containerd namespace for workload tasks.
-	WorkloadContainerdNamespace = "k8s.io"
+	WorkloadContainerdNamespace = "workload"
 
 	// WorkloadContainerdAddress is the path to the workload containerd socket.
 	WorkloadContainerdAddress = "/run/containerd/containerd.sock"

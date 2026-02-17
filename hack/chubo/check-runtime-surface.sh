@@ -115,7 +115,6 @@ forbidden_services=(
 	dashboard
 	kubelet
 	etcd
-	cri
 )
 
 for svc in "${forbidden_services[@]}"; do

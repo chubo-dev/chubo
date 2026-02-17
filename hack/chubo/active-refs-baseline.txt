@@ -20,5 +20,4 @@
 ./hack/chubo/check-runtime-surface.sh:	kubelet
 ./hack/chubo/check-runtime-surface.sh:# Kubernetes/etcd listeners must stay absent in chubo baseline.
 ./hack/chubo/forbidden-go-deps-baseline.txt:# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*
-./pkg/machinery/constants/constants.go:	WorkloadContainerdNamespace = "k8s.io"
 ./tools/go.mod:	go.etcd.io/bbolt v1.4.3 // indirect
