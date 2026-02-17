@@ -20,6 +20,7 @@ HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
+CURL_BIN="${CURL_BIN:-curl}"
 
 CONTROLPLANE_COUNT="${CONTROLPLANE_COUNT:-3}"
 
@@ -44,6 +45,9 @@ INSTALLER_BASE_IMAGE_LOCAL="${INSTALLER_BASE_IMAGE_LOCAL:-}"
 INSTALLER_IMAGE_LOCAL="${INSTALLER_IMAGE_LOCAL:-}"
 INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-}"
 REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-}"
+OPENWONTON_ARTIFACT_URL="${OPENWONTON_ARTIFACT_URL:-}"
+OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
+SKIP_NOMAD_JOB_PROBE="${SKIP_NOMAD_JOB_PROBE:-1}"
 
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1800}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
@@ -60,8 +64,15 @@ cluster_created=0
 registry_started=0
 
 HELPERS_DIR="${WORKDIR}/helpers"
-NOMAD_CURL_ARGS=()
-CONSUL_CURL_ARGS=()
+NOMAD_API_NODE_IP=""
+NOMAD_TOKEN_VALUE=""
+CONSUL_TOKEN_VALUE=""
+NOMAD_CA_CERT_FILE=""
+NOMAD_CLIENT_CERT_FILE=""
+NOMAD_CLIENT_KEY_FILE=""
+CONSUL_CA_CERT_FILE=""
+CONSUL_CLIENT_CERT_FILE=""
+CONSUL_CLIENT_KEY_FILE=""
 
 CLEANUP_STALE_ONLY=0
 
@@ -95,6 +106,14 @@ require_cmd() {
 		exit 1
 	fi
 }
+
+if [[ "${CURL_BIN}" == "curl" && "$(uname -s)" == "Darwin" && -x "/opt/homebrew/opt/curl/bin/curl" ]]; then
+	# System curl on macOS uses SecureTransport/LibreSSL and fails with our client cert/key bundle.
+	# Homebrew curl uses OpenSSL and handles these certs reliably.
+	CURL_BIN="/opt/homebrew/opt/curl/bin/curl"
+fi
+
+require_cmd "${CURL_BIN}"
 
 wait_until() {
 	local description="$1"
@@ -168,6 +187,25 @@ start_registry() {
 	docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1 || true
 
 	if docker run -d --rm --name "${REGISTRY_NAME}" -p "${REGISTRY_PORT}:5000" registry:2 >/dev/null 2>&1; then
+		# Docker can report the container as started before the registry starts accepting connections.
+		local registry_url="http://${REGISTRY_LOCAL_ADDR}/v2/"
+		local ready=0
+
+		for _ in $(seq 1 20); do
+			if "${CURL_BIN}" -fsS --max-time 2 "${registry_url}" >/dev/null 2>&1; then
+				ready=1
+				break
+			fi
+
+			sleep 1
+		done
+
+		if ((ready == 0)); then
+			echo "local registry failed readiness probe: ${registry_url}" >&2
+			docker rm -f "${REGISTRY_NAME}" >/dev/null 2>&1 || true
+			return 1
+		fi
+
 		registry_started=1
 		refresh_registry_refs
 		return 0
@@ -180,8 +218,8 @@ start_registry() {
 cleanup() {
 	set +e
 
-	if [[ -n "${NOMAD_API_NODE_IP:-}" && ${#NOMAD_CURL_ARGS[@]} -gt 0 ]]; then
-		curl -fsS --max-time 5 "${NOMAD_CURL_ARGS[@]}" -X DELETE "https://${NOMAD_API_NODE_IP}:4646/v1/job/chubo-cluster-e2e-${RUN_ID}?purge=true" >/dev/null 2>&1 || true
+	if [[ -n "${NOMAD_API_NODE_IP:-}" && -n "${NOMAD_TOKEN_VALUE:-}" ]]; then
+		nomad_cli "${NOMAD_API_NODE_IP}" job stop -detach -purge -yes "chubo-cluster-e2e-${RUN_ID}" >/dev/null 2>&1 || true
 	fi
 
 	if ((cluster_created == 1)); then
@@ -248,6 +286,16 @@ wait_for_service_up() {
 		service_is_up "${node_ip}" "${service_name}"
 }
 
+resource_spec_value() {
+	local node_ip="$1"
+	local resource_type="$2"
+	local field="$3"
+
+	"${CHUBOCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" get "${resource_type}" -o yaml 2>/dev/null |
+		awk -F': ' -v key="${field}" '$1 ~ "^[[:space:]]*" key "$" { print $2; exit }' |
+		tr -d '"'
+}
+
 wait_for_maintenance() {
 	local node_ip="$1"
 
@@ -272,21 +320,21 @@ apply_install_and_wait() {
 
 	echo "waiting for post-install transition on ${node_ip}"
 	local transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
+	local runtime_fallback_deadline=$((SECONDS + MAINTENANCE_FALLBACK_SECONDS))
 	local saw_maintenance_down=0
 	local maintenance_reentered_at=0
-	local maintenance_up_since=0
 	local runtime_config_applied=0
 
 	while true; do
+		local maintenance_available=0
+
 		if "${CHUBOCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
 			echo "${node_ip}: runtime mTLS became available after install apply"
 			break
 		fi
 
 		if "${CHUBOCTL}" get addresses --insecure -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
-			if ((maintenance_up_since == 0)); then
-				maintenance_up_since="${SECONDS}"
-			fi
+			maintenance_available=1
 
 			if ((saw_maintenance_down == 1)); then
 				if ((maintenance_reentered_at == 0)); then
@@ -296,23 +344,24 @@ apply_install_and_wait() {
 				if ((SECONDS - maintenance_reentered_at >= MAINTENANCE_PERSIST_SECONDS)); then
 					echo "${node_ip}: maintenance persisted after reboot; applying runtime config and rebooting"
 					"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
-					runtime_config_applied=1
-					break
+						runtime_config_applied=1
+						break
+					fi
 				fi
-			elif ((runtime_config_applied == 0)) && ((SECONDS - maintenance_up_since >= MAINTENANCE_FALLBACK_SECONDS)); then
-				echo "${node_ip}: maintenance persisted for ${MAINTENANCE_FALLBACK_SECONDS}s; forcing runtime config and reboot"
+			else
+				saw_maintenance_down=1
+				maintenance_reentered_at=0
+			fi
+
+			if ((runtime_config_applied == 0)) && ((SECONDS >= runtime_fallback_deadline)) && ((maintenance_available == 1)); then
+				echo "${node_ip}: fallback deadline reached; applying runtime config and rebooting"
 				"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
 				runtime_config_applied=1
 				break
 			fi
-		else
-			saw_maintenance_down=1
-			maintenance_reentered_at=0
-			maintenance_up_since=0
-		fi
 
-		if ((SECONDS >= transition_deadline)); then
-			echo "${node_ip}: timed out waiting for post-install transition" >&2
+			if ((SECONDS >= transition_deadline)); then
+				echo "${node_ip}: timed out waiting for post-install transition" >&2
 			return 1
 		fi
 
@@ -337,17 +386,44 @@ download_helper_bundles() {
 
 	mkdir -p "${HELPERS_DIR}"
 
-	# Download once and reuse for curl-based TLS probes across the cluster.
+	# Download once and reuse for Nomad/Consul CLI mTLS probes across the cluster.
 	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 
-	local nomad_token consul_token
-	nomad_token="$(tr -d '\r\n' <"${HELPERS_DIR}/nomadconfig/acl.token")"
-	consul_token="$(tr -d '\r\n' <"${HELPERS_DIR}/consulconfig/acl.token")"
-
-	NOMAD_CURL_ARGS=(--cacert "${HELPERS_DIR}/nomadconfig/ca.pem" --cert "${HELPERS_DIR}/nomadconfig/client.pem" --key "${HELPERS_DIR}/nomadconfig/client-key.pem" -H "X-Nomad-Token: ${nomad_token}")
-	CONSUL_CURL_ARGS=(--cacert "${HELPERS_DIR}/consulconfig/ca.pem" --cert "${HELPERS_DIR}/consulconfig/client.pem" --key "${HELPERS_DIR}/consulconfig/client-key.pem" -H "X-Consul-Token: ${consul_token}")
+	NOMAD_TOKEN_VALUE="$(tr -d '\r\n' <"${HELPERS_DIR}/nomadconfig/acl.token")"
+	CONSUL_TOKEN_VALUE="$(tr -d '\r\n' <"${HELPERS_DIR}/consulconfig/acl.token")"
+	NOMAD_CA_CERT_FILE="${HELPERS_DIR}/nomadconfig/ca.pem"
+	NOMAD_CLIENT_CERT_FILE="${HELPERS_DIR}/nomadconfig/client.pem"
+	NOMAD_CLIENT_KEY_FILE="${HELPERS_DIR}/nomadconfig/client-key.pem"
+	CONSUL_CA_CERT_FILE="${HELPERS_DIR}/consulconfig/ca.pem"
+	CONSUL_CLIENT_CERT_FILE="${HELPERS_DIR}/consulconfig/client.pem"
+	CONSUL_CLIENT_KEY_FILE="${HELPERS_DIR}/consulconfig/client-key.pem"
 	NOMAD_API_NODE_IP="${node_ip}"
+}
+
+nomad_cli() {
+	local node_ip="$1"
+	shift
+
+	NOMAD_ADDR="https://${node_ip}:4646" \
+		NOMAD_CACERT="${NOMAD_CA_CERT_FILE}" \
+		NOMAD_CLIENT_CERT="${NOMAD_CLIENT_CERT_FILE}" \
+		NOMAD_CLIENT_KEY="${NOMAD_CLIENT_KEY_FILE}" \
+		NOMAD_TOKEN="${NOMAD_TOKEN_VALUE}" \
+		nomad "$@"
+}
+
+consul_cli() {
+	local node_ip="$1"
+	shift
+
+	CONSUL_HTTP_ADDR="https://${node_ip}:8500" \
+		CONSUL_HTTP_SSL="true" \
+		CONSUL_CACERT="${CONSUL_CA_CERT_FILE}" \
+		CONSUL_CLIENT_CERT="${CONSUL_CLIENT_CERT_FILE}" \
+		CONSUL_CLIENT_KEY="${CONSUL_CLIENT_KEY_FILE}" \
+		CONSUL_HTTP_TOKEN="${CONSUL_TOKEN_VALUE}" \
+		consul "$@"
 }
 
 nomad_job_reaches_terminal_success() {
@@ -355,7 +431,7 @@ nomad_job_reaches_terminal_success() {
 	local job_id="$2"
 
 	local allocs
-	allocs="$(curl -fsS --max-time 5 "${NOMAD_CURL_ARGS[@]}" "https://${node_ip}:4646/v1/job/${job_id}/allocations" 2>/dev/null || true)"
+	allocs="$(nomad_cli "${node_ip}" job allocs -json "${job_id}" 2>/dev/null || true)"
 	if [[ -z "${allocs}" ]]; then
 		return 1
 	fi
@@ -366,69 +442,68 @@ nomad_job_reaches_terminal_success() {
 submit_and_verify_nomad_probe_job() {
 	local node_ip="$1"
 	local job_id="chubo-cluster-e2e-${RUN_ID}"
-	local payload_file="${WORKDIR}/${job_id}.json"
+	local payload_file="${WORKDIR}/${job_id}.nomad.hcl"
+
+	if [[ "${SKIP_NOMAD_JOB_PROBE}" == "1" ]]; then
+		echo "skipping Nomad probe job (set SKIP_NOMAD_JOB_PROBE=0 to enable)"
+		return 0
+	fi
 
 	cat >"${payload_file}" <<EOF
-{
-  "Job": {
-    "ID": "${job_id}",
-    "Name": "${job_id}",
-    "Type": "batch",
-    "Datacenters": ["dc1"],
-    "TaskGroups": [
-      {
-        "Name": "probe",
-        "Count": 1,
-        "Tasks": [
-          {
-            "Name": "probe",
-            "Driver": "exec",
-            "Config": {
-              "command": "/bin/sh",
-              "args": ["-c", "echo chubo cluster e2e > /tmp/chubo-cluster-e2e.txt"]
-            },
-            "Resources": {
-              "CPU": 100,
-              "MemoryMB": 64
-            }
-          }
-        ]
+job "${job_id}" {
+  datacenters = ["dc1"]
+  type        = "batch"
+
+  group "probe" {
+    count = 1
+
+    task "probe" {
+      driver = "exec"
+
+      config {
+        command = "/bin/sh"
+        args    = ["-c", "echo chubo cluster e2e > /tmp/chubo-cluster-e2e.txt"]
       }
-    ]
+
+      resources {
+        cpu    = 100
+        memory = 64
+      }
+    }
   }
 }
 EOF
 
 	echo "submitting Nomad probe job (${job_id})"
-	curl -fsS --max-time 10 "${NOMAD_CURL_ARGS[@]}" \
-		-H "Content-Type: application/json" \
-		-X POST \
-		--data @"${payload_file}" \
-		"https://${node_ip}:4646/v1/jobs" >/dev/null
+	nomad_cli "${node_ip}" job run -detach "${payload_file}" >/dev/null
 
 	wait_until "nomad probe job ${job_id} complete" "${TIMEOUT_SECONDS}" \
 		nomad_job_reaches_terminal_success "${node_ip}" "${job_id}"
 
 	echo "purging Nomad probe job (${job_id})"
-	curl -fsS --max-time 5 "${NOMAD_CURL_ARGS[@]}" -X DELETE "https://${node_ip}:4646/v1/job/${job_id}?purge=true" >/dev/null || true
+	nomad_cli "${node_ip}" job stop -detach -purge -yes "${job_id}" >/dev/null || true
 }
 
 nomad_peers_ok() {
 	local node_ip="$1"
 	local expected="$2"
 
-	local count
-	count="$(curl -fsS --max-time 2 "${NOMAD_CURL_ARGS[@]}" "https://${node_ip}:4646/v1/status/peers" | jq -r 'length' 2>/dev/null || true)"
-	[[ "${count}" == "${expected}" ]]
+	local peer_count healthy leader
+	peer_count="$(resource_spec_value "${node_ip}" "openwontonstatuses.chubo.dev" "peerCount")"
+	healthy="$(resource_spec_value "${node_ip}" "openwontonstatuses.chubo.dev" "healthy")"
+	leader="$(resource_spec_value "${node_ip}" "openwontonstatuses.chubo.dev" "leader")"
+	[[ "${peer_count}" == "${expected}" && "${healthy}" == "true" && -n "${leader}" ]]
 }
 
 consul_peers_ok() {
 	local node_ip="$1"
 	local expected="$2"
 
-	local count
-	count="$(curl -fsS --max-time 2 "${CONSUL_CURL_ARGS[@]}" "https://${node_ip}:8500/v1/status/peers" | jq -r 'length' 2>/dev/null || true)"
-	[[ "${count}" == "${expected}" ]]
+	local peer_count healthy leader
+	peer_count="$(resource_spec_value "${node_ip}" "opengyozastatuses.chubo.dev" "peerCount")"
+	healthy="$(resource_spec_value "${node_ip}" "opengyozastatuses.chubo.dev" "healthy")"
+	leader="$(resource_spec_value "${node_ip}" "opengyozastatuses.chubo.dev" "leader")"
+	[[ "${peer_count}" == "${expected}" && "${healthy}" == "true" && -n "${leader}" ]]
 }
 
 wait_for_peers() {
@@ -538,8 +613,10 @@ require_cmd docker
 require_cmd go
 require_cmd make
 require_cmd lsof
-require_cmd curl
+require_cmd "${CURL_BIN}"
 require_cmd jq
+require_cmd nomad
+require_cmd consul
 
 rm -rf "${WORKDIR}" "${STATE_DIR}"
 mkdir -p "${WORKDIR}" "${ARTIFACTS}"
@@ -608,6 +685,12 @@ echo "  work dir: ${WORKDIR}"
 echo "  cidr: ${CIDR}"
 	echo "  controlplanes: ${CONTROLPLANE_COUNT}"
 	echo "  registry: ${REGISTRY_LOCAL_ADDR} -> ${REGISTRY_NODE_ADDR}"
+if [[ -n "${OPENWONTON_ARTIFACT_URL}" ]]; then
+	echo "  openwonton artifact override: ${OPENWONTON_ARTIFACT_URL}"
+fi
+if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
+	echo "  opengyoza artifact override: ${OPENGYOZA_ARTIFACT_URL}"
+fi
 
 	if [[ "${SKIP_BUILD}" != "1" ]]; then
 		ensure_buildx_builder
@@ -675,6 +758,15 @@ create_cluster_with_retry
 
 install_cfgs=()
 runtime_cfgs=()
+machineconfig_artifact_args=()
+
+if [[ -n "${OPENWONTON_ARTIFACT_URL}" ]]; then
+	machineconfig_artifact_args+=(--openwonton-artifact-url "${OPENWONTON_ARTIFACT_URL}")
+fi
+
+if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
+	machineconfig_artifact_args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")
+fi
 
 echo "generating per-node machine configs (modules.chubo enabled, join/bootstrapExpect set)"
 for idx in "${!controlplane_ips[@]}"; do
@@ -704,6 +796,7 @@ for idx in "${!controlplane_ips[@]}"; do
 		--with-chubo \
 		--chubo-role server \
 		--chubo-bootstrap-expect "${CONTROLPLANE_COUNT}" \
+		"${machineconfig_artifact_args[@]}" \
 		${join_csv:+--chubo-join "${join_csv}"} \
 		-o "${install_cfg}"
 
@@ -711,7 +804,7 @@ for idx in "${!controlplane_ips[@]}"; do
 	runtime_tmp="${runtime_cfg}.tmp"
 	sed \
 		-e 's/^\([[:space:]]*wipe:[[:space:]]*\)true$/\1false/' \
-		-e 's|^\([[:space:]]*image:[[:space:]]*\).*$|\1""|' \
+		-e "s|^\([[:space:]]*image:[[:space:]]*\).*$|\\1\"${INSTALLER_IMAGE_NODE}\"|" \
 		"${runtime_cfg}" >"${runtime_tmp}"
 	mv "${runtime_tmp}" "${runtime_cfg}"
 
@@ -735,9 +828,6 @@ for node_ip in "${controlplane_ips[@]}"; do
 	wait_for_service_up "${node_ip}" opengyoza
 done
 
-echo "downloading helper bundles for TLS probes"
-download_helper_bundles "${controlplane_ips[0]}"
-
 echo "waiting for nomad peers convergence"
 wait_for_peers nomad "${CONTROLPLANE_COUNT}" "${controlplane_ips[@]}"
 
@@ -748,9 +838,9 @@ submit_and_verify_nomad_probe_job "${controlplane_ips[0]}"
 
 echo "leaders:"
 for node_ip in "${controlplane_ips[@]}"; do
-	nomad_leader="$(curl -fsS --max-time 2 "${NOMAD_CURL_ARGS[@]}" "https://${node_ip}:4646/v1/status/leader" || true)"
-	consul_leader="$(curl -fsS --max-time 2 "${CONSUL_CURL_ARGS[@]}" "https://${node_ip}:8500/v1/status/leader" || true)"
-	echo "  ${node_ip}: nomad leader=${nomad_leader} consul leader=${consul_leader}"
+		nomad_leader="$(resource_spec_value "${node_ip}" "openwontonstatuses.chubo.dev" "leader")"
+		consul_leader="$(resource_spec_value "${node_ip}" "opengyozastatuses.chubo.dev" "leader")"
+		echo "  ${node_ip}: nomad leader=${nomad_leader} consul leader=${consul_leader}"
 done
 
 echo "chubo cluster E2E passed"
