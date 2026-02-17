@@ -3,7 +3,6 @@
 ./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
 ./Makefile:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
 ./Makefile:chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
-./go.mod:	sigs.k8s.io/knftables v0.0.18 // indirect
 ./hack/chubo/check-go-deps.sh:		echo "# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*"
 ./hack/chubo/check-go-deps.sh:	sort -u "${target_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${target_forbidden}" || true
 ./hack/chubo/check-go-deps.sh:# - forbidden prefixes: k8s.io/* and go.etcd.io/etcd/*

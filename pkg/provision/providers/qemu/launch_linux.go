@@ -6,6 +6,7 @@ package qemu
 
 import (
 	"context"
+	"crypto/sha512"
 	"errors"
 	"fmt"
 	"log"
@@ -21,7 +22,6 @@ import (
 	types100 "github.com/containernetworking/cni/pkg/types/100"
 	"github.com/containernetworking/plugins/pkg/ns"
 	"github.com/containernetworking/plugins/pkg/testutils"
-	"github.com/containernetworking/plugins/pkg/utils"
 	"github.com/coreos/go-iptables/iptables"
 	"github.com/google/uuid"
 	"github.com/siderolabs/gen/xslices"
@@ -62,6 +62,18 @@ func getNetdevParams(networkConfig networkConfig, id string) string {
 
 func getConfigServerAddr(hostAddrs net.Addr, _ LaunchConfig) (net.Addr, error) {
 	return hostAddrs, nil
+}
+
+func formatCNIChainName(name, id string) string {
+	// Match CNI iptables chain naming rules without pulling plugins/pkg/utils.
+	const (
+		maxChainLength = 28
+		chainPrefix    = "CNI-"
+	)
+
+	sum := sha512.Sum512([]byte(name + id))
+
+	return fmt.Sprintf("%s%x", chainPrefix, sum)[:maxChainLength]
 }
 
 // withCNIOperationLocked ensures that CNI operations don't run concurrently.
@@ -181,7 +193,7 @@ func withNetworkContext(ctx context.Context, config *LaunchConfig, f func(config
 	}
 
 	if !config.Network.Airgapped {
-		cniChain := utils.FormatChainName(config.Network.CniNetworkConfig.Name, containerID)
+		cniChain := formatCNIChainName(config.Network.CniNetworkConfig.Name, containerID)
 
 		ipt, err := iptables.New()
 		if err != nil {
