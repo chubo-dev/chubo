@@ -14,6 +14,7 @@ cd "${REPO_ROOT}"
 
 BASELINE_CORE="${BASELINE_CORE:-hack/chubo/active-refs-baseline.txt}"
 BASELINE_CRI="${BASELINE_CRI:-hack/chubo/active-cri-refs-baseline.txt}"
+COMPAT_PATHS_FILE="${COMPAT_PATHS_FILE:-hack/chubo/active-refs-compat-paths.txt}"
 
 TMPDIR="$(mktemp -d "${TMPDIR:-/tmp}/chubo-active-refs.XXXXXX")"
 trap 'rm -rf "${TMPDIR}"' EXIT
@@ -21,10 +22,15 @@ trap 'rm -rf "${TMPDIR}"' EXIT
 core_pattern='(kubernetes|k8s|kube|etcd)'
 cri_pattern='(\bcri\b)'
 
-scan_core="${TMPDIR}/core.raw"
-scan_cri="${TMPDIR}/cri.raw"
-core_norm="${TMPDIR}/core.normalized"
-cri_norm="${TMPDIR}/cri.normalized"
+scan_core_compat="${TMPDIR}/core.compat.raw"
+scan_cri_compat="${TMPDIR}/cri.compat.raw"
+core_compat_norm="${TMPDIR}/core.compat.normalized"
+cri_compat_norm="${TMPDIR}/cri.compat.normalized"
+
+scan_core_forbidden="${TMPDIR}/core.forbidden.raw"
+scan_cri_forbidden="${TMPDIR}/cri.forbidden.raw"
+core_forbidden_norm="${TMPDIR}/core.forbidden.normalized"
+cri_forbidden_norm="${TMPDIR}/cri.forbidden.normalized"
 
 rg_common_excludes=(
 	--glob '!**/*.md'
@@ -40,9 +46,13 @@ rg_common_excludes=(
 	--glob '!**/*_vtproto.pb.go'
 	--glob '!**/*.binpb'
 	--glob '!hack/chubo/check-active-refs.sh'
+	--glob '!hack/chubo/active-refs-compat-paths.txt'
 	--glob '!hack/chubo/active-refs-baseline.txt'
 	--glob '!hack/chubo/active-cri-refs-baseline.txt'
 )
+
+declare -a compat_paths
+declare -a compat_excludes
 
 normalize_refs() {
 	# Normalize away line numbers so non-semantic code movement doesn't trigger
@@ -50,17 +60,84 @@ normalize_refs() {
 	sed -E 's#^([^:]+):[0-9]+:#\1:#' "$1" | sort -u >"$2"
 }
 
-run_scan() {
-	rg -n -i "${core_pattern}" . "${rg_common_excludes[@]}" >"${scan_core}" || true
-	rg -n -i "${cri_pattern}" . "${rg_common_excludes[@]}" >"${scan_cri}" || true
+trim() {
+	local value="$1"
+	value="${value#"${value%%[![:space:]]*}"}"
+	value="${value%"${value##*[![:space:]]}"}"
+	printf '%s' "${value}"
+}
 
-	normalize_refs "${scan_core}" "${core_norm}"
-	normalize_refs "${scan_cri}" "${cri_norm}"
+load_compat_paths() {
+	if [[ ! -f "${COMPAT_PATHS_FILE}" ]]; then
+		echo "missing compat paths file: ${COMPAT_PATHS_FILE}" >&2
+		exit 1
+	fi
+
+	while IFS= read -r raw_line || [[ -n "${raw_line}" ]]; do
+		local line
+		line="$(trim "${raw_line%%#*}")"
+
+		if [[ -z "${line}" ]]; then
+			continue
+		fi
+
+		compat_paths+=("${line}")
+	done <"${COMPAT_PATHS_FILE}"
+
+	if [[ "${#compat_paths[@]}" -eq 0 ]]; then
+		echo "no compat paths configured in ${COMPAT_PATHS_FILE}" >&2
+		exit 1
+	fi
+}
+
+build_compat_excludes() {
+	for path in "${compat_paths[@]}"; do
+		local normalized="${path#./}"
+
+		if [[ -d "${normalized}" ]]; then
+			compat_excludes+=(--glob "!${normalized}/**")
+		else
+			compat_excludes+=(--glob "!${normalized}")
+		fi
+	done
+}
+
+run_compat_scan() {
+	: >"${scan_core_compat}"
+	: >"${scan_cri_compat}"
+
+	for path in "${compat_paths[@]}"; do
+		if [[ ! -e "${path}" ]]; then
+			echo "warning: compat path not found: ${path}" >&2
+			continue
+		fi
+
+		rg --with-filename -n -i "${core_pattern}" "${path}" "${rg_common_excludes[@]}" >>"${scan_core_compat}" || true
+		rg --with-filename -n -i "${cri_pattern}" "${path}" "${rg_common_excludes[@]}" >>"${scan_cri_compat}" || true
+	done
+
+	normalize_refs "${scan_core_compat}" "${core_compat_norm}"
+	normalize_refs "${scan_cri_compat}" "${cri_compat_norm}"
+}
+
+run_forbidden_scan() {
+	rg -n -i "${core_pattern}" . "${rg_common_excludes[@]}" "${compat_excludes[@]}" >"${scan_core_forbidden}" || true
+	rg -n -i "${cri_pattern}" . "${rg_common_excludes[@]}" "${compat_excludes[@]}" >"${scan_cri_forbidden}" || true
+
+	normalize_refs "${scan_core_forbidden}" "${core_forbidden_norm}"
+	normalize_refs "${scan_cri_forbidden}" "${cri_forbidden_norm}"
+}
+
+run_scan() {
+	load_compat_paths
+	build_compat_excludes
+	run_compat_scan
+	run_forbidden_scan
 }
 
 write_baselines() {
-	cp "${core_norm}" "${BASELINE_CORE}"
-	cp "${cri_norm}" "${BASELINE_CRI}"
+	cp "${core_compat_norm}" "${BASELINE_CORE}"
+	cp "${cri_compat_norm}" "${BASELINE_CRI}"
 
 	echo "updated baselines:"
 	echo "  ${BASELINE_CORE}"
@@ -98,9 +175,21 @@ check_one() {
 	fi
 }
 
+check_forbidden_empty() {
+	local label="$1"
+	local file="$2"
+
+	if [[ -s "${file}" ]]; then
+		echo "forbidden ${label} references detected outside compat paths:" >&2
+		cat "${file}" >&2
+		return 1
+	fi
+}
+
 run_scan
 
 if [[ "${1:-}" == "--update-baseline" ]]; then
+	check_forbidden_empty "core" "${core_forbidden_norm}"
 	write_baselines
 	exit 0
 fi
@@ -108,7 +197,9 @@ fi
 require_baseline "${BASELINE_CORE}"
 require_baseline "${BASELINE_CRI}"
 
-check_one "core" "${BASELINE_CORE}" "${core_norm}"
-check_one "cri" "${BASELINE_CRI}" "${cri_norm}"
+check_forbidden_empty "core" "${core_forbidden_norm}"
+
+check_one "compat-core" "${BASELINE_CORE}" "${core_compat_norm}"
+check_one "compat-cri" "${BASELINE_CRI}" "${cri_compat_norm}"
 
 echo "active refs guardrail passed"

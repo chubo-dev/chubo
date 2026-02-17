@@ -27,20 +27,7 @@
 ./hack/chubo/check-runtime-surface.sh:	etcd
 ./hack/chubo/check-runtime-surface.sh:	kubelet
 ./hack/chubo/check-runtime-surface.sh:# Kubernetes/etcd listeners must stay absent in chubo baseline.
-./hack/chubo/e2e-core-qemu.sh:	echo "existing CLI binary is stale (contains 'KUBERNETES ENDPOINT'); rebuilding"
-./hack/chubo/e2e-core-qemu.sh:elif command -v strings >/dev/null 2>&1 && strings "${TALOSCTL}" 2>/dev/null | grep -q "KUBERNETES ENDPOINT"; then
 ./hack/chubo/forbidden-go-deps-baseline.txt:# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*
-./hack/release.sh:  ${ARTIFACTS}/talosctl-linux-amd64 image k8s-bundle >> ${1}
-./hack/release.toml:        title = "Kubernetes server-side apply"
-./hack/release.toml:        title = "Talosctl images k8s-bundle subcommand accepts version parameter"
-./hack/release.toml:    [notes.images_k8s_bundle]
-./hack/release.toml:    [notes.k8s_ssa]
-./hack/release.toml:BREAKING: If you were relying on the resources EtcdConfigs, KubeletConfigs, ControllerManagerConfigs, SchedulerConfigs or APIServerConfigs, the protobuf format has changed from `map<string,string>` to `map<string,message>`.
-./hack/release.toml:Kubernetes: 1.35.0
-./hack/release.toml:The `talosctl images k8s-bundle` command now accepts an optional version overrides arguments.
-./hack/release.toml:etcd: 3.6.7
-./hack/start-registry-proxies.sh:    --name registry-registry.k8s.io registry:2
-./hack/start-registry-proxies.sh:    -e REGISTRY_PROXY_REMOTEURL=https://registry.k8s.io \
 ./hack/third_party/go-talos-support/go.sum:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
 ./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:DgQWBBQahGK8SEwzJQTU7tD2A8QZRtGUazBuBgNVHSMEZzBlgBQahGK8SEwzJQTU7tD2A8QZRtGU
 ./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:bjPsMZ57k8HkyWkaPcBrTiJt7qtYTcbQQcEr6k8Sh17rRdhs9ZgC06DYVYoGmRmioHfRMJ6szHXu

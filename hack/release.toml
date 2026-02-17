@@ -20,10 +20,7 @@ preface = """
         description = """\
 Linux: 6.18.8
 containerd: 2.2.1
-etcd: 3.6.7
 CoreDNS: 1.13.2
-Kubernetes: 1.35.0
-Flannel CNI plugin: v1.9.0-flannel1
 LVM2: 2_03_38
 runc: 1.4.0
 systemd: 259
@@ -88,8 +85,8 @@ The related `GenerateConfiguration` API method has also been removed.
 Users are encouraged to use other installation methods, such as using pre-generated configuration files, or using Omni.
 """
 
-    [notes.k8s_ssa]
-        title = "Kubernetes server-side apply"
+    [notes.server_side_apply]
+        title = "Server-side apply for bootstrap manifests"
         description = """\
 Talos now uses inventory backed server-side apply when applying bootsrap manifests (including `extraManifests` and `inlineManifests`).
 Purging of unneeded manifests is automatically performed.
@@ -103,10 +100,10 @@ The `talosctl images talos-bundle` command now accepts optional `--overlays` and
 If those are set to `false`, the command will not attempt to reach out to the container registry to fetch the latest versions and digests of the overlays and extensions.
 """
 
-    [notes.images_k8s_bundle]
-        title = "Talosctl images k8s-bundle subcommand accepts version parameter"
+    [notes.images_bundle]
+        title = "Talosctl images talos-bundle subcommand accepts version parameter"
         description = """\
-The `talosctl images k8s-bundle` command now accepts an optional version overrides arguments.
+The `talosctl images talos-bundle` command now accepts an optional version overrides arguments.
 """
 
     [notes.environment_config]
@@ -126,7 +123,7 @@ To remove an environment variable, remove it from the `EnvironmentConfig` docume
 Several Talos configuration fields that previously accepted single string values for extra arguments have been updated to accept slices of strings as well.
 This includes fields such as `.cluster.apiServer.extraArgs`.
 
-BREAKING: If you were relying on the resources EtcdConfigs, KubeletConfigs, ControllerManagerConfigs, SchedulerConfigs or APIServerConfigs, the protobuf format has changed from `map<string,string>` to `map<string,message>`.
+BREAKING: Several legacy control-plane resource payloads changed from `map<string,string>` to `map<string,message>`.
 """
 
     [notes.serviceAccountIssuer]

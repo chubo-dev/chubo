@@ -9,11 +9,6 @@ docker run -d -p 5000:5000 \
     --restart always \
     --name registry-docker.io registry:2
 
-docker run -d -p 5001:5000 \
-    -e REGISTRY_PROXY_REMOTEURL=https://registry.k8s.io \
-    --restart always \
-    --name registry-registry.k8s.io registry:2
-
 docker run -d -p 5003:5000 \
     -e REGISTRY_PROXY_REMOTEURL=https://gcr.io \
     --restart always \

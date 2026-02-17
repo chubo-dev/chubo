@@ -22,7 +22,6 @@ function release-notes {
   release-tool "${2}" --gfm > "${1}"
 
   echo -e '\n## Images\n\n```' >> ${1}
-  ${ARTIFACTS}/talosctl-linux-amd64 image k8s-bundle >> ${1}
   ${ARTIFACTS}/talosctl-linux-amd64 image talos-bundle --overlays=false --extensions=false >> ${1}
   echo -e '```\n' >> ${1}
 }
