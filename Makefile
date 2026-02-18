@@ -437,6 +437,7 @@ chuboctl: chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
 .PHONY: chuboctl-%
 chuboctl-%:
 	@$(MAKE) -B talosctl-$*
+	@rm -f $(ARTIFACTS)/chuboctl-$*
 	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
 	@chmod +x $(ARTIFACTS)/chuboctl-$*
 

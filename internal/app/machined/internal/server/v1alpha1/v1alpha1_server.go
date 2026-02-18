@@ -10,6 +10,8 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
+	stdlibx509 "crypto/x509"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"io"
@@ -1181,9 +1183,38 @@ func tarGzFiles(files ...tarGzFile) ([]byte, error) {
 }
 
 func (s *Server) workloadHelperClientMaterial() ([]byte, []byte, []byte, error) {
-	secretsBundle := secrets.NewBundleFromConfig(secrets.NewFixedClock(time.Now()), s.Controller.Runtime().Config())
+	// openwonton currently validates client certs against a frozen verifier clock.
+	// Anchor helper cert validity to the OS CA notBefore so they remain valid in that window.
+	const helperCertFutureWindow = 365 * 24 * time.Hour
 
-	cert, err := secretsBundle.GenerateTalosAPIClientCertificateWithTTL(role.MakeSet(role.Admin), 365*24*time.Hour)
+	now := time.Now()
+	secretsBundle := secrets.NewBundleFromConfig(secrets.NewFixedClock(now), s.Controller.Runtime().Config())
+
+	caBlock, _ := pem.Decode(secretsBundle.Certs.OS.Crt)
+	if caBlock == nil || caBlock.Type != "CERTIFICATE" {
+		return nil, nil, nil, fmt.Errorf("failed to decode OS CA certificate for workload helper")
+	}
+
+	caCert, err := stdlibx509.ParseCertificate(caBlock.Bytes)
+	if err != nil {
+		return nil, nil, nil, fmt.Errorf("failed to parse OS CA certificate for workload helper: %w", err)
+	}
+
+	helperNotBefore := caCert.NotBefore
+	helperNotAfter := now.Add(helperCertFutureWindow)
+	if helperNotAfter.After(caCert.NotAfter) {
+		helperNotAfter = caCert.NotAfter
+	}
+
+	// Defensive fallback for malformed CA windows.
+	if !helperNotAfter.After(helperNotBefore) {
+		helperNotBefore = now.Add(-24 * time.Hour)
+		helperNotAfter = now.Add(helperCertFutureWindow)
+	}
+
+	helperTTL := helperNotAfter.Sub(helperNotBefore)
+
+	cert, err := secrets.NewAdminCertificateAndKey(helperNotBefore, secretsBundle.Certs.OS, role.MakeSet(role.Admin), helperTTL)
 	if err != nil {
 		return nil, nil, nil, err
 	}
