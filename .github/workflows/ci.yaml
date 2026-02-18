@@ -103,3 +103,22 @@ jobs:
         run: sudo -n true
       - name: chubo-e2e-opengyoza-quorum-qemu
         run: sudo -n -E ./hack/chubo/e2e-opengyoza-quorum-qemu.sh
+
+  chubo-e2e-cluster-qemu:
+    needs: chubo-guardrails
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: self-hosted
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+      - name: verify-sudo
+        run: sudo -n true
+      - name: chubo-e2e-cluster-qemu
+        run: sudo -n -E CONTROLPLANE_COUNT=2 SKIP_NOMAD_JOB_PROBE=0 ./hack/chubo/e2e-cluster-qemu.sh
