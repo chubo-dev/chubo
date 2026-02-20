@@ -107,7 +107,7 @@ func (p *provisioner) GenOptions(networkReq provision.NetworkRequest, contract *
 				"reboot=k",
 				"panic=1",
 				"talos.shutdown=halt",
-				// Talos-specific
+				// OS-specific
 				"talos.platform=metal",
 			}),
 		)

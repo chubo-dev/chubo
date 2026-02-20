@@ -41,10 +41,10 @@ type ClusterRequest struct {
 	// Encryption
 	KMSEndpoint string
 
-	// Path to talosctl executable to re-execute itself as needed.
+	// Path to chuboctl executable to re-execute itself as needed.
 	SelfExecutable string
 
-	// Path to root of state directory (~/.talos/clusters by default).
+	// Path to the root of the cluster state directory.
 	StateDirectory string
 
 	SiderolinkRequest SiderolinkRequest

@@ -1170,19 +1170,13 @@
 ./pkg/provision/providers/qemu/node.go:			cmdline.Append("talos.config", "metal-iso")
 ./pkg/provision/providers/qemu/node.go:			cmdline.Append("talos.config", "{TALOS_CONFIG_URL}") // to be patched by launcher
 ./pkg/provision/providers/qemu/node.go:		cmdline.Append("talos.debugshell", "")
-./pkg/provision/providers/qemu/node.go:	// Talos config
 ./pkg/provision/providers/qemu/node.go:	cmdline.Append("talos.platform", constants.PlatformMetal)
 ./pkg/provision/providers/qemu/node.go:	cmdline.Append("talos.shutdown", "halt")
-./pkg/provision/providers/qemu/node.go:	tmpDir, err := os.MkdirTemp("", "talos-metal-config-iso")
 ./pkg/provision/providers/qemu/qemu.go:				"talos.platform=metal",
 ./pkg/provision/providers/qemu/qemu.go:				"talos.shutdown=halt",
-./pkg/provision/providers/qemu/qemu.go:				// Talos-specific
 ./pkg/provision/providers/vm/dhcpd_darwin.go:		fmt.Printf("warning: failed to start native dhcp server after creating a talos dhcp server: %s", err)
 ./pkg/provision/providers/vm/dhcpd_darwin.go:// starts the talos DHCP server and then starts the apple bootp server again, which is configured such
 ./pkg/provision/providers/vm/network_linux.go:	state.BridgeName = fmt.Sprintf("%s%s", "talos", hex.EncodeToString(networkNameHash[:])[:8])
-./pkg/provision/request.go:	// Path to root of state directory (~/.talos/clusters by default).
-./pkg/provision/request.go:	// Path to talosctl executable to re-execute itself as needed.
-./pkg/provision/state.go:			"state directory %q already exists, is the cluster %q already running? remove cluster state with talosctl cluster destroy",
 ./tools/docgen/schema.go:const ConfigSchemaURLFormat = "https://talos.dev/%s/schemas/%s"
 ./tools/structprotogen/consts/consts.go:	fmt.Fprint(w, "package talos.resource.definitions.enums;\n\n")
 ./tools/structprotogen/proto/proto.go:					typeName = "repeated talos.resource.definitions.enums." + block.ProtoMessageName()

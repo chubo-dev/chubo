@@ -82,7 +82,7 @@ func (p *provisioner) createNode(ctx context.Context, state *provision.State, cl
 	cmdline.Append("panic", "1")
 	cmdline.Append("talos.shutdown", "halt")
 
-	// Talos config
+	// OS config
 	cmdline.Append("talos.platform", constants.PlatformMetal)
 
 	// add overrides
@@ -382,7 +382,7 @@ func (p *provisioner) handleOptionalZSTDDiskImage(provisionerDisk, diskImagePath
 func (p *provisioner) createMetalConfigISO(state *provision.State, nodeName, config string) (string, error) {
 	isoPath := state.GetRelativePath(nodeName + "-metal-config.iso")
 
-	tmpDir, err := os.MkdirTemp("", "talos-metal-config-iso")
+	tmpDir, err := os.MkdirTemp("", "chubo-metal-config-iso")
 	if err != nil {
 		return "", err
 	}
