@@ -33,7 +33,7 @@ func init() {
 
 	commonFlags := getCommonUserFacingFlags(&cOps)
 	addControlplanesFlag(commonFlags, &cOps.Controlplanes)
-	addTalosVersionFlag(commonFlags, &cOps.TalosVersion, "the desired talos version")
+	addOSVersionFlags(commonFlags, &cOps.TalosVersion, "the desired Chubo OS version")
 	commonFlags.StringVar(&cOps.NetworkCIDR, networkCIDRFlagName, "10.5.0.0/24", "CIDR of the cluster network")
 
 	getQemuFlags := func() *pflag.FlagSet {

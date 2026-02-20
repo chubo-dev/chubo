@@ -85,6 +85,7 @@ func addCommand(cmd *cobra.Command) {
 			filepath.Join(constants.ServiceAccountMountPath, constants.ChuboconfigFilename),
 		),
 	)
+	cli.Should(cmd.PersistentFlags().MarkHidden("talosconfig"))
 	cmd.PersistentFlags().StringSliceVarP(&GlobalArgs.Nodes, "nodes", "n", []string{}, "target the specified nodes")
 	cmd.PersistentFlags().StringSliceVarP(&GlobalArgs.Endpoints, "endpoints", "e", []string{}, "override default endpoints in client configuration")
 	cli.Should(cmd.RegisterFlagCompletionFunc("nodes", CompleteNodes))

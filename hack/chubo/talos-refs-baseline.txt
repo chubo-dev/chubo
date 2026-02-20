@@ -314,11 +314,8 @@
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.events.sink") != nil,
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.logging.kernel") != nil:
 ./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	talosVersionFlagName   = "talos-version"
-./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_qemu.go:	addTalosVersionFlag(commonFlags, &cOps.TalosVersion, "the desired talos version")
-./cmd/chuboctl/cmd/mgmt/cluster/create/create_qemu.go:		return fmt.Errorf("failed to parse talos version: %s", err)
-./cmd/chuboctl/cmd/mgmt/cluster/create/create_qemu.go:		return fmt.Errorf("failed to parse talos version: version string must start with a 'v'")
-./cmd/chuboctl/cmd/mgmt/gen/config.go:			return fmt.Errorf("invalid talos-version: %w", err)
-./cmd/chuboctl/cmd/mgmt/gen/config.go:	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.talosVersion, "talos-version", "", "the desired Chubo OS version to generate config for (backwards compatibility, e.g. v0.8)")
+./cmd/chuboctl/cmd/mgmt/gen/config.go:	cli.Should(genConfigCmd.Flags().MarkHidden("talos-version"))
+./cmd/chuboctl/cmd/mgmt/gen/config.go:	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
 ./cmd/chuboctl/cmd/mgmt/gen/secrets.go:				return fmt.Errorf("invalid talos-version: %w", err)
 ./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Chubo OS version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
 ./cmd/chuboctl/cmd/nodes/image.go:		fmt.Printf("%s\n", sources.Talos)
@@ -483,7 +480,6 @@
 ./internal/app/machined/pkg/controllers/runtime/booted_entry.go:		// this case is only currently applicable when locally developing Talos
 ./internal/app/machined/pkg/controllers/runtime/diagnostics.go:// DiagnosticsController analyzes state of Talos Linux system and provides warnings on common problems.
 ./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/diagnostic.go:// Package diagnostics provides Talos diagnostics specific checks.
-./internal/app/machined/pkg/controllers/runtime/maintenance_service.go:			logger.Sugar().Info("upload configuration using talosctl:")
 ./internal/app/machined/pkg/controllers/runtime/sbom_item.go:// SBOMItemController is a controller that publishes Talos SBOMs as resources.
 ./internal/app/machined/pkg/controllers/runtime/security_state.go:					if strings.HasPrefix(filepath.Base(strings.ReplaceAll(stubImageIdentifier, "\\", "/")), "Talos-") {
 ./internal/app/machined/pkg/controllers/runtime/security_state.go:				if strings.HasPrefix(defaultEntry, "Talos-") {
@@ -537,7 +533,6 @@
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:					Message: "Talos installed successfully.",
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:					Message: "Talos staged upgrade successful.",
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:				Message: "Talos rebooted.",
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:				logger.Printf("%s failed, rebooting in %.0f minutes. You can use talosctl apply-config or talosctl edit mc to fix the issues, error:\n%s", name, timeout.Minutes(), err)
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			// b/c we'd only ever get here if Talos was already
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Printf("Talos is already installed to disk but booted from another media and %s kernel parameter is set. Please reboot from the disk.", constants.KernelParamHaltIfInstalled)
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Printf("installing Talos to disk %s", disk)

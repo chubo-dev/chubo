@@ -167,7 +167,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		addConfigPatchWorkerFlag(common, &cOps.ConfigPatchWorker, configPatchWorkerFlag)
 		addRegistryMirrorFlag(common, &cOps.RegistryMirrors)
 		addNetworkMTUFlag(common, &cOps.NetworkMTU)
-		addTalosVersionFlag(common, &cOps.TalosVersion, "the desired Chubo OS version to generate config for")
+		addOSVersionFlags(common, &cOps.TalosVersion, "the desired Chubo OS version to generate config for")
 
 		common.StringVar(&cOps.NetworkCIDR, networkCIDRFlagName, cOps.NetworkCIDR, "CIDR of the cluster network (IPv4, ULA network for IPv6 is derived in automated way)")
 		common.StringVar(&cOps.WireguardCIDR, wireguardCIDRFlag, cOps.WireguardCIDR, "CIDR of the wireguard network")

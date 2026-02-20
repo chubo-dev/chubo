@@ -290,10 +290,10 @@ func (ctrl *MaintenanceServiceController) Run(ctx context.Context, r controller.
 		if !usagePrinted && len(reachableAddresses) > 0 && lastCertificateFingerprint != "" && !ctrl.V1Alpha1Mode.IsAgent() {
 			firstIP := reachableAddresses[0]
 
-			logger.Sugar().Info("upload configuration using talosctl:")
-			logger.Sugar().Infof("\ttalosctl apply-config --insecure --nodes %s --file <config.yaml>", firstIP)
+			logger.Sugar().Info("upload configuration using chuboctl:")
+			logger.Sugar().Infof("\tchuboctl apply-config --insecure --nodes %s --file <config.yaml>", firstIP)
 			logger.Sugar().Info("optionally with node fingerprint check:")
-			logger.Sugar().Infof("\ttalosctl apply-config --insecure --nodes %s --cert-fingerprint '%s' --file <config.yaml>", firstIP, lastCertificateFingerprint)
+			logger.Sugar().Infof("\tchuboctl apply-config --insecure --nodes %s --cert-fingerprint '%s' --file <config.yaml>", firstIP, lastCertificateFingerprint)
 
 			usagePrinted = true
 		}

@@ -25,6 +25,7 @@ var (
 	registryMirrorFlagName = "registry-mirror"
 	networkMTUFlagName     = "mtu"
 	networkCIDRFlagName    = "cidr"
+	chuboVersionFlagName   = "chubo-version"
 	talosVersionFlagName   = "talos-version"
 
 	// Flags that have been renamed in the user-facing commands.
@@ -132,8 +133,10 @@ func addNetworkMTUFlag(flagset *pflag.FlagSet, bind *int) {
 	flagset.IntVar(bind, networkMTUFlagName, *bind, "MTU of the cluster network")
 }
 
-func addTalosVersionFlag(flagset *pflag.FlagSet, bind *string, description string) {
-	flagset.StringVar(bind, talosVersionFlagName, *bind, description)
+func addOSVersionFlags(flagset *pflag.FlagSet, bind *string, description string) {
+	flagset.StringVar(bind, chuboVersionFlagName, *bind, description)
+	flagset.StringVar(bind, talosVersionFlagName, *bind, fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
+	cli.Should(flagset.MarkHidden(talosVersionFlagName))
 }
 
 // qemu flags

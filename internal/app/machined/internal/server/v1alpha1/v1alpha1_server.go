@@ -1841,7 +1841,7 @@ func (s *Server) Memory(ctx context.Context, in *emptypb.Empty) (reply *machine.
 // GenerateClientConfiguration implements the machine.MachineServer interface.
 func (s *Server) GenerateClientConfiguration(ctx context.Context, in *machine.GenerateClientConfigurationRequest) (*machine.GenerateClientConfigurationResponse, error) {
 	if s.Controller.Runtime().Config().Machine().Type() == machinetype.TypeWorker {
-		return nil, status.Error(codes.FailedPrecondition, "client configuration (talosconfig) can't be generated on worker nodes")
+		return nil, status.Error(codes.FailedPrecondition, "client configuration (chuboconfig) can't be generated on worker nodes")
 	}
 
 	crtTTL := in.CrtTtl.AsDuration()

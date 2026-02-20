@@ -20,6 +20,7 @@ import (
 	"go.yaml.in/yaml/v4"
 
 	"github.com/chubo-dev/chubo/cmd/chuboctl/pkg/mgmt/helpers"
+	"github.com/chubo-dev/chubo/pkg/cli"
 	"github.com/chubo-dev/chubo/pkg/images"
 	"github.com/chubo-dev/chubo/pkg/machinery/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/bundle"
@@ -36,6 +37,7 @@ const (
 	workerOutputType       = "worker"
 	chuboconfigOutputType  = "chuboconfig"
 	talosconfigOutputType  = "talosconfig"
+	chuboVersionFlagName   = "chubo-version"
 
 	stdoutOutput = "-"
 
@@ -48,7 +50,7 @@ var defaultOutputTypes = []string{
 	chuboconfigOutputType,
 }
 
-var allOutputTypes = []string{
+var acceptedOutputTypes = []string{
 	controlPlaneOutputType,
 	workerOutputType,
 	chuboconfigOutputType,
@@ -63,7 +65,7 @@ var genConfigCmdFlags struct {
 	additionalSANs []string
 	configVersion  string
 	dnsDomain      string
-	talosVersion   string
+	chuboVersion   string
 	installDisk    string
 	installImage   string
 
@@ -196,12 +198,12 @@ func writeConfig(args []string) error {
 		genOptions = append(genOptions, generate.WithRegistryMirror(left, right))
 	}
 
-	if genConfigCmdFlags.talosVersion != "" {
+	if genConfigCmdFlags.chuboVersion != "" {
 		var versionContract *config.VersionContract
 
-		versionContract, err = config.ParseContractFromVersion(genConfigCmdFlags.talosVersion)
+		versionContract, err = config.ParseContractFromVersion(genConfigCmdFlags.chuboVersion)
 		if err != nil {
-			return fmt.Errorf("invalid talos-version: %w", err)
+			return fmt.Errorf("invalid chubo-version: %w", err)
 		}
 
 		genOptions = append(genOptions, generate.WithVersionContract(versionContract))
@@ -276,7 +278,7 @@ func validateFlags() error {
 	)
 
 	for _, outputType := range genConfigCmdFlags.outputTypes {
-		if !slices.ContainsFunc(allOutputTypes, func(t string) bool {
+		if !slices.ContainsFunc(acceptedOutputTypes, func(t string) bool {
 			return t == outputType
 		}) {
 			err = multierror.Append(err, fmt.Errorf("invalid output type: %q", outputType))
@@ -445,7 +447,9 @@ func init() {
 	genConfigCmd.Flags().StringSliceVar(&genConfigCmdFlags.additionalSANs, "additional-sans", []string{}, "additional Subject-Alt-Names for the APIServer certificate")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.dnsDomain, "dns-domain", "cluster.local", "the dns domain to use for cluster")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.configVersion, "version", "v1alpha1", "the desired machine config version to generate")
-	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.talosVersion, "talos-version", "", "the desired Chubo OS version to generate config for (backwards compatibility, e.g. v0.8)")
+	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, chuboVersionFlagName, "", "the desired Chubo OS version to generate config for (backwards compatibility, e.g. v0.8)")
+	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
+	cli.Should(genConfigCmd.Flags().MarkHidden("talos-version"))
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatch, "config-patch", nil, "patch generated machineconfigs (applied to all node types), use @file to read a patch from file")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchControlPlane, "config-patch-control-plane", nil, "patch generated machineconfigs (applied to 'init' and 'controlplane' types)")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchWorker, "config-patch-worker", nil, "patch generated machineconfigs (applied to 'worker' type)")
@@ -455,7 +459,7 @@ func init() {
 	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withClusterDiscovery, "with-cluster-discovery", "", true, "enable cluster discovery feature")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.withSecrets, "with-secrets", "", "use a secrets file generated using 'gen secrets'")
 
-	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", defaultOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q (legacy alias: %q -> %q)", allOutputTypes, talosconfigOutputType, chuboconfigOutputType))
+	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", defaultOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q (legacy alias: %q -> %q)", defaultOutputTypes, talosconfigOutputType, chuboconfigOutputType))
 	genConfigCmd.Flags().StringVarP(&genConfigCmdFlags.output, "output", "o", "",
 		`destination to output generated files. when multiple output types are specified, it must be a directory. for a single output type, it must either be a file path, or "-" for stdout`)
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.outputDir, "output-dir", "", "destination to output generated files") // kept for backwards compatibility
