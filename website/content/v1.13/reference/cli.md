@@ -56,7 +56,7 @@ Several presets are available to focus on specific cgroup subsystems:
 You can specify the preset using the --preset flag.
 
 Alternatively, a custom schema can be provided using the --schema-file flag.
-To see schema examples, refer to https://github.com/chubo-dev/chubo/tree/main/cmd/talosctl/cmd/talos/cgroupsprinter/schemas.
+To see preset examples, refer to https://github.com/chubo-dev/chubo/tree/main/cmd/chuboctl/cmd/nodes/cgroupsprinter/presets.
 
 
 ```
@@ -3015,4 +3015,3 @@ A CLI for out-of-band management of Chubo OS nodes
 * [chuboctl validate](#chuboctl-validate)	 - Validate config
 * [chuboctl version](#chuboctl-version)	 - Prints the version
 * [chuboctl wipe](#chuboctl-wipe)	 - Wipe block device or volumes
-
