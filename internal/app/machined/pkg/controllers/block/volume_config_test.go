@@ -156,12 +156,13 @@ func (suite *VolumeConfigSuite) TestReconcileDefaults() {
 		"/var/log/audit",
 		"/var/log/containers",
 		"/var/log/pods",
-		constants.EtcdDataVolumeID,
+		"/var/lib",
 		"/var/lib/containerd",
-		"/var/lib/kubelet",
 		"/var/lib/cni",
-		constants.SeccompProfilesDirectory,
-		constants.KubernetesAuditLogDir,
+		"/var/lib/workload",
+		"/var/lib/workload/seccomp",
+		constants.WorkloadSeccompProfilesDirectory,
+		constants.UserVolumeMountPoint,
 		"/var/run/lock",
 	}, func(r *block.VolumeConfig, asrt *assert.Assertions) {
 		asrt.Equal(block.VolumeTypeDirectory, r.TypedSpec().Type)

@@ -219,7 +219,7 @@ const (
 
 	// DefaultCoreDNSVersion is the default version for the CoreDNS.
 	// renovate: datasource=docker depName=docker.io/coredns/coredns
-	DefaultCoreDNSVersion = "v1.13.2"
+	DefaultCoreDNSVersion = "1.13.2"
 
 	// ConfigFilename is the filename of the saved config in STATE partition.
 	ConfigFilename = "config.yaml"

@@ -108,7 +108,6 @@ func (suite *ContainerdSuite) SetupSuite() {
 			"--address", suite.containerdAddress,
 			"--state", stateDir,
 			"--root", rootDir,
-			"--config", constants.CRIContainerdConfig,
 		},
 	}
 
