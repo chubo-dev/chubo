@@ -97,7 +97,7 @@ func (suite *SBOMSuite) TestCommon() {
 		},
 	)
 
-	if suite.Capabilities().RunsTalosKernel {
+	if suite.Capabilities().RunsOSKernel {
 		// Assert on Talos kernel version.
 		rtestutils.AssertResource(ctx, suite.T(), suite.Client.COSI,
 			"kernel",

@@ -4,7 +4,7 @@
 
 //go:build integration
 
-// Package cli provides CLI (talosctl) integration tests for Talos
+// Package cli provides CLI (chuboctl) integration tests for Chubo OS.
 package cli
 
 import "github.com/stretchr/testify/suite"

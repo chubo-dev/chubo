@@ -68,7 +68,7 @@ func (suite *ApidSuite) TestControlPlaneRouting() {
 	for _, endpoint := range endpoints {
 		suite.Run(endpoint, func() {
 			cli, err := client.New(suite.ctx,
-				client.WithConfig(suite.Talosconfig),
+				client.WithConfig(suite.Chuboconfig),
 				client.WithEndpoints(endpoint),
 			)
 			suite.Require().NoError(err)
@@ -127,7 +127,7 @@ func (suite *ApidSuite) TestWorkerNoRouting() {
 	for _, endpoint := range endpoints {
 		suite.Run(endpoint, func() {
 			cli, err := client.New(suite.ctx,
-				client.WithConfig(suite.Talosconfig),
+				client.WithConfig(suite.Chuboconfig),
 				client.WithEndpoints(endpoint),
 			)
 			suite.Require().NoError(err)

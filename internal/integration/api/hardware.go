@@ -36,8 +36,8 @@ func (suite *HardwareSuite) SuiteName() string {
 
 // SetupTest ...
 func (suite *HardwareSuite) SetupTest() {
-	if !suite.Capabilities().RunsTalosKernel {
-		suite.T().Skipf("doesn't run Talos kernel, skipping")
+	if !suite.Capabilities().RunsOSKernel {
+		suite.T().Skipf("doesn't run an OS kernel, skipping")
 	}
 
 	suite.ctx, suite.ctxCancel = context.WithTimeout(context.Background(), 15*time.Second)

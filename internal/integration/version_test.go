@@ -16,7 +16,7 @@ import (
 // VersionSuite.
 type VersionSuite struct {
 	suite.Suite
-	base.TalosSuite
+	base.ChuboSuite
 }
 
 func (suite *VersionSuite) SuiteName() string {

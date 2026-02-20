@@ -43,19 +43,19 @@ var (
 	virtiofsd        bool
 	race             bool
 
-	talosConfig       string
+	chuboconfigPath   string
 	endpoint          string
 	k8sEndpoint       string
 	expectedVersion   string
 	expectedGoVersion string
-	talosctlPath      string
+	chuboctlPath      string
 	kubectlPath       string
 	helmPath          string
 	kubeStrPath       string
 	provisionerName   string
 	clusterName       string
 	stateDir          string
-	talosImage        string
+	chuboImage        string
 	csiTestName       string
 	csiTestTimeout    string
 )
@@ -64,7 +64,7 @@ var (
 //
 //nolint:gocyclo
 func TestIntegration(t *testing.T) {
-	if talosConfig == "" {
+	if chuboconfigPath == "" {
 		t.Error("--talos.config is not provided")
 	}
 
@@ -99,14 +99,14 @@ func TestIntegration(t *testing.T) {
 
 	for _, s := range allSuites {
 		if configuredSuite, ok := s.(base.ConfiguredSuite); ok {
-			configuredSuite.SetConfig(base.TalosSuite{
+			configuredSuite.SetConfig(base.ChuboSuite{
 				Endpoint:         endpoint,
 				K8sEndpoint:      k8sEndpoint,
 				Cluster:          cluster,
-				TalosConfig:      talosConfig,
+				ChuboconfigPath:  chuboconfigPath,
 				Version:          expectedVersion,
 				GoVersion:        expectedGoVersion,
-				TalosctlPath:     talosctlPath,
+				ChuboctlPath:     chuboctlPath,
 				KubectlPath:      kubectlPath,
 				HelmPath:         helmPath,
 				KubeStrPath:      kubeStrPath,
@@ -115,7 +115,7 @@ func TestIntegration(t *testing.T) {
 				TrustedBoot:      trustedBoot,
 				SelinuxEnforcing: selinuxEnforcing,
 				VerifyUKIBooted:  verifyUKIBooted,
-				TalosImage:       talosImage,
+				ChuboImage:       chuboImage,
 				CSITestName:      csiTestName,
 				CSITestTimeout:   csiTestTimeout,
 				Airgapped:        airgapped,
@@ -142,7 +142,7 @@ func TestIntegration(t *testing.T) {
 }
 
 func init() {
-	defaultTalosConfigs, _ := clientconfig.GetDefaultPaths() //nolint:errcheck
+	defaultChuboConfigs, _ := clientconfig.GetDefaultPaths() //nolint:errcheck
 
 	defaultStateDir, err := clientconfig.GetChuboDirectory()
 	if err == nil {
@@ -158,9 +158,9 @@ func init() {
 	flag.BoolVar(&verifyUKIBooted, "talos.verifyukibooted", true, "enable tests for verifying that Talos was booted using a UKI")
 
 	flag.StringVar(
-		&talosConfig,
+		&chuboconfigPath,
 		"talos.config",
-		defaultTalosConfigs[0].Path,
+		defaultChuboConfigs[0].Path,
 		fmt.Sprintf("The path to the Talos configuration file. Defaults to '%s' env variable if set, otherwise '%s' and '%s' in order.",
 			constants.TalosConfigEnvVar,
 			filepath.Join("$HOME", constants.TalosDir, constants.TalosconfigFilename),
@@ -174,11 +174,11 @@ func init() {
 	flag.StringVar(&clusterName, "talos.name", "talos-default", "the name of the cluster")
 	flag.StringVar(&expectedVersion, "talos.version", version.Tag, "expected Talos version")
 	flag.StringVar(&expectedGoVersion, "talos.go.version", constants.GoVersion, "expected Talos version")
-	flag.StringVar(&talosctlPath, "talos.talosctlpath", "talosctl", "The path to 'talosctl' binary")
+	flag.StringVar(&chuboctlPath, "talos.talosctlpath", "talosctl", "The path to 'talosctl' binary")
 	flag.StringVar(&kubectlPath, "talos.kubectlpath", "kubectl", "The path to 'kubectl' binary")
 	flag.StringVar(&helmPath, "talos.helmpath", "helm", "The path to 'helm' binary")
 	flag.StringVar(&kubeStrPath, "talos.kubestrpath", "kubestr", "The path to 'kubestr' binary")
-	flag.StringVar(&talosImage, "talos.image", images.DefaultTalosImageRepository, "The default 'talos' container image")
+	flag.StringVar(&chuboImage, "talos.image", images.DefaultTalosImageRepository, "The default 'talos' container image")
 	flag.StringVar(&csiTestName, "talos.csi", "", "CSI test to run")
 	flag.StringVar(&csiTestTimeout, "talos.csi.timeout", "15m", "CSI test timeout")
 	flag.BoolVar(&airgapped, "talos.airgapped", false, "Marker to skip tests that should not be run on airgapped talos cluster")

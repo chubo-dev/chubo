@@ -52,17 +52,17 @@ import (
 // APISuite is a base suite for API tests.
 type APISuite struct {
 	suite.Suite
-	TalosSuite
+	ChuboSuite
 
 	Client      *client.Client
-	Talosconfig *clientconfig.Config
+	Chuboconfig *clientconfig.Config
 }
 
-// SetupSuite initializes Talos API client.
+// SetupSuite initializes the OS API client.
 func (apiSuite *APISuite) SetupSuite() {
 	var err error
 
-	apiSuite.Talosconfig, err = clientconfig.Open(apiSuite.TalosConfig)
+	apiSuite.Chuboconfig, err = clientconfig.Open(apiSuite.ChuboconfigPath)
 	apiSuite.Require().NoError(err)
 
 	if apiSuite.Endpoint != "" {
@@ -80,10 +80,10 @@ func (apiSuite *APISuite) SetupSuite() {
 	}
 }
 
-// GetClientWithEndpoints returns Talos API client with provided endpoints.
+// GetClientWithEndpoints returns OS API client with provided endpoints.
 func (apiSuite *APISuite) GetClientWithEndpoints(endpoints ...string) *client.Client {
 	opts := []client.OptionFunc{
-		client.WithConfig(apiSuite.Talosconfig),
+		client.WithConfig(apiSuite.Chuboconfig),
 		client.WithEndpoints(endpoints...),
 	}
 
@@ -93,15 +93,15 @@ func (apiSuite *APISuite) GetClientWithEndpoints(endpoints ...string) *client.Cl
 	return cli
 }
 
-// DiscoverNodes provides list of Talos nodes in the cluster.
+// DiscoverNodes provides list of OS nodes in the cluster.
 //
-// As there's no way to provide this functionality via Talos API, it works the following way:
+// As there's no way to provide this functionality via the OS API, it works the following way:
 // 1. If there's a provided cluster info, it's used.
 // 2. If integration test was compiled with k8s support, k8s is used.
 //
 // The passed ctx is additionally limited to one minute.
 func (apiSuite *APISuite) DiscoverNodes(ctx context.Context) cluster.Info {
-	discoveredNodes := apiSuite.TalosSuite.DiscoverNodes(ctx)
+	discoveredNodes := apiSuite.ChuboSuite.DiscoverNodes(ctx)
 	if discoveredNodes != nil {
 		return discoveredNodes
 	}
@@ -114,7 +114,7 @@ func (apiSuite *APISuite) DiscoverNodes(ctx context.Context) cluster.Info {
 
 	defer ctxCancel()
 
-	apiSuite.discoveredNodes, err = discoverNodesK8s(ctx, apiSuite.Client, &apiSuite.TalosSuite)
+	apiSuite.discoveredNodes, err = discoverNodesK8s(ctx, apiSuite.Client, &apiSuite.ChuboSuite)
 	apiSuite.Require().NoError(err, "k8s discovery failed")
 
 	if apiSuite.discoveredNodes == nil {
@@ -125,14 +125,14 @@ func (apiSuite *APISuite) DiscoverNodes(ctx context.Context) cluster.Info {
 	return apiSuite.discoveredNodes
 }
 
-// DiscoverNodeInternalIPs provides list of Talos node internal IPs in the cluster.
+// DiscoverNodeInternalIPs provides list of node internal IPs in the cluster.
 func (apiSuite *APISuite) DiscoverNodeInternalIPs(ctx context.Context) []string {
 	nodes := apiSuite.DiscoverNodes(ctx).Nodes()
 
 	return mapNodeInfosToInternalIPs(nodes)
 }
 
-// DiscoverNodeInternalIPsByType provides list of Talos node internal IPs in the cluster for given machine type.
+// DiscoverNodeInternalIPsByType provides list of node internal IPs in the cluster for given machine type.
 func (apiSuite *APISuite) DiscoverNodeInternalIPsByType(ctx context.Context, machineType machine.Type) []string {
 	nodesByType := apiSuite.DiscoverNodes(ctx).NodesByType(machineType)
 
@@ -164,7 +164,7 @@ func (apiSuite *APISuite) RandomDiscoveredNodeInternalIP(types ...machine.Type) 
 
 // Capabilities describes current cluster allowed actions.
 type Capabilities struct {
-	RunsTalosKernel bool
+	RunsOSKernel    bool
 	SupportsReboot  bool
 	SupportsRecover bool
 	SupportsVolumes bool
@@ -182,7 +182,7 @@ func (apiSuite *APISuite) Capabilities() Capabilities {
 		switch v.Messages[0].Platform.Mode {
 		case runtime.ModeContainer.String():
 		default:
-			caps.RunsTalosKernel = true
+			caps.RunsOSKernel = true
 			caps.SupportsReboot = true
 			caps.SupportsRecover = true
 			caps.SupportsVolumes = true
@@ -806,7 +806,7 @@ func (apiSuite *APISuite) ReadCmdline(nodeCtx context.Context) string {
 	return apiSuite.ReadFile(nodeCtx, "/proc/cmdline")
 }
 
-// TearDownSuite closes Talos API client.
+// TearDownSuite closes the OS API client.
 func (apiSuite *APISuite) TearDownSuite() {
 	if apiSuite.Client != nil {
 		apiSuite.Assert().NoError(apiSuite.Client.Close())

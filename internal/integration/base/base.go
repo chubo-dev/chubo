@@ -22,22 +22,22 @@ const (
 	ProvisionerDocker = "docker"
 )
 
-// TalosSuite defines most common settings for integration test suites.
-type TalosSuite struct {
+// ChuboSuite defines most common settings for integration test suites.
+type ChuboSuite struct {
 	// Endpoint to use to connect, if not set config is used
 	Endpoint string
 	// K8sEndpoint is API server endpoint, if set overrides kubeconfig
 	K8sEndpoint string
 	// Cluster describes provisioned cluster, used for discovery purposes
 	Cluster provision.Cluster
-	// TalosConfig is a path to talosconfig
-	TalosConfig string
-	// Version is the (expected) version of Talos tests are running against
+	// ChuboconfigPath is a path to chuboconfig.
+	ChuboconfigPath string
+	// Version is the expected OS version tests are running against.
 	Version string
 	// GoVersion is the (expected) version of Go compiler.
 	GoVersion string
-	// TalosctlPath is a path to talosctl binary
-	TalosctlPath string
+	// ChuboctlPath is a path to chuboctl binary.
+	ChuboctlPath string
 	// KubectlPath is a path to kubectl binary
 	KubectlPath string
 	// HelmPath is a path to helm binary
@@ -52,10 +52,10 @@ type TalosSuite struct {
 	TrustedBoot bool
 	// SelinuxEnforcing tells if the cluster is booted with the image with selinux enforcement enabled
 	SelinuxEnforcing bool
-	// VerifyUKIBooted runs tests to verify Talos is booted from a UKI
+	// VerifyUKIBooted runs tests to verify the node is booted from a UKI.
 	VerifyUKIBooted bool
-	// TalosImage is the image name for 'talos' container.
-	TalosImage string
+	// ChuboImage is the image name for the OS container image.
+	ChuboImage string
 	// CSITestName is the name of the CSI test to run
 	CSITestName string
 	// CSITestTimeout is the timeout for the CSI test
@@ -73,24 +73,24 @@ type TalosSuite struct {
 // DiscoverNodes provides basic functionality to discover cluster nodes via test settings.
 //
 // This method is overridden in specific suites to allow for specific discovery.
-func (talosSuite *TalosSuite) DiscoverNodes(_ context.Context) cluster.Info {
-	if talosSuite.discoveredNodes == nil {
-		if talosSuite.Cluster != nil {
-			talosSuite.discoveredNodes = access.NewAdapter(talosSuite.Cluster).Info
+func (chuboSuite *ChuboSuite) DiscoverNodes(_ context.Context) cluster.Info {
+	if chuboSuite.discoveredNodes == nil {
+		if chuboSuite.Cluster != nil {
+			chuboSuite.discoveredNodes = access.NewAdapter(chuboSuite.Cluster).Info
 		}
 	}
 
-	return talosSuite.discoveredNodes
+	return chuboSuite.discoveredNodes
 }
 
 // ConfiguredSuite expects config to be set before running.
 type ConfiguredSuite interface {
-	SetConfig(config TalosSuite)
+	SetConfig(config ChuboSuite)
 }
 
 // SetConfig implements ConfiguredSuite.
-func (talosSuite *TalosSuite) SetConfig(config TalosSuite) {
-	*talosSuite = config
+func (chuboSuite *ChuboSuite) SetConfig(config ChuboSuite) {
+	*chuboSuite = config
 }
 
 // NamedSuite interface provides names for test suites.

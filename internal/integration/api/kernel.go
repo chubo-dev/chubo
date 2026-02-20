@@ -36,8 +36,8 @@ func (suite *KernelSuite) SuiteName() string {
 func (suite *KernelSuite) SetupTest() {
 	suite.ctx, suite.ctxCancel = context.WithTimeout(context.Background(), 10*time.Second)
 
-	if !suite.Capabilities().RunsTalosKernel {
-		suite.T().Skip("skipping kernel test since Talos kernel is not running")
+	if !suite.Capabilities().RunsOSKernel {
+		suite.T().Skip("skipping kernel test since an OS kernel is not running")
 	}
 }
 

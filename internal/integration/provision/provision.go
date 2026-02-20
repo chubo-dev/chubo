@@ -107,7 +107,7 @@ var defaultNameservers = []netip.Addr{netip.MustParseAddr("8.8.8.8"), netip.Must
 // BaseSuite provides base features for provision tests.
 type BaseSuite struct {
 	suite.Suite
-	base.TalosSuite
+	base.ChuboSuite
 
 	provisioner provision.Provisioner
 
@@ -432,7 +432,7 @@ func (suite *BaseSuite) setupCluster(options clusterOptions) {
 			},
 		},
 
-		SelfExecutable: suite.TalosctlPath,
+		SelfExecutable: suite.ChuboctlPath,
 		StateDirectory: suite.stateDir,
 	}
 

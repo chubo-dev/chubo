@@ -30,14 +30,14 @@ import (
 // CLISuite is a base suite for CLI tests.
 type CLISuite struct {
 	suite.Suite
-	TalosSuite
+	ChuboSuite
 }
 
 // DiscoverNodes provides list of Chubo OS nodes in the cluster.
 //
 // As there's no way to provide this functionality via chuboctl, it relies on cluster info.
 func (cliSuite *CLISuite) DiscoverNodes(ctx context.Context) cluster.Info {
-	discoveredNodes := cliSuite.TalosSuite.DiscoverNodes(ctx)
+	discoveredNodes := cliSuite.ChuboSuite.DiscoverNodes(ctx)
 	if discoveredNodes != nil {
 		return discoveredNodes
 	}
@@ -130,10 +130,10 @@ func (cliSuite *CLISuite) MakeCMDFn(args []string) func() *exec.Cmd {
 	mgmtCommand := slices.Contains([]string{"completion", "gen", "inject", "machineconfig", "validate"}, firstArg)
 
 	if !mgmtCommand {
-		args = append([]string{"--chuboconfig", cliSuite.TalosConfig}, args...)
+		args = append([]string{"--chuboconfig", cliSuite.ChuboconfigPath}, args...)
 	}
 
-	path := cliSuite.TalosctlPath
+	path := cliSuite.ChuboctlPath
 
 	return func() *exec.Cmd { return exec.CommandContext(cliSuite.T().Context(), path, args...) }
 }
