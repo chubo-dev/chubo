@@ -24,7 +24,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
-// ClusterConfigs is the configuration needed to create a talos cluster via the provisioner interface.
+// ClusterConfigs is the configuration needed to create a local cluster via the provisioner interface.
 type ClusterConfigs struct {
 	ClusterRequest   provision.ClusterRequest
 	ProvisionOptions []provision.Option

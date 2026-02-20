@@ -89,7 +89,7 @@ The output is suitable for ` + "`chuboctl apply-config`" + ` in the ` + "`chubo`
 				Wipe:  pointer.To(genMachineConfigFlags.wipe),
 			}
 
-			// Keep Talos default NTP server unless explicitly overridden later.
+			// Keep the default NTP server unless explicitly overridden later.
 			mc.Spec.Time = &chubotypes.TimeSpec{
 				Servers: []string{"time.cloudflare.com"},
 			}

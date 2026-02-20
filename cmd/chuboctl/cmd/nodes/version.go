@@ -108,7 +108,7 @@ func cmdVersion(ctx context.Context, c *client.Client) error {
 func init() {
 	versionCmd.Flags().BoolVar(&versionCmdFlags.shortVersion, "short", false, "Print the short version")
 	versionCmd.Flags().BoolVar(&versionCmdFlags.clientOnly, "client", false, "Print client version only")
-	versionCmd.Flags().BoolVarP(&versionCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
+	versionCmd.Flags().BoolVarP(&versionCmdFlags.insecure, "insecure", "i", false, "use Chubo OS maintenance mode API")
 
 	// TODO remove when https://github.com/chubo-dev/chubo/issues/907 is implemented
 	versionCmd.Flags().BoolVar(&versionCmdFlags.json, "json", false, "")

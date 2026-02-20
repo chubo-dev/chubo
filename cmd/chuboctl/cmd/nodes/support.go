@@ -56,14 +56,14 @@ var supportCmd = &cobra.Command{
 - For each node:
 
 	- Kernel logs.
-	- All Talos internal services logs.
-	- Talos COSI resources without secrets.
+	- All Chubo OS internal services logs.
+	- Chubo OS COSI resources without secrets.
 	- COSI runtime state graph.
 	- Processes snapshot.
 	- IO pressure snapshot.
 	- Mounts list.
 	- PCI devices info.
-	- Talos version.
+	- Chubo OS version.
 `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -136,7 +136,7 @@ func collectData(dest *os.File, progress chan bundle.Progress) error {
 			return err
 		}
 
-		fmt.Fprintln(os.Stderr, "Talos-only collector mode active.")
+		fmt.Fprintln(os.Stderr, "Chubo-only collector mode active.")
 
 		return support.CreateSupportBundle(ctx, options, supportCollectors...)
 	})

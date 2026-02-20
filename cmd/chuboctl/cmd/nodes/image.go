@@ -138,7 +138,7 @@ func imageList() error {
 		for resp := range responseChan {
 			if resp.Err != nil {
 				if status.Code(resp.Err) == codes.Unimplemented {
-					// fallback to legacy API for older Talos
+					// fallback to legacy API for older Chubo OS releases
 					return imageListLegacy()
 				}
 
@@ -260,7 +260,7 @@ func imagePullInternal(
 	for resp := range responseChan {
 		if resp.Err != nil {
 			if status.Code(resp.Err) == codes.Unimplemented {
-				// fallback to legacy API for older Talos
+				// fallback to legacy API for older Chubo OS releases
 				return nil, imagePullLegacy(imageRef)
 			}
 
@@ -457,10 +457,10 @@ var imageTalosBundleCmdFlags = struct {
 	overlays   bool
 }{}
 
-// imageTalosBundleCmd represents the image talos-bundle command.
+// imageTalosBundleCmd represents the legacy image talos-bundle command.
 var imageTalosBundleCmd = &cobra.Command{
 	Use:   "talos-bundle [talos-version]",
-	Short: "List the default system images and extensions used for Talos",
+	Short: "List the default system images and extensions used for Chubo OS",
 	Long:  ``,
 	Args: cobra.MatchAll(
 		cobra.RangeArgs(0, 1),
@@ -654,7 +654,7 @@ var imageCacheServeCmd = &cobra.Command{
 			imageCacheServeCmdFlags.mirrors,
 			imageCacheServeCmdFlags.tlsCertFile != "" && imageCacheServeCmdFlags.tlsKeyFile != "",
 		); err != nil {
-			development.Error("failed to generate Talos config patch for registry mirrors", zap.Error(err))
+			development.Error("failed to generate Chubo OS config patch for registry mirrors", zap.Error(err))
 		}
 
 		it := func(yield func(string) bool) {
@@ -765,8 +765,8 @@ var imageCacheServeCmdFlags struct {
 // imageCacheCertGenCmd represents the image cache tls certificate generation command.
 var imageCacheCertGenCmd = &cobra.Command{
 	Use:     "cache-cert-gen",
-	Short:   "Generate TLS certificates and CA patch required for securing image cache to Talos communication",
-	Long:    `Generate TLS certificates and CA patch required for securing image cache to Talos communication`,
+	Short:   "Generate TLS certificates and CA patch required for securing image cache to Chubo OS communication",
+	Long:    `Generate TLS certificates and CA patch required for securing image cache to Chubo OS communication`,
 	Example: ``,
 	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {

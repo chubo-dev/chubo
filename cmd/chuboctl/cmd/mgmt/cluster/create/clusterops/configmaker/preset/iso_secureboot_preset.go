@@ -6,7 +6,7 @@ package preset
 
 import "github.com/chubo-dev/chubo/cmd/chuboctl/cmd/mgmt/cluster/create/clusterops"
 
-// ISOSecureBoot configures Talos to boot from a disk image from the Image Factory.
+// ISOSecureBoot configures Chubo OS to boot from a disk image from the Image Factory.
 type ISOSecureBoot struct{}
 
 // Name implements the Preset interface.
@@ -14,7 +14,7 @@ func (ISOSecureBoot) Name() string { return "iso-secureboot" }
 
 // Description implements the Preset interface.
 func (ISOSecureBoot) Description() string {
-	return "Configure Talos for Secureboot via ISO. Only available on Linux hosts."
+	return "Configure Chubo OS for Secureboot via ISO. Only available on Linux hosts."
 }
 
 // ModifyOptions implements the Preset interface.

@@ -350,7 +350,7 @@ func (m *Qemu) addDiskEncryptionPatches() error {
 		}
 
 		if !m.VersionContract.VolumeConfigEncryptionSupported() {
-			// legacy v1alpha1 flow to support booting old Talos versions
+			// legacy v1alpha1 flow to support booting old Chubo OS versions
 			patch, err := m.getLegacyDiskEncryptionPatch(keys)
 			if err != nil {
 				return err

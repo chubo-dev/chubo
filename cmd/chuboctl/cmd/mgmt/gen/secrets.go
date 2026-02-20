@@ -88,7 +88,7 @@ func writeSecretsBundleToFile(bundle *secrets.Bundle) error {
 
 func init() {
 	genSecretsCmd.Flags().StringVarP(&genSecretsCmdFlags.outputFile, "output-file", "o", "secrets.yaml", `path of the output file, or "-" for stdout`)
-	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
+	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Chubo OS version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
 	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.fromControlplaneConfig, "from-controlplane-config", "", "use the provided control-plane machine configuration as input")
 
 	Cmd.AddCommand(genSecretsCmd)

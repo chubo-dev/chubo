@@ -89,7 +89,7 @@ func init() {
 	wipeDiskCmd.Flags().BoolVar(&wipeDiskCmdFlags.dropPartition, "drop-partition", false, "drop partition after wipe (if applicable)")
 	wipeDiskCmd.Flags().MarkHidden("skip-volume-check")    //nolint:errcheck
 	wipeDiskCmd.Flags().MarkHidden("skip-secondary-check") //nolint:errcheck
-	wipeDiskCmd.Flags().BoolVarP(&wipeDiskCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
+	wipeDiskCmd.Flags().BoolVarP(&wipeDiskCmdFlags.insecure, "insecure", "i", false, "use Chubo OS maintenance mode API")
 
 	wipeCmd.AddCommand(wipeDiskCmd)
 }

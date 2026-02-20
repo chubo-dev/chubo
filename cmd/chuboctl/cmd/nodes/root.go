@@ -34,7 +34,7 @@ var GlobalArgs global.Args
 
 const pathAutoCompleteLimit = 500
 
-// WithClientNoNodes wraps common code to initialize Talos client and provide cancellable context.
+// WithClientNoNodes wraps common code to initialize Chubo OS client and provide cancellable context.
 //
 // WithClientNoNodes doesn't set any node information on the request context.
 func WithClientNoNodes(action func(context.Context, *client.Client) error, dialOptions ...grpc.DialOption) error {
@@ -51,7 +51,7 @@ func WithClientAndNodes(action func(context.Context, *client.Client, []string) e
 	return GlobalArgs.WithClientAndNodes(action, dialOptions...)
 }
 
-// WithClientMaintenance wraps common code to initialize Talos client in maintenance (insecure mode).
+// WithClientMaintenance wraps common code to initialize Chubo OS client in maintenance (insecure mode).
 func WithClientMaintenance(enforceFingerprints []string, action func(context.Context, *client.Client) error) error {
 	return GlobalArgs.WithClientMaintenance(enforceFingerprints, action)
 }

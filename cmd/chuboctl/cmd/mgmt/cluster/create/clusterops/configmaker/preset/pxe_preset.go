@@ -12,7 +12,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/platforms"
 )
 
-// PXE configures Talos to boot from via pxe from the Image Factory.
+// PXE configures Chubo OS to boot from via pxe from the Image Factory.
 type PXE struct{}
 
 // Name implements the Preset interface.
@@ -20,7 +20,7 @@ func (PXE) Name() string { return "pxe" }
 
 // Description implements the Preset interface.
 func (PXE) Description() string {
-	return "Configure Talos to boot via PXE from the Image Factory."
+	return "Configure Chubo OS to boot via PXE from the Image Factory."
 }
 
 // ModifyOptions implements the Preset interface.

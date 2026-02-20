@@ -252,7 +252,7 @@ var editCmd = &cobra.Command{
 	Short: "Edit machine configuration with the default editor.",
 	Args:  cobra.RangeArgs(1, 2),
 	Long: `The edit command allows you to directly edit the machine configuration
-of a Talos node using your preferred text editor.
+of a Chubo OS node using your preferred text editor.
 
 It will open the editor defined by your CHUBO_EDITOR,
 TALOS_EDITOR, or EDITOR environment variables, or fall back to 'vi' for Linux

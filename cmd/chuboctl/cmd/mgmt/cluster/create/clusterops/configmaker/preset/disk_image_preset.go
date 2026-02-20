@@ -12,7 +12,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/platforms"
 )
 
-// DiskImage configures Talos to boot from a disk image from the Image Factory.
+// DiskImage configures Chubo OS to boot from a disk image from the Image Factory.
 type DiskImage struct{}
 
 // Name implements the Preset interface.
@@ -20,7 +20,7 @@ func (DiskImage) Name() string { return "disk-image" }
 
 // Description implements the Preset interface.
 func (DiskImage) Description() string {
-	return "Configure Talos to boot from a disk image from the Image Factory."
+	return "Configure Chubo OS to boot from a disk image from the Image Factory."
 }
 
 // ModifyOptions implements the Preset interface.

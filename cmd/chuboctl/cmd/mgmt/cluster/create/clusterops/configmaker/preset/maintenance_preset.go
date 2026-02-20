@@ -6,7 +6,7 @@ package preset
 
 import "github.com/chubo-dev/chubo/cmd/chuboctl/cmd/mgmt/cluster/create/clusterops"
 
-// Maintenance configures Talos to boot from a disk image from the Image Factory.
+// Maintenance configures Chubo OS to boot from a disk image from the Image Factory.
 type Maintenance struct{}
 
 // Name implements the Preset interface.

@@ -41,7 +41,7 @@ func (j *JSON) WriteHeader(definition *meta.ResourceDefinition, withEvents bool)
 func (j *JSON) prepareEncodableData(node string, r resource.Resource, event state.EventType) (map[string]any, error) {
 	if r.Metadata().Type() == config.MachineConfigType && r.Metadata().Annotations().Empty() {
 		// use a temporary wrapper to adjust YAML marshaling
-		// for backwards compatibility with versions of Talos
+		// for backwards compatibility with older OS releases
 		// which incorrectly marshal MachineConfig spec as YAML document
 		// directly
 		r = &mcYamlRepr{r}

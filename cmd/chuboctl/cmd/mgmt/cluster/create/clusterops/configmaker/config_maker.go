@@ -9,7 +9,7 @@ import (
 	"github.com/chubo-dev/chubo/cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers"
 )
 
-// DockerOptions are the options for provisioning a docker based Talos cluster.
+// DockerOptions are the options for provisioning a docker based Chubo OS cluster.
 type DockerOptions makers.MakerOptions[clusterops.Docker]
 
 // GetDockerConfigs returns the cluster configs for docker.
@@ -22,7 +22,7 @@ func GetDockerConfigs(options DockerOptions) (clusterops.ClusterConfigs, error) 
 	return maker.GetClusterConfigs()
 }
 
-// QemuOptions are the options for provisioning a qemu based Talos cluster.
+// QemuOptions are the options for provisioning a qemu based Chubo OS cluster.
 type QemuOptions makers.MakerOptions[clusterops.Qemu]
 
 // GetQemuConfigs returns the cluster configs for qemu.

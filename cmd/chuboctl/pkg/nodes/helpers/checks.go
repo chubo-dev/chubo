@@ -47,7 +47,7 @@ func CheckErrors[T interface{ GetMetadata() *common.Metadata }](messages ...T) e
 	return err
 }
 
-// ClientVersionCheck verifies that client is not outdated vs. Talos version.
+// ClientVersionCheck verifies that client is not outdated vs. Chubo OS version.
 func ClientVersionCheck(ctx context.Context, c *client.Client) error {
 	// ignore the error, as we are only interested in the nodes which respond
 	serverVersions, _ := c.Version(ctx) //nolint:errcheck

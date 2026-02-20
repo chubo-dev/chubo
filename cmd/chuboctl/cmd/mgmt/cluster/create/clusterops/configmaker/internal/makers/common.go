@@ -212,7 +212,7 @@ func (m *Maker[T]) initVersionContract() error {
 
 	versionContract, err := config.ParseContractFromVersion(m.Ops.TalosVersion)
 	if err != nil {
-		return fmt.Errorf("error parsing Talos version %q: %w", m.Ops.TalosVersion, err)
+		return fmt.Errorf("error parsing Chubo OS version %q: %w", m.Ops.TalosVersion, err)
 	}
 
 	m.VersionContract = versionContract

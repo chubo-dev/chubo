@@ -166,14 +166,14 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		addConfigPatchWorkerFlag(common, &cOps.ConfigPatchWorker, configPatchWorkerFlag)
 		addRegistryMirrorFlag(common, &cOps.RegistryMirrors)
 		addNetworkMTUFlag(common, &cOps.NetworkMTU)
-		addTalosVersionFlag(common, &cOps.TalosVersion, "the desired Talos version to generate config for")
+		addTalosVersionFlag(common, &cOps.TalosVersion, "the desired Chubo OS version to generate config for")
 
 		common.StringVar(&cOps.NetworkCIDR, networkCIDRFlagName, cOps.NetworkCIDR, "CIDR of the cluster network (IPv4, ULA network for IPv6 is derived in automated way)")
 		common.StringVar(&cOps.WireguardCIDR, wireguardCIDRFlag, cOps.WireguardCIDR, "CIDR of the wireguard network")
 		common.BoolVar(&cOps.ApplyConfigEnabled, applyConfigEnabledFlag, cOps.ApplyConfigEnabled, "enable apply config when the VM is starting in maintenance mode")
 		common.StringSliceVar(&cOps.RegistryInsecure, registryInsecureFlag, cOps.RegistryInsecure, "list of registry hostnames to skip TLS verification for")
 		common.IntVar(&cOps.ControlPlanePort, controlPlanePortFlag, cOps.ControlPlanePort, "control plane port (load balancer and local API port)")
-		common.BoolVar(&cOps.ConfigDebug, configDebugFlag, cOps.ConfigDebug, "enable debug in Talos config to send service logs to the console")
+		common.BoolVar(&cOps.ConfigDebug, configDebugFlag, cOps.ConfigDebug, "enable debug in Chubo OS config to send service logs to the console")
 		common.BoolVar(&cOps.NetworkIPv4, networkIPv4Flag, cOps.NetworkIPv4, "enable IPv4 network in the cluster")
 		common.BoolVar(&cOps.ClusterWait, clusterWaitFlag, cOps.ClusterWait, "wait for the cluster to be ready before returning")
 		common.DurationVar(&cOps.ClusterWaitTimeout, clusterWaitTimeoutFlag, cOps.ClusterWaitTimeout, "timeout to wait for the cluster to be ready")
@@ -184,7 +184,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		common.BoolVar(&cOps.SkipInjectingConfig, skipInjectingConfigFlag, cOps.SkipInjectingConfig,
 			"skip injecting config from embedded metadata server, write config files to current directory")
 		common.BoolVar(&cOps.EnableClusterDiscovery, withClusterDiscoveryFlag, cOps.EnableClusterDiscovery, "enable cluster discovery")
-		common.BoolVar(&cOps.WithJSONLogs, withJSONLogsFlag, cOps.WithJSONLogs, "enable JSON logs receiver and configure Talos to send logs there")
+		common.BoolVar(&cOps.WithJSONLogs, withJSONLogsFlag, cOps.WithJSONLogs, "enable JSON logs receiver and configure Chubo OS to send logs there")
 		common.BoolVar(&cOps.WithUUIDHostnames, withUUIDHostnamesFlag, cOps.WithUUIDHostnames, "use machine UUIDs as default hostnames")
 		common.BoolVar(&cOps.NetworkIPv6, networkIPv6Flag, cOps.NetworkIPv6, "enable IPv6 network in the cluster")
 
@@ -210,7 +210,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		qemu.BoolVar(&qOps.UefiEnabled, uefiEnabledFlag, qOps.UefiEnabled, "enable UEFI on x86_64 architecture")
 		qemu.BoolVar(&qOps.Tpm1_2Enabled, tpmEnabledFlag, qOps.Tpm1_2Enabled, "enable TPM 1.2 emulation support using swtpm")
 		qemu.BoolVar(&qOps.Tpm2Enabled, tpm2EnabledFlag, qOps.Tpm2Enabled, "enable TPM 2.0 emulation support using swtpm")
-		qemu.BoolVar(&qOps.DebugShellEnabled, withDebugShellFlag, qOps.DebugShellEnabled, "drop talos into a maintenance shell on boot, this is for advanced debugging for developers only")
+		qemu.BoolVar(&qOps.DebugShellEnabled, withDebugShellFlag, qOps.DebugShellEnabled, "drop Chubo OS into a maintenance shell on boot, this is for advanced debugging for developers only")
 		qemu.BoolVar(&qOps.WithIOMMU, withIOMMUFlag, qOps.WithIOMMU, "enable IOMMU support, this also add a new PCI root port and an interface attached to it")
 		qemu.MarkHidden("with-debug-shell") //nolint:errcheck
 		qemu.StringSliceVar(&qOps.ExtraUEFISearchPaths, extraUEFISearchPathsFlag, qOps.ExtraUEFISearchPaths, "additional search paths for UEFI firmware (only applies when UEFI is enabled)")
@@ -257,7 +257,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 	// createCmd is the developer oriented create command.
 	createCmd := &cobra.Command{
 		Use:   cmdName,
-		Short: "Creates a local QEMU-based cluster for Talos development.",
+		Short: "Creates a local QEMU-based cluster for Chubo OS development.",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cli.WithContext(context.Background(), func(ctx context.Context) error {
@@ -334,7 +334,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 			f.Hidden = true
 		})
 
-		createCmd.Short = "Create a local Talos cluster."
+		createCmd.Short = "Create a local Chubo OS cluster."
 		createCmd.DisableFlagsInUseLine = true
 	}
 

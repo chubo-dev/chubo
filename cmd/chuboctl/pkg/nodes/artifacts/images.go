@@ -18,7 +18,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/images"
 )
 
-// ExtensionRef is a ref to the extension for some Talos version.
+// ExtensionRef is a ref to the extension for some Chubo OS version.
 type ExtensionRef struct {
 	TaggedReference name.Tag
 	Digest          string
@@ -28,14 +28,14 @@ type ExtensionRef struct {
 	imageDigest string
 }
 
-// OverlayRef is a ref to the overlay for some Talos version.
+// OverlayRef is a ref to the overlay for some Chubo OS version.
 type OverlayRef struct {
 	Name            string
 	TaggedReference name.Tag
 	Digest          string
 }
 
-// FetchOfficialExtensions fetches list of extensions for specific Talos version.
+// FetchOfficialExtensions fetches list of extensions for specific Chubo OS version.
 func FetchOfficialExtensions(tag string) ([]ExtensionRef, error) {
 	var extensions []ExtensionRef
 
@@ -57,7 +57,7 @@ func FetchOfficialExtensions(tag string) ([]ExtensionRef, error) {
 	return extensions, nil
 }
 
-// FetchOfficialOverlays fetches list of overlays for specific Talos version.
+// FetchOfficialOverlays fetches list of overlays for specific Chubo OS version.
 func FetchOfficialOverlays(tag string) ([]OverlayRef, error) {
 	var overlays []OverlayRef
 

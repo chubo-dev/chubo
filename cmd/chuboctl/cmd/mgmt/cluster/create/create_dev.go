@@ -80,12 +80,12 @@ func createDevCluster(ctx context.Context, cOps clusterops.Common, qOps clustero
 func saveConfig(talosConfigObj *clientconfig.Config, talosconfigPath string) (err error) {
 	c, err := clientconfig.Open(talosconfigPath)
 	if err != nil {
-		return fmt.Errorf("error opening talos config: %w", err)
+		return fmt.Errorf("error opening node config: %w", err)
 	}
 
 	renames := c.Merge(talosConfigObj)
 	for _, rename := range renames {
-		fmt.Fprintf(os.Stderr, "renamed talosconfig context %s\n", rename.String())
+		fmt.Fprintf(os.Stderr, "renamed config context %s\n", rename.String())
 	}
 
 	return c.Save(talosconfigPath)

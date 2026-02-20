@@ -60,7 +60,7 @@ for e.g. Wireguard tunnels:
 
 	    chuboctl pcap -i siderolink --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
 
-	As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
+	As packet capture is transmitted over the network, it is recommended to filter out the Chubo OS API traffic,
 	e.g. by excluding packets with the port 50000.
 	   `,
 	Args: cobra.NoArgs,

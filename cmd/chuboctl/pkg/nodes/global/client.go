@@ -19,7 +19,7 @@ import (
 	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
-// Args is a context for the Talos command line client.
+// Args is a context for the Chubo OS command line client.
 type Args struct {
 	Talosconfig     string
 	CmdContext      string
@@ -34,7 +34,7 @@ func (c *Args) NodeList() []string {
 	return c.Nodes
 }
 
-// WithClientNoNodes wraps common code to initialize Talos client and provide cancellable context.
+// WithClientNoNodes wraps common code to initialize Chubo OS client and provide cancellable context.
 //
 // WithClientNoNodes doesn't set any node information on the request context.
 func (c *Args) WithClientNoNodes(action func(context.Context, *client.Client) error, dialOptions ...grpc.DialOption) error {
@@ -129,7 +129,7 @@ func (c *Args) WithClientAndNodes(action func(context.Context, *client.Client, [
 	)
 }
 
-// WithClientMaintenance wraps common code to initialize Talos client in maintenance (insecure mode).
+// WithClientMaintenance wraps common code to initialize Chubo OS client in maintenance (insecure mode).
 func (c *Args) WithClientMaintenance(enforceFingerprints []string, action func(context.Context, *client.Client) error) error {
 	return cli.WithContext(
 		context.Background(), func(ctx context.Context) error {

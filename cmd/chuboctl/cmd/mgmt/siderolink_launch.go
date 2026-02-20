@@ -115,7 +115,7 @@ type handler struct {
 }
 
 func (h *handler) HandlePeerAdded(event wireguard.PeerEvent) error {
-	h.l.Info("talos agent sees peer added", zap.String("address", event.Address.String()))
+	h.l.Info("chubo agent sees peer added", zap.String("address", event.Address.String()))
 
 	return nil
 }

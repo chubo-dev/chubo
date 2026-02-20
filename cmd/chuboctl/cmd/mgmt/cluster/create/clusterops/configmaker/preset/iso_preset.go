@@ -11,7 +11,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/platforms"
 )
 
-// ISO configures Talos to boot from an iso from the Image Factory.
+// ISO configures Chubo OS to boot from an iso from the Image Factory.
 type ISO struct{}
 
 // Name implements the Preset interface.
@@ -19,7 +19,7 @@ func (ISO) Name() string { return "iso" }
 
 // Description implements the Preset interface.
 func (ISO) Description() string {
-	return "Configure Talos to boot from an ISO from the Image Factory."
+	return "Configure Chubo OS to boot from an ISO from the Image Factory."
 }
 
 // ModifyOptions implements the Preset interface.

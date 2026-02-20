@@ -18,7 +18,7 @@ import (
 // Commands is a list of commands published by the package.
 var Commands []*cobra.Command
 
-// GenV1Alpha1Config generates the Talos config bundle
+// GenV1Alpha1Config generates the Chubo OS config bundle
 //
 // Kept with this name in this package for backwards-compatibility.
 var GenV1Alpha1Config = gen.GenerateConfigBundle

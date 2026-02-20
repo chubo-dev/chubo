@@ -37,7 +37,7 @@ func init() {
 		docker.BoolVar(&dOps.DisableIPv6, dockerDisableIPv6Flag, dOps.DisableIPv6, "skip enabling IPv6 in containers")
 		cli.Should(docker.MarkHidden(dockerDisableIPv6Flag))
 		docker.Var(&dOps.MountOpts, mountOptsFlag, "attach a mount to the container (docker --mount syntax)")
-		docker.StringVar(&dOps.TalosImage, "image", dOps.TalosImage, "the talos image to run")
+		docker.StringVar(&dOps.TalosImage, "image", dOps.TalosImage, "the installer image to run")
 
 		return docker
 	}
