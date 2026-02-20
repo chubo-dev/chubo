@@ -131,7 +131,7 @@ func collectData(dest *os.File, progress chan bundle.Progress) error {
 
 		options := bundle.NewOptions(opts...)
 
-		supportCollectors, err := getTalosOnlyCollectors(ctx, c)
+		supportCollectors, err := getOSOnlyCollectors(ctx, c)
 		if err != nil {
 			return err
 		}
@@ -142,11 +142,11 @@ func collectData(dest *os.File, progress chan bundle.Progress) error {
 	})
 }
 
-func getTalosOnlyCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
+func getOSOnlyCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
 	var allCollectors []*collectors.Collector
 
 	for _, node := range GlobalArgs.Nodes {
-		nodeCollectors, err := getTalosOnlyNodeCollectors(client.WithNode(ctx, node), c)
+		nodeCollectors, err := getOSOnlyNodeCollectors(client.WithNode(ctx, node), c)
 		if err != nil {
 			return nil, err
 		}
@@ -157,21 +157,21 @@ func getTalosOnlyCollectors(ctx context.Context, c *client.Client) ([]*collector
 	return allCollectors, nil
 }
 
-func getTalosOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
+func getOSOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
 	supportCollectors := []*collectors.Collector{
-		collectors.NewCollector("summary", talosOnlySummary),
-		collectors.NewCollector("dmesg.log", talosOnlyDmesg),
-		collectors.NewCollector("controller-runtime.log", talosOnlyServiceLog("controller-runtime")),
-		collectors.NewCollector("dns-resolve-cache.log", talosOnlyServiceLog("dns-resolve-cache")),
-		collectors.NewCollector("dependencies.dot", talosOnlyDependencies),
-		collectors.NewCollector("mounts", talosOnlyMounts),
-		collectors.NewCollector("devices", talosOnlyDevices),
-		collectors.NewCollector("io", talosOnlyIOPressure),
-		collectors.NewCollector("processes", talosOnlyProcesses),
-		collectors.NewCollector("service-list.log", talosOnlyServiceList),
+		collectors.NewCollector("summary", osOnlySummary),
+		collectors.NewCollector("dmesg.log", osOnlyDmesg),
+		collectors.NewCollector("controller-runtime.log", osOnlyServiceLog("controller-runtime")),
+		collectors.NewCollector("dns-resolve-cache.log", osOnlyServiceLog("dns-resolve-cache")),
+		collectors.NewCollector("dependencies.dot", osOnlyDependencies),
+		collectors.NewCollector("mounts", osOnlyMounts),
+		collectors.NewCollector("devices", osOnlyDevices),
+		collectors.NewCollector("io", osOnlyIOPressure),
+		collectors.NewCollector("processes", osOnlyProcesses),
+		collectors.NewCollector("service-list.log", osOnlyServiceList),
 	}
 
-	resourceCollectors, err := getTalosOnlyResourceCollectors(ctx, c.COSI)
+	resourceCollectors, err := getOSOnlyResourceCollectors(ctx, c.COSI)
 	if err != nil {
 		supportCollectors = append(
 			supportCollectors,
@@ -188,7 +188,7 @@ func getTalosOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*colle
 		)
 	}
 
-	serviceCollectors, err := getTalosOnlyServiceCollectors(ctx, c)
+	serviceCollectors, err := getOSOnlyServiceCollectors(ctx, c)
 	if err != nil {
 		supportCollectors = append(
 			supportCollectors,
@@ -208,7 +208,7 @@ func getTalosOnlyNodeCollectors(ctx context.Context, c *client.Client) ([]*colle
 	return supportCollectors, nil
 }
 
-func getTalosOnlyServiceCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
+func getOSOnlyServiceCollectors(ctx context.Context, c *client.Client) ([]*collectors.Collector, error) {
 	resp, err := c.ServiceList(ctx)
 	if err != nil {
 		return nil, err
@@ -235,15 +235,15 @@ func getTalosOnlyServiceCollectors(ctx context.Context, c *client.Client) ([]*co
 		serviceID := id
 
 		collectorsList = append(collectorsList,
-			collectors.NewCollector(fmt.Sprintf("%s.log", serviceID), talosOnlyServiceLog(serviceID)),
-			collectors.NewCollector(fmt.Sprintf("%s.state", serviceID), talosOnlyServiceInfo(serviceID)),
+			collectors.NewCollector(fmt.Sprintf("%s.log", serviceID), osOnlyServiceLog(serviceID)),
+			collectors.NewCollector(fmt.Sprintf("%s.state", serviceID), osOnlyServiceInfo(serviceID)),
 		)
 	}
 
 	return collectorsList, nil
 }
 
-func getTalosOnlyResourceCollectors(ctx context.Context, cosiState state.State) ([]*collectors.Collector, error) {
+func getOSOnlyResourceCollectors(ctx context.Context, cosiState state.State) ([]*collectors.Collector, error) {
 	resourceDefinitions, err := safe.StateListAll[*meta.ResourceDefinition](ctx, cosiState)
 	if err != nil {
 		return nil, err
@@ -256,7 +256,7 @@ func getTalosOnlyResourceCollectors(ctx context.Context, cosiState state.State) 
 			collectorsList,
 			collectors.NewCollector(
 				fmt.Sprintf("%s.yaml", rd.Metadata().ID()),
-				talosOnlyResource(rd),
+				osOnlyResource(rd),
 			),
 		)
 	})
@@ -264,7 +264,7 @@ func getTalosOnlyResourceCollectors(ctx context.Context, cosiState state.State) 
 	return collectorsList, nil
 }
 
-func talosOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.Version(ctx)
 	if err != nil {
 		return nil, err
@@ -293,7 +293,7 @@ func talosOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, err
 	return []byte(b.String()), nil
 }
 
-func talosOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	stream, err := options.TalosClient.Dmesg(ctx, false, false)
 	if err != nil {
 		return nil, err
@@ -317,7 +317,7 @@ func talosOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error
 	return data, nil
 }
 
-func talosOnlyDependencies(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyDependencies(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.Inspect.ControllerRuntimeDependencies(ctx)
 	if err != nil && resp == nil {
 		return nil, fmt.Errorf("error getting controller runtime dependencies: %w", err)
@@ -332,7 +332,7 @@ func talosOnlyDependencies(ctx context.Context, options *bundle.Options) ([]byte
 	return b.Bytes(), nil
 }
 
-func talosOnlyMounts(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyMounts(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.Mounts(ctx)
 	if err != nil && resp == nil {
 		return nil, fmt.Errorf("error getting mounts: %w", err)
@@ -347,7 +347,7 @@ func talosOnlyMounts(ctx context.Context, options *bundle.Options) ([]byte, erro
 	return b.Bytes(), nil
 }
 
-func talosOnlyDevices(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyDevices(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	reader, err := options.TalosClient.Read(ctx, "/proc/bus/pci/devices")
 	if err != nil {
 		return nil, err
@@ -358,7 +358,7 @@ func talosOnlyDevices(ctx context.Context, options *bundle.Options) ([]byte, err
 	return io.ReadAll(reader)
 }
 
-func talosOnlyIOPressure(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyIOPressure(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.MachineClient.DiskStats(ctx, &emptypb.Empty{})
 	if err != nil {
 		return nil, err
@@ -388,7 +388,7 @@ func talosOnlyIOPressure(ctx context.Context, options *bundle.Options) ([]byte, 
 	return b.Bytes(), nil
 }
 
-func talosOnlyProcesses(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyProcesses(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.Processes(ctx)
 	if err != nil {
 		return nil, err
@@ -420,7 +420,7 @@ func talosOnlyProcesses(ctx context.Context, options *bundle.Options) ([]byte, e
 	return b.Bytes(), nil
 }
 
-func talosOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte, error) {
+func osOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	resp, err := options.TalosClient.ServiceList(ctx)
 	if err != nil {
 		return nil, err
@@ -442,7 +442,7 @@ func talosOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte,
 	return []byte(b.String()), nil
 }
 
-func talosOnlyServiceInfo(serviceID string) collectors.Collect {
+func osOnlyServiceInfo(serviceID string) collectors.Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
 		resp, err := options.TalosClient.ServiceInfo(ctx, serviceID)
 		if err != nil && resp == nil {
@@ -459,7 +459,7 @@ func talosOnlyServiceInfo(serviceID string) collectors.Collect {
 	}
 }
 
-func talosOnlyServiceLog(serviceID string) collectors.Collect {
+func osOnlyServiceLog(serviceID string) collectors.Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
 		stream, err := options.TalosClient.Logs(
 			ctx,
@@ -492,7 +492,7 @@ func talosOnlyServiceLog(serviceID string) collectors.Collect {
 	}
 }
 
-func talosOnlyResource(rd *meta.ResourceDefinition) collectors.Collect {
+func osOnlyResource(rd *meta.ResourceDefinition) collectors.Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
 		resp, err := options.TalosClient.COSI.List(
 			ctx,
