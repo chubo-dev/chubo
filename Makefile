@@ -597,7 +597,7 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (cluster-free ima
 		trap 'rm -rf "$$docs_tmp"' EXIT; \
 		_out/chubo/chuboctl-linux-amd64 docs "$$docs_tmp" --cli >/dev/null; \
 		! rg -n -i 'ku[b]ernetes|ku[b]ectl|ku[b]e-system|e[t]c[d]' "$$docs_tmp" >/dev/null
-	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
+	@go test ./cmd/chuboctl/cmd/nodes -run TestDoesNotExist -count=1
 
 .PHONY: chuboos-guardrails
 chuboos-guardrails: ## Legacy alias for chubo-guardrails (Wave B compatibility).

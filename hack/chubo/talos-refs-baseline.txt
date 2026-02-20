@@ -193,7 +193,6 @@
 ./Makefile:	@./hack/chubo/check-talos-refs.sh
 ./Makefile:	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
 ./Makefile:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
-./Makefile:	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
 ./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
 ./Makefile:# Build chuboctl by reusing the talosctl artifact and renaming it.
 ./Makefile:# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
