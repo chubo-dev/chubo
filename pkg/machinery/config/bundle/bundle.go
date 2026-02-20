@@ -152,7 +152,7 @@ func NewBundle(opts ...Option) (*Bundle, error) {
 		return nil, err
 	}
 
-	bundle.TalosCfg, err = input.Talosconfig()
+	bundle.TalosCfg, err = input.Chuboconfig()
 	if err != nil {
 		return bundle, err
 	}

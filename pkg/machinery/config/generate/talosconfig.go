@@ -8,12 +8,17 @@ import (
 	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
-// Talosconfig returns the talos admin Talos config.
-func (in *Input) Talosconfig() (*clientconfig.Config, error) {
+// Chuboconfig returns the primary admin client config.
+func (in *Input) Chuboconfig() (*clientconfig.Config, error) {
 	clientcert, err := in.Options.SecretsBundle.GenerateTalosAPIClientCertificate(in.Options.Roles)
 	if err != nil {
 		return nil, err
 	}
 
 	return clientconfig.NewConfig(in.ClusterName, in.Options.EndpointList, in.Options.SecretsBundle.Certs.OS.Crt, clientcert), nil
+}
+
+// Talosconfig is a legacy alias kept for compatibility.
+func (in *Input) Talosconfig() (*clientconfig.Config, error) {
+	return in.Chuboconfig()
 }

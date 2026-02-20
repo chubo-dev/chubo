@@ -778,7 +778,6 @@
 ./pkg/machinery/config/generate/secrets/secrets.go:	// OS is Talos API CA certificate and key.
 ./pkg/machinery/config/generate/secrets/secrets.go:// Cluster holds Talos cluster-wide secrets.
 ./pkg/machinery/config/generate/stdpatches/stdpatches.go:// Package stdpatches contains standard patches applied to Talos machine configurations.
-./pkg/machinery/config/generate/talosconfig.go:// Talosconfig returns the talos admin Talos config.
 ./pkg/machinery/config/merge/merge.go:// It is specifically fine-tuned to merge Talos machine configuration.
 ./pkg/machinery/config/schemas/config.schema.json:          "description": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - stable - generates a stable hostname based on machine identity\n  - off - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with hostname field.\n",
 ./pkg/machinery/config/schemas/config.schema.json:          "description": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\nGitHub releases page.\n",

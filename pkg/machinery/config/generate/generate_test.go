@@ -125,8 +125,8 @@ func (suite *GenerateSuite) TestGenerateWorkerSuccess() {
 	suite.NotEmpty(cfg.Machine().Security().IssuingCA())
 }
 
-func (suite *GenerateSuite) TestGenerateTalosconfigSuccess() {
-	cfg, err := suite.input.Talosconfig()
+func (suite *GenerateSuite) TestGenerateChuboconfigSuccess() {
+	cfg, err := suite.input.Chuboconfig()
 	suite.Require().NoError(err)
 
 	creds, err := client.CertificateFromConfigContext(cfg.Contexts[cfg.Context])

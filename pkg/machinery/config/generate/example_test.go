@@ -93,13 +93,13 @@ func Example() {
 		}
 	}
 
-	// generate the client Talos configuration (for API access, e.g. talosctl)
-	clientCfg, err := input.Talosconfig()
+	// generate the client Chubo configuration (for API access, e.g. chuboctl)
+	clientCfg, err := input.Chuboconfig()
 	if err != nil {
 		log.Fatalf("failed to generate client config: %s", err)
 	}
 
-	if err = clientCfg.Save(clusterName + "-talosconfig"); err != nil {
+	if err = clientCfg.Save(clusterName + "-chuboconfig"); err != nil {
 		log.Fatalf("failed to save client config: %s", err)
 	}
 }
