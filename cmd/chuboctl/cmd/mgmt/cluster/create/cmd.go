@@ -26,7 +26,7 @@ var (
 	networkMTUFlagName     = "mtu"
 	networkCIDRFlagName    = "cidr"
 	chuboVersionFlagName   = "chubo-version"
-	talosVersionFlagName   = "talos-version"
+	legacyVersionAliasFlag = "talos-version"
 
 	// Flags that have been renamed in the user-facing commands.
 	controlPlaneCpusFlagName        = "cpus-controlplanes"
@@ -37,7 +37,7 @@ var (
 	configPatchControlPlaneFlagName = "config-patch-controlplanes"
 	configPatchWorkerFlagName       = "config-patch-workers"
 	chuboconfigDestinationFlagName  = "chuboconfig-destination"
-	talosconfigDestinationFlagName  = "talosconfig-destination"
+	legacyConfigAliasFlagName       = "talosconfig-destination"
 
 	// Qemu flags.
 	disksFlagName           = "disks"
@@ -48,7 +48,7 @@ func getCommonUserFacingFlags(pointer *clusterops.Common) *pflag.FlagSet {
 	common := pflag.NewFlagSet("common", pflag.PanicOnError)
 
 	addWorkersFlag(common, &pointer.Workers)
-	addClientConfigDestinationFlags(common, &pointer.ChuboconfigDestination, chuboconfigDestinationFlagName, talosconfigDestinationFlagName)
+	addClientConfigDestinationFlags(common, &pointer.ChuboconfigDestination, chuboconfigDestinationFlagName, legacyConfigAliasFlagName)
 	addConfigPatchFlag(common, &pointer.ConfigPatch, configPatchFlagName)
 	addConfigPatchControlPlaneFlag(common, &pointer.ConfigPatchControlPlane, configPatchControlPlaneFlagName)
 	addConfigPatchWorkerFlag(common, &pointer.ConfigPatchWorker, configPatchWorkerFlagName)
@@ -135,8 +135,8 @@ func addNetworkMTUFlag(flagset *pflag.FlagSet, bind *int) {
 
 func addOSVersionFlags(flagset *pflag.FlagSet, bind *string, description string) {
 	flagset.StringVar(bind, chuboVersionFlagName, *bind, description)
-	flagset.StringVar(bind, talosVersionFlagName, *bind, fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
-	cli.Should(flagset.MarkHidden(talosVersionFlagName))
+	flagset.StringVar(bind, legacyVersionAliasFlag, *bind, fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
+	cli.Should(flagset.MarkHidden(legacyVersionAliasFlag))
 }
 
 // qemu flags

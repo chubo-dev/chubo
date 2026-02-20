@@ -313,7 +313,7 @@
 ./cmd/chuboctl/cmd/constants/constants.go:	ImageFactoryURL = "https://factory.talos.dev/"
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.events.sink") != nil,
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.logging.kernel") != nil:
-./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	talosVersionFlagName   = "talos-version"
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	legacyVersionAliasFlag = "talos-version"
 ./cmd/chuboctl/cmd/mgmt/gen/config.go:	cli.Should(genConfigCmd.Flags().MarkHidden("talos-version"))
 ./cmd/chuboctl/cmd/mgmt/gen/config.go:	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
 ./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	cli.Should(genSecretsCmd.Flags().MarkHidden("talos-version"))
