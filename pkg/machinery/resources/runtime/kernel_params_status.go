@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// KernelParamStatusType is type of KernelParam resource.
-const KernelParamStatusType = resource.Type("KernelParamStatuses.runtime.talos.dev")
+const (
+	// KernelParamStatusType is type of KernelParam resource.
+	KernelParamStatusType = resource.Type("KernelParamStatuses.runtime.chubo.dev")
+
+	// LegacyKernelParamStatusType is the legacy type of KernelParam resource.
+	LegacyKernelParamStatusType = resource.Type("KernelParamStatuses.runtime.talos.dev")
+)
 
 // KernelParamStatus resource holds defined sysctl flags status.
 type KernelParamStatus = typed.Resource[KernelParamStatusSpec, KernelParamStatusExtension]
@@ -43,7 +48,7 @@ type KernelParamStatusExtension struct{}
 func (KernelParamStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             KernelParamStatusType,
-		Aliases:          []resource.Type{"sysctls", "kernelparameters", "kernelparams"},
+		Aliases:          []resource.Type{LegacyKernelParamStatusType, "sysctls", "kernelparameters", "kernelparams"},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -66,6 +71,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[KernelParamStatusSpec](KernelParamStatusType, &KernelParamStatus{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[KernelParamStatusSpec](LegacyKernelParamStatusType, &KernelParamStatus{})
 	if err != nil {
 		panic(err)
 	}

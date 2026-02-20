@@ -15,8 +15,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// WatchdogTimerConfigType is type of WatchdogTimerConfig resource.
-const WatchdogTimerConfigType = resource.Type("WatchdogTimerConfigs.runtime.talos.dev")
+const (
+	// WatchdogTimerConfigType is type of WatchdogTimerConfig resource.
+	WatchdogTimerConfigType = resource.Type("WatchdogTimerConfigs.runtime.chubo.dev")
+
+	// LegacyWatchdogTimerConfigType is the legacy type of WatchdogTimerConfig resource.
+	LegacyWatchdogTimerConfigType = resource.Type("WatchdogTimerConfigs.runtime.talos.dev")
+)
 
 // WatchdogTimerConfig resource holds configuration for watchdog timer.
 type WatchdogTimerConfig = typed.Resource[WatchdogTimerConfigSpec, WatchdogTimerConfigExtension]
@@ -47,7 +52,7 @@ type WatchdogTimerConfigExtension struct{}
 func (WatchdogTimerConfigExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             WatchdogTimerConfigType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyWatchdogTimerConfigType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -66,6 +71,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[WatchdogTimerConfigSpec](WatchdogTimerConfigType, &WatchdogTimerConfig{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[WatchdogTimerConfigSpec](LegacyWatchdogTimerConfigType, &WatchdogTimerConfig{})
 	if err != nil {
 		panic(err)
 	}

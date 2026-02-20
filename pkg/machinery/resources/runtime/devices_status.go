@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// DevicesStatusType is type of DevicesStatus resource.
-const DevicesStatusType = resource.Type("DevicesStatuses.runtime.talos.dev")
+const (
+	// DevicesStatusType is type of DevicesStatus resource.
+	DevicesStatusType = resource.Type("DevicesStatuses.runtime.chubo.dev")
+
+	// LegacyDevicesStatusType is the legacy type of DevicesStatus resource.
+	LegacyDevicesStatusType = resource.Type("DevicesStatuses.runtime.talos.dev")
+)
 
 // DevicesStatus resource holds status of hardware devices (overall).
 type DevicesStatus = typed.Resource[DevicesStatusSpec, DevicesStatusExtension]
@@ -45,7 +50,7 @@ type DevicesStatusExtension struct{}
 func (DevicesStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             DevicesStatusType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyDevicesStatusType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -60,6 +65,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[DevicesStatusSpec](DevicesStatusType, &DevicesStatus{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[DevicesStatusSpec](LegacyDevicesStatusType, &DevicesStatus{})
 	if err != nil {
 		panic(err)
 	}

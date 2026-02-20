@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// KernelCmdlineType is type of KernelCmdline resource.
-const KernelCmdlineType = resource.Type("KernelCmdlines.runtime.talos.dev")
+const (
+	// KernelCmdlineType is type of KernelCmdline resource.
+	KernelCmdlineType = resource.Type("KernelCmdlines.runtime.chubo.dev")
+
+	// LegacyKernelCmdlineType is the legacy type of KernelCmdline resource.
+	LegacyKernelCmdlineType = resource.Type("KernelCmdlines.runtime.talos.dev")
+)
 
 // KernelCmdline resource holds configuration for kernel message log streaming.
 type KernelCmdline = typed.Resource[KernelCmdlineSpec, KernelCmdlineExtension]
@@ -44,7 +49,7 @@ type KernelCmdlineExtension struct{}
 func (KernelCmdlineExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             KernelCmdlineType,
-		Aliases:          []resource.Type{"cmdline"},
+		Aliases:          []resource.Type{LegacyKernelCmdlineType, "cmdline"},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -59,6 +64,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[KernelCmdlineSpec](KernelCmdlineType, &KernelCmdline{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[KernelCmdlineSpec](LegacyKernelCmdlineType, &KernelCmdline{})
 	if err != nil {
 		panic(err)
 	}

@@ -13,11 +13,19 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// KernelParamSpecType is type of KernelParam resource.
-const KernelParamSpecType = resource.Type("KernelParamSpecs.runtime.talos.dev")
+const (
+	// KernelParamSpecType is type of KernelParam resource.
+	KernelParamSpecType = resource.Type("KernelParamSpecs.runtime.chubo.dev")
 
-// KernelParamDefaultSpecType is type of KernelParam resource for default kernel params.
-const KernelParamDefaultSpecType = resource.Type("KernelParamDefaultSpecs.runtime.talos.dev")
+	// LegacyKernelParamSpecType is the legacy type of KernelParam resource.
+	LegacyKernelParamSpecType = resource.Type("KernelParamSpecs.runtime.talos.dev")
+
+	// KernelParamDefaultSpecType is type of KernelParam resource for default kernel params.
+	KernelParamDefaultSpecType = resource.Type("KernelParamDefaultSpecs.runtime.chubo.dev")
+
+	// LegacyKernelParamDefaultSpecType is the legacy type of KernelParam resource for default kernel params.
+	LegacyKernelParamDefaultSpecType = resource.Type("KernelParamDefaultSpecs.runtime.talos.dev")
+)
 
 // KernelParam interface.
 type KernelParam interface {
@@ -50,7 +58,7 @@ type KernelParamSpecExtension struct{}
 func (KernelParamSpecExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             KernelParamSpecType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyKernelParamSpecType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns:     []meta.PrintColumn{},
 	}
@@ -77,7 +85,7 @@ type KernelParamDefaultSpecExtension struct{}
 func (KernelParamDefaultSpecExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             KernelParamDefaultSpecType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyKernelParamDefaultSpecType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns:     []meta.PrintColumn{},
 	}
@@ -91,7 +99,17 @@ func init() {
 		panic(err)
 	}
 
+	err = protobuf.RegisterDynamic[KernelParamSpecSpec](LegacyKernelParamSpecType, &KernelParamSpec{})
+	if err != nil {
+		panic(err)
+	}
+
 	err = protobuf.RegisterDynamic[KernelParamDefaultSpecSpec](KernelParamDefaultSpecType, &KernelParamDefaultSpec{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[KernelParamDefaultSpecSpec](LegacyKernelParamDefaultSpecType, &KernelParamDefaultSpec{})
 	if err != nil {
 		panic(err)
 	}

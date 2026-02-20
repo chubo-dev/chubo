@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MountStatusType is type of Mount resource.
-const MountStatusType = resource.Type("MountStatuses.runtime.talos.dev")
+const (
+	// MountStatusType is type of Mount resource.
+	MountStatusType = resource.Type("MountStatuses.runtime.chubo.dev")
+
+	// LegacyMountStatusType is the legacy type of Mount resource.
+	LegacyMountStatusType = resource.Type("MountStatuses.runtime.talos.dev")
+)
 
 // MountStatus resource holds defined sysctl flags status.
 type MountStatus = typed.Resource[MountStatusSpec, MountStatusExtension]
@@ -46,7 +51,7 @@ type MountStatusExtension struct{}
 func (MountStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:                 MountStatusType,
-		Aliases:              []resource.Type{"mounts"},
+		Aliases:              []resource.Type{LegacyMountStatusType, "mounts"},
 		DefaultNamespace:     NamespaceName,
 		SkipAutomaticAliases: true,
 		PrintColumns: []meta.PrintColumn{
@@ -70,6 +75,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[MountStatusSpec](MountStatusType, &MountStatus{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[MountStatusSpec](LegacyMountStatusType, &MountStatus{})
 	if err != nil {
 		panic(err)
 	}
