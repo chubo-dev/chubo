@@ -53,7 +53,7 @@ func (p *provisioner) createNodes(
 
 				nodeReq.Ports = append(
 					[]string{
-						fmt.Sprintf("%s%d:%d/tcp", hostPrefix, p.mappedTalosAPIPort, constants.ApidPort),
+						fmt.Sprintf("%s%d:%d/tcp", hostPrefix, p.mappedOSAPIPort, constants.ApidPort),
 						fmt.Sprintf("%s%d:%d/tcp", hostPrefix, p.mappedControlPlanePort, constants.DefaultControlPlanePort),
 					},
 					nodeReq.Ports...,
@@ -108,9 +108,9 @@ func (p *provisioner) createNode(ctx context.Context, clusterReq provision.Clust
 		Image:    clusterReq.Image,
 		Env:      env,
 		Labels: map[string]string{
-			"talos.owned":        "true",
-			"talos.cluster.name": clusterReq.Name,
-			"talos.type":         nodeReq.Type.String(),
+			clusterOwnedLabelKey: "true",
+			clusterNameLabelKey:  clusterReq.Name,
+			clusterTypeLabelKey:  nodeReq.Type.String(),
 		},
 	}
 
@@ -156,7 +156,7 @@ func (p *provisioner) createNode(ctx context.Context, clusterReq provision.Clust
 		}
 	}
 
-	// Ensure that the container is created in the talos network.
+	// Ensure that the container is created in the cluster network.
 
 	networkConfig := &network.NetworkingConfig{
 		EndpointsConfig: map[string]*network.EndpointSettings{
@@ -244,9 +244,39 @@ func (p *provisioner) createNode(ctx context.Context, clusterReq provision.Clust
 }
 
 func (p *provisioner) listNodes(ctx context.Context, clusterName string) ([]container.Summary, error) {
+	chuboNodes, err := p.listNodesByLabelSet(ctx, clusterName, clusterOwnedLabelKey, clusterNameLabelKey)
+	if err != nil {
+		return nil, err
+	}
+
+	legacyNodes, err := p.listNodesByLabelSet(ctx, clusterName, legacyOwnedLabelKey, legacyClusterNameLabelKey)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(legacyNodes) == 0 {
+		return chuboNodes, nil
+	}
+
+	seen := make(map[string]struct{}, len(chuboNodes)+len(legacyNodes))
+	out := make([]container.Summary, 0, len(chuboNodes)+len(legacyNodes))
+
+	for _, node := range append(chuboNodes, legacyNodes...) {
+		if _, ok := seen[node.ID]; ok {
+			continue
+		}
+
+		seen[node.ID] = struct{}{}
+		out = append(out, node)
+	}
+
+	return out, nil
+}
+
+func (p *provisioner) listNodesByLabelSet(ctx context.Context, clusterName, ownedLabelKey, nameLabelKey string) ([]container.Summary, error) {
 	filters := client.Filters{}
-	filters.Add("label", "talos.owned=true")
-	filters.Add("label", "talos.cluster.name="+clusterName)
+	filters.Add("label", ownedLabelKey+"=true")
+	filters.Add("label", nameLabelKey+"="+clusterName)
 
 	summary, err := p.client.ContainerList(ctx, client.ContainerListOptions{All: true, Filters: filters})
 	if err != nil {

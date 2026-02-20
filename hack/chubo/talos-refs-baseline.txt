@@ -1160,19 +1160,9 @@
 ./pkg/machinery/version/os-release:ID=talos
 ./pkg/machinery/version/os-release:NAME="Talos"
 ./pkg/machinery/version/os-release:PRETTY_NAME="Talos (v1.13.0-alpha.1)"
-./pkg/provision/providers/docker/docker.go:		return nil, fmt.Errorf("failed to get available port for Talos API: %w", err)
-./pkg/provision/providers/docker/docker.go:	// return a mapped to the localhost first container Talos API endpoint.
-./pkg/provision/providers/docker/network.go:			"talos.cluster.name": req.Name,
-./pkg/provision/providers/docker/network.go:			"talos.owned":        "true",
-./pkg/provision/providers/docker/network.go:	filters.Add("label", "talos.cluster.name="+name)
-./pkg/provision/providers/docker/network.go:	filters.Add("label", "talos.owned=true")
-./pkg/provision/providers/docker/node.go:			"talos.cluster.name": clusterReq.Name,
-./pkg/provision/providers/docker/node.go:			"talos.owned":        "true",
-./pkg/provision/providers/docker/node.go:			"talos.type":         nodeReq.Type.String(),
-./pkg/provision/providers/docker/node.go:	// Ensure that the container is created in the talos network.
-./pkg/provision/providers/docker/node.go:	filters.Add("label", "talos.cluster.name="+clusterName)
-./pkg/provision/providers/docker/node.go:	filters.Add("label", "talos.owned=true")
-./pkg/provision/providers/docker/reflect.go:		t, err := machine.ParseType(node.Labels["talos.type"])
+./pkg/provision/providers/docker/docker.go:	legacyClusterNameLabelKey = "talos.cluster.name"
+./pkg/provision/providers/docker/docker.go:	legacyClusterTypeLabelKey = "talos.type"
+./pkg/provision/providers/docker/docker.go:	legacyOwnedLabelKey       = "talos.owned"
 ./pkg/provision/providers/qemu/launch.go:				// [TODO]: once Talos is fixed, use multipath NVME: https://qemu-project.gitlab.io/qemu/system/devices/nvme.html
 ./pkg/provision/providers/qemu/launch.go:		config.sdStubExtraCmdlineConfig = fmt.Sprintf(" talos.config=http://%s/config.yaml", httpServerAddr)
 ./pkg/provision/providers/qemu/launch.go:	// Talos config

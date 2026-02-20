@@ -62,7 +62,12 @@ func (p *provisioner) Reflect(ctx context.Context, clusterName, stateDirectory s
 	var mappedControlPlanePort string
 
 	for _, node := range nodes {
-		t, err := machine.ParseType(node.Labels["talos.type"])
+		nodeTypeLabel := node.Labels[clusterTypeLabelKey]
+		if nodeTypeLabel == "" {
+			nodeTypeLabel = node.Labels[legacyClusterTypeLabelKey]
+		}
+
+		t, err := machine.ParseType(nodeTypeLabel)
 		if err != nil {
 			return nil, err
 		}

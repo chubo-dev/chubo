@@ -24,8 +24,17 @@ import (
 type provisioner struct {
 	client *client.Client
 
-	mappedControlPlanePort, mappedTalosAPIPort int
+	mappedControlPlanePort, mappedOSAPIPort int
 }
+
+const (
+	clusterOwnedLabelKey      = "chubo.owned"
+	clusterNameLabelKey       = "chubo.cluster.name"
+	clusterTypeLabelKey       = "chubo.type"
+	legacyOwnedLabelKey       = "talos.owned"
+	legacyClusterNameLabelKey = "talos.cluster.name"
+	legacyClusterTypeLabelKey = "talos.type"
+)
 
 func getAvailableTCPPort(ctx context.Context) (int, error) {
 	l, err := (&net.ListenConfig{}).Listen(ctx, "tcp", "127.0.0.1:0")
@@ -69,9 +78,9 @@ func NewProvisioner(ctx context.Context) (provision.Provisioner, error) {
 		return nil, fmt.Errorf("failed to get available port for control plane endpoint: %w", err)
 	}
 
-	p.mappedTalosAPIPort, err = getAvailableTCPPort(ctx)
+	p.mappedOSAPIPort, err = getAvailableTCPPort(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get available port for Talos API: %w", err)
+		return nil, fmt.Errorf("failed to get available port for OS API: %w", err)
 	}
 
 	return p, nil
@@ -115,8 +124,8 @@ func (p *provisioner) GetExternalControlPlaneEndpoint(provision.NetworkRequest, 
 
 // GetTalosAPIEndpoints returns a list of OS API endpoints.
 func (p *provisioner) GetTalosAPIEndpoints(provision.NetworkRequest) []string {
-	// return a mapped to the localhost first container Talos API endpoint.
-	return []string{nethelpers.JoinHostPort("127.0.0.1", p.mappedTalosAPIPort)}
+	// return a mapped-to-localhost endpoint for the first container OS API endpoint.
+	return []string{nethelpers.JoinHostPort("127.0.0.1", p.mappedOSAPIPort)}
 }
 
 // UserDiskName not implemented for docker.

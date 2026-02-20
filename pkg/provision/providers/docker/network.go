@@ -36,8 +36,8 @@ func (p *provisioner) createNetwork(ctx context.Context, req provision.NetworkRe
 	// Create new net
 	options := client.NetworkCreateOptions{
 		Labels: map[string]string{
-			"talos.owned":        "true",
-			"talos.cluster.name": req.Name,
+			clusterOwnedLabelKey: "true",
+			clusterNameLabelKey:  req.Name,
 		},
 		IPAM: &network.IPAM{
 			Config: []network.IPAMConfig{
@@ -57,9 +57,39 @@ func (p *provisioner) createNetwork(ctx context.Context, req provision.NetworkRe
 }
 
 func (p *provisioner) listNetworks(ctx context.Context, name string) ([]network.Summary, error) {
+	chuboNetworks, err := p.listNetworksByLabelSet(ctx, name, clusterOwnedLabelKey, clusterNameLabelKey)
+	if err != nil {
+		return nil, err
+	}
+
+	legacyNetworks, err := p.listNetworksByLabelSet(ctx, name, legacyOwnedLabelKey, legacyClusterNameLabelKey)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(legacyNetworks) == 0 {
+		return chuboNetworks, nil
+	}
+
+	seen := make(map[string]struct{}, len(chuboNetworks)+len(legacyNetworks))
+	out := make([]network.Summary, 0, len(chuboNetworks)+len(legacyNetworks))
+
+	for _, nw := range append(chuboNetworks, legacyNetworks...) {
+		if _, ok := seen[nw.ID]; ok {
+			continue
+		}
+
+		seen[nw.ID] = struct{}{}
+		out = append(out, nw)
+	}
+
+	return out, nil
+}
+
+func (p *provisioner) listNetworksByLabelSet(ctx context.Context, name, ownedLabelKey, nameLabelKey string) ([]network.Summary, error) {
 	filters := client.Filters{}
-	filters.Add("label", "talos.owned=true")
-	filters.Add("label", "talos.cluster.name="+name)
+	filters.Add("label", ownedLabelKey+"=true")
+	filters.Add("label", nameLabelKey+"="+name)
 
 	options := client.NetworkListOptions{
 		Filters: filters,
