@@ -35,6 +35,7 @@ var (
 	configPatchFlagName             = "config-patch"
 	configPatchControlPlaneFlagName = "config-patch-controlplanes"
 	configPatchWorkerFlagName       = "config-patch-workers"
+	chuboconfigDestinationFlagName  = "chuboconfig-destination"
 	talosconfigDestinationFlagName  = "talosconfig-destination"
 
 	// Qemu flags.
@@ -46,7 +47,7 @@ func getCommonUserFacingFlags(pointer *clusterops.Common) *pflag.FlagSet {
 	common := pflag.NewFlagSet("common", pflag.PanicOnError)
 
 	addWorkersFlag(common, &pointer.Workers)
-	addTalosconfigDestinationFlag(common, &pointer.TalosconfigDestination, talosconfigDestinationFlagName)
+	addClientConfigDestinationFlags(common, &pointer.ChuboconfigDestination, chuboconfigDestinationFlagName, talosconfigDestinationFlagName)
 	addConfigPatchFlag(common, &pointer.ConfigPatch, configPatchFlagName)
 	addConfigPatchControlPlaneFlag(common, &pointer.ConfigPatchControlPlane, configPatchControlPlaneFlagName)
 	addConfigPatchWorkerFlag(common, &pointer.ConfigPatchWorker, configPatchWorkerFlagName)
@@ -67,8 +68,8 @@ func getCommonUserFacingFlags(pointer *clusterops.Common) *pflag.FlagSet {
 
 // Common flags
 
-func addTalosconfigDestinationFlag(flagset *pflag.FlagSet, bind *string, flagName string) {
-	flagset.StringVar(bind, flagName, "",
+func addClientConfigDestinationFlags(flagset *pflag.FlagSet, bind *string, primaryFlagName string, legacyFlagNames ...string) {
+	flagset.StringVar(bind, primaryFlagName, "",
 		fmt.Sprintf("The location to save the generated client configuration file to. Defaults to '%s' (or legacy '%s') env variables if set, otherwise '%s', then legacy '%s', then '%s'.",
 			constants.ChuboConfigEnvVar,
 			constants.TalosConfigEnvVar,
@@ -77,6 +78,14 @@ func addTalosconfigDestinationFlag(flagset *pflag.FlagSet, bind *string, flagNam
 			filepath.Join(constants.ServiceAccountMountPath, constants.ChuboconfigFilename),
 		),
 	)
+
+	for _, legacyFlagName := range legacyFlagNames {
+		flagset.StringVar(bind, legacyFlagName, "",
+			fmt.Sprintf("Legacy alias for --%s.", primaryFlagName),
+		)
+
+		cli.Should(flagset.MarkHidden(legacyFlagName))
+	}
 }
 
 func addControlplaneCpusFlag(flagset *pflag.FlagSet, bind *string, flagName string) {

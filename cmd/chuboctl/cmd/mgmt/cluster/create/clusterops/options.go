@@ -47,7 +47,7 @@ type ParsedNodeResources struct {
 type Common struct {
 	// rootOps are the options from the root cluster command
 	RootOps                 *clustercmd.CmdOps
-	TalosconfigDestination  string
+	ChuboconfigDestination  string
 	RegistryMirrors         []string
 	RegistryInsecure        []string
 	ApplyConfigEnabled      bool

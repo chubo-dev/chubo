@@ -580,7 +580,7 @@ echo "generating secrets and machine configs"
 	-o "${MACHINECONFIG_INSTALL}"
 "${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
-	-t talosconfig \
+	-t chuboconfig \
 	-o "${CHUBOCONFIG_FILE}"
 
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"

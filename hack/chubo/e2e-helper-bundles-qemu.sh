@@ -633,7 +633,7 @@ mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 
 "${CHUBOCTL_BASE}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
-	-t talosconfig \
+	-t chuboconfig \
 	-o "${CHUBOCONFIG_FILE}"
 
 VMNET_MAC=""

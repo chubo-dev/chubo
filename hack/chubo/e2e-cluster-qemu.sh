@@ -920,7 +920,7 @@ echo "generating secrets and chuboconfig"
 "${CHUBOCTL}" gen secrets -o "${SECRETS_FILE}"
 "${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
-	-t talosconfig \
+	-t chuboconfig \
 	-o "${CHUBOCONFIG_FILE}"
 
 controlplane_ips=()

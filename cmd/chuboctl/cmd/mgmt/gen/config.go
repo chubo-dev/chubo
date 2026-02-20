@@ -34,6 +34,7 @@ import (
 const (
 	controlPlaneOutputType = "controlplane"
 	workerOutputType       = "worker"
+	chuboconfigOutputType  = "chuboconfig"
 	talosconfigOutputType  = "talosconfig"
 
 	stdoutOutput = "-"
@@ -41,14 +42,21 @@ const (
 	yamlExt = ".yaml"
 )
 
+var defaultOutputTypes = []string{
+	controlPlaneOutputType,
+	workerOutputType,
+	chuboconfigOutputType,
+}
+
 var allOutputTypes = []string{
 	controlPlaneOutputType,
 	workerOutputType,
+	chuboconfigOutputType,
 	talosconfigOutputType,
 }
 
 type configOutputPaths struct {
-	controlPlane, worker, talosconfig string
+	controlPlane, worker, chuboconfig string
 }
 
 var genConfigCmdFlags struct {
@@ -262,17 +270,34 @@ func validateFlags() error {
 		genConfigCmdFlags.output = genConfigCmdFlags.outputDir
 	}
 
-	var err error
+	var (
+		err                 error
+		normalizedOutputSet = make([]string, 0, len(genConfigCmdFlags.outputTypes))
+	)
 
 	for _, outputType := range genConfigCmdFlags.outputTypes {
 		if !slices.ContainsFunc(allOutputTypes, func(t string) bool {
 			return t == outputType
 		}) {
 			err = multierror.Append(err, fmt.Errorf("invalid output type: %q", outputType))
+
+			continue
 		}
+
+		if outputType == talosconfigOutputType {
+			outputType = chuboconfigOutputType
+		}
+
+		normalizedOutputSet = append(normalizedOutputSet, outputType)
 	}
 
-	return err
+	if err != nil {
+		return err
+	}
+
+	genConfigCmdFlags.outputTypes = normalizedOutputSet
+
+	return nil
 }
 
 func writeConfigBundle(configBundle *bundle.Bundle, outputPaths configOutputPaths, commentsFlags encoder.CommentsFlags) error {
@@ -300,13 +325,13 @@ func writeConfigBundle(configBundle *bundle.Bundle, outputPaths configOutputPath
 		}
 	}
 
-	if _, ok := outputTypesSet[talosconfigOutputType]; ok {
+	if _, ok := outputTypesSet[chuboconfigOutputType]; ok {
 		data, err := yaml.Marshal(configBundle.TalosConfig())
 		if err != nil {
 			return fmt.Errorf("failed to marshal config: %+v", err)
 		}
 
-		if err = writeToDestination(data, outputPaths.talosconfig, 0o644); err != nil {
+		if err = writeToDestination(data, outputPaths.chuboconfig, 0o644); err != nil {
 			return err
 		}
 	}
@@ -342,7 +367,7 @@ func writeToDestination(data []byte, destination string, permissions os.FileMode
 func outputPaths() (configOutputPaths, error) {
 	// output to stdout
 	if genConfigCmdFlags.output == stdoutOutput {
-		return configOutputPaths{controlPlane: stdoutOutput, worker: stdoutOutput, talosconfig: stdoutOutput}, nil
+		return configOutputPaths{controlPlane: stdoutOutput, worker: stdoutOutput, chuboconfig: stdoutOutput}, nil
 	}
 
 	// output is not specified - use current working directory as the default
@@ -354,9 +379,9 @@ func outputPaths() (configOutputPaths, error) {
 
 		controlPlane := filepath.Join(cwd, machine.TypeControlPlane.String()+yamlExt)
 		worker := filepath.Join(cwd, machine.TypeWorker.String()+yamlExt)
-		talosconfig := filepath.Join(cwd, "talosconfig")
+		chuboconfig := filepath.Join(cwd, "chuboconfig")
 
-		return configOutputPaths{controlPlane: controlPlane, worker: worker, talosconfig: talosconfig}, nil
+		return configOutputPaths{controlPlane: controlPlane, worker: worker, chuboconfig: chuboconfig}, nil
 	}
 
 	// output is specified
@@ -367,16 +392,16 @@ func outputPaths() (configOutputPaths, error) {
 		return configOutputPaths{
 			controlPlane: genConfigCmdFlags.output,
 			worker:       genConfigCmdFlags.output,
-			talosconfig:  genConfigCmdFlags.output,
+			chuboconfig:  genConfigCmdFlags.output,
 		}, nil
 	}
 
 	// treat --output as a directory
 	controlPlane := filepath.Join(genConfigCmdFlags.output, machine.TypeControlPlane.String()+yamlExt)
 	worker := filepath.Join(genConfigCmdFlags.output, machine.TypeWorker.String()+yamlExt)
-	talosconfig := filepath.Join(genConfigCmdFlags.output, "talosconfig")
+	chuboconfig := filepath.Join(genConfigCmdFlags.output, "chuboconfig")
 
-	return configOutputPaths{controlPlane: controlPlane, worker: worker, talosconfig: talosconfig}, nil
+	return configOutputPaths{controlPlane: controlPlane, worker: worker, chuboconfig: chuboconfig}, nil
 }
 
 func validateClusterEndpoint(endpoint string) error {
@@ -430,7 +455,7 @@ func init() {
 	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withClusterDiscovery, "with-cluster-discovery", "", true, "enable cluster discovery feature")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.withSecrets, "with-secrets", "", "use a secrets file generated using 'gen secrets'")
 
-	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", allOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q", allOutputTypes))
+	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", defaultOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q (legacy alias: %q -> %q)", allOutputTypes, talosconfigOutputType, chuboconfigOutputType))
 	genConfigCmd.Flags().StringVarP(&genConfigCmdFlags.output, "output", "o", "",
 		`destination to output generated files. when multiple output types are specified, it must be a directory. for a single output type, it must either be a file path, or "-" for stdout`)
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.outputDir, "output-dir", "", "destination to output generated files") // kept for backwards compatibility

@@ -57,6 +57,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 		tpm2EnabledFlag               = "with-tpm2"
 		withDebugShellFlag            = "with-debug-shell"
 		withIOMMUFlag                 = "with-iommu"
+		chuboconfigFlag               = "chuboconfig"
 		talosconfigFlag               = "talosconfig"
 		applyConfigEnabledFlag        = "with-apply-config"
 		wireguardCIDRFlag             = "wireguard-cidr"
@@ -160,7 +161,7 @@ func getCreateCmd(cmdName string, hidden bool) *cobra.Command {
 
 		addWorkersFlag(common, &cOps.Workers)
 		addControlplanesFlag(common, &cOps.Controlplanes)
-		addTalosconfigDestinationFlag(common, &cOps.TalosconfigDestination, talosconfigFlag)
+		addClientConfigDestinationFlags(common, &cOps.ChuboconfigDestination, chuboconfigFlag, talosconfigFlag)
 		addConfigPatchFlag(common, &cOps.ConfigPatch, configPatchFlag)
 		addConfigPatchControlPlaneFlag(common, &cOps.ConfigPatchControlPlane, configPatchControlPlaneFlag)
 		addConfigPatchWorkerFlag(common, &cOps.ConfigPatchWorker, configPatchWorkerFlag)

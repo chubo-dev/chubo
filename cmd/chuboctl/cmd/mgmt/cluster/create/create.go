@@ -132,9 +132,9 @@ func postCreate(
 	clusterConfigs clusterops.ClusterConfigs,
 ) error {
 	if clusterConfigs.ConfigBundle != nil {
-		bundleTalosconfig := clusterConfigs.ConfigBundle.TalosConfig()
+		bundleChuboconfig := clusterConfigs.ConfigBundle.TalosConfig()
 
-		if err := saveConfig(bundleTalosconfig, cOps.TalosconfigDestination); err != nil {
+		if err := saveConfig(bundleChuboconfig, cOps.ChuboconfigDestination); err != nil {
 			return err
 		}
 	}

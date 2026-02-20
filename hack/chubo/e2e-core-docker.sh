@@ -140,7 +140,7 @@ if ! "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster creat
 	--image "${TALOS_IMAGE_LOCAL}" \
 	--workers 0 \
 	--subnet "${SUBNET}" \
-	--talosconfig-destination "${CHUBOCONFIG_FILE}"; then
+	--chuboconfig-destination "${CHUBOCONFIG_FILE}"; then
 	echo "cluster create docker failed; recent node logs:" >&2
 	if docker ps -a --format '{{.Names}}' | grep -qx "${NODE_CONTAINER}"; then
 		docker logs --tail 120 "${NODE_CONTAINER}" >&2 || true

@@ -277,7 +277,7 @@ func (suite *GenSuite) TestGenConfigWithDeprecatedOutputDirFlag() {
 
 	suite.Assert().FileExists(filepath.Join(tempDir, "controlplane.yaml"))
 	suite.Assert().FileExists(filepath.Join(tempDir, "worker.yaml"))
-	suite.Assert().FileExists(filepath.Join(tempDir, "talosconfig"))
+	suite.Assert().FileExists(filepath.Join(tempDir, "chuboconfig"))
 }
 
 // TestGenConfigToStdoutControlPlane tests that the gen config command can output a control plane config to stdout.
@@ -314,8 +314,8 @@ func (suite *GenSuite) TestGenConfigToStdoutWorker() {
 	}))
 }
 
-// TestGenConfigToStdoutTalosconfig tests that the gen config command can output a talosconfig to stdout.
-func (suite *GenSuite) TestGenConfigToStdoutTalosconfig() {
+// TestGenConfigToStdoutLegacyTalosconfigAlias tests that the legacy talosconfig output type alias remains accepted.
+func (suite *GenSuite) TestGenConfigToStdoutLegacyTalosconfigAlias() {
 	suite.RunCLI([]string{
 		"gen", "config",
 		"foo", "https://192.168.0.1:6443",
@@ -366,7 +366,7 @@ func (suite *GenSuite) TestGenConfigMultipleTypesToDirectory() {
 
 	suite.Assert().FileExists(filepath.Join(tempDir, "controlplane.yaml"))
 	suite.Assert().FileExists(filepath.Join(tempDir, "worker.yaml"))
-	suite.Assert().NoFileExists(filepath.Join(tempDir, "talosconfig"))
+	suite.Assert().NoFileExists(filepath.Join(tempDir, "chuboconfig"))
 }
 
 // TestGenConfigSingleTypeToFile tests that the gen config command treats
