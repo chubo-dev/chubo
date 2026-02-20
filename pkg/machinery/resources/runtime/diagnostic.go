@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// DiagnosticType is type of Diagnostic resource.
-const DiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
+const (
+	// DiagnosticType is type of Diagnostic resource.
+	DiagnosticType = resource.Type("Diagnostics.runtime.chubo.dev")
+
+	// LegacyDiagnosticType is the legacy Diagnostic resource type name.
+	LegacyDiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
+)
 
 // Diagnostic resource contains warnings produced by Talos Diagnostics.
 type Diagnostic = typed.Resource[DiagnosticSpec, DiagnosticExtension]
@@ -31,7 +36,7 @@ type DiagnosticSpec struct {
 
 // DocumentationURL returns the URL to the documentation for the warning.
 func (spec *DiagnosticSpec) DocumentationURL(id string) string {
-	return "https://talos.dev/diagnostic/" + id
+	return "https://chubo.dev/diagnostic/" + id
 }
 
 // NewDiagnostic initializes a Diagnostic resource.
@@ -49,7 +54,7 @@ type DiagnosticExtension struct{}
 func (DiagnosticExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             DiagnosticType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyDiagnosticType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -64,6 +69,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[DiagnosticSpec](DiagnosticType, &Diagnostic{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[DiagnosticSpec](LegacyDiagnosticType, &Diagnostic{})
 	if err != nil {
 		panic(err)
 	}

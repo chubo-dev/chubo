@@ -506,33 +506,16 @@
 ./internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub/encode.go:		fmt.Fprintf(wr, `menuentry "Reset Talos installation and return to maintenance mode" {
 ./internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub/encode.go:  linux %s %s talos.experimental.wipe=system:EPHEMERAL,STATE
 ./internal/app/machined/pkg/runtime/v1alpha1/bootloader/options/options.go:	// Talos version.
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:			return fmt.Errorf("failed to delete existing Talos boot entry at index %d: %w", idx, err)
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		printf("Removing existing Talos Linux UKI boot entry at index %d", idx)
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		return fmt.Errorf("failed to create Talos Linux UKI boot entry at index %d: %w", nextMinimalIndex, err)
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		return fmt.Errorf("failed to list existing Talos boot entries: %w", err)
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// Find all boot entries with the Talos Linux UKI description.
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// Remove any existing Talos Linux UKI boot entries from the BootOrder.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		printf("Removing existing Chubo/Talos Linux UKI boot entry at index %d", idx)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// Find all boot entries with managed Chubo/Talos descriptions.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// TalosBootEntryDescription is the legacy Talos UEFI boot entry description kept for compatibility.
 ./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// We need to do this since Talos 1.11.x release assumed that the boot order set by the code stays even after a reboot,
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// but UEFI firmware settings can set a different boot order on boot, which lead to multiple Talos Linux UKI entries in the boot order,
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// find the next minimal available index for the new Talos Linux UKI boot entry
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// remove all existing Talos Linux UKI boot entries except the first one
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// when removing duplicate Talos Linux UKI boot entries
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	printf("Found existing Talos Linux UKI boot entries: %v", existingTalosBootEntryIndexes)
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	printf("created Talos Linux UKI boot entry at index %d", nextMinimalIndex)
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:// CreateBootEntry creates a UEFI boot entry named "Talos Linux UKI" and sets it as the first in the `BootOrder`
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:// TalosBootEntryDescription is the description of the Talos Linux UKI UEFI boot entry.
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:const TalosBootEntryDescription = "Talos Linux UKI"
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// when removing duplicate Chubo/Talos Linux UKI boot entries
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	printf("Found existing Chubo/Talos Linux UKI boot entries: %v", existingManagedBootEntryIndexes)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// Chubo-{version}+{index}.efi and Talos-{version}+{index}.efi legacy formats.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// Chubo-{version}.efi and Talos-{version}.efi legacy formats.
 ./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// If we booted of UKI/Kernel+Initramfs/ISO Talos installer will always be run which
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// Talos-{version}+{index}.efi format
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// Talos-{version}.efi format
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			files, err := filepath.Glob(filepath.Join(opts.MountPrefix, constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			ukiFiles, err := filepath.Glob(filepath.Join(constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:		if !strings.HasPrefix(base, "Talos-") {
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:		return fmt.Sprintf("Talos-%s~%d.efi", version, maxIndex+1), nil
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:		suffix := strings.TrimPrefix(base, "Talos-")
 ./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:	// this is to make sure sd-boot from Talos is being used and not sd-boot from another distro
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:	files, err := filepath.Glob(filepath.Join(constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
-./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:	return fmt.Sprintf("Talos-%s.efi", version), nil
 ./internal/app/machined/pkg/runtime/v1alpha1/platform/aws/aws.go:					// Include both IPv4 & IPv6 addresses for the NTP servers, Talos would lock to one of them (whichever works),
 ./internal/app/machined/pkg/runtime/v1alpha1/platform/container/container.go:// Container is a platform for installing Talos via an Container image.
 ./internal/app/machined/pkg/runtime/v1alpha1/platform/equinixmetal/equinix.go:// ParseMetadata converts Equinix Metal metadata into Talos network configuration.
@@ -949,6 +932,8 @@
 ./pkg/machinery/constants/constants.go:	KernelParamPlatform = "talos.platform"
 ./pkg/machinery/constants/constants.go:	KernelParamShutdown = "talos.shutdown"
 ./pkg/machinery/constants/constants.go:	KernelParamWipe = "talos.experimental.wipe"
+./pkg/machinery/constants/constants.go:	LegacyBootEntryDescription = "Talos Linux UKI"
+./pkg/machinery/constants/constants.go:	LegacyUKIPrefix = "Talos-"
 ./pkg/machinery/constants/constants.go:	MaintenanceServiceCommonName = "maintenance-service.talos.dev"
 ./pkg/machinery/constants/constants.go:	NetworkAPIServerPortAnnotation = "networking.talos.dev/api-server-port"
 ./pkg/machinery/constants/constants.go:	NetworkSelfIPsAnnotation = "networking.talos.dev/self-ips"
@@ -1132,9 +1117,8 @@
 ./pkg/machinery/resources/resources.go:// Package resources provides common Talos resources settings.
 ./pkg/machinery/resources/runtime/booted_entry_status.go:const BootedEntryType = resource.Type("BootedEntries.talos.dev")
 ./pkg/machinery/resources/runtime/devices_status.go:const DevicesStatusType = resource.Type("DevicesStatuses.runtime.talos.dev")
-./pkg/machinery/resources/runtime/diagnostic.go:	return "https://talos.dev/diagnostic/" + id
+./pkg/machinery/resources/runtime/diagnostic.go:	LegacyDiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/diagnostic.go:// Diagnostic resource contains warnings produced by Talos Diagnostics.
-./pkg/machinery/resources/runtime/diagnostic.go:const DiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/environment.go:const EnvironmentType = resource.Type("Environments.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/event_sink_config.go:// EventSinkConfig resource holds configuration for Talos event log streaming.
 ./pkg/machinery/resources/runtime/event_sink_config.go:// EventSinkConfigSpec describes configuration of Talos event log streaming.
@@ -1161,9 +1145,9 @@
 ./pkg/machinery/resources/runtime/sbom_item.go:const SBOMItemType = resource.Type("SBOMItems.talos.dev")
 ./pkg/machinery/resources/runtime/security_status.go:const SecurityStateType = resource.Type("SecurityStates.talos.dev")
 ./pkg/machinery/resources/runtime/unique_machine_token.go:	UniqueMachineTokenType = resource.Type("UniqueMachineTokens.runtime.talos.dev")
+./pkg/machinery/resources/runtime/version.go:	LegacyVersionType = resource.Type("Versions.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/version.go:// Version resource holds version of Talos.
 ./pkg/machinery/resources/runtime/version.go:// VersionSpec describes version of Talos.
-./pkg/machinery/resources/runtime/version.go:const VersionType = resource.Type("Versions.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/watchdog_timer_config.go:const WatchdogTimerConfigType = resource.Type("WatchdogTimerConfigs.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/watchdog_timer_status.go:const WatchdogTimerStatusType = resource.Type("WatchdogTimerStatuses.runtime.talos.dev")
 ./pkg/machinery/resources/secrets/api.go:const APIType = resource.Type("ApiCertificates.secrets.talos.dev")

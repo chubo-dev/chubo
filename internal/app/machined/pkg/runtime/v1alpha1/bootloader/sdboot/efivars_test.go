@@ -80,7 +80,7 @@ func TestSetBootEntry(t *testing.T) {
 			efivarfsMock: &efivarfs.Mock{},
 
 			expectedEntries: map[int]string{
-				0: sdboot.TalosBootEntryDescription,
+				0: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -98,7 +98,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -115,7 +115,7 @@ func TestSetBootEntry(t *testing.T) {
 			},
 
 			expectedEntries: map[int]string{
-				0: sdboot.TalosBootEntryDescription,
+				0: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -137,7 +137,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -159,7 +159,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -185,7 +185,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 				2: "Default Boot Entry",
 			},
 		},
@@ -212,7 +212,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 				3: "Default Boot Entry",
 			},
 		},
@@ -230,7 +230,7 @@ func TestSetBootEntry(t *testing.T) {
 			},
 
 			expectedEntries: map[int]string{
-				0: sdboot.TalosBootEntryDescription,
+				0: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -260,7 +260,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -290,7 +290,7 @@ func TestSetBootEntry(t *testing.T) {
 
 			expectedEntries: map[int]string{
 				0: "Default Boot Entry",
-				1: sdboot.TalosBootEntryDescription,
+				1: sdboot.ChuboBootEntryDescription,
 			},
 		},
 		{
@@ -325,7 +325,7 @@ func TestSetBootEntry(t *testing.T) {
 			expectedEntries: map[int]string{
 				0:  "Default Boot Entry",
 				1:  "Default Boot Entry",
-				2:  sdboot.TalosBootEntryDescription,
+				2:  sdboot.ChuboBootEntryDescription,
 				3:  "Default Boot Entry",
 				42: "Default Boot Entry",
 			},

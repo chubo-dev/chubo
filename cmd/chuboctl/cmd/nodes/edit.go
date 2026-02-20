@@ -113,8 +113,8 @@ func editFn(c *client.Client) func(context.Context, string, resource.Resource, e
 	)
 
 	edit := newEditorLauncher([]string{
-		"CHUBO_EDITOR",
-		"TALOS_EDITOR",
+		constants.ChuboEditorEnvVar,
+		constants.TalosEditorEnvVar,
 		"EDITOR",
 	})
 

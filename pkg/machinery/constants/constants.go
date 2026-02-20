@@ -155,6 +155,18 @@ const (
 	// https://www.kernel.org/doc/html/next/filesystems/efivarfs.html
 	EFIVarsMountPoint = "/sys/firmware/efi/efivars"
 
+	// UKIPrefix is the prefix used for new UKI file names.
+	UKIPrefix = "Chubo-"
+
+	// LegacyUKIPrefix is the legacy prefix for UKI file names kept for compatibility reads.
+	LegacyUKIPrefix = "Talos-"
+
+	// ChuboBootEntryDescription is the description used for new UEFI boot entries.
+	ChuboBootEntryDescription = "Chubo Linux UKI"
+
+	// LegacyBootEntryDescription is the legacy UEFI boot entry description accepted for compatibility.
+	LegacyBootEntryDescription = "Talos Linux UKI"
+
 	// BIOSGrubPartitionLabel is the label of the partition used by grub's second
 	// stage bootloader.
 	BIOSGrubPartitionLabel = "BIOS"
@@ -312,6 +324,12 @@ const (
 
 	// TalosConfigEnvVar is the legacy environment variable for setting the Talos configuration file path.
 	TalosConfigEnvVar = "TALOSCONFIG"
+
+	// ChuboEditorEnvVar is the environment variable for setting the preferred editor.
+	ChuboEditorEnvVar = "CHUBO_EDITOR"
+
+	// TalosEditorEnvVar is the legacy environment variable for setting the preferred editor.
+	TalosEditorEnvVar = "TALOS_EDITOR"
 
 	// ChuboHomeEnvVar is the environment variable for setting the Chubo state directory file path.
 	ChuboHomeEnvVar = "CHUBO_HOME"

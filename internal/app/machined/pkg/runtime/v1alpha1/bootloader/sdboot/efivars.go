@@ -20,8 +20,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
-// TalosBootEntryDescription is the description of the Talos Linux UKI UEFI boot entry.
-const TalosBootEntryDescription = "Talos Linux UKI"
+const (
+	// ChuboBootEntryDescription is the description of new UEFI boot entries.
+	ChuboBootEntryDescription = constants.ChuboBootEntryDescription
+
+	// TalosBootEntryDescription is the legacy Talos UEFI boot entry description kept for compatibility.
+	TalosBootEntryDescription = constants.LegacyBootEntryDescription
+)
 
 // SystemdBootStubInfoPath is the path to the SystemdBoot StubInfo EFI variable.
 var SystemdBootStubInfoPath = constants.EFIVarsMountPoint + "/" + "StubInfo-" + efivarfs.ScopeSystemd.String()
@@ -95,7 +100,7 @@ func WriteVariable(name, value string) error {
 	return efi.Write(efivarfs.ScopeSystemd, name, efivarfs.AttrBootserviceAccess|efivarfs.AttrRuntimeAccess|efivarfs.AttrNonVolatile, out)
 }
 
-// CreateBootEntry creates a UEFI boot entry named "Talos Linux UKI" and sets it as the first in the `BootOrder`
+// CreateBootEntry creates/updates a UEFI boot entry and sets it as the first in the `BootOrder`.
 // The entry will point to the SystemdBoot PE binary located at the specified install disk path.
 //
 //nolint:gocyclo,cyclop
@@ -133,33 +138,33 @@ func CreateBootEntry(rw efivarfs.ReadWriter, blkidInfo *blkid.Info, printf func(
 
 	bootEntries, err := efivarfs.ListBootEntries(rw)
 	if err != nil {
-		return fmt.Errorf("failed to list existing Talos boot entries: %w", err)
+		return fmt.Errorf("failed to list existing boot entries: %w", err)
 	}
 
 	printf("Existing boot entries: %v", slices.Collect(maps.Keys(bootEntries)))
 
-	var existingTalosBootEntryIndexes []int
+	var existingManagedBootEntryIndexes []int
 
-	// Find all boot entries with the Talos Linux UKI description.
+	// Find all boot entries with managed Chubo/Talos descriptions.
 	for idx, entry := range bootEntries {
-		if entry.Description == TalosBootEntryDescription {
-			existingTalosBootEntryIndexes = append(existingTalosBootEntryIndexes, idx)
+		if entry.Description == ChuboBootEntryDescription || entry.Description == TalosBootEntryDescription {
+			existingManagedBootEntryIndexes = append(existingManagedBootEntryIndexes, idx)
 		}
 	}
 
 	// we sort the indexes to make sure we always keep the lowest index
-	// when removing duplicate Talos Linux UKI boot entries
-	slices.Sort(existingTalosBootEntryIndexes)
+	// when removing duplicate Chubo/Talos Linux UKI boot entries
+	slices.Sort(existingManagedBootEntryIndexes)
 
-	printf("Found existing Talos Linux UKI boot entries: %v", existingTalosBootEntryIndexes)
+	printf("Found existing Chubo/Talos Linux UKI boot entries: %v", existingManagedBootEntryIndexes)
 
-	// Remove any existing Talos Linux UKI boot entries from the BootOrder.
+	// Remove any existing managed Linux UKI boot entries from the BootOrder.
 	// We need to do this since Talos 1.11.x release assumed that the boot order set by the code stays even after a reboot,
-	// but UEFI firmware settings can set a different boot order on boot, which lead to multiple Talos Linux UKI entries in the boot order,
+	// but UEFI firmware settings can set a different boot order on boot, which lead to multiple managed Linux UKI entries in the boot order,
 	// causing some UEFI firmwares to fail to boot at all.
 	// See https://github.com/chubo-dev/chubo/issues/11829
 
-	// find the next minimal available index for the new Talos Linux UKI boot entry
+	// find the next minimal available index for the new managed Linux UKI boot entry
 	nextMinimalIndex := -1
 
 	for i := range math.MaxUint16 {
@@ -174,24 +179,24 @@ func CreateBootEntry(rw efivarfs.ReadWriter, blkidInfo *blkid.Info, printf func(
 		return errors.New("all 2^16 boot entry variables are occupied")
 	}
 
-	// remove all existing Talos Linux UKI boot entries except the first one
+	// remove all existing managed Linux UKI boot entries except the first one
 	// and use its index for the new/updated entry
-	for i, idx := range existingTalosBootEntryIndexes {
+	for i, idx := range existingManagedBootEntryIndexes {
 		if i == 0 {
 			nextMinimalIndex = idx
 
 			continue
 		}
 
-		printf("Removing existing Talos Linux UKI boot entry at index %d", idx)
+		printf("Removing existing Chubo/Talos Linux UKI boot entry at index %d", idx)
 
 		if err := efivarfs.DeleteBootEntry(rw, idx); err != nil {
-			return fmt.Errorf("failed to delete existing Talos boot entry at index %d: %w", idx, err)
+			return fmt.Errorf("failed to delete existing managed boot entry at index %d: %w", idx, err)
 		}
 	}
 
 	if err := efivarfs.SetBootEntry(rw, nextMinimalIndex, &efivarfs.LoadOption{
-		Description: TalosBootEntryDescription,
+		Description: ChuboBootEntryDescription,
 		FilePath: efivarfs.DevicePath{
 			&efivarfs.HardDrivePath{
 				PartitionNumber:     uint32(efiPartInfo[0].PartitionIndex),
@@ -204,10 +209,10 @@ func CreateBootEntry(rw efivarfs.ReadWriter, blkidInfo *blkid.Info, printf func(
 			efivarfs.FilePath("/" + sdBootFilePath),
 		},
 	}); err != nil {
-		return fmt.Errorf("failed to create Talos Linux UKI boot entry at index %d: %w", nextMinimalIndex, err)
+		return fmt.Errorf("failed to create Chubo Linux UKI boot entry at index %d: %w", nextMinimalIndex, err)
 	}
 
-	printf("created Talos Linux UKI boot entry at index %d", nextMinimalIndex)
+	printf("created Chubo Linux UKI boot entry at index %d", nextMinimalIndex)
 
 	return nil
 }

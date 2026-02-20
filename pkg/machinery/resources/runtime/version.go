@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// VersionType is type of VersionStatus resource.
-const VersionType = resource.Type("Versions.runtime.talos.dev")
+const (
+	// VersionType is type of VersionStatus resource.
+	VersionType = resource.Type("Versions.runtime.chubo.dev")
+
+	// LegacyVersionType is the legacy VersionStatus resource type name.
+	LegacyVersionType = resource.Type("Versions.runtime.talos.dev")
+)
 
 // Version resource holds version of Talos.
 type Version = typed.Resource[VersionSpec, VersionExtension]
@@ -39,7 +44,7 @@ type VersionExtension struct{}
 func (VersionExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             VersionType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyVersionType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -54,6 +59,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic(VersionType, &Version{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic(LegacyVersionType, &Version{})
 	if err != nil {
 		panic(err)
 	}

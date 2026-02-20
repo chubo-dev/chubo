@@ -108,7 +108,7 @@ func ProbeWithCallback(disk string, options options.ProbeOptions, callback func(
 			}
 
 			// list existing UKIs, and check if the current one is present
-			ukiFiles, err := filepath.Glob(filepath.Join(constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
+			ukiFiles, err := listUKIFiles(filepath.Join(constants.EFIMountPoint, "EFI", "Linux"))
 			if err != nil {
 				return err
 			}
@@ -335,7 +335,7 @@ func (c *Config) Upgrade(opts options.InstallOptions) (*options.InstallResult, e
 		},
 		func() error {
 			// list existing UKIs, and clean up all but the current one (used to boot)
-			files, err := filepath.Glob(filepath.Join(opts.MountPrefix, constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
+			files, err := listUKIFiles(filepath.Join(opts.MountPrefix, constants.EFIMountPoint, "EFI", "Linux"))
 			if err != nil {
 				return err
 			}
@@ -476,11 +476,16 @@ func generateNextUKIName(version string, existingFiles []string) (string, error)
 
 	for _, file := range existingFiles {
 		base := strings.TrimSuffix(filepath.Base(file), ".efi")
-		if !strings.HasPrefix(base, "Talos-") {
+		var suffix string
+
+		switch {
+		case strings.HasPrefix(base, constants.UKIPrefix):
+			suffix = strings.TrimPrefix(base, constants.UKIPrefix)
+		case strings.HasPrefix(base, constants.LegacyUKIPrefix):
+			suffix = strings.TrimPrefix(base, constants.LegacyUKIPrefix)
+		default:
 			continue
 		}
-
-		suffix := strings.TrimPrefix(base, "Talos-")
 		parts := strings.SplitN(suffix, "~", 2)
 
 		if parts[0] != version {
@@ -488,12 +493,12 @@ func generateNextUKIName(version string, existingFiles []string) (string, error)
 		}
 
 		if len(parts) == 1 {
-			// Talos-{version}.efi format
+			// Chubo-{version}.efi and Talos-{version}.efi legacy formats.
 			if maxIndex < 0 {
 				maxIndex = 0
 			}
 		} else if len(parts) == 2 {
-			// Talos-{version}+{index}.efi format
+			// Chubo-{version}+{index}.efi and Talos-{version}+{index}.efi legacy formats.
 			if idx, err := strconv.Atoi(parts[1]); err == nil && idx > maxIndex {
 				maxIndex = idx
 			}
@@ -501,10 +506,10 @@ func generateNextUKIName(version string, existingFiles []string) (string, error)
 	}
 
 	if maxIndex >= 0 {
-		return fmt.Sprintf("Talos-%s~%d.efi", version, maxIndex+1), nil
+		return fmt.Sprintf("%s%s~%d.efi", constants.UKIPrefix, version, maxIndex+1), nil
 	}
 
-	return fmt.Sprintf("Talos-%s.efi", version), nil
+	return fmt.Sprintf("%s%s.efi", constants.UKIPrefix, version), nil
 }
 
 // Revert the bootloader to the previous version.
@@ -534,7 +539,7 @@ func (c *Config) Revert(disk string) error {
 }
 
 func (c *Config) revert() error {
-	files, err := filepath.Glob(filepath.Join(constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
+	files, err := listUKIFiles(filepath.Join(constants.EFIMountPoint, "EFI", "Linux"))
 	if err != nil {
 		return err
 	}
@@ -550,6 +555,29 @@ func (c *Config) revert() error {
 	}
 
 	return errors.New("previous UKI not found")
+}
+
+func listUKIFiles(dir string) ([]string, error) {
+	files := make([]string, 0)
+	seen := make(map[string]struct{})
+
+	for _, prefix := range []string{constants.UKIPrefix, constants.LegacyUKIPrefix} {
+		matches, err := filepath.Glob(filepath.Join(dir, prefix+"*.efi"))
+		if err != nil {
+			return nil, err
+		}
+
+		for _, match := range matches {
+			if _, ok := seen[match]; ok {
+				continue
+			}
+
+			seen[match] = struct{}{}
+			files = append(files, match)
+		}
+	}
+
+	return files, nil
 }
 
 func findMatchingUKIFile(ukiFiles []string, entry string) (string, bool) {
