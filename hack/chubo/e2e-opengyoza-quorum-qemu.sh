@@ -14,7 +14,7 @@ cd "${TALOS_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
-GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}"
+GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL:-${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}}"
 ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
@@ -443,13 +443,13 @@ if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 fi
 
 if [[ ! -x "${CHUBOCTL}" ]]; then
-	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	make "${ctl_target}" GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL}"
 elif ! "${CHUBOCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
 	if [[ "${SKIP_BUILD}" == "1" ]]; then
 		echo "warning: existing CLI binary is not chubo-tagged; continuing due --skip-build"
 	else
 		echo "existing CLI binary is not chubo-tagged; rebuilding"
-		make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+		make "${ctl_target}" GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL}"
 	fi
 fi
 

@@ -168,64 +168,47 @@
 ./Dockerfile:WORKDIR /src/cmd/talosctl
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/initramfs-amd64.xz" \
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/vmlinuz-amd64" \
+./Makefile:			talosctl-cni-bundle-* ) continue ;; \
 ./Makefile:		IMAGE=$(REGISTRY_AND_USERNAME)/talos:$(IMAGE_TAG_IN) \
-./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
+./Makefile:		dst="$(ARTIFACTS)/$$(printf '%s' "$$base" | sed 's/^talosctl-/chuboctl-/')"; \
+./Makefile:		echo "failed to locate talosctl artifact for target '$*'" >&2; \
 ./Makefile:		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
-./Makefile:	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
-./Makefile:	@$(MAKE) -B talosctl-$*
+./Makefile:	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
 ./Makefile:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-darwin-amd64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-darwin-arm64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-freebsd-amd64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-freebsd-arm64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-linux-amd64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-linux-arm64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-linux-armv7 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-linux-riscv64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-windows-amd64 DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-windows-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-cni-bundle DEST=$(ARTIFACTS)
 ./Makefile:	@$(MAKE) registry-talosctl
 ./Makefile:	@$(MAKE) registry-talosctl-all
 ./Makefile:	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
 ./Makefile:	@$(MAKE) talos PUSH=true
-./Makefile:	@$(MAKE) talosctl-all-image PUSH=true
-./Makefile:	@$(MAKE) talosctl-image PUSH=true
 ./Makefile:	@./hack/chubo/check-talos-refs.sh
-./Makefile:	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
 ./Makefile:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+./Makefile:	@for src in $(ARTIFACTS)/talosctl-*; do \
 ./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
-./Makefile:# Build chuboctl by reusing the talosctl artifact and renaming it.
-./Makefile:# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
+./Makefile:	for src in "$(ARTIFACTS)/talosctl-$*" "$(ARTIFACTS)/talosctl-$*.exe"; do \
+./Makefile:# Compatibility alias while Docker build args/scripts still reference TALOSCTL naming.
+./Makefile:# Compatibility aliases while talosctl naming is still accepted.
 ./Makefile:.PHONY: talos
 ./Makefile:.PHONY: talosctl
+./Makefile:.PHONY: talosctl-%
+./Makefile:.PHONY: talosctl-all
+./Makefile:.PHONY: talosctl-all-image
 ./Makefile:.PHONY: talosctl-cni-bundle
 ./Makefile:.PHONY: talosctl-image
 ./Makefile:Building with `WITH_RACE=1` enables race detector in the Talos executables. Integration tests are always built with the race detector
 ./Makefile:GO_MACHINED_LDFLAGS ?= -X golang.zx2c4.com/wireguard/ipc.socketDirectory=/system/wireguard-sock # see https://github.com/siderolabs/talos/issues/8514
 ./Makefile:NAME = Talos
 ./Makefile:PKG_TALOSCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
-./Makefile:TALOSCTL_DEFAULT_TARGET := talosctl-$(OPERATING_SYSTEM)
-./Makefile:all: initramfs kernel installer imager talosctl talosctl-image talos
-./Makefile:docs: ## Generates the documentation for machine config, and talosctl.
-./Makefile:push-%: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the specified tag (e.g. push-latest).
-./Makefile:push: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the generated tag.
+./Makefile:all: initramfs kernel installer imager chuboctl chuboctl-image talos
+./Makefile:push-%: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the specified tag (e.g. push-latest).
+./Makefile:push: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the generated tag.
 ./Makefile:talos: ## Builds the Talos container image and outputs it to the registry.
-./Makefile:talosctl-all-image:
-./Makefile:talosctl-all:
-./Makefile:talosctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for talosctl.
-./Makefile:talosctl-darwin-amd64:
-./Makefile:talosctl-darwin-arm64:
-./Makefile:talosctl-freebsd-amd64:
-./Makefile:talosctl-freebsd-arm64:
-./Makefile:talosctl-image: ## Builds the talosctl container image and outputs it to the registry.
-./Makefile:talosctl-linux-amd64:
-./Makefile:talosctl-linux-arm64:
-./Makefile:talosctl-linux-armv7:
-./Makefile:talosctl-linux-riscv64:
-./Makefile:talosctl-windows-amd64:
-./Makefile:talosctl-windows-arm64:
-./Makefile:talosctl:
-./Makefile:uki-certs: talosctl ## Generate test certificates for SecureBoot/PCR Signing
+./Makefile:talosctl-%: ## Legacy alias for chuboctl-% (Wave B compatibility).
+./Makefile:talosctl-all-image: ## Legacy alias for chuboctl-all-image (Wave B compatibility).
+./Makefile:talosctl-all: ## Legacy alias for chuboctl-all (Wave B compatibility).
+./Makefile:talosctl-cni-bundle: ## Legacy alias for chuboctl-cni-bundle (Wave B compatibility).
+./Makefile:talosctl-image: ## Legacy alias for chuboctl-image (Wave B compatibility).
+./Makefile:talosctl: ## Legacy alias for chuboctl (Wave B compatibility).
 ./api/common/common.proto:  // Indicates the Talos version when this deprecated enum value will be removed from API.
 ./api/common/common.proto:  // Indicates the Talos version when this deprecated enum will be removed from API.
 ./api/common/common.proto:  // Indicates the Talos version when this deprecated filed will be removed from API.
@@ -369,11 +352,6 @@
 ./go.mod:	github.com/siderolabs/go-talos-support v0.1.4
 ./go.mod:// deadcode elimination fix replacement: https://github.com/siderolabs/talos/issues/11296
 ./hack/buildkit/buildkitd.local-registry.toml:#     --buildkitd-config talos/hack/buildkit/buildkitd.local-registry.toml \
-./hack/chubo/check-go-deps.sh:	"linux amd64 0 cmd/talosctl"
-./hack/chubo/check-go-deps.sh:	echo "FAIL: cmd/talosctl must not import forbidden package deps:" >&2
-./hack/chubo/check-go-deps.sh:	if [[ "${target}" == "cmd/talosctl" ]]; then
-./hack/chubo/check-go-deps.sh:#   * cmd/talosctl has any forbidden deps
-./hack/chubo/check-go-deps.sh:# - cmd/talosctl is strict: zero forbidden deps allowed
 ./hack/chubo/check-runtime-surface.sh:	--talosctl)
 ./hack/chubo/check-runtime-surface.sh:# - `--talosctl` is a legacy alias for `--chuboctl` during the rename wave.
 ./hack/chubo/check-runtime-surface.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-./_out/chuboctl-darwin-arm64}}"
@@ -392,7 +370,6 @@
 ./hack/chubo/e2e-core-docker.sh:make docker-talos \
 ./hack/chubo/e2e-core-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
 ./hack/chubo/e2e-core-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-core-qemu.sh:# This script is Linux/amd64 oriented for CI. It uses `talosctl cluster create dev`
 ./hack/chubo/e2e-core-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 ./hack/chubo/e2e-core-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 ./hack/chubo/e2e-helper-bundles-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
@@ -418,8 +395,6 @@
 ./hack/cloud-image-uploader/options.go:	FactoryHost:   "https://factory.talos.dev",
 ./hack/lvm.conf:# Disable LVM backups as Talos rootfs is read-only, and ephemeral partition is not a safe place to store
 ./hack/lvm.conf:# See https://github.com/siderolabs/talos/issues/3129
-./hack/qemu/chubo-qemu.sh:  talosctl apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f <config.yaml>
-./hack/qemu/chubo-qemu.sh:# - `talosctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
 ./hack/qemu/chubo-qemu.sh:# Optional extra kernel args, e.g. 'talos.platform=qemu' or debugging flags.
 ./hack/qemu/chubo-qemu.sh:# This script boots Talos via systemd-boot from a FAT "EFI drive" directory and forwards the
 ./hack/qemu/chubo-qemu.sh:options talos.platform=metal talos.halt_if_installed=${HALT_IF_INSTALLED} net.ifnames=0 slab_nomerge pti=on talos.dashboard.disabled=1 console=tty0 console=ttyAMA0 printk.devkmsg=on consoleblank=0 ${EXTRA_KERNEL_ARGS}

@@ -4,7 +4,7 @@ set -euo pipefail
 # Quick, no-sudo QEMU loop for the chubo build-tag variant.
 #
 # Why this exists:
-# - `talosctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
+# - `chuboctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
 # - slirp/usernet + hostfwd works without privileges and is "good enough" for fast iteration.
 #
 # This script boots Talos via systemd-boot from a FAT "EFI drive" directory and forwards the
@@ -117,7 +117,7 @@ Disk image: ${DISK_PATH}
 NAT + hostfwd maintenance API: 127.0.0.1:${HOST_PORT} -> guest :50000
 
 Apply config example (maintenance mode):
-  talosctl apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f <config.yaml>
+  chuboctl apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f <config.yaml>
 
 EOF
 

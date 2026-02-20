@@ -100,8 +100,11 @@ GO_VERSION ?= 1.25
 MARKDOWNLINTCLI_VERSION ?= 0.47.0
 OPERATING_SYSTEM := $(shell uname -s | tr "[:upper:]" "[:lower:]")
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/' | sed 's/aarch64/arm64/')
-TALOSCTL_DEFAULT_TARGET := talosctl-$(OPERATING_SYSTEM)
-TALOSCTL_EXECUTABLE := $(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-$(ARCH)
+CHUBOCTL_DEFAULT_TARGET := chuboctl-$(OPERATING_SYSTEM)
+CHUBOCTL_EXECUTABLE := $(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-$(ARCH)
+# Compatibility aliases while talosctl naming is still accepted.
+TALOSCTL_DEFAULT_TARGET := $(CHUBOCTL_DEFAULT_TARGET)
+TALOSCTL_EXECUTABLE := $(CHUBOCTL_EXECUTABLE)
 INTEGRATION_TEST := integration-test
 INTEGRATION_TEST_DEFAULT_TARGET := $(INTEGRATION_TEST)-$(OPERATING_SYSTEM)
 INTEGRATION_TEST_PROVISION_DEFAULT_TARGET := integration-test-provision-$(OPERATING_SYSTEM)
@@ -127,7 +130,9 @@ CGO_ENABLED ?= 0
 GO_BUILDFLAGS ?=
 # This repository is the chubo OS fork; compile the chubo variant by default.
 GO_BUILDTAGS ?= tcell_minimal,grpcnotrace,chubo
-GO_BUILDTAGS_TALOSCTL ?= grpcnotrace,chubo
+GO_BUILDTAGS_CHUBOCTL ?= grpcnotrace,chubo
+# Compatibility alias while Docker build args/scripts still reference TALOSCTL naming.
+GO_BUILDTAGS_TALOSCTL ?= $(GO_BUILDTAGS_CHUBOCTL)
 GO_LDFLAGS ?=
 GO_MACHINED_LDFLAGS ?= -X golang.zx2c4.com/wireguard/ipc.socketDirectory=/system/wireguard-sock # see https://github.com/siderolabs/talos/issues/8514
 GOAMD64 ?= v2
@@ -145,7 +150,8 @@ endif
 
 ifneq (, $(filter $(WITH_DEBUG), t true TRUE y yes 1))
 GO_BUILDTAGS := $(GO_BUILDTAGS),sidero.debug
-GO_BUILDTAGS_TALOSCTL := $(GO_BUILDTAGS_TALOSCTL),sidero.debug
+GO_BUILDTAGS_CHUBOCTL := $(GO_BUILDTAGS_CHUBOCTL),sidero.debug
+GO_BUILDTAGS_TALOSCTL := $(GO_BUILDTAGS_CHUBOCTL)
 else
 GO_LDFLAGS += -s -w
 endif
@@ -155,7 +161,8 @@ ifneq (, $(filter $(WITH_DEBUG_SHELL), t true TRUE y yes 1))
 DEBUG_TOOLS_SOURCE := bash-minimal
 endif
 
-GO_BUILDFLAGS_TALOSCTL := $(GO_BUILDFLAGS) -tags "$(GO_BUILDTAGS_TALOSCTL)"
+GO_BUILDFLAGS_CHUBOCTL := $(GO_BUILDFLAGS) -tags "$(GO_BUILDTAGS_CHUBOCTL)"
+GO_BUILDFLAGS_TALOSCTL ?= $(GO_BUILDFLAGS_CHUBOCTL)
 GO_BUILDFLAGS += -tags "$(GO_BUILDTAGS)"
 
 , := ,
@@ -267,7 +274,7 @@ CI_ARGS ?=
 
 EXTENSIONS_FILTER_COMMAND ?= grep -vE 'tailscale|xen-guest-agent|nvidia|vmtoolsd-guest-agent|metal-agent|cloudflared|zerotier|nebula|newt|netbird|multipath-tools|trident-iscsi-tools'
 
-all: initramfs kernel installer imager talosctl talosctl-image talos
+all: initramfs kernel installer imager chuboctl chuboctl-image talos
 
 # Help Menu
 
@@ -351,7 +358,7 @@ generate: ## Generates code from protobuf service definitions and machinery conf
 	@$(MAKE) local-$@ DEST=./ PLATFORM=linux/$(ARCH) EMBED_TARGET=embed-abbrev
 
 .PHONY: docs
-docs: ## Generates the documentation for machine config, and talosctl.
+docs: ## Generates the documentation for machine config and chuboctl.
 	@$(MAKE) local-$@ DEST=./ PLATFORM=linux/amd64
 
 # Local Artifacts
@@ -385,61 +392,68 @@ imager: ## Builds the container image for the imager and outputs it to the regis
 talos: ## Builds the Talos container image and outputs it to the registry.
 	@$(MAKE) registry-$@
 
-.PHONY: talosctl-image
-talosctl-image: ## Builds the talosctl container image and outputs it to the registry.
+.PHONY: chuboctl-image
+chuboctl-image: ## Builds the chuboctl container image and outputs it to the registry.
 	@$(MAKE) registry-talosctl
 
-talosctl-all-image:
+.PHONY: talosctl-image
+talosctl-image: ## Legacy alias for chuboctl-image (Wave B compatibility).
+	@$(MAKE) chuboctl-image
+
+.PHONY: chuboctl-all-image
+chuboctl-all-image:
 	@$(MAKE) registry-talosctl-all
 
-talosctl-all:
+.PHONY: talosctl-all-image
+talosctl-all-image: ## Legacy alias for chuboctl-all-image (Wave B compatibility).
+	@$(MAKE) chuboctl-all-image
+
+.PHONY: chuboctl-all
+chuboctl-all:
 	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
+	@for src in $(ARTIFACTS)/talosctl-*; do \
+		[ -f "$$src" ] || continue; \
+		base="$$(basename "$$src")"; \
+		case "$$base" in \
+			talosctl-cni-bundle-* ) continue ;; \
+		esac; \
+		dst="$(ARTIFACTS)/$$(printf '%s' "$$base" | sed 's/^talosctl-/chuboctl-/')"; \
+		cp -f "$$src" "$$dst"; \
+		chmod +x "$$dst" 2>/dev/null || true; \
+	done
 
-talosctl-linux-amd64:
-	@$(MAKE) local-talosctl-linux-amd64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-linux-arm64:
-	@$(MAKE) local-talosctl-linux-arm64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-linux-armv7:
-	@$(MAKE) local-talosctl-linux-armv7 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-linux-riscv64:
-	@$(MAKE) local-talosctl-linux-riscv64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-darwin-amd64:
-	@$(MAKE) local-talosctl-darwin-amd64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-darwin-arm64:
-	@$(MAKE) local-talosctl-darwin-arm64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-freebsd-amd64:
-	@$(MAKE) local-talosctl-freebsd-amd64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-freebsd-arm64:
-	@$(MAKE) local-talosctl-freebsd-arm64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-windows-amd64:
-	@$(MAKE) local-talosctl-windows-amd64 DEST=$(ARTIFACTS) PUSH=false
-
-talosctl-windows-arm64:
-	@$(MAKE) local-talosctl-windows-arm64 DEST=$(ARTIFACTS) PUSH=false
-
-.PHONY: talosctl
-talosctl:
-	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
+.PHONY: talosctl-all
+talosctl-all: ## Legacy alias for chuboctl-all (Wave B compatibility).
+	@$(MAKE) chuboctl-all
 
 .PHONY: chuboctl
-chuboctl: chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
+chuboctl:
+	@$(MAKE) -B chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
 
-# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
-# Build chuboctl by reusing the talosctl artifact and renaming it.
 .PHONY: chuboctl-%
 chuboctl-%:
-	@$(MAKE) -B talosctl-$*
-	@rm -f $(ARTIFACTS)/chuboctl-$*
-	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
-	@chmod +x $(ARTIFACTS)/chuboctl-$*
+	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
+	@found=0; \
+	for src in "$(ARTIFACTS)/talosctl-$*" "$(ARTIFACTS)/talosctl-$*.exe"; do \
+		[ -f "$$src" ] || continue; \
+		found=1; \
+		base="$$(basename "$$src")"; \
+		dst="$(ARTIFACTS)/$$(printf '%s' "$$base" | sed 's/^talosctl-/chuboctl-/')"; \
+		cp -f "$$src" "$$dst"; \
+		chmod +x "$$dst" 2>/dev/null || true; \
+	done; \
+	if [ "$$found" -eq 0 ]; then \
+		echo "failed to locate talosctl artifact for target '$*'" >&2; \
+		exit 1; \
+	fi
+
+.PHONY: talosctl
+talosctl: ## Legacy alias for chuboctl (Wave B compatibility).
+	@$(MAKE) -B chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
+
+.PHONY: talosctl-%
+talosctl-%: ## Legacy alias for chuboctl-% (Wave B compatibility).
+	@$(MAKE) chuboctl-$*
 
 sbom:
 	@$(MAKE) local-sbom DEST=$(ARTIFACTS)
@@ -503,14 +517,18 @@ secureboot-installer: ## Builds UEFI only installer which uses UKI and push it t
 		rm -f $(ARTIFACTS)/installer-$${arch}-secureboot.tar ; \
 	done
 
-.PHONY: talosctl-cni-bundle
-talosctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for talosctl.
-	@$(MAKE) local-$@ DEST=$(ARTIFACTS)
+.PHONY: chuboctl-cni-bundle
+chuboctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for chuboctl.
+	@$(MAKE) local-talosctl-cni-bundle DEST=$(ARTIFACTS)
 	@for platform in $(subst $(,),$(space),$(PLATFORM)); do \
 		arch=`basename "$${platform}"` ; \
 		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
 	done
 	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
+
+.PHONY: talosctl-cni-bundle
+talosctl-cni-bundle: ## Legacy alias for chuboctl-cni-bundle (Wave B compatibility).
+	@$(MAKE) chuboctl-cni-bundle
 
 .PHONY: cloud-images
 cloud-images: ## Uploads cloud images (AMIs, etc.) to the cloud registry.
@@ -522,19 +540,19 @@ cloud-images: ## Uploads cloud images (AMIs, etc.) to the cloud registry.
 		./hack/cloud-image-uploader.sh $(CLOUD_IMAGES_EXTRA_ARGS)
 
 .PHONY: uki-certs
-uki-certs: talosctl ## Generate test certificates for SecureBoot/PCR Signing
-	@$(TALOSCTL_EXECUTABLE) gen secureboot uki
-	@$(TALOSCTL_EXECUTABLE) gen secureboot pcr
-	@$(TALOSCTL_EXECUTABLE) gen secureboot database
+uki-certs: chuboctl ## Generate test certificates for SecureBoot/PCR Signing
+	@$(CHUBOCTL_EXECUTABLE) gen secureboot uki
+	@$(CHUBOCTL_EXECUTABLE) gen secureboot pcr
+	@$(CHUBOCTL_EXECUTABLE) gen secureboot database
 
 .PHONY: integration-images-list
 integration-images-list: ## Generate list of integration images.
-	@$(TALOSCTL_EXECUTABLE) images integration --installer-tag=$(IMAGE_TAG_IN) --registry-and-user=$(REGISTRY_AND_USERNAME) > $(ARTIFACTS)/integration-images.txt
+	@$(CHUBOCTL_EXECUTABLE) images integration --installer-tag=$(IMAGE_TAG_IN) --registry-and-user=$(REGISTRY_AND_USERNAME) > $(ARTIFACTS)/integration-images.txt
 
 .PHONY: cache-create
 cache-create: installer imager integration-images-list ## Generate image cache.
 	@cat $(ARTIFACTS)/integration-images.txt | \
-		$(TALOSCTL_EXECUTABLE) images cache-create --image-cache-path=/tmp/cache.tar --images=- --force
+		$(CHUBOCTL_EXECUTABLE) images cache-create --image-cache-path=/tmp/cache.tar --images=- --force
 	@$(CRANE) $(CRANE_FLAGS) push /tmp/cache.tar $(REGISTRY_AND_USERNAME)/image-cache:$(IMAGE_TAG_OUT)
 	@$(MAKE) image-iso IMAGER_ARGS="--image-cache=$(REGISTRY_AND_USERNAME)/image-cache:$(IMAGE_TAG_OUT) --extra-kernel-arg='console=ttyS0'"
 
@@ -678,7 +696,8 @@ e2e-%: $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 external-artifacts 
 		IMAGE=$(REGISTRY_AND_USERNAME)/talos:$(IMAGE_TAG_IN) \
 		INSTALLER_IMAGE=$(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_IN) \
 		ARTIFACTS=$(ARTIFACTS) \
-		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+		CHUBOCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
+		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
 		INTEGRATION_TEST=$(PWD)/$(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 \
 		SHORT_INTEGRATION_TEST=$(SHORT_INTEGRATION_TEST) \
 		CUSTOM_CNI_URL=$(CUSTOM_CNI_URL) \
@@ -690,13 +709,15 @@ provision-tests-prepare: release-artifacts $(ARTIFACTS)/$(INTEGRATION_TEST_PROVI
 provision-tests: provision-tests-prepare
 	@$(MAKE) hack-test-$@ \
 		TAG=$(TAG) \
-		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+		CHUBOCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
+		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
 		INTEGRATION_TEST=$(PWD)/$(ARTIFACTS)/$(INTEGRATION_TEST_PROVISION_DEFAULT_TARGET)-amd64
 
 provision-tests-track-%:
 	@$(MAKE) hack-test-provision-tests \
 		TAG=$(TAG) \
-		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+		CHUBOCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
+		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
 		INTEGRATION_TEST=$(PWD)/$(ARTIFACTS)/$(INTEGRATION_TEST_PROVISION_DEFAULT_TARGET)-amd64 \
 		INTEGRATION_TEST_RUN="TestIntegration/.+-TR$*" \
 		INTEGRATION_TEST_TRACK="$*" \
@@ -749,15 +770,15 @@ conformance:
 release-notes:
 	ARTIFACTS=$(ARTIFACTS) ./hack/release.sh $@ $(ARTIFACTS)/RELEASE_NOTES.md $(TAG)
 
-push: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the generated tag.
+push: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the generated tag.
 	@$(MAKE) installer-base PUSH=true
 	@$(MAKE) imager PUSH=true
 	@$(MAKE) installer PUSH=true
 	@$(MAKE) talos PUSH=true
-	@$(MAKE) talosctl-image PUSH=true
-	@$(MAKE) talosctl-all-image PUSH=true
+	@$(MAKE) chuboctl-image PUSH=true
+	@$(MAKE) chuboctl-all-image PUSH=true
 
-push-%: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the specified tag (e.g. push-latest).
+push-%: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the specified tag (e.g. push-latest).
 	@$(MAKE) push IMAGE_TAG_OUT=$*
 
 .PHONY: clean

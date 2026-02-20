@@ -4,7 +4,7 @@ set -euo pipefail
 # End-to-end chubo core flow in QEMU:
 # install -> runtime mTLS -> upgrade -> rollback -> support bundle
 #
-# This script is Linux/amd64 oriented for CI. It uses `talosctl cluster create dev`
+# This script is Linux/amd64 oriented for CI. It uses `chuboctl cluster create dev`
 # to get a host-reachable node IP and drives the rest over the OS API.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,7 +13,7 @@ cd "${TALOS_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
-GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}"
+GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL:-${GO_BUILDFLAGS_TALOSCTL:--tags grpcnotrace,chubo}}"
 ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 WITH_HELPERS="${WITH_HELPERS:-0}"
@@ -470,14 +470,14 @@ if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 fi
 
 if [[ ! -x "${CHUBOCTL}" ]]; then
-	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	make "${ctl_target}" GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL}"
 elif ! "${CHUBOCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
 	echo "existing CLI binary is not chubo-tagged; rebuilding"
-	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	make "${ctl_target}" GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL}"
 elif command -v strings >/dev/null 2>&1 && ! strings "${CHUBOCTL}" 2>/dev/null | grep -q "CONTROL PLANE ENDPOINT"; then
 	# Ensure the host CLI has the current cluster UX strings.
 	echo "existing CLI binary is stale (missing 'CONTROL PLANE ENDPOINT'); rebuilding"
-	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
+	make "${ctl_target}" GO_BUILDFLAGS_CHUBOCTL="${GO_BUILDFLAGS_CHUBOCTL}"
 fi
 
 if ! command -v crane >/dev/null 2>&1; then

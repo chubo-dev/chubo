@@ -5,10 +5,10 @@ set -euo pipefail
 #
 # Policy:
 # - forbidden prefixes: k[0-9]s.io/* and go.etc[d].io/etc[d]/*
-# - cmd/talosctl is strict: zero forbidden deps allowed
+# - cmd/chuboctl is strict: zero forbidden deps allowed
 # - baseline file stores currently-allowed package paths for incremental targets
 # - check fails when:
-#   * cmd/talosctl has any forbidden deps
+#   * cmd/chuboctl has any forbidden deps
 #   * current deps include package paths not present in baseline
 # - removals are reported as improvement (baseline can be tightened with --update)
 #
@@ -53,7 +53,7 @@ fi
 # Keep target matrix explicit so regressions are obvious.
 TARGETS=(
 	"linux arm64 0 internal/app/machined"
-	"linux amd64 0 cmd/talosctl"
+	"linux amd64 0 cmd/chuboctl"
 )
 
 TAGS="tcell_minimal,grpcnotrace,chubo"
@@ -62,10 +62,10 @@ workdir="$(mktemp -d /tmp/chubo-go-deps-check.XXXXXX)"
 trap 'rm -rf "${workdir}"' EXIT
 current_file="${workdir}/current.txt"
 current_raw="${workdir}/current-raw.txt"
-strict_cmd_talosctl_file="${workdir}/cmd_talosctl_forbidden.txt"
+strict_cmd_chuboctl_file="${workdir}/cmd_chuboctl_forbidden.txt"
 
 : >"${current_raw}"
-: >"${strict_cmd_talosctl_file}"
+: >"${strict_cmd_chuboctl_file}"
 
 for target_spec in "${TARGETS[@]}"; do
 	read -r goos goarch cgo target <<<"${target_spec}"
@@ -83,16 +83,16 @@ for target_spec in "${TARGETS[@]}"; do
 	target_count="$(wc -l <"${target_forbidden}" | tr -d ' ')"
 	echo "  forbidden deps for ${target}: ${target_count}"
 
-	if [[ "${target}" == "cmd/talosctl" ]]; then
-		cat "${target_forbidden}" >"${strict_cmd_talosctl_file}"
+	if [[ "${target}" == "cmd/chuboctl" ]]; then
+		cat "${target_forbidden}" >"${strict_cmd_chuboctl_file}"
 	fi
 done
 
 sort -u "${current_raw}" | grep -E "${forbidden_dep_re}" >"${current_file}" || true
 
-if [[ -s "${strict_cmd_talosctl_file}" ]]; then
-	echo "FAIL: cmd/talosctl must not import forbidden package deps:" >&2
-	sed 's/^/  + /' "${strict_cmd_talosctl_file}" >&2
+if [[ -s "${strict_cmd_chuboctl_file}" ]]; then
+	echo "FAIL: cmd/chuboctl must not import forbidden package deps:" >&2
+	sed 's/^/  + /' "${strict_cmd_chuboctl_file}" >&2
 	exit 1
 fi
 
