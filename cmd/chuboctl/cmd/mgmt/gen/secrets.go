@@ -26,6 +26,7 @@ var genSecretsCmdFlags struct {
 
 const (
 	genSecretsChuboVersionFlagName = "chubo-version"
+	legacySecretsVersionAliasFlag  = "talos-version"
 )
 
 // genSecretsCmd represents the `gen secrets` command.
@@ -94,8 +95,8 @@ func writeSecretsBundleToFile(bundle *secrets.Bundle) error {
 func init() {
 	genSecretsCmd.Flags().StringVarP(&genSecretsCmdFlags.outputFile, "output-file", "o", "secrets.yaml", `path of the output file, or "-" for stdout`)
 	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, genSecretsChuboVersionFlagName, "", "the desired Chubo OS version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
-	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", genSecretsChuboVersionFlagName))
-	cli.Should(genSecretsCmd.Flags().MarkHidden("talos-version"))
+	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, legacySecretsVersionAliasFlag, "", fmt.Sprintf("Legacy alias for --%s.", genSecretsChuboVersionFlagName))
+	cli.Should(genSecretsCmd.Flags().MarkHidden(legacySecretsVersionAliasFlag))
 	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.fromControlplaneConfig, "from-controlplane-config", "", "use the provided control-plane machine configuration as input")
 
 	Cmd.AddCommand(genSecretsCmd)

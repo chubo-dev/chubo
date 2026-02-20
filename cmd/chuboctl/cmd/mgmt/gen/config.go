@@ -36,8 +36,9 @@ const (
 	controlPlaneOutputType = "controlplane"
 	workerOutputType       = "worker"
 	chuboconfigOutputType  = "chuboconfig"
-	talosconfigOutputType  = "talosconfig"
+	legacyOutputTypeAlias  = "talosconfig"
 	chuboVersionFlagName   = "chubo-version"
+	legacyVersionAliasFlag = "talos-version"
 
 	stdoutOutput = "-"
 
@@ -54,7 +55,7 @@ var acceptedOutputTypes = []string{
 	controlPlaneOutputType,
 	workerOutputType,
 	chuboconfigOutputType,
-	talosconfigOutputType,
+	legacyOutputTypeAlias,
 }
 
 type configOutputPaths struct {
@@ -286,7 +287,7 @@ func validateFlags() error {
 			continue
 		}
 
-		if outputType == talosconfigOutputType {
+		if outputType == legacyOutputTypeAlias {
 			outputType = chuboconfigOutputType
 		}
 
@@ -448,8 +449,8 @@ func init() {
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.dnsDomain, "dns-domain", "cluster.local", "the dns domain to use for cluster")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.configVersion, "version", "v1alpha1", "the desired machine config version to generate")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, chuboVersionFlagName, "", "the desired Chubo OS version to generate config for (backwards compatibility, e.g. v0.8)")
-	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
-	cli.Should(genConfigCmd.Flags().MarkHidden("talos-version"))
+	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, legacyVersionAliasFlag, "", fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
+	cli.Should(genConfigCmd.Flags().MarkHidden(legacyVersionAliasFlag))
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatch, "config-patch", nil, "patch generated machineconfigs (applied to all node types), use @file to read a patch from file")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchControlPlane, "config-patch-control-plane", nil, "patch generated machineconfigs (applied to 'init' and 'controlplane' types)")
 	genConfigCmd.Flags().StringArrayVar(&genConfigCmdFlags.configPatchWorker, "config-patch-worker", nil, "patch generated machineconfigs (applied to 'worker' type)")
@@ -459,7 +460,7 @@ func init() {
 	genConfigCmd.Flags().BoolVarP(&genConfigCmdFlags.withClusterDiscovery, "with-cluster-discovery", "", true, "enable cluster discovery feature")
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.withSecrets, "with-secrets", "", "use a secrets file generated using 'gen secrets'")
 
-	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", defaultOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q (legacy alias: %q -> %q)", defaultOutputTypes, talosconfigOutputType, chuboconfigOutputType))
+	genConfigCmd.Flags().StringSliceVarP(&genConfigCmdFlags.outputTypes, "output-types", "t", defaultOutputTypes, fmt.Sprintf("types of outputs to be generated. valid types are: %q (legacy alias: %q -> %q)", defaultOutputTypes, legacyOutputTypeAlias, chuboconfigOutputType))
 	genConfigCmd.Flags().StringVarP(&genConfigCmdFlags.output, "output", "o", "",
 		`destination to output generated files. when multiple output types are specified, it must be a directory. for a single output type, it must either be a file path, or "-" for stdout`)
 	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.outputDir, "output-dir", "", "destination to output generated files") // kept for backwards compatibility
