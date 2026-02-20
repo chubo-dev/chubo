@@ -37,6 +37,7 @@ func WithControlPlaneEndpoint(endpoint string) Option {
 // WithChuboConfig specifies chuboconfig to use when accessing a Chubo cluster.
 func WithChuboConfig(chuboConfig *clientconfig.Config) Option {
 	return func(o *Options) error {
+		o.ChuboConfig = chuboConfig
 		o.TalosConfig = chuboConfig
 
 		return nil
@@ -51,6 +52,7 @@ func WithTalosConfig(talosConfig *clientconfig.Config) Option {
 // WithChuboClient specifies client to use when accessing a Chubo cluster.
 func WithChuboClient(client *client.Client) Option {
 	return func(o *Options) error {
+		o.ChuboClient = client
 		o.TalosClient = client
 
 		return nil
@@ -218,6 +220,8 @@ func WithSkipInjectingExtraCmdline(v bool) Option {
 // Options describes Provisioner parameters.
 type Options struct {
 	LogWriter            io.Writer
+	ChuboConfig          *clientconfig.Config
+	ChuboClient          *client.Client
 	TalosConfig          *clientconfig.Config
 	TalosClient          *client.Client
 	ControlPlaneEndpoint string
@@ -263,4 +267,22 @@ func DefaultOptions() Options {
 		LogWriter:         os.Stderr,
 		DockerPortsHostIP: "0.0.0.0",
 	}
+}
+
+// EffectiveConfig returns the primary client config with legacy fallback.
+func (o Options) EffectiveConfig() *clientconfig.Config {
+	if o.ChuboConfig != nil {
+		return o.ChuboConfig
+	}
+
+	return o.TalosConfig
+}
+
+// EffectiveClient returns the primary API client with legacy fallback.
+func (o Options) EffectiveClient() *client.Client {
+	if o.ChuboClient != nil {
+		return o.ChuboClient
+	}
+
+	return o.TalosClient
 }

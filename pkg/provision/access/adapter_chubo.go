@@ -61,8 +61,8 @@ func NewAdapter(clusterInfo provision.Cluster, opts ...provision.Option) *Adapte
 	}
 
 	configProvider := cluster.ConfigClientProvider{
-		DefaultClient: options.TalosClient,
-		TalosConfig:   options.TalosConfig,
+		DefaultClient: options.EffectiveClient(),
+		TalosConfig:   options.EffectiveConfig(),
 	}
 
 	return &Adapter{
