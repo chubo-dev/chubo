@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package provision provides abstract definitions for Talos cluster provisioners.
+// Package provision provides abstract definitions for Chubo cluster provisioners.
 package provision
 
 import (
@@ -35,4 +35,9 @@ type Provisioner interface {
 	Close() error
 
 	UserDiskName(index int) string
+}
+
+// GetChuboAPIEndpoints returns the OS API endpoints for a provisioner.
+func GetChuboAPIEndpoints(p Provisioner, req NetworkRequest) []string {
+	return p.GetTalosAPIEndpoints(req)
 }

@@ -1175,13 +1175,10 @@
 ./pkg/machinery/version/os-release:NAME="Talos"
 ./pkg/machinery/version/os-release:PRETTY_NAME="Talos (v1.13.0-alpha.1)"
 ./pkg/provision/access/access.go:// Package access provides methods to access provisioned Talos cluster.
-./pkg/provision/options.go:// WithTalosClient specifies client to use when acessing Talos cluster.
-./pkg/provision/options.go:// WithTalosConfig specifies talosconfig to use when acessing Talos cluster.
 ./pkg/provision/providers/docker/create.go:// Create Talos cluster as a set of docker containers on docker network.
 ./pkg/provision/providers/docker/destroy.go:// Destroy Talos cluster as set of Docker nodes.
 ./pkg/provision/providers/docker/docker.go:		return nil, fmt.Errorf("failed to get available port for Talos API: %w", err)
 ./pkg/provision/providers/docker/docker.go:	// return a mapped to the localhost first container Talos API endpoint.
-./pkg/provision/providers/docker/docker.go:// GetTalosAPIEndpoints returns a list of Talos API endpoints.
 ./pkg/provision/providers/docker/network.go:			"talos.cluster.name": req.Name,
 ./pkg/provision/providers/docker/network.go:			"talos.owned":        "true",
 ./pkg/provision/providers/docker/network.go:	filters.Add("label", "talos.cluster.name="+name)
@@ -1209,11 +1206,9 @@
 ./pkg/provision/providers/qemu/qemu.go:				"talos.platform=metal",
 ./pkg/provision/providers/qemu/qemu.go:				"talos.shutdown=halt",
 ./pkg/provision/providers/qemu/qemu.go:				// Talos-specific
-./pkg/provision/providers/qemu/qemu.go:// GetTalosAPIEndpoints returns a list of Talos API endpoints.
 ./pkg/provision/providers/vm/dhcpd_darwin.go:		fmt.Printf("warning: failed to start native dhcp server after creating a talos dhcp server: %s", err)
 ./pkg/provision/providers/vm/dhcpd_darwin.go:// starts the talos DHCP server and then starts the apple bootp server again, which is configured such
 ./pkg/provision/providers/vm/network_linux.go:	state.BridgeName = fmt.Sprintf("%s%s", "talos", hex.EncodeToString(networkNameHash[:])[:8])
-./pkg/provision/provision.go:// Package provision provides abstract definitions for Talos cluster provisioners.
 ./pkg/provision/request.go:	// Path to root of state directory (~/.talos/clusters by default).
 ./pkg/provision/request.go:	// Path to talosctl executable to re-execute itself as needed.
 ./pkg/provision/state.go:			"state directory %q already exists, is the cluster %q already running? remove cluster state with talosctl cluster destroy",

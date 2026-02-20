@@ -214,7 +214,7 @@ func (apiSuite *APISuite) AssertClusterHealthy(ctx context.Context) {
 		apiSuite.T().Skip("cluster health can't be verified when cluster state is not provided")
 	}
 
-	clusterAccess := access.NewAdapter(apiSuite.Cluster, provision.WithTalosClient(apiSuite.Client))
+	clusterAccess := access.NewAdapter(apiSuite.Cluster, provision.WithChuboClient(apiSuite.Client))
 	defer clusterAccess.Close() //nolint:errcheck
 
 	apiSuite.Require().NoError(check.Wait(ctx, clusterAccess, append(check.DefaultClusterChecks(), check.ExtraClusterChecks()...), check.StderrReporter()))

@@ -113,7 +113,7 @@ func (p *provisioner) GetExternalControlPlaneEndpoint(provision.NetworkRequest, 
 	return "https://" + nethelpers.JoinHostPort("127.0.0.1", p.mappedControlPlanePort)
 }
 
-// GetTalosAPIEndpoints returns a list of Talos API endpoints.
+// GetTalosAPIEndpoints returns a list of OS API endpoints.
 func (p *provisioner) GetTalosAPIEndpoints(provision.NetworkRequest) []string {
 	// return a mapped to the localhost first container Talos API endpoint.
 	return []string{nethelpers.JoinHostPort("127.0.0.1", p.mappedTalosAPIPort)}

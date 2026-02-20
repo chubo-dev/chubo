@@ -84,20 +84,24 @@ func NewBundle(opts ...Option) (*Bundle, error) {
 			return nil, err
 		}
 
-		// Pull existing talosconfig
-		talosConfig, err := os.Open(filepath.Join(options.ExistingConfigs, "talosconfig"))
-		if errors.Is(err, fs.ErrNotExist) { // talosconfig is optional
+		// Pull existing chuboconfig first, then fall back to the legacy talosconfig.
+		for _, configFilename := range []string{"chuboconfig", "talosconfig"} {
+			configFile, err := os.Open(filepath.Join(options.ExistingConfigs, configFilename))
+			if errors.Is(err, fs.ErrNotExist) {
+				continue
+			}
+
+			if err != nil {
+				return bundle, err
+			}
+
+			defer configFile.Close() //nolint:errcheck
+
+			if bundle.TalosCfg, err = clientconfig.ReadFrom(configFile); err != nil {
+				return bundle, err
+			}
+
 			return bundle, nil
-		}
-
-		if err != nil {
-			return bundle, err
-		}
-
-		defer talosConfig.Close() //nolint:errcheck
-
-		if bundle.TalosCfg, err = clientconfig.ReadFrom(talosConfig); err != nil {
-			return bundle, err
 		}
 
 		return bundle, nil
@@ -171,9 +175,14 @@ func (bundle *Bundle) Worker() config.Provider {
 	return bundle.WorkerCfg
 }
 
-// TalosConfig implements the ProviderBundle interface.
-func (bundle *Bundle) TalosConfig() *clientconfig.Config {
+// ChuboConfig returns the primary Chubo client configuration from the bundle.
+func (bundle *Bundle) ChuboConfig() *clientconfig.Config {
 	return bundle.TalosCfg
+}
+
+// TalosConfig is a legacy alias kept for compatibility.
+func (bundle *Bundle) TalosConfig() *clientconfig.Config {
+	return bundle.ChuboConfig()
 }
 
 // Write config files to output directory.

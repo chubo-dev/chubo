@@ -34,22 +34,32 @@ func WithControlPlaneEndpoint(endpoint string) Option {
 	}
 }
 
-// WithTalosConfig specifies talosconfig to use when acessing Talos cluster.
-func WithTalosConfig(talosConfig *clientconfig.Config) Option {
+// WithChuboConfig specifies chuboconfig to use when accessing a Chubo cluster.
+func WithChuboConfig(chuboConfig *clientconfig.Config) Option {
 	return func(o *Options) error {
-		o.TalosConfig = talosConfig
+		o.TalosConfig = chuboConfig
 
 		return nil
 	}
 }
 
-// WithTalosClient specifies client to use when acessing Talos cluster.
-func WithTalosClient(client *client.Client) Option {
+// WithTalosConfig is a legacy alias kept for compatibility.
+func WithTalosConfig(talosConfig *clientconfig.Config) Option {
+	return WithChuboConfig(talosConfig)
+}
+
+// WithChuboClient specifies client to use when accessing a Chubo cluster.
+func WithChuboClient(client *client.Client) Option {
 	return func(o *Options) error {
 		o.TalosClient = client
 
 		return nil
 	}
+}
+
+// WithTalosClient is a legacy alias kept for compatibility.
+func WithTalosClient(client *client.Client) Option {
+	return WithChuboClient(client)
 }
 
 // WithBootlader enables or disables bootloader (bootloader is enabled by default).

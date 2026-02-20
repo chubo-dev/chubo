@@ -335,7 +335,7 @@ func (m *Maker[T]) finalizeMachineConfigs() (*bundle.Bundle, error) {
 		}
 	}
 
-	m.ProvisionOps = append(m.ProvisionOps, provision.WithTalosConfig(configBundle.TalosConfig()))
+	m.ProvisionOps = append(m.ProvisionOps, provision.WithChuboConfig(configBundle.ChuboConfig()))
 
 	return configBundle, nil
 }
@@ -560,7 +560,7 @@ func (m *Maker[T]) initGatewayIPs() error {
 
 func (m *Maker[T]) initEndpoints() error {
 	m.InClusterEndpoint = m.Provisioner.GetInClusterControlPlaneEndpoint(m.ClusterRequest.Network, m.Ops.ControlPlanePort)
-	m.Endpoints = m.Provisioner.GetTalosAPIEndpoints(m.ClusterRequest.Network)
+	m.Endpoints = provision.GetChuboAPIEndpoints(m.Provisioner, m.ClusterRequest.Network)
 
 	return nil
 }

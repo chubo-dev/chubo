@@ -611,7 +611,7 @@ func (suite *BaseSuite) setupCluster(options clusterOptions) {
 	provisionerOptions := []provision.Option{
 		provision.WithBootlader(true),
 		provision.WithUEFI(!options.WithBios),
-		provision.WithTalosConfig(suite.configBundle.TalosConfig()),
+		provision.WithChuboConfig(suite.configBundle.ChuboConfig()),
 	}
 
 	suite.Cluster, err = suite.provisioner.Create(
@@ -632,11 +632,11 @@ func (suite *BaseSuite) setupCluster(options clusterOptions) {
 	c, err := clientconfig.Open("")
 	suite.Require().NoError(err)
 
-	c.Merge(suite.configBundle.TalosConfig())
+	c.Merge(suite.configBundle.ChuboConfig())
 
 	suite.Require().NoError(c.Save(""))
 
-	suite.clusterAccess = access.NewAdapter(suite.Cluster, provision.WithTalosConfig(suite.configBundle.TalosConfig()))
+	suite.clusterAccess = access.NewAdapter(suite.Cluster, provision.WithChuboConfig(suite.configBundle.ChuboConfig()))
 
 	suite.Require().NoError(suite.clusterAccess.Bootstrap(suite.ctx, os.Stdout))
 

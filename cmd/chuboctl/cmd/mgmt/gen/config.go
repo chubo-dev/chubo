@@ -329,7 +329,7 @@ func writeConfigBundle(configBundle *bundle.Bundle, outputPaths configOutputPath
 	}
 
 	if _, ok := outputTypesSet[chuboconfigOutputType]; ok {
-		data, err := yaml.Marshal(configBundle.TalosConfig())
+		data, err := yaml.Marshal(configBundle.ChuboConfig())
 		if err != nil {
 			return fmt.Errorf("failed to marshal config: %+v", err)
 		}
