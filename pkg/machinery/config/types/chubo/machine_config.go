@@ -782,12 +782,11 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) str
 
 	joinBlock := ""
 	if len(join) > 0 {
-		joinBlock = fmt.Sprintf(`server_join {
-  retry_join = %s
-  retry_max = 0
-  retry_interval = "15s"
-}
-
+		joinBlock = fmt.Sprintf(`  server_join {
+    retry_join = %s
+    retry_max = 0
+    retry_interval = "15s"
+  }
 `, renderHCLStringArray(join))
 	}
 
@@ -808,15 +807,16 @@ tls {
   verify_https_client = true
 }
 
-%sserver {
+server {
   enabled = %t
   bootstrap_expect = %d
+%s
 }
 
 client {
   enabled = %t
 }
-`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, joinBlock, serverEnabled, bootstrapExpect, clientEnabled)
+`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, serverEnabled, bootstrapExpect, joinBlock, clientEnabled)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {

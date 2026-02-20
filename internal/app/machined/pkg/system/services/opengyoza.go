@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 	goruntime "runtime"
@@ -170,7 +171,18 @@ func (s *OpenGyoza) HealthFunc(runtime.Runtime) health.Check {
 			return err
 		}
 
-		return simpleHealthCheckWithClient(ctx, "https://127.0.0.1:8500/v1/status/leader", client)
+		err = simpleHealthCheckWithClient(ctx, "https://127.0.0.1:8500/v1/status/leader", client)
+		if err == nil {
+			return nil
+		}
+
+		// Mock-mode opengyoza serves plain HTTP on 8500. Keep TLS first for real
+		// artifacts, then fall back to HTTP when the endpoint advertises plain HTTP.
+		if strings.Contains(err.Error(), "server gave HTTP response to HTTPS client") {
+			return simpleHealthCheckWithClient(ctx, "http://127.0.0.1:8500/v1/status/leader", http.DefaultClient)
+		}
+
+		return err
 	}
 }
 

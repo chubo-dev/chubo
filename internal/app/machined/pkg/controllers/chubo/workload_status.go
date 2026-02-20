@@ -18,6 +18,14 @@ import (
 
 const workloadStatusHTTPTimeout = 2 * time.Second
 
+func isHTTPSMismatchError(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	return strings.Contains(err.Error(), "server gave HTTP response to HTTPS client")
+}
+
 func fetchLeader(ctx context.Context, client *http.Client, url string, tokenHeader, token string) (string, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -123,11 +131,19 @@ func queryOpenGyozaStatus(ctx context.Context, token string) (leader string, pee
 	}
 
 	leader, err = fetchLeader(ctx, client, "https://127.0.0.1:8500/v1/status/leader", "X-Consul-Token", token)
+	if isHTTPSMismatchError(err) {
+		leader, err = fetchLeader(ctx, http.DefaultClient, "http://127.0.0.1:8500/v1/status/leader", "X-Consul-Token", token)
+	}
+
 	if err != nil {
 		errs = append(errs, "leader: "+err.Error())
 	}
 
 	peers, err := fetchPeers(ctx, client, "https://127.0.0.1:8500/v1/status/peers", "X-Consul-Token", token)
+	if isHTTPSMismatchError(err) {
+		peers, err = fetchPeers(ctx, http.DefaultClient, "http://127.0.0.1:8500/v1/status/peers", "X-Consul-Token", token)
+	}
+
 	if err != nil {
 		errs = append(errs, "peers: "+err.Error())
 	} else {

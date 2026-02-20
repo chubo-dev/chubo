@@ -158,7 +158,9 @@ func (s *OpenWonton) HealthFunc(runtime.Runtime) health.Check {
 // HealthSettings implements the HealthcheckedService interface.
 func (s *OpenWonton) HealthSettings(runtime.Runtime) *health.Settings {
 	settings := health.DefaultSettings
-	settings.InitialDelay = 3 * time.Second
+	// OpenWonton can take a bit longer to bind TLS listeners after first boot/install.
+	// Avoid a false-negative first probe which leaves the service marked unhealthy.
+	settings.InitialDelay = 30 * time.Second
 
 	return &settings
 }
