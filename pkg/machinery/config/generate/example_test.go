@@ -36,7 +36,7 @@ func Example() {
 
 	// parse the version contract
 	var (
-		versionContract = config.TalosVersionCurrent //nolint:wastedassign,ineffassign // version of the Talos machinery package
+		versionContract = config.ChuboVersionCurrent //nolint:wastedassign,ineffassign // version of the Talos machinery package
 		err             error
 	)
 

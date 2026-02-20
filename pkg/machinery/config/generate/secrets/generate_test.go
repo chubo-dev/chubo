@@ -31,19 +31,19 @@ func TestNewBundle(t *testing.T) {
 	}{
 		{
 			name:            "v1.0",
-			versionContract: config.TalosVersion1_0,
+			versionContract: config.ChuboVersion1_0,
 		},
 		{
 			name:            "v1.3",
-			versionContract: config.TalosVersion1_3,
+			versionContract: config.ChuboVersion1_3,
 		},
 		{
 			name:            "v1.7",
-			versionContract: config.TalosVersion1_7,
+			versionContract: config.ChuboVersion1_7,
 		},
 		{
 			name:            "current",
-			versionContract: config.TalosVersionCurrent,
+			versionContract: config.ChuboVersionCurrent,
 		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
@@ -58,7 +58,7 @@ func TestNewBundle(t *testing.T) {
 func TestNewBundleFromConfig(t *testing.T) {
 	t.Parallel()
 
-	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.TalosVersionCurrent)
+	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.ChuboVersionCurrent)
 	require.NoError(t, err)
 
 	osCA, err := x509.NewCertificateAuthorityFromCertificateAndKey(bundle.Certs.OS)

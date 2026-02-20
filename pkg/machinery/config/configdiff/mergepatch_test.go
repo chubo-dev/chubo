@@ -401,7 +401,7 @@ environment:
 }
 
 func TestMergePatchDynamic(t *testing.T) {
-	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.TalosVersionCurrent)
+	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.ChuboVersionCurrent)
 	require.NoError(t, err)
 
 	input, err := generate.NewInput("test", "https://localhost:6443", constants.DefaultWorkloadVersion, generate.WithSecretsBundle(bundle))

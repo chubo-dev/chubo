@@ -21,7 +21,7 @@ import (
 func TestMarshalUnmarshal(t *testing.T) {
 	t.Parallel()
 
-	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.TalosVersionCurrent)
+	bundle, err := secrets.NewBundle(secrets.NewFixedClock(time.Now()), config.ChuboVersionCurrent)
 	require.NoError(t, err)
 
 	dir := t.TempDir()

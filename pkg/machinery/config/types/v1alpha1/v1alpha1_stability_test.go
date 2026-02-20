@@ -36,17 +36,17 @@ func TestConfigEncodingStability(t *testing.T) {
 	require.NoError(t, err)
 
 	versionContracts := []*config.VersionContract{
-		config.TalosVersion1_3,
-		config.TalosVersion1_4,
-		config.TalosVersion1_5,
-		config.TalosVersion1_6,
-		config.TalosVersion1_7,
-		config.TalosVersion1_8,
-		config.TalosVersion1_9,
-		config.TalosVersion1_10,
-		config.TalosVersion1_11,
-		config.TalosVersion1_12,
-		config.TalosVersion1_13,
+		config.ChuboVersion1_3,
+		config.ChuboVersion1_4,
+		config.ChuboVersion1_5,
+		config.ChuboVersion1_6,
+		config.ChuboVersion1_7,
+		config.ChuboVersion1_8,
+		config.ChuboVersion1_9,
+		config.ChuboVersion1_10,
+		config.ChuboVersion1_11,
+		config.ChuboVersion1_12,
+		config.ChuboVersion1_13,
 	}
 
 	currentVersion := ensure.Value(semver.ParseTolerant(gendata.VersionTag))

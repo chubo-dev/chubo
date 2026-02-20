@@ -45,35 +45,35 @@ func TestGenerateSuite(t *testing.T) {
 		},
 		{
 			label:      "1.7",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_7)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_7)},
 		},
 		{
 			label:      "1.6",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_6)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_6)},
 		},
 		{
 			label:      "1.5",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_5)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_5)},
 		},
 		{
 			label:      "1.4",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_4)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_4)},
 		},
 		{
 			label:      "1.3",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_3)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_3)},
 		},
 		{
 			label:      "1.2",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_2)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_2)},
 		},
 		{
 			label:      "1.1",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_1)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_1)},
 		},
 		{
 			label:      "1.0",
-			genOptions: []generate.Option{generate.WithVersionContract(config.TalosVersion1_0)},
+			genOptions: []generate.Option{generate.WithVersionContract(config.ChuboVersion1_0)},
 		},
 	} {
 		t.Run(tt.label, func(t *testing.T) {

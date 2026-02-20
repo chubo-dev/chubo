@@ -744,16 +744,6 @@
 ./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure applying rfc6902 patches to talos machine config: %s", err)
 ./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure converting talos machine config from json to yaml: %s", err)
 ./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure converting talos machine config to json: %s", err)
-./pkg/machinery/config/contract.go:// Config generation only supports backwards compatibility (e.g. Talos 0.9 can generate configs for Talos 0.9 and 0.8).
-./pkg/machinery/config/contract.go:// GrubUseUKICmdlineDefault returns true if version of Talos should use UKI cmdline by default.
-./pkg/machinery/config/contract.go:// Matching version of the machinery package is required to generate configs for the current version of Talos.
-./pkg/machinery/config/contract.go:// MultidocNetworkConfigSupported returns true if version of Talos supports multiple NetworkConfig documents.
-./pkg/machinery/config/contract.go:// Nil value of *VersionContract always describes current version of Talos.
-./pkg/machinery/config/contract.go:// ParseContractFromVersion parses Talos version into VersionContract.
-./pkg/machinery/config/contract.go:// SecureBootEnrollEnforcementSupported returns true if version of Talos supports SecureBoot enforcement on enroll.
-./pkg/machinery/config/contract.go:// VersionContract describes Talos version to generate config for.
-./pkg/machinery/config/contract.go:// VolumeConfigEncryptionSupported returns true if version of Talos supports disk encryption via VolumeConfig.
-./pkg/machinery/config/contract.go:// Well-known Talos version contracts.
 ./pkg/machinery/config/encoder/encoder.go:			tag = t.Field(i).Tag.Get("talos")
 ./pkg/machinery/config/generate/generate.go:// Config returns the talos config for a given node type.
 ./pkg/machinery/config/generate/network.go:		machine.MachineFeatures.StableHostname = pointer.To(true) //nolint:staticcheck // using legacy field for older Talos versions

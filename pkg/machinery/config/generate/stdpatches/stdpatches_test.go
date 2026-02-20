@@ -39,8 +39,8 @@ func TestPatches(t *testing.T) {
 			},
 
 			versionContracts: []*config.VersionContract{
-				config.TalosVersion1_11,
-				config.TalosVersion1_12,
+				config.ChuboVersion1_11,
+				config.ChuboVersion1_12,
 			},
 			kubernetesVersion: "1.34.0",
 

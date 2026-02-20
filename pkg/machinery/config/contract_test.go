@@ -14,25 +14,25 @@ import (
 )
 
 func TestContractGreater(t *testing.T) {
-	assert.True(t, config.TalosVersion1_1.Greater(config.TalosVersion1_0))
-	assert.True(t, config.TalosVersionCurrent.Greater(config.TalosVersion1_2))
-	assert.True(t, config.TalosVersionCurrent.Greater(config.TalosVersion1_3))
+	assert.True(t, config.ChuboVersion1_1.Greater(config.ChuboVersion1_0))
+	assert.True(t, config.ChuboVersionCurrent.Greater(config.ChuboVersion1_2))
+	assert.True(t, config.ChuboVersionCurrent.Greater(config.ChuboVersion1_3))
 
-	assert.False(t, config.TalosVersion1_2.Greater(config.TalosVersion1_3))
-	assert.False(t, config.TalosVersion1_2.Greater(config.TalosVersion1_2))
-	assert.False(t, config.TalosVersionCurrent.Greater(config.TalosVersionCurrent))
+	assert.False(t, config.ChuboVersion1_2.Greater(config.ChuboVersion1_3))
+	assert.False(t, config.ChuboVersion1_2.Greater(config.ChuboVersion1_2))
+	assert.False(t, config.ChuboVersionCurrent.Greater(config.ChuboVersionCurrent))
 }
 
 func TestContractParseVersion(t *testing.T) {
 	t.Parallel()
 
 	for v, expected := range map[string]*config.VersionContract{
-		"v1.5":           config.TalosVersion1_5,
-		"v1.5.":          config.TalosVersion1_5,
-		"v1.5.1":         config.TalosVersion1_5,
+		"v1.5":           config.ChuboVersion1_5,
+		"v1.5.":          config.ChuboVersion1_5,
+		"v1.5.1":         config.ChuboVersion1_5,
 		"v1.88":          {1, 88},
-		"v1.5.3-alpha.4": config.TalosVersion1_5,
-		"1.6":            config.TalosVersion1_6,
+		"v1.5.3-alpha.4": config.ChuboVersion1_5,
+		"1.6":            config.ChuboVersion1_6,
 	} {
 		t.Run(v, func(t *testing.T) {
 			t.Parallel()
@@ -45,7 +45,7 @@ func TestContractParseVersion(t *testing.T) {
 }
 
 func TestContractCurrent(t *testing.T) {
-	contract := config.TalosVersionCurrent
+	contract := config.ChuboVersionCurrent
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -60,7 +60,7 @@ func TestContractCurrent(t *testing.T) {
 }
 
 func TestContract1_13(t *testing.T) {
-	contract := config.TalosVersion1_13
+	contract := config.ChuboVersion1_13
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -75,7 +75,7 @@ func TestContract1_13(t *testing.T) {
 }
 
 func TestContract1_12(t *testing.T) {
-	contract := config.TalosVersion1_12
+	contract := config.ChuboVersion1_12
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -90,7 +90,7 @@ func TestContract1_12(t *testing.T) {
 }
 
 func TestContract1_11(t *testing.T) {
-	contract := config.TalosVersion1_11
+	contract := config.ChuboVersion1_11
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -105,7 +105,7 @@ func TestContract1_11(t *testing.T) {
 }
 
 func TestContract1_10(t *testing.T) {
-	contract := config.TalosVersion1_10
+	contract := config.ChuboVersion1_10
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -120,7 +120,7 @@ func TestContract1_10(t *testing.T) {
 }
 
 func TestContract1_9(t *testing.T) {
-	contract := config.TalosVersion1_9
+	contract := config.ChuboVersion1_9
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -135,7 +135,7 @@ func TestContract1_9(t *testing.T) {
 }
 
 func TestContract1_8(t *testing.T) {
-	contract := config.TalosVersion1_8
+	contract := config.ChuboVersion1_8
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -150,7 +150,7 @@ func TestContract1_8(t *testing.T) {
 }
 
 func TestContract1_7(t *testing.T) {
-	contract := config.TalosVersion1_7
+	contract := config.ChuboVersion1_7
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -165,7 +165,7 @@ func TestContract1_7(t *testing.T) {
 }
 
 func TestContract1_6(t *testing.T) {
-	contract := config.TalosVersion1_6
+	contract := config.ChuboVersion1_6
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -180,7 +180,7 @@ func TestContract1_6(t *testing.T) {
 }
 
 func TestContract1_5(t *testing.T) {
-	contract := config.TalosVersion1_5
+	contract := config.ChuboVersion1_5
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -195,7 +195,7 @@ func TestContract1_5(t *testing.T) {
 }
 
 func TestContract1_4(t *testing.T) {
-	contract := config.TalosVersion1_4
+	contract := config.ChuboVersion1_4
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -210,7 +210,7 @@ func TestContract1_4(t *testing.T) {
 }
 
 func TestContract1_3(t *testing.T) {
-	contract := config.TalosVersion1_3
+	contract := config.ChuboVersion1_3
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.True(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -225,7 +225,7 @@ func TestContract1_3(t *testing.T) {
 }
 
 func TestContract1_2(t *testing.T) {
-	contract := config.TalosVersion1_2
+	contract := config.ChuboVersion1_2
 
 	assert.True(t, contract.StableHostnameEnabled())
 	assert.False(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -240,7 +240,7 @@ func TestContract1_2(t *testing.T) {
 }
 
 func TestContract1_1(t *testing.T) {
-	contract := config.TalosVersion1_1
+	contract := config.ChuboVersion1_1
 
 	assert.False(t, contract.StableHostnameEnabled())
 	assert.False(t, contract.ApidExtKeyUsageCheckEnabled())
@@ -255,7 +255,7 @@ func TestContract1_1(t *testing.T) {
 }
 
 func TestContract1_0(t *testing.T) {
-	contract := config.TalosVersion1_0
+	contract := config.ChuboVersion1_0
 
 	assert.False(t, contract.StableHostnameEnabled())
 	assert.False(t, contract.ApidExtKeyUsageCheckEnabled())

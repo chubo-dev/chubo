@@ -116,7 +116,7 @@ func (bundle *Bundle) populate(versionContract *config.VersionContract) error {
 		bundle.Secrets.BootstrapToken = token
 	}
 
-	if versionContract.Greater(config.TalosVersion1_2) {
+	if versionContract.Greater(config.ChuboVersion1_2) {
 		if bundle.Secrets.SecretboxEncryptionSecret == "" {
 			secretboxEncryptionSecret, err := cis.CreateEncryptionToken()
 			if err != nil {

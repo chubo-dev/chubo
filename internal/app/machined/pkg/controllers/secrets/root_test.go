@@ -44,7 +44,7 @@ type RootSuite struct {
 }
 
 func (suite *RootSuite) genConfig(controlplane bool) talosconfig.Provider {
-	bundle, err := gensecrets.NewBundle(gensecrets.NewFixedClock(time.Now()), talosconfig.TalosVersionCurrent)
+	bundle, err := gensecrets.NewBundle(gensecrets.NewFixedClock(time.Now()), talosconfig.ChuboVersionCurrent)
 	suite.Require().NoError(err)
 
 	nodeType := machine.TypeWorker
