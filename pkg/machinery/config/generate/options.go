@@ -18,7 +18,7 @@ import (
 // Option controls generate options specific to input generation.
 type Option func(o *Options) error
 
-// WithEndpointList specifies endpoints to use when accessing Talos cluster.
+// WithEndpointList specifies endpoints to use when accessing a Chubo cluster.
 func WithEndpointList(endpoints []string) Option {
 	return func(o *Options) error {
 		o.EndpointList = endpoints
@@ -36,7 +36,7 @@ func WithLocalAPIServerPort(port int) Option {
 	}
 }
 
-// WithInstallDisk specifies install disk to use in Talos cluster.
+// WithInstallDisk specifies install disk to use in a Chubo cluster.
 func WithInstallDisk(disk string) Option {
 	return func(o *Options) error {
 		o.InstallDisk = disk
@@ -54,7 +54,7 @@ func WithAdditionalSubjectAltNames(sans []string) Option {
 	}
 }
 
-// WithInstallImage specifies install container image to use in Talos cluster.
+// WithInstallImage specifies install container image to use in a Chubo cluster.
 func WithInstallImage(imageRef string) Option {
 	return func(o *Options) error {
 		o.InstallImage = imageRef
@@ -120,7 +120,7 @@ func WithRegistryInsecureSkipVerify(host string) Option {
 	}
 }
 
-// WithDNSDomain specifies domain name to use in Talos cluster.
+// WithDNSDomain specifies domain name to use in a Chubo cluster.
 func WithDNSDomain(dnsDomain string) Option {
 	return func(o *Options) error {
 		o.DNSDomain = dnsDomain

@@ -18,7 +18,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
-// Destroy Talos cluster as set of Docker nodes.
+// Destroy a Chubo cluster as set of Docker nodes.
 //
 // Only cluster.Info().ClusterName and cluster.Info().Network.Name is being used.
 func (p *provisioner) Destroy(ctx context.Context, cluster provision.Cluster, opts ...provision.Option) error {

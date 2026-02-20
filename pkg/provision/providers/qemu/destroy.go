@@ -13,7 +13,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
-// Destroy Talos cluster as set of qemu VMs.
+// Destroy a Chubo cluster as set of qemu VMs.
 //
 //nolint:gocyclo,cyclop
 func (p *provisioner) Destroy(ctx context.Context, cluster provision.Cluster, opts ...provision.Option) error {

@@ -36,11 +36,11 @@ type Certs struct {
 	WorkloadProxy *x509.PEMEncodedCertificateAndKey `json:"WorkloadProxy"`
 	// WorkloadSigner is the legacy workload service account signing key.
 	WorkloadSigner *x509.PEMEncodedKey `json:"WorkloadSigner"`
-	// OS is Talos API CA certificate and key.
+	// OS is the OS API CA certificate and key.
 	OS *x509.PEMEncodedCertificateAndKey `json:"OS"`
 }
 
-// Cluster holds Talos cluster-wide secrets.
+// Cluster holds cluster-wide secrets.
 type Cluster struct {
 	ID     string `json:"Id"`
 	Secret string `json:"Secret"`

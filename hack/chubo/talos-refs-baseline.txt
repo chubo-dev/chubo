@@ -732,16 +732,13 @@
 ./pkg/machinery/compatibility/talos_version.go:// SupportsSSAManifestSync returns true if the Talos version supports server side apply manifest sync.
 ./pkg/machinery/compatibility/talos_version.go:// TalosVersion embeds Talos version.
 ./pkg/machinery/compatibility/talos_version.go:// UpgradeableFrom checks if the current version of Talos can be used as an upgrade for the given host version.
-./pkg/machinery/config/config.go:// Package config provides methods to generate and consume Talos configuration.
 ./pkg/machinery/config/config/machine.go:// Features describe individual Talos features that can be switched on or off.
 ./pkg/machinery/config/config/machine.go:// Kernel describes Talos Linux kernel configuration.
 ./pkg/machinery/config/config/runtime.go:// EnvironmentConfig defines the interface to access Talos environment configuration.
 ./pkg/machinery/config/config/runtime.go:// RuntimeConfig defines the interface to access Talos runtime configuration.
 ./pkg/machinery/config/config/runtime.go:// WatchdogTimerConfig defines the interface to access Talos watchdog timer configuration.
 ./pkg/machinery/config/config/validate.go:// This interface is used by Talos itself to validate configuration on the machine (vs. the Validator interface).
-./pkg/machinery/config/configloader/configloader.go:// Package configloader provides methods to load Talos config.
 ./pkg/machinery/config/configpatcher/apply.go:// Apply config patches to Talos machine config.
-./pkg/machinery/config/configpatcher/configpatcher.go:// Package configpatcher provides methods to patch Talos config.
 ./pkg/machinery/config/configpatcher/json6902.go:			return 0, errors.New("talos machine config is not a yaml document")
 ./pkg/machinery/config/configpatcher/json6902.go:			return 0, fmt.Errorf("failure decoding talos machine config: %s", err)
 ./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure applying rfc6902 patches to talos machine config: %s", err)
@@ -759,23 +756,15 @@
 ./pkg/machinery/config/contract.go:// Well-known Talos version contracts.
 ./pkg/machinery/config/encoder/encoder.go:			tag = t.Field(i).Tag.Get("talos")
 ./pkg/machinery/config/generate/generate.go:// Config returns the talos config for a given node type.
-./pkg/machinery/config/generate/generate.go:// Package generate provides Talos machine configuration generation and client config generation.
 ./pkg/machinery/config/generate/network.go:		machine.MachineFeatures.StableHostname = pointer.To(true) //nolint:staticcheck // using legacy field for older Talos versions
 ./pkg/machinery/config/generate/network.go:		machine.MachineNetwork = &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 ./pkg/machinery/config/generate/network.go:		machine.MachineNetwork = networkConfig //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 ./pkg/machinery/config/generate/network.go:		networkConfig := &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 ./pkg/machinery/config/generate/network.go:	// generate empty machine.network for backwards compatibility with older Talos versions
 ./pkg/machinery/config/generate/network.go:	if machine.MachineNetwork == nil && !in.Options.VersionContract.MultidocNetworkConfigSupported() { //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
-./pkg/machinery/config/generate/options.go:// WithDNSDomain specifies domain name to use in Talos cluster.
-./pkg/machinery/config/generate/options.go:// WithEndpointList specifies endpoints to use when accessing Talos cluster.
-./pkg/machinery/config/generate/options.go:// WithInstallDisk specifies install disk to use in Talos cluster.
-./pkg/machinery/config/generate/options.go:// WithInstallImage specifies install container image to use in Talos cluster.
 ./pkg/machinery/config/generate/secrets/ca.go:		x509.Organization("talos"),
 ./pkg/machinery/config/generate/secrets/ca.go:// NewAdminCertificateAndKey generates the admin Talos certificate and key.
 ./pkg/machinery/config/generate/secrets/ca.go:// NewTalosCA generates a CA for the Talos PKI.
-./pkg/machinery/config/generate/secrets/secrets.go:	// OS is Talos API CA certificate and key.
-./pkg/machinery/config/generate/secrets/secrets.go:// Cluster holds Talos cluster-wide secrets.
-./pkg/machinery/config/generate/stdpatches/stdpatches.go:// Package stdpatches contains standard patches applied to Talos machine configurations.
 ./pkg/machinery/config/merge/merge.go:// It is specifically fine-tuned to merge Talos machine configuration.
 ./pkg/machinery/config/schemas/config.schema.json:          "description": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - stable - generates a stable hostname based on machine identity\n  - off - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with hostname field.\n",
 ./pkg/machinery/config/schemas/config.schema.json:          "description": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\nGitHub releases page.\n",
@@ -1171,9 +1160,6 @@
 ./pkg/machinery/version/os-release:ID=talos
 ./pkg/machinery/version/os-release:NAME="Talos"
 ./pkg/machinery/version/os-release:PRETTY_NAME="Talos (v1.13.0-alpha.1)"
-./pkg/provision/access/access.go:// Package access provides methods to access provisioned Talos cluster.
-./pkg/provision/providers/docker/create.go:// Create Talos cluster as a set of docker containers on docker network.
-./pkg/provision/providers/docker/destroy.go:// Destroy Talos cluster as set of Docker nodes.
 ./pkg/provision/providers/docker/docker.go:		return nil, fmt.Errorf("failed to get available port for Talos API: %w", err)
 ./pkg/provision/providers/docker/docker.go:	// return a mapped to the localhost first container Talos API endpoint.
 ./pkg/provision/providers/docker/network.go:			"talos.cluster.name": req.Name,
@@ -1187,8 +1173,6 @@
 ./pkg/provision/providers/docker/node.go:	filters.Add("label", "talos.cluster.name="+clusterName)
 ./pkg/provision/providers/docker/node.go:	filters.Add("label", "talos.owned=true")
 ./pkg/provision/providers/docker/reflect.go:		t, err := machine.ParseType(node.Labels["talos.type"])
-./pkg/provision/providers/qemu/create.go:// Create Talos cluster as a set of qemu VMs.
-./pkg/provision/providers/qemu/destroy.go:// Destroy Talos cluster as set of qemu VMs.
 ./pkg/provision/providers/qemu/launch.go:				// [TODO]: once Talos is fixed, use multipath NVME: https://qemu-project.gitlab.io/qemu/system/devices/nvme.html
 ./pkg/provision/providers/qemu/launch.go:		config.sdStubExtraCmdlineConfig = fmt.Sprintf(" talos.config=http://%s/config.yaml", httpServerAddr)
 ./pkg/provision/providers/qemu/launch.go:	// Talos config

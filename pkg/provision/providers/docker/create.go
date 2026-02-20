@@ -13,7 +13,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/provision"
 )
 
-// Create Talos cluster as a set of docker containers on docker network.
+// Create a Chubo cluster as a set of docker containers on a docker network.
 func (p *provisioner) Create(ctx context.Context, request provision.ClusterRequest, opts ...provision.Option) (provision.Cluster, error) {
 	var err error
 
