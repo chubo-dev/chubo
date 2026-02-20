@@ -1864,9 +1864,9 @@ func (s *Server) GenerateClientConfiguration(ctx context.Context, in *machine.Ge
 		contextName = strings.TrimPrefix(r[0], role.Prefix) + "@" + contextName
 	}
 
-	talosconfig := clientconfig.NewConfig(contextName, nil, secretsBundle.Certs.OS.Crt, cert)
+	clientConfig := clientconfig.NewConfig(contextName, nil, secretsBundle.Certs.OS.Crt, cert)
 
-	b, err := talosconfig.Bytes()
+	b, err := clientConfig.Bytes()
 	if err != nil {
 		return nil, err
 	}

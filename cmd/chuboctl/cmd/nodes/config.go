@@ -460,7 +460,7 @@ Roles:               {{ join .Roles ", " }}{{ end }}
 Certificate expires: {{ .CertTTL }} ({{ .CertNotAfter }}){{ end }}
 `)))
 
-type talosconfigInfo struct {
+type chuboconfigInfo struct {
 	Context      string   `json:"context" yaml:"context"`
 	Nodes        []string `json:"nodes" yaml:"nodes"`
 	Endpoints    []string `json:"endpoints" yaml:"endpoints"`
@@ -469,11 +469,11 @@ type talosconfigInfo struct {
 	CertNotAfter string   `json:"certNotAfter" yaml:"certNotAfter"`
 }
 
-// configInfo returns talosct config info.
-func configInfo(config *clientconfig.Config, now time.Time) (talosconfigInfo, error) {
+// configInfo returns chuboconfig info.
+func configInfo(config *clientconfig.Config, now time.Time) (chuboconfigInfo, error) {
 	cfgContext, err := getContextData(config)
 	if err != nil {
-		return talosconfigInfo{}, err
+		return chuboconfigInfo{}, err
 	}
 
 	var (
@@ -486,19 +486,19 @@ func configInfo(config *clientconfig.Config, now time.Time) (talosconfigInfo, er
 
 		b, err = base64.StdEncoding.DecodeString(cfgContext.Crt)
 		if err != nil {
-			return talosconfigInfo{}, err
+			return chuboconfigInfo{}, err
 		}
 
 		block, _ := pem.Decode(b)
 		if block == nil {
-			return talosconfigInfo{}, errors.New("error decoding PEM")
+			return chuboconfigInfo{}, errors.New("error decoding PEM")
 		}
 
 		var crt *x509.Certificate
 
 		crt, err = x509.ParseCertificate(block.Bytes)
 		if err != nil {
-			return talosconfigInfo{}, err
+			return chuboconfigInfo{}, err
 		}
 
 		roles, _ = role.Parse(crt.Subject.Organization)
@@ -507,7 +507,7 @@ func configInfo(config *clientconfig.Config, now time.Time) (talosconfigInfo, er
 		certNotAfter = crt.NotAfter.UTC().Format("2006-01-02")
 	}
 
-	return talosconfigInfo{
+	return chuboconfigInfo{
 		Context:      config.Context,
 		Nodes:        cfgContext.Nodes,
 		Endpoints:    cfgContext.Endpoints,

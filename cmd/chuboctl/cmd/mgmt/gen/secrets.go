@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"go.yaml.in/yaml/v4"
 
+	"github.com/chubo-dev/chubo/pkg/cli"
 	"github.com/chubo-dev/chubo/pkg/machinery/config"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/configloader"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
@@ -19,9 +20,13 @@ import (
 
 var genSecretsCmdFlags struct {
 	outputFile             string
-	talosVersion           string
+	chuboVersion           string
 	fromControlplaneConfig string
 }
+
+const (
+	genSecretsChuboVersionFlagName = "chubo-version"
+)
 
 // genSecretsCmd represents the `gen secrets` command.
 var genSecretsCmd = &cobra.Command{
@@ -36,10 +41,10 @@ var genSecretsCmd = &cobra.Command{
 			err             error
 		)
 
-		if genSecretsCmdFlags.talosVersion != "" {
-			versionContract, err = config.ParseContractFromVersion(genSecretsCmdFlags.talosVersion)
+		if genSecretsCmdFlags.chuboVersion != "" {
+			versionContract, err = config.ParseContractFromVersion(genSecretsCmdFlags.chuboVersion)
 			if err != nil {
-				return fmt.Errorf("invalid talos-version: %w", err)
+				return fmt.Errorf("invalid chubo-version: %w", err)
 			}
 		}
 
@@ -88,7 +93,9 @@ func writeSecretsBundleToFile(bundle *secrets.Bundle) error {
 
 func init() {
 	genSecretsCmd.Flags().StringVarP(&genSecretsCmdFlags.outputFile, "output-file", "o", "secrets.yaml", `path of the output file, or "-" for stdout`)
-	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Chubo OS version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
+	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, genSecretsChuboVersionFlagName, "", "the desired Chubo OS version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
+	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", genSecretsChuboVersionFlagName))
+	cli.Should(genSecretsCmd.Flags().MarkHidden("talos-version"))
 	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.fromControlplaneConfig, "from-controlplane-config", "", "use the provided control-plane machine configuration as input")
 
 	Cmd.AddCommand(genSecretsCmd)

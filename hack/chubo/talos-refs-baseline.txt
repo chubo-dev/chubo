@@ -316,8 +316,8 @@
 ./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	talosVersionFlagName   = "talos-version"
 ./cmd/chuboctl/cmd/mgmt/gen/config.go:	cli.Should(genConfigCmd.Flags().MarkHidden("talos-version"))
 ./cmd/chuboctl/cmd/mgmt/gen/config.go:	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", chuboVersionFlagName))
-./cmd/chuboctl/cmd/mgmt/gen/secrets.go:				return fmt.Errorf("invalid talos-version: %w", err)
-./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Chubo OS version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
+./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	cli.Should(genSecretsCmd.Flags().MarkHidden("talos-version"))
+./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", genSecretsChuboVersionFlagName))
 ./cmd/chuboctl/cmd/nodes/image.go:		fmt.Printf("%s\n", sources.Talos)
 ./cmd/chuboctl/cmd/nodes/image.go:	Use:   "talos-bundle [talos-version]",
 ./cmd/chuboctl/cmd/nodes/image.go:// imageTalosBundleCmd represents the legacy image talos-bundle command.
