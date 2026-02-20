@@ -15,7 +15,10 @@ import (
 
 const (
 	// UniqueMachineTokenType is type of [UniqueMachineToken] resource.
-	UniqueMachineTokenType = resource.Type("UniqueMachineTokens.runtime.talos.dev")
+	UniqueMachineTokenType = resource.Type("UniqueMachineTokens.runtime.chubo.dev")
+
+	// LegacyUniqueMachineTokenType is the legacy type of [UniqueMachineToken] resource.
+	LegacyUniqueMachineTokenType = resource.Type("UniqueMachineTokens.runtime.talos.dev")
 
 	// UniqueMachineTokenID is the ID of [UniqueMachineToken] resource.
 	UniqueMachineTokenID = resource.ID("unique-machine-token")
@@ -46,7 +49,7 @@ type UniqueMachineTokenExtension struct{}
 func (UniqueMachineTokenExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             UniqueMachineTokenType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyUniqueMachineTokenType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -61,6 +64,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[UniqueMachineTokenSpec](UniqueMachineTokenType, &UniqueMachineToken{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[UniqueMachineTokenSpec](LegacyUniqueMachineTokenType, &UniqueMachineToken{})
 	if err != nil {
 		panic(err)
 	}

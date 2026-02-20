@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// EnvironmentType is type of Environment resource.
-const EnvironmentType = resource.Type("Environments.runtime.talos.dev")
+const (
+	// EnvironmentType is type of Environment resource.
+	EnvironmentType = resource.Type("Environments.runtime.chubo.dev")
+
+	// LegacyEnvironmentType is the legacy type of Environment resource.
+	LegacyEnvironmentType = resource.Type("Environments.runtime.talos.dev")
+)
 
 // Environment resource holds information about environment variables.
 type Environment = typed.Resource[EnvironmentSpec, EnvironmentExtension]
@@ -42,6 +47,7 @@ func (EnvironmentExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type: EnvironmentType,
 		Aliases: []resource.Type{
+			LegacyEnvironmentType,
 			"env",
 		},
 		DefaultNamespace: NamespaceName,
@@ -58,6 +64,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[EnvironmentSpec](EnvironmentType, &Environment{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[EnvironmentSpec](LegacyEnvironmentType, &Environment{})
 	if err != nil {
 		panic(err)
 	}

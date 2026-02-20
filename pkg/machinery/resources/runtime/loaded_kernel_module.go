@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// LoadedKernelModuleType is type of LoadedKernelModule resource.
-const LoadedKernelModuleType = resource.Type("LoadedKernelModules.runtime.talos.dev")
+const (
+	// LoadedKernelModuleType is type of LoadedKernelModule resource.
+	LoadedKernelModuleType = resource.Type("LoadedKernelModules.runtime.chubo.dev")
+
+	// LegacyLoadedKernelModuleType is the legacy type of LoadedKernelModule resource.
+	LegacyLoadedKernelModuleType = resource.Type("LoadedKernelModules.runtime.talos.dev")
+)
 
 // LoadedKernelModule resource holds information about Linux kernel module to load.
 type LoadedKernelModule = typed.Resource[LoadedKernelModuleSpec, LoadedKernelModuleExtension]
@@ -45,7 +50,7 @@ type LoadedKernelModuleExtension struct{}
 func (LoadedKernelModuleExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             LoadedKernelModuleType,
-		Aliases:          []resource.Type{"module", "modules"},
+		Aliases:          []resource.Type{LegacyLoadedKernelModuleType, "module", "modules"},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -60,6 +65,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[LoadedKernelModuleSpec](LoadedKernelModuleType, &LoadedKernelModule{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[LoadedKernelModuleSpec](LegacyLoadedKernelModuleType, &LoadedKernelModule{})
 	if err != nil {
 		panic(err)
 	}

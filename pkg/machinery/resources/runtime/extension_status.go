@@ -14,8 +14,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// ExtensionStatusType is type of Extension resource.
-const ExtensionStatusType = resource.Type("ExtensionStatuses.runtime.talos.dev")
+const (
+	// ExtensionStatusType is type of Extension resource.
+	ExtensionStatusType = resource.Type("ExtensionStatuses.runtime.chubo.dev")
+
+	// LegacyExtensionStatusType is the legacy type of Extension resource.
+	LegacyExtensionStatusType = resource.Type("ExtensionStatuses.runtime.talos.dev")
+)
 
 // ExtensionStatus resource holds status of installed system extensions.
 type ExtensionStatus = typed.Resource[ExtensionStatusSpec, ExtensionStatusExtension]
@@ -38,7 +43,7 @@ type ExtensionStatusExtension struct{}
 func (ExtensionStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             ExtensionStatusType,
-		Aliases:          []resource.Type{"extensions"},
+		Aliases:          []resource.Type{LegacyExtensionStatusType, "extensions"},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -57,6 +62,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[ExtensionStatusSpec](ExtensionStatusType, &ExtensionStatus{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[ExtensionStatusSpec](LegacyExtensionStatusType, &ExtensionStatus{})
 	if err != nil {
 		panic(err)
 	}

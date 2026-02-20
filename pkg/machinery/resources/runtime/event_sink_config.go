@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// EventSinkConfigType is type of EventSinkConfig resource.
-const EventSinkConfigType = resource.Type("EventSinkConfigs.runtime.talos.dev")
+const (
+	// EventSinkConfigType is type of EventSinkConfig resource.
+	EventSinkConfigType = resource.Type("EventSinkConfigs.runtime.chubo.dev")
+
+	// LegacyEventSinkConfigType is the legacy type of EventSinkConfig resource.
+	LegacyEventSinkConfigType = resource.Type("EventSinkConfigs.runtime.talos.dev")
+)
 
 // EventSinkConfig resource holds configuration for Talos event log streaming.
 type EventSinkConfig = typed.Resource[EventSinkConfigSpec, EventSinkConfigExtension]
@@ -44,7 +49,7 @@ type EventSinkConfigExtension struct{}
 func (EventSinkConfigExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             EventSinkConfigType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyEventSinkConfigType},
 		DefaultNamespace: NamespaceName,
 	}
 }
@@ -53,6 +58,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[EventSinkConfigSpec](EventSinkConfigType, &EventSinkConfig{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[EventSinkConfigSpec](LegacyEventSinkConfigType, &EventSinkConfig{})
 	if err != nil {
 		panic(err)
 	}

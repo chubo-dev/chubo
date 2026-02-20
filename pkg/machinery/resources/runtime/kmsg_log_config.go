@@ -15,8 +15,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// KmsgLogConfigType is type of KmsgLogConfig resource.
-const KmsgLogConfigType = resource.Type("KmsgLogConfigs.runtime.talos.dev")
+const (
+	// KmsgLogConfigType is type of KmsgLogConfig resource.
+	KmsgLogConfigType = resource.Type("KmsgLogConfigs.runtime.chubo.dev")
+
+	// LegacyKmsgLogConfigType is the legacy type of KmsgLogConfig resource.
+	LegacyKmsgLogConfigType = resource.Type("KmsgLogConfigs.runtime.talos.dev")
+)
 
 // KmsgLogConfig resource holds configuration for kernel message log streaming.
 type KmsgLogConfig = typed.Resource[KmsgLogConfigSpec, KmsgLogConfigExtension]
@@ -46,7 +51,7 @@ type KmsgLogConfigExtension struct{}
 func (KmsgLogConfigExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             KmsgLogConfigType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyKmsgLogConfigType},
 		DefaultNamespace: NamespaceName,
 	}
 }
@@ -55,6 +60,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[KmsgLogConfigSpec](KmsgLogConfigType, &KmsgLogConfig{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[KmsgLogConfigSpec](LegacyKmsgLogConfigType, &KmsgLogConfig{})
 	if err != nil {
 		panic(err)
 	}

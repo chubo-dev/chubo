@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MaintenanceServiceRequestType is type of MaintenanceServiceConfig resource.
-const MaintenanceServiceRequestType = resource.Type("MaintenanceServiceRequests.runtime.talos.dev")
+const (
+	// MaintenanceServiceRequestType is type of MaintenanceServiceConfig resource.
+	MaintenanceServiceRequestType = resource.Type("MaintenanceServiceRequests.runtime.chubo.dev")
+
+	// LegacyMaintenanceServiceRequestType is the legacy type of MaintenanceServiceConfig resource.
+	LegacyMaintenanceServiceRequestType = resource.Type("MaintenanceServiceRequests.runtime.talos.dev")
+)
 
 // MaintenanceServiceRequest resource indicates that the maintenance service should run.
 type MaintenanceServiceRequest = typed.Resource[MaintenanceServiceRequestSpec, MaintenanceServiceRequestExtension]
@@ -42,7 +47,7 @@ type MaintenanceServiceRequestExtension struct{}
 func (MaintenanceServiceRequestExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             MaintenanceServiceRequestType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyMaintenanceServiceRequestType},
 		DefaultNamespace: NamespaceName,
 	}
 }
@@ -51,6 +56,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[MaintenanceServiceRequestSpec](MaintenanceServiceRequestType, &MaintenanceServiceRequest{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[MaintenanceServiceRequestSpec](LegacyMaintenanceServiceRequestType, &MaintenanceServiceRequest{})
 	if err != nil {
 		panic(err)
 	}

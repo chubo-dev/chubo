@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MetaLoadedType is type of [MetaLoaded] resource.
-const MetaLoadedType = resource.Type("MetaLoads.runtime.talos.dev")
+const (
+	// MetaLoadedType is type of [MetaLoaded] resource.
+	MetaLoadedType = resource.Type("MetaLoads.runtime.chubo.dev")
+
+	// LegacyMetaLoadedType is the legacy type of [MetaLoaded] resource.
+	LegacyMetaLoadedType = resource.Type("MetaLoads.runtime.talos.dev")
+)
 
 // MetaLoaded resource appears when all meta keys are loaded.
 type MetaLoaded = typed.Resource[MetaLoadedSpec, MetaLoadedExtension]
@@ -44,7 +49,7 @@ type MetaLoadedExtension struct{}
 func (MetaLoadedExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             MetaLoadedType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyMetaLoadedType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -59,6 +64,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[MetaLoadedSpec](MetaLoadedType, &MetaLoaded{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[MetaLoadedSpec](LegacyMetaLoadedType, &MetaLoaded{})
 	if err != nil {
 		panic(err)
 	}

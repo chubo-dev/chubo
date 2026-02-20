@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// ExtensionServiceConfigStatusType is a type of ExtensionServiceConfig.
-const ExtensionServiceConfigStatusType = resource.Type("ExtensionServiceConfigStatuses.runtime.talos.dev")
+const (
+	// ExtensionServiceConfigStatusType is a type of ExtensionServiceConfig.
+	ExtensionServiceConfigStatusType = resource.Type("ExtensionServiceConfigStatuses.runtime.chubo.dev")
+
+	// LegacyExtensionServiceConfigStatusType is the legacy type of ExtensionServiceConfig.
+	LegacyExtensionServiceConfigStatusType = resource.Type("ExtensionServiceConfigStatuses.runtime.talos.dev")
+)
 
 // ExtensionServiceConfigStatus represents a resource that describes status of rendered extensions service config files.
 type ExtensionServiceConfigStatus = typed.Resource[ExtensionServiceConfigStatusSpec, ExtensionServiceConfigStatusExtension]
@@ -41,7 +46,7 @@ type ExtensionServiceConfigStatusExtension struct{}
 func (ExtensionServiceConfigStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             ExtensionServiceConfigStatusType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyExtensionServiceConfigStatusType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns:     []meta.PrintColumn{},
 	}
@@ -51,6 +56,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[ExtensionServiceConfigStatusSpec](ExtensionServiceConfigStatusType, &ExtensionServiceConfigStatus{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[ExtensionServiceConfigStatusSpec](LegacyExtensionServiceConfigStatusType, &ExtensionServiceConfigStatus{})
 	if err != nil {
 		panic(err)
 	}

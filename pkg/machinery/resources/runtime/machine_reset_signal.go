@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MachineResetSignalType is type of MachineResetSignal resource.
-const MachineResetSignalType = resource.Type("MachineResetSignals.runtime.talos.dev")
+const (
+	// MachineResetSignalType is type of MachineResetSignal resource.
+	MachineResetSignalType = resource.Type("MachineResetSignals.runtime.chubo.dev")
+
+	// LegacyMachineResetSignalType is the legacy type of MachineResetSignal resource.
+	LegacyMachineResetSignalType = resource.Type("MachineResetSignals.runtime.talos.dev")
+)
 
 // MachineResetSignalID is singleton MachineResetSignal resource ID.
 const MachineResetSignalID = resource.ID("machine")
@@ -44,7 +49,7 @@ type MachineResetSignalExtension struct{}
 func (MachineResetSignalExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             MachineResetSignalType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyMachineResetSignalType},
 		DefaultNamespace: NamespaceName,
 	}
 }
@@ -53,6 +58,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[MachineResetSignalSpec](MachineResetSignalType, &MachineResetSignal{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[MachineResetSignalSpec](LegacyMachineResetSignalType, &MachineResetSignal{})
 	if err != nil {
 		panic(err)
 	}

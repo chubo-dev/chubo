@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MachineStatusType is type of MachineStatus resource.
-const MachineStatusType = resource.Type("MachineStatuses.runtime.talos.dev")
+const (
+	// MachineStatusType is type of MachineStatus resource.
+	MachineStatusType = resource.Type("MachineStatuses.runtime.chubo.dev")
+
+	// LegacyMachineStatusType is the legacy type of MachineStatus resource.
+	LegacyMachineStatusType = resource.Type("MachineStatuses.runtime.talos.dev")
+)
 
 // MachineStatusID is singleton MachineStatus resource ID.
 const MachineStatusID = resource.ID("machine")
@@ -61,7 +66,7 @@ type MachineStatusExtension struct{}
 func (MachineStatusExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             MachineStatusType,
-		Aliases:          []resource.Type{},
+		Aliases:          []resource.Type{LegacyMachineStatusType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -80,6 +85,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[MachineStatusSpec](MachineStatusType, &MachineStatus{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[MachineStatusSpec](LegacyMachineStatusType, &MachineStatus{})
 	if err != nil {
 		panic(err)
 	}

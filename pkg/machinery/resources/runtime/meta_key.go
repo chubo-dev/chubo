@@ -15,8 +15,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// MetaKeyType is type of MetaKey resource.
-const MetaKeyType = resource.Type("MetaKeys.runtime.talos.dev")
+const (
+	// MetaKeyType is type of MetaKey resource.
+	MetaKeyType = resource.Type("MetaKeys.runtime.chubo.dev")
+
+	// LegacyMetaKeyType is the legacy type of MetaKey resource.
+	LegacyMetaKeyType = resource.Type("MetaKeys.runtime.talos.dev")
+)
 
 // MetaKey resource holds value of a key in META partition.
 type MetaKey = typed.Resource[MetaKeySpec, MetaKeyExtension]
@@ -43,7 +48,7 @@ type MetaKeyExtension struct{}
 func (MetaKeyExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             MetaKeyType,
-		Aliases:          []resource.Type{"meta"},
+		Aliases:          []resource.Type{LegacyMetaKeyType, "meta"},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -63,6 +68,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[MetaKeySpec](MetaKeyType, &MetaKey{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[MetaKeySpec](LegacyMetaKeyType, &MetaKey{})
 	if err != nil {
 		panic(err)
 	}
