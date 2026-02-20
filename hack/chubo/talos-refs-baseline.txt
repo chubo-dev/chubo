@@ -190,6 +190,7 @@
 ./Makefile:	@$(MAKE) talos PUSH=true
 ./Makefile:	@$(MAKE) talosctl-all-image PUSH=true
 ./Makefile:	@$(MAKE) talosctl-image PUSH=true
+./Makefile:	@./hack/chubo/check-talos-refs.sh
 ./Makefile:	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
 ./Makefile:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
 ./Makefile:	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
