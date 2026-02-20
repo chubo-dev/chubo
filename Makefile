@@ -583,6 +583,7 @@ chubo-guardrails: ## Runs chubo-specific regression guardrails (cluster-free ima
 	@./hack/chubo/check-rootfs.sh _out/chubo/initramfs-arm64.xz
 	@./hack/chubo/check-go-deps.sh
 	@./hack/chubo/check-active-refs.sh
+	@./hack/chubo/check-talos-refs.sh
 	@GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/machined-linux-arm64 ./internal/app/machined
 	@go build -tags tcell_minimal,grpcnotrace,chubo -o _out/chubo/chuboctl-linux-amd64 ./cmd/chuboctl
 	@_out/chubo/chuboctl-linux-amd64 --help | grep -q nomadconfig

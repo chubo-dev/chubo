@@ -1,0 +1,1625 @@
+./.conform.yaml:          - talosctl
+./.github/ISSUE_TEMPLATE/config.yml:    about: Ask a question about Talos Linux.
+./.github/ISSUE_TEMPLATE/config.yml:    url: https://github.com/siderolabs/talos/discussions
+./.golangci.yml:        path: cmd/talosctl/cmd
+./.golangci.yml:        path: cmd/talosctl/cmd/mgmt
+./.golangci.yml:        path: cmd/talosctl/cmd/mgmt/inject
+./.golangci.yml:        path: cmd/talosctl/cmd/talos
+./.golangci.yml:        path: cmd/talosctl/pkg/talos/action
+./.golangci.yml:        path: cmd/talosctl/pkg/talos/global
+./.golangci.yml:        path: cmd/talosctl/pkg/talos/helpers
+./Dockerfile:    && env HOME=/home/user TAG=latest /bin/talosctl docs --cli /tmp
+./Dockerfile:    --vex /talos.vex.json -vv --fail-on negligible --config /talos.grype.yaml
+./Dockerfile:    --vex /talos.vex.json -vv 2>&1 | tee /grype-scan.log
+./Dockerfile:    echo PKGS=${PKGS} >> _out/talos-metadata && \
+./Dockerfile:    echo TAG=${TAG} >> _out/talos-metadata
+./Dockerfile:    echo TOOLS=${TOOLS} >> _out/talos-metadata && \
+./Dockerfile:    github.com/anchore/grype/cmd/grype sbom:/talos-arm64.spdx.json \
+./Dockerfile:# 'installer-base' does not contain boot assets or talos itself.
+./Dockerfile:# Go standard library is shipped with Talos, thus it must be tracked in SBOM
+./Dockerfile:# Imager is meant to be run outside of talos and the talos installation flow.
+./Dockerfile:# It has the boot artifacts and tools to build any requested talos image with desired modifications and system extensions.
+./Dockerfile:# The base target provides a container that can be used to build all Talos
+./Dockerfile:# The build target creates a container that will be used to build Talos source
+./Dockerfile:# The initramfs target provides the Talos initramfs image.
+./Dockerfile:# The installer target generates an image that can be used to install Talos to
+./Dockerfile:# The rootfs target provides the Talos rootfs.
+./Dockerfile:# The talos target generates a docker image that can be used to run Talos
+./Dockerfile:# The talosctl targets build the talosctl binaries.
+./Dockerfile:# The talosctl-cni-bundle builds the CNI bundle for talosctl.
+./Dockerfile:COPY --from=embed-abbrev-generate /src/_out/talos-metadata /_out/talos-metadata
+./Dockerfile:COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
+./Dockerfile:COPY --from=sbom-amd64 /talos-amd64.spdx.json /usr/install/amd64/talos.spdx.json
+./Dockerfile:COPY --from=sbom-amd64-generate /rootfs/usr/share/spdx/talos-amd64.spdx.json /
+./Dockerfile:COPY --from=sbom-arm64 /talos-arm64.spdx.json /talos-arm64.spdx.json
+./Dockerfile:COPY --from=sbom-arm64 /talos-arm64.spdx.json /usr/install/arm64/talos.spdx.json
+./Dockerfile:COPY --from=sbom-arm64-generate /rootfs/usr/share/spdx/talos-arm64.spdx.json /
+./Dockerfile:COPY --from=sbom-container-amd64-generate /rootfs/usr/share/spdx/talos-container-amd64.spdx.json /
+./Dockerfile:COPY --from=sbom-container-arm64-generate /rootfs/usr/share/spdx/talos-container-arm64.spdx.json /
+./Dockerfile:COPY --from=talos-vex /generate-vex /generate-vex
+./Dockerfile:COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
+./Dockerfile:COPY --from=talosctl-darwin-amd64 / /
+./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
+./Dockerfile:COPY --from=talosctl-darwin-arm64 / /
+./Dockerfile:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /talosctl-darwin-arm64
+./Dockerfile:COPY --from=talosctl-freebsd-amd64 / /
+./Dockerfile:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /talosctl-freebsd-amd64
+./Dockerfile:COPY --from=talosctl-freebsd-arm64 / /
+./Dockerfile:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /talosctl-freebsd-arm64
+./Dockerfile:COPY --from=talosctl-linux-amd64 / /
+./Dockerfile:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /talosctl-linux-amd64
+./Dockerfile:COPY --from=talosctl-linux-arm64 / /
+./Dockerfile:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /talosctl-linux-arm64
+./Dockerfile:COPY --from=talosctl-linux-armv7 / /
+./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
+./Dockerfile:COPY --from=talosctl-linux-riscv64 / /
+./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
+./Dockerfile:COPY --from=talosctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/talosctl
+./Dockerfile:COPY --from=talosctl-windows-amd64 / /
+./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
+./Dockerfile:COPY --from=talosctl-windows-arm64 / /
+./Dockerfile:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
+./Dockerfile:COPY --from=vex /talos.grype.yaml /talos.grype.yaml
+./Dockerfile:COPY --from=vex /talos.vex.json /talos.vex.json
+./Dockerfile:COPY --from=vex-generate /talos.grype.yaml /talos.grype.yaml
+./Dockerfile:COPY --from=vex-generate /talos.vex.json /talos.vex.json
+./Dockerfile:ENTRYPOINT ["/talosctl"]
+./Dockerfile:FROM ${GENERATE_VEX_PREFIX}:${GENERATE_VEX} AS talos-vex
+./Dockerfile:FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
+./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
+./Dockerfile:FROM base AS talosctl-darwin-amd64-build
+./Dockerfile:FROM base AS talosctl-darwin-arm64-build
+./Dockerfile:FROM base AS talosctl-freebsd-amd64-build
+./Dockerfile:FROM base AS talosctl-freebsd-arm64-build
+./Dockerfile:FROM base AS talosctl-linux-amd64-build
+./Dockerfile:FROM base AS talosctl-linux-arm64-build
+./Dockerfile:FROM base AS talosctl-linux-armv7-build
+./Dockerfile:FROM base AS talosctl-linux-riscv64-build
+./Dockerfile:FROM base AS talosctl-windows-amd64-build
+./Dockerfile:FROM base AS talosctl-windows-arm64-build
+./Dockerfile:FROM scratch AS talos
+./Dockerfile:FROM scratch AS talosctl
+./Dockerfile:FROM scratch AS talosctl-all
+./Dockerfile:FROM scratch AS talosctl-cni-bundle
+./Dockerfile:FROM scratch AS talosctl-darwin-amd64
+./Dockerfile:FROM scratch AS talosctl-darwin-arm64
+./Dockerfile:FROM scratch AS talosctl-freebsd-amd64
+./Dockerfile:FROM scratch AS talosctl-freebsd-arm64
+./Dockerfile:FROM scratch AS talosctl-linux-amd64
+./Dockerfile:FROM scratch AS talosctl-linux-arm64
+./Dockerfile:FROM scratch AS talosctl-linux-armv7
+./Dockerfile:FROM scratch AS talosctl-linux-riscv64
+./Dockerfile:FROM scratch AS talosctl-windows-amd64
+./Dockerfile:FROM scratch AS talosctl-windows-arm64
+./Dockerfile:LABEL "alpha.talos.dev/version"="${VERSION}"
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache <<EOF
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-amd64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-arm64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=arm64 go test -v -c ${GO_BUILDFLAGS} \
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=freebsd GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-amd64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=freebsd GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-arm64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=${TARGETARCH} go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /installer
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-amd64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS} ${GO_MACHINED_LDFLAGS} -dumpdep" ./internal/app/machined \
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS} ${GO_MACHINED_LDFLAGS}" -o /machined
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /chubo-agent
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go test -v -c ${GO_BUILDFLAGS} \
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=v1 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /init
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm GOARM=7 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-armv7
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-arm64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS} ${GO_MACHINED_LDFLAGS}" -o /machined
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /chubo-agent
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /init
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go test -v -c ${GO_BUILDFLAGS} \
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=riscv64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-riscv64
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=windows GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-amd64.exe
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=windows GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-arm64.exe
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go generate -v ./version
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go generate ./...
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go generate ./pkg/...
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go install github.com/psampaz/go-mod-outdated@latest \
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go list all >/dev/null
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go mod download
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go mod verify
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool \
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf breaking current.lock.binpb --against lock.binpb
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf build
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf build --exclude-source-info -o lock.binpb
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf format
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf lint
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/gotagsrewrite .
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/structprotogen github.com/chubo-dev/chubo/pkg/machinery/... /api/resource/definitions/
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/siderolabs/importvet/cmd/importvet github.com/chubo-dev/chubo/...
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo ./
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo ./pkg/
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo /src/api/machinery/
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/vuln/cmd/govulncheck ./...
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -w ./
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -w ./pkg/
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -w /src/api/machinery/
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache sbom.sh /tmp/sbom-src/ talos-amd64.spdx.json
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache sbom.sh /tmp/sbom-src/ talos-arm64.spdx.json
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache sbom.sh /tmp/sbom-src/ talos-container-amd64.spdx.json
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache sbom.sh /tmp/sbom-src/ talos-container-arm64.spdx.json
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache,sharing=locked go tool github.com/bufbuild/buf/cmd/buf generate
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache,sharing=locked go tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint config verify --config .golangci.yml
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache,sharing=locked go tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint run --config ../../.golangci.yml
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache,sharing=locked go tool github.com/golangci/golangci-lint/v2/cmd/golangci-lint run --config .golangci.yml
+./Dockerfile:RUN --security=insecure --mount=type=cache,id=testspace,target=/tmp --mount=type=cache,target=/.cache,id=talos/.cache go test ${GO_BUILDFLAGS} \
+./Dockerfile:RUN /generate-vex gen --target-version $TAG > /talos.vex.json
+./Dockerfile:RUN /generate-vex grype-config --target-version $TAG > /talos.grype.yaml
+./Dockerfile:RUN chmod +x /talosctl-darwin-amd64
+./Dockerfile:RUN chmod +x /talosctl-darwin-arm64
+./Dockerfile:RUN chmod +x /talosctl-linux-amd64
+./Dockerfile:RUN chmod +x /talosctl-linux-arm64
+./Dockerfile:RUN chmod +x /talosctl-linux-armv7
+./Dockerfile:RUN chmod +x /talosctl-linux-riscv64
+./Dockerfile:RUN env HOME=/home/user TAG=latest /bin/talosctl docs --config /tmp/configuration \
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-darwin-amd64
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-amd64
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-arm64
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-amd64
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-arm64
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-armv7
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-riscv64
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-amd64.exe
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-arm64.exe
+./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" talosctl-darwin-arm64
+./Dockerfile:WORKDIR /src/cmd/talosctl
+./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/initramfs-amd64.xz" \
+./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/vmlinuz-amd64" \
+./Makefile:		IMAGE=$(REGISTRY_AND_USERNAME)/talos:$(IMAGE_TAG_IN) \
+./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+./Makefile:		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
+./Makefile:	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
+./Makefile:	@$(MAKE) -B talosctl-$*
+./Makefile:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-darwin-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-darwin-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-freebsd-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-freebsd-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-linux-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-linux-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-linux-armv7 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-linux-riscv64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-windows-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) local-talosctl-windows-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:	@$(MAKE) registry-talosctl
+./Makefile:	@$(MAKE) registry-talosctl-all
+./Makefile:	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
+./Makefile:	@$(MAKE) talos PUSH=true
+./Makefile:	@$(MAKE) talosctl-all-image PUSH=true
+./Makefile:	@$(MAKE) talosctl-image PUSH=true
+./Makefile:	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
+./Makefile:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+./Makefile:	@go test ./cmd/talosctl/cmd/talos -run TestDoesNotExist -count=1
+./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
+./Makefile:# Build chuboctl by reusing the talosctl artifact and renaming it.
+./Makefile:# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
+./Makefile:.PHONY: talos
+./Makefile:.PHONY: talosctl
+./Makefile:.PHONY: talosctl-cni-bundle
+./Makefile:.PHONY: talosctl-image
+./Makefile:Building with `WITH_RACE=1` enables race detector in the Talos executables. Integration tests are always built with the race detector
+./Makefile:GO_MACHINED_LDFLAGS ?= -X golang.zx2c4.com/wireguard/ipc.socketDirectory=/system/wireguard-sock # see https://github.com/siderolabs/talos/issues/8514
+./Makefile:NAME = Talos
+./Makefile:PKG_TALOSCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
+./Makefile:TALOSCTL_DEFAULT_TARGET := talosctl-$(OPERATING_SYSTEM)
+./Makefile:all: initramfs kernel installer imager talosctl talosctl-image talos
+./Makefile:docs: ## Generates the documentation for machine config, and talosctl.
+./Makefile:push-%: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the specified tag (e.g. push-latest).
+./Makefile:push: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the generated tag.
+./Makefile:talos: ## Builds the Talos container image and outputs it to the registry.
+./Makefile:talosctl-all-image:
+./Makefile:talosctl-all:
+./Makefile:talosctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for talosctl.
+./Makefile:talosctl-darwin-amd64:
+./Makefile:talosctl-darwin-arm64:
+./Makefile:talosctl-freebsd-amd64:
+./Makefile:talosctl-freebsd-arm64:
+./Makefile:talosctl-image: ## Builds the talosctl container image and outputs it to the registry.
+./Makefile:talosctl-linux-amd64:
+./Makefile:talosctl-linux-arm64:
+./Makefile:talosctl-linux-armv7:
+./Makefile:talosctl-linux-riscv64:
+./Makefile:talosctl-windows-amd64:
+./Makefile:talosctl-windows-arm64:
+./Makefile:talosctl:
+./Makefile:uki-certs: talosctl ## Generate test certificates for SecureBoot/PCR Signing
+./api/common/common.proto:  // Indicates the Talos version when this deprecated enum value will be removed from API.
+./api/common/common.proto:  // Indicates the Talos version when this deprecated enum will be removed from API.
+./api/common/common.proto:  // Indicates the Talos version when this deprecated filed will be removed from API.
+./api/common/common.proto:  // Indicates the Talos version when this deprecated message will be removed from API.
+./api/common/common.proto:  // Indicates the Talos version when this deprecated method will be removed from API.
+./api/common/common.proto:  // Indicates the Talos version when this deprecated service will be removed from API.
+./api/docs.markdown.tmpl:description: Talos gRPC API reference.
+./api/machine/debug.proto:// DebugService provides debugging and inspection capabilities for a Talos node.
+./api/machine/machine.proto:  // Features describe individual Talos features that can be switched on or off.
+./api/machine/machine.proto:  // GenerateClientConfiguration generates talosctl client configuration (talosconfig).
+./api/machine/machine.proto:// CopyRequest describes a request to copy data out of Talos node
+./api/machine/machine.proto:// FeaturesInfo describes individual Talos features that can be switched on or off.
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionKeyType type = 2;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 12;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 7;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionProviderType provider = 1;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFSParameterType type = 1;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFilesystemType filesystem = 10;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFilesystemType filesystem = 4;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFilesystemType type = 1;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumePhase phase = 1;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumePhase pre_fail_phase = 6;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumeType type = 16;
+./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumeType type = 2;
+./api/resource/definitions/block/block.proto:package talos.resource.definitions.block;
+./api/resource/definitions/chubo/chubo.proto:package talos.resource.definitions.chubo;
+./api/resource/definitions/cluster/cluster.proto:  talos.resource.definitions.enums.MachineType machine_type = 4;
+./api/resource/definitions/cluster/cluster.proto:  talos.resource.definitions.enums.MachineType machine_type = 6;
+./api/resource/definitions/cluster/cluster.proto:package talos.resource.definitions.cluster;
+./api/resource/definitions/cri/cri.proto:  talos.resource.definitions.enums.CriImageCacheCopyStatus copy_status = 3;
+./api/resource/definitions/cri/cri.proto:  talos.resource.definitions.enums.CriImageCacheStatus status = 1;
+./api/resource/definitions/cri/cri.proto:package talos.resource.definitions.cri;
+./api/resource/definitions/enums/enums.proto:// NetworkOperator enumerates Talos network operators.
+./api/resource/definitions/enums/enums.proto:package talos.resource.definitions.enums;
+./api/resource/definitions/extensions/extensions.proto:  Constraint talos = 1;
+./api/resource/definitions/extensions/extensions.proto:package talos.resource.definitions.extensions;
+./api/resource/definitions/files/files.proto:package talos.resource.definitions.files;
+./api/resource/definitions/hardware/hardware.proto:package talos.resource.definitions.hardware;
+./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersConntrackState states = 1;
+./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersICMPType types = 1;
+./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 10;
+./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 4;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersADLACPActive adlacp_active = 27;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersADSelect ad_select = 9;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersARPAllTargets arp_all_targets = 5;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersARPValidate arp_validate = 4;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersAddressSortAlgorithm algorithm = 1;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersAddressSortAlgorithm sort_algorithm = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersBondMode mode = 1;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersBondXmitHashPolicy hash_policy = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersClientIdentifier client_identifier = 1;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersDuplex duplex = 25;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersDuplex duplex = 4;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFailOverMAC fail_over_mac = 8;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFamily family = 1;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFamily family = 3;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFamily family = 8;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersLACPRate lacp_rate = 3;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersLinkType type = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersLinkType type = 6;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersMatchOperator operator = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesChainHook hook = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesChainPriority priority = 3;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesVerdict policy = 5;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesVerdict verdict = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersOperationalState operational_state = 10;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersPort port = 24;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersPort port = 3;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersPrimaryReselect primary_reselect = 7;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersProtocol protocol = 1;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteProtocol protocol = 11;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteProtocol protocol = 12;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteType type = 10;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteType type = 9;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRoutingTable table = 6;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRoutingTable table = 7;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersScope scope = 4;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersScope scope = 8;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersScope scope = 9;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersVLANProtocol protocol = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 12;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 14;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 2;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 3;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 4;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 7;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkOperator operator = 1;
+./api/resource/definitions/network/network.proto:  talos.resource.definitions.runtime.PlatformMetadataSpec metadata = 10;
+./api/resource/definitions/network/network.proto:package talos.resource.definitions.network;
+./api/resource/definitions/perf/perf.proto:package talos.resource.definitions.perf;
+./api/resource/definitions/proto/proto.proto:package talos.resource.definitions.proto;
+./api/resource/definitions/runtime/runtime.proto:  talos.resource.definitions.enums.RuntimeFIPSState fips_state = 6;
+./api/resource/definitions/runtime/runtime.proto:  talos.resource.definitions.enums.RuntimeMachineStage stage = 1;
+./api/resource/definitions/runtime/runtime.proto:  talos.resource.definitions.enums.RuntimeSELinuxState se_linux_state = 4;
+./api/resource/definitions/runtime/runtime.proto:// EventSinkConfigSpec describes configuration of Talos event log streaming.
+./api/resource/definitions/runtime/runtime.proto:package talos.resource.definitions.runtime;
+./api/resource/definitions/secrets/secrets.proto:package talos.resource.definitions.secrets;
+./api/resource/definitions/siderolink/siderolink.proto:package talos.resource.definitions.siderolink;
+./api/resource/definitions/time/time.proto:package talos.resource.definitions.time;
+./api/resource/definitions/v1alpha1/v1alpha1.proto:package talos.resource.definitions.v1alpha1;
+./api/storage/storage.proto:  // SystemDisk indicates that the disk is used as Talos system disk.
+./cmd/chuboctl/main.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd"
+./cmd/chuboctl/main.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
+./cmd/installer/cmd/installer/install.go:	log.Printf("running Talos installer %s", version.NewVersion().Tag)
+./cmd/installer/pkg/install/errata.go:		// can't read Talos version
+./cmd/installer/pkg/install/errata.go:		// old Talos version, include fallback
+./cmd/installer/pkg/install/errata.go:		return nil, fmt.Errorf("error getting Talos version: %w", err)
+./cmd/installer/pkg/install/errata.go:		return nil, fmt.Errorf("error parsing Talos version: %w", err)
+./cmd/installer/pkg/install/errata.go:// from an old enough version of Talos.
+./cmd/installer/pkg/install/install.go:	// Talos >= 1.8 can create STATE/EPHEMERAL on first boot, so the upstream installer
+./cmd/installer/pkg/install/install.go:	// compatibility when installing on Talos < 1.8
+./cmd/installer/pkg/install/install.go:// Install installs Talos.
+./cmd/installer/pkg/install/install.go:// system partitions defined by Talos and handling META and IMAGE cache.
+./cmd/installer/pkg/install/install.go:const diskImageLabel = "talos-image-disk"
+./cmd/installer/pkg/install/preflight.go:		log.Printf("pre-flight checks disabled, as host Talos version is too old")
+./cmd/installer/pkg/install/preflight.go:		return fmt.Errorf("error getting Talos version: %w", err)
+./cmd/installer/pkg/install/preflight.go:		return fmt.Errorf("error parsing host Talos version: %w", err)
+./cmd/installer/pkg/install/preflight.go:		return fmt.Errorf("error parsing installer Talos version: %w", err)
+./cmd/installer/pkg/install/preflight.go:	log.Printf("host Talos version: %s", hostVersion.Version.Tag)
+./cmd/talosctl/cmd/common/common.go:// Package common provides common functionality for talosctl commands.
+./cmd/talosctl/cmd/completion.go:			fmt.Printf("compdef _chuboctl chuboctl talosctl")
+./cmd/talosctl/cmd/constants/constants.go:	ImageFactoryURL = "https://factory.talos.dev/"
+./cmd/talosctl/cmd/docs.go:// Package cmd provides the talosctl command implementation.
+./cmd/talosctl/cmd/docs.go:const cliDescription = "Talosctl CLI tool reference."
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/config_maker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/config_maker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/config_maker.go:// DockerOptions are the options for provisioning a docker based Talos cluster.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/config_maker.go:// QemuOptions are the options for provisioning a qemu based Talos cluster.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/common.go:				// Chubo doesn't bootstrap legacy control-plane components as part of `talosctl cluster create`.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/common.go:		return fmt.Errorf("error parsing Talos version %q: %w", m.Ops.TalosVersion, err)
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/common.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/common.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/docker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/maker.go:import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/qemu.go:			// legacy v1alpha1 flow to support booting old Talos versions
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/internal/firewallpatch"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.events.sink") != nil,
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.logging.kernel") != nil:
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/disk_image_preset.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/disk_image_preset.go:	return "Configure Talos to boot from a disk image from the Image Factory."
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/disk_image_preset.go:// DiskImage configures Talos to boot from a disk image from the Image Factory.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_preset.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_preset.go:	return "Configure Talos to boot from an ISO from the Image Factory."
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_preset.go:// ISO configures Talos to boot from an iso from the Image Factory.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_secureboot_preset.go:	return "Configure Talos for Secureboot via ISO. Only available on Linux hosts."
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_secureboot_preset.go:// ISOSecureBoot configures Talos to boot from a disk image from the Image Factory.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_secureboot_preset.go:import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/maintenance_preset.go:// Maintenance configures Talos to boot from a disk image from the Image Factory.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/maintenance_preset.go:import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/preset.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/pxe_preset.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/pxe_preset.go:	return "Configure Talos to boot via PXE from the Image Factory."
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/pxe_preset.go:// PXE configures Talos to boot from via pxe from the Image Factory.
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/options.go:		CniBundleURL: fmt.Sprintf("https://github.com/%s/talos/releases/download/%s/talosctl-cni-bundle-%s.tar.gz",
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/options.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/options.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/options.go:	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/cluster/create/clusterops/options.go:// ClusterConfigs is the configuration needed to create a talos cluster via the provisioner interface.
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd.go:	talosVersionFlagName   = "talos-version"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd.go:// Package create provides way to create talos clusters
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:		Short: "Creates a local QEMU-based cluster for Talos development.",
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:		addTalosVersionFlag(common, &cOps.TalosVersion, "the desired Talos version to generate config for")
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:		common.BoolVar(&cOps.ConfigDebug, configDebugFlag, cOps.ConfigDebug, "enable debug in Talos config to send service logs to the console")
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:		common.BoolVar(&cOps.WithJSONLogs, withJSONLogsFlag, cOps.WithJSONLogs, "enable JSON logs receiver and configure Talos to send logs there")
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:		createCmd.Short = "Create a local Talos cluster."
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:		qemu.BoolVar(&qOps.DebugShellEnabled, withDebugShellFlag, qOps.DebugShellEnabled, "drop talos into a maintenance shell on boot, this is for advanced debugging for developers only")
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_dev.go:	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_docker.go:		docker.StringVar(&dOps.TalosImage, "image", dOps.TalosImage, "the talos image to run")
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_docker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_docker.go:	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_qemu.go:		Short: "Create a local QEMU based Talos cluster.",
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/constants"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset"
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_qemu.go:	addTalosVersionFlag(commonFlags, &cOps.TalosVersion, "the desired talos version")
+./cmd/talosctl/cmd/mgmt/cluster/create/cmd_qemu.go:	cmdDescription.WriteString("Create a local QEMU based Talos cluster.\n\n")
+./cmd/talosctl/cmd/mgmt/cluster/create/create.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_dev.go:		return fmt.Errorf("error opening talos config: %w", err)
+./cmd/talosctl/cmd/mgmt/cluster/create/create_dev.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_dev.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_dev.go:	// Create and save the talosctl configuration file.
+./cmd/talosctl/cmd/mgmt/cluster/create/create_dev.go:	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_docker.go:		fmt.Printf("failed to derrive Talos version from the docker image, defaulting to %s\n", currentVersion)
+./cmd/talosctl/cmd/mgmt/cluster/create/create_docker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_docker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_docker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:		return fmt.Errorf("failed to parse talos version: %s", err)
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:		return fmt.Errorf("failed to parse talos version: version string must start with a 'v'")
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/constants"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset"
+./cmd/talosctl/cmd/mgmt/cluster/create/create_qemu.go:	clustercmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/debug/air-gapped.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/debug/debug.go:	Short:  "A collection of commands to facilitate debugging of Talos.",
+./cmd/talosctl/cmd/mgmt/gen/config.go:			return fmt.Errorf("invalid talos-version: %w", err)
+./cmd/talosctl/cmd/mgmt/gen/config.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/gen/config.go:	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate config for (backwards compatibility, e.g. v0.8)")
+./cmd/talosctl/cmd/mgmt/gen/config.go:// GenerateConfigBundle generates the Talos config bundle
+./cmd/talosctl/cmd/mgmt/gen/machineconfig_chubo.go:			// Keep Talos default NTP server unless explicitly overridden later.
+./cmd/talosctl/cmd/mgmt/gen/machineconfig_chubo.go:The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`" + ` build variant.
+./cmd/talosctl/cmd/mgmt/gen/secrets.go:				return fmt.Errorf("invalid talos-version: %w", err)
+./cmd/talosctl/cmd/mgmt/gen/secrets.go:	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
+./cmd/talosctl/cmd/mgmt/gen/secureboot.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/mgmt/machineconfig/gen.go:	// alias for `talosctl gen config`
+./cmd/talosctl/cmd/mgmt/machineconfig/gen.go:import "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/gen"
+./cmd/talosctl/cmd/mgmt/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/debug"
+./cmd/talosctl/cmd/mgmt/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/gen"
+./cmd/talosctl/cmd/mgmt/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/machineconfig"
+./cmd/talosctl/cmd/mgmt/root.go:// GenV1Alpha1Config generates the Talos config bundle
+./cmd/talosctl/cmd/mgmt/root_chubo.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/mgmt/root_chubo.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/debug"
+./cmd/talosctl/cmd/mgmt/root_chubo.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/gen"
+./cmd/talosctl/cmd/mgmt/root_chubo.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/machineconfig"
+./cmd/talosctl/cmd/mgmt/root_chubo.go:// GenV1Alpha1Config generates the Talos config bundle
+./cmd/talosctl/cmd/mgmt/siderolink_launch.go:	h.l.Info("talos agent sees peer added", zap.String("address", event.Address.String()))
+./cmd/talosctl/cmd/mgmt/virtiofsd_launch.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create/flags"
+./cmd/talosctl/cmd/root.go:		talosGroup   = "talos"
+./cmd/talosctl/cmd/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
+./cmd/talosctl/cmd/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt"
+./cmd/talosctl/cmd/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/talosctl/cmd/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos"
+./cmd/talosctl/cmd/root.go:	Aliases: []string{"talosctl"},
+./cmd/talosctl/cmd/root.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create" // import to get the command registered via the init() function.
+./cmd/talosctl/cmd/root.go:	for _, cmd := range talos.Commands {
+./cmd/talosctl/cmd/talos/apply-config.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/apply-config.go:package talos
+./cmd/talosctl/cmd/talos/cgroups.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/cgroupsprinter"
+./cmd/talosctl/cmd/talos/cgroups.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/cgroups.go:To see schema examples, refer to https://github.com/chubo-dev/chubo/tree/main/cmd/talosctl/cmd/talos/cgroupsprinter/schemas.
+./cmd/talosctl/cmd/talos/cgroups.go:package talos
+./cmd/talosctl/cmd/talos/cgroups_resolve_flag_chubo.go:package talos
+./cmd/talosctl/cmd/talos/cgroups_resolve_flag_default.go:package talos
+./cmd/talosctl/cmd/talos/cluster_nodes_common.go:package talos
+./cmd/talosctl/cmd/talos/config.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/config.go:package talos
+./cmd/talosctl/cmd/talos/configbundle.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/configbundle.go:package talos
+./cmd/talosctl/cmd/talos/consulconfig.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/consulconfig.go:package talos
+./cmd/talosctl/cmd/talos/container_namespace_driver.go:package talos
+./cmd/talosctl/cmd/talos/containers.go:package talos
+./cmd/talosctl/cmd/talos/copy.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/copy.go:package talos
+./cmd/talosctl/cmd/talos/copy.go:talosctl creates a directory if <local-path> doesn't exist. Command doesn't preserve
+./cmd/talosctl/cmd/talos/crashdump.go:			return errors.New("`talosctl crashdump` is deprecated, please use `talosctl support` instead")
+./cmd/talosctl/cmd/talos/crashdump.go:package talos
+./cmd/talosctl/cmd/talos/dashboard.go:package talos
+./cmd/talosctl/cmd/talos/debug.go:	Example: `  # Run a debug container from a local tar archive (image will be loaded into Talos from the archive)
+./cmd/talosctl/cmd/talos/debug.go:    talosctl debug ./debug-tools.tar --args /bin/sh
+./cmd/talosctl/cmd/talos/debug.go:    talosctl debug docker.io/library/alpine:latest --args /bin/sh`,
+./cmd/talosctl/cmd/talos/debug.go:  # Run a debug container from an image reference (Talos will pull the image if not present)
+./cmd/talosctl/cmd/talos/debug.go:package talos
+./cmd/talosctl/cmd/talos/disks.go:		return errors.New("`talosctl disks` is deprecated, please use `talosctl get disks`, `talosctl get systemdisk`, `talosctl get discoveredvolumes` instead")
+./cmd/talosctl/cmd/talos/disks.go:package talos
+./cmd/talosctl/cmd/talos/diskusage.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/diskusage.go:package talos
+./cmd/talosctl/cmd/talos/dmesg.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/dmesg.go:package talos
+./cmd/talosctl/cmd/talos/edit.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/edit.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/yamlstrip"
+./cmd/talosctl/cmd/talos/edit.go:of a Talos node using your preferred text editor.
+./cmd/talosctl/cmd/talos/edit.go:package talos
+./cmd/talosctl/cmd/talos/events.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/events.go:package talos
+./cmd/talosctl/cmd/talos/get.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/output"
+./cmd/talosctl/cmd/talos/get.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/get.go:package talos
+./cmd/talosctl/cmd/talos/image.go:					// fallback to legacy API for older Talos
+./cmd/talosctl/cmd/talos/image.go:				// fallback to legacy API for older Talos
+./cmd/talosctl/cmd/talos/image.go:			development.Error("failed to generate Talos config patch for registry mirrors", zap.Error(err))
+./cmd/talosctl/cmd/talos/image.go:		err = c.ImagePull(ctx, ns, imageRef) //nolint:staticcheck // legacy talosctl methods, to be removed in Talos 1.15
+./cmd/talosctl/cmd/talos/image.go:		fmt.Printf("%s\n", sources.Talos)
+./cmd/talosctl/cmd/talos/image.go:		rcv, err := c.ImageList(ctx, ns) //nolint:staticcheck // legacy talosctl methods, to be removed in Talos 1.15
+./cmd/talosctl/cmd/talos/image.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/multiplex"
+./cmd/talosctl/cmd/talos/image.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos/pull"
+./cmd/talosctl/cmd/talos/image.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/artifacts"
+./cmd/talosctl/cmd/talos/image.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/image.go:	Example: `talosctl images cache-create --images=docker.io/library/alpine:latest --image-cache-path=/tmp/talos-image-cache
+./cmd/talosctl/cmd/talos/image.go:	Long:    `Generate TLS certificates and CA patch required for securing image cache to Talos communication`,
+./cmd/talosctl/cmd/talos/image.go:	Short:   "Generate TLS certificates and CA patch required for securing image cache to Talos communication",
+./cmd/talosctl/cmd/talos/image.go:	Short: "List the default system images and extensions used for Talos",
+./cmd/talosctl/cmd/talos/image.go:	Use:   "talos-bundle [talos-version]",
+./cmd/talosctl/cmd/talos/image.go:	mgmthelpers "github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+./cmd/talosctl/cmd/talos/image.go:// Note: remove me in Talos 1.15.
+./cmd/talosctl/cmd/talos/image.go:// Note: this is not exposed as a command, but used in talosctl debug flow.
+./cmd/talosctl/cmd/talos/image.go:// imageTalosBundleCmd represents the image talos-bundle command.
+./cmd/talosctl/cmd/talos/image.go:package talos
+./cmd/talosctl/cmd/talos/image.go:talosctl images default | talosctl images cache-create --image-cache-path=/tmp/talos-image-cache --images=-
+./cmd/talosctl/cmd/talos/image_containerd_driver_chubo.go:package talos
+./cmd/talosctl/cmd/talos/image_containerd_driver_default.go:package talos
+./cmd/talosctl/cmd/talos/image_help_chubo.go:package talos
+./cmd/talosctl/cmd/talos/image_help_default.go:	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.extensions, "extensions", true, "Include images that belong to Talos extensions")
+./cmd/talosctl/cmd/talos/image_help_default.go:	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.overlays, "overlays", true, "Include images that belong to Talos overlays")
+./cmd/talosctl/cmd/talos/image_help_default.go:package talos
+./cmd/talosctl/cmd/talos/image_namespace_alias_chubo.go:package talos
+./cmd/talosctl/cmd/talos/image_namespace_alias_default.go:package talos
+./cmd/talosctl/cmd/talos/image_namespace_default_chubo.go:package talos
+./cmd/talosctl/cmd/talos/image_namespace_default_default.go:package talos
+./cmd/talosctl/cmd/talos/inspect.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/inspect.go:    talosctl inspect dependencies | dot -Tpng > graph.png
+./cmd/talosctl/cmd/talos/inspect.go:package talos
+./cmd/talosctl/cmd/talos/interfaces.go:			return errors.New("`talosctl interfaces` is deprecated, please use `talosctl get addresses` and `talosctl get links` instead")
+./cmd/talosctl/cmd/talos/interfaces.go:package talos
+./cmd/talosctl/cmd/talos/list.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/list.go:package talos
+./cmd/talosctl/cmd/talos/logs.go:package talos
+./cmd/talosctl/cmd/talos/memory.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/memory.go:package talos
+./cmd/talosctl/cmd/talos/meta.go:package talos
+./cmd/talosctl/cmd/talos/mounts.go:package talos
+./cmd/talosctl/cmd/talos/netstat.go:	// extend is normally -e but cannot be used as this is endpoint in talosctl
+./cmd/talosctl/cmd/talos/netstat.go:package talos
+./cmd/talosctl/cmd/talos/netstat_workload_flag_chubo.go:package talos
+./cmd/talosctl/cmd/talos/netstat_workload_flag_default.go:package talos
+./cmd/talosctl/cmd/talos/nomadconfig.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/nomadconfig.go:package talos
+./cmd/talosctl/cmd/talos/openbaoconfig.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/openbaoconfig.go:package talos
+./cmd/talosctl/cmd/talos/output/json.go:		// for backwards compatibility with versions of Talos
+./cmd/talosctl/cmd/talos/output/yaml.go:		// for backwards compatibility with versions of Talos
+./cmd/talosctl/cmd/talos/patch.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/patch.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/yamlstrip"
+./cmd/talosctl/cmd/talos/patch.go:package talos
+./cmd/talosctl/cmd/talos/pcap.go:	    talosctl pcap -i siderolink --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
+./cmd/talosctl/cmd/talos/pcap.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/pcap.go:	As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
+./cmd/talosctl/cmd/talos/pcap.go:    talosctl pcap -i eth0
+./cmd/talosctl/cmd/talos/pcap.go:    talosctl pcap -i eth0 --bpf-filter "$(tcpdump -dd -y EN10MB 'tcp and dst port 80')"
+./cmd/talosctl/cmd/talos/pcap.go:    talosctl pcap -i eth0 --output eth0.pcap
+./cmd/talosctl/cmd/talos/pcap.go:    talosctl pcap -i eth0 -o - | tcpdump -vvv -r -
+./cmd/talosctl/cmd/talos/pcap.go:package talos
+./cmd/talosctl/cmd/talos/processes.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/processes.go:package talos
+./cmd/talosctl/cmd/talos/read.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/read.go:package talos
+./cmd/talosctl/cmd/talos/reboot.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/action"
+./cmd/talosctl/cmd/talos/reboot.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/reboot.go:package talos
+./cmd/talosctl/cmd/talos/reset.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/action"
+./cmd/talosctl/cmd/talos/reset.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/reset.go:package talos
+./cmd/talosctl/cmd/talos/restart.go:package talos
+./cmd/talosctl/cmd/talos/rollback.go:package talos
+./cmd/talosctl/cmd/talos/root.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/global"
+./cmd/talosctl/cmd/talos/root.go:// WithClientMaintenance wraps common code to initialize Talos client in maintenance (insecure mode).
+./cmd/talosctl/cmd/talos/root.go:// WithClientNoNodes wraps common code to initialize Talos client and provide cancellable context.
+./cmd/talosctl/cmd/talos/root.go:package talos
+./cmd/talosctl/cmd/talos/routes.go:			return errors.New("`talosctl routes` is deprecated, please use `talosctl get routes` instead")
+./cmd/talosctl/cmd/talos/routes.go:package talos
+./cmd/talosctl/cmd/talos/service.go:package talos
+./cmd/talosctl/cmd/talos/shutdown.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/action"
+./cmd/talosctl/cmd/talos/shutdown.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/shutdown.go:package talos
+./cmd/talosctl/cmd/talos/stats.go:package talos
+./cmd/talosctl/cmd/talos/stdout_output.go:package talos
+./cmd/talosctl/cmd/talos/support.go:		fmt.Fprintln(os.Stderr, "Talos-only collector mode active.")
+./cmd/talosctl/cmd/talos/support.go:	"github.com/siderolabs/go-talos-support/support"
+./cmd/talosctl/cmd/talos/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
+./cmd/talosctl/cmd/talos/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"
+./cmd/talosctl/cmd/talos/support.go:	- All Talos internal services logs.
+./cmd/talosctl/cmd/talos/support.go:	- Talos COSI resources without secrets.
+./cmd/talosctl/cmd/talos/support.go:	- Talos version.
+./cmd/talosctl/cmd/talos/support.go:package talos
+./cmd/talosctl/cmd/talos/support_chubo.go:package talos
+./cmd/talosctl/cmd/talos/time.go:package talos
+./cmd/talosctl/cmd/talos/track.go:package talos
+./cmd/talosctl/cmd/talos/upgrade.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/action"
+./cmd/talosctl/cmd/talos/upgrade.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/cmd/talos/upgrade.go:package talos
+./cmd/talosctl/cmd/talos/version.go:	versionCmd.Flags().BoolVarP(&versionCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
+./cmd/talosctl/cmd/talos/version.go:// versionCmd represents the `talosctl version` command.
+./cmd/talosctl/cmd/talos/version.go:// versionCmdFlags represents the `talosctl version` command's flags.
+./cmd/talosctl/cmd/talos/version.go:package talos
+./cmd/talosctl/cmd/talos/wipe.go:	wipeDiskCmd.Flags().BoolVarP(&wipeDiskCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
+./cmd/talosctl/cmd/talos/wipe.go:package talos
+./cmd/talosctl/cmd/talos/workload_container_driver_chubo.go:package talos
+./cmd/talosctl/cmd/talos/workload_container_driver_default.go:package talos
+./cmd/talosctl/cmd/talos/workload_legacy_driver_flag_chubo.go:package talos
+./cmd/talosctl/cmd/talos/workload_legacy_driver_flag_default.go:package talos
+./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:package talos
+./cmd/talosctl/cmd/talos/workload_namespace_flag_default.go:package talos
+./cmd/talosctl/main.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd"
+./cmd/talosctl/main.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
+./cmd/talosctl/main.go:// Command talosctl is a legacy compatibility entrypoint for chuboctl.
+./cmd/talosctl/pkg/mgmt/helpers/airgapped.go:		x509.CommonName("talos.dev Root CA"),
+./cmd/talosctl/pkg/mgmt/helpers/airgapped.go:		x509.Organization("talos.dev"),
+./cmd/talosctl/pkg/mgmt/helpers/artifacts.go:// Package helpers provides helpers for talosctl.
+./cmd/talosctl/pkg/talos/action/node.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/pkg/talos/action/tracker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
+./cmd/talosctl/pkg/talos/action/tracker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./cmd/talosctl/pkg/talos/artifacts/images.go:// ExtensionRef is a ref to the extension for some Talos version.
+./cmd/talosctl/pkg/talos/artifacts/images.go:// FetchOfficialExtensions fetches list of extensions for specific Talos version.
+./cmd/talosctl/pkg/talos/artifacts/images.go:// FetchOfficialOverlays fetches list of overlays for specific Talos version.
+./cmd/talosctl/pkg/talos/artifacts/images.go:// OverlayRef is a ref to the overlay for some Talos version.
+./cmd/talosctl/pkg/talos/global/client.go:// Args is a context for the Talos command line client.
+./cmd/talosctl/pkg/talos/global/client.go:// Package global provides global flags for talosctl.
+./cmd/talosctl/pkg/talos/global/client.go:// WithClientMaintenance wraps common code to initialize Talos client in maintenance (insecure mode).
+./cmd/talosctl/pkg/talos/global/client.go:// WithClientNoNodes wraps common code to initialize Talos client and provide cancellable context.
+./cmd/talosctl/pkg/talos/helpers/checks.go:// ClientVersionCheck verifies that client is not outdated vs. Talos version.
+./go.mod:	// fork to add Talos-specific userspace socket location: https://github.com/siderolabs/talos/issues/8514
+./go.mod:	// forked coredns so we don't carry caddy and other stuff into the Talos
+./go.mod:	github.com/siderolabs/go-talos-support => ./hack/third_party/go-talos-support
+./go.mod:	github.com/siderolabs/go-talos-support v0.1.4
+./go.mod:// deadcode elimination fix replacement: https://github.com/siderolabs/talos/issues/11296
+./hack/buildkit/buildkitd.local-registry.toml:#     --buildkitd-config talos/hack/buildkit/buildkitd.local-registry.toml \
+./hack/chubo/check-go-deps.sh:	"linux amd64 0 cmd/talosctl"
+./hack/chubo/check-go-deps.sh:	echo "FAIL: cmd/talosctl must not import forbidden package deps:" >&2
+./hack/chubo/check-go-deps.sh:	if [[ "${target}" == "cmd/talosctl" ]]; then
+./hack/chubo/check-go-deps.sh:#   * cmd/talosctl has any forbidden deps
+./hack/chubo/check-go-deps.sh:# - cmd/talosctl is strict: zero forbidden deps allowed
+./hack/chubo/check-runtime-surface.sh:		TALOSCTL="$2"
+./hack/chubo/check-runtime-surface.sh:	--talosctl)
+./hack/chubo/check-runtime-surface.sh:	echo "talosctl not executable: ${TALOSCTL}" >&2
+./hack/chubo/check-runtime-surface.sh:	if ! output="$("${TALOSCTL}" "${common_args[@]}" service "${service_id}" 2>&1)"; then
+./hack/chubo/check-runtime-surface.sh:	output="$("${TALOSCTL}" "${common_args[@]}" service "${service_id}" 2>&1 || true)"
+./hack/chubo/check-runtime-surface.sh:TALOSCTL="${TALOSCTL:-./_out/chuboctl-darwin-arm64}"
+./hack/chubo/check-runtime-surface.sh:if [[ ! -x "${TALOSCTL}" ]]; then
+./hack/chubo/check-runtime-surface.sh:netstat_output="$("${TALOSCTL}" "${common_args[@]}" netstat --listening --all)"
+./hack/chubo/e2e-cluster-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
+./hack/chubo/e2e-cluster-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-cluster-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-cluster-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-core-docker.sh:		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1
+./hack/chubo/e2e-core-docker.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-docker.sh:		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-core-docker.sh:		echo "host=${host_os} is known to fail with Talos container runtime requirements (seccomp/mount attrs)." >&2
+./hack/chubo/e2e-core-docker.sh:	--talosctl "${TALOSCTL}" \
+./hack/chubo/e2e-core-docker.sh:	echo "hint: docker fallback requires host kernel support for Talos container runtime features." >&2
+./hack/chubo/e2e-core-docker.sh:	if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-core-docker.sh:"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
+./hack/chubo/e2e-core-docker.sh:"${TALOSCTL}" support \
+./hack/chubo/e2e-core-docker.sh:"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-docker.sh:TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+./hack/chubo/e2e-core-docker.sh:TALOS_IMAGE_LOCAL="${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}"
+./hack/chubo/e2e-core-docker.sh:docker load -i "${ARTIFACTS}/talos.tar" >/dev/null
+./hack/chubo/e2e-core-docker.sh:echo "building chubo talos docker image"
+./hack/chubo/e2e-core-docker.sh:if ! "${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create docker \
+./hack/chubo/e2e-core-docker.sh:if [[ ! -x "${TALOSCTL}" ]]; then
+./hack/chubo/e2e-core-docker.sh:make docker-talos \
+./hack/chubo/e2e-core-qemu.sh:				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-core-qemu.sh:			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+./hack/chubo/e2e-core-qemu.sh:			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+./hack/chubo/e2e-core-qemu.sh:			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-core-qemu.sh:			run_probe "${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
+./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
+./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
+./hack/chubo/e2e-core-qemu.sh:		if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
+./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" openbaoconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-core-qemu.sh:	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+./hack/chubo/e2e-core-qemu.sh:	if ! output="$("${TALOSCTL}" get "${resource}" --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
+./hack/chubo/e2e-core-qemu.sh:	if run_probe "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+./hack/chubo/e2e-core-qemu.sh:	if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" gen machineconfig \
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" support \
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" upgrade \
+./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-core-qemu.sh:# This script is Linux/amd64 oriented for CI. It uses `talosctl cluster create dev`
+./hack/chubo/e2e-core-qemu.sh:TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+./hack/chubo/e2e-core-qemu.sh:elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
+./hack/chubo/e2e-core-qemu.sh:elif command -v strings >/dev/null 2>&1 && ! strings "${TALOSCTL}" 2>/dev/null | grep -q "CONTROL PLANE ENDPOINT"; then
+./hack/chubo/e2e-core-qemu.sh:if [[ ! -x "${TALOSCTL}" ]]; then
+./hack/chubo/e2e-core-qemu.sh:if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-core-qemu.sh:if rollback_output="$("${TALOSCTL}" rollback \
+./hack/chubo/e2e-helper-bundles-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	if "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" gen machineconfig \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" machineconfig patch "${MACHINECONFIG_INSTALL}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_INSTALL}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" machineconfig patch "${MACHINECONFIG_RUNTIME}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_RUNTIME}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" meta delete "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b","peer-c"]' \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b"]' \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" upgrade \
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:# Keep in sync with meta.ChuboOpenGyozaPeersOverride (talos/pkg/machinery/meta/constants.go).
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:# Talos build targets use `docker buildx build`. If buildx is only installed via Docker Desktop,
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ ! -x "${TALOSCTL}" ]]; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:role="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
+./hack/chuboos/check-runtime-surface.sh:	export TALOSCTL="${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)"
+./hack/chuboos/check-runtime-surface.sh:if [[ -z "${TALOSCTL:-}" ]] && [[ -x "${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)" ]]; then
+./hack/cloud-image-uploader/aws.go:				VirtualName: pointer.To("talos"),
+./hack/cloud-image-uploader/aws.go:			Description: pointer.To(fmt.Sprintf("Talos Image %s %s %s", au.Options.Tag, arch, region)),
+./hack/cloud-image-uploader/aws.go:		Description:        pointer.To(fmt.Sprintf("Talos AMI %s %s %s", au.Options.Tag, arch, region)),
+./hack/cloud-image-uploader/aws.go:		Description: pointer.To(fmt.Sprintf("Talos Image %s %s %s", au.Options.Tag, arch, region)),
+./hack/cloud-image-uploader/aws.go:	bucketName := fmt.Sprintf("talos-image-upload-%s", uuid.New())
+./hack/cloud-image-uploader/aws.go:	imageName := fmt.Sprintf("talos-%s-%s-%s", au.Options.Tag, region, arch)
+./hack/cloud-image-uploader/gcp.go:		Description:  fmt.Sprintf("Talos %s %s", u.Options.Tag, arch),
+./hack/cloud-image-uploader/gcp.go:		imageName = fmt.Sprintf("%s-talos-%s-%s", u.Options.NamePrefix, strings.ReplaceAll(u.Options.Tag, ".", "-"), arch)
+./hack/cloud-image-uploader/gcp.go:	bucketName := fmt.Sprintf("talos-image-upload-%s", uuid.New())
+./hack/cloud-image-uploader/gcp.go:	imageName := fmt.Sprintf("talos-%s-%s", strings.ReplaceAll(u.Options.Tag, ".", "-"), arch)
+./hack/cloud-image-uploader/main.go:// Package main implements Talos cloud image uploader.
+./hack/cloud-image-uploader/options.go:	FactoryHost:   "https://factory.talos.dev",
+./hack/lvm.conf:# Disable LVM backups as Talos rootfs is read-only, and ephemeral partition is not a safe place to store
+./hack/lvm.conf:# See https://github.com/siderolabs/talos/issues/3129
+./hack/qemu/chubo-qemu.sh:  talosctl apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f <config.yaml>
+./hack/qemu/chubo-qemu.sh:# - `talosctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
+./hack/qemu/chubo-qemu.sh:# Optional extra kernel args, e.g. 'talos.platform=qemu' or debugging flags.
+./hack/qemu/chubo-qemu.sh:# This script boots Talos via systemd-boot from a FAT "EFI drive" directory and forwards the
+./hack/qemu/chubo-qemu.sh:options talos.platform=metal talos.halt_if_installed=${HALT_IF_INSTALLED} net.ifnames=0 slab_nomerge pti=on talos.dashboard.disabled=1 console=tty0 console=ttyAMA0 printk.devkmsg=on consoleblank=0 ${EXTRA_KERNEL_ARGS}
+./hack/release.sh:  ${ARTIFACTS}/talosctl-linux-amd64 image talos-bundle --overlays=false --extensions=false >> ${1}
+./hack/release.toml:        title = "Talos Imager Enhancements"
+./hack/release.toml:        title = "Talosctl images talos-bundle subcommand accepts version parameter"
+./hack/release.toml:        title = "`talosctl images talos-bundle` can ignore reaching to the registry"
+./hack/release.toml:        title = "talosctl debug"
+./hack/release.toml:A new `EnvironmentConfig` document has been introduced to allow users to specify environment variables for Talos components.
+./hack/release.toml:It has been deprecated since Talos v1.12.0, and now fully removed.
+./hack/release.toml:Several Talos configuration fields that previously accepted single string values for extra arguments have been updated to accept slices of strings as well.
+./hack/release.toml:Talos Linux now provides a way to run and attach to the privileged debug container with a user-provided container image.
+./hack/release.toml:Talos Linux provides new APIs to manage container images on the node: listing, pulling, importing and removing images.
+./hack/release.toml:Talos disk images are now reproducible. Building the same version of Talos multiple times will yield
+./hack/release.toml:Talos imager now supports running rootless. `--privileged` and `-v /dev:/dev` are no longer required.
+./hack/release.toml:Talos is built with Go 1.25.7.
+./hack/release.toml:Talos now includes udev rules to support hot-adding of CPUs in virtualized environments.
+./hack/release.toml:Talos now ships with `igzip` (amd64) and `pigz` (arm64) to speed up container image decompression.
+./hack/release.toml:Talos now supports virtiofs-based external volumes via the new
+./hack/release.toml:Talos now uses inventory backed server-side apply when applying bootsrap manifests (including `extraManifests` and `inlineManifests`).
+./hack/release.toml:The CLI commands `talosctl image pull`, `talosctl image list` and `talosctl image remove` have been updated to interact with the new APIs.
+./hack/release.toml:The `talosctl images talos-bundle` command now accepts an optional version overrides arguments.
+./hack/release.toml:The `talosctl images talos-bundle` command now accepts optional `--overlays` and `--extensions` flags.
+./hack/release.toml:The interactive installer mode has been removed from `talosctl apply-config` (`--mode=interactive`).
+./hack/release.toml:[ExternalVolumeConfig](https://www.talos.dev/v1.13/reference/configuration/block/externalvolumeconfig/)
+./hack/release.toml:github_repo = "siderolabs/talos"
+./hack/release.toml:match_deps = "^github.com/((talos-systems|siderolabs)/[a-zA-Z0-9-]+)$"
+./hack/release.toml:project_name = "Talos"
+./hack/start-registry-proxies.sh:    --name registry-factory.talos.dev registry:2
+./hack/start-registry-proxies.sh:    -e REGISTRY_PROXY_REMOTEURL=https://factory.talos.dev \
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go list -mod=readonly all >/dev/null
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go mod download
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go mod verify
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg --mount=type=cache,target=/tmp,id=go-talos-support/tmp CGO_ENABLED=1 go test -race ${TESTPKGS}
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg --mount=type=cache,target=/tmp,id=go-talos-support/tmp go test -covermode=atomic -coverprofile=coverage.txt -coverpkg=${TESTPKGS} ${TESTPKGS}
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg ./hack/govulncheck.sh ./...
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${GOLANGCILINT_VERSION} \
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go install github.com/siderolabs/deep-copy@${DEEPCOPY_VERSION} \
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go install golang.org/x/vuln/cmd/govulncheck@latest \
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/root/.cache/golangci-lint,id=go-talos-support/root/.cache/golangci-lint,sharing=locked --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg golangci-lint fmt --config .golangci.yml
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/root/.cache/golangci-lint,id=go-talos-support/root/.cache/golangci-lint,sharing=locked --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg golangci-lint run --config .golangci.yml
+./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/root/.cache/go-build,id=go-talos-support/root/.cache/go-build --mount=type=cache,target=/root/.cache/golangci-lint,id=go-talos-support/root/.cache/golangci-lint,sharing=locked --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg golangci-lint run --fix --issues-exit-code 0 --config .golangci.yml
+./hack/third_party/go-talos-support/go.mod:module github.com/siderolabs/go-talos-support
+./hack/third_party/go-talos-support/hack/release.toml:github_repo = "siderolabs/go-talos-support"
+./hack/third_party/go-talos-support/hack/release.toml:project_name = "go-talos-support"
+./hack/third_party/go-talos-support/support/bundle/options.go:// WithTalosClient runs bundle creator with the Talos client.
+./hack/third_party/go-talos-support/support/collectors/collectors.go:	"github.com/siderolabs/go-talos-support/support/bundle"
+./hack/third_party/go-talos-support/support/collectors/collectors.go:// GetTalosNodeCollectors creates all collectors that rely on using Talos API.
+./hack/third_party/go-talos-support/support/collectors/collectors.go:// Package collectors contains standard Talos state collectors used in the support bundle generator.
+./hack/third_party/go-talos-support/support/collectors/collectors.go:// Source returns collector source name (Talos node name, cluster, etc).
+./hack/third_party/go-talos-support/support/collectors/collectors.go:// WithNode returns collectors which adds Talos node gRPC metadata to the context.
+./hack/third_party/go-talos-support/support/collectors/talos.go:		options.Log("getting talos resource %s/%s", rd.TypedSpec().DefaultNamespace, rd.TypedSpec().Type)
+./hack/third_party/go-talos-support/support/collectors/talos.go:	"github.com/siderolabs/go-talos-support/support/bundle"
+./hack/third_party/go-talos-support/support/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
+./hack/third_party/go-talos-support/support/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"
+./hack/third_party/go-talos-support/support/support.go:// Package support provides helpers for Talos cluster support bundle collection.
+./internal/app/apid/pkg/backend/apid.go:// Talos has a few long-running API calls, so we need to give the backend some time to finish them.
+./internal/app/init/main.go:	if err := kmsg.SetupLogger(nil, "[talos] [initramfs]", nil); err != nil {
+./internal/app/init/main.go:	log.Printf("booting Talos %s", version.Tag)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server.go:// Copy implements the machine.MachineServer interface and copies data out of Talos node.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server.go:// imperative bootstrap RPC like legacy Talos used.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server.go:// service running on Talos.
+./internal/app/machined/pkg/controllers/block/internal/volumes/format.go:		tmpDir, err := os.MkdirTemp("", "talos-growfs-")
+./internal/app/machined/pkg/controllers/block/user_disk_config.go:// UserDiskConfigController provides volume configuration based on Talos v1alpha1 user disks.
+./internal/app/machined/pkg/controllers/block/volume_config.go:// VolumeConfigController provides volume configuration based on Talos defaults and machine configuration.
+./internal/app/machined/pkg/controllers/cluster/cluster.go:// Package cluster provides controllers which manage Talos cluster resources.
+./internal/app/machined/pkg/controllers/config/acquire.go:						Message: "Error loading and validating Talos machine config.",
+./internal/app/machined/pkg/controllers/config/acquire.go:			Message: "Talos booted into maintenance mode. Ready for user interaction.",
+./internal/app/machined/pkg/controllers/config/acquire.go:			Message: "Talos machine config loaded successfully.",
+./internal/app/machined/pkg/controllers/config/acquire.go:		// if the STATE partition is present & contains machine config, Talos is already installed
+./internal/app/machined/pkg/controllers/config/acquire.go:	// add "fake" events to signal when Talos enters and leaves maintenance mode
+./internal/app/machined/pkg/controllers/config/acquire.go:	// if the STATE partition is present & contains machine config, Talos is already installed
+./internal/app/machined/pkg/controllers/config/acquire.go:// stateCmdlineEarly acquires machine configuration from the kernel cmdline source (talos.config.early).
+./internal/app/machined/pkg/controllers/config/acquire.go:// stateCmdlineLate acquires machine configuration from the kernel cmdline source (talos.config.inline).
+./internal/app/machined/pkg/controllers/files/iqn.go:				// Fri Nov 3 16:19:12 2017 -0700 is the date of the first commit in the talos repository.
+./internal/app/machined/pkg/controllers/files/iqn.go:				spec.Contents = fmt.Appendf([]byte{}, "InitiatorName=iqn.2017-11.dev.talos:%s\n", machineID)
+./internal/app/machined/pkg/controllers/files/nqn.go:				// Fri Nov 3 16:19:12 2017 -0700 is the date of the first commit in the talos repository.
+./internal/app/machined/pkg/controllers/files/nqn.go:				spec.Contents = fmt.Appendf([]byte{}, "nqn.2017-11.dev.talos:uuid:%s", hostID.String())
+./internal/app/machined/pkg/controllers/network/cmdline.go:		// Talos by default sets bond mode to balance-rr
+./internal/app/machined/pkg/controllers/network/cmdline.go:	// process Talos specific kernel params
+./internal/app/machined/pkg/controllers/network/cmdline.go:// ParseCmdlineNetwork parses `ip=` and Talos specific kernel cmdline argument producing all the available configuration options.
+./internal/app/machined/pkg/controllers/network/hostname_config.go:	hostname := fmt.Sprintf("talos-%s-%s", b36[1:4], b36[4:7])
+./internal/app/machined/pkg/controllers/network/hostname_config.go:	spec.Hostname = fmt.Sprintf("talos-%s", strings.ReplaceAll(strings.ReplaceAll(defaultAddr.TypedSpec().Addresses[0].Addr().String(), ":", ""), ".", "-"))
+./internal/app/machined/pkg/controllers/network/operator/vip/equinix_metal.go:		client: packngo.NewClientWithAuth("talos", spec.APIToken, nil),
+./internal/app/machined/pkg/controllers/network/operator/vip/equinix_metal.go:	client := packngo.NewClientWithAuth("talos", spec.APIToken, nil)
+./internal/app/machined/pkg/controllers/runtime/booted_entry.go:		// this case is only currently applicable when locally developing Talos
+./internal/app/machined/pkg/controllers/runtime/diagnostics.go:// DiagnosticsController analyzes state of Talos Linux system and provides warnings on common problems.
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/diagnostic.go:// Package diagnostics provides Talos diagnostics specific checks.
+./internal/app/machined/pkg/controllers/runtime/maintenance_service.go:			logger.Sugar().Info("upload configuration using talosctl:")
+./internal/app/machined/pkg/controllers/runtime/sbom_item.go:// SBOMItemController is a controller that publishes Talos SBOMs as resources.
+./internal/app/machined/pkg/controllers/runtime/security_state.go:					if strings.HasPrefix(filepath.Base(strings.ReplaceAll(stubImageIdentifier, "\\", "/")), "Talos-") {
+./internal/app/machined/pkg/controllers/runtime/security_state.go:				if strings.HasPrefix(defaultEntry, "Talos-") {
+./internal/app/machined/pkg/controllers/runtime/security_state.go:// SecurityStateController is a controller that updates the security state of Talos.
+./internal/app/machined/pkg/controllers/runtime/version.go:// VersionController populates the version of currently running Talos.
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans_chubo.go:// Talos upstream uses a filtered NodeAddress resource (excluding workload pod/service CIDRs),
+./internal/app/machined/pkg/controllers/secrets/root.go:			// Talos upstream always has a Cluster config, but `chubo` intentionally
+./internal/app/machined/pkg/controllers/siderolink/manager.go:							// SideroLink doesn't know Talos endpoint.
+./internal/app/machined/pkg/controllers/siderolink/manager.go:							// make sure Talos pings SideroLink endpoint, so that tunnel is established:
+./internal/app/machined/pkg/controllers/siderolink/manager.go:			// clear any previous provision data we had so that Talos doesn't cycle through endpoints from
+./internal/app/machined/pkg/runtime/events.go:		// In the future, we can publish `talos/runtime`, and
+./internal/app/machined/pkg/runtime/events.go:		// TypeURL: fmt.Sprintf("talos/runtime/%s", protoreflect.MessageDescriptor.FullName(msg)),
+./internal/app/machined/pkg/runtime/events.go:		// `talos/plugin/<plugin>` (or something along those lines) events.
+./internal/app/machined/pkg/runtime/events.go:		typeURL = fmt.Sprintf("talos/runtime/%s", payload.ProtoReflect().Descriptor().FullName())
+./internal/app/machined/pkg/runtime/logging/circular.go:			"talos-service": id,
+./internal/app/machined/pkg/runtime/logging/sender_jsonlines.go:	m["talos-level"] = e.Level.String()
+./internal/app/machined/pkg/runtime/logging/sender_jsonlines.go:	m["talos-time"] = e.Time.Format(time.RFC3339Nano)
+./internal/app/machined/pkg/runtime/platform.go:	// For metal platform that is either `talos.config=` URL or mounted ISO image.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub/blocklist.go:	// Talos partition layout (GPT): EFI (gpt1, efiPartitionSizeBytes), BIOS (gpt2, 1MiB), BOOT (gpt3)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub/encode.go:		fmt.Fprintf(wr, `menuentry "Reset Talos installation and return to maintenance mode" {
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/grub/encode.go:  linux %s %s talos.experimental.wipe=system:EPHEMERAL,STATE
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/options/options.go:	// Talos version.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:			return fmt.Errorf("failed to delete existing Talos boot entry at index %d: %w", idx, err)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		printf("Removing existing Talos Linux UKI boot entry at index %d", idx)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		return fmt.Errorf("failed to create Talos Linux UKI boot entry at index %d: %w", nextMinimalIndex, err)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:		return fmt.Errorf("failed to list existing Talos boot entries: %w", err)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// Find all boot entries with the Talos Linux UKI description.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// Remove any existing Talos Linux UKI boot entries from the BootOrder.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// We need to do this since Talos 1.11.x release assumed that the boot order set by the code stays even after a reboot,
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// but UEFI firmware settings can set a different boot order on boot, which lead to multiple Talos Linux UKI entries in the boot order,
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// find the next minimal available index for the new Talos Linux UKI boot entry
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// remove all existing Talos Linux UKI boot entries except the first one
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	// when removing duplicate Talos Linux UKI boot entries
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	printf("Found existing Talos Linux UKI boot entries: %v", existingTalosBootEntryIndexes)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:	printf("created Talos Linux UKI boot entry at index %d", nextMinimalIndex)
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:// CreateBootEntry creates a UEFI boot entry named "Talos Linux UKI" and sets it as the first in the `BootOrder`
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:// TalosBootEntryDescription is the description of the Talos Linux UKI UEFI boot entry.
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/efivars.go:const TalosBootEntryDescription = "Talos Linux UKI"
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// If we booted of UKI/Kernel+Initramfs/ISO Talos installer will always be run which
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// Talos-{version}+{index}.efi format
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			// Talos-{version}.efi format
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			files, err := filepath.Glob(filepath.Join(opts.MountPrefix, constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:			ukiFiles, err := filepath.Glob(filepath.Join(constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:		if !strings.HasPrefix(base, "Talos-") {
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:		return fmt.Sprintf("Talos-%s~%d.efi", version, maxIndex+1), nil
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:		suffix := strings.TrimPrefix(base, "Talos-")
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:	// this is to make sure sd-boot from Talos is being used and not sd-boot from another distro
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:	files, err := filepath.Glob(filepath.Join(constants.EFIMountPoint, "EFI", "Linux", "Talos-*.efi"))
+./internal/app/machined/pkg/runtime/v1alpha1/bootloader/sdboot/sdboot.go:	return fmt.Sprintf("Talos-%s.efi", version), nil
+./internal/app/machined/pkg/runtime/v1alpha1/platform/aws/aws.go:					// Include both IPv4 & IPv6 addresses for the NTP servers, Talos would lock to one of them (whichever works),
+./internal/app/machined/pkg/runtime/v1alpha1/platform/container/container.go:// Container is a platform for installing Talos via an Container image.
+./internal/app/machined/pkg/runtime/v1alpha1/platform/equinixmetal/equinix.go:// ParseMetadata converts Equinix Metal metadata into Talos network configuration.
+./internal/app/machined/pkg/runtime/v1alpha1/platform/metal/metal.go:			log.Printf("failed to populate talos.config fetch URL %q: %s", *option, err.Error())
+./internal/app/machined/pkg/runtime/v1alpha1/platform/nocloud/nocloud.go:		// ignore cloud-config, Talos does not support it
+./internal/app/machined/pkg/runtime/v1alpha1/platform/platform.go:	EventTypeConfigLoaded = "talos.prov.config.loaded"
+./internal/app/machined/pkg/runtime/v1alpha1/platform/platform.go:	EventTypeInstalled = "talos.prov.os.installed"
+./internal/app/machined/pkg/runtime/v1alpha1/platform/platform.go:	EventTypeRebooted = "talos.prov.host.rebooted"
+./internal/app/machined/pkg/runtime/v1alpha1/platform/platform.go:	EventTypeUpgraded = "talos.prov.os.upgraded"
+./internal/app/machined/pkg/runtime/v1alpha1/platform/vmware/metadata.go:	// Talos doesn't block on network, it will reconfigure itself as network information becomes available. WaitOnNetwork is not used.
+./internal/app/machined/pkg/runtime/v1alpha1/platform/vmware/metadata.go:// ApplyNetworkConfigV2 gets GuestInfo and applies to the Talos runtime platform network configuration.
+./internal/app/machined/pkg/runtime/v1alpha1/platform/vmware/vmware_supported.go:		// try to fetch `talos.config` from OVF
+./internal/app/machined/pkg/runtime/v1alpha1/platform/vmware/vmware_supported.go:		// try to fetch `talos.config` from plain extraConfig (ie, the old behavior)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_controller.go:		log.SetPrefix("[talos] ")
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_controller.go:	if err = kmsg.SetupLogger(nil, "[talos]", machinedLog); err != nil {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_controller.go:	logger := log.New(log.Writer(), fmt.Sprintf("[talos] task %s (%s): ", taskName, progress), log.Flags())
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:						Message: "Talos install failed.",
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:						Message: "Talos staged upgrade failed.",
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:					Message: "Talos installed successfully.",
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:					Message: "Talos staged upgrade successful.",
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:				Message: "Talos rebooted.",
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:				logger.Printf("%s failed, rebooting in %.0f minutes. You can use talosctl apply-config or talosctl edit mc to fix the issues, error:\n%s", name, timeout.Minutes(), err)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			// b/c we'd only ever get here if Talos was already
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Printf("Talos is already installed to disk but booted from another media and %s kernel parameter is set. Please reboot from the disk.", constants.KernelParamHaltIfInstalled)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Printf("installing Talos to disk %s", disk)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Println("WARNING: Talos may not work properly")
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:		// attempt to populate meta from the environment if Talos is not installed (yet)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:// haltIfInstalled halts the boot process if Talos is installed to disk but booted from ISO.
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_chubo.go:// Keep the Talos sequencer API shape for now (upgrade/reset entry points call these tasks),
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_state.go:				// no META, talos is not installed
+./internal/app/machined/pkg/runtime/v1alpha2/v1alpha2_state.go:		{config.NamespaceName, "Talos node configuration."},
+./internal/app/machined/pkg/runtime/v1alpha2/v1alpha2_state.go:		{v1alpha1.NamespaceName, "Talos v1alpha1 subsystems glue resources."},
+./internal/app/machined/pkg/runtime/v1alpha2/v1alpha2_state.go:	// register Talos namespaces
+./internal/app/machined/pkg/runtime/v1alpha2/v1alpha2_state.go:	// register Talos resources
+./internal/app/machined/pkg/startup/cgroups.go:		// as Talos sets up cgroupsv2 on its own
+./internal/app/machined/pkg/system/services/apid.go:	// clean up the socket if it already exists (important for Talos in a container)
+./internal/app/machined/pkg/system/services/trustd.go:	// clean up the socket if it already exists (important for Talos in a container)
+./internal/app/maintenance/server.go:		return nil, errors.New("reset failed: Talos is not installed")
+./internal/app/maintenance/server.go:		return nil, status.Errorf(codes.FailedPrecondition, "Talos is not installed")
+./internal/app/trustd/internal/reg/reg.go:	// we don't return an error here, as otherwise workers running old versions of Talos
+./internal/app/trustd/internal/reg/reg.go:// This API is called by Talos worker nodes to request a server certificate for apid running on the node.
+./internal/pkg/cgroup/cgroup.go:// When Talos is running in a non-container mode, it is always at the root of the cgroup hierarchy.
+./internal/pkg/cgroup/cgroup.go:// When Talos runs in a container, it might either share or not share the host cgroup namespace.
+./internal/pkg/cgroups/tar.go:// It is assumed to work with output of `talosctl cp /sys/fs/cgroup -`.
+./internal/pkg/containermode/containermode.go:// InContainer checks whether or not Talos is running in a container.
+./internal/pkg/containermode/containermode.go:// Package containermode contains a utility function to detect if Talos is running in a container.
+./internal/pkg/containers/image/resolver.go:// NewResolver builds registry resolver based on Talos configuration.
+./internal/pkg/dashboard/apidata/apidata.go:// Package apidata implements the types and the data sources for the data sourced from various Talos APIs.
+./internal/pkg/dashboard/apidata/data.go:// Data represents the monitoring data retrieved via Talos API.
+./internal/pkg/dashboard/apidata/source.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./internal/pkg/dashboard/apidata/source.go:// Source is a data source that gathers information about a Talos node using Talos API.
+./internal/pkg/dashboard/components/talosinfo.go:// TalosInfo represents the Talos info widget.
+./internal/pkg/dashboard/logdata/logdata.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+./internal/pkg/dashboard/logdata/logdata.go:// Package logdata implements the types and the data sources for the data sourced from the Talos dmesg API.
+./internal/pkg/dashboard/resourcedata/resourcedata.go:// Package resourcedata implements the types and the data sources for the data sourced from the Talos resource API (COSI).
+./internal/pkg/dashboard/resourcedata/resourcedata.go:// Source is the data source for the Talos resources.
+./internal/pkg/encryption/keys/token.go:	TokenTypeTPM = "talos-tpm2"
+./internal/pkg/extensions/kernel_modules.go:				Author:      "Talos Machinery",
+./internal/pkg/install/install.go:// Package install provides functionality to run the installer container for Talos.
+./internal/pkg/meta/internal/adv/talos/talos.go:// ADV implements the Talos extended ADV.
+./internal/pkg/meta/internal/adv/talos/talos.go:// Package talos implements modern ADV which supports large size for the values and tags.
+./internal/pkg/meta/internal/adv/talos/talos.go:package talos
+./internal/pkg/meta/meta.go:		return fmt.Errorf("failed to load Talos adv: %w", err)
+./internal/pkg/meta/meta.go:		val, _ := meta.talos.ReadTag(t)
+./internal/pkg/meta/meta.go:		val, _ := meta.talos.ReadTagBytes(t)
+./internal/pkg/meta/meta.go:	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
+./internal/pkg/meta/meta.go:	adv, err := talos.NewADV(f)
+./internal/pkg/meta/meta.go:	for _, t := range meta.talos.ListTags() {
+./internal/pkg/meta/meta.go:	meta.opts.printer("META: saved %d keys", len(meta.talos.ListTags()))
+./internal/pkg/meta/meta.go:	meta.talos = adv
+./internal/pkg/meta/meta.go:	meta.talos, err = talos.NewADV(nil)
+./internal/pkg/meta/meta.go:	ok := meta.talos.DeleteTag(t)
+./internal/pkg/meta/meta.go:	ok := meta.talos.SetTag(t, val)
+./internal/pkg/meta/meta.go:	ok := meta.talos.SetTagBytes(t, val)
+./internal/pkg/meta/meta.go:	serialized, err := meta.talos.Bytes()
+./internal/pkg/meta/meta.go:	talos  adv.ADV
+./internal/pkg/meta/meta.go:	val, ok = meta.talos.ReadTag(t)
+./internal/pkg/meta/meta.go:	val, ok = meta.talos.ReadTagBytes(t)
+./internal/pkg/mount/switchroot/switchroot.go:	if val := procfs.ProcCmdline().Get("talos.debugshell"); val != nil {
+./internal/pkg/mount/switchroot/switchroot.go:	if val := procfs.ProcCmdline().Get("talos.fips140"); val != nil && fipsmode.Enabled() {
+./internal/pkg/secureboot/secureboot.go:// In the case of Talos disk decryption, happens in machined, so we need to only sign EnterMachined
+./internal/pkg/secureboot/tpm2/tpm2.go:	// Talos versions older than 1.12 locked to PCR 7 and PCR 11 but the luks json header only
+./internal/pkg/secureboot/tpm2/unseal.go:	// Talos 1.12+ sets the EncryptionVersion and PubKeyPCRs to PCR 11 and any other PCR used to PCRs field
+./internal/pkg/secureboot/tpm2/unseal.go:	// since both EncryptionVersion and PubKeyPCRs are introduced for Talos 1.12+ only
+./internal/pkg/secureboot/tpm2/unseal.go:	// this handles the case when talos is upgraded from pre Talos 1.12 and we had PCRs field
+./internal/pkg/selinux/policy/selinux/services/system-containers.cil:; Talos installer
+./internal/pkg/uki/generate.go:		// if building from the same version of Talos, use default kernel version
+./internal/pkg/uki/uki.go:	// Version of Talos.
+./internal/pkg/uki/uki.go:	builder.scratchDir, err = os.MkdirTemp("", "talos-uki")
+./pkg/cluster/bootstrap.go:	fmt.Fprintln(out, "waiting for Talos API (to bootstrap the cluster)")
+./pkg/cluster/bootstrap.go:// APIBootstrapper bootstraps cluster via Talos API.
+./pkg/cluster/check/default.go:// DefaultClusterChecks returns a set of default Talos cluster readiness checks.
+./pkg/cluster/check/default.go:// ExtraClusterChecks returns a set of additional Talos cluster readiness checks which work only for newer versions of Talos.
+./pkg/cluster/check/default.go:// PreBootSequenceChecks returns a set of Talos cluster readiness checks which are run before boot sequence.
+./pkg/cluster/check/nodes.go:				// old Talos versions don't support this resource
+./pkg/cluster/cluster_chubo.go:	// Client returns Talos client instance for default (if no endpoints are given) or
+./pkg/cluster/cluster_chubo.go:// Bootstrapper performs Talos cluster bootstrap.
+./pkg/cluster/cluster_chubo.go:// ClientProvider builds Talos client by endpoint.
+./pkg/cluster/cluster_chubo.go:// CrashDumper captures Talos cluster state to the specified writer for debugging.
+./pkg/cluster/cluster_chubo.go:// Info describes the Talos cluster.
+./pkg/cluster/cluster_chubo.go:// NodeInfo describes a Talos node.
+./pkg/cluster/cluster_chubo.go:// Package cluster provides functions to access, check and inspect Talos clusters.
+./pkg/cluster/config.go:	// TalosConfig is a client Talos configuration.
+./pkg/cluster/config.go:// Client returns Talos client instance for default (if no endpoints are given) or
+./pkg/cluster/config.go:// ConfigClientProvider builds Talos client from client config.
+./pkg/cluster/crashdump_chubo.go:// Chubo support collection is handled by dedicated talosctl support flows.
+./pkg/cluster/local.go:// Client returns Talos client instance for default (if no endpoints are given) or
+./pkg/cluster/local.go:// LocalClientProvider builds Talos client to connect to same-node apid instance over file socket.
+./pkg/httpdefaults/httpdefaults.go:// Package httpdefaults provides default HTTP client settings for Talos.
+./pkg/httpdefaults/httpdefaults.go:// PatchTransport updates *http.Transport with Talos-specific settings.
+./pkg/httpdefaults/httpdefaults.go:// Settings applied here only make sense when running in Talos root filesystem.
+./pkg/imager/cache/cache.go:	tmpDir, err := os.MkdirTemp("", "talos-image-cache-gen")
+./pkg/imager/embed.go:				Talos: extensions.Constraint{
+./pkg/imager/extensions/extensions.go:	// Quirks for the Talos version being used.
+./pkg/imager/imager.go:			return "", fmt.Errorf("UKI output is not supported in this Talos version")
+./pkg/imager/imager.go:		// pass META values as kernel talos.environment args which will be passed via the environment to the installer
+./pkg/imager/imager.go:// Package imager contains code related to generation of different boot assets for Talos Linux.
+./pkg/imager/iso/grub.cfg:	linux /boot/vmlinuz {{ quote .Cmdline }} talos.experimental.wipe=system
+./pkg/imager/iso/grub.cfg:menuentry "Reset Talos installation" {
+./pkg/imager/iso/grub.cfg:menuentry "Talos ISO" {
+./pkg/imager/iso/iso.go:	label := "Talos-"
+./pkg/imager/iso/uefi.go:	if err := copy.File(options.UKIPath, filepath.Join(options.ScratchDir, fmt.Sprintf("EFI/Linux/Talos-%s.efi", options.Version))); err != nil {
+./pkg/imager/out.go:	// Talos v1.5+ optimizes the install layers to be easily replaceable with new artifacts
+./pkg/imager/out.go:	// other Talos versions will have an overhead of artifacts being stored twice
+./pkg/imager/ova/ova.go:                ovf:key="talos.config" ovf:value="">
+./pkg/imager/ova/ova.go:        <Description>Inline Talos config</Description>
+./pkg/imager/ova/ova.go:        <Label>Talos config data</Label>
+./pkg/imager/ova/ova.go:        <vssd:VirtualSystemIdentifier>talos</vssd:VirtualSystemIdentifier>
+./pkg/imager/ova/ova.go:      <Info>Talos Virtual Appliance</Info>
+./pkg/imager/ova/ova.go:      <vmw:ExtraConfig ovf:required="false" vmw:key="nvram" vmw:value="talos.nvram"/>
+./pkg/imager/ova/ova.go:    <Name>talos</Name>
+./pkg/imager/ova/ova.go:<!-- Edited by Talos -->
+./pkg/imager/profile/output.go:		// arm64 always uses sd-boot for Talos >= 1.10
+./pkg/imager/profile/output.go:		// legacy versions of Talos use GRUB for BIOS/UEFI
+./pkg/imager/profile/output.go:	//  * image - disk image (Talos pre-installed)
+./pkg/imager/profile/profile.go:		return fmt.Errorf("secureboot is not supported for Talos version %q", p.Version)
+./pkg/imager/profile/profile.go:	// Version is Talos version.
+./pkg/images/images.go:	// DefaultTalosImage is the default talos image.
+./pkg/images/images.go:	// talosctl-all image.
+./pkg/images/images.go:	// the talos image.
+./pkg/images/images.go:	DefaultTalosImageName = Username + "/talos"
+./pkg/images/images.go:	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+./pkg/images/list.go:	Talos         name.Tag
+./pkg/images/list.go:	bundle.Talos = mustParseReferenceWithTag(DefaultTalosImageRepository, tag)
+./pkg/images/list.go:// TalosBundle holds the core images (and their versions) that are used to build Talos.
+./pkg/machinery/api/api.go:// AllAPIs returns a list of all API services served by Talos components.
+./pkg/machinery/api/api.go:// Package api contains API definitions for Talos Linux.
+./pkg/machinery/api/api.go:// This includes Talos apid and trustd APIs.
+./pkg/machinery/client/client.go:			return errors.New("talos config file is empty")
+./pkg/machinery/client/connection.go:				// TODO: enable compression for Talos 1.7+
+./pkg/machinery/client/connection.go:			ClientName:      "Talos",
+./pkg/machinery/client/connection.go:		// TODO: start failing instead of falling back to XDG data directory if we can't resolve Talos directory
+./pkg/machinery/client/connection.go:		return client.NewKeyProvider("talos/keys")
+./pkg/machinery/client/connection.go:		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
+./pkg/machinery/client/connection.go:	return client.NewKeyProviderWithFallback("talos/keys", talosDir, "keys", true)
+./pkg/machinery/client/events.go:		if typeURL == "talos/runtime/"+string(eventType.ProtoReflect().Descriptor().FullName()) {
+./pkg/machinery/client/grpc_connection_wrapper.go:	ctx = metadata.AppendToOutgoingContext(ctx, "runtime", "Talos")
+./pkg/machinery/client/options.go:// Connection over unix socket is only used within the Talos node.
+./pkg/machinery/compatibility/compatibility.go:// Package compatibility provides version compatibility checks for Talos.
+./pkg/machinery/compatibility/talos110/talos110.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.10.
+./pkg/machinery/compatibility/talos110/talos110.go:// MajorMinor is the major.minor version of Talos 1.10.
+./pkg/machinery/compatibility/talos110/talos110.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.10.
+./pkg/machinery/compatibility/talos110/talos110.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.10.
+./pkg/machinery/compatibility/talos110/talos110.go:// Package talos110 provides compatibility constants for Talos 1.10.
+./pkg/machinery/compatibility/talos111/talos111.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.11.
+./pkg/machinery/compatibility/talos111/talos111.go:// MajorMinor is the major.minor version of Talos 1.11.
+./pkg/machinery/compatibility/talos111/talos111.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.11.
+./pkg/machinery/compatibility/talos111/talos111.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.11.
+./pkg/machinery/compatibility/talos111/talos111.go:// Package talos111 provides compatibility constants for Talos 1.11.
+./pkg/machinery/compatibility/talos112/talos112.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.12.
+./pkg/machinery/compatibility/talos112/talos112.go:// MajorMinor is the major.minor version of Talos 1.12.
+./pkg/machinery/compatibility/talos112/talos112.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.12.
+./pkg/machinery/compatibility/talos112/talos112.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.12.
+./pkg/machinery/compatibility/talos112/talos112.go:// Package talos112 provides compatibility constants for Talos 1.12.
+./pkg/machinery/compatibility/talos113/talos113.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.13.
+./pkg/machinery/compatibility/talos113/talos113.go:// MajorMinor is the major.minor version of Talos 1.13.
+./pkg/machinery/compatibility/talos113/talos113.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.13.
+./pkg/machinery/compatibility/talos113/talos113.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.13.
+./pkg/machinery/compatibility/talos113/talos113.go:// Package talos113 provides compatibility constants for Talos 1.13.
+./pkg/machinery/compatibility/talos12/talos12.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.2.
+./pkg/machinery/compatibility/talos12/talos12.go:// MajorMinor is the major.minor version of Talos 1.2.
+./pkg/machinery/compatibility/talos12/talos12.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.3.
+./pkg/machinery/compatibility/talos12/talos12.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.2.
+./pkg/machinery/compatibility/talos12/talos12.go:// Package talos12 provides compatibility constants for Talos 1.2.
+./pkg/machinery/compatibility/talos13/talos13.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.3.
+./pkg/machinery/compatibility/talos13/talos13.go:// MajorMinor is the major.minor version of Talos 1.3.
+./pkg/machinery/compatibility/talos13/talos13.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.3.
+./pkg/machinery/compatibility/talos13/talos13.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.3.
+./pkg/machinery/compatibility/talos13/talos13.go:// Package talos13 provides compatibility constants for Talos 1.3.
+./pkg/machinery/compatibility/talos14/talos14.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.4.
+./pkg/machinery/compatibility/talos14/talos14.go:// MajorMinor is the major.minor version of Talos 1.4.
+./pkg/machinery/compatibility/talos14/talos14.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.4.
+./pkg/machinery/compatibility/talos14/talos14.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.4.
+./pkg/machinery/compatibility/talos14/talos14.go:// Package talos14 provides compatibility constants for Talos 1.4
+./pkg/machinery/compatibility/talos15/talos15.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.5.
+./pkg/machinery/compatibility/talos15/talos15.go:// MajorMinor is the major.minor version of Talos 1.5.
+./pkg/machinery/compatibility/talos15/talos15.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.5.
+./pkg/machinery/compatibility/talos15/talos15.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.5.
+./pkg/machinery/compatibility/talos15/talos15.go:// Package talos15 provides compatibility constants for Talos 1.5.
+./pkg/machinery/compatibility/talos16/talos16.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.6.
+./pkg/machinery/compatibility/talos16/talos16.go:// MajorMinor is the major.minor version of Talos 1.6.
+./pkg/machinery/compatibility/talos16/talos16.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.6.
+./pkg/machinery/compatibility/talos16/talos16.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.6.
+./pkg/machinery/compatibility/talos16/talos16.go:// Package talos16 provides compatibility constants for Talos 1.6.
+./pkg/machinery/compatibility/talos17/talos17.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.7.
+./pkg/machinery/compatibility/talos17/talos17.go:// MajorMinor is the major.minor version of Talos 1.7.
+./pkg/machinery/compatibility/talos17/talos17.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.7.
+./pkg/machinery/compatibility/talos17/talos17.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.7.
+./pkg/machinery/compatibility/talos17/talos17.go:// Package talos17 provides compatibility constants for Talos 1.7.
+./pkg/machinery/compatibility/talos18/talos18.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.8.
+./pkg/machinery/compatibility/talos18/talos18.go:// MajorMinor is the major.minor version of Talos 1.8.
+./pkg/machinery/compatibility/talos18/talos18.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.8.
+./pkg/machinery/compatibility/talos18/talos18.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.8.
+./pkg/machinery/compatibility/talos18/talos18.go:// Package talos18 provides compatibility constants for Talos 1.8.
+./pkg/machinery/compatibility/talos19/talos19.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.9.
+./pkg/machinery/compatibility/talos19/talos19.go:// MajorMinor is the major.minor version of Talos 1.9.
+./pkg/machinery/compatibility/talos19/talos19.go:// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.9.
+./pkg/machinery/compatibility/talos19/talos19.go:// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.9.
+./pkg/machinery/compatibility/talos19/talos19.go:// Package talos19 provides compatibility constants for Talos 1.9.
+./pkg/machinery/compatibility/talos_version.go:		return fmt.Errorf("host version %s is denied for upgrade to Talos %s", host.version.String(), v.version.String())
+./pkg/machinery/compatibility/talos_version.go:		return fmt.Errorf("host version %s is too new to downgrade to Talos %s", host.version.String(), v.version.String())
+./pkg/machinery/compatibility/talos_version.go:		return fmt.Errorf("host version %s is too old to upgrade to Talos %s", host.version.String(), v.version.String())
+./pkg/machinery/compatibility/talos_version.go:	// supported from Talos 1.13+
+./pkg/machinery/compatibility/talos_version.go:// Host Talos needs STATE partition to save the machine configuration.
+./pkg/machinery/compatibility/talos_version.go:// ParseTalosVersion parses Talos version.
+./pkg/machinery/compatibility/talos_version.go:// SupportsSSAManifestSync returns true if the Talos version supports server side apply manifest sync.
+./pkg/machinery/compatibility/talos_version.go:// TalosVersion embeds Talos version.
+./pkg/machinery/compatibility/talos_version.go:// UpgradeableFrom checks if the current version of Talos can be used as an upgrade for the given host version.
+./pkg/machinery/config/config.go:// Package config provides methods to generate and consume Talos configuration.
+./pkg/machinery/config/config/machine.go:// Features describe individual Talos features that can be switched on or off.
+./pkg/machinery/config/config/machine.go:// Kernel describes Talos Linux kernel configuration.
+./pkg/machinery/config/config/runtime.go:// EnvironmentConfig defines the interface to access Talos environment configuration.
+./pkg/machinery/config/config/runtime.go:// RuntimeConfig defines the interface to access Talos runtime configuration.
+./pkg/machinery/config/config/runtime.go:// WatchdogTimerConfig defines the interface to access Talos watchdog timer configuration.
+./pkg/machinery/config/config/validate.go:// This interface is used by Talos itself to validate configuration on the machine (vs. the Validator interface).
+./pkg/machinery/config/configloader/configloader.go:// Package configloader provides methods to load Talos config.
+./pkg/machinery/config/configpatcher/apply.go:// Apply config patches to Talos machine config.
+./pkg/machinery/config/configpatcher/configpatcher.go:// Package configpatcher provides methods to patch Talos config.
+./pkg/machinery/config/configpatcher/json6902.go:			return 0, errors.New("talos machine config is not a yaml document")
+./pkg/machinery/config/configpatcher/json6902.go:			return 0, fmt.Errorf("failure decoding talos machine config: %s", err)
+./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure applying rfc6902 patches to talos machine config: %s", err)
+./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure converting talos machine config from json to yaml: %s", err)
+./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure converting talos machine config to json: %s", err)
+./pkg/machinery/config/contract.go:// Config generation only supports backwards compatibility (e.g. Talos 0.9 can generate configs for Talos 0.9 and 0.8).
+./pkg/machinery/config/contract.go:// GrubUseUKICmdlineDefault returns true if version of Talos should use UKI cmdline by default.
+./pkg/machinery/config/contract.go:// Matching version of the machinery package is required to generate configs for the current version of Talos.
+./pkg/machinery/config/contract.go:// MultidocNetworkConfigSupported returns true if version of Talos supports multiple NetworkConfig documents.
+./pkg/machinery/config/contract.go:// Nil value of *VersionContract always describes current version of Talos.
+./pkg/machinery/config/contract.go:// ParseContractFromVersion parses Talos version into VersionContract.
+./pkg/machinery/config/contract.go:// SecureBootEnrollEnforcementSupported returns true if version of Talos supports SecureBoot enforcement on enroll.
+./pkg/machinery/config/contract.go:// VersionContract describes Talos version to generate config for.
+./pkg/machinery/config/contract.go:// VolumeConfigEncryptionSupported returns true if version of Talos supports disk encryption via VolumeConfig.
+./pkg/machinery/config/contract.go:// Well-known Talos version contracts.
+./pkg/machinery/config/encoder/encoder.go:			tag = t.Field(i).Tag.Get("talos")
+./pkg/machinery/config/generate/generate.go:// Config returns the talos config for a given node type.
+./pkg/machinery/config/generate/generate.go:// Package generate provides Talos machine configuration generation and client config generation.
+./pkg/machinery/config/generate/network.go:		machine.MachineFeatures.StableHostname = pointer.To(true) //nolint:staticcheck // using legacy field for older Talos versions
+./pkg/machinery/config/generate/network.go:		machine.MachineNetwork = &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+./pkg/machinery/config/generate/network.go:		machine.MachineNetwork = networkConfig //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+./pkg/machinery/config/generate/network.go:		networkConfig := &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+./pkg/machinery/config/generate/network.go:	// generate empty machine.network for backwards compatibility with older Talos versions
+./pkg/machinery/config/generate/network.go:	if machine.MachineNetwork == nil && !in.Options.VersionContract.MultidocNetworkConfigSupported() { //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+./pkg/machinery/config/generate/options.go:// WithDNSDomain specifies domain name to use in Talos cluster.
+./pkg/machinery/config/generate/options.go:// WithEndpointList specifies endpoints to use when accessing Talos cluster.
+./pkg/machinery/config/generate/options.go:// WithInstallDisk specifies install disk to use in Talos cluster.
+./pkg/machinery/config/generate/options.go:// WithInstallImage specifies install container image to use in Talos cluster.
+./pkg/machinery/config/generate/secrets/ca.go:		x509.Organization("talos"),
+./pkg/machinery/config/generate/secrets/ca.go:// NewAdminCertificateAndKey generates the admin Talos certificate and key.
+./pkg/machinery/config/generate/secrets/ca.go:// NewTalosCA generates a CA for the Talos PKI.
+./pkg/machinery/config/generate/secrets/secrets.go:	// OS is Talos API CA certificate and key.
+./pkg/machinery/config/generate/secrets/secrets.go:// Cluster holds Talos cluster-wide secrets.
+./pkg/machinery/config/generate/stdpatches/stdpatches.go:// Package stdpatches contains standard patches applied to Talos machine configurations.
+./pkg/machinery/config/generate/talosconfig.go:// Talosconfig returns the talos admin Talos config.
+./pkg/machinery/config/merge/merge.go:// It is specifically fine-tuned to merge Talos machine configuration.
+./pkg/machinery/config/schemas/config.schema.json:          "description": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - stable - generates a stable hostname based on machine identity\n  - off - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with hostname field.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\nGitHub releases page.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse talosctl get ethernetstatus \u0026lt;link\u0026gt; -o yaml to get the list of available features and\ntheir current status.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\nNote: To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Features describe individual Talos features that can be switched on or off.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for chubo we start with the simple model and evolve\nit in Phase 3.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. ‘my-mirror.local:5000’ for ‘https://my-mirror.local:5000/v2/’.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. ‘my-mirror.local:5000’ for ‘https://my-mirror.local:5000/v2/’.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Token used by trustd flows (Talos-like).\n",
+./pkg/machinery/config/schemas/config.schema.json:          "description": "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.\n",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse `talosctl get ethernetstatus \u003clink\u003e -o yaml` to get the list of available features and\ntheir current status.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\n**Note:** To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Features describe individual Talos features that can be switched on or off.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for `chubo` we start with the simple model and evolve\nit in Phase 3.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Token used by trustd flows (Talos-like).",
+./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.",
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eA method to automatically generate a hostname for the machine.\u003c/p\u003e\n\n\u003cp\u003eThere are two methods available:\n  - \u003ccode\u003estable\u003c/code\u003e - generates a stable hostname based on machine identity\n  - \u003ccode\u003eoff\u003c/code\u003e - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\u003c/p\u003e\n\n\u003cp\u003eAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with \u003ccode\u003ehostname\u003c/code\u003e field.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eAllows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n\u003ca href=\"https://github.com/chubo-dev/chubo/releases\" target=\"_blank\"\u003eGitHub releases page\u003c/a\u003e.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eEnable verbose logging to the console.\nAll system containers logs will flow into serial console.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eNote:\u003c/strong\u003e To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eFeatures describe individual Talos features that can be switched on or off.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eIssuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for \u003ccode\u003echubo\u003c/code\u003e we start with the simple model and evolve\nit in Phase 3.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eRegistry endpoint to apply the TLS configuration to.\u003c/p\u003e\n\n\u003cp\u003eRegistry endpoint is the hostname part of the endpoint URL,\ne.g. \u0026lsquo;my-mirror.local:5000\u0026rsquo; for \u0026lsquo;\u003ca href=\"https://my-mirror.local:5000/v2/'\" target=\"_blank\"\u003ehttps://my-mirror.local:5000/v2/\u0026rsquo;\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eRegistry endpoint to apply the authentication configuration to.\u003c/p\u003e\n\n\u003cp\u003eRegistry endpoint is the hostname part of the endpoint URL,\ne.g. \u0026lsquo;my-mirror.local:5000\u0026rsquo; for \u0026lsquo;\u003ca href=\"https://my-mirror.local:5000/v2/'\" target=\"_blank\"\u003ehttps://my-mirror.local:5000/v2/\u0026rsquo;\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eTimeout for the watchdog.\u003c/p\u003e\n\n\u003cp\u003eIf Talos is unresponsive for this duration, the watchdog will reset the system.\u003c/p\u003e\n\n\u003cp\u003eDefault value is 1 minute, minimum value is 10 seconds.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eToken used by trustd flows (Talos-like).\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:          "x-intellij-html-description": "\u003cp\u003eUsed to provide instructions for installations.\u003c/p\u003e\n\n\u003cp\u003eNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.\u003c/p\u003e\n"
+./pkg/machinery/config/schemas/config.schema.json:      "description": "Config defines the v1alpha1.Config Talos machine configuration document."
+./pkg/machinery/config/schemas/config.schema.json:      "description": "ExistingVolumeConfig is an existing volume configuration document.\\nExisting volumes allow to mount partitions (or whole disks) that were created\\noutside of Talos. Volume will be mounted under `/var/mnt/\u003cname\u003e`.\\nThe existing volume config name should not conflict with user volume names.\\n"
+./pkg/machinery/config/schemas/config.schema.json:      "description": "ExternalVolumeConfig is an external disk mount configuration document.\\nExternal volumes allow to mount volumes that were created outside of Talos,\\nover the network or API. Volume will be mounted under `/var/mnt/\u003cname\u003e`.\\nThe external volume config name should not conflict with user volume names.\\n"
+./pkg/machinery/config/schemas/config.schema.json:      "description": "FeaturesConfig describes individual Talos features that can be switched on or off."
+./pkg/machinery/config/schemas/config.schema.json:      "description": "KernelConfig struct configures Talos Linux kernel."
+./pkg/machinery/config/schemas/config.schema.json:      "description": "LoggingConfig struct configures Talos logging."
+./pkg/machinery/config/schemas/config.schema.json:      "description": "LoggingDestination struct configures Talos logging destination."
+./pkg/machinery/config/schemas/config.schema.json:  "$id": "https://talos.dev/v1.13/schemas/config.schema.json",
+./pkg/machinery/config/types/block/block_doc.go:		Description: "ExistingVolumeConfig is an existing volume configuration document.\nExisting volumes allow to mount partitions (or whole disks) that were created\noutside of Talos. Volume will be mounted under `/var/mnt/<name>`.\nThe existing volume config name should not conflict with user volume names.\n",
+./pkg/machinery/config/types/block/block_doc.go:		Description: "ExternalVolumeConfig is an external disk mount configuration document.\nExternal volumes allow to mount volumes that were created outside of Talos,\nover the network or API. Volume will be mounted under `/var/mnt/<name>`.\nThe external volume config name should not conflict with user volume names.\n",
+./pkg/machinery/config/types/block/existing_volume_config.go://	  outside of Talos. Volume will be mounted under `/var/mnt/<name>`.
+./pkg/machinery/config/types/block/external_volume_config.go://	  External volumes allow to mount volumes that were created outside of Talos,
+./pkg/machinery/config/types/chubo/chubo.go:// the Chubo Talos fork.
+./pkg/machinery/config/types/chubo/machine_config.go:			// In `chubo` we treat Talos' "controlplane" machine type as "managed node"
+./pkg/machinery/config/types/chubo/machine_config.go:	// Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on
+./pkg/machinery/config/types/chubo/machine_config.go:	// Token used by trustd flows (Talos-like).
+./pkg/machinery/config/types/chubo/machine_config.go:// Note: Talos upstream uses plain "v1alpha1" for many config documents, but we
+./pkg/machinery/config/types/chubo/machine_config.go:// This preserves Talos' internal config.Provider interface contract (which still depends on v1alpha1.Config),
+./pkg/machinery/config/types/chubo/machine_config.go:// intentionally scope this to a group-like string to avoid collisions with Talos kinds.
+./pkg/machinery/config/types/cri/cri_doc.go:				Description: "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
+./pkg/machinery/config/types/cri/cri_doc.go:				Description: "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
+./pkg/machinery/config/types/network/ethernet.go:	//     Use `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and
+./pkg/machinery/config/types/network/hostname.go:	//       - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).
+./pkg/machinery/config/types/network/network_doc.go:				Description: "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
+./pkg/machinery/config/types/network/network_doc.go:				Description: "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and\ntheir current status.",
+./pkg/machinery/config/types/runtime/runtime_doc.go:				Description: "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
+./pkg/machinery/config/types/runtime/watchdog_timer.go:	//     If Talos is unresponsive for this duration, the watchdog will reset the system.
+./pkg/machinery/config/types/v1alpha1/chubo_validation.go:	// Trust: keep Talos trustd token + OS issuing CA (for now).
+./pkg/machinery/config/types/v1alpha1/chubo_validation.go:	// `chubo` relies on OS API + trustd on every node; keep the Talos "controlplane"
+./pkg/machinery/config/types/v1alpha1/v1alpha1_examples.go:		"kernel.domainname":                   "talos.dev",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_examples.go:		ClusterName:  "talos.local",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types.go:	MachineSeccompProfiles []*MachineSeccompProfile `yaml:"seccompProfiles,omitempty" talos:"omitonlyifnil"`
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Comments:    [3]string{"" /* encoder.HeadComment */, "Features describe individual Talos features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Description: "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Description: "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\n**Note:** To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Description: "Features describe individual Talos features that can be switched on or off.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Description: "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Comments:    [3]string{"" /* encoder.HeadComment */, "Config defines the v1alpha1.Config Talos machine configuration document." /* encoder.LineComment */, "" /* encoder.FootComment */},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Comments:    [3]string{"" /* encoder.HeadComment */, "FeaturesConfig describes individual Talos features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Comments:    [3]string{"" /* encoder.HeadComment */, "KernelConfig struct configures Talos Linux kernel." /* encoder.LineComment */, "" /* encoder.FootComment */},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Comments:    [3]string{"" /* encoder.HeadComment */, "LoggingConfig struct configures Talos logging." /* encoder.LineComment */, "" /* encoder.FootComment */},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Comments:    [3]string{"" /* encoder.HeadComment */, "LoggingDestination struct configures Talos logging destination." /* encoder.LineComment */, "" /* encoder.FootComment */},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "Config defines the v1alpha1.Config Talos machine configuration document.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "FeaturesConfig describes individual Talos features that can be switched on or off.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "KernelConfig struct configures Talos Linux kernel.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "LoggingConfig struct configures Talos logging.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "LoggingDestination struct configures Talos logging destination.",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "Package v1alpha1 contains definition of the `v1alpha1` configuration document.\n\nEven though the machine configuration in Talos Linux is multi-document, at the moment\nthis configuration document contains most of the configuration options.\n\nIt is expected that new configuration options will be added as new documents, and existing ones\nmigrated to their own documents.\n",
+./pkg/machinery/constants/amd64.go:	// MinimumGOAMD64Level is the minimum x86_64 microarchitecture level required by Talos.
+./pkg/machinery/constants/amd64_v1.go:	// MinimumGOAMD64Level is the minimum x86_64 microarchitecture level required by Talos.
+./pkg/machinery/constants/constants.go:	// AnnotationCordonedKey is the annotation key for the nodes cordoned by Talos.
+./pkg/machinery/constants/constants.go:	// AnnotationCordonedValue is the annotation key for the nodes cordoned by Talos.
+./pkg/machinery/constants/constants.go:	// AnnotationOwnedAnnotations is the annotation key for the list of node annotations owned by Talos.
+./pkg/machinery/constants/constants.go:	// AnnotationOwnedLabels is the annotation key for the list of node labels owned by Talos.
+./pkg/machinery/constants/constants.go:	// AnnotationOwnedTaints is the annotation key for the list of node taints owned by Talos.
+./pkg/machinery/constants/constants.go:	// ContainerMarkerFilePath is the path to the file added to container builds of Talos for platform detection.
+./pkg/machinery/constants/constants.go:	// DefaultDiscoveryServiceEndpoint is the default endpoint for Talos discovery service.
+./pkg/machinery/constants/constants.go:	// DefaultNfTablesTableName is the default name of the nftables table created by Talos.
+./pkg/machinery/constants/constants.go:	// GRPCMaxMessageSize is the maximum message size for Talos API.
+./pkg/machinery/constants/constants.go:	// ISOFilesystemLabel is the label of the ISO file system for the Talos
+./pkg/machinery/constants/constants.go:	// KernelParamHaltIfInstalled is the kernel parameter name to control if Talos should pause if booting from boot media while Talos is already installed.
+./pkg/machinery/constants/constants.go:	// KernelParamNetworkInterfaceIgnore is the kernel parameter for specifying network interfaces which should be ignored by talos.
+./pkg/machinery/constants/constants.go:	// NetworkSelfIPsAnnotation is the node annotation used to list the (comma-separated) IP addresses of the host, as discovered by Talos tooling.
+./pkg/machinery/constants/constants.go:	// NoneCNI is the string to indicate that CNI will not be managed by Talos.
+./pkg/machinery/constants/constants.go:	// ServiceAccountMountPath is the path of the directory in which the Talos service account secrets are mounted.
+./pkg/machinery/constants/constants.go:	// ServiceAccountResourceGroup is the group name of the Talos service account CRD.
+./pkg/machinery/constants/constants.go:	// ServiceAccountResourceKind is the kind name of the Talos service account CRD.
+./pkg/machinery/constants/constants.go:	// ServiceAccountResourceSingular is the singular name of the Talos service account CRD.
+./pkg/machinery/constants/constants.go:	// ServiceAccountResourceVersion is the version of the Talos service account CRD.
+./pkg/machinery/constants/constants.go:	// SystemContainerdNamespace is the Containerd namespace for Talos services.
+./pkg/machinery/constants/constants.go:	// TalosAPIDefaultCertificateValidityDuration specifies default certificate duration for Talos API generated client certificates.
+./pkg/machinery/constants/constants.go:	// TalosConfigEnvVar is the legacy environment variable for setting the Talos configuration file path.
+./pkg/machinery/constants/constants.go:	// TalosDir is the legacy name of the Talos directory under user home.
+./pkg/machinery/constants/constants.go:	// TalosHomeEnvVar is the legacy environment variable for setting the Talos state directory file path.
+./pkg/machinery/constants/constants.go:	APIAuthzRoleMetadataKey = "talos-role"
+./pkg/machinery/constants/constants.go:	AnnotationCordonedKey = "talos.dev/cordoned"
+./pkg/machinery/constants/constants.go:	AnnotationOwnedAnnotations = "talos.dev/owned-annotations"
+./pkg/machinery/constants/constants.go:	AnnotationOwnedLabels = "talos.dev/owned-labels"
+./pkg/machinery/constants/constants.go:	AnnotationOwnedTaints = "talos.dev/owned-taints"
+./pkg/machinery/constants/constants.go:	AnnotationStaticPodConfigFileVersion = "talos.dev/config-file-version"
+./pkg/machinery/constants/constants.go:	AnnotationStaticPodConfigVersion = "talos.dev/config-version"
+./pkg/machinery/constants/constants.go:	AnnotationStaticPodSecretsVersion = "talos.dev/secrets-version"
+./pkg/machinery/constants/constants.go:	ClusterNodeIDAnnotation = "cluster.talos.dev/node-id"
+./pkg/machinery/constants/constants.go:	DefaultDiscoveryServiceEndpoint = "https://discovery.talos.dev/"
+./pkg/machinery/constants/constants.go:	DefaultKernelVersion = "6.18.8-talos"
+./pkg/machinery/constants/constants.go:	DefaultNfTablesTableName = "talos"
+./pkg/machinery/constants/constants.go:	EmbeddedConfigDirectory = "/usr/local/etc/talos/"
+./pkg/machinery/constants/constants.go:	ISOFilesystemLabel = "TALOS"
+./pkg/machinery/constants/constants.go:	KernelParamAuditdDisabled = "talos.auditd.disabled"
+./pkg/machinery/constants/constants.go:	KernelParamCGroups = "talos.unified_cgroup_hierarchy"
+./pkg/machinery/constants/constants.go:	KernelParamConfig = "talos.config"
+./pkg/machinery/constants/constants.go:	KernelParamConfigEarly = "talos.config.early"
+./pkg/machinery/constants/constants.go:	KernelParamConfigInline = "talos.config.inline"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthAudience = "talos.config.oauth.audience"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthClientID = "talos.config.oauth.client_id"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthClientSecret = "talos.config.oauth.client_secret"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthDeviceAuthURL = "talos.config.oauth.device_auth_url"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthExtraVariable = "talos.config.oauth.extra_variable"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthScope = "talos.config.oauth.scope"
+./pkg/machinery/constants/constants.go:	KernelParamConfigOAuthTokenURL = "talos.config.oauth.token_url"
+./pkg/machinery/constants/constants.go:	KernelParamDashboardConsole = "talos.dashboard.console"
+./pkg/machinery/constants/constants.go:	KernelParamDashboardDisabled = "talos.dashboard.disabled"
+./pkg/machinery/constants/constants.go:	KernelParamDeviceSettleTime = "talos.device.settle_time"
+./pkg/machinery/constants/constants.go:	KernelParamEnvironment = "talos.environment"
+./pkg/machinery/constants/constants.go:	KernelParamEventsSink = "talos.events.sink"
+./pkg/machinery/constants/constants.go:	KernelParamHaltIfInstalled = "talos.halt_if_installed"
+./pkg/machinery/constants/constants.go:	KernelParamHostname = "talos.hostname"
+./pkg/machinery/constants/constants.go:	KernelParamLoggingKernel = "talos.logging.kernel"
+./pkg/machinery/constants/constants.go:	KernelParamNetworkInterfaceIgnore = "talos.network.interface.ignore"
+./pkg/machinery/constants/constants.go:	KernelParamPlatform = "talos.platform"
+./pkg/machinery/constants/constants.go:	KernelParamShutdown = "talos.shutdown"
+./pkg/machinery/constants/constants.go:	KernelParamWipe = "talos.experimental.wipe"
+./pkg/machinery/constants/constants.go:	MaintenanceServiceCommonName = "maintenance-service.talos.dev"
+./pkg/machinery/constants/constants.go:	NetworkAPIServerPortAnnotation = "networking.talos.dev/api-server-port"
+./pkg/machinery/constants/constants.go:	NetworkSelfIPsAnnotation = "networking.talos.dev/self-ips"
+./pkg/machinery/constants/constants.go:	ServiceAccountMountPath = "/var/run/secrets/talos.dev"
+./pkg/machinery/constants/constants.go:	ServiceAccountResourceGroup = "talos.dev"
+./pkg/machinery/constants/constants.go:	TalosDir = ".talos"
+./pkg/machinery/constants/constants.go:	UdevRulesPath = UdevDir + "/" + "rules.d/99-talos.rules"
+./pkg/machinery/constants/constants.go:	VMwareGuestInfoConfigKey = "talos.config"
+./pkg/machinery/constants/constants.go:// Package constants defines constants used throughout Talos.
+./pkg/machinery/constants/constants.go:// names of variable that can be substituted in the talos.config kernel parameter.
+./pkg/machinery/constants/constants.go:HOME_URL="https://www.talos.dev/"
+./pkg/machinery/extensions/config.go:// Config specifies Talos installer extensions configuration.
+./pkg/machinery/extensions/extensions.go:// Package extensions contains Talos extensions specific API.
+./pkg/machinery/extensions/metadata.go:	Talos Constraint `yaml:"talos" protobuf:"1"`
+./pkg/machinery/extensions/services/services.go:	// Name of the service to run, will be prefixed with `ext-` when registered as Talos service.
+./pkg/machinery/extensions/validate.go:			return fmt.Errorf("error parsing Talos version constraint: %w", err)
+./pkg/machinery/extensions/validate.go:			return fmt.Errorf("version constraint %s can't be satisfied with Talos version %s", constraint, talosVersion)
+./pkg/machinery/extensions/validate.go:	// TalosVersion is the version of Talos to validate against.
+./pkg/machinery/extensions/validate.go:	constraint := ext.Manifest.Metadata.Compatibility.Talos.Version
+./pkg/machinery/extensions/validate.go:// WithTalosVersion sets the Talos version to validate against.
+./pkg/machinery/gendata/data/name:Talos
+./pkg/machinery/imager/quirks/partitions.go:// PartitionSizes capture partition sizes for Talos.
+./pkg/machinery/imager/quirks/quirks.go:	// if the version doesn't parse, we assume it's latest Talos
+./pkg/machinery/imager/quirks/quirks.go:// FirmwarePath returns firmware storage path for the given Talos version.
+./pkg/machinery/imager/quirks/quirks.go:// ISOSupportsSettingBootloader returns true if the Talos version supports setting bootloader for ISO output.
+./pkg/machinery/imager/quirks/quirks.go:// KernelModulesPath returns kernel module storage path for the given Talos version.
+./pkg/machinery/imager/quirks/quirks.go:// New returns a new Quirks instance based on Talos version for the image.
+./pkg/machinery/imager/quirks/quirks.go:// Package quirks contains the quirks for Talos image generation.
+./pkg/machinery/imager/quirks/quirks.go:// PartitionSizes returns partition sizes for the given Talos version.
+./pkg/machinery/imager/quirks/quirks.go:// ProcMemOverrideNever returns true if the Talos version should enforce 'proc_mem.force_override=never'.
+./pkg/machinery/imager/quirks/quirks.go:// Quirks contains the quirks for Talos image generation.
+./pkg/machinery/imager/quirks/quirks.go:// SkipDataPartitions returns true if the Talos version supports creating EPHEMERAL/STATE partitions on its own.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsCompressedEncodedMETA returns true if the Talos version supports compressed and encoded META as an environment variable.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsDisablingModuleSignatureVerification returns true if the Talos version supports disabling module signature verification.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsEmbeddedConfig returns true if the Talos version supports embedded machine configuration.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsHaltIfInstalled returns true if the Talos version supports half if installed.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsIMA returns true if the Talos version has IMA support.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsISOLabel returns true if the Talos version supports setting the ISO label.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsMetalPlatformConsoleTTYS0 returns true if the Talos version supports already has console=ttyS0 kernel argument.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsMultidoc returns true if the Talos version supports multidoc machine configs.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsOverlay returns true if the Talos imager version supports overlay.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsResetGRUBOption returns true if the Talos version supports the reset option in GRUB menu (image and ISO).
+./pkg/machinery/imager/quirks/quirks.go:// SupportsSELinux returns true if the Talos version enables selinux=1 by default.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsUKI returns true if the Talos version supports building UKIs.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsUKIProfiles returns true if the Talos version supports UKI profiles.
+./pkg/machinery/imager/quirks/quirks.go:// SupportsUnifiedInstaller returns true if the Talos version supports unified installer.
+./pkg/machinery/imager/quirks/quirks.go:// UseSDBootForUEFI returns true if the Talos version supports only SDBoot for UEFI.
+./pkg/machinery/imager/quirks/quirks.go:// UseZSTDCompression returns true if the Talos should use zstd compression in place of xz.
+./pkg/machinery/imager/quirks/quirks.go:// Version returns the Talos version.
+./pkg/machinery/imager/quirks/quirks.go:// XFSMkfsConfig returns the mkfs.xfs config for the given Talos version.
+./pkg/machinery/kernel/kernel.go:// DefaultArgs returns the Talos default kernel commandline options.
+./pkg/machinery/meta/constants.go:	// DownloadURLCode stores the value of the `${code}` variable in the download URL for talos.config= URL.
+./pkg/machinery/nethelpers/autohostnamekind.go:	AutoHostnameKindAddr                           // talos-addr
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/akamai/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/aws/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/azure/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/cloudstack/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/digitalocean/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/exoscale/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/gcp/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/hetzner/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/nocloud/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/openstack/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/oracle/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/scaleway/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/upcloud/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/virtualized-platforms/opennebula/",
+./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/virtualized-platforms/vmware/",
+./pkg/machinery/platforms/platforms.go:			Documentation: "/talos-guides/install/bare-metal-platforms/equinix-metal/",
+./pkg/machinery/platforms/platforms.go:			Documentation: "/talos-guides/install/cloud-platforms/vultr/",
+./pkg/machinery/platforms/platforms.go:		Documentation:   "/talos-guides/install/bare-metal-platforms/",
+./pkg/machinery/platforms/platforms.go:// Arch represents an architecture supported by Talos.
+./pkg/machinery/platforms/platforms.go:// BootMethod represents a boot method supported by Talos.
+./pkg/machinery/platforms/platforms.go:// Package platforms provides meta information about supported Talos platforms.
+./pkg/machinery/platforms/platforms.go:// Platform represents a platform supported by Talos.
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/bananapi_m64/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/jetson_nano/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/libretech_all_h3_cc_h5/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/nanopi_r4s/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/orangepi_5/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/orangepi_r1_plus_lts/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/pine64/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/rock4cplus/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/rock5b/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/rock64/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/rockpi_4/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/rockpi_4c/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/rpi_generic/",
+./pkg/machinery/platforms/sbcs.go:			Documentation: "/talos-guides/install/single-board-computers/turing_rk1/",
+./pkg/machinery/platforms/sbcs.go:	// For Talos 1.7+
+./pkg/machinery/resources/block/block.go:	// fetch system disk (where Talos is installed)
+./pkg/machinery/resources/block/block.go:const ExistingVolumeLabel = "talos.dev/existing-volume"
+./pkg/machinery/resources/block/block.go:const ExternalVolumeLabel = "talos.dev/external-volume"
+./pkg/machinery/resources/block/block.go:const PlatformLabel = "talos.dev/platform"
+./pkg/machinery/resources/block/block.go:const RawVolumeLabel = "talos.dev/raw-volume"
+./pkg/machinery/resources/block/block.go:const SwapVolumeLabel = "talos.dev/swap-volume"
+./pkg/machinery/resources/block/block.go:const SystemVolumeLabel = "talos.dev/system-volume"
+./pkg/machinery/resources/block/block.go:const UserDiskLabel = "talos.dev/user-disk"
+./pkg/machinery/resources/block/block.go:const UserVolumeLabel = "talos.dev/user-volume"
+./pkg/machinery/resources/block/device.go:const DeviceType = resource.Type("BlockDevices.block.talos.dev")
+./pkg/machinery/resources/block/discovered_volume.go:const DiscoveredVolumeType = resource.Type("DiscoveredVolumes.block.talos.dev")
+./pkg/machinery/resources/block/discovery_refresh_request.go:const DiscoveryRefreshRequestType = resource.Type("DiscoveryRefreshRequests.block.talos.dev")
+./pkg/machinery/resources/block/discovery_refresh_status.go:const DiscoveryRefreshStatusType = resource.Type("DiscoveryRefreshStatuses.block.talos.dev")
+./pkg/machinery/resources/block/disk.go:const DiskType = resource.Type("Disks.block.talos.dev")
+./pkg/machinery/resources/block/mount_request.go:const MountRequestType = resource.Type("MountRequests.block.talos.dev")
+./pkg/machinery/resources/block/mount_status.go:const MountStatusType = resource.Type("MountStatuses.block.talos.dev")
+./pkg/machinery/resources/block/swap_status.go:const SwapStatusType = resource.Type("SwapStatuses.block.talos.dev")
+./pkg/machinery/resources/block/symlink.go:const SymlinkType = resource.Type("BlockSymlinks.block.talos.dev")
+./pkg/machinery/resources/block/system_disk.go:// SystemDisk resource holds ID of the disk which is the Talos system disk.
+./pkg/machinery/resources/block/system_disk.go:const SystemDiskType = resource.Type("SystemDisks.block.talos.dev")
+./pkg/machinery/resources/block/user_disk_config_status.go:const UserDiskConfigStatusType = resource.Type("UserDiskConfigStatuses.block.talos.dev")
+./pkg/machinery/resources/block/volume_config.go:const VolumeConfigType = resource.Type("VolumeConfigs.block.talos.dev")
+./pkg/machinery/resources/block/volume_lifecycle.go:const VolumeLifecycleType = resource.Type("VolumeLifecycles.block.talos.dev")
+./pkg/machinery/resources/block/volume_mount_request.go:const VolumeMountRequestType = resource.Type("VolumeMountRequests.block.talos.dev")
+./pkg/machinery/resources/block/volume_mount_status.go:const VolumeMountStatusType = resource.Type("VolumeMountStatuses.block.talos.dev")
+./pkg/machinery/resources/block/volume_status.go:const VolumeStatusType = resource.Type("VolumeStatuses.block.talos.dev")
+./pkg/machinery/resources/block/zswap_status.go:const ZswapStatusType = resource.Type("ZswapStatuses.block.talos.dev")
+./pkg/machinery/resources/cluster/affiliate.go:const AffiliateType = resource.Type("Affiliates.cluster.talos.dev")
+./pkg/machinery/resources/cluster/config.go:const ConfigType = resource.Type("DiscoveryConfigs.cluster.talos.dev")
+./pkg/machinery/resources/cluster/endpoint.go:const ControlPlaneEndpointType = resource.Type("ControlPlaneEndpoints.cluster.talos.dev")
+./pkg/machinery/resources/cluster/identity.go:const IdentityType = resource.Type("Identities.cluster.talos.dev")
+./pkg/machinery/resources/cluster/info.go:const InfoType = resource.Type("Infos.cluster.talos.dev")
+./pkg/machinery/resources/cluster/member.go:const MemberType = resource.Type("Members.cluster.talos.dev")
+./pkg/machinery/resources/config/config.go:// Package config provides resources which hold Talos node configuration.
+./pkg/machinery/resources/config/machine_config.go:	r.Metadata().Annotations().Set("talos.dev/yaml-spec", "1")
+./pkg/machinery/resources/config/machine_config.go:// MachineConfig resource holds v1alpha Talos configuration.
+./pkg/machinery/resources/config/machine_config.go:const MachineConfigType = resource.Type("MachineConfigs.config.talos.dev")
+./pkg/machinery/resources/config/machine_type.go:const MachineTypeType = resource.Type("MachineTypes.config.talos.dev")
+./pkg/machinery/resources/cri/image_cache_config.go:const ImageCacheConfigType = resource.Type("ImageCacheConfigs.cri.talos.dev")
+./pkg/machinery/resources/cri/registries_config.go:const RegistriesConfigType = resource.Type("RegistryConfigs.cri.talos.dev")
+./pkg/machinery/resources/cri/seccomp_profile.go:const SeccompProfileType = resource.Type("SeccompProfiles.cri.talos.dev")
+./pkg/machinery/resources/files/etcfile_spec.go:const EtcFileSpecType = resource.Type("EtcFileSpecs.files.talos.dev")
+./pkg/machinery/resources/files/etcfile_status.go:const EtcFileStatusType = resource.Type("EtcFileStatuses.files.talos.dev")
+./pkg/machinery/resources/files/files.go:const SourceFileAnnotation = "talos.dev/source-file"
+./pkg/machinery/resources/hardware/memorymodule.go:const MemoryModuleType = resource.Type("MemoryModules.hardware.talos.dev")
+./pkg/machinery/resources/hardware/pci_driver_rebind_config.go:const PCIDriverRebindConfigType = resource.Type("PCIDriverRebindConfigs.runtime.talos.dev")
+./pkg/machinery/resources/hardware/pci_driver_rebind_status.go:const PCIDriverRebindStatusType = resource.Type("PCIDriverRebindStatuses.runtime.talos.dev")
+./pkg/machinery/resources/hardware/pcidevice.go:const PCIDeviceType = resource.Type("PCIDevices.hardware.talos.dev")
+./pkg/machinery/resources/hardware/pcr_status.go:const PCRStatusType = resource.Type("PCRStatuses.hardware.talos.dev")
+./pkg/machinery/resources/hardware/processor.go:const ProcessorType = resource.Type("Processors.hardware.talos.dev")
+./pkg/machinery/resources/hardware/system_information.go:const SystemInformationType = resource.Type("SystemInformations.hardware.talos.dev")
+./pkg/machinery/resources/network/address_spec.go:const AddressSpecType = resource.Type("AddressSpecs.net.talos.dev")
+./pkg/machinery/resources/network/address_status.go:const AddressStatusType = resource.Type("AddressStatuses.net.talos.dev")
+./pkg/machinery/resources/network/device_config_spec.go:const DeviceConfigSpecType = resource.Type("DeviceConfigSpecs.net.talos.dev")
+./pkg/machinery/resources/network/dns_resolve_cache.go:const DNSResolveCacheType = resource.Type("DNSResolveCaches.net.talos.dev")
+./pkg/machinery/resources/network/dns_upstream.go:const DNSUpstreamType = resource.Type("DNSUpstreams.net.talos.dev")
+./pkg/machinery/resources/network/ethernet_spec.go:const EthernetSpecType = resource.Type("EthernetSpecs.net.talos.dev")
+./pkg/machinery/resources/network/ethernet_status.go:const EthernetStatusType = resource.Type("EthernetStatuses.net.talos.dev")
+./pkg/machinery/resources/network/hardrware_addr.go:const HardwareAddrType = resource.Type("HardwareAddresses.net.talos.dev")
+./pkg/machinery/resources/network/hostdns_config.go:const HostDNSConfigType = resource.Type("HostDNSConfigs.net.talos.dev")
+./pkg/machinery/resources/network/hostname_spec.go:const HostnameSpecType = resource.Type("HostnameSpecs.net.talos.dev")
+./pkg/machinery/resources/network/hostname_status.go:const HostnameStatusType = resource.Type("HostnameStatuses.net.talos.dev")
+./pkg/machinery/resources/network/link_alias_spec.go:const LinkAliasSpecType = resource.Type("LinkAliasSpecs.net.talos.dev")
+./pkg/machinery/resources/network/link_refresh.go:const LinkRefreshType = resource.Type("LinkRefreshes.net.talos.dev")
+./pkg/machinery/resources/network/link_spec.go:const LinkSpecType = resource.Type("LinkSpecs.net.talos.dev")
+./pkg/machinery/resources/network/link_status.go:const LinkStatusType = resource.Type("LinkStatuses.net.talos.dev")
+./pkg/machinery/resources/network/nftables_chain.go:const NfTablesChainType = resource.Type("NfTablesChains.net.talos.dev")
+./pkg/machinery/resources/network/node_address.go:const NodeAddressType = resource.Type("NodeAddresses.net.talos.dev")
+./pkg/machinery/resources/network/node_address_filter.go:const NodeAddressFilterType = resource.Type("NodeAddressFilters.net.talos.dev")
+./pkg/machinery/resources/network/node_address_sort_algorithm.go:const NodeAddressSortAlgorithmType = resource.Type("NodeAddressSortAlgorithms.net.talos.dev")
+./pkg/machinery/resources/network/operator.go:// Operator enumerates Talos network operators.
+./pkg/machinery/resources/network/operator_spec.go:const OperatorSpecType = resource.Type("OperatorSpecs.net.talos.dev")
+./pkg/machinery/resources/network/platform_config.go:const PlatformConfigType = resource.Type("PlatformConfigs.net.talos.dev")
+./pkg/machinery/resources/network/probe_spec.go:const ProbeSpecType = resource.Type("ProbeSpecs.net.talos.dev")
+./pkg/machinery/resources/network/probe_status.go:const ProbeStatusType = resource.Type("ProbeStatuses.net.talos.dev")
+./pkg/machinery/resources/network/resolver_spec.go:const ResolverSpecType = resource.Type("ResolverSpecs.net.talos.dev")
+./pkg/machinery/resources/network/resolver_status.go:const ResolverStatusType = resource.Type("ResolverStatuses.net.talos.dev")
+./pkg/machinery/resources/network/route_spec.go:const RouteSpecType = resource.Type("RouteSpecs.net.talos.dev")
+./pkg/machinery/resources/network/route_status.go:const RouteStatusType = resource.Type("RouteStatuses.net.talos.dev")
+./pkg/machinery/resources/network/status.go:const StatusType = resource.Type("NetworkStatuses.net.talos.dev")
+./pkg/machinery/resources/network/timeserver_spec.go:const TimeServerSpecType = resource.Type("TimeServerSpecs.net.talos.dev")
+./pkg/machinery/resources/network/timeserver_status.go:const TimeServerStatusType = resource.Type("TimeServerStatuses.net.talos.dev")
+./pkg/machinery/resources/network/ula.go:	// Apply the Talos-specific ULA Purpose suffix
+./pkg/machinery/resources/network/ula.go:	// ULABootstrap is the Unique Local Addressing space key for the Talos Self-Bootstrapping protocol.
+./pkg/machinery/resources/network/ula.go:// The Talos implementation uses a combination of a 48-bit cluster-unique portion with an 8-bit purpose portion.
+./pkg/machinery/resources/network/ula.go:// This implements a Talos-specific implementation of RFC4193.
+./pkg/machinery/resources/network/ula.go:// ULAPrefix calculates and returns a Talos-specific Unique Local Address prefix for the given purpose.
+./pkg/machinery/resources/network/ula.go:// ULAPurpose is the Unique Local Addressing key for the Talos-specific purpose of the prefix.
+./pkg/machinery/resources/perf/cpu.go:const CPUType = resource.Type("CPUStats.perf.talos.dev")
+./pkg/machinery/resources/perf/mem.go:const MemoryType = resource.Type("MemoryStats.perf.talos.dev")
+./pkg/machinery/resources/resources.go:// Package resources provides common Talos resources settings.
+./pkg/machinery/resources/runtime/booted_entry_status.go:const BootedEntryType = resource.Type("BootedEntries.talos.dev")
+./pkg/machinery/resources/runtime/devices_status.go:const DevicesStatusType = resource.Type("DevicesStatuses.runtime.talos.dev")
+./pkg/machinery/resources/runtime/diagnostic.go:	return "https://talos.dev/diagnostic/" + id
+./pkg/machinery/resources/runtime/diagnostic.go:// Diagnostic resource contains warnings produced by Talos Diagnostics.
+./pkg/machinery/resources/runtime/diagnostic.go:const DiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
+./pkg/machinery/resources/runtime/environment.go:const EnvironmentType = resource.Type("Environments.runtime.talos.dev")
+./pkg/machinery/resources/runtime/event_sink_config.go:// EventSinkConfig resource holds configuration for Talos event log streaming.
+./pkg/machinery/resources/runtime/event_sink_config.go:// EventSinkConfigSpec describes configuration of Talos event log streaming.
+./pkg/machinery/resources/runtime/event_sink_config.go:const EventSinkConfigType = resource.Type("EventSinkConfigs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/extension_services_config.go:const ExtensionServiceConfigType = resource.Type("ExtensionServiceConfigs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/extension_services_config_status.go:const ExtensionServiceConfigStatusType = resource.Type("ExtensionServiceConfigStatuses.runtime.talos.dev")
+./pkg/machinery/resources/runtime/extension_status.go:const ExtensionStatusType = resource.Type("ExtensionStatuses.runtime.talos.dev")
+./pkg/machinery/resources/runtime/kernel_cmdline.go:const KernelCmdlineType = resource.Type("KernelCmdlines.runtime.talos.dev")
+./pkg/machinery/resources/runtime/kernel_module_spec.go:const KernelModuleSpecType = resource.Type("KernelModuleSpecs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/kernel_params_spec.go:const KernelParamDefaultSpecType = resource.Type("KernelParamDefaultSpecs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/kernel_params_spec.go:const KernelParamSpecType = resource.Type("KernelParamSpecs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/kernel_params_status.go:const KernelParamStatusType = resource.Type("KernelParamStatuses.runtime.talos.dev")
+./pkg/machinery/resources/runtime/kmsg_log_config.go:const KmsgLogConfigType = resource.Type("KmsgLogConfigs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/loaded_kernel_module.go:const LoadedKernelModuleType = resource.Type("LoadedKernelModules.runtime.talos.dev")
+./pkg/machinery/resources/runtime/machine_reset_signal.go:const MachineResetSignalType = resource.Type("MachineResetSignals.runtime.talos.dev")
+./pkg/machinery/resources/runtime/machine_status.go:const MachineStatusType = resource.Type("MachineStatuses.runtime.talos.dev")
+./pkg/machinery/resources/runtime/maintenance_config.go:const MaintenanceServiceConfigType = resource.Type("MaintenanceServiceConfigs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/maintenance_request.go:const MaintenanceServiceRequestType = resource.Type("MaintenanceServiceRequests.runtime.talos.dev")
+./pkg/machinery/resources/runtime/meta_key.go:const MetaKeyType = resource.Type("MetaKeys.runtime.talos.dev")
+./pkg/machinery/resources/runtime/meta_loaded.go:const MetaLoadedType = resource.Type("MetaLoads.runtime.talos.dev")
+./pkg/machinery/resources/runtime/mount_status.go:const MountStatusType = resource.Type("MountStatuses.runtime.talos.dev")
+./pkg/machinery/resources/runtime/oom_action.go:const OOMActionType = resource.Type("OOMActions.talos.dev")
+./pkg/machinery/resources/runtime/platform_metadata.go:const PlatformMetadataType = resource.Type("PlatformMetadatas.talos.dev")
+./pkg/machinery/resources/runtime/sbom_item.go:const SBOMItemType = resource.Type("SBOMItems.talos.dev")
+./pkg/machinery/resources/runtime/security_status.go:const SecurityStateType = resource.Type("SecurityStates.talos.dev")
+./pkg/machinery/resources/runtime/unique_machine_token.go:	UniqueMachineTokenType = resource.Type("UniqueMachineTokens.runtime.talos.dev")
+./pkg/machinery/resources/runtime/version.go:// Version resource holds version of Talos.
+./pkg/machinery/resources/runtime/version.go:// VersionSpec describes version of Talos.
+./pkg/machinery/resources/runtime/version.go:const VersionType = resource.Type("Versions.runtime.talos.dev")
+./pkg/machinery/resources/runtime/watchdog_timer_config.go:const WatchdogTimerConfigType = resource.Type("WatchdogTimerConfigs.runtime.talos.dev")
+./pkg/machinery/resources/runtime/watchdog_timer_status.go:const WatchdogTimerStatusType = resource.Type("WatchdogTimerStatuses.runtime.talos.dev")
+./pkg/machinery/resources/secrets/api.go:const APIType = resource.Type("ApiCertificates.secrets.talos.dev")
+./pkg/machinery/resources/secrets/cert_sans.go:// CertSANAPIID is a resource ID of singleton instance for the Talos API.
+./pkg/machinery/resources/secrets/cert_sans.go:// CertSANMaintenanceID is a resource ID of singleton instance for the Talos Maintenance API.
+./pkg/machinery/resources/secrets/cert_sans.go:const CertSANType = resource.Type("CertSANs.secrets.talos.dev")
+./pkg/machinery/resources/secrets/encryption_salt.go:const EncryptionSaltType = resource.Type("EncryptionSalts.secrets.talos.dev")
+./pkg/machinery/resources/secrets/maintenance.go:const MaintenanceServiceCertsType = resource.Type("MaintenanceServiceCertificates.secrets.talos.dev")
+./pkg/machinery/resources/secrets/maintenance_root.go:const MaintenanceRootType = resource.Type("MaintenanceRootSecrets.secrets.talos.dev")
+./pkg/machinery/resources/secrets/os_root.go:const OSRootType = resource.Type("OSRootSecrets.secrets.talos.dev")
+./pkg/machinery/resources/secrets/trustd.go:const TrustdType = resource.Type("TrustdCertificates.secrets.talos.dev")
+./pkg/machinery/resources/siderolink/siderolink.go:const ConfigType = resource.Type("SiderolinkConfigs.siderolink.talos.dev")
+./pkg/machinery/resources/siderolink/siderolink_status.go:const StatusType = resource.Type("SiderolinkStatuses.siderolink.talos.dev")
+./pkg/machinery/resources/siderolink/siderolink_tunnel.go:const TunnelType = resource.Type("SiderolinkTunnels.siderolink.talos.dev")
+./pkg/machinery/resources/time/adjtime_status.go:const AdjtimeStatusType = resource.Type("AdjtimeStatuses.v1alpha1.talos.dev")
+./pkg/machinery/resources/time/status.go:const StatusType = resource.Type("TimeStatuses.v1alpha1.talos.dev")
+./pkg/machinery/resources/v1alpha1/acquire_config_spec.go:// AcquireConfigSpec is created when Talos is ready to start acquiring machine configuration.
+./pkg/machinery/resources/v1alpha1/acquire_config_spec.go:const AcquireConfigSpecType = resource.Type("AcquireConfigSpecs.v1alpha1.talos.dev")
+./pkg/machinery/resources/v1alpha1/acquire_config_status.go:const AcquireConfigStatusType = resource.Type("AcquireConfigStatuses.v1alpha1.talos.dev")
+./pkg/machinery/resources/v1alpha1/service.go:const ServiceType = resource.Type("Services.v1alpha1.talos.dev")
+./pkg/machinery/resources/v1alpha1/v1alpha1.go:// NamespaceName contains resources linking v1alpha2 components with v1alpha1 Talos runtime.
+./pkg/machinery/resources/v1alpha1/v1alpha1.go:// Package v1alpha1 provides resources which implement "glue" code from v1alpha1 Talos init system.
+./pkg/machinery/role/role.go:		// Client certificates generated by previous Talos versions contained one empty organization.
+./pkg/machinery/role/role.go:	// Admin defines Talos role for admins (every API is available).
+./pkg/machinery/role/role.go:	// Impersonator defines Talos role for impersonating another user (and their role).
+./pkg/machinery/role/role.go:	// Operator defines Talos role for operators (Reader + management APIs which do not allow secret access, e.g. rebooting a node).
+./pkg/machinery/role/role.go:	// Reader defines Talos role for readers who can access read-only APIs that do not expose secrets.
+./pkg/machinery/role/role.go:// Its string value is used everywhere: as the Organization value of Talos client certificate,
+./pkg/machinery/role/role.go:// Role represents Talos user role.
+./pkg/machinery/role/role.go:// as the value of talosctl flag, etc.
+./pkg/machinery/version/os-release:HOME_URL="https://www.talos.dev/"
+./pkg/machinery/version/os-release:ID=talos
+./pkg/machinery/version/os-release:NAME="Talos"
+./pkg/machinery/version/os-release:PRETTY_NAME="Talos (v1.13.0-alpha.1)"
+./pkg/provision/access/access.go:// Package access provides methods to access provisioned Talos cluster.
+./pkg/provision/options.go:// WithTalosClient specifies client to use when acessing Talos cluster.
+./pkg/provision/options.go:// WithTalosConfig specifies talosconfig to use when acessing Talos cluster.
+./pkg/provision/providers/docker/create.go:// Create Talos cluster as a set of docker containers on docker network.
+./pkg/provision/providers/docker/destroy.go:// Destroy Talos cluster as set of Docker nodes.
+./pkg/provision/providers/docker/docker.go:		return nil, fmt.Errorf("failed to get available port for Talos API: %w", err)
+./pkg/provision/providers/docker/docker.go:	// return a mapped to the localhost first container Talos API endpoint.
+./pkg/provision/providers/docker/docker.go:// GetTalosAPIEndpoints returns a list of Talos API endpoints.
+./pkg/provision/providers/docker/network.go:			"talos.cluster.name": req.Name,
+./pkg/provision/providers/docker/network.go:			"talos.owned":        "true",
+./pkg/provision/providers/docker/network.go:	filters.Add("label", "talos.cluster.name="+name)
+./pkg/provision/providers/docker/network.go:	filters.Add("label", "talos.owned=true")
+./pkg/provision/providers/docker/node.go:			"talos.cluster.name": clusterReq.Name,
+./pkg/provision/providers/docker/node.go:			"talos.owned":        "true",
+./pkg/provision/providers/docker/node.go:			"talos.type":         nodeReq.Type.String(),
+./pkg/provision/providers/docker/node.go:	// Ensure that the container is created in the talos network.
+./pkg/provision/providers/docker/node.go:	filters.Add("label", "talos.cluster.name="+clusterName)
+./pkg/provision/providers/docker/node.go:	filters.Add("label", "talos.owned=true")
+./pkg/provision/providers/docker/reflect.go:		t, err := machine.ParseType(node.Labels["talos.type"])
+./pkg/provision/providers/qemu/create.go:// Create Talos cluster as a set of qemu VMs.
+./pkg/provision/providers/qemu/destroy.go:// Destroy Talos cluster as set of qemu VMs.
+./pkg/provision/providers/qemu/launch.go:				// [TODO]: once Talos is fixed, use multipath NVME: https://qemu-project.gitlab.io/qemu/system/devices/nvme.html
+./pkg/provision/providers/qemu/launch.go:		config.sdStubExtraCmdlineConfig = fmt.Sprintf(" talos.config=http://%s/config.yaml", httpServerAddr)
+./pkg/provision/providers/qemu/launch.go:	// Talos config
+./pkg/provision/providers/qemu/launch.go:// This function is invoked from 'talosctl qemu-launch' hidden command
+./pkg/provision/providers/qemu/node.go:			cmdline.Append("talos.config", "metal-iso")
+./pkg/provision/providers/qemu/node.go:			cmdline.Append("talos.config", "{TALOS_CONFIG_URL}") // to be patched by launcher
+./pkg/provision/providers/qemu/node.go:		cmdline.Append("talos.debugshell", "")
+./pkg/provision/providers/qemu/node.go:	// Talos config
+./pkg/provision/providers/qemu/node.go:	cmdline.Append("talos.platform", constants.PlatformMetal)
+./pkg/provision/providers/qemu/node.go:	cmdline.Append("talos.shutdown", "halt")
+./pkg/provision/providers/qemu/node.go:	tmpDir, err := os.MkdirTemp("", "talos-metal-config-iso")
+./pkg/provision/providers/qemu/qemu.go:				"talos.platform=metal",
+./pkg/provision/providers/qemu/qemu.go:				"talos.shutdown=halt",
+./pkg/provision/providers/qemu/qemu.go:				// Talos-specific
+./pkg/provision/providers/qemu/qemu.go:// GetTalosAPIEndpoints returns a list of Talos API endpoints.
+./pkg/provision/providers/vm/dhcpd_darwin.go:		fmt.Printf("warning: failed to start native dhcp server after creating a talos dhcp server: %s", err)
+./pkg/provision/providers/vm/dhcpd_darwin.go:// starts the talos DHCP server and then starts the apple bootp server again, which is configured such
+./pkg/provision/providers/vm/network_linux.go:	state.BridgeName = fmt.Sprintf("%s%s", "talos", hex.EncodeToString(networkNameHash[:])[:8])
+./pkg/provision/provision.go:// Package provision provides abstract definitions for Talos cluster provisioners.
+./pkg/provision/request.go:	// Path to root of state directory (~/.talos/clusters by default).
+./pkg/provision/request.go:	// Path to talosctl executable to re-execute itself as needed.
+./pkg/provision/state.go:			"state directory %q already exists, is the cluster %q already running? remove cluster state with talosctl cluster destroy",
+./tools/docgen/schema.go:const ConfigSchemaURLFormat = "https://talos.dev/%s/schemas/%s"
+./tools/structprotogen/consts/consts.go:	fmt.Fprint(w, "package talos.resource.definitions.enums;\n\n")
+./tools/structprotogen/proto/proto.go:					typeName = "repeated talos.resource.definitions.enums." + block.ProtoMessageName()
+./tools/structprotogen/proto/proto.go:					typeName = "talos.resource.definitions.enums." + block.ProtoMessageName()
+./tools/structprotogen/proto/proto.go:				importPath = "talos.resource.definitions." + importPath
+./tools/structprotogen/proto/proto.go:		return "resource/definitions/block/block.proto", "talos.resource.definitions.block.ParameterSpec"
+./tools/structprotogen/proto/proto.go:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryAuthConfig"
+./tools/structprotogen/proto/proto.go:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryMirrorConfig"
+./tools/structprotogen/proto/proto.go:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryTLSConfig"
+./tools/structprotogen/proto/proto.go:		return "resource/definitions/proto/proto.proto", "talos.resource.definitions.proto.Mount"
+./tools/structprotogen/proto/proto.go:		return "resource/definitions/runtime/runtime.proto", "talos.resource.definitions.runtime.PlatformMetadataSpec"
+./tools/structprotogen/proto/proto.go:	fmt.Fprintf(w, "package talos.resource.definitions.%s; // %s\n\n", p.Name, p.GoPkg)
+./tools/structprotogen/proto/proto.go:	fmt.Fprintf(w, "package talos.resource.definitions.%s;\n\n", p.Name)
