@@ -1115,7 +1115,7 @@
 ./pkg/machinery/resources/perf/cpu.go:const CPUType = resource.Type("CPUStats.perf.talos.dev")
 ./pkg/machinery/resources/perf/mem.go:const MemoryType = resource.Type("MemoryStats.perf.talos.dev")
 ./pkg/machinery/resources/resources.go:// Package resources provides common Talos resources settings.
-./pkg/machinery/resources/runtime/booted_entry_status.go:const BootedEntryType = resource.Type("BootedEntries.talos.dev")
+./pkg/machinery/resources/runtime/booted_entry_status.go:	LegacyBootedEntryType = resource.Type("BootedEntries.talos.dev")
 ./pkg/machinery/resources/runtime/devices_status.go:const DevicesStatusType = resource.Type("DevicesStatuses.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/diagnostic.go:	LegacyDiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/diagnostic.go:// Diagnostic resource contains warnings produced by Talos Diagnostics.
@@ -1140,10 +1140,10 @@
 ./pkg/machinery/resources/runtime/meta_key.go:const MetaKeyType = resource.Type("MetaKeys.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/meta_loaded.go:const MetaLoadedType = resource.Type("MetaLoads.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/mount_status.go:const MountStatusType = resource.Type("MountStatuses.runtime.talos.dev")
-./pkg/machinery/resources/runtime/oom_action.go:const OOMActionType = resource.Type("OOMActions.talos.dev")
-./pkg/machinery/resources/runtime/platform_metadata.go:const PlatformMetadataType = resource.Type("PlatformMetadatas.talos.dev")
-./pkg/machinery/resources/runtime/sbom_item.go:const SBOMItemType = resource.Type("SBOMItems.talos.dev")
-./pkg/machinery/resources/runtime/security_status.go:const SecurityStateType = resource.Type("SecurityStates.talos.dev")
+./pkg/machinery/resources/runtime/oom_action.go:	LegacyOOMActionType = resource.Type("OOMActions.talos.dev")
+./pkg/machinery/resources/runtime/platform_metadata.go:	LegacyPlatformMetadataType = resource.Type("PlatformMetadatas.talos.dev")
+./pkg/machinery/resources/runtime/sbom_item.go:	LegacySBOMItemType = resource.Type("SBOMItems.talos.dev")
+./pkg/machinery/resources/runtime/security_status.go:	LegacySecurityStateType = resource.Type("SecurityStates.talos.dev")
 ./pkg/machinery/resources/runtime/unique_machine_token.go:	UniqueMachineTokenType = resource.Type("UniqueMachineTokens.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/version.go:	LegacyVersionType = resource.Type("Versions.runtime.talos.dev")
 ./pkg/machinery/resources/runtime/version.go:// Version resource holds version of Talos.

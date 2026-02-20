@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// BootedEntryType is the type of booted entry resource.
-const BootedEntryType = resource.Type("BootedEntries.talos.dev")
+const (
+	// BootedEntryType is the type of booted entry resource.
+	BootedEntryType = resource.Type("BootedEntries.chubo.dev")
+
+	// LegacyBootedEntryType is the legacy type of booted entry resource.
+	LegacyBootedEntryType = resource.Type("BootedEntries.talos.dev")
+)
 
 // BootedEntryID is the ID of the booted entry resource.
 const BootedEntryID = resource.ID("bootedentry")
@@ -44,6 +49,7 @@ func NewBootedEntrySpec() *BootedEntry {
 func (BootedEntryExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             BootedEntryType,
+		Aliases:          []resource.Type{LegacyBootedEntryType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -58,6 +64,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic(BootedEntryType, &BootedEntry{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic(LegacyBootedEntryType, &BootedEntry{})
 	if err != nil {
 		panic(err)
 	}

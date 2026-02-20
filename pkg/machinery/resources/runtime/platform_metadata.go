@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// PlatformMetadataType is type of Metadata resource.
-const PlatformMetadataType = resource.Type("PlatformMetadatas.talos.dev")
+const (
+	// PlatformMetadataType is type of Metadata resource.
+	PlatformMetadataType = resource.Type("PlatformMetadatas.chubo.dev")
+
+	// LegacyPlatformMetadataType is the legacy type of Metadata resource.
+	LegacyPlatformMetadataType = resource.Type("PlatformMetadatas.talos.dev")
+)
 
 // PlatformMetadataID is the ID for Metadata resource platform.
 const PlatformMetadataID resource.ID = "platformmetadata"
@@ -54,6 +59,7 @@ type PlatformMetadataExtension struct{}
 func (PlatformMetadataExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             PlatformMetadataType,
+		Aliases:          []resource.Type{LegacyPlatformMetadataType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -80,6 +86,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[PlatformMetadataSpec](PlatformMetadataType, &PlatformMetadata{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[PlatformMetadataSpec](LegacyPlatformMetadataType, &PlatformMetadata{})
 	if err != nil {
 		panic(err)
 	}

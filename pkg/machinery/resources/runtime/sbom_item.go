@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// SBOMItemType is the type of the SBOM item resource.
-const SBOMItemType = resource.Type("SBOMItems.talos.dev")
+const (
+	// SBOMItemType is the type of the SBOM item resource.
+	SBOMItemType = resource.Type("SBOMItems.chubo.dev")
+
+	// LegacySBOMItemType is the legacy type of the SBOM item resource.
+	LegacySBOMItemType = resource.Type("SBOMItems.talos.dev")
+)
 
 // SBOMItem is the SBOM item resource.
 type SBOMItem = typed.Resource[SBOMItemSpec, SBOMItemExtension]
@@ -47,7 +52,7 @@ func (SBOMItemExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             SBOMItemType,
 		DefaultNamespace: NamespaceName,
-		Aliases:          []string{"sbom", "sboms"},
+		Aliases:          []resource.Type{LegacySBOMItemType, "sbom", "sboms"},
 		PrintColumns: []meta.PrintColumn{
 			{
 				Name:     "Version",
@@ -69,6 +74,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[SBOMItemSpec](SBOMItemType, &SBOMItem{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[SBOMItemSpec](LegacySBOMItemType, &SBOMItem{})
 	if err != nil {
 		panic(err)
 	}

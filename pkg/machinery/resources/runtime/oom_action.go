@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// OOMActionType is the type of the OOM action record resource.
-const OOMActionType = resource.Type("OOMActions.talos.dev")
+const (
+	// OOMActionType is the type of the OOM action record resource.
+	OOMActionType = resource.Type("OOMActions.chubo.dev")
+
+	// LegacyOOMActionType is the legacy type of the OOM action record resource.
+	LegacyOOMActionType = resource.Type("OOMActions.talos.dev")
+)
 
 // OOMAction is the OOM action record resource.
 type OOMAction = typed.Resource[OOMActionSpec, OOMActionExtension]
@@ -44,7 +49,7 @@ func (OOMActionExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             OOMActionType,
 		DefaultNamespace: NamespaceName,
-		Aliases:          []string{"oomaction", "oomactions"},
+		Aliases:          []resource.Type{LegacyOOMActionType, "oomaction", "oomactions"},
 		PrintColumns: []meta.PrintColumn{
 			{
 				Name:     "Time",
@@ -63,6 +68,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[OOMActionSpec](OOMActionType, &OOMAction{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[OOMActionSpec](LegacyOOMActionType, &OOMAction{})
 	if err != nil {
 		panic(err)
 	}

@@ -13,8 +13,13 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
-// SecurityStateType is the type of the security state resource.
-const SecurityStateType = resource.Type("SecurityStates.talos.dev")
+const (
+	// SecurityStateType is the type of the security state resource.
+	SecurityStateType = resource.Type("SecurityStates.chubo.dev")
+
+	// LegacySecurityStateType is the legacy type of the security state resource.
+	LegacySecurityStateType = resource.Type("SecurityStates.talos.dev")
+)
 
 // SecurityStateID is the ID of the security state resource.
 const SecurityStateID = resource.ID("securitystate")
@@ -76,6 +81,7 @@ type SecurityStateExtension struct{}
 func (SecurityStateExtension) ResourceDefinition() meta.ResourceDefinitionSpec {
 	return meta.ResourceDefinitionSpec{
 		Type:             SecurityStateType,
+		Aliases:          []resource.Type{LegacySecurityStateType},
 		DefaultNamespace: NamespaceName,
 		PrintColumns: []meta.PrintColumn{
 			{
@@ -106,6 +112,11 @@ func init() {
 	proto.RegisterDefaultTypes()
 
 	err := protobuf.RegisterDynamic[SecurityStateSpec](SecurityStateType, &SecurityState{})
+	if err != nil {
+		panic(err)
+	}
+
+	err = protobuf.RegisterDynamic[SecurityStateSpec](LegacySecurityStateType, &SecurityState{})
 	if err != nil {
 		panic(err)
 	}
