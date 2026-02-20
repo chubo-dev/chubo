@@ -65,7 +65,7 @@ var (
 //nolint:gocyclo
 func TestIntegration(t *testing.T) {
 	if chuboconfigPath == "" {
-		t.Error("--talos.config is not provided")
+		t.Error("--chubo.config is not provided")
 	}
 
 	var (
@@ -141,6 +141,36 @@ func TestIntegration(t *testing.T) {
 	}
 }
 
+func registerBoolFlag(bind *bool, primaryName, legacyName string, defaultValue bool, usage string) {
+	flag.BoolVar(bind, primaryName, defaultValue, usage)
+	flag.BoolVar(bind, legacyName, defaultValue, fmt.Sprintf("Legacy alias for --%s.", primaryName))
+}
+
+func registerStringFlag(bind *string, primaryName, legacyName, defaultValue, usage string) {
+	flag.StringVar(bind, primaryName, defaultValue, usage)
+	flag.StringVar(bind, legacyName, defaultValue, fmt.Sprintf("Legacy alias for --%s.", primaryName))
+}
+
+func registerIntFlag(bind *int, primaryName, legacyName string, defaultValue int, usage string) {
+	flag.IntVar(bind, primaryName, defaultValue, usage)
+	flag.IntVar(bind, legacyName, defaultValue, fmt.Sprintf("Legacy alias for --%s.", primaryName))
+}
+
+func registerInt64Flag(bind *int64, primaryName, legacyName string, defaultValue int64, usage string) {
+	flag.Int64Var(bind, primaryName, defaultValue, usage)
+	flag.Int64Var(bind, legacyName, defaultValue, fmt.Sprintf("Legacy alias for --%s.", primaryName))
+}
+
+func registerUint64Flag(bind *uint64, primaryName, legacyName string, defaultValue uint64, usage string) {
+	flag.Uint64Var(bind, primaryName, defaultValue, usage)
+	flag.Uint64Var(bind, legacyName, defaultValue, fmt.Sprintf("Legacy alias for --%s.", primaryName))
+}
+
+func registerValueFlag(bind flag.Value, primaryName, legacyName, usage string) {
+	flag.Var(bind, primaryName, usage)
+	flag.Var(bind, legacyName, fmt.Sprintf("Legacy alias for --%s.", primaryName))
+}
+
 func init() {
 	defaultChuboConfigs, _ := clientconfig.GetDefaultPaths() //nolint:errcheck
 
@@ -149,53 +179,56 @@ func init() {
 		defaultStateDir = filepath.Join(defaultStateDir, "clusters")
 	}
 
-	flag.BoolVar(&failFast, "talos.failfast", false, "fail the test run on the first failed test")
-	flag.BoolVar(&trustedBoot, "talos.trustedboot", false, "enable tests for trusted boot mode")
-	flag.BoolVar(&selinuxEnforcing, "talos.enforcing", false, "enable tests for SELinux enforcing mode")
-	flag.BoolVar(&extensionsQEMU, "talos.extensions.qemu", false, "enable tests for qemu extensions")
-	flag.BoolVar(&extensionsNvidia, "talos.extensions.nvidia", false, "enable tests for nvidia extensions")
-	flag.BoolVar(&race, "talos.race", false, "skip tests that are incompatible with race detector")
-	flag.BoolVar(&verifyUKIBooted, "talos.verifyukibooted", true, "enable tests for verifying that Talos was booted using a UKI")
+	registerBoolFlag(&failFast, "chubo.failfast", "talos.failfast", false, "fail the test run on the first failed test")
+	registerBoolFlag(&trustedBoot, "chubo.trustedboot", "talos.trustedboot", false, "enable tests for trusted boot mode")
+	registerBoolFlag(&selinuxEnforcing, "chubo.enforcing", "talos.enforcing", false, "enable tests for SELinux enforcing mode")
+	registerBoolFlag(&extensionsQEMU, "chubo.extensions.qemu", "talos.extensions.qemu", false, "enable tests for qemu extensions")
+	registerBoolFlag(&extensionsNvidia, "chubo.extensions.nvidia", "talos.extensions.nvidia", false, "enable tests for nvidia extensions")
+	registerBoolFlag(&race, "chubo.race", "talos.race", false, "skip tests that are incompatible with race detector")
+	registerBoolFlag(&verifyUKIBooted, "chubo.verifyukibooted", "talos.verifyukibooted", true, "enable tests for verifying that the node was booted using a UKI")
 
-	flag.StringVar(
+	registerStringFlag(
 		&chuboconfigPath,
+		"chubo.config",
 		"talos.config",
 		defaultChuboConfigs[0].Path,
-		fmt.Sprintf("The path to the Talos configuration file. Defaults to '%s' env variable if set, otherwise '%s' and '%s' in order.",
+		fmt.Sprintf("The path to the Chubo configuration file. Defaults to '%s' (legacy '%s') env variable if set, otherwise '%s', then legacy '%s', then '%s' in order.",
+			constants.ChuboConfigEnvVar,
 			constants.TalosConfigEnvVar,
+			filepath.Join("$HOME", constants.ChuboDir, constants.ChuboconfigFilename),
 			filepath.Join("$HOME", constants.TalosDir, constants.TalosconfigFilename),
-			filepath.Join(constants.ServiceAccountMountPath, constants.TalosconfigFilename),
+			filepath.Join(constants.ServiceAccountMountPath, constants.ChuboconfigFilename),
 		),
 	)
-	flag.StringVar(&endpoint, "talos.endpoint", "", "endpoint to use (overrides config)")
-	flag.StringVar(&k8sEndpoint, "talos.k8sendpoint", "", "Kubernetes endpoint to use (overrides kubeconfig)")
-	flag.StringVar(&provisionerName, "talos.provisioner", "", "Talos cluster provisioner to use, if not set cluster state is disabled")
-	flag.StringVar(&stateDir, "talos.state", defaultStateDir, "directory path to store cluster state")
-	flag.StringVar(&clusterName, "talos.name", "talos-default", "the name of the cluster")
-	flag.StringVar(&expectedVersion, "talos.version", version.Tag, "expected Talos version")
-	flag.StringVar(&expectedGoVersion, "talos.go.version", constants.GoVersion, "expected Talos version")
-	flag.StringVar(&chuboctlPath, "talos.talosctlpath", "talosctl", "The path to 'talosctl' binary")
-	flag.StringVar(&kubectlPath, "talos.kubectlpath", "kubectl", "The path to 'kubectl' binary")
-	flag.StringVar(&helmPath, "talos.helmpath", "helm", "The path to 'helm' binary")
-	flag.StringVar(&kubeStrPath, "talos.kubestrpath", "kubestr", "The path to 'kubestr' binary")
-	flag.StringVar(&chuboImage, "talos.image", images.DefaultTalosImageRepository, "The default 'talos' container image")
-	flag.StringVar(&csiTestName, "talos.csi", "", "CSI test to run")
-	flag.StringVar(&csiTestTimeout, "talos.csi.timeout", "15m", "CSI test timeout")
-	flag.BoolVar(&airgapped, "talos.airgapped", false, "Marker to skip tests that should not be run on airgapped talos cluster")
-	flag.BoolVar(&virtiofsd, "talos.virtiofsd", false, "Marker to skip tests that should not be run without virtiofsd")
+	registerStringFlag(&endpoint, "chubo.endpoint", "talos.endpoint", "", "endpoint to use (overrides config)")
+	registerStringFlag(&k8sEndpoint, "chubo.k8sendpoint", "talos.k8sendpoint", "", "Kubernetes endpoint to use (overrides kubeconfig)")
+	registerStringFlag(&provisionerName, "chubo.provisioner", "talos.provisioner", "", "cluster provisioner to use, if not set cluster state is disabled")
+	registerStringFlag(&stateDir, "chubo.state", "talos.state", defaultStateDir, "directory path to store cluster state")
+	registerStringFlag(&clusterName, "chubo.name", "talos.name", "chubo-default", "the name of the cluster")
+	registerStringFlag(&expectedVersion, "chubo.version", "talos.version", version.Tag, "expected Chubo OS version")
+	registerStringFlag(&expectedGoVersion, "chubo.go.version", "talos.go.version", constants.GoVersion, "expected Go version")
+	registerStringFlag(&chuboctlPath, "chubo.chuboctlpath", "talos.talosctlpath", "chuboctl", "The path to 'chuboctl' binary")
+	registerStringFlag(&kubectlPath, "chubo.kubectlpath", "talos.kubectlpath", "kubectl", "The path to 'kubectl' binary")
+	registerStringFlag(&helmPath, "chubo.helmpath", "talos.helmpath", "helm", "The path to 'helm' binary")
+	registerStringFlag(&kubeStrPath, "chubo.kubestrpath", "talos.kubestrpath", "kubestr", "The path to 'kubestr' binary")
+	registerStringFlag(&chuboImage, "chubo.image", "talos.image", images.DefaultTalosImageRepository, "The default Chubo OS container image")
+	registerStringFlag(&csiTestName, "chubo.csi", "talos.csi", "", "CSI test to run")
+	registerStringFlag(&csiTestTimeout, "chubo.csi.timeout", "talos.csi.timeout", "15m", "CSI test timeout")
+	registerBoolFlag(&airgapped, "chubo.airgapped", "talos.airgapped", false, "marker to skip tests that should not be run on airgapped clusters")
+	registerBoolFlag(&virtiofsd, "chubo.virtiofsd", "talos.virtiofsd", false, "marker to skip tests that should not be run without virtiofsd")
 
-	flag.StringVar(&provision_test.DefaultSettings.CIDR, "talos.provision.cidr", provision_test.DefaultSettings.CIDR, "CIDR to use to provision clusters (provision tests only)")
-	flag.Var(&provision_test.DefaultSettings.RegistryMirrors, "talos.provision.registry-mirror", "registry mirrors to use (provision tests only)")
-	flag.IntVar(&provision_test.DefaultSettings.MTU, "talos.provision.mtu", provision_test.DefaultSettings.MTU, "MTU to use for cluster network (provision tests only)")
-	flag.Int64Var(&provision_test.DefaultSettings.CPUs, "talos.provision.cpu", provision_test.DefaultSettings.CPUs, "CPU count for each VM (provision tests only)")
-	flag.Int64Var(&provision_test.DefaultSettings.MemMB, "talos.provision.mem", provision_test.DefaultSettings.MemMB, "memory (in MiB) for each VM (provision tests only)")
-	flag.Uint64Var(&provision_test.DefaultSettings.DiskGB, "talos.provision.disk", provision_test.DefaultSettings.DiskGB, "disk size (in GiB) for each VM (provision tests only)")
-	flag.IntVar(&provision_test.DefaultSettings.ControlplaneNodes, "talos.provision.controlplanes", provision_test.DefaultSettings.ControlplaneNodes, "controlplane node count (provision tests only)")
-	flag.IntVar(&provision_test.DefaultSettings.WorkerNodes, "talos.provision.workers", provision_test.DefaultSettings.WorkerNodes, "worker node count (provision tests only)")
-	flag.StringVar(&provision_test.DefaultSettings.TargetInstallImageRegistry, "talos.provision.target-installer-registry",
+	registerStringFlag(&provision_test.DefaultSettings.CIDR, "chubo.provision.cidr", "talos.provision.cidr", provision_test.DefaultSettings.CIDR, "CIDR to use to provision clusters (provision tests only)")
+	registerValueFlag(&provision_test.DefaultSettings.RegistryMirrors, "chubo.provision.registry-mirror", "talos.provision.registry-mirror", "registry mirrors to use (provision tests only)")
+	registerIntFlag(&provision_test.DefaultSettings.MTU, "chubo.provision.mtu", "talos.provision.mtu", provision_test.DefaultSettings.MTU, "MTU to use for cluster network (provision tests only)")
+	registerInt64Flag(&provision_test.DefaultSettings.CPUs, "chubo.provision.cpu", "talos.provision.cpu", provision_test.DefaultSettings.CPUs, "CPU count for each VM (provision tests only)")
+	registerInt64Flag(&provision_test.DefaultSettings.MemMB, "chubo.provision.mem", "talos.provision.mem", provision_test.DefaultSettings.MemMB, "memory (in MiB) for each VM (provision tests only)")
+	registerUint64Flag(&provision_test.DefaultSettings.DiskGB, "chubo.provision.disk", "talos.provision.disk", provision_test.DefaultSettings.DiskGB, "disk size (in GiB) for each VM (provision tests only)")
+	registerIntFlag(&provision_test.DefaultSettings.ControlplaneNodes, "chubo.provision.controlplanes", "talos.provision.controlplanes", provision_test.DefaultSettings.ControlplaneNodes, "controlplane node count (provision tests only)")
+	registerIntFlag(&provision_test.DefaultSettings.WorkerNodes, "chubo.provision.workers", "talos.provision.workers", provision_test.DefaultSettings.WorkerNodes, "worker node count (provision tests only)")
+	registerStringFlag(&provision_test.DefaultSettings.TargetInstallImageRegistry, "chubo.provision.target-installer-registry", "talos.provision.target-installer-registry",
 		provision_test.DefaultSettings.TargetInstallImageRegistry, "image registry for target installer image (provision tests only)")
-	flag.StringVar(&provision_test.DefaultSettings.CustomCNIURL, "talos.provision.custom-cni-url", provision_test.DefaultSettings.CustomCNIURL, "custom CNI URL for the cluster (provision tests only)")
-	flag.StringVar(&provision_test.DefaultSettings.CNIBundleURL, "talos.provision.cni-bundle-url", provision_test.DefaultSettings.CNIBundleURL, "URL to download CNI bundle from")
+	registerStringFlag(&provision_test.DefaultSettings.CustomCNIURL, "chubo.provision.custom-cni-url", "talos.provision.custom-cni-url", provision_test.DefaultSettings.CustomCNIURL, "custom CNI URL for the cluster (provision tests only)")
+	registerStringFlag(&provision_test.DefaultSettings.CNIBundleURL, "chubo.provision.cni-bundle-url", "talos.provision.cni-bundle-url", provision_test.DefaultSettings.CNIBundleURL, "URL to download CNI bundle from")
 
 	allSuites = slices.Concat(api.GetAllSuites(), cli.GetAllSuites(), provision_test.GetAllSuites())
 }
