@@ -5,14 +5,14 @@
 // Package common provides common functionality for chuboctl commands.
 package common
 
-import legacycommon "github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
+var suppressErrors bool
 
 // SuppressErrors reports whether command-level error printing should be suppressed.
 func SuppressErrors() bool {
-	return legacycommon.SuppressErrors
+	return suppressErrors
 }
 
 // SetSuppressErrors toggles command-level error printing.
 func SetSuppressErrors(v bool) {
-	legacycommon.SuppressErrors = v
+	suppressErrors = v
 }

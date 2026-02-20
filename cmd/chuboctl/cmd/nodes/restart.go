@@ -1,0 +1,47 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+package nodes
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/spf13/cobra"
+
+	"github.com/chubo-dev/chubo/pkg/machinery/client"
+)
+
+// restartCmd represents the restart command.
+var restartCmd = &cobra.Command{
+	Use:   "restart <id>",
+	Short: "Restart a process",
+	Long:  ``,
+	Args:  cobra.ExactArgs(1),
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) != 0 {
+			return nil, cobra.ShellCompDirectiveError | cobra.ShellCompDirectiveNoFileComp
+		}
+
+		return getContainersFromNode(workloadNamespaceFlag), cobra.ShellCompDirectiveNoFileComp
+	},
+	RunE: func(cmd *cobra.Command, args []string) error {
+		return WithClient(func(ctx context.Context, c *client.Client) error {
+			namespace, driver := namespaceAndDriverForFlag(workloadNamespaceFlag)
+
+			if err := c.Restart(ctx, namespace, driver, args[0]); err != nil {
+				return fmt.Errorf("error restarting process: %s", err)
+			}
+
+			return nil
+		})
+	},
+}
+
+func init() {
+	registerWorkloadNamespaceFlag(restartCmd)
+	registerLegacyWorkloadDriverFlag(restartCmd)
+
+	addCommand(restartCmd)
+}

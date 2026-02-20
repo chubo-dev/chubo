@@ -328,13 +328,118 @@
 ./api/resource/definitions/time/time.proto:package talos.resource.definitions.time;
 ./api/resource/definitions/v1alpha1/v1alpha1.proto:package talos.resource.definitions.v1alpha1;
 ./api/storage/storage.proto:  // SystemDisk indicates that the disk is used as Talos system disk.
-./cmd/chuboctl/cmd/common/common.go:import legacycommon "github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
 ./cmd/chuboctl/cmd/completion.go:			fmt.Printf("compdef _chuboctl chuboctl talosctl")
-./cmd/chuboctl/cmd/mgmt/cluster/cluster.go:	legacycluster "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
-./cmd/chuboctl/cmd/mgmt/cluster/create/create.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create"
-./cmd/chuboctl/cmd/mgmt/root.go:	legacymgmt "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt"
-./cmd/chuboctl/cmd/nodes/root.go:	legacytalos "github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos"
+./cmd/chuboctl/cmd/constants/constants.go:	ImageFactoryURL = "https://factory.talos.dev/"
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/config_maker.go:// DockerOptions are the options for provisioning a docker based Talos cluster.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/config_maker.go:// QemuOptions are the options for provisioning a qemu based Talos cluster.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/common.go:				// Chubo doesn't bootstrap legacy control-plane components as part of `talosctl cluster create`.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/common.go:		return fmt.Errorf("error parsing Talos version %q: %w", m.Ops.TalosVersion, err)
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/makers/qemu.go:			// legacy v1alpha1 flow to support booting old Talos versions
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.events.sink") != nil,
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.logging.kernel") != nil:
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/disk_image_preset.go:	return "Configure Talos to boot from a disk image from the Image Factory."
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/disk_image_preset.go:// DiskImage configures Talos to boot from a disk image from the Image Factory.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_preset.go:	return "Configure Talos to boot from an ISO from the Image Factory."
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_preset.go:// ISO configures Talos to boot from an iso from the Image Factory.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_secureboot_preset.go:	return "Configure Talos for Secureboot via ISO. Only available on Linux hosts."
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/iso_secureboot_preset.go:// ISOSecureBoot configures Talos to boot from a disk image from the Image Factory.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/maintenance_preset.go:// Maintenance configures Talos to boot from a disk image from the Image Factory.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/pxe_preset.go:	return "Configure Talos to boot via PXE from the Image Factory."
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/preset/pxe_preset.go:// PXE configures Talos to boot from via pxe from the Image Factory.
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/options.go:		CniBundleURL: fmt.Sprintf("https://github.com/%s/talos/releases/download/%s/talosctl-cni-bundle-%s.tar.gz",
+./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/options.go:// ClusterConfigs is the configuration needed to create a talos cluster via the provisioner interface.
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	talosVersionFlagName   = "talos-version"
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:// Package create provides way to create talos clusters
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_dev.go:		Short: "Creates a local QEMU-based cluster for Talos development.",
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_dev.go:		addTalosVersionFlag(common, &cOps.TalosVersion, "the desired Talos version to generate config for")
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_dev.go:		common.BoolVar(&cOps.ConfigDebug, configDebugFlag, cOps.ConfigDebug, "enable debug in Talos config to send service logs to the console")
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_dev.go:		common.BoolVar(&cOps.WithJSONLogs, withJSONLogsFlag, cOps.WithJSONLogs, "enable JSON logs receiver and configure Talos to send logs there")
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_dev.go:		createCmd.Short = "Create a local Talos cluster."
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_dev.go:		qemu.BoolVar(&qOps.DebugShellEnabled, withDebugShellFlag, qOps.DebugShellEnabled, "drop talos into a maintenance shell on boot, this is for advanced debugging for developers only")
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_docker.go:		docker.StringVar(&dOps.TalosImage, "image", dOps.TalosImage, "the talos image to run")
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_qemu.go:		Short: "Create a local QEMU based Talos cluster.",
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_qemu.go:	addTalosVersionFlag(commonFlags, &cOps.TalosVersion, "the desired talos version")
+./cmd/chuboctl/cmd/mgmt/cluster/create/cmd_qemu.go:	cmdDescription.WriteString("Create a local QEMU based Talos cluster.\n\n")
+./cmd/chuboctl/cmd/mgmt/cluster/create/create_dev.go:		return fmt.Errorf("error opening talos config: %w", err)
+./cmd/chuboctl/cmd/mgmt/cluster/create/create_dev.go:	// Create and save the talosctl configuration file.
+./cmd/chuboctl/cmd/mgmt/cluster/create/create_docker.go:		fmt.Printf("failed to derrive Talos version from the docker image, defaulting to %s\n", currentVersion)
+./cmd/chuboctl/cmd/mgmt/cluster/create/create_qemu.go:		return fmt.Errorf("failed to parse talos version: %s", err)
+./cmd/chuboctl/cmd/mgmt/cluster/create/create_qemu.go:		return fmt.Errorf("failed to parse talos version: version string must start with a 'v'")
+./cmd/chuboctl/cmd/mgmt/debug/debug.go:	Short:  "A collection of commands to facilitate debugging of Talos.",
+./cmd/chuboctl/cmd/mgmt/gen/config.go:			return fmt.Errorf("invalid talos-version: %w", err)
+./cmd/chuboctl/cmd/mgmt/gen/config.go:	genConfigCmd.Flags().StringVar(&genConfigCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate config for (backwards compatibility, e.g. v0.8)")
+./cmd/chuboctl/cmd/mgmt/gen/config.go:// GenerateConfigBundle generates the Talos config bundle
+./cmd/chuboctl/cmd/mgmt/gen/machineconfig_chubo.go:			// Keep Talos default NTP server unless explicitly overridden later.
+./cmd/chuboctl/cmd/mgmt/gen/machineconfig_chubo.go:The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`" + ` build variant.
+./cmd/chuboctl/cmd/mgmt/gen/secrets.go:				return fmt.Errorf("invalid talos-version: %w", err)
+./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.talosVersion, "talos-version", "", "the desired Talos version to generate secrets bundle for (backwards compatibility, e.g. v0.8)")
+./cmd/chuboctl/cmd/mgmt/machineconfig/gen.go:	// alias for `talosctl gen config`
+./cmd/chuboctl/cmd/mgmt/root.go:// GenV1Alpha1Config generates the Talos config bundle
+./cmd/chuboctl/cmd/mgmt/root_chubo.go:// GenV1Alpha1Config generates the Talos config bundle
+./cmd/chuboctl/cmd/mgmt/siderolink_launch.go:	h.l.Info("talos agent sees peer added", zap.String("address", event.Address.String()))
+./cmd/chuboctl/cmd/nodes/copy.go:talosctl creates a directory if <local-path> doesn't exist. Command doesn't preserve
+./cmd/chuboctl/cmd/nodes/crashdump.go:			return errors.New("`talosctl crashdump` is deprecated, please use `talosctl support` instead")
+./cmd/chuboctl/cmd/nodes/debug.go:	Example: `  # Run a debug container from a local tar archive (image will be loaded into Talos from the archive)
+./cmd/chuboctl/cmd/nodes/debug.go:    talosctl debug ./debug-tools.tar --args /bin/sh
+./cmd/chuboctl/cmd/nodes/debug.go:    talosctl debug docker.io/library/alpine:latest --args /bin/sh`,
+./cmd/chuboctl/cmd/nodes/debug.go:  # Run a debug container from an image reference (Talos will pull the image if not present)
+./cmd/chuboctl/cmd/nodes/disks.go:		return errors.New("`talosctl disks` is deprecated, please use `talosctl get disks`, `talosctl get systemdisk`, `talosctl get discoveredvolumes` instead")
+./cmd/chuboctl/cmd/nodes/edit.go:of a Talos node using your preferred text editor.
+./cmd/chuboctl/cmd/nodes/image.go:					// fallback to legacy API for older Talos
+./cmd/chuboctl/cmd/nodes/image.go:				// fallback to legacy API for older Talos
+./cmd/chuboctl/cmd/nodes/image.go:			development.Error("failed to generate Talos config patch for registry mirrors", zap.Error(err))
+./cmd/chuboctl/cmd/nodes/image.go:		err = c.ImagePull(ctx, ns, imageRef) //nolint:staticcheck // legacy talosctl methods, to be removed in Talos 1.15
+./cmd/chuboctl/cmd/nodes/image.go:		fmt.Printf("%s\n", sources.Talos)
+./cmd/chuboctl/cmd/nodes/image.go:		rcv, err := c.ImageList(ctx, ns) //nolint:staticcheck // legacy talosctl methods, to be removed in Talos 1.15
+./cmd/chuboctl/cmd/nodes/image.go:	Example: `talosctl images cache-create --images=docker.io/library/alpine:latest --image-cache-path=/tmp/talos-image-cache
+./cmd/chuboctl/cmd/nodes/image.go:	Long:    `Generate TLS certificates and CA patch required for securing image cache to Talos communication`,
+./cmd/chuboctl/cmd/nodes/image.go:	Short:   "Generate TLS certificates and CA patch required for securing image cache to Talos communication",
+./cmd/chuboctl/cmd/nodes/image.go:	Short: "List the default system images and extensions used for Talos",
+./cmd/chuboctl/cmd/nodes/image.go:	Use:   "talos-bundle [talos-version]",
+./cmd/chuboctl/cmd/nodes/image.go:// Note: remove me in Talos 1.15.
+./cmd/chuboctl/cmd/nodes/image.go:// Note: this is not exposed as a command, but used in talosctl debug flow.
+./cmd/chuboctl/cmd/nodes/image.go:// imageTalosBundleCmd represents the image talos-bundle command.
+./cmd/chuboctl/cmd/nodes/image.go:talosctl images default | talosctl images cache-create --image-cache-path=/tmp/talos-image-cache --images=-
+./cmd/chuboctl/cmd/nodes/image_help_default.go:	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.extensions, "extensions", true, "Include images that belong to Talos extensions")
+./cmd/chuboctl/cmd/nodes/image_help_default.go:	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.overlays, "overlays", true, "Include images that belong to Talos overlays")
+./cmd/chuboctl/cmd/nodes/inspect.go:    talosctl inspect dependencies | dot -Tpng > graph.png
+./cmd/chuboctl/cmd/nodes/interfaces.go:			return errors.New("`talosctl interfaces` is deprecated, please use `talosctl get addresses` and `talosctl get links` instead")
+./cmd/chuboctl/cmd/nodes/netstat.go:	// extend is normally -e but cannot be used as this is endpoint in talosctl
+./cmd/chuboctl/cmd/nodes/output/json.go:		// for backwards compatibility with versions of Talos
+./cmd/chuboctl/cmd/nodes/output/yaml.go:		// for backwards compatibility with versions of Talos
+./cmd/chuboctl/cmd/nodes/pcap.go:	    talosctl pcap -i siderolink --bpf-filter "$(tcpdump -dd -y RAW 'port 50000')"
+./cmd/chuboctl/cmd/nodes/pcap.go:	As packet capture is transmitted over the network, it is recommended to filter out the Talos API traffic,
+./cmd/chuboctl/cmd/nodes/pcap.go:    talosctl pcap -i eth0
+./cmd/chuboctl/cmd/nodes/pcap.go:    talosctl pcap -i eth0 --bpf-filter "$(tcpdump -dd -y EN10MB 'tcp and dst port 80')"
+./cmd/chuboctl/cmd/nodes/pcap.go:    talosctl pcap -i eth0 --output eth0.pcap
+./cmd/chuboctl/cmd/nodes/pcap.go:    talosctl pcap -i eth0 -o - | tcpdump -vvv -r -
+./cmd/chuboctl/cmd/nodes/root.go:// WithClientMaintenance wraps common code to initialize Talos client in maintenance (insecure mode).
+./cmd/chuboctl/cmd/nodes/root.go:// WithClientNoNodes wraps common code to initialize Talos client and provide cancellable context.
+./cmd/chuboctl/cmd/nodes/routes.go:			return errors.New("`talosctl routes` is deprecated, please use `talosctl get routes` instead")
+./cmd/chuboctl/cmd/nodes/support.go:		fmt.Fprintln(os.Stderr, "Talos-only collector mode active.")
+./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support"
+./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
+./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"
+./cmd/chuboctl/cmd/nodes/support.go:	- All Talos internal services logs.
+./cmd/chuboctl/cmd/nodes/support.go:	- Talos COSI resources without secrets.
+./cmd/chuboctl/cmd/nodes/support.go:	- Talos version.
+./cmd/chuboctl/cmd/nodes/version.go:	versionCmd.Flags().BoolVarP(&versionCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
+./cmd/chuboctl/cmd/nodes/version.go:// versionCmd represents the `talosctl version` command.
+./cmd/chuboctl/cmd/nodes/version.go:// versionCmdFlags represents the `talosctl version` command's flags.
+./cmd/chuboctl/cmd/nodes/wipe.go:	wipeDiskCmd.Flags().BoolVarP(&wipeDiskCmdFlags.insecure, "insecure", "i", false, "use Talos maintenance mode API")
 ./cmd/chuboctl/cmd/root.go:	Aliases: []string{"talosctl"},
+./cmd/chuboctl/pkg/mgmt/helpers/airgapped.go:		x509.CommonName("talos.dev Root CA"),
+./cmd/chuboctl/pkg/mgmt/helpers/airgapped.go:		x509.Organization("talos.dev"),
+./cmd/chuboctl/pkg/mgmt/helpers/artifacts.go:// Package helpers provides helpers for talosctl.
+./cmd/chuboctl/pkg/nodes/artifacts/images.go:// ExtensionRef is a ref to the extension for some Talos version.
+./cmd/chuboctl/pkg/nodes/artifacts/images.go:// FetchOfficialExtensions fetches list of extensions for specific Talos version.
+./cmd/chuboctl/pkg/nodes/artifacts/images.go:// FetchOfficialOverlays fetches list of overlays for specific Talos version.
+./cmd/chuboctl/pkg/nodes/artifacts/images.go:// OverlayRef is a ref to the overlay for some Talos version.
+./cmd/chuboctl/pkg/nodes/global/client.go:// Args is a context for the Talos command line client.
+./cmd/chuboctl/pkg/nodes/global/client.go:// Package global provides global flags for talosctl.
+./cmd/chuboctl/pkg/nodes/global/client.go:// WithClientMaintenance wraps common code to initialize Talos client in maintenance (insecure mode).
+./cmd/chuboctl/pkg/nodes/global/client.go:// WithClientNoNodes wraps common code to initialize Talos client and provide cancellable context.
+./cmd/chuboctl/pkg/nodes/helpers/checks.go:// ClientVersionCheck verifies that client is not outdated vs. Talos version.
 ./cmd/installer/cmd/installer/install.go:	log.Printf("running Talos installer %s", version.NewVersion().Tag)
 ./cmd/installer/pkg/install/errata.go:		// can't read Talos version
 ./cmd/installer/pkg/install/errata.go:		// old Talos version, include fallback
