@@ -15,12 +15,12 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
-// LocalClientProvider builds Talos client to connect to same-node apid instance over file socket.
+// LocalClientProvider builds an OS client to connect to same-node apid instance over file socket.
 type LocalClientProvider struct {
 	client *client.Client
 }
 
-// Client returns Talos client instance for default (if no endpoints are given) or
+// Client returns an OS client instance for default (if no endpoints are given) or
 // specific endpoints.
 //
 // Client implements ClientProvider interface.

@@ -122,10 +122,15 @@ func (p *provisioner) GetExternalControlPlaneEndpoint(provision.NetworkRequest, 
 	return "https://" + nethelpers.JoinHostPort("127.0.0.1", p.mappedControlPlanePort)
 }
 
-// GetTalosAPIEndpoints returns a list of OS API endpoints.
-func (p *provisioner) GetTalosAPIEndpoints(provision.NetworkRequest) []string {
+// GetChuboAPIEndpoints returns a list of OS API endpoints.
+func (p *provisioner) GetChuboAPIEndpoints(provision.NetworkRequest) []string {
 	// return a mapped-to-localhost endpoint for the first container OS API endpoint.
 	return []string{nethelpers.JoinHostPort("127.0.0.1", p.mappedOSAPIPort)}
+}
+
+// GetTalosAPIEndpoints is a legacy alias kept for compatibility.
+func (p *provisioner) GetTalosAPIEndpoints(req provision.NetworkRequest) []string {
+	return p.GetChuboAPIEndpoints(req)
 }
 
 // UserDiskName not implemented for docker.

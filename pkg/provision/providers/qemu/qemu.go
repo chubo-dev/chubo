@@ -128,10 +128,15 @@ func (p *provisioner) GetExternalControlPlaneEndpoint(networkReq provision.Netwo
 	return p.GetInClusterControlPlaneEndpoint(networkReq, controlPlanePort)
 }
 
-// GetTalosAPIEndpoints returns a list of OS API endpoints.
-func (p *provisioner) GetTalosAPIEndpoints(provision.NetworkRequest) []string {
+// GetChuboAPIEndpoints returns a list of OS API endpoints.
+func (p *provisioner) GetChuboAPIEndpoints(provision.NetworkRequest) []string {
 	// nil means that the API of controlplane endpoints should be used
 	return nil
+}
+
+// GetTalosAPIEndpoints is a legacy alias kept for compatibility.
+func (p *provisioner) GetTalosAPIEndpoints(req provision.NetworkRequest) []string {
+	return p.GetChuboAPIEndpoints(req)
 }
 
 // GetFirstInterface returns first network interface name.

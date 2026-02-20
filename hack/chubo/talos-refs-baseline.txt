@@ -599,19 +599,7 @@
 ./pkg/cluster/check/default.go:// ExtraClusterChecks returns a set of additional Talos cluster readiness checks which work only for newer versions of Talos.
 ./pkg/cluster/check/default.go:// PreBootSequenceChecks returns a set of Talos cluster readiness checks which are run before boot sequence.
 ./pkg/cluster/check/nodes.go:				// old Talos versions don't support this resource
-./pkg/cluster/cluster_chubo.go:	// Client returns Talos client instance for default (if no endpoints are given) or
-./pkg/cluster/cluster_chubo.go:// Bootstrapper performs Talos cluster bootstrap.
-./pkg/cluster/cluster_chubo.go:// ClientProvider builds Talos client by endpoint.
-./pkg/cluster/cluster_chubo.go:// CrashDumper captures Talos cluster state to the specified writer for debugging.
-./pkg/cluster/cluster_chubo.go:// Info describes the Talos cluster.
-./pkg/cluster/cluster_chubo.go:// NodeInfo describes a Talos node.
-./pkg/cluster/cluster_chubo.go:// Package cluster provides functions to access, check and inspect Talos clusters.
-./pkg/cluster/config.go:	// TalosConfig is a client Talos configuration.
-./pkg/cluster/config.go:// Client returns Talos client instance for default (if no endpoints are given) or
-./pkg/cluster/config.go:// ConfigClientProvider builds Talos client from client config.
 ./pkg/cluster/crashdump_chubo.go:// Chubo support collection is handled by dedicated talosctl support flows.
-./pkg/cluster/local.go:// Client returns Talos client instance for default (if no endpoints are given) or
-./pkg/cluster/local.go:// LocalClientProvider builds Talos client to connect to same-node apid instance over file socket.
 ./pkg/httpdefaults/httpdefaults.go:// Package httpdefaults provides default HTTP client settings for Talos.
 ./pkg/httpdefaults/httpdefaults.go:// PatchTransport updates *http.Transport with Talos-specific settings.
 ./pkg/httpdefaults/httpdefaults.go:// Settings applied here only make sense when running in Talos root filesystem.

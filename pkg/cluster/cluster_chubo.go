@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package cluster provides functions to access, check and inspect Talos clusters.
+// Package cluster provides functions to access, check, and inspect Chubo clusters.
 package cluster
 
 import (
@@ -19,29 +19,29 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
-// ClientProvider builds Talos client by endpoint.
+// ClientProvider builds an OS client by endpoint.
 //
 // Client instance should be cached and closed when Close() is called.
 type ClientProvider interface {
-	// Client returns Talos client instance for default (if no endpoints are given) or
+	// Client returns an OS client instance for default (if no endpoints are given) or
 	// specific endpoint.
 	Client(endpoints ...string) (*client.Client, error)
 	// Close client connections.
 	Close() error
 }
 
-// CrashDumper captures Talos cluster state to the specified writer for debugging.
+// CrashDumper captures cluster state to the specified writer for debugging.
 type CrashDumper interface {
 	CrashDump(ctx context.Context, out io.Writer)
 }
 
-// NodeInfo describes a Talos node.
+// NodeInfo describes a cluster node.
 type NodeInfo struct {
 	InternalIP netip.Addr
 	IPs        []netip.Addr
 }
 
-// Info describes the Talos cluster.
+// Info describes the cluster.
 type Info interface {
 	// Nodes returns list of all node infos.
 	Nodes() []NodeInfo
@@ -49,7 +49,7 @@ type Info interface {
 	NodesByType(machine.Type) []NodeInfo
 }
 
-// Bootstrapper performs Talos cluster bootstrap.
+// Bootstrapper performs cluster bootstrap.
 type Bootstrapper interface {
 	Bootstrap(ctx context.Context, out io.Writer) error
 }

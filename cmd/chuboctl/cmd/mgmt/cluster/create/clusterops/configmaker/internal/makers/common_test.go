@@ -29,8 +29,12 @@ func (p testProvisioner) GenOptions(r provision.NetworkRequest, _ *config.Versio
 	return []generate.Option{func(o *generate.Options) error { return nil }}, nil
 }
 
-func (p testProvisioner) GetTalosAPIEndpoints(provision.NetworkRequest) []string {
+func (p testProvisioner) GetChuboAPIEndpoints(provision.NetworkRequest) []string {
 	return []string{"talos-api-endpoint.test"}
+}
+
+func (p testProvisioner) GetTalosAPIEndpoints(req provision.NetworkRequest) []string {
+	return p.GetChuboAPIEndpoints(req)
 }
 
 func (p testProvisioner) GetInClusterControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {

@@ -12,20 +12,31 @@ import (
 	clientconfig "github.com/chubo-dev/chubo/pkg/machinery/client/config"
 )
 
-// ConfigClientProvider builds Talos client from client config.
+// ConfigClientProvider builds an OS client from client config.
 type ConfigClientProvider struct {
 	// DefaultClient to be used when using default endpoints.
 	//
 	// Not required, if missing client will be constructed from the config.
 	DefaultClient *client.Client
 
-	// TalosConfig is a client Talos configuration.
+	// ChuboConfig is the primary client configuration.
+	ChuboConfig *clientconfig.Config
+
+	// TalosConfig is a legacy compatibility alias.
 	TalosConfig *clientconfig.Config
 
 	clients map[string]*client.Client
 }
 
-// Client returns Talos client instance for default (if no endpoints are given) or
+func (c *ConfigClientProvider) effectiveConfig() *clientconfig.Config {
+	if c.ChuboConfig != nil {
+		return c.ChuboConfig
+	}
+
+	return c.TalosConfig
+}
+
+// Client returns OS client instance for default (if no endpoints are given) or
 // specific endpoints.
 //
 // Client implements ClientProvider interface.
@@ -45,7 +56,7 @@ func (c *ConfigClientProvider) Client(endpoints ...string) (*client.Client, erro
 	}
 
 	opts := []client.OptionFunc{
-		client.WithConfig(c.TalosConfig),
+		client.WithConfig(c.effectiveConfig()),
 	}
 
 	if len(endpoints) > 0 {
