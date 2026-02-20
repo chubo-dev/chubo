@@ -11,19 +11,21 @@ import (
 	"github.com/siderolabs/crypto/x509"
 )
 
+const localAirgapCADomain = "chubo.dev"
+
 // GenerateSelfSignedCert generates self-signed certificate.
 func GenerateSelfSignedCert(sanIPs []net.IP, sanNames []string) ([]byte, []byte, []byte, error) {
 	ca, err := x509.NewSelfSignedCertificateAuthority(
 		x509.ECDSA(true),
-		x509.Organization("talos.dev"),
-		x509.CommonName("talos.dev Root CA"),
+		x509.Organization(localAirgapCADomain),
+		x509.CommonName(localAirgapCADomain+" Root CA"),
 	)
 	if err != nil {
 		return nil, nil, nil, err
 	}
 
 	serverIdentity, err := x509.NewKeyPair(ca,
-		x509.Organization("talos.dev"),
+		x509.Organization(localAirgapCADomain),
 		x509.CommonName("server"),
 		x509.IPAddresses(sanIPs),
 		x509.DNSNames(sanNames),

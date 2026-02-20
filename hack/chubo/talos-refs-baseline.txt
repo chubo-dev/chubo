@@ -321,8 +321,6 @@
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support"
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"
-./cmd/chuboctl/pkg/mgmt/helpers/airgapped.go:		x509.CommonName("talos.dev Root CA"),
-./cmd/chuboctl/pkg/mgmt/helpers/airgapped.go:		x509.Organization("talos.dev"),
 ./cmd/installer/cmd/installer/install.go:	log.Printf("running Talos installer %s", version.NewVersion().Tag)
 ./cmd/installer/pkg/install/errata.go:		// can't read Talos version
 ./cmd/installer/pkg/install/errata.go:		// old Talos version, include fallback
