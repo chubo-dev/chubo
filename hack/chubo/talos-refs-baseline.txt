@@ -328,7 +328,8 @@
 ./api/resource/definitions/time/time.proto:package talos.resource.definitions.time;
 ./api/resource/definitions/v1alpha1/v1alpha1.proto:package talos.resource.definitions.v1alpha1;
 ./api/storage/storage.proto:  // SystemDisk indicates that the disk is used as Talos system disk.
-./cmd/chuboctl/main.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd"
+./cmd/chuboctl/cmd/execute.go:// Package cmd exposes the chuboctl entrypoint while cmd/talosctl is still in
+./cmd/chuboctl/cmd/execute.go:import taloscmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd"
 ./cmd/chuboctl/main.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
 ./cmd/installer/cmd/installer/install.go:	log.Printf("running Talos installer %s", version.NewVersion().Tag)
 ./cmd/installer/pkg/install/errata.go:		// can't read Talos version
@@ -617,7 +618,6 @@
 ./cmd/talosctl/cmd/talos/workload_legacy_driver_flag_default.go:package talos
 ./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:package talos
 ./cmd/talosctl/cmd/talos/workload_namespace_flag_default.go:package talos
-./cmd/talosctl/main.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd"
 ./cmd/talosctl/main.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
 ./cmd/talosctl/main.go:// Command talosctl is a legacy compatibility entrypoint for chuboctl.
 ./cmd/talosctl/pkg/mgmt/helpers/airgapped.go:		x509.CommonName("talos.dev Root CA"),

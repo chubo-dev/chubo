@@ -9,7 +9,7 @@ import (
 	"os"
 
 	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
-	"github.com/chubo-dev/chubo/cmd/talosctl/cmd"
+	"github.com/chubo-dev/chubo/cmd/chuboctl/cmd"
 )
 
 func main() {
