@@ -124,7 +124,7 @@ func applyDefaultSettings(presetOps Options, cOps *clusterops.Common, qOps *clus
 		installerName += secureBootSuffix
 	}
 
-	installerURL, err := url.JoinPath(presetOps.ImageFactoryURL.Host, installerName, presetOps.SchematicID+":"+cOps.TalosVersion)
+	installerURL, err := url.JoinPath(presetOps.ImageFactoryURL.Host, installerName, presetOps.SchematicID+":"+cOps.ChuboVersion)
 	if err != nil {
 		return fmt.Errorf("failed to build installer image URL: %w", err)
 	}

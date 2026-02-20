@@ -25,7 +25,7 @@ func (PXE) Description() string {
 
 // ModifyOptions implements the Preset interface.
 func (PXE) ModifyOptions(presetOps Options, cOps *clusterops.Common, qOps *clusterops.Qemu) error {
-	pxeURL, err := url.JoinPath(presetOps.ImageFactoryURL.String(), "pxe", presetOps.SchematicID, cOps.TalosVersion,
+	pxeURL, err := url.JoinPath(presetOps.ImageFactoryURL.String(), "pxe", presetOps.SchematicID, cOps.ChuboVersion,
 		platforms.MetalPlatform().PXEScriptPath(qOps.TargetArch))
 	if err != nil {
 		return fmt.Errorf("failed to build an Image Factory pxe url: %w", err)

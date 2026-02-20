@@ -69,7 +69,7 @@ func (m *Docker) AddExtraProvisionOpts() error {
 // ModifyClusterRequest implements ExtraOptionsProvider.
 func (m *Docker) ModifyClusterRequest() error {
 	m.ClusterRequest.Network.DockerDisableIPv6 = m.EOps.DisableIPv6
-	m.ClusterRequest.Image = m.EOps.TalosImage
+	m.ClusterRequest.Image = m.EOps.ChuboImage
 
 	return nil
 }

@@ -40,5 +40,5 @@ func getISOURL(presetOps Options, cOps *clusterops.Common, qOps *clusterops.Qemu
 		isoPath = platforms.MetalPlatform().SecureBootISOPath(qOps.TargetArch)
 	}
 
-	return url.JoinPath(presetOps.ImageFactoryURL.String(), "image", presetOps.SchematicID, cOps.TalosVersion, isoPath)
+	return url.JoinPath(presetOps.ImageFactoryURL.String(), "image", presetOps.SchematicID, cOps.ChuboVersion, isoPath)
 }

@@ -25,7 +25,7 @@ func (DiskImage) Description() string {
 
 // ModifyOptions implements the Preset interface.
 func (DiskImage) ModifyOptions(presetOps Options, cOps *clusterops.Common, qOps *clusterops.Qemu) error {
-	diskImageURL, err := url.JoinPath(presetOps.ImageFactoryURL.String(), "image", presetOps.SchematicID, cOps.TalosVersion,
+	diskImageURL, err := url.JoinPath(presetOps.ImageFactoryURL.String(), "image", presetOps.SchematicID, cOps.ChuboVersion,
 		platforms.MetalPlatform().DiskImageDefaultPath(qOps.TargetArch))
 	if err != nil {
 		return fmt.Errorf("failed to build an Image Factory disk-image url: %w", err)

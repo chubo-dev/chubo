@@ -24,9 +24,9 @@ func createDevCluster(ctx context.Context, cOps clusterops.Common, qOps clustero
 		return err
 	}
 
-	if cOps.TalosVersion == "" {
+	if cOps.ChuboVersion == "" {
 		parts := strings.Split(qOps.NodeInstallImage, ":")
-		cOps.TalosVersion = parts[len(parts)-1]
+		cOps.ChuboVersion = parts[len(parts)-1]
 	}
 
 	provisioner, err := providers.Factory(ctx, providers.QemuProviderName)

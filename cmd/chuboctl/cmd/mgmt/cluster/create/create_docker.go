@@ -17,14 +17,14 @@ import (
 
 //nolint:gocyclo,cyclop
 func getDockerClusterRequest(cOps clusterops.Common, dOps clusterops.Docker, provisioner provision.Provisioner) (clusterops.ClusterConfigs, error) {
-	parts := strings.Split(dOps.TalosImage, ":")
-	cOps.TalosVersion = parts[len(parts)-1]
+	parts := strings.Split(dOps.ChuboImage, ":")
+	cOps.ChuboVersion = parts[len(parts)-1]
 
-	_, err := config.ParseContractFromVersion(cOps.TalosVersion)
+	_, err := config.ParseContractFromVersion(cOps.ChuboVersion)
 	if err != nil {
 		currentVersion := helpers.GetTag()
 		fmt.Printf("failed to derrive Chubo OS version from the docker image, defaulting to %s\n", currentVersion)
-		cOps.TalosVersion = currentVersion
+		cOps.ChuboVersion = currentVersion
 	}
 
 	return configmaker.GetDockerConfigs(configmaker.DockerOptions{

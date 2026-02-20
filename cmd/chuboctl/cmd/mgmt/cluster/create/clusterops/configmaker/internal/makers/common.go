@@ -204,15 +204,15 @@ func (m *Maker[T]) initConfigBundleOps() error {
 }
 
 func (m *Maker[T]) initVersionContract() error {
-	if m.Ops.TalosVersion == "latest" {
+	if m.Ops.ChuboVersion == "latest" {
 		m.VersionContract = nil
 
 		return nil
 	}
 
-	versionContract, err := config.ParseContractFromVersion(m.Ops.TalosVersion)
+	versionContract, err := config.ParseContractFromVersion(m.Ops.ChuboVersion)
 	if err != nil {
-		return fmt.Errorf("error parsing Chubo OS version %q: %w", m.Ops.TalosVersion, err)
+		return fmt.Errorf("error parsing Chubo OS version %q: %w", m.Ops.ChuboVersion, err)
 	}
 
 	m.VersionContract = versionContract

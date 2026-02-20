@@ -67,7 +67,7 @@ type Common struct {
 	ControlPlanePort        int
 	WithInitNode            bool
 	SkipInjectingConfig     bool
-	TalosVersion            string
+	ChuboVersion            string
 	EnableClusterDiscovery  bool
 	ConfigPatch             []string
 	ConfigPatchControlPlane []string
@@ -85,7 +85,7 @@ type Docker struct {
 	DisableIPv6 bool
 	MountOpts   opts.MountOpt
 	Ports       string
-	TalosImage  string
+	ChuboImage  string
 }
 
 // Qemu are options specific to qemu provisioner.
@@ -166,7 +166,7 @@ func GetCommon() Common {
 		RootOps:                &clustercmd.PersistentFlags, // TODO: move this elsewhere
 		NetworkIPv4:            true,
 		EnableClusterDiscovery: true,
-		TalosVersion:           helpers.GetTag(),
+		ChuboVersion:           helpers.GetTag(),
 	}
 }
 
@@ -196,6 +196,6 @@ func GetQemu() Qemu {
 func GetDocker() Docker {
 	return Docker{
 		HostIP:     "0.0.0.0",
-		TalosImage: helpers.DefaultImage(images.DefaultTalosImageRepository),
+		ChuboImage: helpers.DefaultImage(images.DefaultTalosImageRepository),
 	}
 }

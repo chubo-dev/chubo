@@ -329,7 +329,7 @@ func (m *Qemu) ModifyNodes() error {
 		}
 
 		node.ConfigInjectionMethod = configInjectionMethod
-		node.Quirks = quirks.New(m.Ops.TalosVersion)
+		node.Quirks = quirks.New(m.Ops.ChuboVersion)
 		node.SkipInjectingConfig = m.Ops.SkipInjectingConfig
 		node.BadRTC = m.EOps.BadRTC
 		node.ExtraKernelArgs = extraKernelArgs

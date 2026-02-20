@@ -31,11 +31,11 @@ func createQemuCluster(
 	presetOptions presetOptions,
 	provisioner provision.Provisioner,
 ) error {
-	if cOps.TalosVersion == "" || cOps.TalosVersion[0] != 'v' {
+	if cOps.ChuboVersion == "" || cOps.ChuboVersion[0] != 'v' {
 		return fmt.Errorf("failed to parse Chubo OS version: version string must start with a 'v'")
 	}
 
-	_, err := config.ParseContractFromVersion(cOps.TalosVersion)
+	_, err := config.ParseContractFromVersion(cOps.ChuboVersion)
 	if err != nil {
 		return fmt.Errorf("failed to parse Chubo OS version: %s", err)
 	}

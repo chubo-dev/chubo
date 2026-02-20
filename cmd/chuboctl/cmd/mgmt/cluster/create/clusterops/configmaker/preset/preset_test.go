@@ -84,7 +84,7 @@ func applyPreset(t *testing.T, presets ...string) (clusterops.Common, clusterops
 	cOps := clusterops.GetCommon()
 	qOps := clusterops.GetQemu()
 	qOps.TargetArch = "arm64"
-	cOps.TalosVersion = "v9.9.9"
+	cOps.ChuboVersion = "v9.9.9"
 
 	err = preset.Apply(preset.Options{
 		SchematicID:     "123schematic123",
