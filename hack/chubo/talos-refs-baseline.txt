@@ -648,105 +648,34 @@
 ./hack/chubo/check-go-deps.sh:	if [[ "${target}" == "cmd/talosctl" ]]; then
 ./hack/chubo/check-go-deps.sh:#   * cmd/talosctl has any forbidden deps
 ./hack/chubo/check-go-deps.sh:# - cmd/talosctl is strict: zero forbidden deps allowed
-./hack/chubo/check-runtime-surface.sh:		TALOSCTL="$2"
 ./hack/chubo/check-runtime-surface.sh:	--talosctl)
-./hack/chubo/check-runtime-surface.sh:	echo "talosctl not executable: ${TALOSCTL}" >&2
-./hack/chubo/check-runtime-surface.sh:	if ! output="$("${TALOSCTL}" "${common_args[@]}" service "${service_id}" 2>&1)"; then
-./hack/chubo/check-runtime-surface.sh:	output="$("${TALOSCTL}" "${common_args[@]}" service "${service_id}" 2>&1 || true)"
-./hack/chubo/check-runtime-surface.sh:TALOSCTL="${TALOSCTL:-./_out/chuboctl-darwin-arm64}"
-./hack/chubo/check-runtime-surface.sh:if [[ ! -x "${TALOSCTL}" ]]; then
-./hack/chubo/check-runtime-surface.sh:netstat_output="$("${TALOSCTL}" "${common_args[@]}" netstat --listening --all)"
+./hack/chubo/check-runtime-surface.sh:# - `--talosctl` is a legacy alias for `--chuboctl` during the rename wave.
+./hack/chubo/check-runtime-surface.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-./_out/chuboctl-darwin-arm64}}"
 ./hack/chubo/e2e-cluster-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
 ./hack/chubo/e2e-cluster-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 ./hack/chubo/e2e-cluster-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 ./hack/chubo/e2e-cluster-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
-./hack/chubo/e2e-core-docker.sh:		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1
-./hack/chubo/e2e-core-docker.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/e2e-core-docker.sh:		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 ./hack/chubo/e2e-core-docker.sh:		echo "host=${host_os} is known to fail with Talos container runtime requirements (seccomp/mount attrs)." >&2
-./hack/chubo/e2e-core-docker.sh:	--talosctl "${TALOSCTL}" \
 ./hack/chubo/e2e-core-docker.sh:	echo "hint: docker fallback requires host kernel support for Talos container runtime features." >&2
-./hack/chubo/e2e-core-docker.sh:	if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
-./hack/chubo/e2e-core-docker.sh:"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
-./hack/chubo/e2e-core-docker.sh:"${TALOSCTL}" support \
-./hack/chubo/e2e-core-docker.sh:"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-./hack/chubo/e2e-core-docker.sh:TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+./hack/chubo/e2e-core-docker.sh:	if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-core-docker.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 ./hack/chubo/e2e-core-docker.sh:TALOS_IMAGE_LOCAL="${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}"
 ./hack/chubo/e2e-core-docker.sh:docker load -i "${ARTIFACTS}/talos.tar" >/dev/null
 ./hack/chubo/e2e-core-docker.sh:echo "building chubo talos docker image"
-./hack/chubo/e2e-core-docker.sh:if ! "${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create docker \
-./hack/chubo/e2e-core-docker.sh:if [[ ! -x "${TALOSCTL}" ]]; then
 ./hack/chubo/e2e-core-docker.sh:make docker-talos \
-./hack/chubo/e2e-core-qemu.sh:				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-core-qemu.sh:			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
-./hack/chubo/e2e-core-qemu.sh:			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
-./hack/chubo/e2e-core-qemu.sh:			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-core-qemu.sh:			run_probe "${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
-./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
-./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
-./hack/chubo/e2e-core-qemu.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/e2e-core-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
-./hack/chubo/e2e-core-qemu.sh:		if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
-./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
-./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-./hack/chubo/e2e-core-qemu.sh:	"${TALOSCTL}" openbaoconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/e2e-core-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-core-qemu.sh:	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
-./hack/chubo/e2e-core-qemu.sh:	if ! output="$("${TALOSCTL}" get "${resource}" --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
-./hack/chubo/e2e-core-qemu.sh:	if run_probe "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
-./hack/chubo/e2e-core-qemu.sh:	if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" gen machineconfig \
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" support \
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" upgrade \
-./hack/chubo/e2e-core-qemu.sh:"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/e2e-core-qemu.sh:# This script is Linux/amd64 oriented for CI. It uses `talosctl cluster create dev`
-./hack/chubo/e2e-core-qemu.sh:TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
-./hack/chubo/e2e-core-qemu.sh:elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
-./hack/chubo/e2e-core-qemu.sh:elif command -v strings >/dev/null 2>&1 && ! strings "${TALOSCTL}" 2>/dev/null | grep -q "CONTROL PLANE ENDPOINT"; then
-./hack/chubo/e2e-core-qemu.sh:if [[ ! -x "${TALOSCTL}" ]]; then
-./hack/chubo/e2e-core-qemu.sh:if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
-./hack/chubo/e2e-core-qemu.sh:if rollback_output="$("${TALOSCTL}" rollback \
+./hack/chubo/e2e-core-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-core-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 ./hack/chubo/e2e-helper-bundles-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	if "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" gen machineconfig \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" machineconfig patch "${MACHINECONFIG_INSTALL}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_INSTALL}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" machineconfig patch "${MACHINECONFIG_RUNTIME}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_RUNTIME}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" meta delete "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b","peer-c"]' \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b"]' \
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:"${TALOSCTL}" upgrade \
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:# Keep in sync with meta.ChuboOpenGyozaPeersOverride (talos/pkg/machinery/meta/constants.go).
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:# Talos build targets use `docker buildx build`. If buildx is only installed via Docker Desktop,
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ ! -x "${TALOSCTL}" ]]; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:role="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 ./hack/chuboos/check-runtime-surface.sh:	export TALOSCTL="${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)"
 ./hack/chuboos/check-runtime-surface.sh:if [[ -z "${TALOSCTL:-}" ]] && [[ -x "${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)" ]]; then
 ./hack/cloud-image-uploader/aws.go:				VirtualName: pointer.To("talos"),

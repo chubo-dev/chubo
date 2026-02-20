@@ -269,7 +269,7 @@ cleanup_stale_clusters() {
 	fi
 
 	local stale_probe_pids=""
-	stale_probe_pids="$(/bin/ps -ax -o pid=,command= | /usr/bin/awk '$0 ~ /_out\/chuboctl-.*--talosconfig \/tmp\/chubo-cluster-work-/ { print $1 }' 2>/dev/null || true)"
+	stale_probe_pids="$(/bin/ps -ax -o pid=,command= | /usr/bin/awk '$0 ~ /_out\/chuboctl-.*--chuboconfig \/tmp\/chubo-cluster-work-/ { print $1 }' 2>/dev/null || true)"
 	if [[ -n "${stale_probe_pids}" ]]; then
 		echo "killing stale cluster probe processes: ${stale_probe_pids}"
 		/bin/kill ${stale_probe_pids} >/dev/null 2>&1 || true
@@ -317,7 +317,7 @@ service_is_up() {
 	local node_ip="$1"
 	local service_name="$2"
 
-	run_chuboctl --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" service "${service_name}" 2>/dev/null |
+	run_chuboctl --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" service "${service_name}" 2>/dev/null |
 		grep -qi "Health check successful"
 }
 
@@ -334,7 +334,7 @@ resource_spec_value() {
 	local resource_type="$2"
 	local field="$3"
 
-	run_chuboctl --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" get "${resource_type}" -o yaml 2>/dev/null |
+	run_chuboctl --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" get "${resource_type}" -o yaml 2>/dev/null |
 		awk -F': ' -v key="${field}" '$1 ~ "^[[:space:]]*" key "$" { print $2; exit }' |
 		tr -d '"'
 }
@@ -350,7 +350,7 @@ wait_for_runtime() {
 	local node_ip="$1"
 
 	wait_until "runtime mTLS API on ${node_ip}" "${TIMEOUT_SECONDS}" \
-		run_chuboctl version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+		run_chuboctl version --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 }
 
 apply_install_and_wait() {
@@ -369,7 +369,7 @@ apply_install_and_wait() {
 	local runtime_config_applied=0
 
 	while true; do
-		if run_chuboctl version --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
+		if run_chuboctl version --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
 			echo "${node_ip}: runtime mTLS became available after install apply"
 			break
 		fi
@@ -429,8 +429,8 @@ download_helper_bundles() {
 	mkdir -p "${HELPERS_DIR}"
 
 	# Download once and reuse for Nomad/Consul CLI mTLS probes across the cluster.
-	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
-	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 
 	NOMAD_TOKEN_VALUE="$(tr -d '\r\n' <"${HELPERS_DIR}/nomadconfig/acl.token")"
 	CONSUL_TOKEN_VALUE="$(tr -d '\r\n' <"${HELPERS_DIR}/consulconfig/acl.token")"

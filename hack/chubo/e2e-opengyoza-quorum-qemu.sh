@@ -19,7 +19,7 @@ ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 RUN_ID="${RUN_ID:-$RANDOM}"
 BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"
@@ -141,18 +141,18 @@ ensure_buildx_builder() {
 
 wait_for_maintenance() {
 	wait_until "maintenance API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 service_is_up() {
 	local service_name="$1"
 
-	"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
+	"${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
 		grep -qi "Health check successful"
 }
 
@@ -167,7 +167,7 @@ wait_for_runtime_stable() {
 		local has_machined=0
 		local has_containerd=0
 
-		if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+		if "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 			has_version=1
 		fi
 
@@ -207,7 +207,7 @@ wait_for_runtime_stable() {
 read_boot_id() {
 	local boot_id
 
-	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+	if ! boot_id="$("${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -250,8 +250,8 @@ dump_machined_logs() {
 	echo "capturing machined logs (${label}) to ${out_path}"
 
 	if wait_until "runtime mTLS API on ${NODE_IP} for log capture" 300 \
-		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
-		"${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
+		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
+		"${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
 	else
 		echo "runtime mTLS API not available for log capture" >"${out_path}"
 	fi
@@ -319,7 +319,7 @@ run_cluster_create() {
 		return 1
 	fi
 
-	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+	"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
 		--arch "${ARCH}" \
 		--cidr "${CIDR}" \
 		--control-plane-port "${CONTROL_PLANE_PORT}" \
@@ -350,7 +350,7 @@ create_cluster_with_retry() {
 
 		if grep -Eq 'interface bridge[0-9]+ not found' "${CLUSTER_CREATE_LOG}" && ((attempt < CLUSTER_CREATE_MAX_ATTEMPTS)); then
 			echo "cluster create hit bridge bring-up race; destroying partial state and retrying"
-			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
 			rm -rf "${STATE_DIR:?}/${CLUSTER_NAME}"
 			attempt=$((attempt + 1))
 			sleep 2
@@ -365,7 +365,7 @@ cleanup() {
 	set +e
 
 	if ((cluster_created == 1)); then
-		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
+		"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
 			--provisioner qemu >/dev/null 2>&1
 	fi
 
@@ -406,7 +406,7 @@ cleanup_stale_clusters() {
 			cluster_name="$(basename "${cluster_dir}")"
 
 			echo "destroying stale cluster ${cluster_name} (state dir ${state_root})"
-			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			"${CHUBOCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
 		done
 	done
 
@@ -438,13 +438,13 @@ require_cmd make
 require_cmd lsof
 
 ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
-if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 fi
 
-if [[ ! -x "${TALOSCTL}" ]]; then
+if [[ ! -x "${CHUBOCTL}" ]]; then
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
-elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
+elif ! "${CHUBOCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
 	if [[ "${SKIP_BUILD}" == "1" ]]; then
 		echo "warning: existing CLI binary is not chubo-tagged; continuing due --skip-build"
 	else
@@ -571,14 +571,14 @@ installer_arch_ref="$("${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-${A
 "${CRANE_BIN}" --insecure index append -t "${INSTALLER_IMAGE_LOCAL}" -m "${installer_arch_ref}"
 
 echo "generating secrets and machine configs"
-"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
-"${TALOSCTL}" gen machineconfig \
+"${CHUBOCTL}" gen secrets -o "${SECRETS_FILE}"
+"${CHUBOCTL}" gen machineconfig \
 	--with-secrets "${SECRETS_FILE}" \
 	--install-disk "${INSTALL_DISK}" \
 	--install-image "${INSTALLER_IMAGE_NODE}" \
 	--registry-mirror "${REGISTRY_MIRROR_NODE}" \
 	-o "${MACHINECONFIG_INSTALL}"
-"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
+"${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
 	-o "${TALOSCONFIG_FILE}"
@@ -601,8 +601,8 @@ machine:
         server
 EOF
 
-"${TALOSCTL}" machineconfig patch "${MACHINECONFIG_INSTALL}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_INSTALL}"
-"${TALOSCTL}" machineconfig patch "${MACHINECONFIG_RUNTIME}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_RUNTIME}"
+"${CHUBOCTL}" machineconfig patch "${MACHINECONFIG_INSTALL}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_INSTALL}"
+"${CHUBOCTL}" machineconfig patch "${MACHINECONFIG_RUNTIME}" --patch "@${ROLE_PATCH_FILE}" -o "${MACHINECONFIG_RUNTIME}"
 
 create_cluster_with_retry
 
@@ -610,7 +610,7 @@ echo "waiting for maintenance API"
 wait_for_maintenance
 
 echo "applying install config"
-"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
+"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
 
 echo "waiting for post-install transition"
 transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
@@ -619,12 +619,12 @@ maintenance_reentered_at=0
 maintenance_up_since=0
 
 while true; do
-	if "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		echo "runtime mTLS became available after install apply"
 		break
 	fi
 
-	if "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if "${CHUBOCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		if ((maintenance_up_since == 0)); then
 			maintenance_up_since="${SECONDS}"
 		fi
@@ -636,13 +636,13 @@ while true; do
 
 			if ((SECONDS - maintenance_reentered_at >= MAINTENANCE_PERSIST_SECONDS)); then
 				echo "maintenance API stayed up after reboot; applying runtime config and rebooting"
-				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+				"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
 				runtime_config_applied=1
 				break
 			fi
 		elif ((runtime_config_applied == 0)) && ((SECONDS - maintenance_up_since >= MAINTENANCE_FALLBACK_SECONDS)); then
 			echo "maintenance API stayed up for ${MAINTENANCE_FALLBACK_SECONDS}s after install apply; forcing runtime config and reboot"
-			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+			"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
 			runtime_config_applied=1
 			break
 		fi
@@ -664,7 +664,7 @@ if ! wait_for_runtime; then
 	if ((runtime_config_applied == 0)); then
 		echo "runtime mTLS did not come up after install, applying runtime config and rebooting"
 		wait_for_maintenance
-		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+		"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
 	else
 		echo "runtime mTLS did not come up after runtime config apply, retrying runtime wait"
 	fi
@@ -675,7 +675,7 @@ wait_for_runtime_stable
 echo "runtime mTLS is stable"
 
 echo "verifying opengyoza role file"
-role="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
+role="$("${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
 role="$(printf '%s' "${role}" | tr -d '\r\n[:space:]')"
 if [[ "${role}" != "server" ]]; then
 	echo "expected opengyoza role to be 'server', got ${role:-<missing>}" >&2
@@ -686,13 +686,13 @@ fi
 echo "running unsafe quorum scenario (2 peers): graceful upgrade must be blocked"
 pre_unsafe_boot_id="$(read_boot_id || true)"
 echo "writing opengyoza peers override (unsafe) to META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
-"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b"]' \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b"]' \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}"
 
 set +e
-"${TALOSCTL}" upgrade \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" upgrade \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait \
@@ -731,12 +731,12 @@ if [[ -z "${pre_safe_boot_id}" ]]; then
 fi
 
 echo "writing opengyoza peers override (safe) to META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
-"${TALOSCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b","peer-c"]' \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b","peer-c"]' \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}"
 
-"${TALOSCTL}" upgrade \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" upgrade \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait=false
@@ -745,8 +745,8 @@ wait_for_boot_id_change "${pre_safe_boot_id}" "safe quorum upgrade"
 wait_for_runtime_stable
 
 echo "clearing opengyoza peers override META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
-"${TALOSCTL}" meta delete "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" meta delete "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" || true
 
 echo "opengyoza quorum gate E2E passed"

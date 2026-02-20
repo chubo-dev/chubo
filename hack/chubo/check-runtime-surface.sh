@@ -5,22 +5,28 @@ set -euo pipefail
 #
 # Usage:
 #   hack/chubo/check-runtime-surface.sh \
+#     --chuboctl ./_out/chuboctl-darwin-arm64 \
 #     --chuboconfig /tmp/chubo-chuboconfig \
 #     --endpoint 192.168.0.139 \
 #     --node 192.168.0.139
 #
 # Notes:
+# - `--talosctl` is a legacy alias for `--chuboctl` during the rename wave.
 # - `--talosconfig` is a legacy alias for `--chuboconfig` during the rename wave.
 
-TALOSCTL="${TALOSCTL:-./_out/chuboctl-darwin-arm64}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-./_out/chuboctl-darwin-arm64}}"
 CHUBOCONFIG=""
 ENDPOINT=""
 NODE=""
 
 while [[ $# -gt 0 ]]; do
 	case "$1" in
+	--chuboctl)
+		CHUBOCTL="$2"
+		shift 2
+		;;
 	--talosctl)
-		TALOSCTL="$2"
+		CHUBOCTL="$2"
 		shift 2
 		;;
 	--chuboconfig)
@@ -55,8 +61,8 @@ if [[ -z "${CHUBOCONFIG}" || -z "${ENDPOINT}" || -z "${NODE}" ]]; then
 	exit 2
 fi
 
-if [[ ! -x "${TALOSCTL}" ]]; then
-	echo "talosctl not executable: ${TALOSCTL}" >&2
+if [[ ! -x "${CHUBOCTL}" ]]; then
+	echo "chuboctl not executable: ${CHUBOCTL}" >&2
 	exit 2
 fi
 
@@ -66,7 +72,7 @@ check_running() {
 	local service_id="$1"
 	local output
 
-	if ! output="$("${TALOSCTL}" "${common_args[@]}" service "${service_id}" 2>&1)"; then
+	if ! output="$("${CHUBOCTL}" "${common_args[@]}" service "${service_id}" 2>&1)"; then
 		echo "FAIL: service ${service_id} is not queryable" >&2
 		echo "${output}" >&2
 		exit 1
@@ -85,7 +91,7 @@ check_not_running() {
 	local service_id="$1"
 	local output
 
-	output="$("${TALOSCTL}" "${common_args[@]}" service "${service_id}" 2>&1 || true)"
+	output="$("${CHUBOCTL}" "${common_args[@]}" service "${service_id}" 2>&1 || true)"
 
 	if grep -qE '^STATE[[:space:]]+Running$' <<<"${output}"; then
 		echo "FAIL: forbidden service ${service_id} is Running" >&2
@@ -123,7 +129,7 @@ done
 
 echo "Checking listener ports"
 
-netstat_output="$("${TALOSCTL}" "${common_args[@]}" netstat --listening --all)"
+netstat_output="$("${CHUBOCTL}" "${common_args[@]}" netstat --listening --all)"
 listen_lines="$(printf '%s\n' "${netstat_output}" | grep -E 'LISTEN' || true)"
 
 if [[ -z "${listen_lines}" ]]; then

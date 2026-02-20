@@ -20,7 +20,7 @@ WITH_HELPERS="${WITH_HELPERS:-0}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 
 RUN_ID="${RUN_ID:-$RANDOM}"
 BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"
@@ -195,7 +195,7 @@ run_cluster_create() {
 		return 1
 	fi
 
-	"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
+	"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create dev \
 		--arch "${ARCH}" \
 		--cidr "${CIDR}" \
 		--control-plane-port "${CONTROL_PLANE_PORT}" \
@@ -226,7 +226,7 @@ create_cluster_with_retry() {
 
 		if grep -Eq 'interface bridge[0-9]+ not found' "${CLUSTER_CREATE_LOG}" && ((attempt < CLUSTER_CREATE_MAX_ATTEMPTS)); then
 			echo "cluster create hit bridge bring-up race; destroying partial state and retrying"
-			"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
 			rm -rf "${STATE_DIR:?}/${CLUSTER_NAME}"
 			attempt=$((attempt + 1))
 			sleep 2
@@ -240,12 +240,12 @@ create_cluster_with_retry() {
 
 wait_for_maintenance() {
 	wait_until "maintenance API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 wait_for_runtime_stable() {
@@ -254,8 +254,8 @@ wait_for_runtime_stable() {
 	local deadline=$((SECONDS + TIMEOUT_SECONDS))
 
 	while true; do
-		if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
-			run_probe "${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
+		if run_probe "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
+			run_probe "${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
 			consecutive=$((consecutive + 1))
 
 			if ((consecutive >= required_consecutive)); then
@@ -279,7 +279,7 @@ check_binary_mode_artifact() {
 	local resource="$1"
 	local output
 
-	if ! output="$("${TALOSCTL}" get "${resource}" --namespace chubo -o yaml --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
+	if ! output="$("${CHUBOCTL}" get "${resource}" --namespace chubo -o yaml --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
 		echo "failed to query ${resource} status" >&2
 		echo "${output}" >&2
 		return 1
@@ -308,9 +308,9 @@ download_helper_bundles() {
 	rm -rf "${HELPERS_DIR}"
 	mkdir -p "${HELPERS_DIR}"
 
-	"${TALOSCTL}" nomadconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-	"${TALOSCTL}" consulconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-	"${TALOSCTL}" openbaoconfig "${HELPERS_DIR}" --force --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL}" openbaoconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 	for bundle in nomadconfig consulconfig openbaoconfig; do
 		local dir="${HELPERS_DIR}/${bundle}"
@@ -354,7 +354,7 @@ download_helper_bundles() {
 read_boot_id() {
 	local boot_id
 
-	if ! boot_id="$("${TALOSCTL}" --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+	if ! boot_id="$("${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -423,7 +423,7 @@ cleanup_stale_clusters() {
 			cluster_name="$(basename "${cluster_dir}")"
 
 			echo "destroying stale cluster ${cluster_name} (state dir ${state_root})"
-			"${TALOSCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
+			"${CHUBOCTL}" --state "${state_root}" --name "${cluster_name}" cluster destroy --provisioner qemu >/dev/null 2>&1 || true
 		done
 	done
 
@@ -434,7 +434,7 @@ cleanup() {
 	set +e
 
 	if ((cluster_created == 1)); then
-		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
+		"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy \
 			--provisioner qemu \
 			--save-cluster-logs-archive-path "${CLUSTER_LOGS_OUT}" \
 			--save-support-archive-path "${CLUSTER_SUPPORT_OUT}" >/dev/null 2>&1
@@ -465,16 +465,16 @@ require_cmd make
 require_cmd unzip
 
 ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
-if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 fi
 
-if [[ ! -x "${TALOSCTL}" ]]; then
+if [[ ! -x "${CHUBOCTL}" ]]; then
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
-elif ! "${TALOSCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
+elif ! "${CHUBOCTL}" support --help 2>/dev/null | grep -q "Chubo module config snapshots"; then
 	echo "existing CLI binary is not chubo-tagged; rebuilding"
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
-elif command -v strings >/dev/null 2>&1 && ! strings "${TALOSCTL}" 2>/dev/null | grep -q "CONTROL PLANE ENDPOINT"; then
+elif command -v strings >/dev/null 2>&1 && ! strings "${CHUBOCTL}" 2>/dev/null | grep -q "CONTROL PLANE ENDPOINT"; then
 	# Ensure the host CLI has the current cluster UX strings.
 	echo "existing CLI binary is stale (missing 'CONTROL PLANE ENDPOINT'); rebuilding"
 	make "${ctl_target}" GO_BUILDFLAGS_TALOSCTL="${GO_BUILDFLAGS_TALOSCTL}"
@@ -547,14 +547,14 @@ installer_arch_ref="$("${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-${A
 "${CRANE_BIN}" --insecure index append -t "${INSTALLER_IMAGE_LOCAL}" -m "${installer_arch_ref}"
 
 echo "generating secrets and machine configs"
-"${TALOSCTL}" gen secrets -o "${SECRETS_FILE}"
-"${TALOSCTL}" gen machineconfig \
+"${CHUBOCTL}" gen secrets -o "${SECRETS_FILE}"
+"${CHUBOCTL}" gen machineconfig \
 	--with-secrets "${SECRETS_FILE}" \
 	--install-disk "${INSTALL_DISK}" \
 	--install-image "${INSTALLER_IMAGE_NODE}" \
 	--registry-mirror "${REGISTRY_MIRROR_NODE}" \
 	-o "${MACHINECONFIG_INSTALL}"
-"${TALOSCTL}" gen config chubo https://0.0.0.0:6443 \
+"${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
 	-o "${TALOSCONFIG_FILE}"
@@ -574,7 +574,7 @@ echo "waiting for maintenance API"
 wait_for_maintenance
 
 echo "applying install config"
-"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
+"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_INSTALL}"
 
 echo "waiting for post-install transition"
 transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
@@ -583,12 +583,12 @@ maintenance_reentered_at=0
 maintenance_up_since=0
 
 while true; do
-	if run_probe "${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if run_probe "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		echo "runtime mTLS became available after install apply"
 		break
 	fi
 
-	if run_probe "${TALOSCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if run_probe "${CHUBOCTL}" get addresses --insecure -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		if ((maintenance_up_since == 0)); then
 			maintenance_up_since="${SECONDS}"
 		fi
@@ -600,13 +600,13 @@ while true; do
 
 			if ((SECONDS - maintenance_reentered_at >= MAINTENANCE_PERSIST_SECONDS)); then
 				echo "maintenance API stayed up after reboot; applying runtime config and rebooting"
-				"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+				"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
 				runtime_config_applied=1
 				break
 			fi
 		elif ((runtime_config_applied == 0)) && ((SECONDS - maintenance_up_since >= MAINTENANCE_FALLBACK_SECONDS)); then
 			echo "maintenance API stayed up for ${MAINTENANCE_FALLBACK_SECONDS}s after install apply; forcing runtime config and reboot"
-			"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+			"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
 			runtime_config_applied=1
 			break
 		fi
@@ -628,7 +628,7 @@ if ! wait_for_runtime; then
 	if ((runtime_config_applied == 0)); then
 		echo "runtime mTLS did not come up after install, applying runtime config and rebooting"
 		wait_for_maintenance
-		"${TALOSCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
+		"${CHUBOCTL}" apply-config --insecure -m reboot -e "${NODE_IP}" -n "${NODE_IP}" -f "${MACHINECONFIG_RUNTIME}"
 	else
 		echo "runtime mTLS did not come up after runtime config apply, retrying runtime wait"
 	fi
@@ -636,9 +636,9 @@ if ! wait_for_runtime; then
 fi
 
 echo "validating runtime mTLS and runtime surface"
-"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/check-runtime-surface.sh \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	--endpoint "${NODE_IP}" \
 	--node "${NODE_IP}"
 check_binary_mode_artifact "openwontonstatus"
@@ -650,8 +650,8 @@ fi
 
 echo "running upgrade flow"
 pre_upgrade_boot_id="$(read_boot_id || true)"
-"${TALOSCTL}" upgrade \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" upgrade \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait=false
@@ -666,8 +666,8 @@ wait_for_runtime_stable
 
 echo "running rollback flow"
 pre_rollback_boot_id="$(read_boot_id || true)"
-if rollback_output="$("${TALOSCTL}" rollback \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+if rollback_output="$("${CHUBOCTL}" rollback \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
 	if [[ -n "${pre_rollback_boot_id}" ]]; then
 		wait_for_boot_id_change "${pre_rollback_boot_id}" "rollback" || true
@@ -685,8 +685,8 @@ wait_for_runtime_stable
 
 echo "collecting support bundle"
 rm -f "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
-"${TALOSCTL}" support \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" support \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-O "${SUPPORT_OUT}" -v
 unzip -l "${SUPPORT_OUT}" > "${SUPPORT_LISTING}"

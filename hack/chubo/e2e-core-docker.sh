@@ -17,7 +17,7 @@ ARCH="${ARCH:-amd64}"
 
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-TALOSCTL="${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 
 CLUSTER_NAME="${CLUSTER_NAME:-chubo-e2e-docker}"
 STATE_DIR="${STATE_DIR:-/tmp/chubo-e2e-docker-state}"
@@ -84,14 +84,14 @@ wait_until() {
 
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 cleanup() {
 	set +e
 
 	if ((cluster_created == 1)); then
-		"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1
+		"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1
 	fi
 }
 
@@ -109,9 +109,9 @@ require_cmd make
 require_cmd unzip
 check_host_support
 
-if [[ ! -x "${TALOSCTL}" ]]; then
+if [[ ! -x "${CHUBOCTL}" ]]; then
 	ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
-	if [[ "${TALOSCTL##*/}" == talosctl-* ]]; then
+	if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
 	fi
 
@@ -120,7 +120,7 @@ fi
 
 mkdir -p "${WORKDIR}" "${ARTIFACTS}" "${STATE_DIR}"
 rm -f "${TALOSCONFIG_FILE}" "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
-"${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
+"${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
 
 echo "building chubo talos docker image"
 make docker-talos \
@@ -136,7 +136,7 @@ docker load -i "${ARTIFACTS}/talos.tar" >/dev/null
 
 echo "creating single-node Docker provisioner cluster"
 cluster_created=1
-if ! "${TALOSCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create docker \
+if ! "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create docker \
 	--image "${TALOS_IMAGE_LOCAL}" \
 	--workers 0 \
 	--subnet "${SUBNET}" \
@@ -166,16 +166,16 @@ if ! wait_for_runtime; then
 fi
 
 echo "validating runtime mTLS and runtime surface"
-"${TALOSCTL}" version --talosconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/check-runtime-surface.sh \
-	--talosctl "${TALOSCTL}" \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+	--chuboctl "${CHUBOCTL}" \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	--endpoint "${NODE_IP}" \
 	--node "${NODE_IP}"
 
 echo "collecting support bundle"
-"${TALOSCTL}" support \
-	--talosconfig "${TALOSCONFIG_FILE}" \
+"${CHUBOCTL}" support \
+	--chuboconfig "${TALOSCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-O "${SUPPORT_OUT}" -v
 unzip -l "${SUPPORT_OUT}" > "${SUPPORT_LISTING}"
