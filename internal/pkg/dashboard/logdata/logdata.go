@@ -17,7 +17,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/cmd/chuboctl/pkg/nodes/helpers"
 	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resolver"
 	"github.com/chubo-dev/chubo/internal/pkg/dashboard/util"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/common"

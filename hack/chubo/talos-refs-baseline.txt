@@ -893,10 +893,8 @@
 ./internal/pkg/containers/image/resolver.go:// NewResolver builds registry resolver based on Talos configuration.
 ./internal/pkg/dashboard/apidata/apidata.go:// Package apidata implements the types and the data sources for the data sourced from various Talos APIs.
 ./internal/pkg/dashboard/apidata/data.go:// Data represents the monitoring data retrieved via Talos API.
-./internal/pkg/dashboard/apidata/source.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 ./internal/pkg/dashboard/apidata/source.go:// Source is a data source that gathers information about a Talos node using Talos API.
 ./internal/pkg/dashboard/components/talosinfo.go:// TalosInfo represents the Talos info widget.
-./internal/pkg/dashboard/logdata/logdata.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 ./internal/pkg/dashboard/logdata/logdata.go:// Package logdata implements the types and the data sources for the data sourced from the Talos dmesg API.
 ./internal/pkg/dashboard/resourcedata/resourcedata.go:// Package resourcedata implements the types and the data sources for the data sourced from the Talos resource API (COSI).
 ./internal/pkg/dashboard/resourcedata/resourcedata.go:// Source is the data source for the Talos resources.

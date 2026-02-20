@@ -14,7 +14,7 @@ import (
 	"github.com/siderolabs/go-procfs/procfs"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/mgmt/helpers"
+	"github.com/chubo-dev/chubo/cmd/chuboctl/pkg/mgmt/helpers"
 	"github.com/chubo-dev/chubo/pkg/images"
 	talosclient "github.com/chubo-dev/chubo/pkg/machinery/client"
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"

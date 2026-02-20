@@ -12,7 +12,7 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
+	"github.com/chubo-dev/chubo/cmd/chuboctl/pkg/nodes/helpers"
 	"github.com/chubo-dev/chubo/internal/pkg/dashboard/resolver"
 	"github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
