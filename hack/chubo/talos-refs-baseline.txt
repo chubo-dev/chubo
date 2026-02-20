@@ -328,9 +328,13 @@
 ./api/resource/definitions/time/time.proto:package talos.resource.definitions.time;
 ./api/resource/definitions/v1alpha1/v1alpha1.proto:package talos.resource.definitions.v1alpha1;
 ./api/storage/storage.proto:  // SystemDisk indicates that the disk is used as Talos system disk.
-./cmd/chuboctl/cmd/execute.go:// Package cmd exposes the chuboctl entrypoint while cmd/talosctl is still in
-./cmd/chuboctl/cmd/execute.go:import taloscmd "github.com/chubo-dev/chubo/cmd/talosctl/cmd"
-./cmd/chuboctl/main.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
+./cmd/chuboctl/cmd/common/common.go:import legacycommon "github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
+./cmd/chuboctl/cmd/completion.go:			fmt.Printf("compdef _chuboctl chuboctl talosctl")
+./cmd/chuboctl/cmd/mgmt/cluster/cluster.go:	legacycluster "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster"
+./cmd/chuboctl/cmd/mgmt/cluster/create/create.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt/cluster/create"
+./cmd/chuboctl/cmd/mgmt/root.go:	legacymgmt "github.com/chubo-dev/chubo/cmd/talosctl/cmd/mgmt"
+./cmd/chuboctl/cmd/nodes/root.go:	legacytalos "github.com/chubo-dev/chubo/cmd/talosctl/cmd/talos"
+./cmd/chuboctl/cmd/root.go:	Aliases: []string{"talosctl"},
 ./cmd/installer/cmd/installer/install.go:	log.Printf("running Talos installer %s", version.NewVersion().Tag)
 ./cmd/installer/pkg/install/errata.go:		// can't read Talos version
 ./cmd/installer/pkg/install/errata.go:		// old Talos version, include fallback
@@ -618,13 +622,11 @@
 ./cmd/talosctl/cmd/talos/workload_legacy_driver_flag_default.go:package talos
 ./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:package talos
 ./cmd/talosctl/cmd/talos/workload_namespace_flag_default.go:package talos
-./cmd/talosctl/main.go:	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
 ./cmd/talosctl/main.go:// Command talosctl is a legacy compatibility entrypoint for chuboctl.
 ./cmd/talosctl/pkg/mgmt/helpers/airgapped.go:		x509.CommonName("talos.dev Root CA"),
 ./cmd/talosctl/pkg/mgmt/helpers/airgapped.go:		x509.Organization("talos.dev"),
 ./cmd/talosctl/pkg/mgmt/helpers/artifacts.go:// Package helpers provides helpers for talosctl.
 ./cmd/talosctl/pkg/talos/action/node.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
-./cmd/talosctl/pkg/talos/action/tracker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
 ./cmd/talosctl/pkg/talos/action/tracker.go:	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 ./cmd/talosctl/pkg/talos/artifacts/images.go:// ExtensionRef is a ref to the extension for some Talos version.
 ./cmd/talosctl/pkg/talos/artifacts/images.go:// FetchOfficialExtensions fetches list of extensions for specific Talos version.

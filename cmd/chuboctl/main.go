@@ -8,7 +8,7 @@ package main
 import (
 	"os"
 
-	_ "github.com/chubo-dev/chubo/cmd/talosctl/acompat"
+	_ "github.com/chubo-dev/chubo/cmd/chuboctl/acompat"
 	"github.com/chubo-dev/chubo/cmd/chuboctl/cmd"
 )
 

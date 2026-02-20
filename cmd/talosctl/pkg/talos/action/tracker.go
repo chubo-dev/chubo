@@ -25,7 +25,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/chubo-dev/chubo/cmd/talosctl/cmd/common"
+	"github.com/chubo-dev/chubo/cmd/chuboctl/cmd/common"
 	"github.com/chubo-dev/chubo/cmd/talosctl/pkg/talos/helpers"
 	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
@@ -178,7 +178,7 @@ func (a *Tracker) Run() error {
 
 		// Reporter is started, it will print the errors if there is any.
 		// So from here on we can suppress the command error to be printed to avoid it being printed twice.
-		common.SuppressErrors = true
+		common.SetSuppressErrors(true)
 
 		var trackEg errgroup.Group
 
