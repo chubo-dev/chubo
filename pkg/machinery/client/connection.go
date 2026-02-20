@@ -117,13 +117,13 @@ func getKeyProvider(customKeysDir string) *client.KeyProvider {
 		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
 	}
 
-	talosDir, err := clientconfig.GetTalosDirectory()
+	chuboDir, err := clientconfig.GetChuboDirectory()
 	if err != nil {
 		// TODO: start failing instead of falling back to XDG data directory if we can't resolve Talos directory
 		return client.NewKeyProvider("talos/keys")
 	}
 
-	return client.NewKeyProviderWithFallback("talos/keys", talosDir, "keys", true)
+	return client.NewKeyProviderWithFallback("talos/keys", chuboDir, "keys", true)
 }
 
 func buildTLSConfig(configContext *clientconfig.Context) (*tls.Config, error) {

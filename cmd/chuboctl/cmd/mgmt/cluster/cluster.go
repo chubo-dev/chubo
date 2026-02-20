@@ -44,10 +44,10 @@ var (
 )
 
 func init() {
-	talosDir, err := clientconfig.GetTalosDirectory()
+	chuboDir, err := clientconfig.GetChuboDirectory()
 	if err == nil {
-		DefaultStateDir = filepath.Join(talosDir, "clusters")
-		DefaultCNIDir = filepath.Join(talosDir, "cni")
+		DefaultStateDir = filepath.Join(chuboDir, "clusters")
+		DefaultCNIDir = filepath.Join(chuboDir, "cni")
 	}
 
 	Cmd.PersistentFlags().StringVar(&PersistentFlags.StateDir, "state", DefaultStateDir, "directory path to store cluster state")

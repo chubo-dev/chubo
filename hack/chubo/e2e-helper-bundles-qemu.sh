@@ -53,7 +53,7 @@ CLEANUP_ONLY="${CLEANUP_ONLY:-0}"
 SECRETS_FILE="${RUN_DIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${RUN_DIR}/machineconfig-install.yaml"
 MACHINECONFIG_RUNTIME="${RUN_DIR}/machineconfig-runtime.yaml"
-TALOSCONFIG_FILE="${RUN_DIR}/talosconfig"
+CHUBOCONFIG_FILE="${RUN_DIR}/chuboconfig"
 HELPERS_DIR="${RUN_DIR}/helpers"
 LOG_INSTALL="${RUN_DIR}/qemu-install.log"
 LOG_DISK="${RUN_DIR}/qemu-disk.log"
@@ -358,7 +358,7 @@ parse_bridged_ip() {
 openwonton_ready() {
 	local output
 
-	if ! output="$("${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+	if ! output="$("${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -368,7 +368,7 @@ openwonton_ready() {
 opengyoza_ready() {
 	local output
 
-	if ! output="$("${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+	if ! output="$("${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -378,7 +378,7 @@ opengyoza_ready() {
 openbao_job_ready() {
 	local output
 
-	if ! output="$("${CHUBOCTL_CHUBO}" get openbaojobstatus --namespace chubo -o json --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
+	if ! output="$("${CHUBOCTL_CHUBO}" get openbaojobstatus --namespace chubo -o json --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -395,41 +395,41 @@ dump_chubo_debug() {
 	echo
 
 	echo "-- openwontonstatus (json)"
-	"${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o json --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- openwontonstatus (yaml)"
-	"${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o yaml --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get openwontonstatus --namespace chubo -o yaml --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- opengyozastatus (json)"
-	"${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o json --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- opengyozastatus (yaml)"
-	"${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o yaml --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get opengyozastatus --namespace chubo -o yaml --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- node time (runtime API)"
-	"${CHUBOCTL_CHUBO}" time --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" time --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- openwonton TLS cert (subject/dates)"
-	"${CHUBOCTL_CHUBO}" read /var/lib/chubo/certs/openwonton/server.pem --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+	"${CHUBOCTL_CHUBO}" read /var/lib/chubo/certs/openwonton/server.pem --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
 		| openssl x509 -noout -subject -dates 2>/dev/null || true
 	echo
 
 	echo "-- opengyoza TLS cert (subject/dates)"
-	"${CHUBOCTL_CHUBO}" read /var/lib/chubo/certs/opengyoza/server.pem --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+	"${CHUBOCTL_CHUBO}" read /var/lib/chubo/certs/opengyoza/server.pem --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
 		| openssl x509 -noout -subject -dates 2>/dev/null || true
 	echo
 
 	echo "-- v1alpha1 service openwonton (yaml)"
-	"${CHUBOCTL_CHUBO}" get svc --namespace v1alpha1 openwonton -o yaml --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get svc --namespace v1alpha1 openwonton -o yaml --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- v1alpha1 service opengyoza (yaml)"
-	"${CHUBOCTL_CHUBO}" get svc --namespace v1alpha1 opengyoza -o yaml --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
+	"${CHUBOCTL_CHUBO}" get svc --namespace v1alpha1 opengyoza -o yaml --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" || true
 	echo
 
 	echo "-- qemu logs (tail)"
@@ -634,7 +634,7 @@ mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
 "${CHUBOCTL_BASE}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
-	-o "${TALOSCONFIG_FILE}"
+	-o "${CHUBOCONFIG_FILE}"
 
 VMNET_MAC=""
 if [[ "${VMNET_ENABLE}" -eq 1 ]]; then
@@ -685,7 +685,7 @@ echo "applying runtime config and rebooting into runtime API"
 "${CHUBOCTL_CHUBO}" apply-config -i -m reboot -e 127.0.0.1 -n 127.0.0.1 -f "${MACHINECONFIG_RUNTIME}" || true
 
 wait_until "runtime mTLS API (${NODE_IP})" "${TIMEOUT_SECONDS}" \
-	"${CHUBOCTL_CHUBO}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL_CHUBO}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 echo "waiting for openwonton/opengyoza health + ACL bootstrap"
 if ! wait_until "openwontonstatus (healthy + aclReady)" "${TIMEOUT_SECONDS}" openwonton_ready; then
@@ -706,9 +706,9 @@ stop_opengyoza_mirror
 
 echo "downloading helper bundles"
 mkdir -p "${HELPERS_DIR}"
-"${CHUBOCTL_CHUBO}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-"${CHUBOCTL_CHUBO}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-"${CHUBOCTL_CHUBO}" openbaoconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL_CHUBO}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL_CHUBO}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL_CHUBO}" openbaoconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 for bundle in nomadconfig consulconfig openbaoconfig; do
 	dir="${HELPERS_DIR}/${bundle}"
@@ -740,7 +740,7 @@ done
 	echo "run=${RUN_DIR}"
 	echo "node_ip=${NODE_IP}"
 	echo "installer_tag=${INSTALLER_TAG}"
-	"${CHUBOCTL_CHUBO}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
+	"${CHUBOCTL_CHUBO}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" \
 		| awk 'BEGIN{s=0} /^Server:/{s=1; next} s && /^\tTag:/{print "server_tag=" $2} s && /^\tSHA:/{print "server_sha=" $2}'
 	echo "nomad_addr=$(awk -F= '/^NOMAD_ADDR=/{print $2}' "${HELPERS_DIR}/nomadconfig/nomad.env")"
 	echo "consul_addr=$(awk -F= '/^CONSUL_HTTP_ADDR=/{print $2}' "${HELPERS_DIR}/consulconfig/consul.env")"

@@ -57,12 +57,12 @@ func createDevCluster(ctx context.Context, cOps clusterops.Common, qOps clustero
 		fmt.Println("You can now connect to debug shell on any node using these commands:")
 
 		for _, node := range clusterConfigs.ClusterRequest.Nodes {
-			talosDir, err := clientconfig.GetTalosDirectory()
+			chuboDir, err := clientconfig.GetChuboDirectory()
 			if err != nil {
 				return err
 			}
 
-			fmt.Printf("socat - UNIX-CONNECT:%s\n", filepath.Join(talosDir, "clusters", cOps.RootOps.ClusterName, node.Name+".serial"))
+			fmt.Printf("socat - UNIX-CONNECT:%s\n", filepath.Join(chuboDir, "clusters", cOps.RootOps.ClusterName, node.Name+".serial"))
 		}
 
 		return nil

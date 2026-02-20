@@ -20,9 +20,9 @@ type Path struct {
 	WriteAllowed bool
 }
 
-// GetTalosDirectory returns path to the client state directory.
+// GetChuboDirectory returns path to the client state directory.
 // It prefers CHUBO_HOME, then TALOS_HOME, and finally falls back to ~/.chubo.
-func GetTalosDirectory() (string, error) {
+func GetChuboDirectory() (string, error) {
 	if path, ok := os.LookupEnv(constants.ChuboHomeEnvVar); ok && filepath.IsAbs(path) {
 		return path, nil
 	}
@@ -39,9 +39,14 @@ func GetTalosDirectory() (string, error) {
 	return filepath.Join(home, constants.ChuboDir), nil
 }
 
+// GetTalosDirectory is a legacy alias kept for compatibility.
+func GetTalosDirectory() (string, error) {
+	return GetChuboDirectory()
+}
+
 // GetDefaultPaths returns the list of config file paths in order of priority.
 func GetDefaultPaths() ([]Path, error) {
-	chuboDir, err := GetTalosDirectory()
+	chuboDir, err := GetChuboDirectory()
 	if err != nil {
 		return nil, err
 	}

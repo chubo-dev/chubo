@@ -52,7 +52,7 @@ CLUSTER_CREATE_MAX_ATTEMPTS="${CLUSTER_CREATE_MAX_ATTEMPTS:-3}"
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
 MACHINECONFIG_RUNTIME="${WORKDIR}/machineconfig-runtime.yaml"
-TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
+CHUBOCONFIG_FILE="${WORKDIR}/chuboconfig"
 ROLE_PATCH_FILE="${WORKDIR}/opengyoza-role-patch.yaml"
 UNSAFE_UPGRADE_OUT="${WORKDIR}/unsafe-upgrade.out"
 UNSAFE_MACHINED_LOG="${WORKDIR}/unsafe-machined.log"
@@ -146,13 +146,13 @@ wait_for_maintenance() {
 
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 service_is_up() {
 	local service_name="$1"
 
-	"${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
+	"${CHUBOCTL}" --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service "${service_name}" 2>/dev/null |
 		grep -qi "Health check successful"
 }
 
@@ -167,7 +167,7 @@ wait_for_runtime_stable() {
 		local has_machined=0
 		local has_containerd=0
 
-		if "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+		if "${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 			has_version=1
 		fi
 
@@ -207,7 +207,7 @@ wait_for_runtime_stable() {
 read_boot_id() {
 	local boot_id
 
-	if ! boot_id="$("${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+	if ! boot_id="$("${CHUBOCTL}" --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -250,8 +250,8 @@ dump_machined_logs() {
 	echo "capturing machined logs (${label}) to ${out_path}"
 
 	if wait_until "runtime mTLS API on ${NODE_IP} for log capture" 300 \
-		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
-		"${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
+		"${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"; then
+		"${CHUBOCTL}" --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" logs machined --tail 4000 >"${out_path}" 2>&1 || true
 	else
 		echo "runtime mTLS API not available for log capture" >"${out_path}"
 	fi
@@ -581,7 +581,7 @@ echo "generating secrets and machine configs"
 "${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
-	-o "${TALOSCONFIG_FILE}"
+	-o "${CHUBOCONFIG_FILE}"
 
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
 runtime_tmp="${MACHINECONFIG_RUNTIME}.tmp"
@@ -619,7 +619,7 @@ maintenance_reentered_at=0
 maintenance_up_since=0
 
 while true; do
-	if "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if "${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		echo "runtime mTLS became available after install apply"
 		break
 	fi
@@ -675,7 +675,7 @@ wait_for_runtime_stable
 echo "runtime mTLS is stable"
 
 echo "verifying opengyoza role file"
-role="$("${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
+role="$("${CHUBOCTL}" --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read "${openGyozaRolePath:-/var/lib/chubo/config/opengyoza.role}" 2>/dev/null || true)"
 role="$(printf '%s' "${role}" | tr -d '\r\n[:space:]')"
 if [[ "${role}" != "server" ]]; then
 	echo "expected opengyoza role to be 'server', got ${role:-<missing>}" >&2
@@ -687,12 +687,12 @@ echo "running unsafe quorum scenario (2 peers): graceful upgrade must be blocked
 pre_unsafe_boot_id="$(read_boot_id || true)"
 echo "writing opengyoza peers override (unsafe) to META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
 "${CHUBOCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b"]' \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}"
 
 set +e
 "${CHUBOCTL}" upgrade \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait \
@@ -732,11 +732,11 @@ fi
 
 echo "writing opengyoza peers override (safe) to META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
 "${CHUBOCTL}" meta write "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" '["peer-a","peer-b","peer-c"]' \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}"
 
 "${CHUBOCTL}" upgrade \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait=false
@@ -746,7 +746,7 @@ wait_for_runtime_stable
 
 echo "clearing opengyoza peers override META key ${OPENGYOZA_PEERS_OVERRIDE_META_KEY}"
 "${CHUBOCTL}" meta delete "${OPENGYOZA_PEERS_OVERRIDE_META_KEY}" \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" || true
 
 echo "opengyoza quorum gate E2E passed"

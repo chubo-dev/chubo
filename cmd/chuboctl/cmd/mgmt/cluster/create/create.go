@@ -65,7 +65,7 @@ func downloadBootAssets(ctx context.Context, qOps *clusterops.Qemu) error {
 			continue
 		}
 
-		defaultStateDir, err := clientconfig.GetTalosDirectory()
+		defaultStateDir, err := clientconfig.GetChuboDirectory()
 		if err != nil {
 			return err
 		}

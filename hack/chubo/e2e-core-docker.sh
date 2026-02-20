@@ -31,7 +31,7 @@ SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 
 SUPPORT_OUT="${SUPPORT_OUT:-/tmp/chubo-support-e2e-docker.zip}"
 SUPPORT_LISTING="${WORKDIR}/support-listing.txt"
-TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
+CHUBOCONFIG_FILE="${WORKDIR}/chuboconfig"
 
 cluster_created=0
 NODE_IP=""
@@ -84,7 +84,7 @@ wait_until() {
 
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 cleanup() {
@@ -119,7 +119,7 @@ if [[ ! -x "${CHUBOCTL}" ]]; then
 fi
 
 mkdir -p "${WORKDIR}" "${ARTIFACTS}" "${STATE_DIR}"
-rm -f "${TALOSCONFIG_FILE}" "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
+rm -f "${CHUBOCONFIG_FILE}" "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
 "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
 
 echo "building chubo talos docker image"
@@ -140,7 +140,7 @@ if ! "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster creat
 	--image "${TALOS_IMAGE_LOCAL}" \
 	--workers 0 \
 	--subnet "${SUBNET}" \
-	--talosconfig-destination "${TALOSCONFIG_FILE}"; then
+	--talosconfig-destination "${CHUBOCONFIG_FILE}"; then
 	echo "cluster create docker failed; recent node logs:" >&2
 	if docker ps -a --format '{{.Names}}' | grep -qx "${NODE_CONTAINER}"; then
 		docker logs --tail 120 "${NODE_CONTAINER}" >&2 || true
@@ -166,16 +166,16 @@ if ! wait_for_runtime; then
 fi
 
 echo "validating runtime mTLS and runtime surface"
-"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/check-runtime-surface.sh \
 	--chuboctl "${CHUBOCTL}" \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	--endpoint "${NODE_IP}" \
 	--node "${NODE_IP}"
 
 echo "collecting support bundle"
 "${CHUBOCTL}" support \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-O "${SUPPORT_OUT}" -v
 unzip -l "${SUPPORT_OUT}" > "${SUPPORT_LISTING}"

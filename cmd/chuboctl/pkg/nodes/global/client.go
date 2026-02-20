@@ -21,7 +21,7 @@ import (
 
 // Args is a context for the Chubo OS command line client.
 type Args struct {
-	Talosconfig     string
+	Chuboconfig     string
 	CmdContext      string
 	Cluster         string
 	Nodes           []string
@@ -40,9 +40,9 @@ func (c *Args) NodeList() []string {
 func (c *Args) WithClientNoNodes(action func(context.Context, *client.Client) error, dialOptions ...grpc.DialOption) error {
 	return cli.WithContext(
 		context.Background(), func(ctx context.Context) error {
-			cfg, err := clientconfig.Open(c.Talosconfig)
+			cfg, err := clientconfig.Open(c.Chuboconfig)
 			if err != nil {
-				return fmt.Errorf("failed to open config file %q: %w", c.Talosconfig, err)
+				return fmt.Errorf("failed to open config file %q: %w", c.Chuboconfig, err)
 			}
 
 			opts := []client.OptionFunc{

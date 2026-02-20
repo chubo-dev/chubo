@@ -57,7 +57,7 @@ MAINTENANCE_PERSIST_SECONDS="${MAINTENANCE_PERSIST_SECONDS:-30}"
 MAINTENANCE_FALLBACK_SECONDS="${MAINTENANCE_FALLBACK_SECONDS:-180}"
 
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
-TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
+CHUBOCONFIG_FILE="${WORKDIR}/chuboconfig"
 CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
 
 CRANE_BIN=""
@@ -317,7 +317,7 @@ service_is_up() {
 	local node_ip="$1"
 	local service_name="$2"
 
-	run_chuboctl --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" service "${service_name}" 2>/dev/null |
+	run_chuboctl --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" service "${service_name}" 2>/dev/null |
 		grep -qi "Health check successful"
 }
 
@@ -334,7 +334,7 @@ resource_spec_value() {
 	local resource_type="$2"
 	local field="$3"
 
-	run_chuboctl --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" get "${resource_type}" -o yaml 2>/dev/null |
+	run_chuboctl --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" get "${resource_type}" -o yaml 2>/dev/null |
 		awk -F': ' -v key="${field}" '$1 ~ "^[[:space:]]*" key "$" { print $2; exit }' |
 		tr -d '"'
 }
@@ -350,7 +350,7 @@ wait_for_runtime() {
 	local node_ip="$1"
 
 	wait_until "runtime mTLS API on ${node_ip}" "${TIMEOUT_SECONDS}" \
-		run_chuboctl version --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+		run_chuboctl version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 }
 
 apply_install_and_wait() {
@@ -369,7 +369,7 @@ apply_install_and_wait() {
 	local runtime_config_applied=0
 
 	while true; do
-		if run_chuboctl version --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
+		if run_chuboctl version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
 			echo "${node_ip}: runtime mTLS became available after install apply"
 			break
 		fi
@@ -429,8 +429,8 @@ download_helper_bundles() {
 	mkdir -p "${HELPERS_DIR}"
 
 	# Download once and reuse for Nomad/Consul CLI mTLS probes across the cluster.
-	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
-	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
+	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}"
 
 	NOMAD_TOKEN_VALUE="$(tr -d '\r\n' <"${HELPERS_DIR}/nomadconfig/acl.token")"
 	CONSUL_TOKEN_VALUE="$(tr -d '\r\n' <"${HELPERS_DIR}/consulconfig/acl.token")"
@@ -916,12 +916,12 @@ echo "pushing installer image to local registry (${INSTALLER_IMAGE_LOCAL})"
 installer_arch_ref="$("${CRANE_BIN}" --insecure push "${ARTIFACTS}/installer-${ARCH}.tar" "${INSTALLER_IMAGE_LOCAL}-${ARCH}")"
 "${CRANE_BIN}" --insecure index append -t "${INSTALLER_IMAGE_LOCAL}" -m "${installer_arch_ref}" >/dev/null
 
-echo "generating secrets and talosconfig"
+echo "generating secrets and chuboconfig"
 "${CHUBOCTL}" gen secrets -o "${SECRETS_FILE}"
 "${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
-	-o "${TALOSCONFIG_FILE}"
+	-o "${CHUBOCONFIG_FILE}"
 
 controlplane_ips=()
 for ((i = 0; i < CONTROLPLANE_COUNT; i++)); do

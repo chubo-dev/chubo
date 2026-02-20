@@ -61,7 +61,7 @@ CLEANUP_STALE_ONLY=0
 SECRETS_FILE="${WORKDIR}/secrets.yaml"
 MACHINECONFIG_INSTALL="${WORKDIR}/machineconfig-install.yaml"
 MACHINECONFIG_RUNTIME="${WORKDIR}/machineconfig-runtime.yaml"
-TALOSCONFIG_FILE="${WORKDIR}/talosconfig"
+CHUBOCONFIG_FILE="${WORKDIR}/chuboconfig"
 SUPPORT_LISTING="${WORKDIR}/support-listing.txt"
 CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
 
@@ -245,7 +245,7 @@ wait_for_maintenance() {
 
 wait_for_runtime() {
 	wait_until "runtime mTLS API on ${NODE_IP}" "${TIMEOUT_SECONDS}" \
-		"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+		"${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 }
 
 wait_for_runtime_stable() {
@@ -254,8 +254,8 @@ wait_for_runtime_stable() {
 	local deadline=$((SECONDS + TIMEOUT_SECONDS))
 
 	while true; do
-		if run_probe "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
-			run_probe "${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
+		if run_probe "${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1 &&
+			run_probe "${CHUBOCTL}" --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" service machined >/dev/null 2>&1; then
 			consecutive=$((consecutive + 1))
 
 			if ((consecutive >= required_consecutive)); then
@@ -279,7 +279,7 @@ check_binary_mode_artifact() {
 	local resource="$1"
 	local output
 
-	if ! output="$("${CHUBOCTL}" get "${resource}" --namespace chubo -o yaml --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
+	if ! output="$("${CHUBOCTL}" get "${resource}" --namespace chubo -o yaml --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
 		echo "failed to query ${resource} status" >&2
 		echo "${output}" >&2
 		return 1
@@ -308,9 +308,9 @@ download_helper_bundles() {
 	rm -rf "${HELPERS_DIR}"
 	mkdir -p "${HELPERS_DIR}"
 
-	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
-	"${CHUBOCTL}" openbaoconfig "${HELPERS_DIR}" --force --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL}" nomadconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL}" consulconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+	"${CHUBOCTL}" openbaoconfig "${HELPERS_DIR}" --force --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 
 	for bundle in nomadconfig consulconfig openbaoconfig; do
 		local dir="${HELPERS_DIR}/${bundle}"
@@ -354,7 +354,7 @@ download_helper_bundles() {
 read_boot_id() {
 	local boot_id
 
-	if ! boot_id="$("${CHUBOCTL}" --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
+	if ! boot_id="$("${CHUBOCTL}" --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" read /proc/sys/kernel/random/boot_id 2>/dev/null)"; then
 		return 1
 	fi
 
@@ -557,7 +557,7 @@ echo "generating secrets and machine configs"
 "${CHUBOCTL}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
 	-t talosconfig \
-	-o "${TALOSCONFIG_FILE}"
+	-o "${CHUBOCONFIG_FILE}"
 
 cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
 # Use a temp file rewrite so this works on both GNU and BSD/macOS sed.
@@ -583,7 +583,7 @@ maintenance_reentered_at=0
 maintenance_up_since=0
 
 while true; do
-	if run_probe "${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
+	if run_probe "${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" >/dev/null 2>&1; then
 		echo "runtime mTLS became available after install apply"
 		break
 	fi
@@ -636,9 +636,9 @@ if ! wait_for_runtime; then
 fi
 
 echo "validating runtime mTLS and runtime surface"
-"${CHUBOCTL}" version --chuboconfig "${TALOSCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+"${CHUBOCTL}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
 ./hack/chubo/check-runtime-surface.sh \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	--endpoint "${NODE_IP}" \
 	--node "${NODE_IP}"
 check_binary_mode_artifact "openwontonstatus"
@@ -651,7 +651,7 @@ fi
 echo "running upgrade flow"
 pre_upgrade_boot_id="$(read_boot_id || true)"
 "${CHUBOCTL}" upgrade \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-i "${INSTALLER_IMAGE_NODE}" \
 	--wait=false
@@ -667,7 +667,7 @@ wait_for_runtime_stable
 echo "running rollback flow"
 pre_rollback_boot_id="$(read_boot_id || true)"
 if rollback_output="$("${CHUBOCTL}" rollback \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" 2>&1)"; then
 	if [[ -n "${pre_rollback_boot_id}" ]]; then
 		wait_for_boot_id_change "${pre_rollback_boot_id}" "rollback" || true
@@ -686,7 +686,7 @@ wait_for_runtime_stable
 echo "collecting support bundle"
 rm -f "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
 "${CHUBOCTL}" support \
-	--chuboconfig "${TALOSCONFIG_FILE}" \
+	--chuboconfig "${CHUBOCONFIG_FILE}" \
 	-e "${NODE_IP}" -n "${NODE_IP}" \
 	-O "${SUPPORT_OUT}" -v
 unzip -l "${SUPPORT_OUT}" > "${SUPPORT_LISTING}"

@@ -61,7 +61,7 @@ var Commands []*cobra.Command
 
 func addCommand(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVar(
-		&GlobalArgs.Talosconfig,
+		&GlobalArgs.Chuboconfig,
 		"chuboconfig",
 		"",
 		fmt.Sprintf("The path to the Chubo configuration file. Defaults to '%s' (or legacy '%s') env variables if set, otherwise '%s', then legacy '%s', then '%s'.",
@@ -74,7 +74,7 @@ func addCommand(cmd *cobra.Command) {
 	)
 
 	cmd.PersistentFlags().StringVar(
-		&GlobalArgs.Talosconfig,
+		&GlobalArgs.Chuboconfig,
 		"talosconfig",
 		"",
 		fmt.Sprintf("Legacy alias for --chuboconfig. Defaults to '%s' (or legacy '%s') env variables if set, otherwise '%s', then legacy '%s', then '%s'.",

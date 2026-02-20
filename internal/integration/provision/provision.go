@@ -391,7 +391,7 @@ type clusterOptions struct {
 //
 //nolint:gocyclo
 func (suite *BaseSuite) setupCluster(options clusterOptions) {
-	defaultStateDir, err := clientconfig.GetTalosDirectory()
+	defaultStateDir, err := clientconfig.GetChuboDirectory()
 	suite.Require().NoError(err)
 
 	suite.stateDir = filepath.Join(defaultStateDir, "clusters")

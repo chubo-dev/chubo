@@ -144,7 +144,7 @@ func TestIntegration(t *testing.T) {
 func init() {
 	defaultTalosConfigs, _ := clientconfig.GetDefaultPaths() //nolint:errcheck
 
-	defaultStateDir, err := clientconfig.GetTalosDirectory()
+	defaultStateDir, err := clientconfig.GetChuboDirectory()
 	if err == nil {
 		defaultStateDir = filepath.Join(defaultStateDir, "clusters")
 	}

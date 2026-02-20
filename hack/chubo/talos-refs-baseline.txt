@@ -685,7 +685,7 @@
 ./pkg/machinery/client/connection.go:		// TODO: start failing instead of falling back to XDG data directory if we can't resolve Talos directory
 ./pkg/machinery/client/connection.go:		return client.NewKeyProvider("talos/keys")
 ./pkg/machinery/client/connection.go:		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
-./pkg/machinery/client/connection.go:	return client.NewKeyProviderWithFallback("talos/keys", talosDir, "keys", true)
+./pkg/machinery/client/connection.go:	return client.NewKeyProviderWithFallback("talos/keys", chuboDir, "keys", true)
 ./pkg/machinery/client/events.go:		if typeURL == "talos/runtime/"+string(eventType.ProtoReflect().Descriptor().FullName()) {
 ./pkg/machinery/client/grpc_connection_wrapper.go:	ctx = metadata.AppendToOutgoingContext(ctx, "runtime", "Talos")
 ./pkg/machinery/client/options.go:// Connection over unix socket is only used within the Talos node.
