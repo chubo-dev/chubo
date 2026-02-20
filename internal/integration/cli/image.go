@@ -30,7 +30,7 @@ func (suite *ImageSuite) SuiteName() string {
 	return "cli.ImageSuite"
 }
 
-// TestDefault verifies default Talos list of images.
+// TestDefault verifies the default Kubernetes image list.
 func (suite *ImageSuite) TestDefault() {
 	suite.RunCLI([]string{"image", "k8s-bundle"},
 		base.StdoutShouldMatch(regexp.MustCompile(regexp.QuoteMeta("registry.k8s.io/kube-apiserver"))),
@@ -48,7 +48,7 @@ func normalizeTag(tag string) string {
 	return m[1]
 }
 
-// TestSourceBundle verifies talos-bundle Talos list of images.
+// TestSourceBundle verifies source-bundle image output.
 func (suite *ImageSuite) TestSourceBundle() {
 	out := `ghcr.io/siderolabs/installer:v1.11.2
 ghcr.io/siderolabs/installer-base:v1.11.2
@@ -129,7 +129,7 @@ ghcr.io/siderolabs/youki:0.5.5@sha256:562ceabb69570203024dbb9b8673ba485af1ffdd08
 ghcr.io/siderolabs/zerotier:1.16.0@sha256:9444baa3acdc665dba56ed16c8a983c81c3f37fc73877be8fd882f9cf8c9fa5a
 ghcr.io/siderolabs/zfs:2.3.3-v1.11.2@sha256:73782571f334b18995ddf324d24b86ea9a11aa37661a468b4e077da63e0d9714`
 
-	suite.RunCLI([]string{"image", "talos-bundle", "v1.11.2"},
+	suite.RunCLI([]string{"image", "source-bundle", "v1.11.2"},
 		base.StdoutShouldMatch(regexp.MustCompile(regexp.QuoteMeta(out))),
 	)
 
@@ -143,18 +143,18 @@ ghcr.io/siderolabs/zfs:2.3.3-v1.11.2@sha256:73782571f334b18995ddf324d24b86ea9a11
 		suite.T().Skip("skipping the test for the exact version tag")
 	}
 
-	suite.RunCLI([]string{"image", "talos-bundle", "v" + tag.String()},
+	suite.RunCLI([]string{"image", "source-bundle", "v" + tag.String()},
 		base.StdoutShouldMatch(regexp.MustCompile(regexp.QuoteMeta("ghcr.io/siderolabs/talos:v"+tag.String()))),
 	)
 
-	suite.RunCLI([]string{"image", "talos-bundle", tag.String()},
+	suite.RunCLI([]string{"image", "source-bundle", tag.String()},
 		base.StdoutEmpty(),
 		base.ShouldFail(),
 	)
 
 	tag.Patch = 0
 	assert.NoError(suite.T(), tag.IncrementMinor())
-	suite.RunCLI([]string{"image", "talos-bundle", "v" + tag.FinalizeVersion()},
+	suite.RunCLI([]string{"image", "source-bundle", "v" + tag.FinalizeVersion()},
 		base.StdoutEmpty(),
 		base.ShouldFail(),
 	)

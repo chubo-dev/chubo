@@ -21,24 +21,24 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
-// TalosconfigSuite checks `talosctl config`.
-type TalosconfigSuite struct {
+// ChuboconfigSuite checks `chuboctl config`.
+type ChuboconfigSuite struct {
 	base.CLISuite
 }
 
 // SuiteName implements base.NamedSuite.
-func (suite *TalosconfigSuite) SuiteName() string {
-	return "cli.TalosconfigSuite"
+func (suite *ChuboconfigSuite) SuiteName() string {
+	return "cli.ChuboconfigSuite"
 }
 
-// TestList checks `talosctl config contexts`.
-func (suite *TalosconfigSuite) TestList() {
+// TestList checks `chuboctl config contexts`.
+func (suite *ChuboconfigSuite) TestList() {
 	suite.RunCLI([]string{"config", "contexts"},
 		base.StdoutShouldMatch(regexp.MustCompile(`CURRENT`)))
 }
 
-// TestInfo checks `talosctl config info`.
-func (suite *TalosconfigSuite) TestInfo() {
+// TestInfo checks `chuboctl config info`.
+func (suite *ChuboconfigSuite) TestInfo() {
 	suite.RunCLI([]string{"config", "info"}, // TODO: remove 10 years once the CABPT & TF providers are updated to 1.5.2+
 		base.StdoutShouldMatch(regexp.MustCompile(`(1 year|10 years) from now`)))
 
@@ -88,8 +88,8 @@ func (suite *TalosconfigSuite) TestInfo() {
 	)
 }
 
-// TestMerge checks `talosctl config merge`.
-func (suite *TalosconfigSuite) TestMerge() {
+// TestMerge checks `chuboctl config merge`.
+func (suite *ChuboconfigSuite) TestMerge() {
 	tempDir := suite.T().TempDir()
 
 	suite.RunCLI([]string{"gen", "config", "-o", tempDir, "foo", "https://192.168.0.1:6443"},
@@ -97,13 +97,13 @@ func (suite *TalosconfigSuite) TestMerge() {
 		base.StderrNotEmpty(),
 	)
 
-	talosconfigPath := filepath.Join(tempDir, "talosconfig")
+	chuboconfigPath := filepath.Join(tempDir, "chuboconfig")
 
-	suite.Assert().FileExists(talosconfigPath)
+	suite.Assert().FileExists(chuboconfigPath)
 
 	path := filepath.Join(tempDir, "merged")
 
-	suite.RunCLI([]string{"config", "merge", "--talosconfig", path, talosconfigPath},
+	suite.RunCLI([]string{"config", "merge", "--chuboconfig", path, chuboconfigPath},
 		base.StdoutEmpty())
 
 	suite.Require().FileExists(path)
@@ -113,7 +113,7 @@ func (suite *TalosconfigSuite) TestMerge() {
 
 	suite.Require().NotNil(c.Contexts["foo"])
 
-	suite.RunCLI([]string{"config", "merge", "--talosconfig", path, talosconfigPath},
+	suite.RunCLI([]string{"config", "merge", "--chuboconfig", path, chuboconfigPath},
 		base.StdoutEmpty(),
 		base.StderrNotEmpty(),
 		base.StderrShouldMatch(regexp.MustCompile(`renamed`)),
@@ -125,22 +125,22 @@ func (suite *TalosconfigSuite) TestMerge() {
 	suite.Require().NotNil(c.Contexts["foo-1"])
 }
 
-// TestNewTTL checks `talosctl config new --crt-ttl`.
-func (suite *TalosconfigSuite) TestNewTTL() {
+// TestNewTTL checks `chuboctl config new --crt-ttl`.
+func (suite *ChuboconfigSuite) TestNewTTL() {
 	tempDir := suite.T().TempDir()
 
 	node := suite.RandomDiscoveredNodeInternalIP(machine.TypeControlPlane)
 
-	talosconfig := filepath.Join(tempDir, "talosconfig")
-	suite.RunCLI([]string{"--nodes", node, "config", "new", "--roles", "os:reader", talosconfig, "--crt-ttl", "17520h"},
+	chuboconfig := filepath.Join(tempDir, "chuboconfig")
+	suite.RunCLI([]string{"--nodes", node, "config", "new", "--roles", "os:reader", chuboconfig, "--crt-ttl", "17520h"},
 		base.StdoutEmpty())
 
-	suite.RunCLI([]string{"config", "info", "--talosconfig", talosconfig},
+	suite.RunCLI([]string{"config", "info", "--chuboconfig", chuboconfig},
 		base.StdoutShouldMatch(regexp.MustCompile(`2 years from now`)))
 }
 
-// TestNew checks `talosctl config new`.
-func (suite *TalosconfigSuite) TestNew() {
+// TestNew checks `chuboctl config new`.
+func (suite *ChuboconfigSuite) TestNew() {
 	stdout, _ := suite.RunCLI([]string{"version", "--json", "--nodes", suite.RandomDiscoveredNodeInternalIP()})
 
 	var v machineapi.Version
@@ -178,7 +178,7 @@ func (suite *TalosconfigSuite) TestNew() {
 				args := append([]string{"--nodes", node}, tt.args...)
 				suite.RunCLI(args, tt.opts...)
 
-				args = append([]string{"--talosconfig", config}, args...)
+				args = append([]string{"--chuboconfig", config}, args...)
 				suite.RunCLI(args, tt.opts...)
 			}
 		})
@@ -234,10 +234,10 @@ func (suite *TalosconfigSuite) TestNew() {
 
 			for _, config := range []string{readerConfig, operatorConfig} {
 				if rbacEnabled {
-					suite.RunCLI(append([]string{"--talosconfig", config}, args...), tt.nonprivOpts...)
+					suite.RunCLI(append([]string{"--chuboconfig", config}, args...), tt.nonprivOpts...)
 				} else {
 					// check that it works the same way as for admin with reader's config
-					suite.RunCLI(append([]string{"--talosconfig", config}, args...), tt.adminOpts...)
+					suite.RunCLI(append([]string{"--chuboconfig", config}, args...), tt.adminOpts...)
 				}
 			}
 		})
@@ -266,13 +266,13 @@ func (suite *TalosconfigSuite) TestNew() {
 			args := append([]string{"--nodes", node}, tt.args...)
 			suite.RunCLI(args, tt.privOpts...)
 
-			suite.RunCLI(append([]string{"--talosconfig", operatorConfig}, args...), tt.privOpts...)
+			suite.RunCLI(append([]string{"--chuboconfig", operatorConfig}, args...), tt.privOpts...)
 
 			if rbacEnabled {
-				suite.RunCLI(append([]string{"--talosconfig", readerConfig}, args...), tt.nonprivOpts...)
+				suite.RunCLI(append([]string{"--chuboconfig", readerConfig}, args...), tt.nonprivOpts...)
 			} else {
 				// check that it works the same way as for admin with reader's config
-				suite.RunCLI(append([]string{"--talosconfig", readerConfig}, args...), tt.privOpts...)
+				suite.RunCLI(append([]string{"--chuboconfig", readerConfig}, args...), tt.privOpts...)
 			}
 		})
 	}
@@ -307,12 +307,12 @@ func (suite *TalosconfigSuite) TestNew() {
 	} {
 		name := strings.Join(tt.args, "_")
 		suite.Run(name, func() {
-			args := append([]string{"--nodes", node, "--talosconfig", readerConfig}, tt.args...)
+			args := append([]string{"--nodes", node, "--chuboconfig", readerConfig}, tt.args...)
 			suite.RunCLI(args, tt.readerOpts...)
 		})
 	}
 }
 
 func init() {
-	allSuites = append(allSuites, new(TalosconfigSuite))
+	allSuites = append(allSuites, new(ChuboconfigSuite))
 }

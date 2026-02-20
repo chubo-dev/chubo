@@ -48,7 +48,7 @@ func (suite *MachineConfigSuite) TearDownTest() {
 
 // TestGen tests the gen subcommand.
 // Identical to GenSuite.TestGenConfigToStdoutControlPlane
-// The remaining functionality is checked for `talosctl gen config` in GenSuite.
+// The remaining functionality is checked for `chuboctl gen config` in GenSuite.
 func (suite *MachineConfigSuite) TestGen() {
 	suite.RunCLI([]string{
 		"gen", "config",

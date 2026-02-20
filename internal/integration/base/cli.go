@@ -33,9 +33,9 @@ type CLISuite struct {
 	TalosSuite
 }
 
-// DiscoverNodes provides list of Talos nodes in the cluster.
+// DiscoverNodes provides list of Chubo OS nodes in the cluster.
 //
-// As there's no way to provide this functionality via Talos CLI, it relies on cluster info.
+// As there's no way to provide this functionality via chuboctl, it relies on cluster info.
 func (cliSuite *CLISuite) DiscoverNodes(ctx context.Context) cluster.Info {
 	discoveredNodes := cliSuite.TalosSuite.DiscoverNodes(ctx)
 	if discoveredNodes != nil {
@@ -45,14 +45,14 @@ func (cliSuite *CLISuite) DiscoverNodes(ctx context.Context) cluster.Info {
 	return cliSuite.discoverKubectl()
 }
 
-// DiscoverNodeInternalIPs provides list of Talos node internal IPs in the cluster.
+// DiscoverNodeInternalIPs provides list of Chubo OS node internal IPs in the cluster.
 func (cliSuite *CLISuite) DiscoverNodeInternalIPs(ctx context.Context) []string {
 	nodes := cliSuite.DiscoverNodes(ctx)
 
 	return mapNodeInfosToInternalIPs(nodes.Nodes())
 }
 
-// DiscoverNodeInternalIPsByType provides list of Talos node internal IPs in the cluster for given machine type.
+// DiscoverNodeInternalIPsByType provides list of Chubo OS node internal IPs in the cluster for given machine type.
 func (cliSuite *CLISuite) DiscoverNodeInternalIPsByType(ctx context.Context, machineType machine.Type) []string {
 	nodesByType := cliSuite.DiscoverNodes(ctx).NodesByType(machineType)
 
@@ -82,7 +82,7 @@ func (cliSuite *CLISuite) discoverKubectl() cluster.Info {
 	// pull down kubeconfig into temporary directory
 	tempDir := cliSuite.T().TempDir()
 
-	// rely on `nodes:` being set in talosconfig
+	// rely on `nodes:` being set in chuboconfig
 	cliSuite.RunCLI([]string{"kubeconfig", tempDir}, StdoutEmpty())
 
 	masterNodes, err := cmd.Run(cliSuite.KubectlPath, "--kubeconfig", filepath.Join(tempDir, "kubeconfig"), "get", "nodes",
@@ -102,13 +102,13 @@ func (cliSuite *CLISuite) discoverKubectl() cluster.Info {
 	return nodeInfo
 }
 
-// RunCLI runs talosctl binary with the options provided.
+// RunCLI runs chuboctl binary with the options provided.
 func (cliSuite *CLISuite) RunCLI(args []string, options ...RunOption) (stdout, stderr string) {
 	return run(cliSuite.T(), cliSuite.MakeCMDFn(args), options...)
 }
 
 // MakeCMDFn returns a function that creates a new exec.Cmd with the provided args.
-// TalosSuite flags are added at the beginning so they can be overridden by args.
+// Base suite flags are added at the beginning so they can be overridden by args.
 func (cliSuite *CLISuite) MakeCMDFn(args []string) func() *exec.Cmd {
 	if cliSuite.Endpoint != "" {
 		args = append([]string{"--endpoints", cliSuite.Endpoint}, args...)
@@ -130,7 +130,7 @@ func (cliSuite *CLISuite) MakeCMDFn(args []string) func() *exec.Cmd {
 	mgmtCommand := slices.Contains([]string{"completion", "gen", "inject", "machineconfig", "validate"}, firstArg)
 
 	if !mgmtCommand {
-		args = append([]string{"--talosconfig", cliSuite.TalosConfig}, args...)
+		args = append([]string{"--chuboconfig", cliSuite.TalosConfig}, args...)
 	}
 
 	path := cliSuite.TalosctlPath
@@ -138,7 +138,7 @@ func (cliSuite *CLISuite) MakeCMDFn(args []string) func() *exec.Cmd {
 	return func() *exec.Cmd { return exec.CommandContext(cliSuite.T().Context(), path, args...) }
 }
 
-// RunCLI runs talosctl binary with the options provided.
+// RunCLI runs chuboctl binary with the options provided.
 func RunCLI(t *testing.T, f func() *exec.Cmd, options ...RunOption) (stdout, stderr string) {
 	return run(t, f, options...)
 }
