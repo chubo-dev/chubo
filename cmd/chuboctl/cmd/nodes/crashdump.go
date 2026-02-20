@@ -26,7 +26,7 @@ var crashdumpCmd = &cobra.Command{
 	Hidden: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			return errors.New("`talosctl crashdump` is deprecated, please use `talosctl support` instead")
+			return errors.New("`chuboctl crashdump` is deprecated, please use `chuboctl support` instead")
 		})
 	},
 }

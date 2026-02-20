@@ -22,7 +22,7 @@ var interfacesCmd = &cobra.Command{
 	Hidden: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			return errors.New("`talosctl interfaces` is deprecated, please use `talosctl get addresses` and `talosctl get links` instead")
+			return errors.New("`chuboctl interfaces` is deprecated, please use `chuboctl get addresses` and `chuboctl get links` instead")
 		})
 	},
 }

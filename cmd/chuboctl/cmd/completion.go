@@ -68,7 +68,7 @@ Note for zsh users: [1] zsh completions are only supported in versions of zsh >=
 		case "zsh":
 			err := rootCmd.GenZshCompletion(os.Stdout)
 			// cobra does not hook the completion, so let's do it manually
-			fmt.Printf("compdef _chuboctl chuboctl talosctl")
+			fmt.Printf("compdef _chuboctl chuboctl chuboctl")
 
 			return err
 		default:

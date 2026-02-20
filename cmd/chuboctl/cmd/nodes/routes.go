@@ -23,7 +23,7 @@ var routesCmd = &cobra.Command{
 	Hidden:  true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return WithClient(func(ctx context.Context, c *client.Client) error {
-			return errors.New("`talosctl routes` is deprecated, please use `talosctl get routes` instead")
+			return errors.New("`chuboctl routes` is deprecated, please use `chuboctl get routes` instead")
 		})
 	},
 }

@@ -7,6 +7,6 @@ package machineconfig
 import "github.com/chubo-dev/chubo/cmd/chuboctl/cmd/mgmt/gen"
 
 func init() {
-	// alias for `talosctl gen config`
+	// alias for `chuboctl gen config`
 	Cmd.AddCommand(gen.NewConfigCmd("gen"))
 }

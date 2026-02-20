@@ -68,7 +68,7 @@ func createDevCluster(ctx context.Context, cOps clusterops.Common, qOps clustero
 		return nil
 	}
 
-	// Create and save the talosctl configuration file.
+	// Create and save the chuboctl configuration file.
 	err = postCreate(ctx, cOps, cluster, clusterConfigs)
 	if err != nil {
 		return err

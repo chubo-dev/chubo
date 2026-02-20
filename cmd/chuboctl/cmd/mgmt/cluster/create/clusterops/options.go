@@ -185,7 +185,7 @@ func GetQemu() Qemu {
 		CniBinPath:        []string{filepath.Join(clustercmd.DefaultCNIDir, "bin")},
 		CniConfDir:        filepath.Join(clustercmd.DefaultCNIDir, "conf.d"),
 		CniCacheDir:       filepath.Join(clustercmd.DefaultCNIDir, "cache"),
-		CniBundleURL: fmt.Sprintf("https://github.com/%s/talos/releases/download/%s/talosctl-cni-bundle-%s.tar.gz",
+		CniBundleURL: fmt.Sprintf("https://github.com/%s/chubo/releases/download/%s/chuboctl-cni-bundle-%s.tar.gz",
 			images.Username, version.Trim(version.Tag), constants.ArchVariable),
 		Disks:          disks,
 		ImageCachePort: 5000,

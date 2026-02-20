@@ -29,7 +29,7 @@ streams it back to the client.
 
 If '-' is given for <local-path>, archive is written to stdout.
 Otherwise archive is extracted to <local-path> which should be an empty directory or
-talosctl creates a directory if <local-path> doesn't exist. Command doesn't preserve
+chuboctl creates a directory if <local-path> doesn't exist. Command doesn't preserve
 ownership and access mode for the files in extract mode, while  streamed .tar archive
 captures ownership and permission bits.`,
 	Args: cobra.ExactArgs(2),

@@ -168,7 +168,7 @@ func imageList() error {
 
 // imageListLegacy lists images using the legacy ImageList API.
 //
-// Note: remove me in Talos 1.15.
+// Note: remove this compatibility helper in a future major release.
 func imageListLegacy() error {
 	return WithClient(func(ctx context.Context, c *client.Client) error {
 		ns, err := imageCmdFlags.apiNamespace()
@@ -176,7 +176,7 @@ func imageListLegacy() error {
 			return err
 		}
 
-		rcv, err := c.ImageList(ctx, ns) //nolint:staticcheck // legacy talosctl methods, to be removed in Talos 1.15
+		rcv, err := c.ImageList(ctx, ns) //nolint:staticcheck // legacy chuboctl methods slated for removal
 		if err != nil {
 			return fmt.Errorf("error listing images: %w", err)
 		}
@@ -302,7 +302,7 @@ func imagePullInternal(
 
 // imagePullLegacy pulls an image using the legacy ImagePull API.
 //
-// Note: remove me in Talos 1.15.
+// Note: remove this compatibility helper in a future major release.
 func imagePullLegacy(imageRef string) error {
 	return WithClient(func(ctx context.Context, c *client.Client) error {
 		ns, err := imageCmdFlags.apiNamespace()
@@ -310,7 +310,7 @@ func imagePullLegacy(imageRef string) error {
 			return err
 		}
 
-		err = c.ImagePull(ctx, ns, imageRef) //nolint:staticcheck // legacy talosctl methods, to be removed in Talos 1.15
+		err = c.ImagePull(ctx, ns, imageRef) //nolint:staticcheck // legacy chuboctl methods slated for removal
 		if err != nil {
 			return fmt.Errorf("error pulling image: %w", err)
 		}
@@ -321,7 +321,7 @@ func imagePullLegacy(imageRef string) error {
 
 // imageImportInternal imports an image from a tarball.
 //
-// Note: this is not exposed as a command, but used in talosctl debug flow.
+// Note: this is not exposed as a command, but used in chuboctl debug flow.
 //
 //nolint:gocyclo
 func imageImportInternal(
@@ -567,10 +567,10 @@ var imageCacheCreateCmd = &cobra.Command{
 	Use:   "cache-create",
 	Short: "Create a cache of images in OCI format into a directory",
 	Long:  `Create a cache of images in OCI format into a directory`,
-	Example: `talosctl images cache-create --images=docker.io/library/alpine:latest --image-cache-path=/tmp/talos-image-cache
+	Example: `chuboctl images cache-create --images=docker.io/library/alpine:latest --image-cache-path=/tmp/chubo-image-cache
 
 Alternatively, stdin can be piped to the command:
-talosctl images default | talosctl images cache-create --image-cache-path=/tmp/talos-image-cache --images=-
+chuboctl images default | chuboctl images cache-create --image-cache-path=/tmp/chubo-image-cache --images=-
 `,
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {

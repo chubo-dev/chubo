@@ -45,10 +45,10 @@ var debugCmd = &cobra.Command{
 	Use:   "debug <image-tar-path|image ref> [args]",
 	Short: "Run a debug container from an image archive or reference",
 	Example: `  # Run a debug container from a local tar archive (image will be loaded into Talos from the archive)
-    talosctl debug ./debug-tools.tar --args /bin/sh
+    chuboctl debug ./debug-tools.tar --args /bin/sh
 
   # Run a debug container from an image reference (Talos will pull the image if not present)
-    talosctl debug docker.io/library/alpine:latest --args /bin/sh`,
+    chuboctl debug docker.io/library/alpine:latest --args /bin/sh`,
 
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {

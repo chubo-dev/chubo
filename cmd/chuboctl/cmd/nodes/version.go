@@ -19,7 +19,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
-// versionCmdFlags represents the `talosctl version` command's flags.
+// versionCmdFlags represents the `chuboctl version` command's flags.
 var versionCmdFlags struct {
 	clientOnly   bool
 	shortVersion bool
@@ -27,7 +27,7 @@ var versionCmdFlags struct {
 	insecure     bool
 }
 
-// versionCmd represents the `talosctl version` command.
+// versionCmd represents the `chuboctl version` command.
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Prints the version",

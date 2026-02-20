@@ -48,7 +48,7 @@ func newMachineConfigCmd() *cobra.Command {
   apiVersion: chubo.dev/v1alpha1
   kind: MachineConfig
 
-The output is suitable for ` + "`talosctl apply-config`" + ` in the ` + "`chubo`" + ` build variant.
+The output is suitable for ` + "`chuboctl apply-config`" + ` in the ` + "`chubo`" + ` build variant.
 `,
 		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {

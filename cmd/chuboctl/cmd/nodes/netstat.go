@@ -393,7 +393,7 @@ func wildcardIfZero(num uint32) string {
 
 func init() {
 	netstatCmd.Flags().BoolVarP(&netstatCmdFlags.verbose, "verbose", "v", false, "display sockets of all supported transport protocols")
-	// extend is normally -e but cannot be used as this is endpoint in talosctl
+	// extend is normally -e but cannot be used as this is endpoint in chuboctl
 	netstatCmd.Flags().BoolVarP(&netstatCmdFlags.extend, "extend", "x", false, "show detailed socket information")
 	netstatCmd.Flags().BoolVarP(&netstatCmdFlags.pid, "programs", "p", false, "show process using socket")
 	netstatCmd.Flags().BoolVarP(&netstatCmdFlags.timers, "timers", "o", false, "display timers")

@@ -21,9 +21,8 @@ import (
 
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
-	Use:     "chuboctl",
-	Aliases: []string{"talosctl"},
-	Short:   "A CLI for out-of-band management of Chubo OS nodes",
+	Use:   "chuboctl",
+	Short: "A CLI for out-of-band management of Chubo OS nodes",
 	Long: `Manage Chubo OS nodes over the OS API.
 
 The OS API is the only remote control plane.

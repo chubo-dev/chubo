@@ -16,7 +16,7 @@ var disksCmd = &cobra.Command{
 	Long:   ``,
 	Hidden: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return errors.New("`talosctl disks` is deprecated, please use `talosctl get disks`, `talosctl get systemdisk`, `talosctl get discoveredvolumes` instead")
+		return errors.New("`chuboctl disks` is deprecated, please use `chuboctl get disks`, `chuboctl get systemdisk`, `chuboctl get discoveredvolumes` instead")
 	},
 }
 
