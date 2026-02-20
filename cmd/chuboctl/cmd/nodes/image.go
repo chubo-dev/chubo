@@ -452,16 +452,17 @@ func imageRemove(imageRef string) error {
 	})
 }
 
-var imageTalosBundleCmdFlags = struct {
+var imageSourceBundleCmdFlags = struct {
 	extensions bool
 	overlays   bool
 }{}
 
-// imageTalosBundleCmd represents the legacy image talos-bundle command.
-var imageTalosBundleCmd = &cobra.Command{
-	Use:   "talos-bundle [talos-version]",
-	Short: "List the default system images and extensions used for Chubo OS",
-	Long:  ``,
+// imageSourceBundleCmd lists source images for a Chubo OS release.
+var imageSourceBundleCmd = &cobra.Command{
+	Use:     "source-bundle [chubo-version]",
+	Aliases: []string{"talos-bundle"},
+	Short:   "List the default system images and extensions used for Chubo OS",
+	Long:    ``,
 	Args: cobra.MatchAll(
 		cobra.RangeArgs(0, 1),
 		func(cmd *cobra.Command, args []string) error {
@@ -528,7 +529,7 @@ var imageTalosBundleCmd = &cobra.Command{
 
 		digestedReferences := []string{}
 
-		if imageTalosBundleCmdFlags.extensions {
+		if imageSourceBundleCmdFlags.extensions {
 			extensions, err = artifacts.FetchOfficialExtensions(tag)
 			if err != nil {
 				return fmt.Errorf("error fetching official extensions for %s: %w", tag, err)
@@ -539,7 +540,7 @@ var imageTalosBundleCmd = &cobra.Command{
 			}
 		}
 
-		if imageTalosBundleCmdFlags.overlays {
+		if imageSourceBundleCmdFlags.overlays {
 			overlays, err = artifacts.FetchOfficialOverlays(tag)
 			if err != nil {
 				return fmt.Errorf("error fetching official overlays for %s: %w", tag, err)

@@ -319,8 +319,7 @@
 ./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	cli.Should(genSecretsCmd.Flags().MarkHidden("talos-version"))
 ./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	genSecretsCmd.Flags().StringVar(&genSecretsCmdFlags.chuboVersion, "talos-version", "", fmt.Sprintf("Legacy alias for --%s.", genSecretsChuboVersionFlagName))
 ./cmd/chuboctl/cmd/nodes/image.go:		fmt.Printf("%s\n", sources.Talos)
-./cmd/chuboctl/cmd/nodes/image.go:	Use:   "talos-bundle [talos-version]",
-./cmd/chuboctl/cmd/nodes/image.go:// imageTalosBundleCmd represents the legacy image talos-bundle command.
+./cmd/chuboctl/cmd/nodes/image.go:	Aliases: []string{"talos-bundle"},
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support"
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"

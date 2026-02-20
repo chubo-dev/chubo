@@ -15,7 +15,7 @@ func imageCacheMirrorDefaults() []string {
 }
 
 func registerImageBundleCommand() {
-	imageCmd.AddCommand(imageTalosBundleCmd)
-	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.overlays, "overlays", true, "Include images that belong to OS overlays")
-	imageTalosBundleCmd.PersistentFlags().BoolVar(&imageTalosBundleCmdFlags.extensions, "extensions", true, "Include images that belong to OS extensions")
+	imageCmd.AddCommand(imageSourceBundleCmd)
+	imageSourceBundleCmd.PersistentFlags().BoolVar(&imageSourceBundleCmdFlags.overlays, "overlays", true, "Include images that belong to OS overlays")
+	imageSourceBundleCmd.PersistentFlags().BoolVar(&imageSourceBundleCmdFlags.extensions, "extensions", true, "Include images that belong to OS extensions")
 }
