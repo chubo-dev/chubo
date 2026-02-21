@@ -1853,7 +1853,7 @@ func (s *Server) GenerateClientConfiguration(ctx context.Context, in *machine.Ge
 
 	secretsBundle := secrets.NewBundleFromConfig(secrets.NewFixedClock(time.Now()), s.Controller.Runtime().Config())
 
-	cert, err := secretsBundle.GenerateTalosAPIClientCertificateWithTTL(roles, crtTTL)
+	cert, err := secretsBundle.GenerateChuboAPIClientCertificateWithTTL(roles, crtTTL)
 	if err != nil {
 		return nil, err
 	}
@@ -1871,15 +1871,15 @@ func (s *Server) GenerateClientConfiguration(ctx context.Context, in *machine.Ge
 		return nil, err
 	}
 
+	msg := &machine.GenerateClientConfiguration{
+		Ca:  secretsBundle.Certs.OS.Crt,
+		Crt: cert.Crt,
+		Key: cert.Key,
+	}
+	msg.SetChuboconfig(b)
+
 	reply := &machine.GenerateClientConfigurationResponse{
-		Messages: []*machine.GenerateClientConfiguration{
-			{
-				Ca:          secretsBundle.Certs.OS.Crt,
-				Crt:         cert.Crt,
-				Key:         cert.Key,
-				Talosconfig: b,
-			},
-		},
+		Messages: []*machine.GenerateClientConfiguration{msg},
 	}
 
 	return reply, nil

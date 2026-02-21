@@ -10,7 +10,7 @@ import (
 
 // Chuboconfig returns the primary admin client config.
 func (in *Input) Chuboconfig() (*clientconfig.Config, error) {
-	clientcert, err := in.Options.SecretsBundle.GenerateTalosAPIClientCertificate(in.Options.Roles)
+	clientcert, err := in.Options.SecretsBundle.GenerateChuboAPIClientCertificate(in.Options.Roles)
 	if err != nil {
 		return nil, err
 	}

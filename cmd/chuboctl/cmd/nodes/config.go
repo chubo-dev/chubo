@@ -433,7 +433,7 @@ var configNewCmd = &cobra.Command{
 				panic(fmt.Sprintf("expected 1 message, got %d", l))
 			}
 
-			config, err := clientconfig.FromBytes(resp.Messages[0].Talosconfig)
+			config, err := clientconfig.FromBytes(resp.Messages[0].GetChuboconfig())
 			if err != nil {
 				return err
 			}

@@ -174,19 +174,29 @@ func (bundle *Bundle) populate(versionContract *config.VersionContract) error {
 	return nil
 }
 
-// GenerateTalosAPIClientCertificate generates the admin certificate.
-func (bundle *Bundle) GenerateTalosAPIClientCertificate(roles role.Set) (*x509.PEMEncodedCertificateAndKey, error) {
-	return bundle.GenerateTalosAPIClientCertificateWithTTL(roles, constants.ChuboAPIDefaultCertificateValidityDuration)
+// GenerateChuboAPIClientCertificate generates the admin certificate.
+func (bundle *Bundle) GenerateChuboAPIClientCertificate(roles role.Set) (*x509.PEMEncodedCertificateAndKey, error) {
+	return bundle.GenerateChuboAPIClientCertificateWithTTL(roles, constants.ChuboAPIDefaultCertificateValidityDuration)
 }
 
-// GenerateTalosAPIClientCertificateWithTTL generates the admin certificate with specified TTL.
-func (bundle *Bundle) GenerateTalosAPIClientCertificateWithTTL(roles role.Set, crtTTL time.Duration) (*x509.PEMEncodedCertificateAndKey, error) {
+// GenerateChuboAPIClientCertificateWithTTL generates the admin certificate with specified TTL.
+func (bundle *Bundle) GenerateChuboAPIClientCertificateWithTTL(roles role.Set, crtTTL time.Duration) (*x509.PEMEncodedCertificateAndKey, error) {
 	return NewAdminCertificateAndKey(
 		bundle.Clock.Now(),
 		bundle.Certs.OS,
 		roles,
 		crtTTL,
 	)
+}
+
+// GenerateTalosAPIClientCertificate is a legacy alias kept for compatibility.
+func (bundle *Bundle) GenerateTalosAPIClientCertificate(roles role.Set) (*x509.PEMEncodedCertificateAndKey, error) {
+	return bundle.GenerateChuboAPIClientCertificate(roles)
+}
+
+// GenerateTalosAPIClientCertificateWithTTL is a legacy alias kept for compatibility.
+func (bundle *Bundle) GenerateTalosAPIClientCertificateWithTTL(roles role.Set, crtTTL time.Duration) (*x509.PEMEncodedCertificateAndKey, error) {
+	return bundle.GenerateChuboAPIClientCertificateWithTTL(roles, crtTTL)
 }
 
 // Validate the bundle.
