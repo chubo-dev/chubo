@@ -79,7 +79,7 @@ Talos now includes udev rules to support hot-adding of CPUs in virtualized envir
     [notest.interactive-installer]
         title = "Interactive Installer Removal"
         description = """\
-The interactive installer mode has been removed from `talosctl apply-config` (`--mode=interactive`).
+The interactive installer mode has been removed from `chuboctl apply-config` (`--mode=interactive`).
 It has been deprecated since Talos v1.12.0, and now fully removed.
 The related `GenerateConfiguration` API method has also been removed.
 Users are encouraged to use other installation methods, such as using pre-generated configuration files, or using Omni.
@@ -93,17 +93,17 @@ Purging of unneeded manifests is automatically performed.
 The switch and inventory backfill is automatic and no action is needed from the user.
 """
 
-    [notes.talosctl_images_talos_bundle]
-        title = "`talosctl images talos-bundle` can ignore reaching to the registry"
+    [notes.chuboctl_images_source_bundle]
+        title = "`chuboctl image source-bundle` can ignore reaching to the registry"
         description = """\
-The `talosctl images talos-bundle` command now accepts optional `--overlays` and `--extensions` flags.
+The `chuboctl image source-bundle` command now accepts optional `--overlays` and `--extensions` flags.
 If those are set to `false`, the command will not attempt to reach out to the container registry to fetch the latest versions and digests of the overlays and extensions.
 """
 
     [notes.images_bundle]
-        title = "Talosctl images talos-bundle subcommand accepts version parameter"
+        title = "Chuboctl image source-bundle subcommand accepts version parameter"
         description = """\
-The `talosctl images talos-bundle` command now accepts an optional version overrides arguments.
+The `chuboctl image source-bundle` command now accepts optional version override arguments.
 """
 
     [notes.environment_config]
@@ -160,16 +160,16 @@ This allows to define a custom connectivity condition.
     [notes.images]
         title = "Image APIs Updated"
         description = """\
-Talos Linux provides new APIs to manage container images on the node: listing, pulling, importing and removing images.
+Chubo OS provides new APIs to manage container images on the node: listing, pulling, importing and removing images.
 The new pull APIs provides pull progress notifications.
 
-The CLI commands `talosctl image pull`, `talosctl image list` and `talosctl image remove` have been updated to interact with the new APIs.
+The CLI commands `chuboctl image pull`, `chuboctl image list` and `chuboctl image remove` have been updated to interact with the new APIs.
 """
 
     [notes.debug]
-        title = "talosctl debug"
+        title = "chuboctl debug"
         description = """\
-Talos Linux now provides a way to run and attach to the privileged debug container with a user-provided container image.
+Chubo OS now provides a way to run and attach to the privileged debug container with a user-provided container image.
 The debug container might be used for troubleshooting and debugging purposes.
 """
 
