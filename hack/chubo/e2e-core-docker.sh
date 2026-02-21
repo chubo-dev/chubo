@@ -25,7 +25,7 @@ WORKDIR="${WORKDIR:-/tmp/chubo-e2e-docker-work}"
 SUBNET="${SUBNET:-10.5.0.0/24}"
 NODE_CONTAINER="${NODE_CONTAINER:-${CLUSTER_NAME}-controlplane-1}"
 
-CHUBO_IMAGE_LOCAL="${CHUBO_IMAGE_LOCAL:-${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}}"
+CHUBO_IMAGE_LOCAL="${CHUBO_IMAGE_LOCAL:-${TALOS_IMAGE_LOCAL:-localhost/chubo/chubo:dev}}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-600}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 
@@ -123,7 +123,7 @@ rm -f "${CHUBOCONFIG_FILE}" "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
 "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
 
 echo "building chubo OS docker image"
-make docker-talos \
+make docker-chubo \
 	DEST="${ARTIFACTS}" \
 	GO_BUILDTAGS="${GO_BUILDTAGS}" \
 	PLATFORM="linux/${ARCH}" \
@@ -132,7 +132,7 @@ make docker-talos \
 	USERNAME=chubo \
 	IMAGE_TAG_OUT=dev
 
-docker load -i "${ARTIFACTS}/talos.tar" >/dev/null
+docker load -i "${ARTIFACTS}/chubo.tar" >/dev/null
 
 echo "creating single-node Docker provisioner cluster"
 cluster_created=1

@@ -1112,13 +1112,15 @@ FROM scratch AS initramfs
 ARG TARGETARCH
 COPY --from=initramfs-archive /initramfs.xz /initramfs-${TARGETARCH}.xz
 
-# The talos target generates a docker image that can be used to run Talos
-# in containers.
+# The talos target is retained as a compatibility alias for the Chubo OS image.
 
 FROM scratch AS talos
 COPY --from=rootfs / /
 LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
 ENTRYPOINT ["/sbin/init"]
+
+# The chubo target is the primary Chubo OS image target.
+FROM talos AS chubo
 
 # The installer target generates an image that can be used to install Talos to
 # various environments.

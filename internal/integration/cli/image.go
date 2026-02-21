@@ -53,7 +53,7 @@ func (suite *ImageSuite) TestSourceBundle() {
 	out := `ghcr.io/siderolabs/installer:v1.11.2
 ghcr.io/siderolabs/installer-base:v1.11.2
 ghcr.io/siderolabs/imager:v1.11.2
-ghcr.io/siderolabs/talos:v1.11.2
+ghcr.io/siderolabs/chubo:v1.11.2
 ghcr.io/siderolabs/chuboctl-all:v1.11.2
 ghcr.io/siderolabs/overlays:v1.11.2
 ghcr.io/siderolabs/extensions:v1.11.2
@@ -144,7 +144,7 @@ ghcr.io/siderolabs/zfs:2.3.3-v1.11.2@sha256:73782571f334b18995ddf324d24b86ea9a11
 	}
 
 	suite.RunCLI([]string{"image", "source-bundle", "v" + tag.String()},
-		base.StdoutShouldMatch(regexp.MustCompile(regexp.QuoteMeta("ghcr.io/siderolabs/talos:v"+tag.String()))),
+		base.StdoutShouldMatch(regexp.MustCompile(regexp.QuoteMeta("ghcr.io/siderolabs/chubo:v"+tag.String()))),
 	)
 
 	suite.RunCLI([]string{"image", "source-bundle", tag.String()},

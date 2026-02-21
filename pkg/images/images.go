@@ -30,9 +30,7 @@ var (
 
 	// DefaultChuboImageName is the default container image name for
 	// the Chubo image.
-	//
-	// Legacy repository path is retained for compatibility.
-	DefaultChuboImageName = Username + "/talos"
+	DefaultChuboImageName = Username + "/chubo"
 
 	// DefaultChuboImageRepository is the default container repository for
 	// the Chubo image.
@@ -41,12 +39,12 @@ var (
 	// DefaultChuboImage is the default Chubo image.
 	DefaultChuboImage = DefaultChuboImageRepository + ":" + version.Tag
 
-	// DefaultTalosImageName is a compatibility alias for DefaultChuboImageName.
-	DefaultTalosImageName = DefaultChuboImageName
-	// DefaultTalosImageRepository is a compatibility alias for DefaultChuboImageRepository.
-	DefaultTalosImageRepository = DefaultChuboImageRepository
-	// DefaultTalosImage is a compatibility alias for DefaultChuboImage.
-	DefaultTalosImage = DefaultChuboImage
+	// DefaultTalosImageName is the legacy container image name kept for compatibility.
+	DefaultTalosImageName = Username + "/talos"
+	// DefaultTalosImageRepository is the legacy container repository kept for compatibility.
+	DefaultTalosImageRepository = Registry + "/" + DefaultTalosImageName
+	// DefaultTalosImage is the legacy Talos image kept for compatibility.
+	DefaultTalosImage = DefaultTalosImageRepository + ":" + version.Tag
 
 	// DefaultInstallerBaseImageRepository is the default container repository for
 	// installer-base image.

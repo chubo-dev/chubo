@@ -278,7 +278,7 @@ CI_ARGS ?=
 
 EXTENSIONS_FILTER_COMMAND ?= grep -vE 'tailscale|xen-guest-agent|nvidia|vmtoolsd-guest-agent|metal-agent|cloudflared|zerotier|nebula|newt|netbird|multipath-tools|trident-iscsi-tools'
 
-all: initramfs kernel installer imager chuboctl chuboctl-image talos
+all: initramfs kernel installer imager chuboctl chuboctl-image chubo
 
 # Help Menu
 
@@ -392,9 +392,13 @@ installer-base: ## Builds the container image for the installer-base and outputs
 imager: ## Builds the container image for the imager and outputs it to the registry.
 	@$(MAKE) registry-$@
 
-.PHONY: talos
-talos: ## Builds the Talos container image and outputs it to the registry.
+.PHONY: chubo
+chubo: ## Builds the Chubo OS container image and outputs it to the registry.
 	@$(MAKE) registry-$@
+
+.PHONY: talos
+talos: ## Legacy alias for chubo (Wave B compatibility).
+	@$(MAKE) chubo
 
 .PHONY: chuboctl-image
 chuboctl-image: ## Builds the chuboctl container image and outputs it to the registry.
@@ -675,7 +679,7 @@ e2e-%: $(ARTIFACTS)/$(INTEGRATION_TEST_DEFAULT_TARGET)-amd64 external-artifacts 
 		TAG=$(TAG) \
 		SHA=$(SHA) \
 		REGISTRY=$(IMAGE_REGISTRY) \
-		IMAGE=$(REGISTRY_AND_USERNAME)/talos:$(IMAGE_TAG_IN) \
+		IMAGE=$(REGISTRY_AND_USERNAME)/chubo:$(IMAGE_TAG_IN) \
 		INSTALLER_IMAGE=$(REGISTRY_AND_USERNAME)/installer:$(IMAGE_TAG_IN) \
 		ARTIFACTS=$(ARTIFACTS) \
 		CHUBOCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
@@ -752,15 +756,15 @@ conformance:
 release-notes:
 	ARTIFACTS=$(ARTIFACTS) ./hack/release.sh $@ $(ARTIFACTS)/RELEASE_NOTES.md $(TAG)
 
-push: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the generated tag.
+push: ## Pushes the installer, imager, chubo and chuboctl images to the configured container registry with the generated tag.
 	@$(MAKE) installer-base PUSH=true
 	@$(MAKE) imager PUSH=true
 	@$(MAKE) installer PUSH=true
-	@$(MAKE) talos PUSH=true
+	@$(MAKE) chubo PUSH=true
 	@$(MAKE) chuboctl-image PUSH=true
 	@$(MAKE) chuboctl-all-image PUSH=true
 
-push-%: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the specified tag (e.g. push-latest).
+push-%: ## Pushes the installer, imager, chubo and chuboctl images to the configured container registry with the specified tag (e.g. push-latest).
 	@$(MAKE) push IMAGE_TAG_OUT=$*
 
 .PHONY: clean
@@ -769,7 +773,7 @@ clean: ## Cleans up all artifacts.
 
 .PHONY: image-list
 image-list: ## Prints a list of all images built by this Makefile with digests.
-	@echo -n installer installer-base talos imager chuboctl chuboctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+	@echo -n installer installer-base chubo imager chuboctl chuboctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
 
 $(ARTIFACTS)/image-signer: $(ARTIFACTS) ## Downloads image-signer binary
 	@curl -sSL https://github.com/siderolabs/go-tools/releases/download/$(IMAGE_SIGNER_RELEASE)/image-signer-$(OPERATING_SYSTEM)-$(ARCH) -o $(ARTIFACTS)/image-signer
@@ -784,7 +788,7 @@ sign-images: $(ARTIFACTS)/image-signer ## Run cosign to sign all images built by
 reproducibility-test: $(ARTIFACTS)
 	@$(MAKE) reproducibility-test-local-initramfs
 	@$(MAKE) reproducibility-test-docker-installer-base INSTALLER_ARCH=targetarch PLATFORM=linux/$(ARCH)
-	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
+	@$(MAKE) reproducibility-test-docker-chubo reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
 	@$(MAKE) reproducibility-test-iso
 
 reproducibility-test-docker-%: $(ARTIFACTS)
