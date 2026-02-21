@@ -54,7 +54,7 @@ func (suite *ImageSuite) TestSourceBundle() {
 ghcr.io/siderolabs/installer-base:v1.11.2
 ghcr.io/siderolabs/imager:v1.11.2
 ghcr.io/siderolabs/talos:v1.11.2
-ghcr.io/siderolabs/talosctl-all:v1.11.2
+ghcr.io/siderolabs/chuboctl-all:v1.11.2
 ghcr.io/siderolabs/overlays:v1.11.2
 ghcr.io/siderolabs/extensions:v1.11.2
 ghcr.io/siderolabs/amazon-ena:2.15.0-v1.11.2@sha256:e21baee86adfb637b113751a678e9a57e970d3d597a2e488fc13440db1437732
