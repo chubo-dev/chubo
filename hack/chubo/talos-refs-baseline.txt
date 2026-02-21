@@ -311,7 +311,6 @@
 ./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	legacyVersionAliasFlag = "talos-version"
 ./cmd/chuboctl/cmd/mgmt/gen/config.go:	legacyVersionAliasFlag = "talos-version"
 ./cmd/chuboctl/cmd/mgmt/gen/secrets.go:	legacySecretsVersionAliasFlag  = "talos-version"
-./cmd/chuboctl/cmd/nodes/image.go:		fmt.Printf("%s\n", sources.Talos)
 ./cmd/chuboctl/cmd/nodes/image.go:	Aliases: []string{"talos-bundle"},
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support"
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
@@ -474,8 +473,6 @@
 ./pkg/imager/profile/profile.go:		return fmt.Errorf("secureboot is not supported for Talos version %q", p.Version)
 ./pkg/images/images.go:	DefaultChuboImageName = Username + "/talos"
 ./pkg/images/images.go:	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
-./pkg/images/list.go:	Talos         name.Tag
-./pkg/images/list.go:	bundle.Talos = mustParseReferenceWithTag(DefaultChuboImageRepository, tag)
 ./pkg/machinery/client/connection.go:		return client.NewKeyProvider("talos/keys")
 ./pkg/machinery/client/connection.go:		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
 ./pkg/machinery/client/connection.go:	return client.NewKeyProviderWithFallback("talos/keys", chuboDir, "keys", true)

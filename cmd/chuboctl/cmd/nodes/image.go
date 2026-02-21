@@ -522,8 +522,8 @@ var imageSourceBundleCmd = &cobra.Command{
 		fmt.Printf("%s\n", sources.Installer)
 		fmt.Printf("%s\n", sources.InstallerBase)
 		fmt.Printf("%s\n", sources.Imager)
-		fmt.Printf("%s\n", sources.Talos)
-		fmt.Printf("%s\n", sources.TalosctlAll)
+		fmt.Printf("%s\n", sources.Chubo)
+		fmt.Printf("%s\n", sources.ChuboctlAll)
 		fmt.Printf("%s\n", sources.Overlays)
 		fmt.Printf("%s\n", sources.Extensions)
 

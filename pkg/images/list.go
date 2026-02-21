@@ -17,27 +17,30 @@ func mustParseReferenceWithTag(ref, tag string) name.Tag {
 	return r.Context().Tag(tag)
 }
 
-// TalosBundle holds the core images (and their versions) that are used to build Chubo.
-type TalosBundle struct {
+// SourceBundle holds the core images (and their versions) that are used to build Chubo.
+type SourceBundle struct {
 	Installer     name.Tag
 	InstallerBase name.Tag
 	Imager        name.Tag
-	Talos         name.Tag
-	TalosctlAll   name.Tag
+	Chubo         name.Tag
+	ChuboctlAll   name.Tag
 
 	Overlays   name.Tag
 	Extensions name.Tag
 }
 
+// TalosBundle is a compatibility alias for SourceBundle.
+type TalosBundle = SourceBundle
+
 // ListSourcesFor returns source bundle for specific version.
-func ListSourcesFor(tag string) TalosBundle {
-	var bundle TalosBundle
+func ListSourcesFor(tag string) SourceBundle {
+	var bundle SourceBundle
 
 	bundle.Installer = mustParseReferenceWithTag(DefaultInstallerImageRepository, tag)
 	bundle.InstallerBase = mustParseReferenceWithTag(DefaultInstallerBaseImageRepository, tag)
 	bundle.Imager = mustParseReferenceWithTag(DefaultImagerImageRepository, tag)
-	bundle.Talos = mustParseReferenceWithTag(DefaultChuboImageRepository, tag)
-	bundle.TalosctlAll = mustParseReferenceWithTag(DefaultChuboctlAllImageRepository, tag)
+	bundle.Chubo = mustParseReferenceWithTag(DefaultChuboImageRepository, tag)
+	bundle.ChuboctlAll = mustParseReferenceWithTag(DefaultChuboctlAllImageRepository, tag)
 
 	bundle.Overlays = mustParseReferenceWithTag(DefaultOverlaysManifestRepository, tag)
 	bundle.Extensions = mustParseReferenceWithTag(DefaultExtensionsManifestRepository, tag)
