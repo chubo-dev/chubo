@@ -783,15 +783,5 @@
 ./pkg/provision/providers/vm/dhcpd_darwin.go:// starts the talos DHCP server and then starts the apple bootp server again, which is configured such
 ./pkg/provision/providers/vm/network_linux.go:	state.BridgeName = fmt.Sprintf("%s%s", "talos", hex.EncodeToString(networkNameHash[:])[:8])
 ./tools/docgen/schema.go:const ConfigSchemaURLFormat = "https://talos.dev/%s/schemas/%s"
-./tools/structprotogen/consts/consts.go:	fmt.Fprint(w, "package talos.resource.definitions.enums;\n\n")
-./tools/structprotogen/proto/proto.go:					typeName = "repeated talos.resource.definitions.enums." + block.ProtoMessageName()
-./tools/structprotogen/proto/proto.go:					typeName = "talos.resource.definitions.enums." + block.ProtoMessageName()
-./tools/structprotogen/proto/proto.go:				importPath = "talos.resource.definitions." + importPath
-./tools/structprotogen/proto/proto.go:		return "resource/definitions/block/block.proto", "talos.resource.definitions.block.ParameterSpec"
-./tools/structprotogen/proto/proto.go:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryAuthConfig"
-./tools/structprotogen/proto/proto.go:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryMirrorConfig"
-./tools/structprotogen/proto/proto.go:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryTLSConfig"
-./tools/structprotogen/proto/proto.go:		return "resource/definitions/proto/proto.proto", "talos.resource.definitions.proto.Mount"
-./tools/structprotogen/proto/proto.go:		return "resource/definitions/runtime/runtime.proto", "talos.resource.definitions.runtime.PlatformMetadataSpec"
-./tools/structprotogen/proto/proto.go:	fmt.Fprintf(w, "package talos.resource.definitions.%s; // %s\n\n", p.Name, p.GoPkg)
-./tools/structprotogen/proto/proto.go:	fmt.Fprintf(w, "package talos.resource.definitions.%s;\n\n", p.Name)
+./tools/structprotogen/consts/consts.go:const resourceDefinitionsNamespace = "talos.resource.definitions"
+./tools/structprotogen/proto/proto.go:const resourceDefinitionsNamespace = "talos.resource.definitions"

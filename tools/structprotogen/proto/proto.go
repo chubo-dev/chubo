@@ -19,6 +19,16 @@ import (
 	"github.com/chubo-dev/chubo/tools/structprotogen/types"
 )
 
+const resourceDefinitionsNamespace = "talos.resource.definitions"
+
+func resourceDefinitionsPackage(pkg string) string {
+	return resourceDefinitionsNamespace + "." + pkg
+}
+
+func resourceDefinitionsType(pkg, name string) string {
+	return resourceDefinitionsPackage(pkg) + "." + name
+}
+
 // Pkg represents a protobuf package.
 type Pkg struct {
 	Name  string
@@ -60,7 +70,7 @@ func (p *Pkg) WriteDebug(w io.Writer) {
 	pkgName := p.Name
 
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
-	fmt.Fprintf(w, "package talos.resource.definitions.%s; // %s\n\n", p.Name, p.GoPkg)
+	fmt.Fprintf(w, "package %s; // %s\n\n", resourceDefinitionsPackage(p.Name), p.GoPkg)
 	fmt.Fprintf(w, "option go_package = \"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
 	fmt.Fprintf(w, "option java_package = \"dev.chubo.api.resource.definitions.%s\";\n\n", pkgName)
 
@@ -68,7 +78,7 @@ func (p *Pkg) WriteDebug(w io.Writer) {
 		for i := 0; i < p.imports.Len(); i++ {
 			importPath := p.imports.Get(i)
 			if !strings.ContainsRune(importPath, '.') {
-				importPath = "talos.resource.definitions." + importPath
+				importPath = resourceDefinitionsPackage(importPath)
 			}
 
 			fmt.Fprintf(w, "import \"%s\";\n", importPath)
@@ -88,7 +98,7 @@ func (p *Pkg) Format(w io.Writer) {
 	pkgName := p.Name
 
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
-	fmt.Fprintf(w, "package talos.resource.definitions.%s;\n\n", p.Name)
+	fmt.Fprintf(w, "package %s;\n\n", resourceDefinitionsPackage(p.Name))
 	fmt.Fprintf(w, "option go_package = \"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
 	fmt.Fprintf(w, "option java_package = \"dev.chubo.api.resource.definitions.%s\";\n\n", pkgName)
 
@@ -96,7 +106,7 @@ func (p *Pkg) Format(w io.Writer) {
 		for i := 0; i < p.imports.Len(); i++ {
 			importPath := p.imports.Get(i)
 			if !strings.ContainsRune(importPath, '.') {
-				importPath = "talos.resource.definitions." + importPath
+				importPath = resourceDefinitionsPackage(importPath)
 			}
 
 			fmt.Fprintf(w, "import \"%s\";\n", importPath)
@@ -250,7 +260,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 
 				if block, ok := constants.Get(fieldTyp.Pkg, fieldTyp.Name); ok {
 					importName = "resource/definitions/enums/enums.proto"
-					typeName = "talos.resource.definitions.enums." + block.ProtoMessageName()
+					typeName = resourceDefinitionsType("enums", block.ProtoMessageName())
 				} else {
 					importName, typeName = mustFormatBasicTypeName(fieldTyp.Pkg, fieldTyp.Name)
 				}
@@ -277,7 +287,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 				switch {
 				case isEnum:
 					importName = "resource/definitions/enums/enums.proto"
-					typeName = "repeated talos.resource.definitions.enums." + block.ProtoMessageName()
+					typeName = "repeated " + resourceDefinitionsType("enums", block.ProtoMessageName())
 				case fieldTyp.Pkg == "" && fieldTyp.Name == "byte" && fieldTyp.Is2DSlice: //nolint:goconst
 					typeName = "repeated bytes"
 				case fieldTyp.Pkg == "" && fieldTyp.Name == "byte":
@@ -387,7 +397,7 @@ func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (stri
 	case typeData{"net/netip", "Addr"}:
 		return commoProto, "common.NetIP"
 	case typeData{"github.com/opencontainers/runtime-spec/specs-go", "Mount"}:
-		return "resource/definitions/proto/proto.proto", "talos.resource.definitions.proto.Mount"
+		return "resource/definitions/proto/proto.proto", resourceDefinitionsType("proto", "Mount")
 	case typeData{"github.com/siderolabs/crypto/x509", "PEMEncodedCertificateAndKey"}:
 		return commoProto, "common.PEMEncodedCertificateAndKey"
 	case typeData{"github.com/siderolabs/crypto/x509", "PEMEncodedKey"}:
@@ -398,17 +408,17 @@ func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (stri
 		return "google/api/expr/v1alpha1/checked.proto", "google.api.expr.v1alpha1.CheckedExpr"
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryMirrorConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
-		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryMirrorConfig"
+		return "resource/definitions/cri/registry.proto", resourceDefinitionsType("cri", "RegistryMirrorConfig")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryAuthConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
-		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryAuthConfig"
+		return "resource/definitions/cri/registry.proto", resourceDefinitionsType("cri", "RegistryAuthConfig")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryTLSConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
-		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryTLSConfig"
+		return "resource/definitions/cri/registry.proto", resourceDefinitionsType("cri", "RegistryTLSConfig")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime", "PlatformMetadataSpec"}:
-		return "resource/definitions/runtime/runtime.proto", "talos.resource.definitions.runtime.PlatformMetadataSpec"
+		return "resource/definitions/runtime/runtime.proto", resourceDefinitionsType("runtime", "PlatformMetadataSpec")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/block", "ParameterSpec"}:
-		return "resource/definitions/block/block.proto", "talos.resource.definitions.block.ParameterSpec"
+		return "resource/definitions/block/block.proto", resourceDefinitionsType("block", "ParameterSpec")
 	default:
 		return "", ""
 	}
