@@ -107,7 +107,7 @@ func (ext *Extension) Validate(opts ...ValidationOption) error {
 }
 
 func (ext *Extension) validateConstraints(chuboVersion semver.Version) error {
-	constraint := ext.Manifest.Metadata.Compatibility.Talos.Version
+	constraint := ext.Manifest.Metadata.Compatibility.VersionConstraint()
 
 	if constraint != "" {
 		versionConstraint, err := semver.ParseRange(trim(constraint))

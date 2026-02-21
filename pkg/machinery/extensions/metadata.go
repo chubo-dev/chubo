@@ -26,7 +26,17 @@ type Metadata struct {
 //
 //gotagsrewrite:gen
 type Compatibility struct {
-	Talos Constraint `yaml:"talos" protobuf:"1"`
+	Chubo  Constraint `yaml:"chubo,omitempty" protobuf:"2"`
+	Legacy Constraint `yaml:"talos,omitempty" protobuf:"1"`
+}
+
+// VersionConstraint returns the effective version constraint with chubo-first preference.
+func (c Compatibility) VersionConstraint() string {
+	if c.Chubo.Version != "" {
+		return c.Chubo.Version
+	}
+
+	return c.Legacy.Version
 }
 
 // Constraint describes compatibility constraint.

@@ -6,5 +6,5 @@ metadata:
   description: >
     This system extension provides gVisor using containerd's runtime handler.
   compatibility:
-    talos:
+    chubo:
       version: ">= v1.0.0"
