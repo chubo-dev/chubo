@@ -131,7 +131,7 @@ func WithConfigFromFile(fn string) OptionFunc {
 //
 // This option disables config parsing and TLS.
 //
-// Connection over unix socket is only used within the Talos node.
+// Connection over unix socket is only used within the local OS node.
 func WithUnixSocket(path string) OptionFunc {
 	return func(o *Options) error {
 		o.unixSocketPath = path

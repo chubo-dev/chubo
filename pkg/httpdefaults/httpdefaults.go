@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package httpdefaults provides default HTTP client settings for Talos.
+// Package httpdefaults provides default HTTP client settings for Chubo.
 package httpdefaults
 
 import (
@@ -13,9 +13,9 @@ import (
 	"golang.org/x/net/http/httpproxy"
 )
 
-// PatchTransport updates *http.Transport with Talos-specific settings.
+// PatchTransport updates *http.Transport with Chubo-specific settings.
 //
-// Settings applied here only make sense when running in Talos root filesystem.
+// Settings applied here only make sense when running in Chubo root filesystem.
 func PatchTransport(transport *http.Transport) *http.Transport {
 	// Explicitly set the Proxy function to work around proxy.Do
 	// once: the environment variables will be reread/initialized each time the

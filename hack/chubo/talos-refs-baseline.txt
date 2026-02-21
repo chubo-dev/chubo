@@ -594,9 +594,6 @@
 ./pkg/cluster/check/default.go:// PreBootSequenceChecks returns a set of Talos cluster readiness checks which are run before boot sequence.
 ./pkg/cluster/check/nodes.go:				// old Talos versions don't support this resource
 ./pkg/cluster/crashdump_chubo.go:// Chubo support collection is handled by dedicated talosctl support flows.
-./pkg/httpdefaults/httpdefaults.go:// Package httpdefaults provides default HTTP client settings for Talos.
-./pkg/httpdefaults/httpdefaults.go:// PatchTransport updates *http.Transport with Talos-specific settings.
-./pkg/httpdefaults/httpdefaults.go:// Settings applied here only make sense when running in Talos root filesystem.
 ./pkg/imager/cache/cache.go:	tmpDir, err := os.MkdirTemp("", "talos-image-cache-gen")
 ./pkg/imager/embed.go:				Talos: extensions.Constraint{
 ./pkg/imager/extensions/extensions.go:	// Quirks for the Talos version being used.
@@ -639,7 +636,6 @@
 ./pkg/machinery/client/connection.go:		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
 ./pkg/machinery/client/connection.go:	return client.NewKeyProviderWithFallback("talos/keys", chuboDir, "keys", true)
 ./pkg/machinery/client/events.go:		if typeURL == "talos/runtime/"+string(eventType.ProtoReflect().Descriptor().FullName()) {
-./pkg/machinery/client/options.go:// Connection over unix socket is only used within the Talos node.
 ./pkg/machinery/compatibility/compatibility.go:// Package compatibility provides version compatibility checks for Talos.
 ./pkg/machinery/compatibility/talos110/talos110.go:// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.10.
 ./pkg/machinery/compatibility/talos110/talos110.go:// MajorMinor is the major.minor version of Talos 1.10.
@@ -929,7 +925,6 @@
 ./pkg/machinery/imager/quirks/quirks.go:// UseZSTDCompression returns true if the Talos should use zstd compression in place of xz.
 ./pkg/machinery/imager/quirks/quirks.go:// Version returns the Talos version.
 ./pkg/machinery/imager/quirks/quirks.go:// XFSMkfsConfig returns the mkfs.xfs config for the given Talos version.
-./pkg/machinery/kernel/kernel.go:// DefaultArgs returns the Talos default kernel commandline options.
 ./pkg/machinery/meta/constants.go:	// DownloadURLCode stores the value of the `${code}` variable in the download URL for talos.config= URL.
 ./pkg/machinery/nethelpers/autohostnamekind.go:	AutoHostnameKindAddr                           // talos-addr
 ./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/akamai/",

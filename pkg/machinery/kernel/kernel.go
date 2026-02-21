@@ -20,7 +20,7 @@ const (
 	Sysctl = "proc.sys"
 )
 
-// DefaultArgs returns the Talos default kernel commandline options.
+// DefaultArgs returns the default kernel command line options.
 func DefaultArgs(quirks quirks.Quirks) []string {
 	result := []string{
 		"init_on_alloc=1",
