@@ -99,7 +99,7 @@ func TestNewBundleFromConfig(t *testing.T) {
 	assert.Equal(t, bundle.Cluster.ID, bundle2.Cluster.ID)
 	assert.Equal(t, bundle.Cluster.Secret, bundle2.Cluster.Secret)
 
-	cert, err := bundle2.GenerateTalosAPIClientCertificate(role.MakeSet(role.Admin))
+	cert, err := bundle2.GenerateChuboAPIClientCertificate(role.MakeSet(role.Admin))
 	require.NoError(t, err)
 	require.NotEmpty(t, cert.Crt)
 	require.NotEmpty(t, cert.Key)
