@@ -447,14 +447,6 @@
 ./internal/app/machined/pkg/controllers/block/user_disk_config.go:// UserDiskConfigController provides volume configuration based on Talos v1alpha1 user disks.
 ./internal/app/machined/pkg/controllers/block/volume_config.go:// VolumeConfigController provides volume configuration based on Talos defaults and machine configuration.
 ./internal/app/machined/pkg/controllers/cluster/cluster.go:// Package cluster provides controllers which manage Talos cluster resources.
-./internal/app/machined/pkg/controllers/config/acquire.go:						Message: "Error loading and validating Talos machine config.",
-./internal/app/machined/pkg/controllers/config/acquire.go:			Message: "Talos booted into maintenance mode. Ready for user interaction.",
-./internal/app/machined/pkg/controllers/config/acquire.go:			Message: "Talos machine config loaded successfully.",
-./internal/app/machined/pkg/controllers/config/acquire.go:		// if the STATE partition is present & contains machine config, Talos is already installed
-./internal/app/machined/pkg/controllers/config/acquire.go:	// add "fake" events to signal when Talos enters and leaves maintenance mode
-./internal/app/machined/pkg/controllers/config/acquire.go:	// if the STATE partition is present & contains machine config, Talos is already installed
-./internal/app/machined/pkg/controllers/config/acquire.go:// stateCmdlineEarly acquires machine configuration from the kernel cmdline source (talos.config.early).
-./internal/app/machined/pkg/controllers/config/acquire.go:// stateCmdlineLate acquires machine configuration from the kernel cmdline source (talos.config.inline).
 ./internal/app/machined/pkg/controllers/files/iqn.go:				// Fri Nov 3 16:19:12 2017 -0700 is the date of the first commit in the talos repository.
 ./internal/app/machined/pkg/controllers/files/iqn.go:				spec.Contents = fmt.Appendf([]byte{}, "InitiatorName=iqn.2017-11.dev.talos:%s\n", machineID)
 ./internal/app/machined/pkg/controllers/files/nqn.go:				// Fri Nov 3 16:19:12 2017 -0700 is the date of the first commit in the talos repository.
@@ -517,17 +509,6 @@
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_controller.go:		log.SetPrefix("[talos] ")
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_controller.go:	if err = kmsg.SetupLogger(nil, "[talos]", machinedLog); err != nil {
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_controller.go:	logger := log.New(log.Writer(), fmt.Sprintf("[talos] task %s (%s): ", taskName, progress), log.Flags())
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:						Message: "Talos install failed.",
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:						Message: "Talos staged upgrade failed.",
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:					Message: "Talos installed successfully.",
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:					Message: "Talos staged upgrade successful.",
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:				Message: "Talos rebooted.",
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			// b/c we'd only ever get here if Talos was already
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Printf("Talos is already installed to disk but booted from another media and %s kernel parameter is set. Please reboot from the disk.", constants.KernelParamHaltIfInstalled)
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Printf("installing Talos to disk %s", disk)
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:			logger.Println("WARNING: Talos may not work properly")
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:		// attempt to populate meta from the environment if Talos is not installed (yet)
-./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:// haltIfInstalled halts the boot process if Talos is installed to disk but booted from ISO.
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_chubo.go:// Keep the Talos sequencer API shape for now (upgrade/reset entry points call these tasks),
 ./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_state.go:				// no META, talos is not installed
 ./internal/app/machined/pkg/runtime/v1alpha2/v1alpha2_state.go:		{config.NamespaceName, "Talos node configuration."},
@@ -560,7 +541,6 @@
 ./internal/pkg/meta/internal/adv/talos/talos.go:// ADV implements the Talos extended ADV.
 ./internal/pkg/meta/internal/adv/talos/talos.go:// Package talos implements modern ADV which supports large size for the values and tags.
 ./internal/pkg/meta/internal/adv/talos/talos.go:package talos
-./internal/pkg/meta/meta.go:		return fmt.Errorf("failed to load Talos adv: %w", err)
 ./internal/pkg/meta/meta.go:		val, _ := meta.talos.ReadTag(t)
 ./internal/pkg/meta/meta.go:		val, _ := meta.talos.ReadTagBytes(t)
 ./internal/pkg/meta/meta.go:	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
@@ -812,29 +792,7 @@
 ./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:		Description: "Package v1alpha1 contains definition of the `v1alpha1` configuration document.\n\nEven though the machine configuration in Talos Linux is multi-document, at the moment\nthis configuration document contains most of the configuration options.\n\nIt is expected that new configuration options will be added as new documents, and existing ones\nmigrated to their own documents.\n",
 ./pkg/machinery/constants/amd64.go:	// MinimumGOAMD64Level is the minimum x86_64 microarchitecture level required by Talos.
 ./pkg/machinery/constants/amd64_v1.go:	// MinimumGOAMD64Level is the minimum x86_64 microarchitecture level required by Talos.
-./pkg/machinery/constants/constants.go:	// AnnotationCordonedKey is the annotation key for the nodes cordoned by Talos.
-./pkg/machinery/constants/constants.go:	// AnnotationCordonedValue is the annotation key for the nodes cordoned by Talos.
-./pkg/machinery/constants/constants.go:	// AnnotationOwnedAnnotations is the annotation key for the list of node annotations owned by Talos.
-./pkg/machinery/constants/constants.go:	// AnnotationOwnedLabels is the annotation key for the list of node labels owned by Talos.
-./pkg/machinery/constants/constants.go:	// AnnotationOwnedTaints is the annotation key for the list of node taints owned by Talos.
-./pkg/machinery/constants/constants.go:	// ContainerMarkerFilePath is the path to the file added to container builds of Talos for platform detection.
-./pkg/machinery/constants/constants.go:	// DefaultDiscoveryServiceEndpoint is the default endpoint for Talos discovery service.
-./pkg/machinery/constants/constants.go:	// DefaultNfTablesTableName is the default name of the nftables table created by Talos.
-./pkg/machinery/constants/constants.go:	// GRPCMaxMessageSize is the maximum message size for Talos API.
-./pkg/machinery/constants/constants.go:	// ISOFilesystemLabel is the label of the ISO file system for the Talos
-./pkg/machinery/constants/constants.go:	// KernelParamHaltIfInstalled is the kernel parameter name to control if Talos should pause if booting from boot media while Talos is already installed.
 ./pkg/machinery/constants/constants.go:	// KernelParamNetworkInterfaceIgnore is the kernel parameter for specifying network interfaces which should be ignored by talos.
-./pkg/machinery/constants/constants.go:	// NetworkSelfIPsAnnotation is the node annotation used to list the (comma-separated) IP addresses of the host, as discovered by Talos tooling.
-./pkg/machinery/constants/constants.go:	// NoneCNI is the string to indicate that CNI will not be managed by Talos.
-./pkg/machinery/constants/constants.go:	// ServiceAccountMountPath is the path of the directory in which the Talos service account secrets are mounted.
-./pkg/machinery/constants/constants.go:	// ServiceAccountResourceGroup is the group name of the Talos service account CRD.
-./pkg/machinery/constants/constants.go:	// ServiceAccountResourceKind is the kind name of the Talos service account CRD.
-./pkg/machinery/constants/constants.go:	// ServiceAccountResourceSingular is the singular name of the Talos service account CRD.
-./pkg/machinery/constants/constants.go:	// ServiceAccountResourceVersion is the version of the Talos service account CRD.
-./pkg/machinery/constants/constants.go:	// SystemContainerdNamespace is the Containerd namespace for Talos services.
-./pkg/machinery/constants/constants.go:	// TalosConfigEnvVar is the legacy environment variable for setting the Talos configuration file path.
-./pkg/machinery/constants/constants.go:	// TalosDir is the legacy name of the Talos directory under user home.
-./pkg/machinery/constants/constants.go:	// TalosHomeEnvVar is the legacy environment variable for setting the Talos state directory file path.
 ./pkg/machinery/constants/constants.go:	APIAuthzRoleMetadataKey = "talos-role"
 ./pkg/machinery/constants/constants.go:	AnnotationCordonedKey = "talos.dev/cordoned"
 ./pkg/machinery/constants/constants.go:	AnnotationOwnedAnnotations = "talos.dev/owned-annotations"
@@ -883,8 +841,6 @@
 ./pkg/machinery/constants/constants.go:	TalosDir = ".talos"
 ./pkg/machinery/constants/constants.go:	UdevRulesPath = UdevDir + "/" + "rules.d/99-talos.rules"
 ./pkg/machinery/constants/constants.go:	VMwareGuestInfoConfigKey = "talos.config"
-./pkg/machinery/constants/constants.go:// Package constants defines constants used throughout Talos.
-./pkg/machinery/constants/constants.go:// names of variable that can be substituted in the talos.config kernel parameter.
 ./pkg/machinery/constants/constants.go:HOME_URL="https://www.talos.dev/"
 ./pkg/machinery/extensions/config.go:// Config specifies Talos installer extensions configuration.
 ./pkg/machinery/extensions/extensions.go:// Package extensions contains Talos extensions specific API.
@@ -897,34 +853,6 @@
 ./pkg/machinery/extensions/validate.go:// WithTalosVersion sets the Talos version to validate against.
 ./pkg/machinery/gendata/data/name:Talos
 ./pkg/machinery/imager/quirks/partitions.go:// PartitionSizes capture partition sizes for Talos.
-./pkg/machinery/imager/quirks/quirks.go:	// if the version doesn't parse, we assume it's latest Talos
-./pkg/machinery/imager/quirks/quirks.go:// FirmwarePath returns firmware storage path for the given Talos version.
-./pkg/machinery/imager/quirks/quirks.go:// ISOSupportsSettingBootloader returns true if the Talos version supports setting bootloader for ISO output.
-./pkg/machinery/imager/quirks/quirks.go:// KernelModulesPath returns kernel module storage path for the given Talos version.
-./pkg/machinery/imager/quirks/quirks.go:// New returns a new Quirks instance based on Talos version for the image.
-./pkg/machinery/imager/quirks/quirks.go:// Package quirks contains the quirks for Talos image generation.
-./pkg/machinery/imager/quirks/quirks.go:// PartitionSizes returns partition sizes for the given Talos version.
-./pkg/machinery/imager/quirks/quirks.go:// ProcMemOverrideNever returns true if the Talos version should enforce 'proc_mem.force_override=never'.
-./pkg/machinery/imager/quirks/quirks.go:// Quirks contains the quirks for Talos image generation.
-./pkg/machinery/imager/quirks/quirks.go:// SkipDataPartitions returns true if the Talos version supports creating EPHEMERAL/STATE partitions on its own.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsCompressedEncodedMETA returns true if the Talos version supports compressed and encoded META as an environment variable.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsDisablingModuleSignatureVerification returns true if the Talos version supports disabling module signature verification.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsEmbeddedConfig returns true if the Talos version supports embedded machine configuration.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsHaltIfInstalled returns true if the Talos version supports half if installed.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsIMA returns true if the Talos version has IMA support.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsISOLabel returns true if the Talos version supports setting the ISO label.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsMetalPlatformConsoleTTYS0 returns true if the Talos version supports already has console=ttyS0 kernel argument.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsMultidoc returns true if the Talos version supports multidoc machine configs.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsOverlay returns true if the Talos imager version supports overlay.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsResetGRUBOption returns true if the Talos version supports the reset option in GRUB menu (image and ISO).
-./pkg/machinery/imager/quirks/quirks.go:// SupportsSELinux returns true if the Talos version enables selinux=1 by default.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsUKI returns true if the Talos version supports building UKIs.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsUKIProfiles returns true if the Talos version supports UKI profiles.
-./pkg/machinery/imager/quirks/quirks.go:// SupportsUnifiedInstaller returns true if the Talos version supports unified installer.
-./pkg/machinery/imager/quirks/quirks.go:// UseSDBootForUEFI returns true if the Talos version supports only SDBoot for UEFI.
-./pkg/machinery/imager/quirks/quirks.go:// UseZSTDCompression returns true if the Talos should use zstd compression in place of xz.
-./pkg/machinery/imager/quirks/quirks.go:// Version returns the Talos version.
-./pkg/machinery/imager/quirks/quirks.go:// XFSMkfsConfig returns the mkfs.xfs config for the given Talos version.
 ./pkg/machinery/meta/constants.go:	// DownloadURLCode stores the value of the `${code}` variable in the download URL for talos.config= URL.
 ./pkg/machinery/nethelpers/autohostnamekind.go:	AutoHostnameKindAddr                           // talos-addr
 ./pkg/machinery/platforms/platforms.go:			Documentation:   "/talos-guides/install/cloud-platforms/akamai/",

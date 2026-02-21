@@ -207,7 +207,7 @@ func (ctrl *AcquireController) Run(ctx context.Context, r controller.Runtime, lo
 					ctx,
 					platform.Event{
 						Type:    platform.EventTypeFailure,
-						Message: "Error loading and validating Talos machine config.",
+						Message: "Error loading and validating Chubo machine config.",
 						Error:   err,
 					},
 				)
@@ -368,7 +368,7 @@ func (ctrl *AcquireController) loadConfigFromDisk(ctx context.Context, r control
 			return err
 		}
 
-		// if the STATE partition is present & contains machine config, Talos is already installed
+		// if the STATE partition is present & contains machine config, the OS is already installed
 		warnings, err := cfg.Validate(validationModeDiskConfig{})
 		if err != nil {
 			return fmt.Errorf("failed to validate on-disk config: %w", err)
@@ -469,7 +469,7 @@ func (ctrl *AcquireController) loadConfigFromEmbedded(logger *zap.Logger) (confi
 		return nil, fmt.Errorf("failed to load config from embedded: %w", err)
 	}
 
-	// if the STATE partition is present & contains machine config, Talos is already installed
+	// if the STATE partition is present & contains machine config, the OS is already installed
 	warnings, err := cfg.Validate(validationModeDiskConfig{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to validate embedded config: %w", err)
@@ -482,7 +482,7 @@ func (ctrl *AcquireController) loadConfigFromEmbedded(logger *zap.Logger) (confi
 	return cfg, nil
 }
 
-// stateCmdlineEarly acquires machine configuration from the kernel cmdline source (talos.config.early).
+// stateCmdlineEarly acquires machine configuration from the early kernel cmdline source.
 //
 // It is called before the platform source.
 //
@@ -583,7 +583,7 @@ func (ctrl *AcquireController) loadFromPlatform(ctx context.Context, logger *zap
 	return cfg, nil
 }
 
-// stateCmdlineLate acquires machine configuration from the kernel cmdline source (talos.config.inline).
+// stateCmdlineLate acquires machine configuration from the late kernel cmdline source.
 //
 // It is called after the platform source.
 //
@@ -706,11 +706,11 @@ func (ctrl *AcquireController) stateMaintenanceEnter(ctx context.Context, r cont
 		ctx,
 		platform.Event{
 			Type:    platform.EventTypeActivate,
-			Message: "Talos booted into maintenance mode. Ready for user interaction.",
+			Message: "Chubo booted into maintenance mode. Ready for user interaction.",
 		},
 	)
 
-	// add "fake" events to signal when Talos enters and leaves maintenance mode
+	// add "fake" events to signal when Chubo enters and leaves maintenance mode
 	ctrl.EventPublisher.Publish(ctx, &machineapi.TaskEvent{
 		Action: machineapi.TaskEvent_START,
 		Task:   "runningMaintenance",
@@ -799,7 +799,7 @@ func (ctrl *AcquireController) stateDone(ctx context.Context, r controller.Runti
 		ctx,
 		platform.Event{
 			Type:    platform.EventTypeConfigLoaded,
-			Message: "Talos machine config loaded successfully.",
+			Message: "Chubo machine config loaded successfully.",
 		},
 	)
 

@@ -177,7 +177,7 @@ func MemorySizeCheck(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) 
 		switch memTotal := pointer.SafeDeref(info.MemTotal) * humanize.KiByte; {
 		case memTotal < minimum:
 			logger.Println("WARNING: memory size is less than recommended")
-			logger.Println("WARNING: Talos may not work properly")
+			logger.Println("WARNING: Chubo may not work properly")
 			logger.Println("WARNING: minimum memory size is", minimum/humanize.MiByte, "MiB")
 			logger.Println("WARNING: recommended memory size is", recommended/humanize.MiByte, "MiB")
 			logger.Println("WARNING: current total memory size is", memTotal/humanize.MiByte, "MiB")
@@ -221,7 +221,7 @@ func DiskSizeCheck(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 
 		if minimum := minimal.DiskSize(); diskSize < minimum {
 			logger.Println("WARNING: disk size is less than recommended")
-			logger.Println("WARNING: Talos may not work properly")
+			logger.Println("WARNING: Chubo may not work properly")
 			logger.Println("WARNING: minimum recommended disk size is", minimum/humanize.MiByte, "MiB")
 			logger.Println("WARNING: current total disk size is", diskSize/humanize.MiByte, "MiB")
 		} else {
@@ -1047,7 +1047,7 @@ func Reboot(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 			r.State().Platform(),
 			platform.Event{
 				Type:    platform.EventTypeRebooted,
-				Message: "Talos rebooted.",
+				Message: "Chubo rebooted.",
 			},
 		)
 
@@ -1074,7 +1074,7 @@ func Shutdown(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	}, "shutdown"
 }
 
-// haltIfInstalled halts the boot process if Talos is installed to disk but booted from ISO.
+// haltIfInstalled halts the boot process if Chubo is installed to disk but booted from ISO.
 func haltIfInstalled(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 	return func(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
 		ctx, cancel := context.WithTimeout(ctx, constants.BootTimeout)
@@ -1084,7 +1084,7 @@ func haltIfInstalled(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) 
 		defer timer.Stop()
 
 		for {
-			logger.Printf("Talos is already installed to disk but booted from another media and %s kernel parameter is set. Please reboot from the disk.", constants.KernelParamHaltIfInstalled)
+			logger.Printf("Chubo is already installed to disk but booted from another media and %s kernel parameter is set. Please reboot from the disk.", constants.KernelParamHaltIfInstalled)
 
 			select {
 			case <-timer.C:
@@ -1213,7 +1213,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 				return err
 			}
 
-			logger.Printf("installing Talos to disk %s", disk)
+			logger.Printf("installing Chubo to disk %s", disk)
 
 			err = install.RunInstallerContainer(
 				disk,
@@ -1232,7 +1232,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 					r.State().Platform(),
 					platform.Event{
 						Type:    platform.EventTypeFailure,
-						Message: "Talos install failed.",
+						Message: "Chubo install failed.",
 						Error:   err,
 					},
 				)
@@ -1245,7 +1245,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 				r.State().Platform(),
 				platform.Event{
 					Type:    platform.EventTypeInstalled,
-					Message: "Talos installed successfully.",
+					Message: "Chubo installed successfully.",
 				},
 			)
 
@@ -1296,7 +1296,7 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 					r.State().Platform(),
 					platform.Event{
 						Type:    platform.EventTypeFailure,
-						Message: "Talos staged upgrade failed.",
+						Message: "Chubo staged upgrade failed.",
 						Error:   err,
 					},
 				)
@@ -1305,14 +1305,14 @@ func Install(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 			}
 
 			// nb: we don't fire an "activate" event after this one
-			// b/c we'd only ever get here if Talos was already
+			// b/c we'd only ever get here if Chubo was already
 			// installed I believe.
 			platform.FireEvent(
 				ctx,
 				r.State().Platform(),
 				platform.Event{
 					Type:    platform.EventTypeUpgraded,
-					Message: "Talos staged upgrade successful.",
+					Message: "Chubo staged upgrade successful.",
 				},
 			)
 
@@ -1432,7 +1432,7 @@ func ReloadMeta(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
 			return err
 		}
 
-		// attempt to populate meta from the environment if Talos is not installed (yet)
+		// attempt to populate meta from the environment if Chubo is not installed (yet)
 		if errors.Is(err, fs.ErrNotExist) {
 			env := environment.Get(r.Config())
 

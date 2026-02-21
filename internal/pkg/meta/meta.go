@@ -167,7 +167,7 @@ func (meta *Meta) Reload(ctx context.Context) error {
 	adv, err := talos.NewADV(f)
 	if adv == nil && err != nil {
 		// if adv is not nil, but err is nil, it might be missing ADV, ignore it
-		return fmt.Errorf("failed to load Talos adv: %w", err)
+		return fmt.Errorf("failed to load Chubo ADV: %w", err)
 	}
 
 	legacyAdv, err := syslinux.NewADV(f)

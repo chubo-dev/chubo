@@ -320,7 +320,7 @@ func (suite *AcquireSuite) TestFromDisk() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -348,7 +348,7 @@ func (suite *AcquireSuite) TestFromDiskFailure() {
 
 	ev := suite.platformEvent.getEvents()[0]
 	suite.Assert().Equal(platform.EventTypeFailure, ev.Type)
-	suite.Assert().Equal("Error loading and validating Talos machine config.", ev.Message)
+	suite.Assert().Equal("Error loading and validating Chubo machine config.", ev.Message)
 	suite.Assert().Equal(
 		"failed to load \"config.yaml\" from STATE: error decoding document /v1alpha1/ (line 1): unknown keys found during decoding:\n"+
 			"aaaversion: v1alpha1 # Indicates the schema used to decode the contents.\n",
@@ -406,11 +406,11 @@ func (suite *AcquireSuite) TestFromDiskToMaintenance() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeActivate,
-				Message: "Talos booted into maintenance mode. Ready for user interaction.",
+				Message: "Chubo booted into maintenance mode. Ready for user interaction.",
 			},
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -432,7 +432,7 @@ func (suite *AcquireSuite) TestFromPlatform() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -455,7 +455,7 @@ func (suite *AcquireSuite) TestFromPlatformFailure() {
 
 	ev := suite.platformEvent.getEvents()[0]
 	suite.Assert().Equal(platform.EventTypeFailure, ev.Type)
-	suite.Assert().Equal("Error loading and validating Talos machine config.", ev.Message)
+	suite.Assert().Equal("Error loading and validating Chubo machine config.", ev.Message)
 	suite.Assert().Equal("error acquiring via platform mock: mock error", ev.Error.Error())
 
 	suite.Assert().Equal(&machineapi.ConfigLoadErrorEvent{
@@ -492,7 +492,7 @@ func (suite *AcquireSuite) TestFromPlatformNotValid() {
 
 	ev := suite.platformEvent.getEvents()[0]
 	suite.Assert().Equal(platform.EventTypeFailure, ev.Type)
-	suite.Assert().Equal("Error loading and validating Talos machine config.", ev.Message)
+	suite.Assert().Equal("Error loading and validating Chubo machine config.", ev.Message)
 	suite.Assert().Contains(ev.Error.Error(), "failed to validate config acquired via platform mock:")
 	suite.Assert().Contains(ev.Error.Error(), "chubo requires machine.type")
 
@@ -527,7 +527,7 @@ func (suite *AcquireSuite) TestFromPlatformGzip() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -579,11 +579,11 @@ func (suite *AcquireSuite) TestFromPlatformToMaintenance() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeActivate,
-				Message: "Talos booted into maintenance mode. Ready for user interaction.",
+				Message: "Chubo booted into maintenance mode. Ready for user interaction.",
 			},
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -646,11 +646,11 @@ func (suite *AcquireSuite) TestFromCmdlineLateToMaintenance() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeActivate,
-				Message: "Talos booted into maintenance mode. Ready for user interaction.",
+				Message: "Chubo booted into maintenance mode. Ready for user interaction.",
 			},
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -701,7 +701,7 @@ func (suite *AcquireSuite) TestFromCmdlineEarlyToPlatform() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -734,11 +734,11 @@ func (suite *AcquireSuite) TestFromMaintenance() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeActivate,
-				Message: "Talos booted into maintenance mode. Ready for user interaction.",
+				Message: "Chubo booted into maintenance mode. Ready for user interaction.",
 			},
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),
@@ -789,11 +789,11 @@ func (suite *AcquireSuite) TestFromEmbeddedToMaintenance() {
 		[]platform.Event{
 			{
 				Type:    platform.EventTypeActivate,
-				Message: "Talos booted into maintenance mode. Ready for user interaction.",
+				Message: "Chubo booted into maintenance mode. Ready for user interaction.",
 			},
 			{
 				Type:    platform.EventTypeConfigLoaded,
-				Message: "Talos machine config loaded successfully.",
+				Message: "Chubo machine config loaded successfully.",
 			},
 		},
 		suite.platformEvent.getEvents(),

@@ -2,19 +2,19 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package quirks contains the quirks for Talos image generation.
+// Package quirks contains version quirks for image generation.
 package quirks
 
 import "github.com/blang/semver/v4"
 
-// Quirks contains the quirks for Talos image generation.
+// Quirks contains version quirks for image generation.
 type Quirks struct {
 	v *semver.Version
 }
 
-// New returns a new Quirks instance based on Talos version for the image.
-func New(talosVersion string) Quirks {
-	v, err := semver.ParseTolerant(talosVersion) // ignore the error
+// New returns a new Quirks instance based on OS version for the image.
+func New(osVersion string) Quirks {
+	v, err := semver.ParseTolerant(osVersion) // ignore the error
 	if err != nil {
 		return Quirks{}
 	}
@@ -27,16 +27,16 @@ func New(talosVersion string) Quirks {
 	}}
 }
 
-// Version returns the Talos version.
+// Version returns the parsed OS version.
 func (q Quirks) Version() *semver.Version {
 	return q.v
 }
 
 var minVersionResetOption = semver.MustParse("1.4.0")
 
-// SupportsResetGRUBOption returns true if the Talos version supports the reset option in GRUB menu (image and ISO).
+// SupportsResetGRUBOption returns true if this version supports the reset option in GRUB menu (image and ISO).
 func (q Quirks) SupportsResetGRUBOption() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -46,9 +46,9 @@ func (q Quirks) SupportsResetGRUBOption() bool {
 
 var minVersionUKI = semver.MustParse("1.5.0")
 
-// SupportsUKI returns true if the Talos version supports building UKIs.
+// SupportsUKI returns true if this version supports building UKIs.
 func (q Quirks) SupportsUKI() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -58,9 +58,9 @@ func (q Quirks) SupportsUKI() bool {
 
 var minVersionCompressedMETA = semver.MustParse("1.6.3")
 
-// SupportsCompressedEncodedMETA returns true if the Talos version supports compressed and encoded META as an environment variable.
+// SupportsCompressedEncodedMETA returns true if this version supports compressed and encoded META as an environment variable.
 func (q Quirks) SupportsCompressedEncodedMETA() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -70,9 +70,9 @@ func (q Quirks) SupportsCompressedEncodedMETA() bool {
 
 var minVersionOverlay = semver.MustParse("1.7.0")
 
-// SupportsOverlay returns true if the Talos imager version supports overlay.
+// SupportsOverlay returns true if this imager version supports overlay.
 func (q Quirks) SupportsOverlay() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -82,9 +82,9 @@ func (q Quirks) SupportsOverlay() bool {
 
 var minVersionZstd = semver.MustParse("1.8.0")
 
-// UseZSTDCompression returns true if the Talos should use zstd compression in place of xz.
+// UseZSTDCompression returns true if this version should use zstd compression in place of xz.
 func (q Quirks) UseZSTDCompression() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -94,9 +94,9 @@ func (q Quirks) UseZSTDCompression() bool {
 
 var minVersionISOLabel = semver.MustParse("1.8.0")
 
-// SupportsISOLabel returns true if the Talos version supports setting the ISO label.
+// SupportsISOLabel returns true if this version supports setting the ISO label.
 func (q Quirks) SupportsISOLabel() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -106,9 +106,9 @@ func (q Quirks) SupportsISOLabel() bool {
 
 var minVersionMultidoc = semver.MustParse("1.5.0")
 
-// SupportsMultidoc returns true if the Talos version supports multidoc machine configs.
+// SupportsMultidoc returns true if this version supports multidoc machine configs.
 func (q Quirks) SupportsMultidoc() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -119,9 +119,9 @@ func (q Quirks) SupportsMultidoc() bool {
 // maxVersionMetalPlatformConsoleTTYS0Dropped is the version that dropped console=ttyS0 for metal image.
 var maxVersionMetalPlatformConsoleTTYS0Dropped = semver.MustParse("1.8.0")
 
-// SupportsMetalPlatformConsoleTTYS0 returns true if the Talos version supports already has console=ttyS0 kernel argument.
+// SupportsMetalPlatformConsoleTTYS0 returns true if this version keeps console=ttyS0 for metal images.
 func (q Quirks) SupportsMetalPlatformConsoleTTYS0() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return false
 	}
@@ -132,9 +132,9 @@ func (q Quirks) SupportsMetalPlatformConsoleTTYS0() bool {
 // minVersionSupportsHalfIfInstalled is the version that supports half if installed.
 var minVersionSupportsHalfIfInstalled = semver.MustParse("1.8.0")
 
-// SupportsHaltIfInstalled returns true if the Talos version supports half if installed.
+// SupportsHaltIfInstalled returns true if this version supports halt-if-installed.
 func (q Quirks) SupportsHaltIfInstalled() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -144,9 +144,9 @@ func (q Quirks) SupportsHaltIfInstalled() bool {
 
 var minVersionSkipDataPartitions = semver.MustParse("1.8.0")
 
-// SkipDataPartitions returns true if the Talos version supports creating EPHEMERAL/STATE partitions on its own.
+// SkipDataPartitions returns true if this version supports creating EPHEMERAL/STATE partitions on its own.
 func (q Quirks) SkipDataPartitions() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -157,9 +157,9 @@ func (q Quirks) SkipDataPartitions() bool {
 // minVersionSELinux is the version that enabled SELinux and added respective parameters.
 var minVersionSELinux = semver.MustParse("1.10.0")
 
-// SupportsSELinux returns true if the Talos version enables selinux=1 by default.
+// SupportsSELinux returns true if this version enables selinux=1 by default.
 func (q Quirks) SupportsSELinux() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
@@ -168,73 +168,73 @@ func (q Quirks) SupportsSELinux() bool {
 }
 
 // minVersionUseSDBootOnly is the version that supports only SDBoot for UEFI.
-var minTalosVersionUseSDBootOnly = semver.MustParse("1.10.0")
+var minVersionUseSDBootOnly = semver.MustParse("1.10.0")
 
-// UseSDBootForUEFI returns true if the Talos version supports only SDBoot for UEFI.
+// UseSDBootForUEFI returns true if this version supports only SDBoot for UEFI.
 func (q Quirks) UseSDBootForUEFI() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return false
 	}
 
-	return q.v.GTE(minTalosVersionUseSDBootOnly)
+	return q.v.GTE(minVersionUseSDBootOnly)
 }
 
-// minTalosVersionUsrMerge is the version that has /lib and /bin symlinked into /usr.
-var minTalosVersionUsrMerge = semver.MustParse("1.10.0")
+// minVersionUsrMerge is the version that has /lib and /bin symlinked into /usr.
+var minVersionUsrMerge = semver.MustParse("1.10.0")
 
-// KernelModulesPath returns kernel module storage path for the given Talos version.
+// KernelModulesPath returns kernel module storage path for the given version.
 func (q Quirks) KernelModulesPath() string {
-	// if the version doesn't parse, we assume it's latest Talos
-	if q.v == nil || q.v.GTE(minTalosVersionUsrMerge) {
+	// if the version doesn't parse, assume latest behavior
+	if q.v == nil || q.v.GTE(minVersionUsrMerge) {
 		return "/usr/lib/modules"
 	}
 
 	return "/lib/modules"
 }
 
-// FirmwarePath returns firmware storage path for the given Talos version.
+// FirmwarePath returns firmware storage path for the given version.
 func (q Quirks) FirmwarePath() string {
-	// if the version doesn't parse, we assume it's latest Talos
-	if q.v == nil || q.v.GTE(minTalosVersionUsrMerge) {
+	// if the version doesn't parse, assume latest behavior
+	if q.v == nil || q.v.GTE(minVersionUsrMerge) {
 		return "/usr/lib/firmware"
 	}
 
 	return "/lib/firmware"
 }
 
-// minTalosVersionUKIProfiles is the version that supports UKI profiles.
-var minTalosVersionUKIProfiles = semver.MustParse("1.10.0")
+// minVersionUKIProfiles is the version that supports UKI profiles.
+var minVersionUKIProfiles = semver.MustParse("1.10.0")
 
-// SupportsUKIProfiles returns true if the Talos version supports UKI profiles.
+// SupportsUKIProfiles returns true if this version supports UKI profiles.
 func (q Quirks) SupportsUKIProfiles() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
 
-	return q.v.GTE(minTalosVersionUKIProfiles)
+	return q.v.GTE(minVersionUKIProfiles)
 }
 
-var minTalosVersionUnifiedInstaller = semver.MustParse("1.10.0")
+var minVersionUnifiedInstaller = semver.MustParse("1.10.0")
 
-// SupportsUnifiedInstaller returns true if the Talos version supports unified installer.
+// SupportsUnifiedInstaller returns true if this version supports unified installer.
 func (q Quirks) SupportsUnifiedInstaller() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
 
-	return q.v.GTE(minTalosVersionUnifiedInstaller)
+	return q.v.GTE(minVersionUnifiedInstaller)
 }
 
-var minTalosVersionBoot2G = semver.MustParse("1.11.0")
+var minVersionBoot2G = semver.MustParse("1.11.0")
 
-// PartitionSizes returns partition sizes for the given Talos version.
+// PartitionSizes returns partition sizes for the given version.
 func (q Quirks) PartitionSizes() PartitionSizes {
 	bootSize := uint64(2000 * mib) // 2000 MiB
 
-	if q.v != nil && q.v.LT(minTalosVersionBoot2G) {
+	if q.v != nil && q.v.LT(minVersionBoot2G) {
 		// legacy size of 1000 MiB
 		bootSize = uint64(1000 * mib)
 	}
@@ -244,10 +244,10 @@ func (q Quirks) PartitionSizes() PartitionSizes {
 	}
 }
 
-// XFSMkfsConfig returns the mkfs.xfs config for the given Talos version.
+// XFSMkfsConfig returns the mkfs.xfs config for the given version.
 func (q Quirks) XFSMkfsConfig() string {
 	switch version := q.v; {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	// update when we have a new LTS config
 	case version == nil:
 		return "/usr/share/xfsprogs/mkfs/lts_6.18.conf"
@@ -265,62 +265,62 @@ func (q Quirks) XFSMkfsConfig() string {
 	}
 }
 
-var maxTalosVersionIMASupported = semver.MustParse("1.10.99")
+var maxVersionIMASupported = semver.MustParse("1.10.99")
 
-// SupportsIMA returns true if the Talos version has IMA support.
+// SupportsIMA returns true if this version has IMA support.
 func (q Quirks) SupportsIMA() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return false
 	}
 
-	return q.v.LTE(maxTalosVersionIMASupported)
+	return q.v.LTE(maxVersionIMASupported)
 }
 
-var minTalosVersionEmbeddedConfig = semver.MustParse("1.12.0")
+var minVersionEmbeddedConfig = semver.MustParse("1.12.0")
 
-// SupportsEmbeddedConfig returns true if the Talos version supports embedded machine configuration.
+// SupportsEmbeddedConfig returns true if this version supports embedded machine configuration.
 func (q Quirks) SupportsEmbeddedConfig() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
 
-	return q.v.GTE(minTalosVersionEmbeddedConfig)
+	return q.v.GTE(minVersionEmbeddedConfig)
 }
 
-var minTalosVersionDisableModSigVerify = semver.MustParse("1.12.0")
+var minVersionDisableModSigVerify = semver.MustParse("1.12.0")
 
-// SupportsDisablingModuleSignatureVerification returns true if the Talos version supports disabling module signature verification.
+// SupportsDisablingModuleSignatureVerification returns true if this version supports disabling module signature verification.
 func (q Quirks) SupportsDisablingModuleSignatureVerification() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
 
-	return q.v.GTE(minTalosVersionDisableModSigVerify)
+	return q.v.GTE(minVersionDisableModSigVerify)
 }
 
-var minTalosVersionISOSupportsSettingBootloader = semver.MustParse("1.12.0")
+var minVersionISOSupportsSettingBootloader = semver.MustParse("1.12.0")
 
-// ISOSupportsSettingBootloader returns true if the Talos version supports setting bootloader for ISO output.
+// ISOSupportsSettingBootloader returns true if this version supports setting bootloader for ISO output.
 func (q Quirks) ISOSupportsSettingBootloader() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
 
-	return q.v.GTE(minTalosVersionISOSupportsSettingBootloader)
+	return q.v.GTE(minVersionISOSupportsSettingBootloader)
 }
 
-var minTalosVersionProcMemOverrideNever = semver.MustParse("1.13.0")
+var minVersionProcMemOverrideNever = semver.MustParse("1.13.0")
 
-// ProcMemOverrideNever returns true if the Talos version should enforce 'proc_mem.force_override=never'.
+// ProcMemOverrideNever returns true if this version should enforce 'proc_mem.force_override=never'.
 func (q Quirks) ProcMemOverrideNever() bool {
-	// if the version doesn't parse, we assume it's latest Talos
+	// if the version doesn't parse, assume latest behavior
 	if q.v == nil {
 		return true
 	}
 
-	return q.v.GTE(minTalosVersionProcMemOverrideNever)
+	return q.v.GTE(minVersionProcMemOverrideNever)
 }

@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package constants defines constants used throughout Talos.
+// Package constants defines constants used throughout Chubo.
 package constants
 
 import (
@@ -91,7 +91,7 @@ const (
 	// KernelParamNetIfnames is the kernel parameter name to control predictable network interface names.
 	KernelParamNetIfnames = "net.ifnames"
 
-	// KernelParamHaltIfInstalled is the kernel parameter name to control if Talos should pause if booting from boot media while Talos is already installed.
+	// KernelParamHaltIfInstalled controls whether boot should pause when the OS is already installed.
 	KernelParamHaltIfInstalled = "talos.halt_if_installed"
 
 	// KernelParamSELinux is the kernel parameter name to enable/disable SELinux.
@@ -210,8 +210,7 @@ const (
 	// the root path.
 	RootMountPoint = "/"
 
-	// ISOFilesystemLabel is the label of the ISO file system for the Talos
-	// installer.
+	// ISOFilesystemLabel is the label of the installer ISO file system.
 	ISOFilesystemLabel = "TALOS"
 
 	// WorkloadShutdownGracePeriod is the shutdown grace period for workload containers.
@@ -289,7 +288,7 @@ const (
 	// RuncVersion is the runc version.
 	RuncVersion = "1.4.0"
 
-	// SystemContainerdNamespace is the Containerd namespace for Talos services.
+	// SystemContainerdNamespace is the containerd namespace for system services.
 	SystemContainerdNamespace = "system"
 
 	// SystemContainerdAddress is the path to the system containerd socket.
@@ -322,7 +321,7 @@ const (
 	// ChuboConfigEnvVar is the environment variable for setting the Chubo configuration file path.
 	ChuboConfigEnvVar = "CHUBOCONFIG"
 
-	// TalosConfigEnvVar is the legacy environment variable for setting the Talos configuration file path.
+	// TalosConfigEnvVar is the legacy environment variable for setting the config file path.
 	TalosConfigEnvVar = "TALOSCONFIG"
 
 	// ChuboEditorEnvVar is the environment variable for setting the preferred editor.
@@ -334,7 +333,7 @@ const (
 	// ChuboHomeEnvVar is the environment variable for setting the Chubo state directory file path.
 	ChuboHomeEnvVar = "CHUBO_HOME"
 
-	// TalosHomeEnvVar is the legacy environment variable for setting the Talos state directory file path.
+	// TalosHomeEnvVar is the legacy environment variable for setting the state directory path.
 	TalosHomeEnvVar = "TALOS_HOME"
 
 	// APISocketPath is the path to file socket of apid.
@@ -639,7 +638,7 @@ const (
 	// CustomCNI is the string to use custom CNI managed by Tanos with extra manifests.
 	CustomCNI = "custom"
 
-	// NoneCNI is the string to indicate that CNI will not be managed by Talos.
+	// NoneCNI is the string to indicate that CNI will not be managed by the OS.
 	NoneCNI = "none"
 
 	// CNISELinuxLabel is the SELinux label to be set for CNI configuration overlay mount.
@@ -676,10 +675,10 @@ const (
 	// For bootstrap API, this includes time to run bootstrap.
 	NodeReadyTimeout = BootTimeout
 
-	// AnnotationCordonedKey is the annotation key for the nodes cordoned by Talos.
+	// AnnotationCordonedKey is the annotation key for nodes cordoned by the OS.
 	AnnotationCordonedKey = "talos.dev/cordoned"
 
-	// AnnotationCordonedValue is the annotation key for the nodes cordoned by Talos.
+	// AnnotationCordonedValue is the annotation value used for cordoned nodes.
 	AnnotationCordonedValue = "true"
 
 	// AnnotationStaticPodSecretsVersion is the annotation key for the static pod secret version.
@@ -691,13 +690,13 @@ const (
 	// AnnotationStaticPodConfigFileVersion is the annotation key for the static pod configuration file version.
 	AnnotationStaticPodConfigFileVersion = "talos.dev/config-file-version"
 
-	// AnnotationOwnedLabels is the annotation key for the list of node labels owned by Talos.
+	// AnnotationOwnedLabels is the annotation key for node labels owned by the OS.
 	AnnotationOwnedLabels = "talos.dev/owned-labels"
 
-	// AnnotationOwnedAnnotations is the annotation key for the list of node annotations owned by Talos.
+	// AnnotationOwnedAnnotations is the annotation key for node annotations owned by the OS.
 	AnnotationOwnedAnnotations = "talos.dev/owned-annotations"
 
-	// AnnotationOwnedTaints is the annotation key for the list of node taints owned by Talos.
+	// AnnotationOwnedTaints is the annotation key for node taints owned by the OS.
 	AnnotationOwnedTaints = "talos.dev/owned-taints"
 
 	// DefaultNTPServer is the NTP server to use if not configured explicitly.
@@ -721,10 +720,10 @@ const (
 	// NodeIdentityFilename is the filename to cache node identity across reboots.
 	NodeIdentityFilename = "node-identity.yaml"
 
-	// DefaultDiscoveryServiceEndpoint is the default endpoint for Talos discovery service.
+	// DefaultDiscoveryServiceEndpoint is the default endpoint for the legacy discovery service.
 	DefaultDiscoveryServiceEndpoint = "https://discovery.talos.dev/"
 
-	// NetworkSelfIPsAnnotation is the node annotation used to list the (comma-separated) IP addresses of the host, as discovered by Talos tooling.
+	// NetworkSelfIPsAnnotation stores a comma-separated list of host IPs discovered by OS tooling.
 	NetworkSelfIPsAnnotation = "networking.talos.dev/self-ips"
 
 	// NetworkAPIServerPortAnnotation is the node annotation used to report the control plane API server port.
@@ -786,25 +785,25 @@ const (
 	// ChuboDir is the default name of the Chubo directory under user home.
 	ChuboDir = ".chubo"
 
-	// TalosDir is the legacy name of the Talos directory under user home.
+	// TalosDir is the legacy name of the state directory under user home.
 	TalosDir = ".talos"
 
 	// ChuboconfigFilename is the file name of chuboconfig under ChuboDir or under ServiceAccountMountPath inside a pod.
 	ChuboconfigFilename = "config"
 
-	// TalosconfigFilename is the legacy file name of talosconfig under TalosDir or under ServiceAccountMountPath inside a pod.
+	// TalosconfigFilename is the legacy file name under TalosDir or ServiceAccountMountPath inside a pod.
 	TalosconfigFilename = "config"
 
-	// ServiceAccountResourceGroup is the group name of the Talos service account CRD.
+	// ServiceAccountResourceGroup is the group name of the service account CRD.
 	ServiceAccountResourceGroup = "talos.dev"
 
-	// ServiceAccountResourceVersion is the version of the Talos service account CRD.
+	// ServiceAccountResourceVersion is the version of the service account CRD.
 	ServiceAccountResourceVersion = "v1alpha1"
 
-	// ServiceAccountResourceKind is the kind name of the Talos service account CRD.
+	// ServiceAccountResourceKind is the kind name of the service account CRD.
 	ServiceAccountResourceKind = "ServiceAccount"
 
-	// ServiceAccountResourceSingular is the singular name of the Talos service account CRD.
+	// ServiceAccountResourceSingular is the singular name of the service account CRD.
 	ServiceAccountResourceSingular = "serviceaccount"
 
 	// ServiceAccountResourceShortName is the short name of the service account CRD.
@@ -813,7 +812,7 @@ const (
 	// ServiceAccountResourcePlural is the plural name of the service account CRD.
 	ServiceAccountResourcePlural = ServiceAccountResourceSingular + "s"
 
-	// ServiceAccountMountPath is the path of the directory in which the Talos service account secrets are mounted.
+	// ServiceAccountMountPath is the path where service account secrets are mounted.
 	ServiceAccountMountPath = "/var/run/secrets/talos.dev"
 
 	// DefaultTrustedRelativeCAFile is the default path to the trusted CA file relative to the /etc.
@@ -860,7 +859,7 @@ const (
 	// MaintenanceServiceCommonName is the CN of the maintenance service server certificate.
 	MaintenanceServiceCommonName = "maintenance-service.talos.dev"
 
-	// GRPCMaxMessageSize is the maximum message size for Talos API.
+	// GRPCMaxMessageSize is the maximum message size for the OS API.
 	GRPCMaxMessageSize = 32 * 1024 * 1024
 
 	// ChuboAPIDefaultCertificateValidityDuration specifies default certificate duration for OS API generated client certificates.
@@ -869,7 +868,7 @@ const (
 	// TalosAPIDefaultCertificateValidityDuration is a legacy alias kept for compatibility.
 	TalosAPIDefaultCertificateValidityDuration = ChuboAPIDefaultCertificateValidityDuration
 
-	// DefaultNfTablesTableName is the default name of the nftables table created by Talos.
+	// DefaultNfTablesTableName is the default name of the nftables table created by the OS.
 	DefaultNfTablesTableName = "talos"
 
 	// SystemResolvedPath is the path to the resolved dir.
@@ -948,7 +947,7 @@ const (
 	// SideroV1KeysDir is the default directory containing user PGP keys for SideroV1 auth.
 	SideroV1KeysDir = "keys"
 
-	// ContainerMarkerFilePath is the path to the file added to container builds of Talos for platform detection.
+	// ContainerMarkerFilePath is the path to the file added to container builds for platform detection.
 	ContainerMarkerFilePath = "/usr/etc/in-container"
 
 	// DefaultOOMTriggerExpression is the default CEL expression used to determine whether to trigger OOM.
@@ -974,7 +973,7 @@ const (
 	LogFlushPeriod = 15 * time.Second
 )
 
-// names of variable that can be substituted in the talos.config kernel parameter.
+// names of variables that can be substituted in the config kernel parameter.
 const (
 	UUIDKey         = "uuid"
 	SerialNumberKey = "serial"
