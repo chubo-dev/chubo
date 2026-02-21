@@ -15,14 +15,14 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/cel"
 )
 
-// RuntimeConfig defines the interface to access Talos runtime configuration.
+// RuntimeConfig defines the interface to access Chubo runtime configuration.
 type RuntimeConfig interface {
 	EventsEndpoint() *string
 	KmsgLogURLs() []*url.URL
 	WatchdogTimer() WatchdogTimerConfig
 }
 
-// EnvironmentConfig defines the interface to access Talos environment configuration.
+// EnvironmentConfig defines the interface to access Chubo environment configuration.
 type EnvironmentConfig interface {
 	Variables() map[string]string
 }
@@ -40,7 +40,7 @@ func (w environmentConfigWrapper) Variables() map[string]string {
 	})
 }
 
-// WatchdogTimerConfig defines the interface to access Talos watchdog timer configuration.
+// WatchdogTimerConfig defines the interface to access Chubo watchdog timer configuration.
 type WatchdogTimerConfig interface {
 	Device() string
 	Timeout() time.Duration

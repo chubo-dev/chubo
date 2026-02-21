@@ -312,7 +312,7 @@ type SystemDiskEncryption interface {
 	Get(label string) EncryptionConfig
 }
 
-// Features describe individual Talos features that can be switched on or off.
+// Features describe individual Chubo features that can be switched on or off.
 type Features interface {
 	DiskQuotaSupportEnabled() bool
 	HostDNS() HostDNS
@@ -348,7 +348,7 @@ type LoggingDestination interface {
 	Format() string
 }
 
-// Kernel describes Talos Linux kernel configuration.
+// Kernel describes Chubo Linux kernel configuration.
 type Kernel interface {
 	Modules() []KernelModule
 }

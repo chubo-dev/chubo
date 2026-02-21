@@ -51,7 +51,7 @@ type FilesystemType = block.FilesystemType
 // ExternalVolumeConfigV1Alpha1 is an external disk mount configuration document.
 //
 //	description: |
-//	  External volumes allow to mount volumes that were created outside of Talos,
+//	  External volumes allow to mount volumes that were created outside of Chubo,
 //	  over the network or API. Volume will be mounted under `/var/mnt/<name>`.
 //	  The external volume config name should not conflict with user volume names.
 //	examples:

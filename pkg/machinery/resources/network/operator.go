@@ -4,7 +4,7 @@
 
 package network
 
-// Operator enumerates Talos network operators.
+// Operator enumerates Chubo network operators.
 type Operator int
 
 // Operator list.

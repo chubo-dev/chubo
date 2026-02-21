@@ -27,13 +27,13 @@ func (c *Config) validateChuboOS(mode validation.RuntimeMode, options ...validat
 		return nil, result.ErrorOrNil()
 	}
 
-	// `chubo` relies on OS API + trustd on every node; keep the Talos "controlplane"
+	// `chubo` relies on OS API + trustd on every node; keep the Chubo "controlplane"
 	// machine type as the compatibility signal.
 	if !c.Machine().Type().IsControlPlane() {
 		result = multierror.Append(result, fmt.Errorf("chubo requires machine.type to be %q (or %q)", machine.TypeControlPlane.String(), machine.TypeInit.String()))
 	}
 
-	// Trust: keep Talos trustd token + OS issuing CA (for now).
+	// Trust: keep Chubo trustd token + OS issuing CA (for now).
 	if c.Machine().Security().Token() == "" {
 		result = multierror.Append(result, errors.New("trustd token is required (.machine.token)"))
 	}

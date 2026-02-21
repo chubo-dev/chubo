@@ -92,7 +92,7 @@ func GetSystemDisk(ctx context.Context, st state.State) (*SystemDiskSpec, error)
 func GetSystemDiskPaths(ctx context.Context, st state.State) ([]string, error) {
 	systemDisks := map[string]struct{}{}
 
-	// fetch system disk (where Talos is installed)
+	// fetch system disk (where Chubo is installed)
 	systemDisk, err := GetSystemDisk(ctx, st)
 	if err != nil {
 		return nil, err

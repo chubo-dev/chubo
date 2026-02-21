@@ -16,7 +16,7 @@ import (
 // AcquireConfigSpecType is type of AcquireConfigSpec resource.
 const AcquireConfigSpecType = resource.Type("AcquireConfigSpecs.v1alpha1.talos.dev")
 
-// AcquireConfigSpec is created when Talos is ready to start acquiring machine configuration.
+// AcquireConfigSpec is created when Chubo is ready to start acquiring machine configuration.
 type AcquireConfigSpec = typed.Resource[AcquireConfigSpecSpec, AcquireConfigSpecExtension]
 
 // AcquireConfigSpecSpec describe state of ready to acquire config.

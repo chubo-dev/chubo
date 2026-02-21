@@ -71,7 +71,7 @@ func WithBytes(bytes []byte) Input {
 // Output of patch application process.
 type Output = Input
 
-// Apply config patches to Talos machine config.
+// Apply config patches to Chubo machine config.
 //
 // Apply either JSON6902 or StrategicMergePatch.
 //

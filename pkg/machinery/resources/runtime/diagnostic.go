@@ -21,7 +21,7 @@ const (
 	LegacyDiagnosticType = resource.Type("Diagnostics.runtime.talos.dev")
 )
 
-// Diagnostic resource contains warnings produced by Talos Diagnostics.
+// Diagnostic resource contains warnings produced by Chubo Diagnostics.
 type Diagnostic = typed.Resource[DiagnosticSpec, DiagnosticExtension]
 
 // DiagnosticSpec is the spec for devices status.

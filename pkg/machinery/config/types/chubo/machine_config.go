@@ -63,8 +63,8 @@ const (
 
 // MachineConfigAPIVersion is the API version string for the minimal machine config.
 //
-// Note: Talos upstream uses plain "v1alpha1" for many config documents, but we
-// intentionally scope this to a group-like string to avoid collisions with Talos kinds.
+// Note: Chubo upstream uses plain "v1alpha1" for many config documents, but we
+// intentionally scope this to a group-like string to avoid collisions with Chubo kinds.
 const MachineConfigAPIVersion = "chubo.dev/v1alpha1"
 
 func init() {
@@ -156,10 +156,10 @@ type LoggingSpec struct {
 }
 
 type TrustSpec struct {
-	// Token used by trustd flows (Talos-like).
+	// Token used by trustd flows (Chubo-like).
 	Token string `yaml:"token,omitempty"`
 
-	// Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on
+	// Issuing CA for the OS API (PEM-encoded). In Chubo this key typically lives on
 	// control plane nodes; for `chubo` we start with the simple model and evolve
 	// it in Phase 3.
 	CA *CASpec `yaml:"ca,omitempty"`
@@ -456,13 +456,13 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 
 // ToV1Alpha1 synthesizes a minimal internal v1alpha1.Config suitable for the current `chubo` boot pipeline.
 //
-// This preserves Talos' internal config.Provider interface contract (which still depends on v1alpha1.Config),
+// This preserves Chubo' internal config.Provider interface contract (which still depends on v1alpha1.Config),
 // while allowing the external config surface to remain small and workload-focused.
 func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 	cfg := &v1alpha1.Config{
 		ConfigVersion: v1alpha1.Version,
 		MachineConfig: &v1alpha1.MachineConfig{
-			// In `chubo` we treat Talos' "controlplane" machine type as "managed node"
+			// In `chubo` we treat Chubo' "controlplane" machine type as "managed node"
 			// to keep OS API certificate flows (trustd) enabled everywhere.
 			MachineType: machine.TypeControlPlane.String(),
 		},

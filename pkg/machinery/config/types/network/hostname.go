@@ -59,7 +59,7 @@ type HostnameConfigV1Alpha1 struct {
 	//
 	//     There are two methods available:
 	//       - `stable` - generates a stable hostname based on machine identity
-	//       - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).
+	//       - `off` - disables automatic hostname generation, Chubo will wait for an external source to provide a hostname (DHCP, cloud-init, etc).
 	//
 	//     Automatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.
 	//     Conflicts with `hostname` field.

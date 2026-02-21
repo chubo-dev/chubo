@@ -15,7 +15,7 @@ import (
 // Data in the left is replaced with data in the right unless it's zero value.
 //
 // This function is not supposed to be a generic merge function.
-// It is specifically fine-tuned to merge Talos machine configuration.
+// It is specifically fine-tuned to merge Chubo machine configuration.
 //
 // Rules:
 //   - if it is a simple value (int, float, string, etc.), it's merged into the left unless it's zero value, but boolean false is always merged.

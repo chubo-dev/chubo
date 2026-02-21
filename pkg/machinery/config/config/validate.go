@@ -22,7 +22,7 @@ type Validator interface {
 
 // RuntimeValidator is the interface to validate configuration in the runtime context.
 //
-// This interface is used by Talos itself to validate configuration on the machine (vs. the Validator interface).
+// This interface is used by Chubo itself to validate configuration on the machine (vs. the Validator interface).
 //
 // The errors reported by Validator & RuntimeValidator are different.
 type RuntimeValidator interface {

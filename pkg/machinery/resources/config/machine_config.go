@@ -30,7 +30,7 @@ const MaintenanceID = resource.ID("maintenance")
 // Note: PersistentID might be behind the "current" ID if the config was submitted in e.g. "try" mode.
 const PersistentID = resource.ID("persistent")
 
-// MachineConfig resource holds v1alpha Talos configuration.
+// MachineConfig resource holds v1alpha Chubo configuration.
 type MachineConfig struct {
 	md   resource.Metadata
 	spec *v1alpha1Spec

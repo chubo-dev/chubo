@@ -4,7 +4,7 @@
 
 package quirks
 
-// PartitionSizes capture partition sizes for Talos.
+// PartitionSizes capture partition sizes for Chubo.
 type PartitionSizes struct {
 	bootSize uint64
 }

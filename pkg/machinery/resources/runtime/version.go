@@ -21,10 +21,10 @@ const (
 	LegacyVersionType = resource.Type("Versions.runtime.talos.dev")
 )
 
-// Version resource holds version of Talos.
+// Version resource holds version of Chubo.
 type Version = typed.Resource[VersionSpec, VersionExtension]
 
-// VersionSpec describes version of Talos.
+// VersionSpec describes version of Chubo.
 type VersionSpec struct {
 	Version string `yaml:"version" protobuf:"1"`
 }

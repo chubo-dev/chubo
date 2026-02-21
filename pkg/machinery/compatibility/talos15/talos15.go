@@ -2,21 +2,21 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package talos15 provides compatibility constants for Talos 1.5.
+// Package talos15 provides compatibility constants for Chubo 1.5.
 package talos15
 
 import (
 	"github.com/blang/semver/v4"
 )
 
-// MajorMinor is the major.minor version of Talos 1.5.
+// MajorMinor is the major.minor version of Chubo 1.5.
 var MajorMinor = [2]uint64{1, 5}
 
-// MinimumHostUpgradeVersion is the minimum version of Talos that can be upgraded to 1.5.
+// MinimumHostUpgradeVersion is the minimum version of Chubo that can be upgraded to 1.5.
 var MinimumHostUpgradeVersion = semver.MustParse("1.2.0")
 
-// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Talos that can be downgraded to 1.5.
+// MaximumHostDowngradeVersion is the maximum (not inclusive) version of Chubo that can be downgraded to 1.5.
 var MaximumHostDowngradeVersion = semver.MustParse("1.7.0")
 
-// DeniedHostUpgradeVersions are the versions of Talos that cannot be upgraded to 1.5.
+// DeniedHostUpgradeVersions are the versions of Chubo that cannot be upgraded to 1.5.
 var DeniedHostUpgradeVersions []semver.Version

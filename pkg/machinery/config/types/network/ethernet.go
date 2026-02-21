@@ -57,7 +57,7 @@ type EthernetConfigV1Alpha1 struct {
 	//     Configuration for Ethernet features.
 	//
 	//     Set of features available and whether they can be enabled or disabled is driver specific.
-	//     Use `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and
+	//     Use `chuboctl get ethernetstatus <link> -o yaml` to get the list of available features and
 	//     their current status.
 	FeaturesConfig map[string]bool `yaml:"features,omitempty"`
 	//   description: |

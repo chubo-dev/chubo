@@ -22,10 +22,10 @@ import (
 // CertSANType is type of CertSAN resource.
 const CertSANType = resource.Type("CertSANs.secrets.talos.dev")
 
-// CertSANAPIID is a resource ID of singleton instance for the Talos API.
+// CertSANAPIID is a resource ID of singleton instance for the Chubo API.
 const CertSANAPIID = resource.ID("api")
 
-// CertSANMaintenanceID is a resource ID of singleton instance for the Talos Maintenance API.
+// CertSANMaintenanceID is a resource ID of singleton instance for the Chubo Maintenance API.
 const CertSANMaintenanceID = resource.ID("maintenance")
 
 // CertSAN contains certficiate subject alternative names.

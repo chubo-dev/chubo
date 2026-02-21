@@ -7,6 +7,6 @@
 package constants
 
 const (
-	// MinimumGOAMD64Level is the minimum x86_64 microarchitecture level required by Talos.
+	// MinimumGOAMD64Level is the minimum x86_64 microarchitecture level required by Chubo.
 	MinimumGOAMD64Level = 1
 )

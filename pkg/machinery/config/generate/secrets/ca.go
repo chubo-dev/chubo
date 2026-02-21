@@ -51,7 +51,7 @@ func NewAggregatorCA(currentTime time.Time, contract *config.VersionContract) (c
 	return x509.NewSelfSignedCertificateAuthority(opts...)
 }
 
-// NewTalosCA generates a CA for the Talos PKI.
+// NewTalosCA generates a CA for the Chubo PKI.
 func NewTalosCA(currentTime time.Time) (ca *x509.CertificateAuthority, err error) {
 	// Backdate the OS CA so services with buggy or skewed clocks can still
 	// validate the chain during early boot.
@@ -70,7 +70,7 @@ func NewTalosCA(currentTime time.Time) (ca *x509.CertificateAuthority, err error
 	return x509.NewSelfSignedCertificateAuthority(opts...)
 }
 
-// NewAdminCertificateAndKey generates the admin Talos certificate and key.
+// NewAdminCertificateAndKey generates the admin Chubo certificate and key.
 func NewAdminCertificateAndKey(currentTime time.Time, ca *x509.PEMEncodedCertificateAndKey, roles role.Set, ttl time.Duration) (p *x509.PEMEncodedCertificateAndKey, err error) {
 	opts := []x509.Option{
 		x509.Organization(roles.Strings()...),

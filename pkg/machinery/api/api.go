@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package api contains API definitions for Talos Linux.
+// Package api contains API definitions for Chubo Linux.
 //
 //nolint:revive
 package api
@@ -46,9 +46,9 @@ func TalosAPIdAllAPIs() []protoreflect.FileDescriptor {
 	)
 }
 
-// AllAPIs returns a list of all API services served by Talos components.
+// AllAPIs returns a list of all API services served by Chubo components.
 //
-// This includes Talos apid and trustd APIs.
+// This includes Chubo apid and trustd APIs.
 func AllAPIs() []protoreflect.FileDescriptor {
 	return append(TalosAPIdAllAPIs(),
 		security.File_security_security_proto,

@@ -21,13 +21,13 @@ const (
 	LegacyEventSinkConfigType = resource.Type("EventSinkConfigs.runtime.talos.dev")
 )
 
-// EventSinkConfig resource holds configuration for Talos event log streaming.
+// EventSinkConfig resource holds configuration for Chubo event log streaming.
 type EventSinkConfig = typed.Resource[EventSinkConfigSpec, EventSinkConfigExtension]
 
 // EventSinkConfigID is a resource ID for EventSinkConfig.
 const EventSinkConfigID resource.ID = "event-sink"
 
-// EventSinkConfigSpec describes configuration of Talos event log streaming.
+// EventSinkConfigSpec describes configuration of Chubo event log streaming.
 //
 //gotagsrewrite:gen
 type EventSinkConfigSpec struct {

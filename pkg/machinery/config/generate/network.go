@@ -29,7 +29,7 @@ func (in *Input) generateNetworkConfigs(machine *v1alpha1.MachineConfig) ([]conf
 		machine.MachineNetwork = networkConfig //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 	}
 
-	// generate empty machine.network for backwards compatibility with older Talos versions
+	// generate empty machine.network for backwards compatibility with older Chubo versions
 	if machine.MachineNetwork == nil && !in.Options.VersionContract.MultidocNetworkConfigSupported() { //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 		machine.MachineNetwork = &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
 	}

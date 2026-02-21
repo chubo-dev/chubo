@@ -2,12 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package v1alpha1 provides resources which implement "glue" code from v1alpha1 Talos init system.
+// Package v1alpha1 provides resources which implement "glue" code from v1alpha1 Chubo init system.
 package v1alpha1
 
 import "github.com/cosi-project/runtime/pkg/resource"
 
 //go:generate go tool github.com/siderolabs/deep-copy -type AcquireConfigSpecSpec -type AcquireConfigStatusSpec -type ServiceSpec -header-file ../../../../hack/boilerplate.txt -o deep_copy.generated.go .
 
-// NamespaceName contains resources linking v1alpha2 components with v1alpha1 Talos runtime.
+// NamespaceName contains resources linking v1alpha2 components with v1alpha1 Chubo runtime.
 const NamespaceName resource.Namespace = "runtime"

@@ -16,7 +16,7 @@ import (
 // SystemDiskType is type of SystemDisk resource.
 const SystemDiskType = resource.Type("SystemDisks.block.talos.dev")
 
-// SystemDisk resource holds ID of the disk which is the Talos system disk.
+// SystemDisk resource holds ID of the disk which is the Chubo system disk.
 type SystemDisk = typed.Resource[SystemDiskSpec, SystemDiskExtension]
 
 // SystemDiskID is the singleton resource ID.

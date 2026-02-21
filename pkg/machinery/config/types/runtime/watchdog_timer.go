@@ -62,7 +62,7 @@ type WatchdogTimerV1Alpha1 struct {
 	//   description: |
 	//     Timeout for the watchdog.
 	//
-	//     If Talos is unresponsive for this duration, the watchdog will reset the system.
+	//     If Chubo is unresponsive for this duration, the watchdog will reset the system.
 	//
 	//     Default value is 1 minute, minimum value is 10 seconds.
 	//   schema:
