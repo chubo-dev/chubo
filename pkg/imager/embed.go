@@ -66,7 +66,10 @@ func BuildEmbeddedConfigExtension(machineConfig []byte) (io.Reader, error) {
 			Author:      "Imager",
 			Description: "Virtual extension which embeds the machine configuration.",
 			Compatibility: extensions.Compatibility{
-				Talos: extensions.Constraint{
+				Chubo: extensions.Constraint{
+					Version: ">= 1.0.0",
+				},
+				Legacy: extensions.Constraint{
 					Version: ">= 1.0.0",
 				},
 			},
