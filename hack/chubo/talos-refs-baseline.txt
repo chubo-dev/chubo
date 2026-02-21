@@ -8,7 +8,6 @@
 ./.golangci.yml:        path: cmd/talosctl/pkg/talos/action
 ./.golangci.yml:        path: cmd/talosctl/pkg/talos/global
 ./.golangci.yml:        path: cmd/talosctl/pkg/talos/helpers
-./Dockerfile:    && env HOME=/home/user TAG=latest /bin/talosctl docs --cli /tmp
 ./Dockerfile:    --vex /talos.vex.json -vv --fail-on negligible --config /talos.grype.yaml
 ./Dockerfile:    --vex /talos.vex.json -vv 2>&1 | tee /grype-scan.log
 ./Dockerfile:    echo PKGS=${PKGS} >> _out/talos-metadata && \
@@ -25,8 +24,10 @@
 ./Dockerfile:# The installer target generates an image that can be used to install Talos to
 ./Dockerfile:# The rootfs target provides the Talos rootfs.
 ./Dockerfile:# The talos target generates a docker image that can be used to run Talos
-./Dockerfile:# The talosctl targets build the talosctl binaries.
 ./Dockerfile:# The talosctl-cni-bundle builds the CNI bundle for talosctl.
+./Dockerfile:COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /chuboctl
+./Dockerfile:COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /talosctl
+./Dockerfile:COPY --from=chuboctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/chuboctl
 ./Dockerfile:COPY --from=embed-abbrev-generate /src/_out/talos-metadata /_out/talos-metadata
 ./Dockerfile:COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
 ./Dockerfile:COPY --from=sbom-amd64 /talos-amd64.spdx.json /usr/install/amd64/talos.spdx.json
@@ -37,6 +38,7 @@
 ./Dockerfile:COPY --from=sbom-container-amd64-generate /rootfs/usr/share/spdx/talos-container-amd64.spdx.json /
 ./Dockerfile:COPY --from=sbom-container-arm64-generate /rootfs/usr/share/spdx/talos-container-arm64.spdx.json /
 ./Dockerfile:COPY --from=talos-vex /generate-vex /generate-vex
+./Dockerfile:COPY --from=talosctl-all / /
 ./Dockerfile:COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
 ./Dockerfile:COPY --from=talosctl-darwin-amd64 / /
 ./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
@@ -54,7 +56,6 @@
 ./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
 ./Dockerfile:COPY --from=talosctl-linux-riscv64 / /
 ./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
-./Dockerfile:COPY --from=talosctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/talosctl
 ./Dockerfile:COPY --from=talosctl-windows-amd64 / /
 ./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
 ./Dockerfile:COPY --from=talosctl-windows-arm64 / /
@@ -66,6 +67,7 @@
 ./Dockerfile:ENTRYPOINT ["/talosctl"]
 ./Dockerfile:FROM ${GENERATE_VEX_PREFIX}:${GENERATE_VEX} AS talos-vex
 ./Dockerfile:FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
+./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS chuboctl-targetarch
 ./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
 ./Dockerfile:FROM base AS talosctl-darwin-amd64-build
 ./Dockerfile:FROM base AS talosctl-darwin-arm64-build
@@ -154,7 +156,6 @@
 ./Dockerfile:RUN chmod +x /talosctl-linux-arm64
 ./Dockerfile:RUN chmod +x /talosctl-linux-armv7
 ./Dockerfile:RUN chmod +x /talosctl-linux-riscv64
-./Dockerfile:RUN env HOME=/home/user TAG=latest /bin/talosctl docs --config /tmp/configuration \
 ./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-darwin-amd64
 ./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-amd64
 ./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-arm64
@@ -177,12 +178,10 @@
 ./Makefile:	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
 ./Makefile:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
 ./Makefile:	@$(MAKE) local-talosctl-cni-bundle DEST=$(ARTIFACTS)
-./Makefile:	@$(MAKE) registry-talosctl
-./Makefile:	@$(MAKE) registry-talosctl-all
 ./Makefile:	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
 ./Makefile:	@$(MAKE) talos PUSH=true
 ./Makefile:	@./hack/chubo/check-talos-refs.sh
-./Makefile:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+./Makefile:	@echo -n installer installer-base talos imager chuboctl chuboctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
 ./Makefile:	@for src in $(ARTIFACTS)/talosctl-*; do \
 ./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
 ./Makefile:	for src in "$(ARTIFACTS)/talosctl-$*" "$(ARTIFACTS)/talosctl-$*.exe"; do \
@@ -488,7 +487,7 @@
 ./pkg/imager/ova/ova.go:<!-- Edited by Talos -->
 ./pkg/imager/profile/profile.go:		return fmt.Errorf("secureboot is not supported for Talos version %q", p.Version)
 ./pkg/images/images.go:	DefaultChuboImageName = Username + "/talos"
-./pkg/images/images.go:	DefaultChuboctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+./pkg/images/images.go:	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
 ./pkg/images/list.go:	Talos         name.Tag
 ./pkg/images/list.go:	bundle.Talos = mustParseReferenceWithTag(DefaultChuboImageRepository, tag)
 ./pkg/machinery/client/connection.go:		return client.NewKeyProvider("talos/keys")

@@ -394,7 +394,7 @@ talos: ## Builds the Talos container image and outputs it to the registry.
 
 .PHONY: chuboctl-image
 chuboctl-image: ## Builds the chuboctl container image and outputs it to the registry.
-	@$(MAKE) registry-talosctl
+	@$(MAKE) registry-chuboctl
 
 .PHONY: talosctl-image
 talosctl-image: ## Legacy alias for chuboctl-image (Wave B compatibility).
@@ -402,7 +402,7 @@ talosctl-image: ## Legacy alias for chuboctl-image (Wave B compatibility).
 
 .PHONY: chuboctl-all-image
 chuboctl-all-image:
-	@$(MAKE) registry-talosctl-all
+	@$(MAKE) registry-chuboctl-all
 
 .PHONY: talosctl-all-image
 talosctl-all-image: ## Legacy alias for chuboctl-all-image (Wave B compatibility).
@@ -787,7 +787,7 @@ clean: ## Cleans up all artifacts.
 
 .PHONY: image-list
 image-list: ## Prints a list of all images built by this Makefile with digests.
-	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+	@echo -n installer installer-base talos imager chuboctl chuboctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
 
 $(ARTIFACTS)/image-signer: $(ARTIFACTS) ## Downloads image-signer binary
 	@curl -sSL https://github.com/siderolabs/go-tools/releases/download/$(IMAGE_SIGNER_RELEASE)/image-signer-$(OPERATING_SYSTEM)-$(ARCH) -o $(ARTIFACTS)/image-signer

@@ -531,7 +531,7 @@ ARG GO_LDFLAGS
 RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /chubo-agent
 RUN chmod +x /chubo-agent
 
-# The talosctl targets build the talosctl binaries.
+# The CLI targets build the binaries.
 
 FROM base AS talosctl-linux-amd64-build
 WORKDIR /src/cmd/talosctl
@@ -644,6 +644,7 @@ FROM scratch AS talosctl-windows-arm64
 COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
 
 FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
+FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS chuboctl-targetarch
 
 FROM scratch AS talosctl-all
 COPY --from=talosctl-linux-amd64 / /
@@ -656,6 +657,19 @@ COPY --from=talosctl-freebsd-amd64 / /
 COPY --from=talosctl-freebsd-arm64 / /
 COPY --from=talosctl-windows-amd64 / /
 COPY --from=talosctl-windows-arm64 / /
+
+FROM scratch AS chuboctl-all
+COPY --from=talosctl-all / /
+
+FROM scratch AS chuboctl
+ARG TARGETARCH
+COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /chuboctl
+COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /talosctl
+ARG TAG
+ENV VERSION=${TAG}
+LABEL "alpha.chubo.dev/version"="${VERSION}"
+LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
+ENTRYPOINT ["/chuboctl"]
 
 FROM scratch AS talosctl
 ARG TARGETARCH
@@ -1338,9 +1352,9 @@ FROM base AS docs-build
 ARG TARGETOS
 ARG TARGETARCH
 WORKDIR /src
-COPY --from=talosctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/talosctl
-RUN env HOME=/home/user TAG=latest /bin/talosctl docs --config /tmp/configuration \
-    && env HOME=/home/user TAG=latest /bin/talosctl docs --cli /tmp
+COPY --from=chuboctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/chuboctl
+RUN env HOME=/home/user TAG=latest /bin/chuboctl docs --config /tmp/configuration \
+    && env HOME=/home/user TAG=latest /bin/chuboctl docs --cli /tmp
 COPY ./pkg/machinery/config/schemas/*.schema.json /tmp/schemas/
 
 FROM scratch AS proto-docs-build

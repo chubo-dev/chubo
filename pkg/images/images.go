@@ -59,11 +59,12 @@ var (
 	// DefaultChuboctlAllImageRepository is the default container repository for
 	// chuboctl-all image.
 	//
-	// Legacy repository path is retained for compatibility.
-	DefaultChuboctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+	// Legacy repository path is retained via
+	// DefaultTalosctlAllImageRepository.
+	DefaultChuboctlAllImageRepository = Registry + "/" + Username + "/chuboctl-all"
 
-	// DefaultTalosctlAllImageRepository is a compatibility alias for DefaultChuboctlAllImageRepository.
-	DefaultTalosctlAllImageRepository = DefaultChuboctlAllImageRepository
+	// DefaultTalosctlAllImageRepository is the legacy repository path.
+	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
 
 	// DefaultOverlaysManifestName is the default container manifest name for
 	// the overlays.
