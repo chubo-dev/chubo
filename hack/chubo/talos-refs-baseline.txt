@@ -846,7 +846,6 @@
 ./pkg/machinery/constants/constants.go:	// ServiceAccountResourceSingular is the singular name of the Talos service account CRD.
 ./pkg/machinery/constants/constants.go:	// ServiceAccountResourceVersion is the version of the Talos service account CRD.
 ./pkg/machinery/constants/constants.go:	// SystemContainerdNamespace is the Containerd namespace for Talos services.
-./pkg/machinery/constants/constants.go:	// TalosAPIDefaultCertificateValidityDuration specifies default certificate duration for Talos API generated client certificates.
 ./pkg/machinery/constants/constants.go:	// TalosConfigEnvVar is the legacy environment variable for setting the Talos configuration file path.
 ./pkg/machinery/constants/constants.go:	// TalosDir is the legacy name of the Talos directory under user home.
 ./pkg/machinery/constants/constants.go:	// TalosHomeEnvVar is the legacy environment variable for setting the Talos state directory file path.

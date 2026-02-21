@@ -863,8 +863,11 @@ const (
 	// GRPCMaxMessageSize is the maximum message size for Talos API.
 	GRPCMaxMessageSize = 32 * 1024 * 1024
 
-	// TalosAPIDefaultCertificateValidityDuration specifies default certificate duration for Talos API generated client certificates.
-	TalosAPIDefaultCertificateValidityDuration = time.Hour * 24 * 365
+	// ChuboAPIDefaultCertificateValidityDuration specifies default certificate duration for OS API generated client certificates.
+	ChuboAPIDefaultCertificateValidityDuration = time.Hour * 24 * 365
+
+	// TalosAPIDefaultCertificateValidityDuration is a legacy alias kept for compatibility.
+	TalosAPIDefaultCertificateValidityDuration = ChuboAPIDefaultCertificateValidityDuration
 
 	// DefaultNfTablesTableName is the default name of the nftables table created by Talos.
 	DefaultNfTablesTableName = "talos"

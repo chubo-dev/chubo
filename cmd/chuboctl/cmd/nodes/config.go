@@ -619,7 +619,7 @@ func init() {
 	)
 
 	configNewCmd.Flags().StringSliceVar(&configNewCmdFlags.roles, "roles", role.MakeSet(role.Admin).Strings(), "roles")
-	configNewCmd.Flags().DurationVar(&configNewCmdFlags.crtTTL, "crt-ttl", constants.TalosAPIDefaultCertificateValidityDuration, "certificate TTL")
+	configNewCmd.Flags().DurationVar(&configNewCmdFlags.crtTTL, "crt-ttl", constants.ChuboAPIDefaultCertificateValidityDuration, "certificate TTL")
 
 	configInfoCmd.Flags().StringVarP(&configInfoCmdFlags.output, "output", "o", "text", "output format (json|yaml|text). Default text.")
 

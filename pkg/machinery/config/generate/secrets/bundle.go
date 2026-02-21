@@ -176,7 +176,7 @@ func (bundle *Bundle) populate(versionContract *config.VersionContract) error {
 
 // GenerateTalosAPIClientCertificate generates the admin certificate.
 func (bundle *Bundle) GenerateTalosAPIClientCertificate(roles role.Set) (*x509.PEMEncodedCertificateAndKey, error) {
-	return bundle.GenerateTalosAPIClientCertificateWithTTL(roles, constants.TalosAPIDefaultCertificateValidityDuration)
+	return bundle.GenerateTalosAPIClientCertificateWithTTL(roles, constants.ChuboAPIDefaultCertificateValidityDuration)
 }
 
 // GenerateTalosAPIClientCertificateWithTTL generates the admin certificate with specified TTL.
