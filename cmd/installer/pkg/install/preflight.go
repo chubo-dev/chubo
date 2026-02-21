@@ -26,14 +26,14 @@ type PreflightChecks struct {
 	disabled bool
 	client   *client.Client
 
-	installerTalosVersion *compatibility.TalosVersion
-	hostTalosVersion      *compatibility.TalosVersion
+	installerChuboVersion *compatibility.ChuboVersion
+	hostChuboVersion      *compatibility.ChuboVersion
 }
 
 // NewPreflightChecks initializes and returns the installation PreflightChecks.
 func NewPreflightChecks(ctx context.Context) (*PreflightChecks, error) {
 	if _, err := os.Stat(constants.MachineSocketPath); err != nil {
-		log.Printf("pre-flight checks disabled, as host Talos version is too old")
+		log.Printf("pre-flight checks disabled, as host Chubo version is too old")
 
 		return &PreflightChecks{disabled: true}, nil //nolint:nilerr
 	}
@@ -74,7 +74,7 @@ func (checks *PreflightChecks) Run(ctx context.Context) error {
 	ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs(constants.APIAuthzRoleMetadataKey, string(role.Admin)))
 
 	for _, check := range []func(context.Context) error{
-		checks.talosVersion,
+		checks.chuboVersion,
 	} {
 		if err := check(ctx); err != nil {
 			return fmt.Errorf("pre-flight checks failed: %w", err)
@@ -86,27 +86,27 @@ func (checks *PreflightChecks) Run(ctx context.Context) error {
 	return nil
 }
 
-func (checks *PreflightChecks) talosVersion(ctx context.Context) error {
+func (checks *PreflightChecks) chuboVersion(ctx context.Context) error {
 	resp, err := checks.client.Version(ctx)
 	if err != nil {
-		return fmt.Errorf("error getting Talos version: %w", err)
+		return fmt.Errorf("error getting Chubo version: %w", err)
 	}
 
 	hostVersion := unpack(resp.Messages)
 
-	log.Printf("host Talos version: %s", hostVersion.Version.Tag)
+	log.Printf("host Chubo version: %s", hostVersion.Version.Tag)
 
-	checks.hostTalosVersion, err = compatibility.ParseTalosVersion(hostVersion.Version)
+	checks.hostChuboVersion, err = compatibility.ParseChuboVersion(hostVersion.Version)
 	if err != nil {
-		return fmt.Errorf("error parsing host Talos version: %w", err)
+		return fmt.Errorf("error parsing host Chubo version: %w", err)
 	}
 
-	checks.installerTalosVersion, err = compatibility.ParseTalosVersion(version.NewVersion())
+	checks.installerChuboVersion, err = compatibility.ParseChuboVersion(version.NewVersion())
 	if err != nil {
-		return fmt.Errorf("error parsing installer Talos version: %w", err)
+		return fmt.Errorf("error parsing installer Chubo version: %w", err)
 	}
 
-	return checks.installerTalosVersion.UpgradeableFrom(checks.hostTalosVersion)
+	return checks.installerChuboVersion.UpgradeableFrom(checks.hostChuboVersion)
 }
 
 func unpack[T any](s []T) T {

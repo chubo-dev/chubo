@@ -22,28 +22,28 @@ import (
 )
 
 // errataNetIfnames appends the `net.ifnames=0` kernel parameter to the kernel command line if upgrading
-// from an old enough version of Talos.
-func (i *Installer) errataNetIfnames(talosVersion *compatibility.TalosVersion) {
+// from an old enough version of Chubo.
+func (i *Installer) errataNetIfnames(chuboVersion *compatibility.ChuboVersion) {
 	if i.cmdline.Get(constants.KernelParamNetIfnames).First() != nil {
 		// net.ifnames is already set, nothing to do
 		return
 	}
 
-	oldTalos := upgradeFromPreIfnamesTalos(talosVersion)
+	oldChubo := upgradeFromPreIfnamesChubo(chuboVersion)
 
-	if oldTalos {
+	if oldChubo {
 		log.Printf("appending net.ifnames=0 to the kernel command line")
 
 		i.cmdline.Append(constants.KernelParamNetIfnames, "0")
 	}
 }
 
-func readHostTalosVersion() (*compatibility.TalosVersion, error) {
+func readHostChuboVersion() (*compatibility.ChuboVersion, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
 	if _, err := os.Stat(constants.MachineSocketPath); err != nil {
-		// can't read Talos version
+		// can't read Chubo version
 		return nil, nil
 	}
 
@@ -64,24 +64,24 @@ func readHostTalosVersion() (*compatibility.TalosVersion, error) {
 
 	resp, err := c.Version(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("error getting Talos version: %w", err)
+		return nil, fmt.Errorf("error getting Chubo version: %w", err)
 	}
 
 	hostVersion := unpack(resp.Messages)
 
-	talosVersion, err := compatibility.ParseTalosVersion(hostVersion.Version)
+	chuboVersion, err := compatibility.ParseChuboVersion(hostVersion.Version)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing Talos version: %w", err)
+		return nil, fmt.Errorf("error parsing Chubo version: %w", err)
 	}
 
-	return talosVersion, nil
+	return chuboVersion, nil
 }
 
-func upgradeFromPreIfnamesTalos(talosVersion *compatibility.TalosVersion) bool {
-	if talosVersion == nil {
-		// old Talos version, include fallback
+func upgradeFromPreIfnamesChubo(chuboVersion *compatibility.ChuboVersion) bool {
+	if chuboVersion == nil {
+		// old Chubo version, include fallback
 		return true
 	}
 
-	return talosVersion.DisablePredictableNetworkInterfaces()
+	return chuboVersion.DisablePredictableNetworkInterfaces()
 }

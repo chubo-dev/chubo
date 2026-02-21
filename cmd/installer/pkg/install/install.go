@@ -314,13 +314,13 @@ func (i *Installer) blockDeviceData(mode Mode) (*block.Device, *blkid.Info, erro
 //nolint:gocyclo,cyclop
 func (i *Installer) Install(ctx context.Context, mode Mode) (err error) {
 	// pre-flight checks, erratas
-	hostTalosVersion, err := readHostTalosVersion()
+	hostChuboVersion, err := readHostChuboVersion()
 	if err != nil {
 		return err
 	}
 
 	if mode == ModeUpgrade {
-		i.errataNetIfnames(hostTalosVersion)
+		i.errataNetIfnames(hostChuboVersion)
 	}
 
 	if err = i.runPreflightChecks(mode); err != nil {
@@ -354,7 +354,7 @@ func (i *Installer) Install(ctx context.Context, mode Mode) (err error) {
 	}
 
 	// create partitions and re-probe the device
-	partitionOptions, err := i.createPartitions(ctx, mode, bd, hostTalosVersion, bootPartitions)
+	partitionOptions, err := i.createPartitions(ctx, mode, bd, hostChuboVersion, bootPartitions)
 	if err != nil {
 		return fmt.Errorf("failed to create partitions: %w", err)
 	}
@@ -580,7 +580,7 @@ func (i *Installer) installBootloader(ctx context.Context, mode Mode, bootloader
 }
 
 //nolint:gocyclo,cyclop
-func (i *Installer) createPartitions(ctx context.Context, mode Mode, bd *block.Device, hostTalosVersion *compatibility.TalosVersion, bootPartitions []partition.Options) ([]partition.Options, error) {
+func (i *Installer) createPartitions(ctx context.Context, mode Mode, bd *block.Device, hostChuboVersion *compatibility.ChuboVersion, bootPartitions []partition.Options) ([]partition.Options, error) {
 	var (
 		gptdev gpt.Device
 		err    error
@@ -610,7 +610,7 @@ func (i *Installer) createPartitions(ctx context.Context, mode Mode, bd *block.D
 		return nil, fmt.Errorf("unknown image mode: %d", mode)
 	}
 
-	partitions, gptOptions, err := i.getPartitionOptions(ctx, mode, hostTalosVersion, bootPartitions)
+	partitions, gptOptions, err := i.getPartitionOptions(ctx, mode, hostChuboVersion, bootPartitions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get partition options: %w", err)
 	}
@@ -856,7 +856,7 @@ func (i *Installer) handleGrubBlocklist(gptdev gpt.Device, pt *gpt.Table) error 
 // including configuration required for reproducible GUIDs when running in image mode.
 //
 //nolint:gocyclo
-func (i *Installer) getPartitionOptions(ctx context.Context, mode Mode, hostTalosVersion *compatibility.TalosVersion, bootPartitions []partition.Options) ([]partition.Options, []gpt.Option, error) {
+func (i *Installer) getPartitionOptions(ctx context.Context, mode Mode, hostChuboVersion *compatibility.ChuboVersion, bootPartitions []partition.Options) ([]partition.Options, []gpt.Option, error) {
 	var partitionOffset uint64
 
 	if i.options.OverlayInstaller != nil {
@@ -902,7 +902,7 @@ func (i *Installer) getPartitionOptions(ctx context.Context, mode Mode, hostTalo
 	createDataPartitions := legacyImage || forceDataPartitions()
 
 	// compatibility when installing on Talos < 1.8
-	if createDataPartitions || (hostTalosVersion != nil && hostTalosVersion.PrecreateStatePartition()) {
+	if createDataPartitions || (hostChuboVersion != nil && hostChuboVersion.PrecreateStatePartition()) {
 		partitions = append(partitions,
 			partition.NewPartitionOptions(false, quirk, partition.WithLabel(constants.StatePartitionLabel)),
 		)

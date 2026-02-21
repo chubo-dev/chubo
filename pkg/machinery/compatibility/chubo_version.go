@@ -26,31 +26,39 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/compatibility/talos19"
 )
 
-// TalosVersion embeds Talos version.
-type TalosVersion struct {
+// ChuboVersion embeds Chubo version.
+type ChuboVersion struct {
 	version    semver.Version
 	majorMinor [2]uint64
 }
 
-// ParseTalosVersion parses Talos version.
-func ParseTalosVersion(v *machine.VersionInfo) (*TalosVersion, error) {
+// TalosVersion is kept as a compatibility alias for ChuboVersion.
+type TalosVersion = ChuboVersion
+
+// ParseChuboVersion parses Chubo version.
+func ParseChuboVersion(v *machine.VersionInfo) (*ChuboVersion, error) {
 	parsed, err := semver.ParseTolerant(v.Tag)
 	if err != nil {
 		return nil, err
 	}
 
-	return &TalosVersion{
+	return &ChuboVersion{
 		version:    parsed,
 		majorMinor: [2]uint64{parsed.Major, parsed.Minor},
 	}, nil
 }
 
-func (v *TalosVersion) String() string {
+// ParseTalosVersion is kept as a compatibility alias for ParseChuboVersion.
+func ParseTalosVersion(v *machine.VersionInfo) (*TalosVersion, error) {
+	return ParseChuboVersion(v)
+}
+
+func (v *ChuboVersion) String() string {
 	return v.version.String()
 }
 
 // DisablePredictableNetworkInterfaces returns true if predictable network interfaces should be disabled on upgrade.
-func (v *TalosVersion) DisablePredictableNetworkInterfaces() bool {
+func (v *ChuboVersion) DisablePredictableNetworkInterfaces() bool {
 	if v.majorMinor[0] <= talos14.MajorMinor[0] && v.majorMinor[1] <= talos14.MajorMinor[1] {
 		return true
 	}
@@ -60,8 +68,8 @@ func (v *TalosVersion) DisablePredictableNetworkInterfaces() bool {
 
 // PrecreateStatePartition returns true if running an 1.8+ installer from a version before <=1.7.x.
 //
-// Host Talos needs STATE partition to save the machine configuration.
-func (v *TalosVersion) PrecreateStatePartition() bool {
+// Host Chubo needs STATE partition to save the machine configuration.
+func (v *ChuboVersion) PrecreateStatePartition() bool {
 	if v.majorMinor[0] <= talos17.MajorMinor[0] && v.majorMinor[1] <= talos17.MajorMinor[1] {
 		return true
 	}
@@ -69,10 +77,10 @@ func (v *TalosVersion) PrecreateStatePartition() bool {
 	return false
 }
 
-// UpgradeableFrom checks if the current version of Talos can be used as an upgrade for the given host version.
+// UpgradeableFrom checks if the current version of Chubo can be used as an upgrade for the given host version.
 //
 //nolint:gocyclo
-func (v *TalosVersion) UpgradeableFrom(host *TalosVersion) error {
+func (v *ChuboVersion) UpgradeableFrom(host *ChuboVersion) error {
 	var (
 		minHostUpgradeVersion, maxHostDowngradeVersion semver.Version
 		deniedHostUpgradeVersions                      []semver.Version
@@ -124,24 +132,24 @@ func (v *TalosVersion) UpgradeableFrom(host *TalosVersion) error {
 	minHostUpgradeVersionCore := ordered.MakeTriple(minHostUpgradeVersion.Major, minHostUpgradeVersion.Minor, minHostUpgradeVersion.Patch)
 
 	if hostCore.LessThan(minHostUpgradeVersionCore) {
-		return fmt.Errorf("host version %s is too old to upgrade to Talos %s", host.version.String(), v.version.String())
+		return fmt.Errorf("host version %s is too old to upgrade to Chubo %s", host.version.String(), v.version.String())
 	}
 
 	maxHostDowngradeVersionCore := ordered.MakeTriple(maxHostDowngradeVersion.Major, maxHostDowngradeVersion.Minor, maxHostDowngradeVersion.Patch)
 
 	if hostCore.Compare(maxHostDowngradeVersionCore) >= 0 {
-		return fmt.Errorf("host version %s is too new to downgrade to Talos %s", host.version.String(), v.version.String())
+		return fmt.Errorf("host version %s is too new to downgrade to Chubo %s", host.version.String(), v.version.String())
 	}
 
 	if slices.ContainsFunc(deniedHostUpgradeVersions, host.version.EQ) {
-		return fmt.Errorf("host version %s is denied for upgrade to Talos %s", host.version.String(), v.version.String())
+		return fmt.Errorf("host version %s is denied for upgrade to Chubo %s", host.version.String(), v.version.String())
 	}
 
 	return nil
 }
 
-// SupportsSSAManifestSync returns true if the Talos version supports server side apply manifest sync.
-func (v *TalosVersion) SupportsSSAManifestSync() bool {
-	// supported from Talos 1.13+
+// SupportsSSAManifestSync returns true if the Chubo version supports server side apply manifest sync.
+func (v *ChuboVersion) SupportsSSAManifestSync() bool {
+	// supported from Chubo 1.13+
 	return v.majorMinor[0] > talos113.MajorMinor[0] || (v.majorMinor[0] == talos113.MajorMinor[0] && v.majorMinor[1] >= talos113.MajorMinor[1])
 }
