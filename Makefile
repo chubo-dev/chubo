@@ -410,21 +410,11 @@ talosctl-all-image: ## Legacy alias for chuboctl-all-image (Wave B compatibility
 
 .PHONY: chuboctl-all
 chuboctl-all:
-	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
-	@for src in $(ARTIFACTS)/talosctl-*; do \
-		[ -f "$$src" ] || continue; \
-		base="$$(basename "$$src")"; \
-		case "$$base" in \
-			talosctl-cni-bundle-* ) continue ;; \
-		esac; \
-		dst="$(ARTIFACTS)/$$(printf '%s' "$$base" | sed 's/^talosctl-/chuboctl-/')"; \
-		cp -f "$$src" "$$dst"; \
-		chmod +x "$$dst" 2>/dev/null || true; \
-	done
+	@$(MAKE) local-chuboctl-all DEST=$(ARTIFACTS) PUSH=false
 
 .PHONY: talosctl-all
 talosctl-all: ## Legacy alias for chuboctl-all (Wave B compatibility).
-	@$(MAKE) chuboctl-all
+	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
 
 .PHONY: chuboctl
 chuboctl:
@@ -432,28 +422,15 @@ chuboctl:
 
 .PHONY: chuboctl-%
 chuboctl-%:
-	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
-	@found=0; \
-	for src in "$(ARTIFACTS)/talosctl-$*" "$(ARTIFACTS)/talosctl-$*.exe"; do \
-		[ -f "$$src" ] || continue; \
-		found=1; \
-		base="$$(basename "$$src")"; \
-		dst="$(ARTIFACTS)/$$(printf '%s' "$$base" | sed 's/^talosctl-/chuboctl-/')"; \
-		cp -f "$$src" "$$dst"; \
-		chmod +x "$$dst" 2>/dev/null || true; \
-	done; \
-	if [ "$$found" -eq 0 ]; then \
-		echo "failed to locate talosctl artifact for target '$*'" >&2; \
-		exit 1; \
-	fi
+	@$(MAKE) local-chuboctl-$* DEST=$(ARTIFACTS) PUSH=false
 
 .PHONY: talosctl
 talosctl: ## Legacy alias for chuboctl (Wave B compatibility).
-	@$(MAKE) -B chuboctl-$(OPERATING_SYSTEM)-$(ARCH)
+	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
 
 .PHONY: talosctl-%
 talosctl-%: ## Legacy alias for chuboctl-% (Wave B compatibility).
-	@$(MAKE) chuboctl-$*
+	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
 
 sbom:
 	@$(MAKE) local-sbom DEST=$(ARTIFACTS)

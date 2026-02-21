@@ -25,9 +25,6 @@
 ./Dockerfile:# The rootfs target provides the Talos rootfs.
 ./Dockerfile:# The talos target generates a docker image that can be used to run Talos
 ./Dockerfile:# The talosctl-cni-bundle builds the CNI bundle for talosctl.
-./Dockerfile:COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /chuboctl
-./Dockerfile:COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /talosctl
-./Dockerfile:COPY --from=chuboctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/chuboctl
 ./Dockerfile:COPY --from=embed-abbrev-generate /src/_out/talos-metadata /_out/talos-metadata
 ./Dockerfile:COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
 ./Dockerfile:COPY --from=sbom-amd64 /talos-amd64.spdx.json /usr/install/amd64/talos.spdx.json
@@ -38,27 +35,36 @@
 ./Dockerfile:COPY --from=sbom-container-amd64-generate /rootfs/usr/share/spdx/talos-container-amd64.spdx.json /
 ./Dockerfile:COPY --from=sbom-container-arm64-generate /rootfs/usr/share/spdx/talos-container-arm64.spdx.json /
 ./Dockerfile:COPY --from=talos-vex /generate-vex /generate-vex
-./Dockerfile:COPY --from=talosctl-all / /
 ./Dockerfile:COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
 ./Dockerfile:COPY --from=talosctl-darwin-amd64 / /
+./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /chuboctl-darwin-amd64
 ./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
 ./Dockerfile:COPY --from=talosctl-darwin-arm64 / /
+./Dockerfile:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /chuboctl-darwin-arm64
 ./Dockerfile:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /talosctl-darwin-arm64
 ./Dockerfile:COPY --from=talosctl-freebsd-amd64 / /
+./Dockerfile:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /chuboctl-freebsd-amd64
 ./Dockerfile:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /talosctl-freebsd-amd64
 ./Dockerfile:COPY --from=talosctl-freebsd-arm64 / /
+./Dockerfile:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /chuboctl-freebsd-arm64
 ./Dockerfile:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /talosctl-freebsd-arm64
 ./Dockerfile:COPY --from=talosctl-linux-amd64 / /
+./Dockerfile:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /chuboctl-linux-amd64
 ./Dockerfile:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /talosctl-linux-amd64
 ./Dockerfile:COPY --from=talosctl-linux-arm64 / /
+./Dockerfile:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /chuboctl-linux-arm64
 ./Dockerfile:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /talosctl-linux-arm64
 ./Dockerfile:COPY --from=talosctl-linux-armv7 / /
+./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /chuboctl-linux-armv7
 ./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
 ./Dockerfile:COPY --from=talosctl-linux-riscv64 / /
+./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /chuboctl-linux-riscv64
 ./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
 ./Dockerfile:COPY --from=talosctl-windows-amd64 / /
+./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /chuboctl-windows-amd64.exe
 ./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
 ./Dockerfile:COPY --from=talosctl-windows-arm64 / /
+./Dockerfile:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /chuboctl-windows-arm64.exe
 ./Dockerfile:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
 ./Dockerfile:COPY --from=vex /talos.grype.yaml /talos.grype.yaml
 ./Dockerfile:COPY --from=vex /talos.vex.json /talos.vex.json
@@ -67,7 +73,6 @@
 ./Dockerfile:ENTRYPOINT ["/talosctl"]
 ./Dockerfile:FROM ${GENERATE_VEX_PREFIX}:${GENERATE_VEX} AS talos-vex
 ./Dockerfile:FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
-./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS chuboctl-targetarch
 ./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
 ./Dockerfile:FROM base AS talosctl-darwin-amd64-build
 ./Dockerfile:FROM base AS talosctl-darwin-arm64-build
@@ -169,12 +174,10 @@
 ./Dockerfile:WORKDIR /src/cmd/talosctl
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/initramfs-amd64.xz" \
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/vmlinuz-amd64" \
-./Makefile:			talosctl-cni-bundle-* ) continue ;; \
 ./Makefile:		IMAGE=$(REGISTRY_AND_USERNAME)/talos:$(IMAGE_TAG_IN) \
 ./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
-./Makefile:		dst="$(ARTIFACTS)/$$(printf '%s' "$$base" | sed 's/^talosctl-/chuboctl-/')"; \
-./Makefile:		echo "failed to locate talosctl artifact for target '$*'" >&2; \
 ./Makefile:		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
+./Makefile:	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
 ./Makefile:	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
 ./Makefile:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
 ./Makefile:	@$(MAKE) local-talosctl-cni-bundle DEST=$(ARTIFACTS)
@@ -182,9 +185,7 @@
 ./Makefile:	@$(MAKE) talos PUSH=true
 ./Makefile:	@./hack/chubo/check-talos-refs.sh
 ./Makefile:	@echo -n installer installer-base talos imager chuboctl chuboctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
-./Makefile:	@for src in $(ARTIFACTS)/talosctl-*; do \
 ./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
-./Makefile:	for src in "$(ARTIFACTS)/talosctl-$*" "$(ARTIFACTS)/talosctl-$*.exe"; do \
 ./Makefile:# Compatibility alias while Docker build args/scripts still reference TALOSCTL naming.
 ./Makefile:# Compatibility aliases while talosctl naming is still accepted.
 ./Makefile:.PHONY: talos

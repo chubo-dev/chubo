@@ -643,8 +643,38 @@ COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-w
 FROM scratch AS talosctl-windows-arm64
 COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
 
+FROM scratch AS chuboctl-linux-amd64
+COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /chuboctl-linux-amd64
+
+FROM scratch AS chuboctl-linux-arm64
+COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /chuboctl-linux-arm64
+
+FROM scratch AS chuboctl-linux-armv7
+COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /chuboctl-linux-armv7
+
+FROM scratch AS chuboctl-linux-riscv64
+COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /chuboctl-linux-riscv64
+
+FROM scratch AS chuboctl-darwin-amd64
+COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /chuboctl-darwin-amd64
+
+FROM scratch AS chuboctl-darwin-arm64
+COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /chuboctl-darwin-arm64
+
+FROM scratch AS chuboctl-freebsd-amd64
+COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /chuboctl-freebsd-amd64
+
+FROM scratch AS chuboctl-freebsd-arm64
+COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /chuboctl-freebsd-arm64
+
+FROM scratch AS chuboctl-windows-amd64
+COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /chuboctl-windows-amd64.exe
+
+FROM scratch AS chuboctl-windows-arm64
+COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /chuboctl-windows-arm64.exe
+
 FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
-FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS chuboctl-targetarch
+FROM --platform=${BUILDPLATFORM} chuboctl-${TARGETOS}-${TARGETARCH} AS chuboctl-targetarch
 
 FROM scratch AS talosctl-all
 COPY --from=talosctl-linux-amd64 / /
@@ -659,12 +689,20 @@ COPY --from=talosctl-windows-amd64 / /
 COPY --from=talosctl-windows-arm64 / /
 
 FROM scratch AS chuboctl-all
-COPY --from=talosctl-all / /
+COPY --from=chuboctl-linux-amd64 / /
+COPY --from=chuboctl-linux-arm64 / /
+COPY --from=chuboctl-linux-armv7 / /
+COPY --from=chuboctl-linux-riscv64 / /
+COPY --from=chuboctl-darwin-amd64 / /
+COPY --from=chuboctl-darwin-arm64 / /
+COPY --from=chuboctl-freebsd-amd64 / /
+COPY --from=chuboctl-freebsd-arm64 / /
+COPY --from=chuboctl-windows-amd64 / /
+COPY --from=chuboctl-windows-arm64 / /
 
 FROM scratch AS chuboctl
 ARG TARGETARCH
-COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /chuboctl
-COPY --from=chuboctl-all /talosctl-linux-${TARGETARCH} /talosctl
+COPY --from=chuboctl-all /chuboctl-linux-${TARGETARCH} /chuboctl
 ARG TAG
 ENV VERSION=${TAG}
 LABEL "alpha.chubo.dev/version"="${VERSION}"
@@ -1352,7 +1390,7 @@ FROM base AS docs-build
 ARG TARGETOS
 ARG TARGETARCH
 WORKDIR /src
-COPY --from=chuboctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/chuboctl
+COPY --from=chuboctl-targetarch /chuboctl-${TARGETOS}-${TARGETARCH} /bin/chuboctl
 RUN env HOME=/home/user TAG=latest /bin/chuboctl docs --config /tmp/configuration \
     && env HOME=/home/user TAG=latest /bin/chuboctl docs --cli /tmp
 COPY ./pkg/machinery/config/schemas/*.schema.json /tmp/schemas/
