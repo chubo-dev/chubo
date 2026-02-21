@@ -44,13 +44,9 @@ func WithChuboConfig(chuboConfig *clientconfig.Config) Option {
 }
 
 // WithTalosConfig is a legacy alias kept for compatibility.
-func WithTalosConfig(talosConfig *clientconfig.Config) Option {
+func WithTalosConfig(legacyConfig *clientconfig.Config) Option {
 	return func(o *Options) error {
-		o.TalosConfig = talosConfig
-
-		if o.ChuboConfig == nil {
-			o.ChuboConfig = talosConfig
-		}
+		o.setLegacyTalosConfig(legacyConfig)
 
 		return nil
 	}
@@ -66,13 +62,9 @@ func WithChuboClient(client *client.Client) Option {
 }
 
 // WithTalosClient is a legacy alias kept for compatibility.
-func WithTalosClient(client *client.Client) Option {
+func WithTalosClient(legacyClient *client.Client) Option {
 	return func(o *Options) error {
-		o.TalosClient = client
-
-		if o.ChuboClient == nil {
-			o.ChuboClient = client
-		}
+		o.setLegacyTalosClient(legacyClient)
 
 		return nil
 	}
@@ -275,6 +267,22 @@ type Options struct {
 	SiderolinkEnabled bool
 }
 
+func (o *Options) setLegacyTalosConfig(legacyConfig *clientconfig.Config) {
+	o.TalosConfig = legacyConfig
+
+	if o.ChuboConfig == nil {
+		o.ChuboConfig = legacyConfig
+	}
+}
+
+func (o *Options) setLegacyTalosClient(legacyClient *client.Client) {
+	o.TalosClient = legacyClient
+
+	if o.ChuboClient == nil {
+		o.ChuboClient = legacyClient
+	}
+}
+
 // DefaultOptions returns default options.
 func DefaultOptions() Options {
 	return Options{
@@ -291,6 +299,7 @@ func (o Options) EffectiveConfig() *clientconfig.Config {
 		return o.ChuboConfig
 	}
 
+	// Compatibility-only fallback for legacy option alias field.
 	return o.TalosConfig
 }
 
@@ -300,5 +309,6 @@ func (o Options) EffectiveClient() *client.Client {
 		return o.ChuboClient
 	}
 
+	// Compatibility-only fallback for legacy option alias field.
 	return o.TalosClient
 }

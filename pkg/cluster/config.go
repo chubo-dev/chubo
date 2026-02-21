@@ -33,6 +33,7 @@ func (c *ConfigClientProvider) effectiveConfig() *clientconfig.Config {
 		return c.ChuboConfig
 	}
 
+	// Compatibility-only fallback for legacy config alias field.
 	return c.TalosConfig
 }
 
