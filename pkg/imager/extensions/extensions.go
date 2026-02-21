@@ -100,7 +100,7 @@ func (builder *Builder) validateExtensions(extensions []*extensions.Extension) e
 
 	opts := []extinterface.ValidationOption{
 		extinterface.WithValidateConstraints(),
-		extinterface.WithTalosVersion(builder.Quirks.Version()),
+		extinterface.WithChuboVersion(builder.Quirks.Version()),
 	}
 
 	if builder.ExtensionValidateContents {

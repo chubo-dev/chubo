@@ -806,14 +806,9 @@
 ./pkg/machinery/constants/constants.go:	VMwareGuestInfoConfigKey = "talos.config"
 ./pkg/machinery/constants/constants.go:HOME_URL="https://www.talos.dev/"
 ./pkg/machinery/extensions/config.go:// Config specifies Talos installer extensions configuration.
-./pkg/machinery/extensions/extensions.go:// Package extensions contains Talos extensions specific API.
 ./pkg/machinery/extensions/metadata.go:	Talos Constraint `yaml:"talos" protobuf:"1"`
 ./pkg/machinery/extensions/services/services.go:	// Name of the service to run, will be prefixed with `ext-` when registered as Talos service.
-./pkg/machinery/extensions/validate.go:			return fmt.Errorf("error parsing Talos version constraint: %w", err)
-./pkg/machinery/extensions/validate.go:			return fmt.Errorf("version constraint %s can't be satisfied with Talos version %s", constraint, talosVersion)
-./pkg/machinery/extensions/validate.go:	// TalosVersion is the version of Talos to validate against.
 ./pkg/machinery/extensions/validate.go:	constraint := ext.Manifest.Metadata.Compatibility.Talos.Version
-./pkg/machinery/extensions/validate.go:// WithTalosVersion sets the Talos version to validate against.
 ./pkg/machinery/gendata/data/name:Talos
 ./pkg/machinery/imager/quirks/partitions.go:// PartitionSizes capture partition sizes for Talos.
 ./pkg/machinery/meta/constants.go:	// DownloadURLCode stores the value of the `${code}` variable in the download URL for talos.config= URL.

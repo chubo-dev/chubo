@@ -23,7 +23,9 @@ type ValidationOptions struct {
 	// ValidateContents enables validation of the extension contents.
 	ValidateContents bool
 
-	// TalosVersion is the version of Talos to validate against.
+	// ChuboVersion is the version of Chubo to validate against.
+	ChuboVersion *semver.Version
+	// TalosVersion is a compatibility alias for ChuboVersion.
 	TalosVersion *semver.Version
 }
 
@@ -45,10 +47,20 @@ func WithValidateContents() ValidationOption {
 	}
 }
 
-// WithTalosVersion sets the Talos version to validate against.
+// WithChuboVersion sets the Chubo version to validate against.
+func WithChuboVersion(version *semver.Version) ValidationOption {
+	return func(o *ValidationOptions) error {
+		o.ChuboVersion = version
+
+		return nil
+	}
+}
+
+// WithTalosVersion is kept as a compatibility alias for WithChuboVersion.
 func WithTalosVersion(version *semver.Version) ValidationOption {
 	return func(o *ValidationOptions) error {
 		o.TalosVersion = version
+		o.ChuboVersion = version
 
 		return nil
 	}
@@ -67,17 +79,22 @@ func (ext *Extension) Validate(opts ...ValidationOption) error {
 		}
 	}
 
-	if validationOptions.TalosVersion == nil {
+	effectiveVersion := validationOptions.ChuboVersion
+	if effectiveVersion == nil {
+		effectiveVersion = validationOptions.TalosVersion
+	}
+
+	if effectiveVersion == nil {
 		version, err := semver.ParseTolerant(version.Tag)
 		if err != nil {
 			return err
 		}
 
-		validationOptions.TalosVersion = &version
+		effectiveVersion = &version
 	}
 
 	if validationOptions.ValidateContstraints {
-		if err := ext.validateConstraints(*validationOptions.TalosVersion); err != nil {
+		if err := ext.validateConstraints(*effectiveVersion); err != nil {
 			return err
 		}
 	}
@@ -89,17 +106,17 @@ func (ext *Extension) Validate(opts ...ValidationOption) error {
 	return nil
 }
 
-func (ext *Extension) validateConstraints(talosVersion semver.Version) error {
+func (ext *Extension) validateConstraints(chuboVersion semver.Version) error {
 	constraint := ext.Manifest.Metadata.Compatibility.Talos.Version
 
 	if constraint != "" {
 		versionConstraint, err := semver.ParseRange(trim(constraint))
 		if err != nil {
-			return fmt.Errorf("error parsing Talos version constraint: %w", err)
+			return fmt.Errorf("error parsing Chubo version constraint: %w", err)
 		}
 
-		if !versionConstraint(coreVersion(talosVersion)) {
-			return fmt.Errorf("version constraint %s can't be satisfied with Talos version %s", constraint, talosVersion)
+		if !versionConstraint(coreVersion(chuboVersion)) {
+			return fmt.Errorf("version constraint %s can't be satisfied with Chubo version %s", constraint, chuboVersion)
 		}
 	}
 
@@ -117,11 +134,11 @@ func trim(constraint string) string {
 	return constraint
 }
 
-func coreVersion(talosVersion semver.Version) semver.Version {
+func coreVersion(chuboVersion semver.Version) semver.Version {
 	return semver.Version{
-		Major: talosVersion.Major,
-		Minor: talosVersion.Minor,
-		Patch: talosVersion.Patch,
+		Major: chuboVersion.Major,
+		Minor: chuboVersion.Minor,
+		Patch: chuboVersion.Patch,
 	}
 }
 
