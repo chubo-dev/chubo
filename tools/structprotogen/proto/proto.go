@@ -19,14 +19,18 @@ import (
 	"github.com/chubo-dev/chubo/tools/structprotogen/types"
 )
 
-const resourceDefinitionsNamespace = "talos.resource.definitions"
+// DefaultResourceDefinitionsNamespace is the legacy proto namespace emitted by structprotogen.
+//
+// Keep this as default for compatibility; callers can override it when generating
+// v2 resources.
+const DefaultResourceDefinitionsNamespace = "talos.resource.definitions"
 
-func resourceDefinitionsPackage(pkg string) string {
-	return resourceDefinitionsNamespace + "." + pkg
+func resourceDefinitionsPackage(resourceNamespace, pkg string) string {
+	return resourceNamespace + "." + pkg
 }
 
-func resourceDefinitionsType(pkg, name string) string {
-	return resourceDefinitionsPackage(pkg) + "." + name
+func resourceDefinitionsType(resourceNamespace, pkg, name string) string {
+	return resourceDefinitionsPackage(resourceNamespace, pkg) + "." + name
 }
 
 // Pkg represents a protobuf package.
@@ -66,11 +70,11 @@ func (p *Pkg) Imports() *slices.Sorted[string] {
 }
 
 // WriteDebug is like Format, but writes additional debug info.
-func (p *Pkg) WriteDebug(w io.Writer) {
+func (p *Pkg) WriteDebug(w io.Writer, resourceNamespace string) {
 	pkgName := p.Name
 
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
-	fmt.Fprintf(w, "package %s; // %s\n\n", resourceDefinitionsPackage(p.Name), p.GoPkg)
+	fmt.Fprintf(w, "package %s; // %s\n\n", resourceDefinitionsPackage(resourceNamespace, p.Name), p.GoPkg)
 	fmt.Fprintf(w, "option go_package = \"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
 	fmt.Fprintf(w, "option java_package = \"dev.chubo.api.resource.definitions.%s\";\n\n", pkgName)
 
@@ -78,7 +82,7 @@ func (p *Pkg) WriteDebug(w io.Writer) {
 		for i := 0; i < p.imports.Len(); i++ {
 			importPath := p.imports.Get(i)
 			if !strings.ContainsRune(importPath, '.') {
-				importPath = resourceDefinitionsPackage(importPath)
+				importPath = resourceDefinitionsPackage(resourceNamespace, importPath)
 			}
 
 			fmt.Fprintf(w, "import \"%s\";\n", importPath)
@@ -94,11 +98,11 @@ func (p *Pkg) WriteDebug(w io.Writer) {
 }
 
 // Format formats the protobuf data.
-func (p *Pkg) Format(w io.Writer) {
+func (p *Pkg) Format(w io.Writer, resourceNamespace string) {
 	pkgName := p.Name
 
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
-	fmt.Fprintf(w, "package %s;\n\n", resourceDefinitionsPackage(p.Name))
+	fmt.Fprintf(w, "package %s;\n\n", resourceDefinitionsPackage(resourceNamespace, p.Name))
 	fmt.Fprintf(w, "option go_package = \"github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/%s\";\n", pkgName) // TODO: insert proper path
 	fmt.Fprintf(w, "option java_package = \"dev.chubo.api.resource.definitions.%s\";\n\n", pkgName)
 
@@ -106,7 +110,7 @@ func (p *Pkg) Format(w io.Writer) {
 		for i := 0; i < p.imports.Len(); i++ {
 			importPath := p.imports.Get(i)
 			if !strings.ContainsRune(importPath, '.') {
-				importPath = resourceDefinitionsPackage(importPath)
+				importPath = resourceDefinitionsPackage(resourceNamespace, importPath)
 			}
 
 			fmt.Fprintf(w, "import \"%s\";\n", importPath)
@@ -216,7 +220,7 @@ func (pf protoField) Format(w io.Writer) {
 // PrepareProtoData prepares the data for the protobuf generation.
 //
 //nolint:gocyclo,cyclop
-func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.ConstBlocks) slices.Sorted[*Pkg] {
+func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.ConstBlocks, resourceNamespace string) slices.Sorted[*Pkg] {
 	result := slices.NewSortedCompare([]*Pkg{}, protoPkgsCmp)
 
 	for i := 0; i < pkgsTypes.Len(); i++ {
@@ -239,7 +243,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 			fieldTypeData := types.TypeInfo(field.TypeData.Type())
 
 			if fieldTyp, ok := types.MatchTypeData[types.Complex](fieldTypeData); ok {
-				importName, typeName := mustFormatTypeName(fieldTyp.Pkg, fieldTyp.Name, pkgType.Pkg)
+				importName, typeName := mustFormatTypeName(fieldTyp.Pkg, fieldTyp.Name, pkgType.Pkg, resourceNamespace)
 
 				if importName != "" {
 					sliceutil.AddIfNotFound(protoPkg.Imports(), importName)
@@ -260,7 +264,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 
 				if block, ok := constants.Get(fieldTyp.Pkg, fieldTyp.Name); ok {
 					importName = "resource/definitions/enums/enums.proto"
-					typeName = resourceDefinitionsType("enums", block.ProtoMessageName())
+					typeName = resourceDefinitionsType(resourceNamespace, "enums", block.ProtoMessageName())
 				} else {
 					importName, typeName = mustFormatBasicTypeName(fieldTyp.Pkg, fieldTyp.Name)
 				}
@@ -287,7 +291,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 				switch {
 				case isEnum:
 					importName = "resource/definitions/enums/enums.proto"
-					typeName = "repeated " + resourceDefinitionsType("enums", block.ProtoMessageName())
+					typeName = "repeated " + resourceDefinitionsType(resourceNamespace, "enums", block.ProtoMessageName())
 				case fieldTyp.Pkg == "" && fieldTyp.Name == "byte" && fieldTyp.Is2DSlice: //nolint:goconst
 					typeName = "repeated bytes"
 				case fieldTyp.Pkg == "" && fieldTyp.Name == "byte":
@@ -295,7 +299,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 				case fieldTyp.Pkg == "":
 					typeName = fmt.Sprintf("repeated %s", getProtoBasicName(fieldTyp.Name))
 				default:
-					importName, typeName = mustFormatTypeName(fieldTyp.Pkg, fieldTyp.Name, pkgType.Pkg)
+					importName, typeName = mustFormatTypeName(fieldTyp.Pkg, fieldTyp.Name, pkgType.Pkg, resourceNamespace)
 					typeName = fmt.Sprintf("repeated %s", typeName)
 				}
 
@@ -334,7 +338,7 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 					typText = fmt.Sprintf("map<%s, %s>", keyTypeName, elemTypeName)
 				case fieldTyp.ElemTypePkg == pkgType.Pkg:
 					var elemTypeName string
-					importElem, elemTypeName = mustFormatTypeName(fieldTyp.ElemTypePkg, fieldTyp.ElemTypeName, pkgType.Pkg)
+					importElem, elemTypeName = mustFormatTypeName(fieldTyp.ElemTypePkg, fieldTyp.ElemTypeName, pkgType.Pkg, resourceNamespace)
 					typText = fmt.Sprintf("map<%s, %s>", keyTypeName, elemTypeName)
 				default:
 					panic(fmt.Errorf("map value type '%s.%s' is not known type", fieldTyp.ElemTypePkg, fieldTyp.ElemTypeName))
@@ -359,8 +363,8 @@ func PrepareProtoData(pkgsTypes slices.Sorted[*types.Type], constants consts.Con
 	return result
 }
 
-func mustFormatTypeName(fieldTypePkg string, fieldType string, declPkg string) (string, string) {
-	importPath, name := formatTypeName(fieldTypePkg, fieldType, declPkg)
+func mustFormatTypeName(fieldTypePkg string, fieldType string, declPkg string, resourceNamespace string) (string, string) {
+	importPath, name := formatTypeName(fieldTypePkg, fieldType, declPkg, resourceNamespace)
 	if name == "" {
 		panic(fmt.Errorf("unknown type %s.%s", fieldTypePkg, fieldType))
 	}
@@ -368,7 +372,7 @@ func mustFormatTypeName(fieldTypePkg string, fieldType string, declPkg string) (
 	return importPath, name
 }
 
-func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (string, string) {
+func formatTypeName(fieldTypePkg string, fieldType string, declPkg string, resourceNamespace string) (string, string) {
 	if fieldTypePkg == declPkg {
 		return "", fieldType
 	}
@@ -397,7 +401,7 @@ func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (stri
 	case typeData{"net/netip", "Addr"}:
 		return commoProto, "common.NetIP"
 	case typeData{"github.com/opencontainers/runtime-spec/specs-go", "Mount"}:
-		return "resource/definitions/proto/proto.proto", resourceDefinitionsType("proto", "Mount")
+		return "resource/definitions/proto/proto.proto", resourceDefinitionsType(resourceNamespace, "proto", "Mount")
 	case typeData{"github.com/siderolabs/crypto/x509", "PEMEncodedCertificateAndKey"}:
 		return commoProto, "common.PEMEncodedCertificateAndKey"
 	case typeData{"github.com/siderolabs/crypto/x509", "PEMEncodedKey"}:
@@ -408,17 +412,17 @@ func formatTypeName(fieldTypePkg string, fieldType string, declPkg string) (stri
 		return "google/api/expr/v1alpha1/checked.proto", "google.api.expr.v1alpha1.CheckedExpr"
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryMirrorConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
-		return "resource/definitions/cri/registry.proto", resourceDefinitionsType("cri", "RegistryMirrorConfig")
+		return "resource/definitions/cri/registry.proto", resourceDefinitionsType(resourceNamespace, "cri", "RegistryMirrorConfig")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryAuthConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
-		return "resource/definitions/cri/registry.proto", resourceDefinitionsType("cri", "RegistryAuthConfig")
+		return "resource/definitions/cri/registry.proto", resourceDefinitionsType(resourceNamespace, "cri", "RegistryAuthConfig")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/cri", "RegistryTLSConfig"}:
 		// This is a hack, but I (Dmitry) don't have enough patience to figure out why we don't support complex maps
-		return "resource/definitions/cri/registry.proto", resourceDefinitionsType("cri", "RegistryTLSConfig")
+		return "resource/definitions/cri/registry.proto", resourceDefinitionsType(resourceNamespace, "cri", "RegistryTLSConfig")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime", "PlatformMetadataSpec"}:
-		return "resource/definitions/runtime/runtime.proto", resourceDefinitionsType("runtime", "PlatformMetadataSpec")
+		return "resource/definitions/runtime/runtime.proto", resourceDefinitionsType(resourceNamespace, "runtime", "PlatformMetadataSpec")
 	case typeData{"github.com/chubo-dev/chubo/pkg/machinery/resources/block", "ParameterSpec"}:
-		return "resource/definitions/block/block.proto", resourceDefinitionsType("block", "ParameterSpec")
+		return "resource/definitions/block/block.proto", resourceDefinitionsType(resourceNamespace, "block", "ParameterSpec")
 	default:
 		return "", ""
 	}
@@ -443,7 +447,7 @@ func IsSupportedExternalType(typ types.ExternalType) bool {
 		return true
 	}
 
-	if _, name := formatTypeName(typ.Pkg, typ.Name, ""); name != "" {
+	if _, name := formatTypeName(typ.Pkg, typ.Name, "", DefaultResourceDefinitionsNamespace); name != "" {
 		return true
 	}
 

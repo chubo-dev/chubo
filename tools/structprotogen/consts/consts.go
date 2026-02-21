@@ -20,7 +20,12 @@ import (
 )
 
 const tag = "structprotogen:gen_enum"
-const resourceDefinitionsNamespace = "talos.resource.definitions"
+
+// DefaultResourceDefinitionsNamespace is the legacy proto namespace emitted by structprotogen.
+//
+// Keep this as default for compatibility; callers can override it when generating
+// v2 resources.
+const DefaultResourceDefinitionsNamespace = "talos.resource.definitions"
 
 // FindIn looks up all const blocks with the specific comment in the given packages.
 //
@@ -227,9 +232,13 @@ type Constant struct {
 type ConstBlocks []ConstBlock
 
 // FormatProtoFile generates proto file from the list of ConstBlocks.
-func (b *ConstBlocks) FormatProtoFile(w io.Writer) error {
+func (b *ConstBlocks) FormatProtoFile(w io.Writer, resourceNamespace string) error {
+	if resourceNamespace == "" {
+		return fmt.Errorf("resource namespace is required")
+	}
+
 	fmt.Fprint(w, "syntax = \"proto3\";\n\n")
-	fmt.Fprintf(w, "package %s.enums;\n\n", resourceDefinitionsNamespace)
+	fmt.Fprintf(w, "package %s.enums;\n\n", resourceNamespace)
 	fmt.Fprint(w, `option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums";`+"\n")
 	fmt.Fprint(w, `option java_package = "dev.chubo.api.resource.definitions.enums";`+"\n\n")
 

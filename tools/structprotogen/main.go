@@ -23,6 +23,8 @@ import (
 	"github.com/chubo-dev/chubo/tools/structprotogen/types"
 )
 
+var resourceNamespace = proto.DefaultResourceDefinitionsNamespace
+
 // rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:     "structprotogen path dest",
@@ -31,10 +33,14 @@ var rootCmd = &cobra.Command{
 	Args:    cobra.ExactArgs(2),
 	Version: "v1.0.0",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return run(args[0], args[1])
+		return run(args[0], args[1], resourceNamespace)
 	},
 	SilenceUsage:      true,
 	DisableAutoGenTag: true,
+}
+
+func init() {
+	rootCmd.Flags().StringVar(&resourceNamespace, "resource-namespace", proto.DefaultResourceDefinitionsNamespace, "resource definition proto package namespace")
 }
 
 func main() {
@@ -47,7 +53,11 @@ func main() {
 // TODO(DmitriyMV): get comments for fields
 
 //nolint:gocyclo
-func run(pkgPath, dst string) error {
+func run(pkgPath, dst, resourceNamespace string) error {
+	if resourceNamespace == "" {
+		return fmt.Errorf("resource namespace must not be empty")
+	}
+
 	loadedPkgs, err := loader.LoadPackages(pkgPath)
 	if err != nil {
 		return err
@@ -84,13 +94,13 @@ func run(pkgPath, dst string) error {
 		}
 	}
 
-	data := proto.PrepareProtoData(pkgsTypes, constants)
+	data := proto.PrepareProtoData(pkgsTypes, constants, resourceNamespace)
 
 	for i := 0; i < data.Len(); i++ {
 		protoData := data.Get(i)
 
 		fmt.Println("--------")
-		protoData.WriteDebug(os.Stdout)
+		protoData.WriteDebug(os.Stdout, resourceNamespace)
 	}
 
 	err = os.MkdirAll(dst, 0o755)
@@ -100,7 +110,7 @@ func run(pkgPath, dst string) error {
 
 	if len(constants) > 0 {
 		err = withFile(filepath.Join(dst, "enums", "enums.proto"), func(f *os.File) error {
-			return constants.FormatProtoFile(f)
+			return constants.FormatProtoFile(f, resourceNamespace)
 		})
 		if err != nil {
 			return fmt.Errorf("failed to write enums proto file: %w", err)
@@ -128,7 +138,7 @@ func run(pkgPath, dst string) error {
 		fmt.Println("writing file", dstFile)
 
 		err = withFile(dstFile, func(f *os.File) error {
-			protoData.Format(f)
+			protoData.Format(f, resourceNamespace)
 
 			return nil
 		})
