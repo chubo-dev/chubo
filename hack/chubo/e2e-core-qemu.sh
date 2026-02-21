@@ -8,8 +8,8 @@ set -euo pipefail
 # to get a host-reachable node IP and drives the rest over the OS API.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-cd "${TALOS_ROOT}"
+CHUBO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+cd "${CHUBO_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
@@ -20,7 +20,7 @@ WITH_HELPERS="${WITH_HELPERS:-0}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 
 RUN_ID="${RUN_ID:-$RANDOM}"
 BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"

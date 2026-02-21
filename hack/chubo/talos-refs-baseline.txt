@@ -328,27 +328,24 @@
 ./hack/chubo/check-runtime-surface.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-./_out/chuboctl-darwin-arm64}}"
 ./hack/chubo/e2e-cluster-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
 ./hack/chubo/e2e-cluster-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-cluster-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-cluster-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 ./hack/chubo/e2e-cluster-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 ./hack/chubo/e2e-core-docker.sh:		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-core-docker.sh:		echo "host=${host_os} is known to fail with Talos container runtime requirements (seccomp/mount attrs)." >&2
 ./hack/chubo/e2e-core-docker.sh:	echo "hint: docker fallback requires host kernel support for Talos container runtime features." >&2
 ./hack/chubo/e2e-core-docker.sh:	if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
-./hack/chubo/e2e-core-docker.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
-./hack/chubo/e2e-core-docker.sh:TALOS_IMAGE_LOCAL="${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}"
+./hack/chubo/e2e-core-docker.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-core-docker.sh:CHUBO_IMAGE_LOCAL="${CHUBO_IMAGE_LOCAL:-${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}}"
 ./hack/chubo/e2e-core-docker.sh:docker load -i "${ARTIFACTS}/talos.tar" >/dev/null
-./hack/chubo/e2e-core-docker.sh:echo "building chubo talos docker image"
 ./hack/chubo/e2e-core-docker.sh:make docker-talos \
 ./hack/chubo/e2e-core-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
 ./hack/chubo/e2e-core-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-core-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-core-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 ./hack/chubo/e2e-core-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 ./hack/chubo/e2e-helper-bundles-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:# Keep in sync with meta.ChuboOpenGyozaPeersOverride (talos/pkg/machinery/meta/constants.go).
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:# Talos build targets use `docker buildx build`. If buildx is only installed via Docker Desktop,
-./hack/chubo/e2e-opengyoza-quorum-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 ./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
 ./hack/chuboos/check-runtime-surface.sh:	export TALOSCTL="${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)"
 ./hack/chuboos/check-runtime-surface.sh:if [[ -z "${TALOSCTL:-}" ]] && [[ -x "${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)" ]]; then

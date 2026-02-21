@@ -7,16 +7,16 @@ set -euo pipefail
 # This is optimized for fast local validation on macOS arm64.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-cd "${TALOS_ROOT}"
+CHUBO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+cd "${CHUBO_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
 
-CHUBOCTL_BASE="${CHUBOCTL_BASE:-${TALOSCTL_BASE:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
-CHUBOCTL_CHUBO="${CHUBOCTL_CHUBO:-${TALOSCTL_CHUBO:-${TALOS_ROOT}/_out/chubo/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL_BASE="${CHUBOCTL_BASE:-${TALOSCTL_BASE:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL_CHUBO="${CHUBOCTL_CHUBO:-${TALOSCTL_CHUBO:-${CHUBO_ROOT}/_out/chubo/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 
 REGISTRY_NAME="${REGISTRY_NAME:-chubo-helper-registry}"
 REGISTRY_PORT="${REGISTRY_PORT:-5001}"

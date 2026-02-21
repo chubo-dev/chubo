@@ -8,8 +8,8 @@ set -euo pipefail
 # form a real cluster (not a mocked/quorum-override scenario).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-cd "${TALOS_ROOT}"
+CHUBO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+cd "${CHUBO_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
@@ -18,7 +18,7 @@ ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 CURL_BIN="${CURL_BIN:-curl}"
 CHUBOCTL_RPC_TIMEOUT="${CHUBOCTL_RPC_TIMEOUT:-15}"

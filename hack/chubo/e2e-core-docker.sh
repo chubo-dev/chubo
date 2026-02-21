@@ -8,8 +8,8 @@ set -euo pipefail
 # is not available. Keep `e2e-core-qemu.sh` as the strict install/upgrade path.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-cd "${TALOS_ROOT}"
+CHUBO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+cd "${CHUBO_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
@@ -17,7 +17,7 @@ ARCH="${ARCH:-amd64}"
 
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 
 CLUSTER_NAME="${CLUSTER_NAME:-chubo-e2e-docker}"
 STATE_DIR="${STATE_DIR:-/tmp/chubo-e2e-docker-state}"
@@ -25,7 +25,7 @@ WORKDIR="${WORKDIR:-/tmp/chubo-e2e-docker-work}"
 SUBNET="${SUBNET:-10.5.0.0/24}"
 NODE_CONTAINER="${NODE_CONTAINER:-${CLUSTER_NAME}-controlplane-1}"
 
-TALOS_IMAGE_LOCAL="${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}"
+CHUBO_IMAGE_LOCAL="${CHUBO_IMAGE_LOCAL:-${TALOS_IMAGE_LOCAL:-localhost/chubo/talos:dev}}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-600}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
 
@@ -53,7 +53,7 @@ check_host_support() {
 
 	if [[ "${host_os}" != "linux" ]] && [[ "${ALLOW_UNSUPPORTED_DOCKER:-0}" != "1" ]]; then
 		echo "docker provisioner fallback is only supported on Linux hosts." >&2
-		echo "host=${host_os} is known to fail with Talos container runtime requirements (seccomp/mount attrs)." >&2
+		echo "host=${host_os} is known to fail with Chubo OS container runtime requirements (seccomp/mount attrs)." >&2
 		echo "use 'make chubo-e2e-qemu' for authoritative validation, or set ALLOW_UNSUPPORTED_DOCKER=1 to bypass this guard." >&2
 
 		exit 2
@@ -122,7 +122,7 @@ mkdir -p "${WORKDIR}" "${ARTIFACTS}" "${STATE_DIR}"
 rm -f "${CHUBOCONFIG_FILE}" "${SUPPORT_OUT}" "${SUPPORT_LISTING}"
 "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster destroy >/dev/null 2>&1 || true
 
-echo "building chubo talos docker image"
+echo "building chubo OS docker image"
 make docker-talos \
 	DEST="${ARTIFACTS}" \
 	GO_BUILDTAGS="${GO_BUILDTAGS}" \
@@ -137,7 +137,7 @@ docker load -i "${ARTIFACTS}/talos.tar" >/dev/null
 echo "creating single-node Docker provisioner cluster"
 cluster_created=1
 if ! "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster create docker \
-	--image "${TALOS_IMAGE_LOCAL}" \
+	--image "${CHUBO_IMAGE_LOCAL}" \
 	--workers 0 \
 	--subnet "${SUBNET}" \
 	--chuboconfig-destination "${CHUBOCONFIG_FILE}"; then

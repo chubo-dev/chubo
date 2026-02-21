@@ -9,8 +9,8 @@ set -euo pipefail
 # scenarios deterministic (no reliance on network namespaces or debug containers).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TALOS_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-cd "${TALOS_ROOT}"
+CHUBO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+cd "${CHUBO_ROOT}"
 
 ARTIFACTS="${ARTIFACTS:-_out/chubo}"
 GO_BUILDTAGS="${GO_BUILDTAGS:-tcell_minimal,grpcnotrace,chubo}"
@@ -19,7 +19,7 @@ ARCH="${ARCH:-amd64}"
 SKIP_BUILD="${SKIP_BUILD:-0}"
 HOST_GOOS="${HOST_GOOS:-$(go env GOOS)}"
 HOST_GOARCH="${HOST_GOARCH:-$(go env GOARCH)}"
-CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${CHUBO_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 RUN_ID="${RUN_ID:-$RANDOM}"
 BASE_NET_OCTET="${BASE_NET_OCTET:-$((100 + RANDOM % 100))}"
@@ -58,7 +58,7 @@ UNSAFE_UPGRADE_OUT="${WORKDIR}/unsafe-upgrade.out"
 UNSAFE_MACHINED_LOG="${WORKDIR}/unsafe-machined.log"
 CLUSTER_CREATE_LOG="${WORKDIR}/cluster-create.log"
 
-# Keep in sync with meta.ChuboOpenGyozaPeersOverride (talos/pkg/machinery/meta/constants.go).
+# Keep in sync with meta.ChuboOpenGyozaPeersOverride (pkg/machinery/meta/constants.go).
 OPENGYOZA_PEERS_OVERRIDE_META_KEY="${OPENGYOZA_PEERS_OVERRIDE_META_KEY:-18}"
 
 cluster_created=0
