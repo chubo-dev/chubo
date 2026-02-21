@@ -33,10 +33,6 @@ func (p testProvisioner) GetChuboAPIEndpoints(provision.NetworkRequest) []string
 	return []string{"talos-api-endpoint.test"}
 }
 
-func (p testProvisioner) GetTalosAPIEndpoints(req provision.NetworkRequest) []string {
-	return p.GetChuboAPIEndpoints(req)
-}
-
 func (p testProvisioner) GetInClusterControlPlaneEndpoint(networkReq provision.NetworkRequest, controlPlanePort int) string {
 	return "controlplane-endpoint.test"
 }
@@ -151,7 +147,7 @@ func TestCommonMaker_MachineConfig(t *testing.T) {
 	assertConfigDefaultness(t, cOps, m)
 }
 
-// assertConfigDefaultness makes sure the maker-generated machine configs are not different from default talos machine configs.
+// assertConfigDefaultness makes sure the maker-generated machine configs are not different from default machine configs.
 func assertConfigDefaultness[ExtraOps any](t *testing.T, cOps clusterops.Common, m makers.Maker[ExtraOps], desiredExtraGenOps ...generate.Option) {
 	var versionContract *config.VersionContract
 

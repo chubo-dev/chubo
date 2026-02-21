@@ -27,8 +27,7 @@ type Provisioner interface {
 
 	GetInClusterControlPlaneEndpoint(req NetworkRequest, controlPlanePort int) string
 	GetExternalControlPlaneEndpoint(req NetworkRequest, controlPlanePort int) string
-	// GetTalosAPIEndpoints is a legacy compatibility method name.
-	GetTalosAPIEndpoints(NetworkRequest) []string
+	GetChuboAPIEndpoints(NetworkRequest) []string
 
 	GetFirstInterface() v1alpha1.IfaceSelector
 	GetFirstInterfaceName() string
@@ -38,15 +37,7 @@ type Provisioner interface {
 	UserDiskName(index int) string
 }
 
-type chuboAPIEndpointsProvider interface {
-	GetChuboAPIEndpoints(NetworkRequest) []string
-}
-
 // GetChuboAPIEndpoints returns the OS API endpoints for a provisioner.
 func GetChuboAPIEndpoints(p Provisioner, req NetworkRequest) []string {
-	if provider, ok := any(p).(chuboAPIEndpointsProvider); ok {
-		return provider.GetChuboAPIEndpoints(req)
-	}
-
-	return p.GetTalosAPIEndpoints(req)
+	return p.GetChuboAPIEndpoints(req)
 }

@@ -134,11 +134,6 @@ func (p *provisioner) GetChuboAPIEndpoints(provision.NetworkRequest) []string {
 	return nil
 }
 
-// GetTalosAPIEndpoints is a legacy alias kept for compatibility.
-func (p *provisioner) GetTalosAPIEndpoints(req provision.NetworkRequest) []string {
-	return p.GetChuboAPIEndpoints(req)
-}
-
 // GetFirstInterface returns first network interface name.
 func (p *provisioner) GetFirstInterface() v1alpha1.IfaceSelector {
 	return v1alpha1.IfaceBySelector(v1alpha1.NetworkDeviceSelector{
