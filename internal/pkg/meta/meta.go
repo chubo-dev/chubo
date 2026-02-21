@@ -23,7 +23,7 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
 	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/syslinux"
-	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
+	metaadv "github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
@@ -35,10 +35,10 @@ import (
 type Meta struct {
 	mu sync.Mutex
 
-	legacy adv.ADV
-	talos  adv.ADV
-	state  state.State
-	opts   Options
+	legacy        adv.ADV
+	advState      adv.ADV
+	resourceState state.State
+	opts          Options
 }
 
 // Options configures the META.
@@ -67,7 +67,7 @@ func WithPrinter(printer func(string, ...any)) Option {
 // New initializes empty META, trying to probe the existing META first.
 func New(ctx context.Context, st state.State, opts ...Option) (*Meta, error) {
 	meta := &Meta{
-		state: st,
+		resourceState: st,
 		opts: Options{
 			printer: log.Printf,
 		},
@@ -84,7 +84,7 @@ func New(ctx context.Context, st state.State, opts ...Option) (*Meta, error) {
 		return nil, err
 	}
 
-	meta.talos, err = talos.NewADV(nil)
+	meta.advState, err = metaadv.NewADV(nil)
 	if err != nil {
 		return nil, err
 	}
@@ -99,17 +99,17 @@ func (meta *Meta) getPath(ctx context.Context) (string, string, error) {
 		return meta.opts.fixedPath, "", nil
 	}
 
-	if meta.state == nil {
+	if meta.resourceState == nil {
 		return "", "", os.ErrNotExist
 	}
 
-	metaStatus, err := block.WaitForVolumePhase(ctx, meta.state, constants.MetaPartitionLabel, block.VolumePhaseReady, block.VolumePhaseMissing, block.VolumePhaseClosed)
+	metaStatus, err := block.WaitForVolumePhase(ctx, meta.resourceState, constants.MetaPartitionLabel, block.VolumePhaseReady, block.VolumePhaseMissing, block.VolumePhaseClosed)
 	if err != nil {
 		return "", "", err
 	}
 
 	// add our own finalizer for the META volume to ensure it never gets removed, even in the late stages of the reboot
-	if err = meta.state.AddFinalizer(ctx, metaStatus.Metadata(), constants.MetaPartitionLabel); err != nil {
+	if err = meta.resourceState.AddFinalizer(ctx, metaStatus.Metadata(), constants.MetaPartitionLabel); err != nil {
 		return "", "", err
 	}
 
@@ -164,7 +164,7 @@ func (meta *Meta) Reload(ctx context.Context) error {
 		return err
 	}
 
-	adv, err := talos.NewADV(f)
+	adv, err := metaadv.NewADV(f)
 	if adv == nil && err != nil {
 		// if adv is not nil, but err is nil, it might be missing ADV, ignore it
 		return fmt.Errorf("failed to load Chubo ADV: %w", err)
@@ -176,14 +176,14 @@ func (meta *Meta) Reload(ctx context.Context) error {
 	}
 
 	// copy values from in-memory to on-disk version
-	for _, t := range meta.talos.ListTags() {
-		val, _ := meta.talos.ReadTagBytes(t)
+	for _, t := range meta.advState.ListTags() {
+		val, _ := meta.advState.ReadTagBytes(t)
 		adv.SetTagBytes(t, val)
 	}
 
 	meta.opts.printer("META: loaded %d keys", len(adv.ListTags()))
 
-	meta.talos = adv
+	meta.advState = adv
 	meta.legacy = legacyAdv
 
 	return meta.syncState(ctx)
@@ -191,22 +191,22 @@ func (meta *Meta) Reload(ctx context.Context) error {
 
 // syncState sync resources with adv contents.
 func (meta *Meta) syncState(ctx context.Context) error {
-	if meta.state == nil {
+	if meta.resourceState == nil {
 		return nil
 	}
 
 	existingTags := make(map[resource.ID]struct{})
 
-	for _, t := range meta.talos.ListTags() {
+	for _, t := range meta.advState.ListTags() {
 		existingTags[runtime.MetaKeyTagToID(t)] = struct{}{}
-		val, _ := meta.talos.ReadTag(t)
+		val, _ := meta.advState.ReadTag(t)
 
-		if err := updateTagResource(ctx, meta.state, t, val); err != nil {
+		if err := updateTagResource(ctx, meta.resourceState, t, val); err != nil {
 			return err
 		}
 	}
 
-	items, err := meta.state.List(ctx, runtime.NewMetaKey(runtime.NamespaceName, "").Metadata())
+	items, err := meta.resourceState.List(ctx, runtime.NewMetaKey(runtime.NamespaceName, "").Metadata())
 	if err != nil {
 		return err
 	}
@@ -216,7 +216,7 @@ func (meta *Meta) syncState(ctx context.Context) error {
 			continue
 		}
 
-		if err = meta.state.Destroy(ctx, item.Metadata()); err != nil {
+		if err = meta.resourceState.Destroy(ctx, item.Metadata()); err != nil {
 			return err
 		}
 	}
@@ -264,7 +264,7 @@ func (meta *Meta) Flush() error {
 		return err
 	}
 
-	serialized, err := meta.talos.Bytes()
+	serialized, err := meta.advState.Bytes()
 	if err != nil {
 		return err
 	}
@@ -297,7 +297,7 @@ func (meta *Meta) Flush() error {
 		return fmt.Errorf("expected to write %d bytes, wrote %d", len(serialized), n)
 	}
 
-	meta.opts.printer("META: saved %d keys", len(meta.talos.ListTags()))
+	meta.opts.printer("META: saved %d keys", len(meta.advState.ListTags()))
 
 	return f.Sync()
 }
@@ -307,7 +307,7 @@ func (meta *Meta) ReadTag(t uint8) (val string, ok bool) {
 	meta.mu.Lock()
 	defer meta.mu.Unlock()
 
-	val, ok = meta.talos.ReadTag(t)
+	val, ok = meta.advState.ReadTag(t)
 	if !ok {
 		val, ok = meta.legacy.ReadTag(t)
 	}
@@ -320,7 +320,7 @@ func (meta *Meta) ReadTagBytes(t uint8) (val []byte, ok bool) {
 	meta.mu.Lock()
 	defer meta.mu.Unlock()
 
-	val, ok = meta.talos.ReadTagBytes(t)
+	val, ok = meta.advState.ReadTagBytes(t)
 	if !ok {
 		val, ok = meta.legacy.ReadTagBytes(t)
 	}
@@ -333,10 +333,10 @@ func (meta *Meta) SetTag(ctx context.Context, t uint8, val string) (bool, error)
 	meta.mu.Lock()
 	defer meta.mu.Unlock()
 
-	ok := meta.talos.SetTag(t, val)
+	ok := meta.advState.SetTag(t, val)
 
 	if ok {
-		err := updateTagResource(ctx, meta.state, t, val)
+		err := updateTagResource(ctx, meta.resourceState, t, val)
 		if err != nil {
 			return false, err
 		}
@@ -350,10 +350,10 @@ func (meta *Meta) SetTagBytes(ctx context.Context, t uint8, val []byte) (bool, e
 	meta.mu.Lock()
 	defer meta.mu.Unlock()
 
-	ok := meta.talos.SetTagBytes(t, val)
+	ok := meta.advState.SetTagBytes(t, val)
 
 	if ok {
-		err := updateTagResource(ctx, meta.state, t, string(val))
+		err := updateTagResource(ctx, meta.resourceState, t, string(val))
 		if err != nil {
 			return false, err
 		}
@@ -367,16 +367,16 @@ func (meta *Meta) DeleteTag(ctx context.Context, t uint8) (bool, error) {
 	meta.mu.Lock()
 	defer meta.mu.Unlock()
 
-	ok := meta.talos.DeleteTag(t)
+	ok := meta.advState.DeleteTag(t)
 	if !ok {
 		ok = meta.legacy.DeleteTag(t)
 	}
 
-	if meta.state == nil {
+	if meta.resourceState == nil {
 		return ok, nil
 	}
 
-	err := meta.state.Destroy(ctx, runtime.NewMetaKey(runtime.NamespaceName, runtime.MetaKeyTagToID(t)).Metadata())
+	err := meta.resourceState.Destroy(ctx, runtime.NewMetaKey(runtime.NamespaceName, runtime.MetaKeyTagToID(t)).Metadata())
 	if state.IsNotFoundError(err) {
 		err = nil
 	}

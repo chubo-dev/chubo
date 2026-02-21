@@ -541,21 +541,7 @@
 ./internal/pkg/meta/internal/adv/talos/talos.go:// ADV implements the Talos extended ADV.
 ./internal/pkg/meta/internal/adv/talos/talos.go:// Package talos implements modern ADV which supports large size for the values and tags.
 ./internal/pkg/meta/internal/adv/talos/talos.go:package talos
-./internal/pkg/meta/meta.go:		val, _ := meta.talos.ReadTag(t)
-./internal/pkg/meta/meta.go:		val, _ := meta.talos.ReadTagBytes(t)
-./internal/pkg/meta/meta.go:	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
-./internal/pkg/meta/meta.go:	adv, err := talos.NewADV(f)
-./internal/pkg/meta/meta.go:	for _, t := range meta.talos.ListTags() {
-./internal/pkg/meta/meta.go:	meta.opts.printer("META: saved %d keys", len(meta.talos.ListTags()))
-./internal/pkg/meta/meta.go:	meta.talos = adv
-./internal/pkg/meta/meta.go:	meta.talos, err = talos.NewADV(nil)
-./internal/pkg/meta/meta.go:	ok := meta.talos.DeleteTag(t)
-./internal/pkg/meta/meta.go:	ok := meta.talos.SetTag(t, val)
-./internal/pkg/meta/meta.go:	ok := meta.talos.SetTagBytes(t, val)
-./internal/pkg/meta/meta.go:	serialized, err := meta.talos.Bytes()
-./internal/pkg/meta/meta.go:	talos  adv.ADV
-./internal/pkg/meta/meta.go:	val, ok = meta.talos.ReadTag(t)
-./internal/pkg/meta/meta.go:	val, ok = meta.talos.ReadTagBytes(t)
+./internal/pkg/meta/meta.go:	metaadv "github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
 ./internal/pkg/mount/switchroot/switchroot.go:	if val := procfs.ProcCmdline().Get("talos.debugshell"); val != nil {
 ./internal/pkg/mount/switchroot/switchroot.go:	if val := procfs.ProcCmdline().Get("talos.fips140"); val != nil && fipsmode.Enabled() {
 ./internal/pkg/secureboot/secureboot.go:// In the case of Talos disk decryption, happens in machined, so we need to only sign EnterMachined
