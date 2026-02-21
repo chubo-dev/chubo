@@ -61,6 +61,7 @@ ARG PKG_RUNC=scratch
 ARG PKG_SD_BOOT=scratch
 ARG PKG_SQUASHFS_TOOLS=scratch
 ARG PKG_SYSTEMD_UDEVD=scratch
+ARG PKG_CHUBOCTL_CNI_BUNDLE=scratch
 ARG PKG_TALOSCTL_CNI_BUNDLE=scratch
 ARG PKG_TAR=scratch
 ARG PKG_UTIL_LINUX=scratch
@@ -264,7 +265,8 @@ COPY --from=pkg-cni-arm64 /opt/cni/bin/loopback /opt/cni/bin/loopback
 COPY --from=pkg-cni-arm64 /opt/cni/bin/portmap /opt/cni/bin/portmap
 COPY --from=pkg-cni-arm64 /usr/share/spdx/cni.spdx.json /usr/share/spdx/cni.spdx.json
 
-FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
+FROM ${PKG_CHUBOCTL_CNI_BUNDLE} AS pkgs-chuboctl-cni-bundle
+FROM pkgs-chuboctl-cni-bundle AS pkgs-talosctl-cni-bundle
 
 # The tools target provides base toolchain for the build.
 
@@ -1404,11 +1406,14 @@ COPY --from=docs-build /tmp/cli.md /website/content/v1.13/reference/
 COPY --from=docs-build /tmp/schemas /website/content/v1.13/schemas/
 COPY --from=proto-docs-build /api.md /website/content/v1.13/reference/
 
-# The talosctl-cni-bundle builds the CNI bundle for talosctl.
+# The chuboctl-cni-bundle builds the CNI bundle for chuboctl.
 
-FROM scratch AS talosctl-cni-bundle
+FROM scratch AS chuboctl-cni-bundle
 ARG TARGETARCH
-COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
+COPY --from=pkgs-chuboctl-cni-bundle /opt/cni/bin/ /chuboctl-cni-bundle-${TARGETARCH}/
+
+# Legacy compatibility alias for one transition window.
+FROM chuboctl-cni-bundle AS talosctl-cni-bundle
 
 # The go-mod-outdated target lists all outdated modules.
 

@@ -24,9 +24,7 @@
 ./Dockerfile:# The installer target generates an image that can be used to install Talos to
 ./Dockerfile:# The rootfs target provides the Talos rootfs.
 ./Dockerfile:# The talos target generates a docker image that can be used to run Talos
-./Dockerfile:# The talosctl-cni-bundle builds the CNI bundle for talosctl.
 ./Dockerfile:COPY --from=embed-abbrev-generate /src/_out/talos-metadata /_out/talos-metadata
-./Dockerfile:COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
 ./Dockerfile:COPY --from=sbom-amd64 /talos-amd64.spdx.json /usr/install/amd64/talos.spdx.json
 ./Dockerfile:COPY --from=sbom-amd64-generate /rootfs/usr/share/spdx/talos-amd64.spdx.json /
 ./Dockerfile:COPY --from=sbom-arm64 /talos-arm64.spdx.json /talos-arm64.spdx.json
@@ -72,7 +70,6 @@
 ./Dockerfile:COPY --from=vex-generate /talos.vex.json /talos.vex.json
 ./Dockerfile:ENTRYPOINT ["/talosctl"]
 ./Dockerfile:FROM ${GENERATE_VEX_PREFIX}:${GENERATE_VEX} AS talos-vex
-./Dockerfile:FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
 ./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
 ./Dockerfile:FROM base AS talosctl-darwin-amd64-build
 ./Dockerfile:FROM base AS talosctl-darwin-arm64-build
@@ -84,10 +81,11 @@
 ./Dockerfile:FROM base AS talosctl-linux-riscv64-build
 ./Dockerfile:FROM base AS talosctl-windows-amd64-build
 ./Dockerfile:FROM base AS talosctl-windows-arm64-build
+./Dockerfile:FROM chuboctl-cni-bundle AS talosctl-cni-bundle
+./Dockerfile:FROM pkgs-chuboctl-cni-bundle AS pkgs-talosctl-cni-bundle
 ./Dockerfile:FROM scratch AS talos
 ./Dockerfile:FROM scratch AS talosctl
 ./Dockerfile:FROM scratch AS talosctl-all
-./Dockerfile:FROM scratch AS talosctl-cni-bundle
 ./Dockerfile:FROM scratch AS talosctl-darwin-amd64
 ./Dockerfile:FROM scratch AS talosctl-darwin-arm64
 ./Dockerfile:FROM scratch AS talosctl-freebsd-amd64
@@ -176,16 +174,14 @@
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/vmlinuz-amd64" \
 ./Makefile:		IMAGE=$(REGISTRY_AND_USERNAME)/talos:$(IMAGE_TAG_IN) \
 ./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
-./Makefile:		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
+./Makefile:		cp $(ARTIFACTS)/chuboctl-cni-bundle-$${arch}.tar.gz $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz ; \
 ./Makefile:	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
 ./Makefile:	@$(MAKE) local-talosctl-$* DEST=$(ARTIFACTS) PUSH=false
 ./Makefile:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
-./Makefile:	@$(MAKE) local-talosctl-cni-bundle DEST=$(ARTIFACTS)
 ./Makefile:	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
 ./Makefile:	@$(MAKE) talos PUSH=true
 ./Makefile:	@./hack/chubo/check-talos-refs.sh
 ./Makefile:	@echo -n installer installer-base talos imager chuboctl chuboctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
-./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
 ./Makefile:# Compatibility alias while Docker build args/scripts still reference TALOSCTL naming.
 ./Makefile:# Compatibility aliases while talosctl naming is still accepted.
 ./Makefile:.PHONY: talos
@@ -198,7 +194,7 @@
 ./Makefile:Building with `WITH_RACE=1` enables race detector in the Talos executables. Integration tests are always built with the race detector
 ./Makefile:GO_MACHINED_LDFLAGS ?= -X golang.zx2c4.com/wireguard/ipc.socketDirectory=/system/wireguard-sock # see https://github.com/siderolabs/talos/issues/8514
 ./Makefile:NAME = Talos
-./Makefile:PKG_TALOSCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
+./Makefile:PKG_CHUBOCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
 ./Makefile:all: initramfs kernel installer imager chuboctl chuboctl-image talos
 ./Makefile:push-%: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the specified tag (e.g. push-latest).
 ./Makefile:push: ## Pushes the installer, imager, talos and chuboctl images to the configured container registry with the generated tag.
@@ -374,7 +370,6 @@
 ./hack/qemu/chubo-qemu.sh:# Optional extra kernel args, e.g. 'talos.platform=qemu' or debugging flags.
 ./hack/qemu/chubo-qemu.sh:# This script boots Talos via systemd-boot from a FAT "EFI drive" directory and forwards the
 ./hack/qemu/chubo-qemu.sh:options talos.platform=metal talos.halt_if_installed=${HALT_IF_INSTALLED} net.ifnames=0 slab_nomerge pti=on talos.dashboard.disabled=1 console=tty0 console=ttyAMA0 printk.devkmsg=on consoleblank=0 ${EXTRA_KERNEL_ARGS}
-./hack/release.sh:  ${ARTIFACTS}/talosctl-linux-amd64 image talos-bundle --overlays=false --extensions=false >> ${1}
 ./hack/release.toml:        title = "Talos Imager Enhancements"
 ./hack/release.toml:        title = "Talosctl images talos-bundle subcommand accepts version parameter"
 ./hack/release.toml:        title = "`talosctl images talos-bundle` can ignore reaching to the registry"

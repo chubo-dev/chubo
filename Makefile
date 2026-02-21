@@ -86,7 +86,10 @@ PKG_RUNC ?= $(PKGS_PREFIX)/runc:$(PKGS)
 PKG_SD_BOOT ?= $(PKGS_PREFIX)/sd-boot:$(PKGS)
 PKG_SQUASHFS_TOOLS ?= $(PKGS_PREFIX)/squashfs-tools:$(PKGS)
 PKG_SYSTEMD_UDEVD ?= $(PKGS_PREFIX)/systemd-udevd:$(PKGS)
-PKG_TALOSCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
+PKG_CHUBOCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
+# Source package still uses the legacy name in ghcr; output artifacts are chubo-first.
+# Compatibility alias while package naming is still accepted.
+PKG_TALOSCTL_CNI_BUNDLE ?= $(PKG_CHUBOCTL_CNI_BUNDLE)
 PKG_TAR ?= $(PKGS_PREFIX)/tar:$(PKGS)
 PKG_UTIL_LINUX ?= $(PKGS_PREFIX)/util-linux:$(PKGS)
 PKG_XFSPROGS ?= $(PKGS_PREFIX)/xfsprogs:$(PKGS)
@@ -248,6 +251,7 @@ COMMON_ARGS += --build-arg=PKG_RUNC=$(PKG_RUNC)
 COMMON_ARGS += --build-arg=PKG_SD_BOOT=$(PKG_SD_BOOT)
 COMMON_ARGS += --build-arg=PKG_SQUASHFS_TOOLS=$(PKG_SQUASHFS_TOOLS)
 COMMON_ARGS += --build-arg=PKG_SYSTEMD_UDEVD=$(PKG_SYSTEMD_UDEVD)
+COMMON_ARGS += --build-arg=PKG_CHUBOCTL_CNI_BUNDLE=$(PKG_CHUBOCTL_CNI_BUNDLE)
 COMMON_ARGS += --build-arg=PKG_TALOSCTL_CNI_BUNDLE=$(PKG_TALOSCTL_CNI_BUNDLE)
 COMMON_ARGS += --build-arg=PKG_TAR=$(PKG_TAR)
 COMMON_ARGS += --build-arg=PKG_U_BOOT=$(PKG_U_BOOT)
@@ -496,12 +500,13 @@ secureboot-installer: ## Builds UEFI only installer which uses UKI and push it t
 
 .PHONY: chuboctl-cni-bundle
 chuboctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for chuboctl.
-	@$(MAKE) local-talosctl-cni-bundle DEST=$(ARTIFACTS)
+	@$(MAKE) local-chuboctl-cni-bundle DEST=$(ARTIFACTS)
 	@for platform in $(subst $(,),$(space),$(PLATFORM)); do \
 		arch=`basename "$${platform}"` ; \
-		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
+		tar -C $(ARTIFACTS)/chuboctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/chuboctl-cni-bundle-$${arch}.tar.gz . ; \
+		cp $(ARTIFACTS)/chuboctl-cni-bundle-$${arch}.tar.gz $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz ; \
 	done
-	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
+	@rm -rf $(ARTIFACTS)/chuboctl-cni-bundle-*/
 
 .PHONY: talosctl-cni-bundle
 talosctl-cni-bundle: ## Legacy alias for chuboctl-cni-bundle (Wave B compatibility).

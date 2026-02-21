@@ -94,7 +94,7 @@ var DefaultSettings = Settings{
 	ControlplaneNodes:          3,
 	WorkerNodes:                1,
 	TargetInstallImageRegistry: "ghcr.io",
-	CNIBundleURL:               fmt.Sprintf("https://github.com/chubo-dev/chubo/releases/download/%s/talosctl-cni-bundle-%s.tar.gz", trimVersion(version.Tag), constants.ArchVariable),
+	CNIBundleURL:               fmt.Sprintf("https://github.com/chubo-dev/chubo/releases/download/%s/chuboctl-cni-bundle-%s.tar.gz", trimVersion(version.Tag), constants.ArchVariable),
 }
 
 func trimVersion(version string) string {
