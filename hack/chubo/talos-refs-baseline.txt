@@ -322,10 +322,6 @@
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
 ./cmd/chuboctl/cmd/nodes/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"
 ./cmd/installer/cmd/installer/install.go:	log.Printf("running Talos installer %s", version.NewVersion().Tag)
-./cmd/installer/pkg/install/install.go:	// Talos >= 1.8 can create STATE/EPHEMERAL on first boot, so the upstream installer
-./cmd/installer/pkg/install/install.go:	// compatibility when installing on Talos < 1.8
-./cmd/installer/pkg/install/install.go:// Install installs Talos.
-./cmd/installer/pkg/install/install.go:// system partitions defined by Talos and handling META and IMAGE cache.
 ./cmd/installer/pkg/install/install.go:const diskImageLabel = "talos-image-disk"
 ./cmd/talosctl/main.go:// Command talosctl is a legacy compatibility entrypoint for chuboctl.
 ./go.mod:	// fork to add Talos-specific userspace socket location: https://github.com/siderolabs/talos/issues/8514
@@ -548,7 +544,6 @@
 ./pkg/cluster/crashdump_chubo.go:// Chubo support collection is handled by dedicated talosctl support flows.
 ./pkg/imager/cache/cache.go:	tmpDir, err := os.MkdirTemp("", "talos-image-cache-gen")
 ./pkg/imager/embed.go:				Talos: extensions.Constraint{
-./pkg/imager/extensions/extensions.go:	// Quirks for the Talos version being used.
 ./pkg/imager/imager.go:			return "", fmt.Errorf("UKI output is not supported in this Talos version")
 ./pkg/imager/imager.go:		// pass META values as kernel talos.environment args which will be passed via the environment to the installer
 ./pkg/imager/imager.go:// Package imager contains code related to generation of different boot assets for Talos Linux.
@@ -805,9 +800,7 @@
 ./pkg/machinery/constants/constants.go:	UdevRulesPath = UdevDir + "/" + "rules.d/99-talos.rules"
 ./pkg/machinery/constants/constants.go:	VMwareGuestInfoConfigKey = "talos.config"
 ./pkg/machinery/constants/constants.go:HOME_URL="https://www.talos.dev/"
-./pkg/machinery/extensions/config.go:// Config specifies Talos installer extensions configuration.
 ./pkg/machinery/extensions/metadata.go:	Legacy Constraint `yaml:"talos,omitempty" protobuf:"1"`
-./pkg/machinery/extensions/services/services.go:	// Name of the service to run, will be prefixed with `ext-` when registered as Talos service.
 ./pkg/machinery/gendata/data/name:Talos
 ./pkg/machinery/imager/quirks/partitions.go:// PartitionSizes capture partition sizes for Talos.
 ./pkg/machinery/meta/constants.go:	// DownloadURLCode stores the value of the `${code}` variable in the download URL for talos.config= URL.

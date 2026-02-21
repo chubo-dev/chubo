@@ -29,7 +29,7 @@ type Builder struct {
 	ExtensionValidateContents bool
 	// Printf is used for logging.
 	Printf func(format string, v ...any)
-	// Quirks for the Talos version being used.
+	// Quirks for the Chubo version being used.
 	Quirks quirks.Quirks
 }
 

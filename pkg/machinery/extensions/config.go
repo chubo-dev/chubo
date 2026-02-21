@@ -12,7 +12,7 @@ import (
 
 //go:generate go tool github.com/siderolabs/deep-copy -type Layer -header-file ../../../hack/boilerplate.txt -o deep_copy.generated.go .
 
-// Config specifies Talos installer extensions configuration.
+// Config specifies Chubo installer extensions configuration.
 type Config struct {
 	Layers []*Layer `yaml:"layers"`
 }

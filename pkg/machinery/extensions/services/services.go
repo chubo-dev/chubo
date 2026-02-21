@@ -19,7 +19,7 @@ import (
 
 // Spec is represents non-system service definition.
 type Spec struct {
-	// Name of the service to run, will be prefixed with `ext-` when registered as Talos service.
+	// Name of the service to run, will be prefixed with `ext-` when registered as a Chubo service.
 	//
 	// Valid: [-_a-z0-9]+
 	Name string `yaml:"name"`

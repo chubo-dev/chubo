@@ -98,7 +98,7 @@ const typeGPT = "gpt"
 // diskImageLabel is used as a label to generate a deterministic GPT UUID for disk images.
 const diskImageLabel = "talos-image-disk"
 
-// Install installs Talos.
+// Install installs Chubo.
 //
 //nolint:gocyclo
 func Install(ctx context.Context, p runtime.Platform, mode Mode, opts *Options) error {
@@ -850,7 +850,7 @@ func (i *Installer) handleGrubBlocklist(gptdev gpt.Device, pt *gpt.Table) error 
 
 // getPartitionOptions builds the complete list of partition options for an installation.
 // It combines the bootloader-specific partitions passed in via bootPartitions with the
-// system partitions defined by Talos and handling META and IMAGE cache.
+// system partitions defined by Chubo and handling META and IMAGE cache.
 // It also generates GPT options required to create
 // the final partition layout. Mode-specific behavior is handled,
 // including configuration required for reproducible GUIDs when running in image mode.
@@ -894,14 +894,14 @@ func (i *Installer) getPartitionOptions(ctx context.Context, mode Mode, hostChub
 		partition.NewPartitionOptions(false, quirk, partition.WithLabel(constants.MetaPartitionLabel)),
 	)
 
-	// Talos >= 1.8 can create STATE/EPHEMERAL on first boot, so the upstream installer
+	// Chubo >= 1.8 can create STATE/EPHEMERAL on first boot, so the upstream installer
 	// skips them for modern installs. For the `chubo` fork we want a simpler, fully
 	// self-contained install path, so we always pre-create STATE/EPHEMERAL when the
 	// `chubo` build tag is enabled.
 	legacyImage := mode == ModeImage && !quirks.New(i.options.Version).SkipDataPartitions()
 	createDataPartitions := legacyImage || forceDataPartitions()
 
-	// compatibility when installing on Talos < 1.8
+	// compatibility when installing on Chubo < 1.8
 	if createDataPartitions || (hostChuboVersion != nil && hostChuboVersion.PrecreateStatePartition()) {
 		partitions = append(partitions,
 			partition.NewPartitionOptions(false, quirk, partition.WithLabel(constants.StatePartitionLabel)),
