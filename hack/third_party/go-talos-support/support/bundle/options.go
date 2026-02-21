@@ -14,11 +14,17 @@ import (
 // Option defines a single bundle option.
 type Option func(*Options)
 
-// WithTalosClient runs bundle creator with the Talos client.
-func WithTalosClient(client *client.Client) Option {
+// WithChuboClient runs bundle creator with the primary OS client.
+func WithChuboClient(client *client.Client) Option {
 	return func(o *Options) {
+		o.ChuboClient = client
 		o.TalosClient = client
 	}
+}
+
+// WithTalosClient is a legacy alias kept for compatibility.
+func WithTalosClient(client *client.Client) Option {
+	return WithChuboClient(client)
 }
 
 // WithLogOutput runs bundle creator with logs output.

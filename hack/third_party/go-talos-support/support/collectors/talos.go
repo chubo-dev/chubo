@@ -32,7 +32,7 @@ import (
 )
 
 func dmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	stream, err := options.TalosClient.Dmesg(ctx, false, false)
+	stream, err := options.EffectiveClient().Dmesg(ctx, false, false)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func logs(service string) Collect {
 
 		options.Log("getting %s/%s service logs", namespace, service)
 
-		stream, err := options.TalosClient.Logs(ctx, namespace, driver, service, false, -1)
+		stream, err := options.EffectiveClient().Logs(ctx, namespace, driver, service, false, -1)
 		if err != nil {
 			return nil, err
 		}
@@ -106,7 +106,7 @@ func logs(service string) Collect {
 func dependencies(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	options.Log("inspecting controller runtime")
 
-	resp, err := options.TalosClient.Inspect.ControllerRuntimeDependencies(ctx)
+	resp, err := options.EffectiveClient().Inspect.ControllerRuntimeDependencies(ctx)
 	if err != nil {
 		if resp == nil {
 			return nil, fmt.Errorf("error getting controller runtime dependencies: %w", err)
@@ -115,7 +115,7 @@ func dependencies(ctx context.Context, options *bundle.Options) ([]byte, error) 
 
 	var buf bytes.Buffer
 
-	if err = formatters.RenderGraph(ctx, options.TalosClient, resp, &buf, true); err != nil {
+	if err = formatters.RenderGraph(ctx, options.EffectiveClient(), resp, &buf, true); err != nil {
 		return nil, err
 	}
 
@@ -125,7 +125,7 @@ func dependencies(ctx context.Context, options *bundle.Options) ([]byte, error) 
 func mounts(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	options.Log("getting mounts")
 
-	resp, err := options.TalosClient.Mounts(ctx)
+	resp, err := options.EffectiveClient().Mounts(ctx)
 	if err != nil {
 		if resp == nil {
 			return nil, fmt.Errorf("error getting interfaces: %w", err)
@@ -144,7 +144,7 @@ func mounts(ctx context.Context, options *bundle.Options) ([]byte, error) {
 func devices(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	options.Log("reading devices")
 
-	r, err := options.TalosClient.Read(ctx, "/proc/bus/pci/devices")
+	r, err := options.EffectiveClient().Read(ctx, "/proc/bus/pci/devices")
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func devices(ctx context.Context, options *bundle.Options) ([]byte, error) {
 func ioPressure(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	options.Log("getting disk stats")
 
-	resp, err := options.TalosClient.MachineClient.DiskStats(ctx, &emptypb.Empty{})
+	resp, err := options.EffectiveClient().MachineClient.DiskStats(ctx, &emptypb.Empty{})
 
 	var filtered interface{}
 
@@ -196,7 +196,7 @@ func ioPressure(ctx context.Context, options *bundle.Options) ([]byte, error) {
 func processes(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	options.Log("getting processes snapshot")
 
-	resp, err := options.TalosClient.Processes(ctx)
+	resp, err := options.EffectiveClient().Processes(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -239,7 +239,7 @@ func summary(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	fmt.Fprintln(&buf, "Client:")
 	version.WriteLongVersionFromExisting(&buf, version.NewVersion())
 
-	resp, err := options.TalosClient.Version(ctx)
+	resp, err := options.EffectiveClient().Version(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -253,11 +253,11 @@ func summary(ctx context.Context, options *bundle.Options) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func talosResource(rd *meta.ResourceDefinition) Collect {
+func chuboResource(rd *meta.ResourceDefinition) Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
-		options.Log("getting talos resource %s/%s", rd.TypedSpec().DefaultNamespace, rd.TypedSpec().Type)
+		options.Log("getting resource %s/%s", rd.TypedSpec().DefaultNamespace, rd.TypedSpec().Type)
 
-		resources, err := options.TalosClient.COSI.List(ctx, resource.NewMetadata(rd.TypedSpec().DefaultNamespace, rd.TypedSpec().Type, "", resource.VersionUndefined))
+		resources, err := options.EffectiveClient().COSI.List(ctx, resource.NewMetadata(rd.TypedSpec().DefaultNamespace, rd.TypedSpec().Type, "", resource.VersionUndefined))
 		if err != nil {
 			return nil, err
 		}
@@ -299,7 +299,7 @@ func talosResource(rd *meta.ResourceDefinition) Collect {
 
 func serviceInfo(id string) Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
-		services, err := options.TalosClient.ServiceInfo(ctx, id)
+		services, err := options.EffectiveClient().ServiceInfo(ctx, id)
 		if err != nil {
 			if services == nil {
 				return nil, fmt.Errorf("error listing services: %w", err)

@@ -119,7 +119,7 @@ func collectData(dest *os.File, progress chan bundle.Progress) error {
 	return WithClientNoNodes(func(ctx context.Context, c *client.Client) error {
 		opts := []bundle.Option{
 			bundle.WithArchiveOutput(dest),
-			bundle.WithTalosClient(c),
+			bundle.WithChuboClient(c),
 			bundle.WithNodes(GlobalArgs.Nodes...),
 			bundle.WithNumWorkers(supportCmdFlags.numWorkers),
 			bundle.WithProgressChan(progress),
@@ -265,7 +265,7 @@ func getOSOnlyResourceCollectors(ctx context.Context, cosiState state.State) ([]
 }
 
 func osOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	resp, err := options.TalosClient.Version(ctx)
+	resp, err := options.EffectiveClient().Version(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -294,7 +294,7 @@ func osOnlySummary(ctx context.Context, options *bundle.Options) ([]byte, error)
 }
 
 func osOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	stream, err := options.TalosClient.Dmesg(ctx, false, false)
+	stream, err := options.EffectiveClient().Dmesg(ctx, false, false)
 	if err != nil {
 		return nil, err
 	}
@@ -318,14 +318,14 @@ func osOnlyDmesg(ctx context.Context, options *bundle.Options) ([]byte, error) {
 }
 
 func osOnlyDependencies(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	resp, err := options.TalosClient.Inspect.ControllerRuntimeDependencies(ctx)
+	resp, err := options.EffectiveClient().Inspect.ControllerRuntimeDependencies(ctx)
 	if err != nil && resp == nil {
 		return nil, fmt.Errorf("error getting controller runtime dependencies: %w", err)
 	}
 
 	var b bytes.Buffer
 
-	if err := formatters.RenderGraph(ctx, options.TalosClient, resp, &b, true); err != nil {
+	if err := formatters.RenderGraph(ctx, options.EffectiveClient(), resp, &b, true); err != nil {
 		return nil, err
 	}
 
@@ -333,7 +333,7 @@ func osOnlyDependencies(ctx context.Context, options *bundle.Options) ([]byte, e
 }
 
 func osOnlyMounts(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	resp, err := options.TalosClient.Mounts(ctx)
+	resp, err := options.EffectiveClient().Mounts(ctx)
 	if err != nil && resp == nil {
 		return nil, fmt.Errorf("error getting mounts: %w", err)
 	}
@@ -348,7 +348,7 @@ func osOnlyMounts(ctx context.Context, options *bundle.Options) ([]byte, error) 
 }
 
 func osOnlyDevices(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	reader, err := options.TalosClient.Read(ctx, "/proc/bus/pci/devices")
+	reader, err := options.EffectiveClient().Read(ctx, "/proc/bus/pci/devices")
 	if err != nil {
 		return nil, err
 	}
@@ -359,7 +359,7 @@ func osOnlyDevices(ctx context.Context, options *bundle.Options) ([]byte, error)
 }
 
 func osOnlyIOPressure(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	resp, err := options.TalosClient.MachineClient.DiskStats(ctx, &emptypb.Empty{})
+	resp, err := options.EffectiveClient().MachineClient.DiskStats(ctx, &emptypb.Empty{})
 	if err != nil {
 		return nil, err
 	}
@@ -389,7 +389,7 @@ func osOnlyIOPressure(ctx context.Context, options *bundle.Options) ([]byte, err
 }
 
 func osOnlyProcesses(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	resp, err := options.TalosClient.Processes(ctx)
+	resp, err := options.EffectiveClient().Processes(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -421,7 +421,7 @@ func osOnlyProcesses(ctx context.Context, options *bundle.Options) ([]byte, erro
 }
 
 func osOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte, error) {
-	resp, err := options.TalosClient.ServiceList(ctx)
+	resp, err := options.EffectiveClient().ServiceList(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -444,7 +444,7 @@ func osOnlyServiceList(ctx context.Context, options *bundle.Options) ([]byte, er
 
 func osOnlyServiceInfo(serviceID string) collectors.Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
-		resp, err := options.TalosClient.ServiceInfo(ctx, serviceID)
+		resp, err := options.EffectiveClient().ServiceInfo(ctx, serviceID)
 		if err != nil && resp == nil {
 			return nil, fmt.Errorf("error getting service state for %q: %w", serviceID, err)
 		}
@@ -461,7 +461,7 @@ func osOnlyServiceInfo(serviceID string) collectors.Collect {
 
 func osOnlyServiceLog(serviceID string) collectors.Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
-		stream, err := options.TalosClient.Logs(
+		stream, err := options.EffectiveClient().Logs(
 			ctx,
 			constants.SystemContainerdNamespace,
 			common.ContainerDriver_CONTAINERD,
@@ -494,7 +494,7 @@ func osOnlyServiceLog(serviceID string) collectors.Collect {
 
 func osOnlyResource(rd *meta.ResourceDefinition) collectors.Collect {
 	return func(ctx context.Context, options *bundle.Options) ([]byte, error) {
-		resp, err := options.TalosClient.COSI.List(
+		resp, err := options.EffectiveClient().COSI.List(
 			ctx,
 			resource.NewMetadata(
 				rd.TypedSpec().DefaultNamespace,

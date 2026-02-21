@@ -432,13 +432,7 @@
 ./hack/third_party/go-talos-support/go.mod:module github.com/siderolabs/go-talos-support
 ./hack/third_party/go-talos-support/hack/release.toml:github_repo = "siderolabs/go-talos-support"
 ./hack/third_party/go-talos-support/hack/release.toml:project_name = "go-talos-support"
-./hack/third_party/go-talos-support/support/bundle/options.go:// WithTalosClient runs bundle creator with the Talos client.
 ./hack/third_party/go-talos-support/support/collectors/collectors.go:	"github.com/siderolabs/go-talos-support/support/bundle"
-./hack/third_party/go-talos-support/support/collectors/collectors.go:// GetTalosNodeCollectors creates all collectors that rely on using Talos API.
-./hack/third_party/go-talos-support/support/collectors/collectors.go:// Package collectors contains standard Talos state collectors used in the support bundle generator.
-./hack/third_party/go-talos-support/support/collectors/collectors.go:// Source returns collector source name (Talos node name, cluster, etc).
-./hack/third_party/go-talos-support/support/collectors/collectors.go:// WithNode returns collectors which adds Talos node gRPC metadata to the context.
-./hack/third_party/go-talos-support/support/collectors/talos.go:		options.Log("getting talos resource %s/%s", rd.TypedSpec().DefaultNamespace, rd.TypedSpec().Type)
 ./hack/third_party/go-talos-support/support/collectors/talos.go:	"github.com/siderolabs/go-talos-support/support/bundle"
 ./hack/third_party/go-talos-support/support/support.go:	"github.com/siderolabs/go-talos-support/support/bundle"
 ./hack/third_party/go-talos-support/support/support.go:	"github.com/siderolabs/go-talos-support/support/collectors"

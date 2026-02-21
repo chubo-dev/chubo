@@ -16,6 +16,7 @@ import (
 
 // Options defines GetSupportBundle options.
 type Options struct {
+	ChuboClient *client.Client
 	TalosClient *client.Client
 	Archive     Archive
 	LogOutput   io.Writer
@@ -34,6 +35,15 @@ func NewOptions(opts ...Option) *Options {
 	}
 
 	return &options
+}
+
+// EffectiveClient returns chubo-primary client if set, otherwise legacy compatibility client.
+func (options *Options) EffectiveClient() *client.Client {
+	if options.ChuboClient != nil {
+		return options.ChuboClient
+	}
+
+	return options.TalosClient
 }
 
 // Progress reports current bundle collection progress.

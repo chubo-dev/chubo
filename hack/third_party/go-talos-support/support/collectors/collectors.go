@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package collectors contains standard Talos state collectors used in the support bundle generator.
+// Package collectors contains standard OS state collectors used in the support bundle generator.
 package collectors
 
 import (
@@ -54,7 +54,7 @@ func (c *Collector) Run(ctx context.Context, options *bundle.Options) error {
 	return options.Archive.Write(c.destinationPath, data)
 }
 
-// Source returns collector source name (Talos node name, cluster, etc).
+// Source returns collector source name (node name, cluster, etc).
 func (c *Collector) Source() string {
 	return c.source
 }
@@ -73,7 +73,7 @@ func WithFolder(collectors []*Collector, path string) []*Collector {
 	return collectors
 }
 
-// WithNode returns collectors which adds Talos node gRPC metadata to the context.
+// WithNode returns collectors which add node gRPC metadata to the context.
 func WithNode(collectors []*Collector, node string) []*Collector {
 	for _, c := range collectors {
 		collectFunc := c.collect
@@ -102,9 +102,9 @@ func WithSource(collectors []*Collector, source string) []*Collector {
 func GetForOptions(ctx context.Context, options *bundle.Options) ([]*Collector, error) {
 	var collectors []*Collector
 
-	if options.TalosClient != nil && len(options.Nodes) > 0 {
+	if cli := options.EffectiveClient(); cli != nil && len(options.Nodes) > 0 {
 		for _, node := range options.Nodes {
-			nodeCollectors, err := GetTalosNodeCollectors(client.WithNode(ctx, node), options.TalosClient)
+			nodeCollectors, err := GetChuboNodeCollectors(client.WithNode(ctx, node), cli)
 			if err != nil {
 				return nil, err
 			}
@@ -116,8 +116,8 @@ func GetForOptions(ctx context.Context, options *bundle.Options) ([]*Collector, 
 	return collectors, nil
 }
 
-// GetTalosNodeCollectors creates all collectors that rely on using Talos API.
-func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Collector, error) {
+// GetChuboNodeCollectors creates all collectors that rely on using the OS API.
+func GetChuboNodeCollectors(ctx context.Context, client *client.Client) ([]*Collector, error) {
 	base := []*Collector{
 		NewCollector("dmesg.log", dmesg),
 		NewCollector("controller-runtime.log", logs("controller-runtime")),
@@ -130,7 +130,7 @@ func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Coll
 		NewCollector("summary", summary),
 	}
 
-	collectors, err := getTalosResources(ctx, client.COSI)
+	collectors, err := getChuboResources(ctx, client.COSI)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,12 @@ func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Coll
 	return base, nil
 }
 
-func getTalosResources(ctx context.Context, state state.State) ([]*Collector, error) {
+// GetTalosNodeCollectors is a legacy alias kept for compatibility.
+func GetTalosNodeCollectors(ctx context.Context, client *client.Client) ([]*Collector, error) {
+	return GetChuboNodeCollectors(ctx, client)
+}
+
+func getChuboResources(ctx context.Context, state state.State) ([]*Collector, error) {
 	rds, err := safe.StateListAll[*meta.ResourceDefinition](ctx, state)
 	if err != nil {
 		return nil, err
@@ -158,7 +163,7 @@ func getTalosResources(ctx context.Context, state state.State) ([]*Collector, er
 	rds.ForEach(func(res *meta.ResourceDefinition) {
 		collectors = append(collectors, NewCollector(
 			fmt.Sprintf("%s.yaml", res.Metadata().ID()),
-			talosResource(res),
+			chuboResource(res),
 		))
 	})
 
