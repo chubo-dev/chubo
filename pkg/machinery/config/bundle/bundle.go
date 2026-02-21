@@ -27,7 +27,9 @@ type Bundle struct {
 	InitCfg         config.Provider
 	ControlPlaneCfg config.Provider
 	WorkerCfg       config.Provider
-	TalosCfg        *clientconfig.Config
+	ChuboCfg        *clientconfig.Config
+	// TalosCfg is a legacy compatibility alias.
+	TalosCfg *clientconfig.Config
 }
 
 // NewBundle returns a new bundle of configuration files.
@@ -97,7 +99,7 @@ func NewBundle(opts ...Option) (*Bundle, error) {
 
 			defer configFile.Close() //nolint:errcheck
 
-			if bundle.TalosCfg, err = clientconfig.ReadFrom(configFile); err != nil {
+			if bundle.ChuboCfg, err = clientconfig.ReadFrom(configFile); err != nil {
 				return bundle, err
 			}
 
@@ -152,7 +154,7 @@ func NewBundle(opts ...Option) (*Bundle, error) {
 		return nil, err
 	}
 
-	bundle.TalosCfg, err = input.Chuboconfig()
+	bundle.ChuboCfg, err = input.Chuboconfig()
 	if err != nil {
 		return bundle, err
 	}
@@ -177,6 +179,10 @@ func (bundle *Bundle) Worker() config.Provider {
 
 // ChuboConfig returns the primary Chubo client configuration from the bundle.
 func (bundle *Bundle) ChuboConfig() *clientconfig.Config {
+	if bundle.ChuboCfg != nil {
+		return bundle.ChuboCfg
+	}
+
 	return bundle.TalosCfg
 }
 
