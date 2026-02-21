@@ -67,7 +67,7 @@ const (
 	currentK8sVersion  = constants.DefaultWorkloadVersion
 )
 
-// upgradePreviousToStable upgrades from the previous Talos release to the stable release.
+// upgradePreviousToStable upgrades from the previous Chubo release to the stable release.
 func upgradePreviousToStable() upgradeSpec {
 	return upgradeSpec{
 		ShortName: fmt.Sprintf("%s-%s", previousRelease, stableRelease),
@@ -92,7 +92,7 @@ func upgradePreviousToStable() upgradeSpec {
 	}
 }
 
-// upgradeStableToCurrent upgrades from the stable Talos release to the current version.
+// upgradeStableToCurrent upgrades from the stable Chubo release to the current version.
 func upgradeStableToCurrent() upgradeSpec {
 	return upgradeSpec{
 		ShortName: fmt.Sprintf("%s-%s", stableRelease, DefaultSettings.CurrentVersion),
@@ -178,7 +178,7 @@ func upgradeCurrentToCurrentBios() upgradeSpec {
 	}
 }
 
-// upgradeStableToCurrentPreserveStage upgrades from the stable Talos release to the current version for single-node cluster with preserve and stage.
+// upgradeStableToCurrentPreserveStage upgrades from the stable Chubo release to the current version for single-node cluster with preserve and stage.
 func upgradeStableToCurrentPreserveStage() upgradeSpec {
 	return upgradeSpec{
 		ShortName: fmt.Sprintf("prsrv-stg-%s-%s", stableRelease, DefaultSettings.CurrentVersion),

@@ -23,7 +23,7 @@ type InstallOptions struct {
 	Cmdline string
 	// Whether to use the UKI cmdline instead of building it on the host (grub only).
 	GrubUseUKICmdline bool
-	// Talos version.
+	// Chubo version.
 	Version string
 
 	// Are we running in image mode?

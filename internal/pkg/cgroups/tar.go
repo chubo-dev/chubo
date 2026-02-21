@@ -14,7 +14,7 @@ import (
 
 // TreeFromTarGz builds a crgroup tree from the tar.gz reader.
 //
-// It is assumed to work with output of `talosctl cp /sys/fs/cgroup -`.
+// It is assumed to work with output of `chuboctl cp /sys/fs/cgroup -`.
 func TreeFromTarGz(r io.Reader) (*Tree, error) {
 	gzReader, err := gzip.NewReader(r)
 	if err != nil {

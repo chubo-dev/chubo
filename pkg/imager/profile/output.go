@@ -13,7 +13,7 @@ import (
 type Output struct {
 	// Kind of the output:
 	//  * iso - ISO image
-	//  * image - disk image (Talos pre-installed)
+	//  * image - disk image (Chubo pre-installed)
 	//  * installer - installer container
 	//  * kernel - Linux kernel
 	//  * initramfs - initramfs image
@@ -166,10 +166,10 @@ func (o *Output) selectBootloader(current BootloaderKind, arch, version string, 
 		// secureboot is always using sd-boot
 		return BootLoaderKindSDBoot
 	case arch == "arm64" && useSDBoot:
-		// arm64 always uses sd-boot for Talos >= 1.10
+		// arm64 always uses sd-boot for Chubo >= 1.10
 		return BootLoaderKindSDBoot
 	case !useSDBoot:
-		// legacy versions of Talos use GRUB for BIOS/UEFI
+		// legacy versions of Chubo use GRUB for BIOS/UEFI
 		return BootLoaderKindGrub
 	default:
 		// Default to dual-boot if not overridden.

@@ -24,7 +24,7 @@ func PatchBlocklistsForDiskImage(sectorSize uint, biosBootStartSector uint64, mo
 		return fmt.Errorf("sector size must be set to patch GRUB blocklists")
 	}
 
-	// Talos partition layout (GPT): EFI (gpt1, efiPartitionSizeBytes), BIOS (gpt2, 1MiB), BOOT (gpt3)
+	// Chubo partition layout (GPT): EFI (gpt1, efiPartitionSizeBytes), BIOS (gpt2, 1MiB), BOOT (gpt3)
 	// BIOS boot partition starts immediately after the EFI partition.
 	const (
 		bootImgKernelSectorOffset = 0x5c  // include/grub/i386/pc/boot.h (GRUB_BOOT_MACHINE_KERNEL_SECTOR)

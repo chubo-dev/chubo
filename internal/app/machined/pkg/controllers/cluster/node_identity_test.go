@@ -59,7 +59,7 @@ func (suite *NodeIdentitySuite) TestLoad() {
 		asrt.Equal(constants.StatePartitionLabel, mountRequest.TypedSpec().VolumeID)
 	})
 
-	// using verbatim data here to make sure nodeId representation is supported in future version fo Talos
+	// using verbatim data here to make sure nodeId representation is supported in future version fo Chubo
 	suite.Require().NoError(os.WriteFile(filepath.Join(statePath, constants.NodeIdentityFilename), []byte("nodeId: gvqfS27LxD58lPlASmpaueeRVzuof16iXoieRgEvBWaE\n"), 0o600))
 
 	ctest.AssertNoResource[*cluster.Identity](suite, cluster.LocalIdentity)

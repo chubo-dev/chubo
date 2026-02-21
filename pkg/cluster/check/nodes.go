@@ -134,7 +134,7 @@ func AllNodesDiskSizes(ctx context.Context, cluster ClusterInfo) error {
 		vs, err := safe.StateGetByID[*block.VolumeStatus](client.WithNode(ctx, nodeIP), cl.COSI, constants.EphemeralPartitionLabel)
 		if err != nil {
 			if client.StatusCode(err) == codes.PermissionDenied {
-				// old Talos versions don't support this resource
+				// old Chubo versions don't support this resource
 				return conditions.ErrSkipAssertion
 			}
 

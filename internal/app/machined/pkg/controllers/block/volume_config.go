@@ -30,7 +30,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
-// VolumeConfigController provides volume configuration based on Talos defaults and machine configuration.
+// VolumeConfigController provides volume configuration based on Chubo defaults and machine configuration.
 type VolumeConfigController struct {
 	V1Alpha1Mode machinedruntime.Mode
 	MetaProvider volumeconfig.MetaProvider

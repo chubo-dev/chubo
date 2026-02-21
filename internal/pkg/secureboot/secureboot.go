@@ -31,7 +31,7 @@ type PhaseInfo struct {
 // Derived from https://github.com/systemd/systemd/blob/v253/src/boot/measure.c#L295-L308
 // ref: https://www.freedesktop.org/software/systemd/man/systemd-pcrphase.service.html#Description
 //
-// In the case of Talos disk decryption, happens in machined, so we need to only sign EnterMachined
+// In the case of Chubo disk decryption, happens in machined, so we need to only sign EnterMachined
 // so that machined can only decrypt the disk if the system booted with the correct kernel/initrd/cmdline
 // OrderedPhases returns the phases that are measured.
 func OrderedPhases() []PhaseInfo {

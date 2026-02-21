@@ -73,7 +73,7 @@ func splitIPArgument(val string) []string {
 
 const autoconfDHCP = "dhcp"
 
-// ParseCmdlineNetwork parses `ip=` and Talos specific kernel cmdline argument producing all the available configuration options.
+// ParseCmdlineNetwork parses `ip=` and Chubo specific kernel cmdline argument producing all the available configuration options.
 //
 //nolint:gocyclo,cyclop
 func ParseCmdlineNetwork(cmdline *procfs.Cmdline, linkNameResolver *network.LinkResolver) (CmdlineNetworking, error) {
@@ -83,7 +83,7 @@ func ParseCmdlineNetwork(cmdline *procfs.Cmdline, linkNameResolver *network.Link
 		linkSpecSpecs []network.LinkSpecSpec
 	)
 
-	// process Talos specific kernel params
+	// process Chubo specific kernel params
 	cmdlineHostname := cmdline.Get(constants.KernelParamHostname).First()
 	if cmdlineHostname != nil {
 		settings.Hostname = *cmdlineHostname
@@ -258,7 +258,7 @@ func ParseCmdlineNetwork(cmdline *procfs.Cmdline, linkNameResolver *network.Link
 		}
 
 		// set defaults as per https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html
-		// Talos by default sets bond mode to balance-rr
+		// Chubo by default sets bond mode to balance-rr
 		if bondSlaves == nil {
 			bondSlaves = []string{
 				"eth0",

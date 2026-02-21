@@ -86,7 +86,7 @@ func ProbeWithCallback(disk string, options options.ProbeOptions, callback func(
 	var sdbootConf *Config
 
 	// read /boot/EFI and find if sd-boot is already being used
-	// this is to make sure sd-boot from Talos is being used and not sd-boot from another distro
+	// this is to make sure sd-boot from Chubo is being used and not sd-boot from another distro
 	if err := mount.PartitionOp(
 		disk,
 		[]mount.Spec{
@@ -119,7 +119,7 @@ func ProbeWithCallback(disk string, options options.ProbeOptions, callback func(
 
 			options.Logf("sd-boot: found UKI files: %v", xslices.Map(ukiFiles, filepath.Base))
 
-			// If we booted of UKI/Kernel+Initramfs/ISO Talos installer will always be run which
+			// If we booted of UKI/Kernel+Initramfs/ISO Chubo installer will always be run which
 			// sets the `LoaderEntryDefault` to the UKI file name, so either for reboot with Kexec or upgrade
 			// we will always have the UKI file name in the `LoaderEntryDefault`
 			// and we can use it to determine the default entry.
@@ -493,12 +493,12 @@ func generateNextUKIName(version string, existingFiles []string) (string, error)
 		}
 
 		if len(parts) == 1 {
-			// Chubo-{version}.efi and Talos-{version}.efi legacy formats.
+			// Chubo-{version}.efi and Chubo-{version}.efi legacy formats.
 			if maxIndex < 0 {
 				maxIndex = 0
 			}
 		} else if len(parts) == 2 {
-			// Chubo-{version}+{index}.efi and Talos-{version}+{index}.efi legacy formats.
+			// Chubo-{version}+{index}.efi and Chubo-{version}+{index}.efi legacy formats.
 			if idx, err := strconv.Atoi(parts[1]); err == nil && idx > maxIndex {
 				maxIndex = idx
 			}

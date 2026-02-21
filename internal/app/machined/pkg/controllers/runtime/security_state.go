@@ -33,7 +33,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
-// SecurityStateController is a controller that updates the security state of Talos.
+// SecurityStateController is a controller that updates the security state of Chubo.
 type SecurityStateController struct {
 	V1Alpha1Mode machineruntime.Mode
 }

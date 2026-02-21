@@ -104,7 +104,7 @@ func (suite *ResetSuite) TestResetNoGracefulWorker() {
 
 // TestResetNoGracefulControlplane resets a control plane node in !graceful mode.
 //
-// As the node doesn't leave etcd, it relies on Talos to fix the problem on rejoin.
+// As the node doesn't leave etcd, it relies on Chubo to fix the problem on rejoin.
 func (suite *ResetSuite) TestResetNoGracefulControlplane() {
 	suite.testResetNoGraceful(machine.TypeControlPlane)
 }

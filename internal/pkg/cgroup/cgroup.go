@@ -4,11 +4,11 @@
 
 // Package cgroup provides cgroup utilities to handle nested cgroups.
 //
-// When Talos runs in a container, it might either share or not share the host cgroup namespace.
+// When Chubo runs in a container, it might either share or not share the host cgroup namespace.
 // If the cgroup namespace is not shared, PID 1 will appear in cgroup '/', otherwise it will be
 // part of some pre-existing cgroup hierarchy.
 //
-// When Talos is running in a non-container mode, it is always at the root of the cgroup hierarchy.
+// When Chubo is running in a non-container mode, it is always at the root of the cgroup hierarchy.
 //
 // This package provides a transparent way to handle nested cgroups by providing a Path() function
 // which returns the correct cgroup path based on the cgroup hierarchy available.

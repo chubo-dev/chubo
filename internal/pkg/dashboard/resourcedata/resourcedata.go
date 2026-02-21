@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package resourcedata implements the types and the data sources for the data sourced from the Talos resource API (COSI).
+// Package resourcedata implements the types and the data sources for the data sourced from the Chubo resource API (COSI).
 package resourcedata
 
 import (
@@ -36,7 +36,7 @@ type Data struct {
 	Deleted  bool
 }
 
-// Source is the data source for the Talos resources.
+// Source is the data source for the Chubo resources.
 type Source struct {
 	ctxCancel context.CancelFunc
 

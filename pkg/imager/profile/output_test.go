@@ -53,13 +53,13 @@ func TestBootloaderSetting(t *testing.T) {
 		secureBoot bool
 		wantImage  profile.BootloaderKind
 	}{
-		// Talos < 1.10: GRUB for both amd64/arm64, ISO options not supported
+		// Chubo < 1.10: GRUB for both amd64/arm64, ISO options not supported
 		{"amd64", "1.9.0", false, profile.BootLoaderKindGrub},
 		{"amd64", "1.9.0", true, profile.BootLoaderKindSDBoot},
 		{"arm64", "1.9.0", false, profile.BootLoaderKindGrub},
 		{"arm64", "1.9.0", true, profile.BootLoaderKindSDBoot},
 
-		// Talos 1.10-1.11: amd64=dual-boot, arm64=sd-boot, ISO options not supported
+		// Chubo 1.10-1.11: amd64=dual-boot, arm64=sd-boot, ISO options not supported
 		{"amd64", "1.10.0", false, profile.BootLoaderKindDualBoot},
 		{"amd64", "1.10.0", true, profile.BootLoaderKindSDBoot},
 		{"arm64", "1.10.0", false, profile.BootLoaderKindSDBoot},
@@ -69,7 +69,7 @@ func TestBootloaderSetting(t *testing.T) {
 		{"arm64", "1.11.0", false, profile.BootLoaderKindSDBoot},
 		{"arm64", "1.11.0", true, profile.BootLoaderKindSDBoot},
 
-		// Talos >= 1.12: amd64=dual-boot, arm64=sd-boot, ISO options supported
+		// Chubo >= 1.12: amd64=dual-boot, arm64=sd-boot, ISO options supported
 		{"amd64", "1.12.0", false, profile.BootLoaderKindDualBoot},
 		{"amd64", "1.12.0", true, profile.BootLoaderKindSDBoot},
 		{"arm64", "1.12.0", false, profile.BootLoaderKindSDBoot},

@@ -22,7 +22,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
-// SBOMItemController is a controller that publishes Talos SBOMs as resources.
+// SBOMItemController is a controller that publishes Chubo SBOMs as resources.
 type SBOMItemController struct {
 	SPDXPath          string
 	ExtensionSPDXPath string

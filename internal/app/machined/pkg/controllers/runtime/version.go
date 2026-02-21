@@ -16,7 +16,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/version"
 )
 
-// VersionController populates the version of currently running Talos.
+// VersionController populates the version of currently running Chubo.
 type VersionController struct{}
 
 // Name implements controller.Controller interface.

@@ -59,7 +59,7 @@ type LaunchConfig struct {
 	IOMMUEnabled              bool
 	SkipInjectingExtraCmdline bool
 
-	// Talos config
+	// Chubo config
 	Config string
 
 	// PXE
@@ -204,7 +204,7 @@ func launchVM(config *LaunchConfig) error {
 
 		case "nvme":
 			if !nvmeAttached {
-				// [TODO]: once Talos is fixed, use multipath NVME: https://qemu-project.gitlab.io/qemu/system/devices/nvme.html
+				// [TODO]: once Chubo is fixed, use multipath NVME: https://qemu-project.gitlab.io/qemu/system/devices/nvme.html
 				args = append(args,
 					"-device", "nvme,id=nvme-ctrl-0,serial=deadbeef",
 				)
@@ -424,7 +424,7 @@ func launchVM(config *LaunchConfig) error {
 
 // Launch a control process around qemu VM manager.
 //
-// This function is invoked from 'talosctl qemu-launch' hidden command
+// This function is invoked from 'chuboctl qemu-launch' hidden command
 // and wraps starting, controlling 'qemu' VM process.
 //
 // Launch restarts VM forever until control process is stopped itself with a signal.

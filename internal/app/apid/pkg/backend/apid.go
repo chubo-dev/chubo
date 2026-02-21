@@ -30,7 +30,7 @@ import (
 
 // GracefulShutdownTimeout is the timeout for graceful shutdown of the backend connection.
 //
-// Talos has a few long-running API calls, so we need to give the backend some time to finish them.
+// Chubo has a few long-running API calls, so we need to give the backend some time to finish them.
 //
 // The connection will enter IDLE time after GracefulShutdownTimeout/2, if no RPC is running.
 const GracefulShutdownTimeout = 30 * time.Minute

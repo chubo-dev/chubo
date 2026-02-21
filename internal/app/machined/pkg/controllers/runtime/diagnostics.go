@@ -19,7 +19,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
 )
 
-// DiagnosticsController analyzes state of Talos Linux system and provides warnings on common problems.
+// DiagnosticsController analyzes state of Chubo Linux system and provides warnings on common problems.
 type DiagnosticsController struct{}
 
 // Name implements controller.Controller interface.

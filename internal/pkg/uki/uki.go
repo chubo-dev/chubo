@@ -50,7 +50,7 @@ type Builder struct {
 	//
 	// Arch of the UKI file.
 	Arch string
-	// Version of Talos.
+	// Version of Chubo.
 	Version string
 	// Path to the sd-stub.
 	SdStubPath string

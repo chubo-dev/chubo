@@ -18,7 +18,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
 )
 
-// Source is a data source that gathers information about a Talos node using Talos API.
+// Source is a data source that gathers information about a Chubo node using Chubo API.
 type Source struct {
 	*client.Client
 

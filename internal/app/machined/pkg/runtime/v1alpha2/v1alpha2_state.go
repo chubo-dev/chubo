@@ -65,7 +65,7 @@ func NewState() (*State, error) {
 		return nil, err
 	}
 
-	// register Talos namespaces
+	// register Chubo namespaces
 	for _, ns := range []struct {
 		name        string
 		description string
@@ -88,7 +88,7 @@ func NewState() (*State, error) {
 		}
 	}
 
-	// register Talos resources
+	// register Chubo resources
 	for _, r := range []meta.ResourceWithRD{
 		&block.Device{},
 		&block.DiscoveredVolume{},

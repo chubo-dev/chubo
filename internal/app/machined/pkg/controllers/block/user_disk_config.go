@@ -26,7 +26,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 )
 
-// UserDiskConfigController provides volume configuration based on Talos v1alpha1 user disks.
+// UserDiskConfigController provides volume configuration based on Chubo v1alpha1 user disks.
 type UserDiskConfigController struct{}
 
 // Name implements controller.Controller interface.

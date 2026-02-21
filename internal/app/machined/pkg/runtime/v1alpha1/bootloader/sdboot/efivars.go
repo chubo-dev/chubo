@@ -145,7 +145,7 @@ func CreateBootEntry(rw efivarfs.ReadWriter, blkidInfo *blkid.Info, printf func(
 
 	var existingManagedBootEntryIndexes []int
 
-	// Find all boot entries with managed Chubo/Talos descriptions.
+	// Find all boot entries with managed Chubo/Chubo descriptions.
 	for idx, entry := range bootEntries {
 		if entry.Description == ChuboBootEntryDescription || entry.Description == TalosBootEntryDescription {
 			existingManagedBootEntryIndexes = append(existingManagedBootEntryIndexes, idx)
@@ -153,13 +153,13 @@ func CreateBootEntry(rw efivarfs.ReadWriter, blkidInfo *blkid.Info, printf func(
 	}
 
 	// we sort the indexes to make sure we always keep the lowest index
-	// when removing duplicate Chubo/Talos Linux UKI boot entries
+	// when removing duplicate Chubo/Chubo Linux UKI boot entries
 	slices.Sort(existingManagedBootEntryIndexes)
 
 	printf("Found existing Chubo/Talos Linux UKI boot entries: %v", existingManagedBootEntryIndexes)
 
 	// Remove any existing managed Linux UKI boot entries from the BootOrder.
-	// We need to do this since Talos 1.11.x release assumed that the boot order set by the code stays even after a reboot,
+	// We need to do this since Chubo 1.11.x release assumed that the boot order set by the code stays even after a reboot,
 	// but UEFI firmware settings can set a different boot order on boot, which lead to multiple managed Linux UKI entries in the boot order,
 	// causing some UEFI firmwares to fail to boot at all.
 	// See https://github.com/chubo-dev/chubo/issues/11829

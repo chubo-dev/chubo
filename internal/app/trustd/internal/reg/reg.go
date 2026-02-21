@@ -43,7 +43,7 @@ func (r *Registrator) Register(s *grpc.Server) {
 
 // Certificate implements the securityapi.SecurityServer interface.
 //
-// This API is called by Talos worker nodes to request a server certificate for apid running on the node.
+// This API is called by Chubo worker nodes to request a server certificate for apid running on the node.
 // Control plane nodes generate certificates (client and server) directly from machine config PKI.
 func (r *Registrator) Certificate(ctx context.Context, in *securityapi.CertificateRequest) (resp *securityapi.CertificateResponse, err error) {
 	remotePeer, ok := peer.FromContext(ctx)
@@ -77,7 +77,7 @@ func (r *Registrator) Certificate(ctx context.Context, in *securityapi.Certifica
 
 	// don't allow any certificates which can be used for client authentication
 	//
-	// we don't return an error here, as otherwise workers running old versions of Talos
+	// we don't return an error here, as otherwise workers running old versions of Chubo
 	// will fail to provision client certificate and will never launch apid
 	//
 	// instead, the returned certificate will be rejected when being used

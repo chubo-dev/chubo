@@ -4,7 +4,7 @@
 
 //go:build integration
 
-// Package api provides API integration tests for Talos
+// Package api provides API integration tests for Chubo
 package api
 
 import "github.com/stretchr/testify/suite"

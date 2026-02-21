@@ -64,12 +64,12 @@ func (suite *SBOMSuite) TestCommon() {
 		},
 	)
 
-	// Talos SBOM item should have a matching version.
+	// Chubo SBOM item should have a matching version.
 	rtestutils.AssertResource(ctx, suite.T(), suite.Client.COSI,
 		"Talos",
 		func(item *runtime.SBOMItem, asrt *assert.Assertions) {
 			asrt.Equal(version.Name, item.TypedSpec().Name, "SBOM item name should match Talos version name")
-			// asrt.Equal(version.Tag, item.TypedSpec().Version, "SBOM item version should match Talos version")
+			// asrt.Equal(version.Tag, item.TypedSpec().Version, "SBOM item version should match Chubo version")
 		},
 	)
 
@@ -98,7 +98,7 @@ func (suite *SBOMSuite) TestCommon() {
 	)
 
 	if suite.Capabilities().RunsOSKernel {
-		// Assert on Talos kernel version.
+		// Assert on Chubo kernel version.
 		rtestutils.AssertResource(ctx, suite.T(), suite.Client.COSI,
 			"kernel",
 			func(item *runtime.SBOMItem, asrt *assert.Assertions) {

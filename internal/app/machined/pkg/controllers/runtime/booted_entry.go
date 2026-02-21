@@ -128,7 +128,7 @@ func (ctrl *BootedEntryController) Run(ctx context.Context, r controller.Runtime
 		case loaderEntryOneShot == "" && loaderEntryDefault != "" && loaderEntrySelected == "":
 			bootedEntry = loaderEntryDefault
 		// this is the case when we just booted with UKI/kernel+initrd and bootloader is not installed
-		// this case is only currently applicable when locally developing Talos
+		// this case is only currently applicable when locally developing Chubo
 		case loaderEntryOneShot == "" && loaderEntryDefault == "" && loaderEntrySelected != "":
 			bootedEntry = loaderEntrySelected
 		}

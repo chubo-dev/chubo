@@ -185,7 +185,7 @@ func (suite *ManagerSuite) TestMultipleEndpoints() {
 			link := r.TypedSpec()
 
 			asrt.Len(link.Wireguard.Peers, 1)
-			// Talos should pick the first endpoint from the list.
+			// Chubo should pick the first endpoint from the list.
 			asrt.Equal(mockServerEndpoint1, link.Wireguard.Peers[0].Endpoint)
 		},
 		rtestutils.WithNamespace(network.ConfigNamespaceName),
@@ -201,7 +201,7 @@ func (suite *ManagerSuite) TestResolveEndpoints() {
 			link := r.TypedSpec()
 
 			asrt.Len(link.Wireguard.Peers, 1)
-			// Talos should resolve the hostname to an IP address.
+			// Chubo should resolve the hostname to an IP address.
 			asrt.Equal("127.0.0.1:51821", link.Wireguard.Peers[0].Endpoint)
 		},
 		rtestutils.WithNamespace(network.ConfigNamespaceName),

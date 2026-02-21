@@ -104,7 +104,7 @@ func (builder *Builder) generateUname() error {
 	var kernelVersion string
 
 	if builder.Version == version.Tag {
-		// if building from the same version of Talos, use default kernel version
+		// if building from the same version of Chubo, use default kernel version
 		kernelVersion = constants.DefaultKernelVersion
 	} else {
 		// otherwise, try to get the kernel version from the kernel image

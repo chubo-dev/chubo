@@ -101,7 +101,7 @@ func (n *Nocloud) Configuration(ctx context.Context, r state.State) ([]byte, err
 
 	switch {
 	case bytes.Equal(firstLine, []byte("#cloud-config")):
-		// ignore cloud-config, Talos does not support it
+		// ignore cloud-config, Chubo does not support it
 		return nil, errors.ErrNoConfigSource
 	case bytes.Equal(firstLine, []byte("#include")):
 		return n.FetchInclude(ctx, rest, r)

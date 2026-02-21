@@ -22,7 +22,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/machine"
 )
 
-// APIBootstrapper bootstraps cluster via Talos API.
+// APIBootstrapper bootstraps cluster via Chubo API.
 type APIBootstrapper struct {
 	ClientProvider
 	Info

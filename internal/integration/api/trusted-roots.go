@@ -62,7 +62,7 @@ func (suite *TrustedRootsSuite) TestTrustedRoots() {
 
 	suite.T().Logf("testing TrustedRoots on node %s", node)
 
-	// build a Talos API context which is tied to the node
+	// build a Chubo API context which is tied to the node
 	nodeCtx := client.WithNode(suite.ctx, node)
 
 	const name = "test-ca"

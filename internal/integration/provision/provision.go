@@ -63,7 +63,7 @@ func GetAllSuites() []suite.TestingSuite {
 type Settings struct {
 	// CIDR to use for provisioned clusters
 	CIDR string
-	// Registry mirrors to push to Talos config, in format `host=endpoint`
+	// Registry mirrors to push to Chubo config, in format `host=endpoint`
 	RegistryMirrors base.StringList
 	// MTU for the network.
 	MTU int

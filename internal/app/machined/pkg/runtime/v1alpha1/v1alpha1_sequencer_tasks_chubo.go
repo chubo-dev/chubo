@@ -26,7 +26,7 @@ import (
 
 // Chubo OS doesn't ship legacy control-plane services.
 //
-// Keep the Talos sequencer API shape for now (upgrade/reset entry points call these tasks),
+// Keep the Chubo sequencer API shape for now (upgrade/reset entry points call these tasks),
 // but implement them in terms of OpenWonton/OpenGyoza.
 
 const (

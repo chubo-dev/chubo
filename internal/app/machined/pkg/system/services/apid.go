@@ -88,7 +88,7 @@ func (o *APID) PreFunc(ctx context.Context, r runtime.Runtime) error {
 		return err
 	}
 
-	// clean up the socket if it already exists (important for Talos in a container)
+	// clean up the socket if it already exists (important for Chubo in a container)
 	if err := os.RemoveAll(constants.APIRuntimeSocketPath); err != nil {
 		return err
 	}

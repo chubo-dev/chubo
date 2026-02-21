@@ -187,7 +187,7 @@ type bootEntry struct {
 
 // oldParser is the kexec parser used before the GRUB parser was rewritten.
 //
-// This makes sure Talos 0.14 can kexec into newly written GRUB config.
+// This makes sure Chubo 0.14 can kexec into newly written GRUB config.
 //
 //nolint:gocyclo
 func oldParser(r io.Reader) (*bootEntry, error) {

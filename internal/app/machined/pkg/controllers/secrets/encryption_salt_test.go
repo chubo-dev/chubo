@@ -65,7 +65,7 @@ func (suite *EncryptionSaltSuite) TestLoad() {
 		asrt.Equal(constants.StatePartitionLabel, mountRequest.TypedSpec().VolumeID)
 	})
 
-	// using verbatim data here to make sure salt representation is supported in future version fo Talos
+	// using verbatim data here to make sure salt representation is supported in future version fo Chubo
 	suite.Require().NoError(os.WriteFile(filepath.Join(statePath, constants.EncryptionSaltFilename),
 		[]byte("diskSalt:\n    - 240\n    - 180\n    - 79\n    - 128\n    - 31\n    - 0\n    - 19\n    - 124\n    - 165\n    - 74\n    - 113\n    - 220\n    - 27\n    - 83\n    - 46\n    - 74\n    - 204\n    - 190\n    - 217\n    - 96\n    - 221\n    - 2\n    - 165\n    - 98\n    - 245\n    - 36\n    - 165\n    - 151\n    - 149\n    - 66\n    - 113\n    - 16\n"), //nolint:lll
 		0o600))

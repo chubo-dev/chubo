@@ -128,7 +128,7 @@ func (p *EquinixMetal) KernelArgs(arch string, _ quirks.Quirks) procfs.Parameter
 	}
 }
 
-// ParseMetadata converts Equinix Metal metadata into Talos network configuration.
+// ParseMetadata converts Equinix Metal metadata into Chubo network configuration.
 //
 //nolint:gocyclo,cyclop
 func (p *EquinixMetal) ParseMetadata(ctx context.Context, equinixMetadata *MetadataConfig, st state.State) (*runtime.PlatformNetworkConfig, error) {

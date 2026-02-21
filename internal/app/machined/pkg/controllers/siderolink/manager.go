@@ -168,7 +168,7 @@ func (ctrl *ManagerController) Run(ctx context.Context, r controller.Runtime, lo
 			}
 		case <-r.EventCh():
 			// if the SideroLink configuration changed (either config itself, or machine UUID or Unique Token),
-			// clear any previous provision data we had so that Talos doesn't cycle through endpoints from
+			// clear any previous provision data we had so that Chubo doesn't cycle through endpoints from
 			// stale provisioning data until it reaches out to SideroLink Provision API again
 			ctrl.pd = provisionData{}
 		}
@@ -257,8 +257,8 @@ func (ctrl *ManagerController) Run(ctx context.Context, r controller.Runtime, lo
 							AllowedIPs: []netip.Prefix{
 								netip.PrefixFrom(serverAddress, serverAddress.BitLen()),
 							},
-							// make sure Talos pings SideroLink endpoint, so that tunnel is established:
-							// SideroLink doesn't know Talos endpoint.
+							// make sure Chubo pings SideroLink endpoint, so that tunnel is established:
+							// SideroLink doesn't know Chubo endpoint.
 							PersistentKeepaliveInterval: constants.SideroLinkDefaultPeerKeepalive,
 						},
 					},

@@ -14,7 +14,7 @@ import (
 
 // Crashdump is a no-op in chubo builds.
 //
-// Chubo support collection is handled by dedicated talosctl support flows.
+// Chubo support collection is handled by dedicated chuboctl support flows.
 func Crashdump(ctx context.Context, cluster provision.Cluster, logWriter io.Writer, zipFilePath string) {
 	_ = ctx
 	_ = cluster

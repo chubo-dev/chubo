@@ -85,7 +85,7 @@ func (suite *EthernetSuite) TestEthernetConfig() {
 
 	suite.T().Logf("testing Ethernet on node %s", node)
 
-	// build a Talos API context which is tied to the node
+	// build a Chubo API context which is tied to the node
 	nodeCtx := client.WithNode(suite.ctx, node)
 
 	// pick a Ethernet links
@@ -207,7 +207,7 @@ func (suite *EthernetSuite) TestBridgeMAC() {
 
 	suite.T().Logf("testing bridge MAC on node %s", node)
 
-	// build a Talos API context which is tied to the node
+	// build a Chubo API context which is tied to the node
 	nodeCtx := client.WithNode(suite.ctx, node)
 
 	randomSuffix := fmt.Sprintf("%04x", rand.Int32())

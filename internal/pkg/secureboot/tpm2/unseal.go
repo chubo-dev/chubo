@@ -225,10 +225,10 @@ func Unseal(sealed SealedResponse) ([]byte, error) {
 		return nil, fmt.Errorf("failed to execute policy authorize: %w", err)
 	}
 
-	// this handles the case when talos is upgraded from pre Talos 1.12 and we had PCRs field
+	// this handles upgrades from versions before Chubo 1.12 where the PCRs field was populated
 	// set to just PCR 11 but locked to PCR 7
 	// in this case the EncryptionVersion is empty and the PubKeyPCRs field is also empty
-	// since both EncryptionVersion and PubKeyPCRs are introduced for Talos 1.12+ only
+	// since both EncryptionVersion and PubKeyPCRs are introduced for Chubo 1.12+ only
 	if sealed.EncryptionVersion == "" && len(sealed.PubKeyPCRs) == 0 {
 		if len(sealed.PCRs) == 1 && sealed.PCRs[0] == constants.UKIPCR {
 			if err := validatePCRPolicyDigest(t, policySess.Handle(), []int{constants.SecureBootStatePCR}, sealed.PolicyDigest); err != nil {
@@ -237,7 +237,7 @@ func Unseal(sealed SealedResponse) ([]byte, error) {
 		}
 	}
 
-	// Talos 1.12+ sets the EncryptionVersion and PubKeyPCRs to PCR 11 and any other PCR used to PCRs field
+	// Chubo 1.12+ sets the EncryptionVersion and PubKeyPCRs to PCR 11 and any other PCR used to PCRs field
 	if sealed.EncryptionVersion != "" && len(sealed.PCRs) > 0 {
 		if err := validatePCRPolicyDigest(t, policySess.Handle(), sealed.PCRs, sealed.PolicyDigest); err != nil {
 			return nil, fmt.Errorf("failed to validate PCR policy digest for PCRs %v: %w", sealed.PCRs, err)

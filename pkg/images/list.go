@@ -17,7 +17,7 @@ func mustParseReferenceWithTag(ref, tag string) name.Tag {
 	return r.Context().Tag(tag)
 }
 
-// TalosBundle holds the core images (and their versions) that are used to build Talos.
+// TalosBundle holds the core images (and their versions) that are used to build Chubo.
 type TalosBundle struct {
 	Installer     name.Tag
 	InstallerBase name.Tag

@@ -21,7 +21,7 @@ import (
 	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
-// Container is a platform for installing Talos via an Container image.
+// Container is a platform for installing Chubo via an Container image.
 type Container struct{}
 
 // Name implements the platform.Platform interface.

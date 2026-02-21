@@ -28,7 +28,7 @@ type talosInfoData struct {
 	machineIDSet map[string]struct{}
 }
 
-// TalosInfo represents the Talos info widget.
+// TalosInfo represents the Chubo info widget.
 type TalosInfo struct {
 	tview.TextView
 

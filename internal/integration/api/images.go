@@ -137,7 +137,7 @@ func (suite *ImagesSuite) TestImportRemove() {
 
 	suite.T().Logf("using node %s", node)
 
-	// we can only import the image if it matches Talos architecture
+	// we can only import the image if it matches Chubo architecture
 	versionResp, err := suite.Client.Version(ctx)
 	suite.Require().NoError(err)
 	suite.Require().Len(versionResp.GetMessages(), 1)

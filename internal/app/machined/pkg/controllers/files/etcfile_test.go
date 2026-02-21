@@ -142,7 +142,7 @@ func (suite *EtcFileSuite) TestFiles() {
 	etcFileSpec.TypedSpec().Contents = []byte("foo")
 	etcFileSpec.TypedSpec().Mode = 0o644
 
-	// create "read-only" mock (in Talos it's part of rootfs)
+	// create "read-only" mock (in Chubo it's part of rootfs)
 	suite.T().Logf("mock created %q", filepath.Join(suite.etcPath, etcFileSpec.Metadata().ID()))
 	suite.Require().NoError(os.WriteFile(filepath.Join(suite.etcPath, etcFileSpec.Metadata().ID()), nil, 0o644))
 

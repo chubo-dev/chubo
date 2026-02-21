@@ -11,7 +11,7 @@ import (
 
 const maxPoints = 1000
 
-// Data represents the monitoring data retrieved via Talos API.
+// Data represents the monitoring data retrieved via Chubo API.
 //
 // Data structure is sent over the channel each interval.
 type Data struct {

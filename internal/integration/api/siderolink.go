@@ -54,7 +54,7 @@ func (suite *SideroLinkSuite) TestTunnelSettingFlip() {
 
 	suite.T().Logf("testing SideroLink on node %s", node)
 
-	// build a Talos API context which is tied to the node
+	// build a Chubo API context which is tied to the node
 	nodeCtx := client.WithNode(suite.ctx, node)
 
 	// check if SideroLink is enabled

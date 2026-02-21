@@ -19,7 +19,7 @@ import (
 	runtimeres "github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
 )
 
-// UKISuite verifies Talos is booted from a UKI.
+// UKISuite verifies Chubo is booted from a UKI.
 type UKISuite struct {
 	base.APISuite
 

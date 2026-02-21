@@ -12,7 +12,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/conditions"
 )
 
-// DefaultClusterChecks returns a set of default Talos cluster readiness checks.
+// DefaultClusterChecks returns a set of default Chubo cluster readiness checks.
 func DefaultClusterChecks() []ClusterCheck {
 	return slices.Concat(
 		PreBootSequenceChecks(),
@@ -20,14 +20,14 @@ func DefaultClusterChecks() []ClusterCheck {
 	)
 }
 
-// ExtraClusterChecks returns a set of additional Talos cluster readiness checks which work only for newer versions of Talos.
+// ExtraClusterChecks returns a set of additional Chubo cluster readiness checks which work only for newer versions of Chubo.
 //
 // ExtraClusterChecks can't be used reliably in upgrade tests, as older versions might not pass the checks.
 func ExtraClusterChecks() []ClusterCheck {
 	return []ClusterCheck{}
 }
 
-// PreBootSequenceChecks returns a set of Talos cluster readiness checks which are run before boot sequence.
+// PreBootSequenceChecks returns a set of Chubo cluster readiness checks which are run before boot sequence.
 func PreBootSequenceChecks() []ClusterCheck {
 	return []ClusterCheck{
 		// wait for apid to be ready on all the nodes

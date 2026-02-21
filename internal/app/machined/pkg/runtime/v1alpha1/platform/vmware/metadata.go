@@ -25,7 +25,7 @@ import (
 type NetworkConfig struct {
 	InstanceID    string `yaml:"instance-id"`
 	LocalHostname string `yaml:"local-hostname"`
-	// Talos doesn't block on network, it will reconfigure itself as network information becomes available. WaitOnNetwork is not used.
+	// Chubo doesn't block on network, it will reconfigure itself as network information becomes available. WaitOnNetwork is not used.
 	WaitOnNetwork struct {
 		Ipv4 bool `yaml:"ipv4"`
 		Ipv6 bool `yaml:"ipv6"`
@@ -80,7 +80,7 @@ type DHCPOverrides struct {
 	UseRoutes    string `yaml:"use-routes,omitempty"`
 }
 
-// ApplyNetworkConfigV2 gets GuestInfo and applies to the Talos runtime platform network configuration.
+// ApplyNetworkConfigV2 gets GuestInfo and applies to the Chubo runtime platform network configuration.
 //
 //nolint:gocyclo,cyclop
 func (v *VMware) ApplyNetworkConfigV2(ctx context.Context, st state.State, config *NetworkConfig, networkConfig *runtime.PlatformNetworkConfig) error {

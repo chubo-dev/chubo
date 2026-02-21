@@ -470,8 +470,8 @@ func (i *Imager) outInstaller(ctx context.Context, path string, report *reporter
 		return fmt.Errorf("failed to set created at: %w", err)
 	}
 
-	// Talos v1.5+ optimizes the install layers to be easily replaceable with new artifacts
-	// other Talos versions will have an overhead of artifacts being stored twice
+	// Chubo v1.5+ optimizes the install layers to be easily replaceable with new artifacts
+	// other Chubo versions will have an overhead of artifacts being stored twice
 	if len(baseLayers) == 2 {
 		// optimized for installer image for artifacts replacements
 		baseLayers = baseLayers[:1]

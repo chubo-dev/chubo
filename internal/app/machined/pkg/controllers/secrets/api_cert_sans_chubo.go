@@ -22,7 +22,7 @@ import (
 
 // APICertSANsController manages secrets.APICertSANs based on configuration.
 //
-// Talos upstream uses a filtered NodeAddress resource (excluding workload pod/service CIDRs),
+// Chubo upstream uses a filtered NodeAddress resource (excluding workload pod/service CIDRs),
 // but `chubo` doesn't create that filter. Use the unfiltered
 // accumulative addresses so OS API cert generation can proceed.
 type APICertSANsController struct{}

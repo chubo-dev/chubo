@@ -22,7 +22,7 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/workload"
 )
 
-// NewResolver builds registry resolver based on Talos configuration.
+// NewResolver builds registry resolver based on Chubo configuration.
 func NewResolver(reg workload.Registries) remotes.Resolver {
 	return docker.NewResolver(docker.ResolverOptions{
 		Hosts: RegistryHosts(reg),
