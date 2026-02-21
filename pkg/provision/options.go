@@ -38,7 +38,6 @@ func WithControlPlaneEndpoint(endpoint string) Option {
 func WithChuboConfig(chuboConfig *clientconfig.Config) Option {
 	return func(o *Options) error {
 		o.ChuboConfig = chuboConfig
-		o.TalosConfig = chuboConfig
 
 		return nil
 	}
@@ -46,14 +45,21 @@ func WithChuboConfig(chuboConfig *clientconfig.Config) Option {
 
 // WithTalosConfig is a legacy alias kept for compatibility.
 func WithTalosConfig(talosConfig *clientconfig.Config) Option {
-	return WithChuboConfig(talosConfig)
+	return func(o *Options) error {
+		o.TalosConfig = talosConfig
+
+		if o.ChuboConfig == nil {
+			o.ChuboConfig = talosConfig
+		}
+
+		return nil
+	}
 }
 
 // WithChuboClient specifies client to use when accessing a Chubo cluster.
 func WithChuboClient(client *client.Client) Option {
 	return func(o *Options) error {
 		o.ChuboClient = client
-		o.TalosClient = client
 
 		return nil
 	}
@@ -61,7 +67,15 @@ func WithChuboClient(client *client.Client) Option {
 
 // WithTalosClient is a legacy alias kept for compatibility.
 func WithTalosClient(client *client.Client) Option {
-	return WithChuboClient(client)
+	return func(o *Options) error {
+		o.TalosClient = client
+
+		if o.ChuboClient == nil {
+			o.ChuboClient = client
+		}
+
+		return nil
+	}
 }
 
 // WithBootlader enables or disables bootloader (bootloader is enabled by default).
@@ -219,10 +233,12 @@ func WithSkipInjectingExtraCmdline(v bool) Option {
 
 // Options describes Provisioner parameters.
 type Options struct {
-	LogWriter            io.Writer
-	ChuboConfig          *clientconfig.Config
-	ChuboClient          *client.Client
-	TalosConfig          *clientconfig.Config
+	LogWriter   io.Writer
+	ChuboConfig *clientconfig.Config
+	ChuboClient *client.Client
+	// TalosConfig is a legacy compatibility alias.
+	TalosConfig *clientconfig.Config
+	// TalosClient is a legacy compatibility alias.
 	TalosClient          *client.Client
 	ControlPlaneEndpoint string
 	TargetArch           string

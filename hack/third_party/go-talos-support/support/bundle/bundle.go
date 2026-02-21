@@ -17,6 +17,7 @@ import (
 // Options defines GetSupportBundle options.
 type Options struct {
 	ChuboClient *client.Client
+	// TalosClient is a legacy compatibility alias.
 	TalosClient *client.Client
 	Archive     Archive
 	LogOutput   io.Writer

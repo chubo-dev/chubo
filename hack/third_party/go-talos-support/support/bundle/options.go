@@ -18,13 +18,18 @@ type Option func(*Options)
 func WithChuboClient(client *client.Client) Option {
 	return func(o *Options) {
 		o.ChuboClient = client
-		o.TalosClient = client
 	}
 }
 
 // WithTalosClient is a legacy alias kept for compatibility.
 func WithTalosClient(client *client.Client) Option {
-	return WithChuboClient(client)
+	return func(o *Options) {
+		o.TalosClient = client
+
+		if o.ChuboClient == nil {
+			o.ChuboClient = client
+		}
+	}
 }
 
 // WithLogOutput runs bundle creator with logs output.
