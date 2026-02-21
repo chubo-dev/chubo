@@ -95,7 +95,7 @@ func (c *Client) getConn(opts ...grpc.DialOption) (*grpcConnectionWrapper, error
 			UserKeyProvider: getKeyProvider(c.options.sideroV1KeysDir),
 			ContextName:     contextName,
 			Identity:        sideroV1.Identity,
-			ClientName:      "Talos",
+			ClientName:      "Chubo",
 		})
 
 		dialOpts = append(dialOpts,
@@ -119,7 +119,7 @@ func getKeyProvider(customKeysDir string) *client.KeyProvider {
 
 	chuboDir, err := clientconfig.GetChuboDirectory()
 	if err != nil {
-		// TODO: start failing instead of falling back to XDG data directory if we can't resolve Talos directory
+		// TODO: start failing instead of falling back to XDG data directory if we can't resolve config directory
 		return client.NewKeyProvider("talos/keys")
 	}
 

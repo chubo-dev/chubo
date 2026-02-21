@@ -50,7 +50,7 @@ func (c *grpcConnectionWrapper) Close() error {
 }
 
 func (c *grpcConnectionWrapper) appendMetadata(ctx context.Context) context.Context {
-	ctx = metadata.AppendToOutgoingContext(ctx, "runtime", "Talos")
+	ctx = metadata.AppendToOutgoingContext(ctx, "runtime", "Chubo")
 
 	if c.clusterName != "" {
 		ctx = metadata.AppendToOutgoingContext(ctx, "context", c.clusterName)
