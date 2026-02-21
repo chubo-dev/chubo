@@ -565,13 +565,10 @@
 ./pkg/imager/profile/output.go:	//  * image - disk image (Talos pre-installed)
 ./pkg/imager/profile/profile.go:		return fmt.Errorf("secureboot is not supported for Talos version %q", p.Version)
 ./pkg/imager/profile/profile.go:	// Version is Talos version.
-./pkg/images/images.go:	// DefaultTalosImage is the default talos image.
-./pkg/images/images.go:	// talosctl-all image.
-./pkg/images/images.go:	// the talos image.
-./pkg/images/images.go:	DefaultTalosImageName = Username + "/talos"
-./pkg/images/images.go:	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+./pkg/images/images.go:	DefaultChuboImageName = Username + "/talos"
+./pkg/images/images.go:	DefaultChuboctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
 ./pkg/images/list.go:	Talos         name.Tag
-./pkg/images/list.go:	bundle.Talos = mustParseReferenceWithTag(DefaultTalosImageRepository, tag)
+./pkg/images/list.go:	bundle.Talos = mustParseReferenceWithTag(DefaultChuboImageRepository, tag)
 ./pkg/images/list.go:// TalosBundle holds the core images (and their versions) that are used to build Talos.
 ./pkg/machinery/api/api.go:// AllAPIs returns a list of all API services served by Talos components.
 ./pkg/machinery/api/api.go:// Package api contains API definitions for Talos Linux.

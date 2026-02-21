@@ -196,6 +196,6 @@ func GetQemu() Qemu {
 func GetDocker() Docker {
 	return Docker{
 		HostIP:     "0.0.0.0",
-		ChuboImage: helpers.DefaultImage(images.DefaultTalosImageRepository),
+		ChuboImage: helpers.DefaultImage(images.DefaultChuboImageRepository),
 	}
 }

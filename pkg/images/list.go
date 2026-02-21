@@ -36,8 +36,8 @@ func ListSourcesFor(tag string) TalosBundle {
 	bundle.Installer = mustParseReferenceWithTag(DefaultInstallerImageRepository, tag)
 	bundle.InstallerBase = mustParseReferenceWithTag(DefaultInstallerBaseImageRepository, tag)
 	bundle.Imager = mustParseReferenceWithTag(DefaultImagerImageRepository, tag)
-	bundle.Talos = mustParseReferenceWithTag(DefaultTalosImageRepository, tag)
-	bundle.TalosctlAll = mustParseReferenceWithTag(DefaultTalosctlAllImageRepository, tag)
+	bundle.Talos = mustParseReferenceWithTag(DefaultChuboImageRepository, tag)
+	bundle.TalosctlAll = mustParseReferenceWithTag(DefaultChuboctlAllImageRepository, tag)
 
 	bundle.Overlays = mustParseReferenceWithTag(DefaultOverlaysManifestRepository, tag)
 	bundle.Extensions = mustParseReferenceWithTag(DefaultExtensionsManifestRepository, tag)

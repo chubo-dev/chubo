@@ -28,16 +28,25 @@ var (
 	// DefaultInstallerImage is the default installer image.
 	DefaultInstallerImage = DefaultInstallerImageRepository + ":" + version.Tag
 
-	// DefaultTalosImageName is the default container image name for
-	// the talos image.
-	DefaultTalosImageName = Username + "/talos"
+	// DefaultChuboImageName is the default container image name for
+	// the Chubo image.
+	//
+	// Legacy repository path is retained for compatibility.
+	DefaultChuboImageName = Username + "/talos"
 
-	// DefaultTalosImageRepository is the default container repository for
-	// the talos image.
-	DefaultTalosImageRepository = Registry + "/" + DefaultTalosImageName
+	// DefaultChuboImageRepository is the default container repository for
+	// the Chubo image.
+	DefaultChuboImageRepository = Registry + "/" + DefaultChuboImageName
 
-	// DefaultTalosImage is the default talos image.
-	DefaultTalosImage = DefaultTalosImageRepository + ":" + version.Tag
+	// DefaultChuboImage is the default Chubo image.
+	DefaultChuboImage = DefaultChuboImageRepository + ":" + version.Tag
+
+	// DefaultTalosImageName is a compatibility alias for DefaultChuboImageName.
+	DefaultTalosImageName = DefaultChuboImageName
+	// DefaultTalosImageRepository is a compatibility alias for DefaultChuboImageRepository.
+	DefaultTalosImageRepository = DefaultChuboImageRepository
+	// DefaultTalosImage is a compatibility alias for DefaultChuboImage.
+	DefaultTalosImage = DefaultChuboImage
 
 	// DefaultInstallerBaseImageRepository is the default container repository for
 	// installer-base image.
@@ -47,9 +56,14 @@ var (
 	// imager image.
 	DefaultImagerImageRepository = Registry + "/" + Username + "/imager"
 
-	// DefaultTalosctlAllImageRepository is the default container repository for
-	// talosctl-all image.
-	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+	// DefaultChuboctlAllImageRepository is the default container repository for
+	// chuboctl-all image.
+	//
+	// Legacy repository path is retained for compatibility.
+	DefaultChuboctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+
+	// DefaultTalosctlAllImageRepository is a compatibility alias for DefaultChuboctlAllImageRepository.
+	DefaultTalosctlAllImageRepository = DefaultChuboctlAllImageRepository
 
 	// DefaultOverlaysManifestName is the default container manifest name for
 	// the overlays.

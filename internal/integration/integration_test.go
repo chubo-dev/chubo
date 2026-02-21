@@ -211,7 +211,7 @@ func init() {
 	registerStringFlag(&kubectlPath, "chubo.kubectlpath", "talos.kubectlpath", "kubectl", "The path to 'kubectl' binary")
 	registerStringFlag(&helmPath, "chubo.helmpath", "talos.helmpath", "helm", "The path to 'helm' binary")
 	registerStringFlag(&kubeStrPath, "chubo.kubestrpath", "talos.kubestrpath", "kubestr", "The path to 'kubestr' binary")
-	registerStringFlag(&chuboImage, "chubo.image", "talos.image", images.DefaultTalosImageRepository, "The default Chubo OS container image")
+	registerStringFlag(&chuboImage, "chubo.image", "talos.image", images.DefaultChuboImageRepository, "The default Chubo OS container image")
 	registerStringFlag(&csiTestName, "chubo.csi", "talos.csi", "", "CSI test to run")
 	registerStringFlag(&csiTestTimeout, "chubo.csi.timeout", "talos.csi.timeout", "15m", "CSI test timeout")
 	registerBoolFlag(&airgapped, "chubo.airgapped", "talos.airgapped", false, "marker to skip tests that should not be run on airgapped clusters")
