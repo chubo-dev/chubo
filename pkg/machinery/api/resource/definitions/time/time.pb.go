@@ -189,7 +189,7 @@ var File_resource_definitions_time_time_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_time_time_proto_rawDesc = "" +
 	"\n" +
-	"$resource/definitions/time/time.proto\x12\x1ftalos.resource.definitions.time\x1a\x1egoogle/protobuf/duration.proto\"\xdf\x02\n" +
+	"$resource/definitions/time/time.proto\x12\x1fchubo.resource.definitions.time\x1a\x1egoogle/protobuf/duration.proto\"\xdf\x02\n" +
 	"\x11AdjtimeStatusSpec\x121\n" +
 	"\x06offset\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x06offset\x12<\n" +
 	"\x1afrequency_adjustment_ratio\x18\x02 \x01(\x01R\x18frequencyAdjustmentRatio\x126\n" +
@@ -221,14 +221,14 @@ func file_resource_definitions_time_time_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_time_time_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_definitions_time_time_proto_goTypes = []any{
-	(*AdjtimeStatusSpec)(nil),   // 0: talos.resource.definitions.time.AdjtimeStatusSpec
-	(*StatusSpec)(nil),          // 1: talos.resource.definitions.time.StatusSpec
+	(*AdjtimeStatusSpec)(nil),   // 0: chubo.resource.definitions.time.AdjtimeStatusSpec
+	(*StatusSpec)(nil),          // 1: chubo.resource.definitions.time.StatusSpec
 	(*durationpb.Duration)(nil), // 2: google.protobuf.Duration
 }
 var file_resource_definitions_time_time_proto_depIdxs = []int32{
-	2, // 0: talos.resource.definitions.time.AdjtimeStatusSpec.offset:type_name -> google.protobuf.Duration
-	2, // 1: talos.resource.definitions.time.AdjtimeStatusSpec.max_error:type_name -> google.protobuf.Duration
-	2, // 2: talos.resource.definitions.time.AdjtimeStatusSpec.est_error:type_name -> google.protobuf.Duration
+	2, // 0: chubo.resource.definitions.time.AdjtimeStatusSpec.offset:type_name -> google.protobuf.Duration
+	2, // 1: chubo.resource.definitions.time.AdjtimeStatusSpec.max_error:type_name -> google.protobuf.Duration
+	2, // 2: chubo.resource.definitions.time.AdjtimeStatusSpec.est_error:type_name -> google.protobuf.Duration
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name

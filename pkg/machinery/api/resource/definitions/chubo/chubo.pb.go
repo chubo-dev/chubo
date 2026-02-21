@@ -688,7 +688,7 @@ var File_resource_definitions_chubo_chubo_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_chubo_chubo_proto_rawDesc = "" +
 	"\n" +
-	"&resource/definitions/chubo/chubo.proto\x12 talos.resource.definitions.chubo\"v\n" +
+	"&resource/definitions/chubo/chubo.proto\x12 chubo.resource.definitions.chubo\"v\n" +
 	"\x13BootstrapStatusSpec\x12\x1e\n" +
 	"\n" +
 	"configured\x18\x01 \x01(\bR\n" +
@@ -793,12 +793,12 @@ func file_resource_definitions_chubo_chubo_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_chubo_chubo_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_resource_definitions_chubo_chubo_proto_goTypes = []any{
-	(*BootstrapStatusSpec)(nil),           // 0: talos.resource.definitions.chubo.BootstrapStatusSpec
-	(*OpenBaoJobStatusSpec)(nil),          // 1: talos.resource.definitions.chubo.OpenBaoJobStatusSpec
-	(*OpenGyozaBootstrapStatusSpec)(nil),  // 2: talos.resource.definitions.chubo.OpenGyozaBootstrapStatusSpec
-	(*OpenGyozaStatusSpec)(nil),           // 3: talos.resource.definitions.chubo.OpenGyozaStatusSpec
-	(*OpenWontonBootstrapStatusSpec)(nil), // 4: talos.resource.definitions.chubo.OpenWontonBootstrapStatusSpec
-	(*OpenWontonStatusSpec)(nil),          // 5: talos.resource.definitions.chubo.OpenWontonStatusSpec
+	(*BootstrapStatusSpec)(nil),           // 0: chubo.resource.definitions.chubo.BootstrapStatusSpec
+	(*OpenBaoJobStatusSpec)(nil),          // 1: chubo.resource.definitions.chubo.OpenBaoJobStatusSpec
+	(*OpenGyozaBootstrapStatusSpec)(nil),  // 2: chubo.resource.definitions.chubo.OpenGyozaBootstrapStatusSpec
+	(*OpenGyozaStatusSpec)(nil),           // 3: chubo.resource.definitions.chubo.OpenGyozaStatusSpec
+	(*OpenWontonBootstrapStatusSpec)(nil), // 4: chubo.resource.definitions.chubo.OpenWontonBootstrapStatusSpec
+	(*OpenWontonStatusSpec)(nil),          // 5: chubo.resource.definitions.chubo.OpenWontonStatusSpec
 }
 var file_resource_definitions_chubo_chubo_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

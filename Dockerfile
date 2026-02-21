@@ -380,7 +380,7 @@ RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool mvdan.cc/gofumpt -
 
 FROM go-generate AS gen-proto-go
 WORKDIR /src/
-RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/structprotogen github.com/chubo-dev/chubo/pkg/machinery/... /api/resource/definitions/
+RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/structprotogen --resource-namespace=chubo.resource.definitions github.com/chubo-dev/chubo/pkg/machinery/... /api/resource/definitions/
 
 # compile protobuf service definitions
 FROM build-go AS generate-build

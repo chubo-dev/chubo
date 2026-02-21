@@ -33,7 +33,7 @@ type AffiliateSpec struct {
 	Hostname        string                 `protobuf:"bytes,3,opt,name=hostname,proto3" json:"hostname,omitempty"`
 	Nodename        string                 `protobuf:"bytes,4,opt,name=nodename,proto3" json:"nodename,omitempty"`
 	OperatingSystem string                 `protobuf:"bytes,5,opt,name=operating_system,json=operatingSystem,proto3" json:"operating_system,omitempty"`
-	MachineType     enums.MachineType      `protobuf:"varint,6,opt,name=machine_type,json=machineType,proto3,enum=talos.resource.definitions.enums.MachineType" json:"machine_type,omitempty"`
+	MachineType     enums.MachineType      `protobuf:"varint,6,opt,name=machine_type,json=machineType,proto3,enum=chubo.resource.definitions.enums.MachineType" json:"machine_type,omitempty"`
 	ControlPlane    *ControlPlane          `protobuf:"bytes,8,opt,name=control_plane,json=controlPlane,proto3" json:"control_plane,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -408,7 +408,7 @@ type MemberSpec struct {
 	NodeId          string                 `protobuf:"bytes,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Addresses       []*common.NetIP        `protobuf:"bytes,2,rep,name=addresses,proto3" json:"addresses,omitempty"`
 	Hostname        string                 `protobuf:"bytes,3,opt,name=hostname,proto3" json:"hostname,omitempty"`
-	MachineType     enums.MachineType      `protobuf:"varint,4,opt,name=machine_type,json=machineType,proto3,enum=talos.resource.definitions.enums.MachineType" json:"machine_type,omitempty"`
+	MachineType     enums.MachineType      `protobuf:"varint,4,opt,name=machine_type,json=machineType,proto3,enum=chubo.resource.definitions.enums.MachineType" json:"machine_type,omitempty"`
 	OperatingSystem string                 `protobuf:"bytes,5,opt,name=operating_system,json=operatingSystem,proto3" json:"operating_system,omitempty"`
 	ControlPlane    *ControlPlane          `protobuf:"bytes,6,opt,name=control_plane,json=controlPlane,proto3" json:"control_plane,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -491,15 +491,15 @@ var File_resource_definitions_cluster_cluster_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_cluster_cluster_proto_rawDesc = "" +
 	"\n" +
-	"*resource/definitions/cluster/cluster.proto\x12\"talos.resource.definitions.cluster\x1a\x13common/common.proto\x1a&resource/definitions/enums/enums.proto\"\xe1\x02\n" +
+	"*resource/definitions/cluster/cluster.proto\x12\"chubo.resource.definitions.cluster\x1a\x13common/common.proto\x1a&resource/definitions/enums/enums.proto\"\xe1\x02\n" +
 	"\rAffiliateSpec\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12+\n" +
 	"\taddresses\x18\x02 \x03(\v2\r.common.NetIPR\taddresses\x12\x1a\n" +
 	"\bhostname\x18\x03 \x01(\tR\bhostname\x12\x1a\n" +
 	"\bnodename\x18\x04 \x01(\tR\bnodename\x12)\n" +
 	"\x10operating_system\x18\x05 \x01(\tR\x0foperatingSystem\x12P\n" +
-	"\fmachine_type\x18\x06 \x01(\x0e2-.talos.resource.definitions.enums.MachineTypeR\vmachineType\x12U\n" +
-	"\rcontrol_plane\x18\b \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlane\"\xbe\x02\n" +
+	"\fmachine_type\x18\x06 \x01(\x0e2-.chubo.resource.definitions.enums.MachineTypeR\vmachineType\x12U\n" +
+	"\rcontrol_plane\x18\b \x01(\v20.chubo.resource.definitions.cluster.ControlPlaneR\fcontrolPlane\"\xbe\x02\n" +
 	"\n" +
 	"ConfigSpec\x12+\n" +
 	"\x11discovery_enabled\x18\x01 \x01(\bR\x10discoveryEnabled\x128\n" +
@@ -524,9 +524,9 @@ const file_resource_definitions_cluster_cluster_proto_rawDesc = "" +
 	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12+\n" +
 	"\taddresses\x18\x02 \x03(\v2\r.common.NetIPR\taddresses\x12\x1a\n" +
 	"\bhostname\x18\x03 \x01(\tR\bhostname\x12P\n" +
-	"\fmachine_type\x18\x04 \x01(\x0e2-.talos.resource.definitions.enums.MachineTypeR\vmachineType\x12)\n" +
+	"\fmachine_type\x18\x04 \x01(\x0e2-.chubo.resource.definitions.enums.MachineTypeR\vmachineType\x12)\n" +
 	"\x10operating_system\x18\x05 \x01(\tR\x0foperatingSystem\x12U\n" +
-	"\rcontrol_plane\x18\x06 \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlaneBw\n" +
+	"\rcontrol_plane\x18\x06 \x01(\v20.chubo.resource.definitions.cluster.ControlPlaneR\fcontrolPlaneBw\n" +
 	"*dev.chubo.api.resource.definitions.clusterZIgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/clusterb\x06proto3"
 
 var (
@@ -543,24 +543,24 @@ func file_resource_definitions_cluster_cluster_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_cluster_cluster_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_resource_definitions_cluster_cluster_proto_goTypes = []any{
-	(*AffiliateSpec)(nil),            // 0: talos.resource.definitions.cluster.AffiliateSpec
-	(*ConfigSpec)(nil),               // 1: talos.resource.definitions.cluster.ConfigSpec
-	(*ControlPlane)(nil),             // 2: talos.resource.definitions.cluster.ControlPlane
-	(*ControlPlaneEndpointSpec)(nil), // 3: talos.resource.definitions.cluster.ControlPlaneEndpointSpec
-	(*IdentitySpec)(nil),             // 4: talos.resource.definitions.cluster.IdentitySpec
-	(*InfoSpec)(nil),                 // 5: talos.resource.definitions.cluster.InfoSpec
-	(*MemberSpec)(nil),               // 6: talos.resource.definitions.cluster.MemberSpec
+	(*AffiliateSpec)(nil),            // 0: chubo.resource.definitions.cluster.AffiliateSpec
+	(*ConfigSpec)(nil),               // 1: chubo.resource.definitions.cluster.ConfigSpec
+	(*ControlPlane)(nil),             // 2: chubo.resource.definitions.cluster.ControlPlane
+	(*ControlPlaneEndpointSpec)(nil), // 3: chubo.resource.definitions.cluster.ControlPlaneEndpointSpec
+	(*IdentitySpec)(nil),             // 4: chubo.resource.definitions.cluster.IdentitySpec
+	(*InfoSpec)(nil),                 // 5: chubo.resource.definitions.cluster.InfoSpec
+	(*MemberSpec)(nil),               // 6: chubo.resource.definitions.cluster.MemberSpec
 	(*common.NetIP)(nil),             // 7: common.NetIP
-	(enums.MachineType)(0),           // 8: talos.resource.definitions.enums.MachineType
+	(enums.MachineType)(0),           // 8: chubo.resource.definitions.enums.MachineType
 }
 var file_resource_definitions_cluster_cluster_proto_depIdxs = []int32{
-	7, // 0: talos.resource.definitions.cluster.AffiliateSpec.addresses:type_name -> common.NetIP
-	8, // 1: talos.resource.definitions.cluster.AffiliateSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
-	2, // 2: talos.resource.definitions.cluster.AffiliateSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane
-	7, // 3: talos.resource.definitions.cluster.ControlPlaneEndpointSpec.addresses:type_name -> common.NetIP
-	7, // 4: talos.resource.definitions.cluster.MemberSpec.addresses:type_name -> common.NetIP
-	8, // 5: talos.resource.definitions.cluster.MemberSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
-	2, // 6: talos.resource.definitions.cluster.MemberSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane
+	7, // 0: chubo.resource.definitions.cluster.AffiliateSpec.addresses:type_name -> common.NetIP
+	8, // 1: chubo.resource.definitions.cluster.AffiliateSpec.machine_type:type_name -> chubo.resource.definitions.enums.MachineType
+	2, // 2: chubo.resource.definitions.cluster.AffiliateSpec.control_plane:type_name -> chubo.resource.definitions.cluster.ControlPlane
+	7, // 3: chubo.resource.definitions.cluster.ControlPlaneEndpointSpec.addresses:type_name -> common.NetIP
+	7, // 4: chubo.resource.definitions.cluster.MemberSpec.addresses:type_name -> common.NetIP
+	8, // 5: chubo.resource.definitions.cluster.MemberSpec.machine_type:type_name -> chubo.resource.definitions.enums.MachineType
+	2, // 6: chubo.resource.definitions.cluster.MemberSpec.control_plane:type_name -> chubo.resource.definitions.cluster.ControlPlane
 	7, // [7:7] is the sub-list for method output_type
 	7, // [7:7] is the sub-list for method input_type
 	7, // [7:7] is the sub-list for extension type_name

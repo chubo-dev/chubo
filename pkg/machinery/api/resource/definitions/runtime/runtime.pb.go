@@ -747,7 +747,7 @@ func (x *LoadedKernelModuleSpec) GetAddress() string {
 // MachineStatusSpec describes status of the defined sysctls.
 type MachineStatusSpec struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Stage         enums.RuntimeMachineStage `protobuf:"varint,1,opt,name=stage,proto3,enum=talos.resource.definitions.enums.RuntimeMachineStage" json:"stage,omitempty"`
+	Stage         enums.RuntimeMachineStage `protobuf:"varint,1,opt,name=stage,proto3,enum=chubo.resource.definitions.enums.RuntimeMachineStage" json:"stage,omitempty"`
 	Status        *MachineStatusStatus      `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1355,9 +1355,9 @@ type SecurityStateSpec struct {
 	SecureBoot               bool                      `protobuf:"varint,1,opt,name=secure_boot,json=secureBoot,proto3" json:"secure_boot,omitempty"`
 	UkiSigningKeyFingerprint string                    `protobuf:"bytes,2,opt,name=uki_signing_key_fingerprint,json=ukiSigningKeyFingerprint,proto3" json:"uki_signing_key_fingerprint,omitempty"`
 	PcrSigningKeyFingerprint string                    `protobuf:"bytes,3,opt,name=pcr_signing_key_fingerprint,json=pcrSigningKeyFingerprint,proto3" json:"pcr_signing_key_fingerprint,omitempty"`
-	SeLinuxState             enums.RuntimeSELinuxState `protobuf:"varint,4,opt,name=se_linux_state,json=seLinuxState,proto3,enum=talos.resource.definitions.enums.RuntimeSELinuxState" json:"se_linux_state,omitempty"`
+	SeLinuxState             enums.RuntimeSELinuxState `protobuf:"varint,4,opt,name=se_linux_state,json=seLinuxState,proto3,enum=chubo.resource.definitions.enums.RuntimeSELinuxState" json:"se_linux_state,omitempty"`
 	BootedWithUki            bool                      `protobuf:"varint,5,opt,name=booted_with_uki,json=bootedWithUki,proto3" json:"booted_with_uki,omitempty"`
-	FipsState                enums.RuntimeFIPSState    `protobuf:"varint,6,opt,name=fips_state,json=fipsState,proto3,enum=talos.resource.definitions.enums.RuntimeFIPSState" json:"fips_state,omitempty"`
+	FipsState                enums.RuntimeFIPSState    `protobuf:"varint,6,opt,name=fips_state,json=fipsState,proto3,enum=chubo.resource.definitions.enums.RuntimeFIPSState" json:"fips_state,omitempty"`
 	ModuleSignatureEnforced  bool                      `protobuf:"varint,7,opt,name=module_signature_enforced,json=moduleSignatureEnforced,proto3" json:"module_signature_enforced,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
@@ -1658,7 +1658,7 @@ var File_resource_definitions_runtime_runtime_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_runtime_runtime_proto_rawDesc = "" +
 	"\n" +
-	"*resource/definitions/runtime/runtime.proto\x12\"talos.resource.definitions.runtime\x1a\x13common/common.proto\x1a\x1egoogle/protobuf/duration.proto\x1a&resource/definitions/enums/enums.proto\"4\n" +
+	"*resource/definitions/runtime/runtime.proto\x12\"chubo.resource.definitions.runtime\x1a\x13common/common.proto\x1a\x1egoogle/protobuf/duration.proto\x1a&resource/definitions/enums/enums.proto\"4\n" +
 	"\x0fBootedEntrySpec\x12!\n" +
 	"\fbooted_entry\x18\x01 \x01(\tR\vbootedEntry\")\n" +
 	"\x11DevicesStatusSpec\x12\x14\n" +
@@ -1675,7 +1675,7 @@ const file_resource_definitions_runtime_runtime_proto_rawDesc = "" +
 	"\n" +
 	"mount_path\x18\x02 \x01(\tR\tmountPath\"\x94\x01\n" +
 	"\x1aExtensionServiceConfigSpec\x12T\n" +
-	"\x05files\x18\x01 \x03(\v2>.talos.resource.definitions.runtime.ExtensionServiceConfigFileR\x05files\x12 \n" +
+	"\x05files\x18\x01 \x03(\v2>.chubo.resource.definitions.runtime.ExtensionServiceConfigFileR\x05files\x12 \n" +
 	"\venvironment\x18\x02 \x03(\tR\venvironment\"E\n" +
 	" ExtensionServiceConfigStatusSpec\x12!\n" +
 	"\fspec_version\x18\x01 \x01(\tR\vspecVersion\"-\n" +
@@ -1702,11 +1702,11 @@ const file_resource_definitions_runtime_runtime_proto_rawDesc = "" +
 	"\x05state\x18\x04 \x01(\tR\x05state\x12\x18\n" +
 	"\aaddress\x18\x05 \x01(\tR\aaddress\"\xb1\x01\n" +
 	"\x11MachineStatusSpec\x12K\n" +
-	"\x05stage\x18\x01 \x01(\x0e25.talos.resource.definitions.enums.RuntimeMachineStageR\x05stage\x12O\n" +
-	"\x06status\x18\x02 \x01(\v27.talos.resource.definitions.runtime.MachineStatusStatusR\x06status\"\x8a\x01\n" +
+	"\x05stage\x18\x01 \x01(\x0e25.chubo.resource.definitions.enums.RuntimeMachineStageR\x05stage\x12O\n" +
+	"\x06status\x18\x02 \x01(\v27.chubo.resource.definitions.runtime.MachineStatusStatusR\x06status\"\x8a\x01\n" +
 	"\x13MachineStatusStatus\x12\x14\n" +
 	"\x05ready\x18\x01 \x01(\bR\x05ready\x12]\n" +
-	"\x10unmet_conditions\x18\x02 \x03(\v22.talos.resource.definitions.runtime.UnmetConditionR\x0funmetConditions\"\x85\x01\n" +
+	"\x10unmet_conditions\x18\x02 \x03(\v22.chubo.resource.definitions.runtime.UnmetConditionR\x0funmetConditions\"\x85\x01\n" +
 	"\x1cMaintenanceServiceConfigSpec\x12%\n" +
 	"\x0elisten_address\x18\x01 \x01(\tR\rlistenAddress\x12>\n" +
 	"\x13reachable_addresses\x18\x02 \x03(\v2\r.common.NetIPR\x12reachableAddresses\"#\n" +
@@ -1739,7 +1739,7 @@ const file_resource_definitions_runtime_runtime_proto_rawDesc = "" +
 	"\finternal_dns\x18\t \x01(\tR\vinternalDns\x12!\n" +
 	"\fexternal_dns\x18\n" +
 	" \x01(\tR\vexternalDns\x12V\n" +
-	"\x04tags\x18\v \x03(\v2B.talos.resource.definitions.runtime.PlatformMetadataSpec.TagsEntryR\x04tags\x1a7\n" +
+	"\x04tags\x18\v \x03(\v2B.chubo.resource.definitions.runtime.PlatformMetadataSpec.TagsEntryR\x04tags\x1a7\n" +
 	"\tTagsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa0\x01\n" +
@@ -1755,10 +1755,10 @@ const file_resource_definitions_runtime_runtime_proto_rawDesc = "" +
 	"secureBoot\x12=\n" +
 	"\x1buki_signing_key_fingerprint\x18\x02 \x01(\tR\x18ukiSigningKeyFingerprint\x12=\n" +
 	"\x1bpcr_signing_key_fingerprint\x18\x03 \x01(\tR\x18pcrSigningKeyFingerprint\x12[\n" +
-	"\x0ese_linux_state\x18\x04 \x01(\x0e25.talos.resource.definitions.enums.RuntimeSELinuxStateR\fseLinuxState\x12&\n" +
+	"\x0ese_linux_state\x18\x04 \x01(\x0e25.chubo.resource.definitions.enums.RuntimeSELinuxStateR\fseLinuxState\x12&\n" +
 	"\x0fbooted_with_uki\x18\x05 \x01(\bR\rbootedWithUki\x12Q\n" +
 	"\n" +
-	"fips_state\x18\x06 \x01(\x0e22.talos.resource.definitions.enums.RuntimeFIPSStateR\tfipsState\x12:\n" +
+	"fips_state\x18\x06 \x01(\x0e22.chubo.resource.definitions.enums.RuntimeFIPSStateR\tfipsState\x12:\n" +
 	"\x19module_signature_enforced\x18\a \x01(\bR\x17moduleSignatureEnforced\".\n" +
 	"\x16UniqueMachineTokenSpec\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\"<\n" +
@@ -1788,55 +1788,55 @@ func file_resource_definitions_runtime_runtime_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_runtime_runtime_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_resource_definitions_runtime_runtime_proto_goTypes = []any{
-	(*BootedEntrySpec)(nil),                  // 0: talos.resource.definitions.runtime.BootedEntrySpec
-	(*DevicesStatusSpec)(nil),                // 1: talos.resource.definitions.runtime.DevicesStatusSpec
-	(*DiagnosticSpec)(nil),                   // 2: talos.resource.definitions.runtime.DiagnosticSpec
-	(*EnvironmentSpec)(nil),                  // 3: talos.resource.definitions.runtime.EnvironmentSpec
-	(*EventSinkConfigSpec)(nil),              // 4: talos.resource.definitions.runtime.EventSinkConfigSpec
-	(*ExtensionServiceConfigFile)(nil),       // 5: talos.resource.definitions.runtime.ExtensionServiceConfigFile
-	(*ExtensionServiceConfigSpec)(nil),       // 6: talos.resource.definitions.runtime.ExtensionServiceConfigSpec
-	(*ExtensionServiceConfigStatusSpec)(nil), // 7: talos.resource.definitions.runtime.ExtensionServiceConfigStatusSpec
-	(*KernelCmdlineSpec)(nil),                // 8: talos.resource.definitions.runtime.KernelCmdlineSpec
-	(*KernelModuleSpecSpec)(nil),             // 9: talos.resource.definitions.runtime.KernelModuleSpecSpec
-	(*KernelParamSpecSpec)(nil),              // 10: talos.resource.definitions.runtime.KernelParamSpecSpec
-	(*KernelParamStatusSpec)(nil),            // 11: talos.resource.definitions.runtime.KernelParamStatusSpec
-	(*KmsgLogConfigSpec)(nil),                // 12: talos.resource.definitions.runtime.KmsgLogConfigSpec
-	(*LoadedKernelModuleSpec)(nil),           // 13: talos.resource.definitions.runtime.LoadedKernelModuleSpec
-	(*MachineStatusSpec)(nil),                // 14: talos.resource.definitions.runtime.MachineStatusSpec
-	(*MachineStatusStatus)(nil),              // 15: talos.resource.definitions.runtime.MachineStatusStatus
-	(*MaintenanceServiceConfigSpec)(nil),     // 16: talos.resource.definitions.runtime.MaintenanceServiceConfigSpec
-	(*MetaKeySpec)(nil),                      // 17: talos.resource.definitions.runtime.MetaKeySpec
-	(*MetaLoadedSpec)(nil),                   // 18: talos.resource.definitions.runtime.MetaLoadedSpec
-	(*MountStatusSpec)(nil),                  // 19: talos.resource.definitions.runtime.MountStatusSpec
-	(*OOMActionSpec)(nil),                    // 20: talos.resource.definitions.runtime.OOMActionSpec
-	(*PlatformMetadataSpec)(nil),             // 21: talos.resource.definitions.runtime.PlatformMetadataSpec
-	(*SBOMItemSpec)(nil),                     // 22: talos.resource.definitions.runtime.SBOMItemSpec
-	(*SecurityStateSpec)(nil),                // 23: talos.resource.definitions.runtime.SecurityStateSpec
-	(*UniqueMachineTokenSpec)(nil),           // 24: talos.resource.definitions.runtime.UniqueMachineTokenSpec
-	(*UnmetCondition)(nil),                   // 25: talos.resource.definitions.runtime.UnmetCondition
-	(*WatchdogTimerConfigSpec)(nil),          // 26: talos.resource.definitions.runtime.WatchdogTimerConfigSpec
-	(*WatchdogTimerStatusSpec)(nil),          // 27: talos.resource.definitions.runtime.WatchdogTimerStatusSpec
-	nil,                                      // 28: talos.resource.definitions.runtime.PlatformMetadataSpec.TagsEntry
+	(*BootedEntrySpec)(nil),                  // 0: chubo.resource.definitions.runtime.BootedEntrySpec
+	(*DevicesStatusSpec)(nil),                // 1: chubo.resource.definitions.runtime.DevicesStatusSpec
+	(*DiagnosticSpec)(nil),                   // 2: chubo.resource.definitions.runtime.DiagnosticSpec
+	(*EnvironmentSpec)(nil),                  // 3: chubo.resource.definitions.runtime.EnvironmentSpec
+	(*EventSinkConfigSpec)(nil),              // 4: chubo.resource.definitions.runtime.EventSinkConfigSpec
+	(*ExtensionServiceConfigFile)(nil),       // 5: chubo.resource.definitions.runtime.ExtensionServiceConfigFile
+	(*ExtensionServiceConfigSpec)(nil),       // 6: chubo.resource.definitions.runtime.ExtensionServiceConfigSpec
+	(*ExtensionServiceConfigStatusSpec)(nil), // 7: chubo.resource.definitions.runtime.ExtensionServiceConfigStatusSpec
+	(*KernelCmdlineSpec)(nil),                // 8: chubo.resource.definitions.runtime.KernelCmdlineSpec
+	(*KernelModuleSpecSpec)(nil),             // 9: chubo.resource.definitions.runtime.KernelModuleSpecSpec
+	(*KernelParamSpecSpec)(nil),              // 10: chubo.resource.definitions.runtime.KernelParamSpecSpec
+	(*KernelParamStatusSpec)(nil),            // 11: chubo.resource.definitions.runtime.KernelParamStatusSpec
+	(*KmsgLogConfigSpec)(nil),                // 12: chubo.resource.definitions.runtime.KmsgLogConfigSpec
+	(*LoadedKernelModuleSpec)(nil),           // 13: chubo.resource.definitions.runtime.LoadedKernelModuleSpec
+	(*MachineStatusSpec)(nil),                // 14: chubo.resource.definitions.runtime.MachineStatusSpec
+	(*MachineStatusStatus)(nil),              // 15: chubo.resource.definitions.runtime.MachineStatusStatus
+	(*MaintenanceServiceConfigSpec)(nil),     // 16: chubo.resource.definitions.runtime.MaintenanceServiceConfigSpec
+	(*MetaKeySpec)(nil),                      // 17: chubo.resource.definitions.runtime.MetaKeySpec
+	(*MetaLoadedSpec)(nil),                   // 18: chubo.resource.definitions.runtime.MetaLoadedSpec
+	(*MountStatusSpec)(nil),                  // 19: chubo.resource.definitions.runtime.MountStatusSpec
+	(*OOMActionSpec)(nil),                    // 20: chubo.resource.definitions.runtime.OOMActionSpec
+	(*PlatformMetadataSpec)(nil),             // 21: chubo.resource.definitions.runtime.PlatformMetadataSpec
+	(*SBOMItemSpec)(nil),                     // 22: chubo.resource.definitions.runtime.SBOMItemSpec
+	(*SecurityStateSpec)(nil),                // 23: chubo.resource.definitions.runtime.SecurityStateSpec
+	(*UniqueMachineTokenSpec)(nil),           // 24: chubo.resource.definitions.runtime.UniqueMachineTokenSpec
+	(*UnmetCondition)(nil),                   // 25: chubo.resource.definitions.runtime.UnmetCondition
+	(*WatchdogTimerConfigSpec)(nil),          // 26: chubo.resource.definitions.runtime.WatchdogTimerConfigSpec
+	(*WatchdogTimerStatusSpec)(nil),          // 27: chubo.resource.definitions.runtime.WatchdogTimerStatusSpec
+	nil,                                      // 28: chubo.resource.definitions.runtime.PlatformMetadataSpec.TagsEntry
 	(*common.URL)(nil),                       // 29: common.URL
-	(enums.RuntimeMachineStage)(0),           // 30: talos.resource.definitions.enums.RuntimeMachineStage
+	(enums.RuntimeMachineStage)(0),           // 30: chubo.resource.definitions.enums.RuntimeMachineStage
 	(*common.NetIP)(nil),                     // 31: common.NetIP
-	(enums.RuntimeSELinuxState)(0),           // 32: talos.resource.definitions.enums.RuntimeSELinuxState
-	(enums.RuntimeFIPSState)(0),              // 33: talos.resource.definitions.enums.RuntimeFIPSState
+	(enums.RuntimeSELinuxState)(0),           // 32: chubo.resource.definitions.enums.RuntimeSELinuxState
+	(enums.RuntimeFIPSState)(0),              // 33: chubo.resource.definitions.enums.RuntimeFIPSState
 	(*durationpb.Duration)(nil),              // 34: google.protobuf.Duration
 }
 var file_resource_definitions_runtime_runtime_proto_depIdxs = []int32{
-	5,  // 0: talos.resource.definitions.runtime.ExtensionServiceConfigSpec.files:type_name -> talos.resource.definitions.runtime.ExtensionServiceConfigFile
-	29, // 1: talos.resource.definitions.runtime.KmsgLogConfigSpec.destinations:type_name -> common.URL
-	30, // 2: talos.resource.definitions.runtime.MachineStatusSpec.stage:type_name -> talos.resource.definitions.enums.RuntimeMachineStage
-	15, // 3: talos.resource.definitions.runtime.MachineStatusSpec.status:type_name -> talos.resource.definitions.runtime.MachineStatusStatus
-	25, // 4: talos.resource.definitions.runtime.MachineStatusStatus.unmet_conditions:type_name -> talos.resource.definitions.runtime.UnmetCondition
-	31, // 5: talos.resource.definitions.runtime.MaintenanceServiceConfigSpec.reachable_addresses:type_name -> common.NetIP
-	28, // 6: talos.resource.definitions.runtime.PlatformMetadataSpec.tags:type_name -> talos.resource.definitions.runtime.PlatformMetadataSpec.TagsEntry
-	32, // 7: talos.resource.definitions.runtime.SecurityStateSpec.se_linux_state:type_name -> talos.resource.definitions.enums.RuntimeSELinuxState
-	33, // 8: talos.resource.definitions.runtime.SecurityStateSpec.fips_state:type_name -> talos.resource.definitions.enums.RuntimeFIPSState
-	34, // 9: talos.resource.definitions.runtime.WatchdogTimerConfigSpec.timeout:type_name -> google.protobuf.Duration
-	34, // 10: talos.resource.definitions.runtime.WatchdogTimerStatusSpec.timeout:type_name -> google.protobuf.Duration
-	34, // 11: talos.resource.definitions.runtime.WatchdogTimerStatusSpec.feed_interval:type_name -> google.protobuf.Duration
+	5,  // 0: chubo.resource.definitions.runtime.ExtensionServiceConfigSpec.files:type_name -> chubo.resource.definitions.runtime.ExtensionServiceConfigFile
+	29, // 1: chubo.resource.definitions.runtime.KmsgLogConfigSpec.destinations:type_name -> common.URL
+	30, // 2: chubo.resource.definitions.runtime.MachineStatusSpec.stage:type_name -> chubo.resource.definitions.enums.RuntimeMachineStage
+	15, // 3: chubo.resource.definitions.runtime.MachineStatusSpec.status:type_name -> chubo.resource.definitions.runtime.MachineStatusStatus
+	25, // 4: chubo.resource.definitions.runtime.MachineStatusStatus.unmet_conditions:type_name -> chubo.resource.definitions.runtime.UnmetCondition
+	31, // 5: chubo.resource.definitions.runtime.MaintenanceServiceConfigSpec.reachable_addresses:type_name -> common.NetIP
+	28, // 6: chubo.resource.definitions.runtime.PlatformMetadataSpec.tags:type_name -> chubo.resource.definitions.runtime.PlatformMetadataSpec.TagsEntry
+	32, // 7: chubo.resource.definitions.runtime.SecurityStateSpec.se_linux_state:type_name -> chubo.resource.definitions.enums.RuntimeSELinuxState
+	33, // 8: chubo.resource.definitions.runtime.SecurityStateSpec.fips_state:type_name -> chubo.resource.definitions.enums.RuntimeFIPSState
+	34, // 9: chubo.resource.definitions.runtime.WatchdogTimerConfigSpec.timeout:type_name -> google.protobuf.Duration
+	34, // 10: chubo.resource.definitions.runtime.WatchdogTimerStatusSpec.timeout:type_name -> google.protobuf.Duration
+	34, // 11: chubo.resource.definitions.runtime.WatchdogTimerStatusSpec.feed_interval:type_name -> google.protobuf.Duration
 	12, // [12:12] is the sub-list for method output_type
 	12, // [12:12] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name

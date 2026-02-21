@@ -7,12 +7,14 @@
 package secrets
 
 import (
-	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+
+	common "github.com/chubo-dev/chubo/pkg/machinery/api/common"
 )
 
 const (
@@ -22,7 +24,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// APICertsSpec describes API cert secrets.
+// APICertsSpec describes API certificate secrets.
 type APICertsSpec struct {
 	state         protoimpl.MessageState              `protogen:"open.v1"`
 	Client        *common.PEMEncodedCertificateAndKey `protobuf:"bytes,2,opt,name=client,proto3" json:"client,omitempty"`
@@ -364,7 +366,7 @@ func (x *OSRootSpec) GetAcceptedCAs() []*common.PEMEncodedCertificate {
 	return nil
 }
 
-// TrustdCertsSpec describes trustd cert secrets.
+// TrustdCertsSpec describes trustd certificate secrets.
 type TrustdCertsSpec struct {
 	state         protoimpl.MessageState              `protogen:"open.v1"`
 	Server        *common.PEMEncodedCertificateAndKey `protobuf:"bytes,2,opt,name=server,proto3" json:"server,omitempty"`
@@ -421,7 +423,7 @@ var File_resource_definitions_secrets_secrets_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_secrets_secrets_proto_rawDesc = "" +
 	"\n" +
-	"*resource/definitions/secrets/secrets.proto\x12\"talos.resource.definitions.secrets\x1a\x13common/common.proto\"\xcb\x01\n" +
+	"*resource/definitions/secrets/secrets.proto\x12\"chubo.resource.definitions.secrets\x1a\x13common/common.proto\"\xcb\x01\n" +
 	"\fAPICertsSpec\x12;\n" +
 	"\x06client\x18\x02 \x01(\v2#.common.PEMEncodedCertificateAndKeyR\x06client\x12;\n" +
 	"\x06server\x18\x03 \x01(\v2#.common.PEMEncodedCertificateAndKeyR\x06server\x12A\n" +
@@ -465,30 +467,30 @@ func file_resource_definitions_secrets_secrets_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_secrets_secrets_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_resource_definitions_secrets_secrets_proto_goTypes = []any{
-	(*APICertsSpec)(nil),                       // 0: talos.resource.definitions.secrets.APICertsSpec
-	(*CertSANSpec)(nil),                        // 1: talos.resource.definitions.secrets.CertSANSpec
-	(*EncryptionSaltSpec)(nil),                 // 2: talos.resource.definitions.secrets.EncryptionSaltSpec
-	(*MaintenanceRootSpec)(nil),                // 3: talos.resource.definitions.secrets.MaintenanceRootSpec
-	(*MaintenanceServiceCertsSpec)(nil),        // 4: talos.resource.definitions.secrets.MaintenanceServiceCertsSpec
-	(*OSRootSpec)(nil),                         // 5: talos.resource.definitions.secrets.OSRootSpec
-	(*TrustdCertsSpec)(nil),                    // 6: talos.resource.definitions.secrets.TrustdCertsSpec
+	(*APICertsSpec)(nil),                       // 0: chubo.resource.definitions.secrets.APICertsSpec
+	(*CertSANSpec)(nil),                        // 1: chubo.resource.definitions.secrets.CertSANSpec
+	(*EncryptionSaltSpec)(nil),                 // 2: chubo.resource.definitions.secrets.EncryptionSaltSpec
+	(*MaintenanceRootSpec)(nil),                // 3: chubo.resource.definitions.secrets.MaintenanceRootSpec
+	(*MaintenanceServiceCertsSpec)(nil),        // 4: chubo.resource.definitions.secrets.MaintenanceServiceCertsSpec
+	(*OSRootSpec)(nil),                         // 5: chubo.resource.definitions.secrets.OSRootSpec
+	(*TrustdCertsSpec)(nil),                    // 6: chubo.resource.definitions.secrets.TrustdCertsSpec
 	(*common.PEMEncodedCertificateAndKey)(nil), // 7: common.PEMEncodedCertificateAndKey
 	(*common.PEMEncodedCertificate)(nil),       // 8: common.PEMEncodedCertificate
 	(*common.NetIP)(nil),                       // 9: common.NetIP
 }
 var file_resource_definitions_secrets_secrets_proto_depIdxs = []int32{
-	7,  // 0: talos.resource.definitions.secrets.APICertsSpec.client:type_name -> common.PEMEncodedCertificateAndKey
-	7,  // 1: talos.resource.definitions.secrets.APICertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
-	8,  // 2: talos.resource.definitions.secrets.APICertsSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
-	9,  // 3: talos.resource.definitions.secrets.CertSANSpec.i_ps:type_name -> common.NetIP
-	7,  // 4: talos.resource.definitions.secrets.MaintenanceRootSpec.ca:type_name -> common.PEMEncodedCertificateAndKey
-	7,  // 5: talos.resource.definitions.secrets.MaintenanceServiceCertsSpec.ca:type_name -> common.PEMEncodedCertificateAndKey
-	7,  // 6: talos.resource.definitions.secrets.MaintenanceServiceCertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
-	7,  // 7: talos.resource.definitions.secrets.OSRootSpec.issuing_ca:type_name -> common.PEMEncodedCertificateAndKey
-	9,  // 8: talos.resource.definitions.secrets.OSRootSpec.cert_sani_ps:type_name -> common.NetIP
-	8,  // 9: talos.resource.definitions.secrets.OSRootSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
-	7,  // 10: talos.resource.definitions.secrets.TrustdCertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
-	8,  // 11: talos.resource.definitions.secrets.TrustdCertsSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
+	7,  // 0: chubo.resource.definitions.secrets.APICertsSpec.client:type_name -> common.PEMEncodedCertificateAndKey
+	7,  // 1: chubo.resource.definitions.secrets.APICertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
+	8,  // 2: chubo.resource.definitions.secrets.APICertsSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
+	9,  // 3: chubo.resource.definitions.secrets.CertSANSpec.i_ps:type_name -> common.NetIP
+	7,  // 4: chubo.resource.definitions.secrets.MaintenanceRootSpec.ca:type_name -> common.PEMEncodedCertificateAndKey
+	7,  // 5: chubo.resource.definitions.secrets.MaintenanceServiceCertsSpec.ca:type_name -> common.PEMEncodedCertificateAndKey
+	7,  // 6: chubo.resource.definitions.secrets.MaintenanceServiceCertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
+	7,  // 7: chubo.resource.definitions.secrets.OSRootSpec.issuing_ca:type_name -> common.PEMEncodedCertificateAndKey
+	9,  // 8: chubo.resource.definitions.secrets.OSRootSpec.cert_sani_ps:type_name -> common.NetIP
+	8,  // 9: chubo.resource.definitions.secrets.OSRootSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
+	7,  // 10: chubo.resource.definitions.secrets.TrustdCertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
+	8,  // 11: chubo.resource.definitions.secrets.TrustdCertsSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
 	12, // [12:12] is the sub-list for method output_type
 	12, // [12:12] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name

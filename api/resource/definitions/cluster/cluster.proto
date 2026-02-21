@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.cluster;
+package chubo.resource.definitions.cluster;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cluster";
 option java_package = "dev.chubo.api.resource.definitions.cluster";
@@ -15,7 +15,7 @@ message AffiliateSpec {
   string hostname = 3;
   string nodename = 4;
   string operating_system = 5;
-  talos.resource.definitions.enums.MachineType machine_type = 6;
+  chubo.resource.definitions.enums.MachineType machine_type = 6;
   ControlPlane control_plane = 8;
 }
 
@@ -59,7 +59,7 @@ message MemberSpec {
   string node_id = 1;
   repeated common.NetIP addresses = 2;
   string hostname = 3;
-  talos.resource.definitions.enums.MachineType machine_type = 4;
+  chubo.resource.definitions.enums.MachineType machine_type = 4;
   string operating_system = 5;
   ControlPlane control_plane = 6;
 }

@@ -25,7 +25,8 @@ const (
 // Compatibility describes extension compatibility.
 type Compatibility struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Talos         *Constraint            `protobuf:"bytes,1,opt,name=talos,proto3" json:"talos,omitempty"`
+	Legacy        *Constraint            `protobuf:"bytes,1,opt,name=legacy,proto3" json:"legacy,omitempty"`
+	Chubo         *Constraint            `protobuf:"bytes,2,opt,name=chubo,proto3" json:"chubo,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,9 +61,16 @@ func (*Compatibility) Descriptor() ([]byte, []int) {
 	return file_resource_definitions_extensions_extensions_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Compatibility) GetTalos() *Constraint {
+func (x *Compatibility) GetLegacy() *Constraint {
 	if x != nil {
-		return x.Talos
+		return x.Legacy
+	}
+	return nil
+}
+
+func (x *Compatibility) GetChubo() *Constraint {
+	if x != nil {
+		return x.Chubo
 	}
 	return nil
 }
@@ -254,21 +262,22 @@ var File_resource_definitions_extensions_extensions_proto protoreflect.FileDescr
 
 const file_resource_definitions_extensions_extensions_proto_rawDesc = "" +
 	"\n" +
-	"0resource/definitions/extensions/extensions.proto\x12%talos.resource.definitions.extensions\"X\n" +
-	"\rCompatibility\x12G\n" +
-	"\x05talos\x18\x01 \x01(\v21.talos.resource.definitions.extensions.ConstraintR\x05talos\"&\n" +
+	"0resource/definitions/extensions/extensions.proto\x12%chubo.resource.definitions.extensions\"\xa3\x01\n" +
+	"\rCompatibility\x12I\n" +
+	"\x06legacy\x18\x01 \x01(\v21.chubo.resource.definitions.extensions.ConstraintR\x06legacy\x12G\n" +
+	"\x05chubo\x18\x02 \x01(\v21.chubo.resource.definitions.extensions.ConstraintR\x05chubo\"&\n" +
 	"\n" +
 	"Constraint\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\tR\aversion\"j\n" +
 	"\x05Layer\x12\x14\n" +
 	"\x05image\x18\x01 \x01(\tR\x05image\x12K\n" +
-	"\bmetadata\x18\x02 \x01(\v2/.talos.resource.definitions.extensions.MetadataR\bmetadata\"\xed\x01\n" +
+	"\bmetadata\x18\x02 \x01(\v2/.chubo.resource.definitions.extensions.MetadataR\bmetadata\"\xed\x01\n" +
 	"\bMetadata\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
 	"\aversion\x18\x02 \x01(\tR\aversion\x12\x16\n" +
 	"\x06author\x18\x03 \x01(\tR\x06author\x12 \n" +
 	"\vdescription\x18\x04 \x01(\tR\vdescription\x12Z\n" +
-	"\rcompatibility\x18\x05 \x01(\v24.talos.resource.definitions.extensions.CompatibilityR\rcompatibility\x12\x1d\n" +
+	"\rcompatibility\x18\x05 \x01(\v24.chubo.resource.definitions.extensions.CompatibilityR\rcompatibility\x12\x1d\n" +
 	"\n" +
 	"extra_info\x18\x06 \x01(\tR\textraInfoB}\n" +
 	"-dev.chubo.api.resource.definitions.extensionsZLgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/extensionsb\x06proto3"
@@ -287,20 +296,21 @@ func file_resource_definitions_extensions_extensions_proto_rawDescGZIP() []byte 
 
 var file_resource_definitions_extensions_extensions_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_resource_definitions_extensions_extensions_proto_goTypes = []any{
-	(*Compatibility)(nil), // 0: talos.resource.definitions.extensions.Compatibility
-	(*Constraint)(nil),    // 1: talos.resource.definitions.extensions.Constraint
-	(*Layer)(nil),         // 2: talos.resource.definitions.extensions.Layer
-	(*Metadata)(nil),      // 3: talos.resource.definitions.extensions.Metadata
+	(*Compatibility)(nil), // 0: chubo.resource.definitions.extensions.Compatibility
+	(*Constraint)(nil),    // 1: chubo.resource.definitions.extensions.Constraint
+	(*Layer)(nil),         // 2: chubo.resource.definitions.extensions.Layer
+	(*Metadata)(nil),      // 3: chubo.resource.definitions.extensions.Metadata
 }
 var file_resource_definitions_extensions_extensions_proto_depIdxs = []int32{
-	1, // 0: talos.resource.definitions.extensions.Compatibility.talos:type_name -> talos.resource.definitions.extensions.Constraint
-	3, // 1: talos.resource.definitions.extensions.Layer.metadata:type_name -> talos.resource.definitions.extensions.Metadata
-	0, // 2: talos.resource.definitions.extensions.Metadata.compatibility:type_name -> talos.resource.definitions.extensions.Compatibility
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // 0: chubo.resource.definitions.extensions.Compatibility.legacy:type_name -> chubo.resource.definitions.extensions.Constraint
+	1, // 1: chubo.resource.definitions.extensions.Compatibility.chubo:type_name -> chubo.resource.definitions.extensions.Constraint
+	3, // 2: chubo.resource.definitions.extensions.Layer.metadata:type_name -> chubo.resource.definitions.extensions.Metadata
+	0, // 3: chubo.resource.definitions.extensions.Metadata.compatibility:type_name -> chubo.resource.definitions.extensions.Compatibility
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_resource_definitions_extensions_extensions_proto_init() }

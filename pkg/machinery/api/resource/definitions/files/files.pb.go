@@ -132,7 +132,7 @@ var File_resource_definitions_files_files_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_files_files_proto_rawDesc = "" +
 	"\n" +
-	"&resource/definitions/files/files.proto\x12 talos.resource.definitions.files\"f\n" +
+	"&resource/definitions/files/files.proto\x12 chubo.resource.definitions.files\"f\n" +
 	"\x0fEtcFileSpecSpec\x12\x1a\n" +
 	"\bcontents\x18\x01 \x01(\fR\bcontents\x12\x12\n" +
 	"\x04mode\x18\x02 \x01(\rR\x04mode\x12#\n" +
@@ -155,8 +155,8 @@ func file_resource_definitions_files_files_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_files_files_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_definitions_files_files_proto_goTypes = []any{
-	(*EtcFileSpecSpec)(nil),   // 0: talos.resource.definitions.files.EtcFileSpecSpec
-	(*EtcFileStatusSpec)(nil), // 1: talos.resource.definitions.files.EtcFileStatusSpec
+	(*EtcFileSpecSpec)(nil),   // 0: chubo.resource.definitions.files.EtcFileSpecSpec
+	(*EtcFileStatusSpec)(nil), // 1: chubo.resource.definitions.files.EtcFileStatusSpec
 }
 var file_resource_definitions_files_files_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

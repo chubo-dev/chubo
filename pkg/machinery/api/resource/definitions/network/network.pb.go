@@ -32,11 +32,11 @@ type AddressSpecSpec struct {
 	state           protoimpl.MessageState   `protogen:"open.v1"`
 	Address         *common.NetIPPrefix      `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	LinkName        string                   `protobuf:"bytes,2,opt,name=link_name,json=linkName,proto3" json:"link_name,omitempty"`
-	Family          enums.NethelpersFamily   `protobuf:"varint,3,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
-	Scope           enums.NethelpersScope    `protobuf:"varint,4,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+	Family          enums.NethelpersFamily   `protobuf:"varint,3,opt,name=family,proto3,enum=chubo.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+	Scope           enums.NethelpersScope    `protobuf:"varint,4,opt,name=scope,proto3,enum=chubo.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
 	Flags           uint32                   `protobuf:"varint,5,opt,name=flags,proto3" json:"flags,omitempty"`
 	AnnounceWithArp bool                     `protobuf:"varint,6,opt,name=announce_with_arp,json=announceWithArp,proto3" json:"announce_with_arp,omitempty"`
-	ConfigLayer     enums.NetworkConfigLayer `protobuf:"varint,7,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer     enums.NetworkConfigLayer `protobuf:"varint,7,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	Priority        uint32                   `protobuf:"varint,8,opt,name=priority,proto3" json:"priority,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -138,8 +138,8 @@ type AddressStatusSpec struct {
 	Multicast     *common.NetIP          `protobuf:"bytes,5,opt,name=multicast,proto3" json:"multicast,omitempty"`
 	LinkIndex     uint32                 `protobuf:"varint,6,opt,name=link_index,json=linkIndex,proto3" json:"link_index,omitempty"`
 	LinkName      string                 `protobuf:"bytes,7,opt,name=link_name,json=linkName,proto3" json:"link_name,omitempty"`
-	Family        enums.NethelpersFamily `protobuf:"varint,8,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
-	Scope         enums.NethelpersScope  `protobuf:"varint,9,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+	Family        enums.NethelpersFamily `protobuf:"varint,8,opt,name=family,proto3,enum=chubo.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+	Scope         enums.NethelpersScope  `protobuf:"varint,9,opt,name=scope,proto3,enum=chubo.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
 	Flags         uint32                 `protobuf:"varint,10,opt,name=flags,proto3" json:"flags,omitempty"`
 	Priority      uint32                 `protobuf:"varint,11,opt,name=priority,proto3" json:"priority,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -256,15 +256,15 @@ func (x *AddressStatusSpec) GetPriority() uint32 {
 // BondMasterSpec describes bond settings if Kind == "bond".
 type BondMasterSpec struct {
 	state           protoimpl.MessageState             `protogen:"open.v1"`
-	Mode            enums.NethelpersBondMode           `protobuf:"varint,1,opt,name=mode,proto3,enum=talos.resource.definitions.enums.NethelpersBondMode" json:"mode,omitempty"`
-	HashPolicy      enums.NethelpersBondXmitHashPolicy `protobuf:"varint,2,opt,name=hash_policy,json=hashPolicy,proto3,enum=talos.resource.definitions.enums.NethelpersBondXmitHashPolicy" json:"hash_policy,omitempty"`
-	LacpRate        enums.NethelpersLACPRate           `protobuf:"varint,3,opt,name=lacp_rate,json=lacpRate,proto3,enum=talos.resource.definitions.enums.NethelpersLACPRate" json:"lacp_rate,omitempty"`
-	ArpValidate     enums.NethelpersARPValidate        `protobuf:"varint,4,opt,name=arp_validate,json=arpValidate,proto3,enum=talos.resource.definitions.enums.NethelpersARPValidate" json:"arp_validate,omitempty"`
-	ArpAllTargets   enums.NethelpersARPAllTargets      `protobuf:"varint,5,opt,name=arp_all_targets,json=arpAllTargets,proto3,enum=talos.resource.definitions.enums.NethelpersARPAllTargets" json:"arp_all_targets,omitempty"`
+	Mode            enums.NethelpersBondMode           `protobuf:"varint,1,opt,name=mode,proto3,enum=chubo.resource.definitions.enums.NethelpersBondMode" json:"mode,omitempty"`
+	HashPolicy      enums.NethelpersBondXmitHashPolicy `protobuf:"varint,2,opt,name=hash_policy,json=hashPolicy,proto3,enum=chubo.resource.definitions.enums.NethelpersBondXmitHashPolicy" json:"hash_policy,omitempty"`
+	LacpRate        enums.NethelpersLACPRate           `protobuf:"varint,3,opt,name=lacp_rate,json=lacpRate,proto3,enum=chubo.resource.definitions.enums.NethelpersLACPRate" json:"lacp_rate,omitempty"`
+	ArpValidate     enums.NethelpersARPValidate        `protobuf:"varint,4,opt,name=arp_validate,json=arpValidate,proto3,enum=chubo.resource.definitions.enums.NethelpersARPValidate" json:"arp_validate,omitempty"`
+	ArpAllTargets   enums.NethelpersARPAllTargets      `protobuf:"varint,5,opt,name=arp_all_targets,json=arpAllTargets,proto3,enum=chubo.resource.definitions.enums.NethelpersARPAllTargets" json:"arp_all_targets,omitempty"`
 	PrimaryIndex    uint32                             `protobuf:"varint,6,opt,name=primary_index,json=primaryIndex,proto3" json:"primary_index,omitempty"`
-	PrimaryReselect enums.NethelpersPrimaryReselect    `protobuf:"varint,7,opt,name=primary_reselect,json=primaryReselect,proto3,enum=talos.resource.definitions.enums.NethelpersPrimaryReselect" json:"primary_reselect,omitempty"`
-	FailOverMac     enums.NethelpersFailOverMAC        `protobuf:"varint,8,opt,name=fail_over_mac,json=failOverMac,proto3,enum=talos.resource.definitions.enums.NethelpersFailOverMAC" json:"fail_over_mac,omitempty"`
-	AdSelect        enums.NethelpersADSelect           `protobuf:"varint,9,opt,name=ad_select,json=adSelect,proto3,enum=talos.resource.definitions.enums.NethelpersADSelect" json:"ad_select,omitempty"`
+	PrimaryReselect enums.NethelpersPrimaryReselect    `protobuf:"varint,7,opt,name=primary_reselect,json=primaryReselect,proto3,enum=chubo.resource.definitions.enums.NethelpersPrimaryReselect" json:"primary_reselect,omitempty"`
+	FailOverMac     enums.NethelpersFailOverMAC        `protobuf:"varint,8,opt,name=fail_over_mac,json=failOverMac,proto3,enum=chubo.resource.definitions.enums.NethelpersFailOverMAC" json:"fail_over_mac,omitempty"`
+	AdSelect        enums.NethelpersADSelect           `protobuf:"varint,9,opt,name=ad_select,json=adSelect,proto3,enum=chubo.resource.definitions.enums.NethelpersADSelect" json:"ad_select,omitempty"`
 	MiiMon          uint32                             `protobuf:"varint,10,opt,name=mii_mon,json=miiMon,proto3" json:"mii_mon,omitempty"`
 	UpDelay         uint32                             `protobuf:"varint,11,opt,name=up_delay,json=upDelay,proto3" json:"up_delay,omitempty"`
 	DownDelay       uint32                             `protobuf:"varint,12,opt,name=down_delay,json=downDelay,proto3" json:"down_delay,omitempty"`
@@ -282,7 +282,7 @@ type BondMasterSpec struct {
 	PeerNotifyDelay uint32                             `protobuf:"varint,24,opt,name=peer_notify_delay,json=peerNotifyDelay,proto3" json:"peer_notify_delay,omitempty"`
 	ArpipTargets    []*common.NetIP                    `protobuf:"bytes,25,rep,name=arpip_targets,json=arpipTargets,proto3" json:"arpip_targets,omitempty"`
 	Nsip6Targets    []*common.NetIP                    `protobuf:"bytes,26,rep,name=nsip6_targets,json=nsip6Targets,proto3" json:"nsip6_targets,omitempty"`
-	AdlacpActive    enums.NethelpersADLACPActive       `protobuf:"varint,27,opt,name=adlacp_active,json=adlacpActive,proto3,enum=talos.resource.definitions.enums.NethelpersADLACPActive" json:"adlacp_active,omitempty"`
+	AdlacpActive    enums.NethelpersADLACPActive       `protobuf:"varint,27,opt,name=adlacp_active,json=adlacpActive,proto3,enum=chubo.resource.definitions.enums.NethelpersADLACPActive" json:"adlacp_active,omitempty"`
 	MissedMax       uint32                             `protobuf:"varint,28,opt,name=missed_max,json=missedMax,proto3" json:"missed_max,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
@@ -713,7 +713,7 @@ func (x *BridgeVLANSpec) GetFilteringEnabled() bool {
 // ClientIdentifierSpec is a shared DHCP4/DHCP6 client identifier spec.
 type ClientIdentifierSpec struct {
 	state            protoimpl.MessageState           `protogen:"open.v1"`
-	ClientIdentifier enums.NethelpersClientIdentifier `protobuf:"varint,1,opt,name=client_identifier,json=clientIdentifier,proto3,enum=talos.resource.definitions.enums.NethelpersClientIdentifier" json:"client_identifier,omitempty"`
+	ClientIdentifier enums.NethelpersClientIdentifier `protobuf:"varint,1,opt,name=client_identifier,json=clientIdentifier,proto3,enum=chubo.resource.definitions.enums.NethelpersClientIdentifier" json:"client_identifier,omitempty"`
 	DuidRawHex       string                           `protobuf:"bytes,2,opt,name=duid_raw_hex,json=duidRawHex,proto3" json:"duid_raw_hex,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
@@ -1433,7 +1433,7 @@ type EthernetSpecSpec struct {
 	Rings         *EthernetRingsSpec        `protobuf:"bytes,1,opt,name=rings,proto3" json:"rings,omitempty"`
 	Features      map[string]bool           `protobuf:"bytes,2,rep,name=features,proto3" json:"features,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	Channels      *EthernetChannelsSpec     `protobuf:"bytes,3,opt,name=channels,proto3" json:"channels,omitempty"`
-	WakeOnLan     []enums.NethelpersWOLMode `protobuf:"varint,4,rep,packed,name=wake_on_lan,json=wakeOnLan,proto3,enum=talos.resource.definitions.enums.NethelpersWOLMode" json:"wake_on_lan,omitempty"`
+	WakeOnLan     []enums.NethelpersWOLMode `protobuf:"varint,4,rep,packed,name=wake_on_lan,json=wakeOnLan,proto3,enum=chubo.resource.definitions.enums.NethelpersWOLMode" json:"wake_on_lan,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1501,14 +1501,14 @@ type EthernetStatusSpec struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	LinkState     bool                      `protobuf:"varint,1,opt,name=link_state,json=linkState,proto3" json:"link_state,omitempty"`
 	SpeedMegabits int64                     `protobuf:"varint,2,opt,name=speed_megabits,json=speedMegabits,proto3" json:"speed_megabits,omitempty"`
-	Port          enums.NethelpersPort      `protobuf:"varint,3,opt,name=port,proto3,enum=talos.resource.definitions.enums.NethelpersPort" json:"port,omitempty"`
-	Duplex        enums.NethelpersDuplex    `protobuf:"varint,4,opt,name=duplex,proto3,enum=talos.resource.definitions.enums.NethelpersDuplex" json:"duplex,omitempty"`
+	Port          enums.NethelpersPort      `protobuf:"varint,3,opt,name=port,proto3,enum=chubo.resource.definitions.enums.NethelpersPort" json:"port,omitempty"`
+	Duplex        enums.NethelpersDuplex    `protobuf:"varint,4,opt,name=duplex,proto3,enum=chubo.resource.definitions.enums.NethelpersDuplex" json:"duplex,omitempty"`
 	OurModes      []string                  `protobuf:"bytes,5,rep,name=our_modes,json=ourModes,proto3" json:"our_modes,omitempty"`
 	PeerModes     []string                  `protobuf:"bytes,6,rep,name=peer_modes,json=peerModes,proto3" json:"peer_modes,omitempty"`
 	Rings         *EthernetRingsStatus      `protobuf:"bytes,7,opt,name=rings,proto3" json:"rings,omitempty"`
 	Features      []*EthernetFeatureStatus  `protobuf:"bytes,8,rep,name=features,proto3" json:"features,omitempty"`
 	Channels      *EthernetChannelsStatus   `protobuf:"bytes,9,opt,name=channels,proto3" json:"channels,omitempty"`
-	WakeOnLan     []enums.NethelpersWOLMode `protobuf:"varint,10,rep,packed,name=wake_on_lan,json=wakeOnLan,proto3,enum=talos.resource.definitions.enums.NethelpersWOLMode" json:"wake_on_lan,omitempty"`
+	WakeOnLan     []enums.NethelpersWOLMode `protobuf:"varint,10,rep,packed,name=wake_on_lan,json=wakeOnLan,proto3,enum=chubo.resource.definitions.enums.NethelpersWOLMode" json:"wake_on_lan,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1740,7 +1740,7 @@ type HostnameSpecSpec struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	Hostname      string                   `protobuf:"bytes,1,opt,name=hostname,proto3" json:"hostname,omitempty"`
 	Domainname    string                   `protobuf:"bytes,2,opt,name=domainname,proto3" json:"domainname,omitempty"`
-	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,3,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,3,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1947,7 +1947,7 @@ type LinkSpecSpec struct {
 	Up              bool                     `protobuf:"varint,3,opt,name=up,proto3" json:"up,omitempty"`
 	Mtu             uint32                   `protobuf:"varint,4,opt,name=mtu,proto3" json:"mtu,omitempty"`
 	Kind            string                   `protobuf:"bytes,5,opt,name=kind,proto3" json:"kind,omitempty"`
-	Type            enums.NethelpersLinkType `protobuf:"varint,6,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersLinkType" json:"type,omitempty"`
+	Type            enums.NethelpersLinkType `protobuf:"varint,6,opt,name=type,proto3,enum=chubo.resource.definitions.enums.NethelpersLinkType" json:"type,omitempty"`
 	ParentName      string                   `protobuf:"bytes,7,opt,name=parent_name,json=parentName,proto3" json:"parent_name,omitempty"`
 	BondSlave       *BondSlave               `protobuf:"bytes,8,opt,name=bond_slave,json=bondSlave,proto3" json:"bond_slave,omitempty"`
 	BridgeSlave     *BridgeSlave             `protobuf:"bytes,9,opt,name=bridge_slave,json=bridgeSlave,proto3" json:"bridge_slave,omitempty"`
@@ -1955,7 +1955,7 @@ type LinkSpecSpec struct {
 	BondMaster      *BondMasterSpec          `protobuf:"bytes,11,opt,name=bond_master,json=bondMaster,proto3" json:"bond_master,omitempty"`
 	BridgeMaster    *BridgeMasterSpec        `protobuf:"bytes,12,opt,name=bridge_master,json=bridgeMaster,proto3" json:"bridge_master,omitempty"`
 	Wireguard       *WireguardSpec           `protobuf:"bytes,13,opt,name=wireguard,proto3" json:"wireguard,omitempty"`
-	ConfigLayer     enums.NetworkConfigLayer `protobuf:"varint,14,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer     enums.NetworkConfigLayer `protobuf:"varint,14,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	HardwareAddress []byte                   `protobuf:"bytes,15,opt,name=hardware_address,json=hardwareAddress,proto3" json:"hardware_address,omitempty"`
 	Multicast       bool                     `protobuf:"varint,16,opt,name=multicast,proto3" json:"multicast,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -2108,7 +2108,7 @@ func (x *LinkSpecSpec) GetMulticast() bool {
 type LinkStatusSpec struct {
 	state            protoimpl.MessageState           `protogen:"open.v1"`
 	Index            uint32                           `protobuf:"varint,1,opt,name=index,proto3" json:"index,omitempty"`
-	Type             enums.NethelpersLinkType         `protobuf:"varint,2,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersLinkType" json:"type,omitempty"`
+	Type             enums.NethelpersLinkType         `protobuf:"varint,2,opt,name=type,proto3,enum=chubo.resource.definitions.enums.NethelpersLinkType" json:"type,omitempty"`
 	LinkIndex        uint32                           `protobuf:"varint,3,opt,name=link_index,json=linkIndex,proto3" json:"link_index,omitempty"`
 	Flags            uint32                           `protobuf:"varint,4,opt,name=flags,proto3" json:"flags,omitempty"`
 	HardwareAddr     []byte                           `protobuf:"bytes,5,opt,name=hardware_addr,json=hardwareAddr,proto3" json:"hardware_addr,omitempty"`
@@ -2116,7 +2116,7 @@ type LinkStatusSpec struct {
 	Mtu              uint32                           `protobuf:"varint,7,opt,name=mtu,proto3" json:"mtu,omitempty"`
 	QueueDisc        string                           `protobuf:"bytes,8,opt,name=queue_disc,json=queueDisc,proto3" json:"queue_disc,omitempty"`
 	MasterIndex      uint32                           `protobuf:"varint,9,opt,name=master_index,json=masterIndex,proto3" json:"master_index,omitempty"`
-	OperationalState enums.NethelpersOperationalState `protobuf:"varint,10,opt,name=operational_state,json=operationalState,proto3,enum=talos.resource.definitions.enums.NethelpersOperationalState" json:"operational_state,omitempty"`
+	OperationalState enums.NethelpersOperationalState `protobuf:"varint,10,opt,name=operational_state,json=operationalState,proto3,enum=chubo.resource.definitions.enums.NethelpersOperationalState" json:"operational_state,omitempty"`
 	Kind             string                           `protobuf:"bytes,11,opt,name=kind,proto3" json:"kind,omitempty"`
 	SlaveKind        string                           `protobuf:"bytes,12,opt,name=slave_kind,json=slaveKind,proto3" json:"slave_kind,omitempty"`
 	BusPath          string                           `protobuf:"bytes,13,opt,name=bus_path,json=busPath,proto3" json:"bus_path,omitempty"`
@@ -2130,8 +2130,8 @@ type LinkStatusSpec struct {
 	Vendor           string                           `protobuf:"bytes,21,opt,name=vendor,proto3" json:"vendor,omitempty"`
 	LinkState        bool                             `protobuf:"varint,22,opt,name=link_state,json=linkState,proto3" json:"link_state,omitempty"`
 	SpeedMegabits    int64                            `protobuf:"varint,23,opt,name=speed_megabits,json=speedMegabits,proto3" json:"speed_megabits,omitempty"`
-	Port             enums.NethelpersPort             `protobuf:"varint,24,opt,name=port,proto3,enum=talos.resource.definitions.enums.NethelpersPort" json:"port,omitempty"`
-	Duplex           enums.NethelpersDuplex           `protobuf:"varint,25,opt,name=duplex,proto3,enum=talos.resource.definitions.enums.NethelpersDuplex" json:"duplex,omitempty"`
+	Port             enums.NethelpersPort             `protobuf:"varint,24,opt,name=port,proto3,enum=chubo.resource.definitions.enums.NethelpersPort" json:"port,omitempty"`
+	Duplex           enums.NethelpersDuplex           `protobuf:"varint,25,opt,name=duplex,proto3,enum=chubo.resource.definitions.enums.NethelpersDuplex" json:"duplex,omitempty"`
 	Vlan             *VLANSpec                        `protobuf:"bytes,26,opt,name=vlan,proto3" json:"vlan,omitempty"`
 	BridgeMaster     *BridgeMasterSpec                `protobuf:"bytes,27,opt,name=bridge_master,json=bridgeMaster,proto3" json:"bridge_master,omitempty"`
 	BondMaster       *BondMasterSpec                  `protobuf:"bytes,28,opt,name=bond_master,json=bondMaster,proto3" json:"bond_master,omitempty"`
@@ -2462,10 +2462,10 @@ func (x *NfTablesAddressMatch) GetInvert() bool {
 type NfTablesChainSpec struct {
 	state         protoimpl.MessageState                `protogen:"open.v1"`
 	Type          string                                `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
-	Hook          enums.NethelpersNfTablesChainHook     `protobuf:"varint,2,opt,name=hook,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesChainHook" json:"hook,omitempty"`
-	Priority      enums.NethelpersNfTablesChainPriority `protobuf:"varint,3,opt,name=priority,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesChainPriority" json:"priority,omitempty"`
+	Hook          enums.NethelpersNfTablesChainHook     `protobuf:"varint,2,opt,name=hook,proto3,enum=chubo.resource.definitions.enums.NethelpersNfTablesChainHook" json:"hook,omitempty"`
+	Priority      enums.NethelpersNfTablesChainPriority `protobuf:"varint,3,opt,name=priority,proto3,enum=chubo.resource.definitions.enums.NethelpersNfTablesChainPriority" json:"priority,omitempty"`
 	Rules         []*NfTablesRule                       `protobuf:"bytes,4,rep,name=rules,proto3" json:"rules,omitempty"`
-	Policy        enums.NethelpersNfTablesVerdict       `protobuf:"varint,5,opt,name=policy,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesVerdict" json:"policy,omitempty"`
+	Policy        enums.NethelpersNfTablesVerdict       `protobuf:"varint,5,opt,name=policy,proto3,enum=chubo.resource.definitions.enums.NethelpersNfTablesVerdict" json:"policy,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2587,7 +2587,7 @@ func (x *NfTablesClampMSS) GetMtu() uint32 {
 // NfTablesConntrackStateMatch describes the match on the connection tracking state.
 type NfTablesConntrackStateMatch struct {
 	state         protoimpl.MessageState           `protogen:"open.v1"`
-	States        []enums.NethelpersConntrackState `protobuf:"varint,1,rep,packed,name=states,proto3,enum=talos.resource.definitions.enums.NethelpersConntrackState" json:"states,omitempty"`
+	States        []enums.NethelpersConntrackState `protobuf:"varint,1,rep,packed,name=states,proto3,enum=chubo.resource.definitions.enums.NethelpersConntrackState" json:"states,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2632,7 +2632,7 @@ func (x *NfTablesConntrackStateMatch) GetStates() []enums.NethelpersConntrackSta
 // NfTablesICMPTypeMatch describes the match on the ICMP type.
 type NfTablesICMPTypeMatch struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Types         []enums.NethelpersICMPType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=talos.resource.definitions.enums.NethelpersICMPType" json:"types,omitempty"`
+	Types         []enums.NethelpersICMPType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=chubo.resource.definitions.enums.NethelpersICMPType" json:"types,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2677,7 +2677,7 @@ func (x *NfTablesICMPTypeMatch) GetTypes() []enums.NethelpersICMPType {
 // NfTablesIfNameMatch describes the match on the interface name.
 type NfTablesIfNameMatch struct {
 	state          protoimpl.MessageState        `protogen:"open.v1"`
-	Operator       enums.NethelpersMatchOperator `protobuf:"varint,2,opt,name=operator,proto3,enum=talos.resource.definitions.enums.NethelpersMatchOperator" json:"operator,omitempty"`
+	Operator       enums.NethelpersMatchOperator `protobuf:"varint,2,opt,name=operator,proto3,enum=chubo.resource.definitions.enums.NethelpersMatchOperator" json:"operator,omitempty"`
 	InterfaceNames []string                      `protobuf:"bytes,3,rep,name=interface_names,json=interfaceNames,proto3" json:"interface_names,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -2730,7 +2730,7 @@ func (x *NfTablesIfNameMatch) GetInterfaceNames() []string {
 // NfTablesLayer4Match describes the match on the transport layer protocol.
 type NfTablesLayer4Match struct {
 	state                protoimpl.MessageState   `protogen:"open.v1"`
-	Protocol             enums.NethelpersProtocol `protobuf:"varint,1,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersProtocol" json:"protocol,omitempty"`
+	Protocol             enums.NethelpersProtocol `protobuf:"varint,1,opt,name=protocol,proto3,enum=chubo.resource.definitions.enums.NethelpersProtocol" json:"protocol,omitempty"`
 	MatchSourcePort      *NfTablesPortMatch       `protobuf:"bytes,2,opt,name=match_source_port,json=matchSourcePort,proto3" json:"match_source_port,omitempty"`
 	MatchDestinationPort *NfTablesPortMatch       `protobuf:"bytes,3,opt,name=match_destination_port,json=matchDestinationPort,proto3" json:"match_destination_port,omitempty"`
 	MatchIcmpType        *NfTablesICMPTypeMatch   `protobuf:"bytes,4,opt,name=match_icmp_type,json=matchIcmpType,proto3" json:"match_icmp_type,omitempty"`
@@ -2957,7 +2957,7 @@ func (x *NfTablesPortMatch) GetRanges() []*PortRange {
 type NfTablesRule struct {
 	state                   protoimpl.MessageState          `protogen:"open.v1"`
 	MatchOIfName            *NfTablesIfNameMatch            `protobuf:"bytes,1,opt,name=match_o_if_name,json=matchOIfName,proto3" json:"match_o_if_name,omitempty"`
-	Verdict                 enums.NethelpersNfTablesVerdict `protobuf:"varint,2,opt,name=verdict,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesVerdict" json:"verdict,omitempty"`
+	Verdict                 enums.NethelpersNfTablesVerdict `protobuf:"varint,2,opt,name=verdict,proto3,enum=chubo.resource.definitions.enums.NethelpersNfTablesVerdict" json:"verdict,omitempty"`
 	MatchMark               *NfTablesMark                   `protobuf:"bytes,3,opt,name=match_mark,json=matchMark,proto3" json:"match_mark,omitempty"`
 	SetMark                 *NfTablesMark                   `protobuf:"bytes,4,opt,name=set_mark,json=setMark,proto3" json:"set_mark,omitempty"`
 	MatchSourceAddress      *NfTablesAddressMatch           `protobuf:"bytes,5,opt,name=match_source_address,json=matchSourceAddress,proto3" json:"match_source_address,omitempty"`
@@ -3142,7 +3142,7 @@ func (x *NodeAddressFilterSpec) GetExcludeSubnets() []*common.NetIPPrefix {
 // NodeAddressSortAlgorithmSpec describes a filter for NodeAddresses.
 type NodeAddressSortAlgorithmSpec struct {
 	state         protoimpl.MessageState               `protogen:"open.v1"`
-	Algorithm     enums.NethelpersAddressSortAlgorithm `protobuf:"varint,1,opt,name=algorithm,proto3,enum=talos.resource.definitions.enums.NethelpersAddressSortAlgorithm" json:"algorithm,omitempty"`
+	Algorithm     enums.NethelpersAddressSortAlgorithm `protobuf:"varint,1,opt,name=algorithm,proto3,enum=chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm" json:"algorithm,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3188,7 +3188,7 @@ func (x *NodeAddressSortAlgorithmSpec) GetAlgorithm() enums.NethelpersAddressSor
 type NodeAddressSpec struct {
 	state         protoimpl.MessageState               `protogen:"open.v1"`
 	Addresses     []*common.NetIPPrefix                `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
-	SortAlgorithm enums.NethelpersAddressSortAlgorithm `protobuf:"varint,2,opt,name=sort_algorithm,json=sortAlgorithm,proto3,enum=talos.resource.definitions.enums.NethelpersAddressSortAlgorithm" json:"sort_algorithm,omitempty"`
+	SortAlgorithm enums.NethelpersAddressSortAlgorithm `protobuf:"varint,2,opt,name=sort_algorithm,json=sortAlgorithm,proto3,enum=chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm" json:"sort_algorithm,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3240,13 +3240,13 @@ func (x *NodeAddressSpec) GetSortAlgorithm() enums.NethelpersAddressSortAlgorith
 // OperatorSpecSpec describes operator specification.
 type OperatorSpecSpec struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Operator      enums.NetworkOperator    `protobuf:"varint,1,opt,name=operator,proto3,enum=talos.resource.definitions.enums.NetworkOperator" json:"operator,omitempty"`
+	Operator      enums.NetworkOperator    `protobuf:"varint,1,opt,name=operator,proto3,enum=chubo.resource.definitions.enums.NetworkOperator" json:"operator,omitempty"`
 	LinkName      string                   `protobuf:"bytes,2,opt,name=link_name,json=linkName,proto3" json:"link_name,omitempty"`
 	RequireUp     bool                     `protobuf:"varint,3,opt,name=require_up,json=requireUp,proto3" json:"require_up,omitempty"`
 	Dhcp4         *DHCP4OperatorSpec       `protobuf:"bytes,4,opt,name=dhcp4,proto3" json:"dhcp4,omitempty"`
 	Dhcp6         *DHCP6OperatorSpec       `protobuf:"bytes,5,opt,name=dhcp6,proto3" json:"dhcp6,omitempty"`
 	Vip           *VIPOperatorSpec         `protobuf:"bytes,6,opt,name=vip,proto3" json:"vip,omitempty"`
-	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,7,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,7,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3511,7 +3511,7 @@ type ProbeSpecSpec struct {
 	Interval         *durationpb.Duration     `protobuf:"bytes,1,opt,name=interval,proto3" json:"interval,omitempty"`
 	FailureThreshold int64                    `protobuf:"varint,2,opt,name=failure_threshold,json=failureThreshold,proto3" json:"failure_threshold,omitempty"`
 	Tcp              *TCPProbeSpec            `protobuf:"bytes,3,opt,name=tcp,proto3" json:"tcp,omitempty"`
-	ConfigLayer      enums.NetworkConfigLayer `protobuf:"varint,4,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer      enums.NetworkConfigLayer `protobuf:"varint,4,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -3631,7 +3631,7 @@ func (x *ProbeStatusSpec) GetLastError() string {
 type ResolverSpecSpec struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	DnsServers    []*common.NetIP          `protobuf:"bytes,1,rep,name=dns_servers,json=dnsServers,proto3" json:"dns_servers,omitempty"`
-	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,2,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,2,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	SearchDomains []string                 `protobuf:"bytes,3,rep,name=search_domains,json=searchDomains,proto3" json:"search_domains,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3744,18 +3744,18 @@ func (x *ResolverStatusSpec) GetSearchDomains() []string {
 // RouteSpecSpec describes the route.
 type RouteSpecSpec struct {
 	state         protoimpl.MessageState        `protogen:"open.v1"`
-	Family        enums.NethelpersFamily        `protobuf:"varint,1,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+	Family        enums.NethelpersFamily        `protobuf:"varint,1,opt,name=family,proto3,enum=chubo.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
 	Destination   *common.NetIPPrefix           `protobuf:"bytes,2,opt,name=destination,proto3" json:"destination,omitempty"`
 	Source        *common.NetIP                 `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
 	Gateway       *common.NetIP                 `protobuf:"bytes,4,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	OutLinkName   string                        `protobuf:"bytes,5,opt,name=out_link_name,json=outLinkName,proto3" json:"out_link_name,omitempty"`
-	Table         enums.NethelpersRoutingTable  `protobuf:"varint,6,opt,name=table,proto3,enum=talos.resource.definitions.enums.NethelpersRoutingTable" json:"table,omitempty"`
+	Table         enums.NethelpersRoutingTable  `protobuf:"varint,6,opt,name=table,proto3,enum=chubo.resource.definitions.enums.NethelpersRoutingTable" json:"table,omitempty"`
 	Priority      uint32                        `protobuf:"varint,7,opt,name=priority,proto3" json:"priority,omitempty"`
-	Scope         enums.NethelpersScope         `protobuf:"varint,8,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
-	Type          enums.NethelpersRouteType     `protobuf:"varint,9,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersRouteType" json:"type,omitempty"`
+	Scope         enums.NethelpersScope         `protobuf:"varint,8,opt,name=scope,proto3,enum=chubo.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+	Type          enums.NethelpersRouteType     `protobuf:"varint,9,opt,name=type,proto3,enum=chubo.resource.definitions.enums.NethelpersRouteType" json:"type,omitempty"`
 	Flags         uint32                        `protobuf:"varint,10,opt,name=flags,proto3" json:"flags,omitempty"`
-	Protocol      enums.NethelpersRouteProtocol `protobuf:"varint,11,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersRouteProtocol" json:"protocol,omitempty"`
-	ConfigLayer   enums.NetworkConfigLayer      `protobuf:"varint,12,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	Protocol      enums.NethelpersRouteProtocol `protobuf:"varint,11,opt,name=protocol,proto3,enum=chubo.resource.definitions.enums.NethelpersRouteProtocol" json:"protocol,omitempty"`
+	ConfigLayer   enums.NetworkConfigLayer      `protobuf:"varint,12,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	Mtu           uint32                        `protobuf:"varint,13,opt,name=mtu,proto3" json:"mtu,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3885,18 +3885,18 @@ func (x *RouteSpecSpec) GetMtu() uint32 {
 // RouteStatusSpec describes status of rendered secrets.
 type RouteStatusSpec struct {
 	state         protoimpl.MessageState        `protogen:"open.v1"`
-	Family        enums.NethelpersFamily        `protobuf:"varint,1,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+	Family        enums.NethelpersFamily        `protobuf:"varint,1,opt,name=family,proto3,enum=chubo.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
 	Destination   *common.NetIPPrefix           `protobuf:"bytes,2,opt,name=destination,proto3" json:"destination,omitempty"`
 	Source        *common.NetIP                 `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
 	Gateway       *common.NetIP                 `protobuf:"bytes,4,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	OutLinkIndex  uint32                        `protobuf:"varint,5,opt,name=out_link_index,json=outLinkIndex,proto3" json:"out_link_index,omitempty"`
 	OutLinkName   string                        `protobuf:"bytes,6,opt,name=out_link_name,json=outLinkName,proto3" json:"out_link_name,omitempty"`
-	Table         enums.NethelpersRoutingTable  `protobuf:"varint,7,opt,name=table,proto3,enum=talos.resource.definitions.enums.NethelpersRoutingTable" json:"table,omitempty"`
+	Table         enums.NethelpersRoutingTable  `protobuf:"varint,7,opt,name=table,proto3,enum=chubo.resource.definitions.enums.NethelpersRoutingTable" json:"table,omitempty"`
 	Priority      uint32                        `protobuf:"varint,8,opt,name=priority,proto3" json:"priority,omitempty"`
-	Scope         enums.NethelpersScope         `protobuf:"varint,9,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
-	Type          enums.NethelpersRouteType     `protobuf:"varint,10,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersRouteType" json:"type,omitempty"`
+	Scope         enums.NethelpersScope         `protobuf:"varint,9,opt,name=scope,proto3,enum=chubo.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+	Type          enums.NethelpersRouteType     `protobuf:"varint,10,opt,name=type,proto3,enum=chubo.resource.definitions.enums.NethelpersRouteType" json:"type,omitempty"`
 	Flags         uint32                        `protobuf:"varint,11,opt,name=flags,proto3" json:"flags,omitempty"`
-	Protocol      enums.NethelpersRouteProtocol `protobuf:"varint,12,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersRouteProtocol" json:"protocol,omitempty"`
+	Protocol      enums.NethelpersRouteProtocol `protobuf:"varint,12,opt,name=protocol,proto3,enum=chubo.resource.definitions.enums.NethelpersRouteProtocol" json:"protocol,omitempty"`
 	Mtu           uint32                        `protobuf:"varint,13,opt,name=mtu,proto3" json:"mtu,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -4194,7 +4194,7 @@ func (x *TCPProbeSpec) GetTimeout() *durationpb.Duration {
 type TimeServerSpecSpec struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	NtpServers    []string                 `protobuf:"bytes,1,rep,name=ntp_servers,json=ntpServers,proto3" json:"ntp_servers,omitempty"`
-	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,2,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,2,opt,name=config_layer,json=configLayer,proto3,enum=chubo.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4483,7 +4483,7 @@ func (x *VIPOperatorSpec) GetHCloud() *VIPHCloudSpec {
 type VLANSpec struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
 	Vid           uint32                       `protobuf:"varint,1,opt,name=vid,proto3" json:"vid,omitempty"`
-	Protocol      enums.NethelpersVLANProtocol `protobuf:"varint,2,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersVLANProtocol" json:"protocol,omitempty"`
+	Protocol      enums.NethelpersVLANProtocol `protobuf:"varint,2,opt,name=protocol,proto3,enum=chubo.resource.definitions.enums.NethelpersVLANProtocol" json:"protocol,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4690,15 +4690,15 @@ var File_resource_definitions_network_network_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\n" +
-	"*resource/definitions/network/network.proto\x12\"talos.resource.definitions.network\x1a\x13common/common.proto\x1a\x1egoogle/protobuf/duration.proto\x1a&resource/definitions/enums/enums.proto\x1a*resource/definitions/runtime/runtime.proto\"\xa9\x03\n" +
+	"*resource/definitions/network/network.proto\x12\"chubo.resource.definitions.network\x1a\x13common/common.proto\x1a\x1egoogle/protobuf/duration.proto\x1a&resource/definitions/enums/enums.proto\x1a*resource/definitions/runtime/runtime.proto\"\xa9\x03\n" +
 	"\x0fAddressSpecSpec\x12-\n" +
 	"\aaddress\x18\x01 \x01(\v2\x13.common.NetIPPrefixR\aaddress\x12\x1b\n" +
 	"\tlink_name\x18\x02 \x01(\tR\blinkName\x12J\n" +
-	"\x06family\x18\x03 \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x12G\n" +
-	"\x05scope\x18\x04 \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12\x14\n" +
+	"\x06family\x18\x03 \x01(\x0e22.chubo.resource.definitions.enums.NethelpersFamilyR\x06family\x12G\n" +
+	"\x05scope\x18\x04 \x01(\x0e21.chubo.resource.definitions.enums.NethelpersScopeR\x05scope\x12\x14\n" +
 	"\x05flags\x18\x05 \x01(\rR\x05flags\x12*\n" +
 	"\x11announce_with_arp\x18\x06 \x01(\bR\x0fannounceWithArp\x12W\n" +
-	"\fconfig_layer\x18\a \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12\x1a\n" +
+	"\fconfig_layer\x18\a \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12\x1a\n" +
 	"\bpriority\x18\b \x01(\rR\bpriority\"\xed\x03\n" +
 	"\x11AddressStatusSpec\x12-\n" +
 	"\aaddress\x18\x01 \x01(\v2\x13.common.NetIPPrefixR\aaddress\x12#\n" +
@@ -4709,22 +4709,22 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\n" +
 	"link_index\x18\x06 \x01(\rR\tlinkIndex\x12\x1b\n" +
 	"\tlink_name\x18\a \x01(\tR\blinkName\x12J\n" +
-	"\x06family\x18\b \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x12G\n" +
-	"\x05scope\x18\t \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12\x14\n" +
+	"\x06family\x18\b \x01(\x0e22.chubo.resource.definitions.enums.NethelpersFamilyR\x06family\x12G\n" +
+	"\x05scope\x18\t \x01(\x0e21.chubo.resource.definitions.enums.NethelpersScopeR\x05scope\x12\x14\n" +
 	"\x05flags\x18\n" +
 	" \x01(\rR\x05flags\x12\x1a\n" +
 	"\bpriority\x18\v \x01(\rR\bpriority\"\x8a\f\n" +
 	"\x0eBondMasterSpec\x12H\n" +
-	"\x04mode\x18\x01 \x01(\x0e24.talos.resource.definitions.enums.NethelpersBondModeR\x04mode\x12_\n" +
-	"\vhash_policy\x18\x02 \x01(\x0e2>.talos.resource.definitions.enums.NethelpersBondXmitHashPolicyR\n" +
+	"\x04mode\x18\x01 \x01(\x0e24.chubo.resource.definitions.enums.NethelpersBondModeR\x04mode\x12_\n" +
+	"\vhash_policy\x18\x02 \x01(\x0e2>.chubo.resource.definitions.enums.NethelpersBondXmitHashPolicyR\n" +
 	"hashPolicy\x12Q\n" +
-	"\tlacp_rate\x18\x03 \x01(\x0e24.talos.resource.definitions.enums.NethelpersLACPRateR\blacpRate\x12Z\n" +
-	"\farp_validate\x18\x04 \x01(\x0e27.talos.resource.definitions.enums.NethelpersARPValidateR\varpValidate\x12a\n" +
-	"\x0farp_all_targets\x18\x05 \x01(\x0e29.talos.resource.definitions.enums.NethelpersARPAllTargetsR\rarpAllTargets\x12#\n" +
+	"\tlacp_rate\x18\x03 \x01(\x0e24.chubo.resource.definitions.enums.NethelpersLACPRateR\blacpRate\x12Z\n" +
+	"\farp_validate\x18\x04 \x01(\x0e27.chubo.resource.definitions.enums.NethelpersARPValidateR\varpValidate\x12a\n" +
+	"\x0farp_all_targets\x18\x05 \x01(\x0e29.chubo.resource.definitions.enums.NethelpersARPAllTargetsR\rarpAllTargets\x12#\n" +
 	"\rprimary_index\x18\x06 \x01(\rR\fprimaryIndex\x12f\n" +
-	"\x10primary_reselect\x18\a \x01(\x0e2;.talos.resource.definitions.enums.NethelpersPrimaryReselectR\x0fprimaryReselect\x12[\n" +
-	"\rfail_over_mac\x18\b \x01(\x0e27.talos.resource.definitions.enums.NethelpersFailOverMACR\vfailOverMac\x12Q\n" +
-	"\tad_select\x18\t \x01(\x0e24.talos.resource.definitions.enums.NethelpersADSelectR\badSelect\x12\x17\n" +
+	"\x10primary_reselect\x18\a \x01(\x0e2;.chubo.resource.definitions.enums.NethelpersPrimaryReselectR\x0fprimaryReselect\x12[\n" +
+	"\rfail_over_mac\x18\b \x01(\x0e27.chubo.resource.definitions.enums.NethelpersFailOverMACR\vfailOverMac\x12Q\n" +
+	"\tad_select\x18\t \x01(\x0e24.chubo.resource.definitions.enums.NethelpersADSelectR\badSelect\x12\x17\n" +
 	"\amii_mon\x18\n" +
 	" \x01(\rR\x06miiMon\x12\x19\n" +
 	"\bup_delay\x18\v \x01(\rR\aupDelay\x12\x1d\n" +
@@ -4747,7 +4747,7 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x11peer_notify_delay\x18\x18 \x01(\rR\x0fpeerNotifyDelay\x122\n" +
 	"\rarpip_targets\x18\x19 \x03(\v2\r.common.NetIPR\farpipTargets\x122\n" +
 	"\rnsip6_targets\x18\x1a \x03(\v2\r.common.NetIPR\fnsip6Targets\x12]\n" +
-	"\radlacp_active\x18\x1b \x01(\x0e28.talos.resource.definitions.enums.NethelpersADLACPActiveR\fadlacpActive\x12\x1d\n" +
+	"\radlacp_active\x18\x1b \x01(\x0e28.chubo.resource.definitions.enums.NethelpersADLACPActiveR\fadlacpActive\x12\x1d\n" +
 	"\n" +
 	"missed_max\x18\x1c \x01(\rR\tmissedMax\"M\n" +
 	"\tBondSlave\x12\x1f\n" +
@@ -4756,25 +4756,25 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\vslave_index\x18\x02 \x01(\x03R\n" +
 	"slaveIndex\"\x99\x01\n" +
 	"\x10BridgeMasterSpec\x12=\n" +
-	"\x03stp\x18\x01 \x01(\v2+.talos.resource.definitions.network.STPSpecR\x03stp\x12F\n" +
-	"\x04vlan\x18\x02 \x01(\v22.talos.resource.definitions.network.BridgeVLANSpecR\x04vlan\".\n" +
+	"\x03stp\x18\x01 \x01(\v2+.chubo.resource.definitions.network.STPSpecR\x03stp\x12F\n" +
+	"\x04vlan\x18\x02 \x01(\v22.chubo.resource.definitions.network.BridgeVLANSpecR\x04vlan\".\n" +
 	"\vBridgeSlave\x12\x1f\n" +
 	"\vmaster_name\x18\x01 \x01(\tR\n" +
 	"masterName\"=\n" +
 	"\x0eBridgeVLANSpec\x12+\n" +
 	"\x11filtering_enabled\x18\x01 \x01(\bR\x10filteringEnabled\"\xa3\x01\n" +
 	"\x14ClientIdentifierSpec\x12i\n" +
-	"\x11client_identifier\x18\x01 \x01(\x0e2<.talos.resource.definitions.enums.NethelpersClientIdentifierR\x10clientIdentifier\x12 \n" +
+	"\x11client_identifier\x18\x01 \x01(\x0e2<.chubo.resource.definitions.enums.NethelpersClientIdentifierR\x10clientIdentifier\x12 \n" +
 	"\fduid_raw_hex\x18\x02 \x01(\tR\n" +
 	"duidRawHex\"\xd1\x01\n" +
 	"\x11DHCP4OperatorSpec\x12!\n" +
 	"\froute_metric\x18\x01 \x01(\rR\vrouteMetric\x122\n" +
 	"\x15skip_hostname_request\x18\x02 \x01(\bR\x13skipHostnameRequest\x12e\n" +
-	"\x11client_identifier\x18\x03 \x01(\v28.talos.resource.definitions.network.ClientIdentifierSpecR\x10clientIdentifier\"\xd1\x01\n" +
+	"\x11client_identifier\x18\x03 \x01(\v28.chubo.resource.definitions.network.ClientIdentifierSpecR\x10clientIdentifier\"\xd1\x01\n" +
 	"\x11DHCP6OperatorSpec\x12!\n" +
 	"\froute_metric\x18\x02 \x01(\rR\vrouteMetric\x122\n" +
 	"\x15skip_hostname_request\x18\x03 \x01(\bR\x13skipHostnameRequest\x12e\n" +
-	"\x11client_identifier\x18\x04 \x01(\v28.talos.resource.definitions.network.ClientIdentifierSpecR\x10clientIdentifier\"-\n" +
+	"\x11client_identifier\x18\x04 \x01(\v28.chubo.resource.definitions.network.ClientIdentifierSpecR\x10clientIdentifier\"-\n" +
 	"\x13DNSResolveCacheSpec\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\"h\n" +
 	"\x14EthernetChannelsSpec\x12\x0e\n" +
@@ -4827,10 +4827,10 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x0ftx_push_buf_len\x18\x0e \x01(\rR\ftxPushBufLen\x12$\n" +
 	"\x0etcp_data_split\x18\x0f \x01(\bR\ftcpDataSplit\"\xa7\x03\n" +
 	"\x10EthernetSpecSpec\x12K\n" +
-	"\x05rings\x18\x01 \x01(\v25.talos.resource.definitions.network.EthernetRingsSpecR\x05rings\x12^\n" +
-	"\bfeatures\x18\x02 \x03(\v2B.talos.resource.definitions.network.EthernetSpecSpec.FeaturesEntryR\bfeatures\x12T\n" +
-	"\bchannels\x18\x03 \x01(\v28.talos.resource.definitions.network.EthernetChannelsSpecR\bchannels\x12S\n" +
-	"\vwake_on_lan\x18\x04 \x03(\x0e23.talos.resource.definitions.enums.NethelpersWOLModeR\twakeOnLan\x1a;\n" +
+	"\x05rings\x18\x01 \x01(\v25.chubo.resource.definitions.network.EthernetRingsSpecR\x05rings\x12^\n" +
+	"\bfeatures\x18\x02 \x03(\v2B.chubo.resource.definitions.network.EthernetSpecSpec.FeaturesEntryR\bfeatures\x12T\n" +
+	"\bchannels\x18\x03 \x01(\v28.chubo.resource.definitions.network.EthernetChannelsSpecR\bchannels\x12S\n" +
+	"\vwake_on_lan\x18\x04 \x03(\x0e23.chubo.resource.definitions.enums.NethelpersWOLModeR\twakeOnLan\x1a;\n" +
 	"\rFeaturesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01\"\xfb\x04\n" +
@@ -4838,16 +4838,16 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\n" +
 	"link_state\x18\x01 \x01(\bR\tlinkState\x12%\n" +
 	"\x0espeed_megabits\x18\x02 \x01(\x03R\rspeedMegabits\x12D\n" +
-	"\x04port\x18\x03 \x01(\x0e20.talos.resource.definitions.enums.NethelpersPortR\x04port\x12J\n" +
-	"\x06duplex\x18\x04 \x01(\x0e22.talos.resource.definitions.enums.NethelpersDuplexR\x06duplex\x12\x1b\n" +
+	"\x04port\x18\x03 \x01(\x0e20.chubo.resource.definitions.enums.NethelpersPortR\x04port\x12J\n" +
+	"\x06duplex\x18\x04 \x01(\x0e22.chubo.resource.definitions.enums.NethelpersDuplexR\x06duplex\x12\x1b\n" +
 	"\tour_modes\x18\x05 \x03(\tR\bourModes\x12\x1d\n" +
 	"\n" +
 	"peer_modes\x18\x06 \x03(\tR\tpeerModes\x12M\n" +
-	"\x05rings\x18\a \x01(\v27.talos.resource.definitions.network.EthernetRingsStatusR\x05rings\x12U\n" +
-	"\bfeatures\x18\b \x03(\v29.talos.resource.definitions.network.EthernetFeatureStatusR\bfeatures\x12V\n" +
-	"\bchannels\x18\t \x01(\v2:.talos.resource.definitions.network.EthernetChannelsStatusR\bchannels\x12S\n" +
+	"\x05rings\x18\a \x01(\v27.chubo.resource.definitions.network.EthernetRingsStatusR\x05rings\x12U\n" +
+	"\bfeatures\x18\b \x03(\v29.chubo.resource.definitions.network.EthernetFeatureStatusR\bfeatures\x12V\n" +
+	"\bchannels\x18\t \x01(\v2:.chubo.resource.definitions.network.EthernetChannelsStatusR\bchannels\x12S\n" +
 	"\vwake_on_lan\x18\n" +
-	" \x03(\x0e23.talos.resource.definitions.enums.NethelpersWOLModeR\twakeOnLan\"K\n" +
+	" \x03(\x0e23.chubo.resource.definitions.enums.NethelpersWOLModeR\twakeOnLan\"K\n" +
 	"\x10HardwareAddrSpec\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12#\n" +
 	"\rhardware_addr\x18\x02 \x01(\fR\fhardwareAddr\"\xe5\x01\n" +
@@ -4861,7 +4861,7 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\n" +
 	"domainname\x18\x02 \x01(\tR\n" +
 	"domainname\x12W\n" +
-	"\fconfig_layer\x18\x03 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"P\n" +
+	"\fconfig_layer\x18\x03 \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"P\n" +
 	"\x12HostnameStatusSpec\x12\x1a\n" +
 	"\bhostname\x18\x01 \x01(\tR\bhostname\x12\x1e\n" +
 	"\n" +
@@ -4879,25 +4879,25 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x02up\x18\x03 \x01(\bR\x02up\x12\x10\n" +
 	"\x03mtu\x18\x04 \x01(\rR\x03mtu\x12\x12\n" +
 	"\x04kind\x18\x05 \x01(\tR\x04kind\x12H\n" +
-	"\x04type\x18\x06 \x01(\x0e24.talos.resource.definitions.enums.NethelpersLinkTypeR\x04type\x12\x1f\n" +
+	"\x04type\x18\x06 \x01(\x0e24.chubo.resource.definitions.enums.NethelpersLinkTypeR\x04type\x12\x1f\n" +
 	"\vparent_name\x18\a \x01(\tR\n" +
 	"parentName\x12L\n" +
 	"\n" +
-	"bond_slave\x18\b \x01(\v2-.talos.resource.definitions.network.BondSlaveR\tbondSlave\x12R\n" +
-	"\fbridge_slave\x18\t \x01(\v2/.talos.resource.definitions.network.BridgeSlaveR\vbridgeSlave\x12@\n" +
+	"bond_slave\x18\b \x01(\v2-.chubo.resource.definitions.network.BondSlaveR\tbondSlave\x12R\n" +
+	"\fbridge_slave\x18\t \x01(\v2/.chubo.resource.definitions.network.BridgeSlaveR\vbridgeSlave\x12@\n" +
 	"\x04vlan\x18\n" +
-	" \x01(\v2,.talos.resource.definitions.network.VLANSpecR\x04vlan\x12S\n" +
-	"\vbond_master\x18\v \x01(\v22.talos.resource.definitions.network.BondMasterSpecR\n" +
+	" \x01(\v2,.chubo.resource.definitions.network.VLANSpecR\x04vlan\x12S\n" +
+	"\vbond_master\x18\v \x01(\v22.chubo.resource.definitions.network.BondMasterSpecR\n" +
 	"bondMaster\x12Y\n" +
-	"\rbridge_master\x18\f \x01(\v24.talos.resource.definitions.network.BridgeMasterSpecR\fbridgeMaster\x12O\n" +
-	"\twireguard\x18\r \x01(\v21.talos.resource.definitions.network.WireguardSpecR\twireguard\x12W\n" +
-	"\fconfig_layer\x18\x0e \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12)\n" +
+	"\rbridge_master\x18\f \x01(\v24.chubo.resource.definitions.network.BridgeMasterSpecR\fbridgeMaster\x12O\n" +
+	"\twireguard\x18\r \x01(\v21.chubo.resource.definitions.network.WireguardSpecR\twireguard\x12W\n" +
+	"\fconfig_layer\x18\x0e \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12)\n" +
 	"\x10hardware_address\x18\x0f \x01(\fR\x0fhardwareAddress\x12\x1c\n" +
 	"\tmulticast\x18\x10 \x01(\bR\tmulticast\"\xe1\n" +
 	"\n" +
 	"\x0eLinkStatusSpec\x12\x14\n" +
 	"\x05index\x18\x01 \x01(\rR\x05index\x12H\n" +
-	"\x04type\x18\x02 \x01(\x0e24.talos.resource.definitions.enums.NethelpersLinkTypeR\x04type\x12\x1d\n" +
+	"\x04type\x18\x02 \x01(\x0e24.chubo.resource.definitions.enums.NethelpersLinkTypeR\x04type\x12\x1d\n" +
 	"\n" +
 	"link_index\x18\x03 \x01(\rR\tlinkIndex\x12\x14\n" +
 	"\x05flags\x18\x04 \x01(\rR\x05flags\x12#\n" +
@@ -4908,7 +4908,7 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"queue_disc\x18\b \x01(\tR\tqueueDisc\x12!\n" +
 	"\fmaster_index\x18\t \x01(\rR\vmasterIndex\x12i\n" +
 	"\x11operational_state\x18\n" +
-	" \x01(\x0e2<.talos.resource.definitions.enums.NethelpersOperationalStateR\x10operationalState\x12\x12\n" +
+	" \x01(\x0e2<.chubo.resource.definitions.enums.NethelpersOperationalStateR\x10operationalState\x12\x12\n" +
 	"\x04kind\x18\v \x01(\tR\x04kind\x12\x1d\n" +
 	"\n" +
 	"slave_kind\x18\f \x01(\tR\tslaveKind\x12\x19\n" +
@@ -4925,13 +4925,13 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\n" +
 	"link_state\x18\x16 \x01(\bR\tlinkState\x12%\n" +
 	"\x0espeed_megabits\x18\x17 \x01(\x03R\rspeedMegabits\x12D\n" +
-	"\x04port\x18\x18 \x01(\x0e20.talos.resource.definitions.enums.NethelpersPortR\x04port\x12J\n" +
-	"\x06duplex\x18\x19 \x01(\x0e22.talos.resource.definitions.enums.NethelpersDuplexR\x06duplex\x12@\n" +
-	"\x04vlan\x18\x1a \x01(\v2,.talos.resource.definitions.network.VLANSpecR\x04vlan\x12Y\n" +
-	"\rbridge_master\x18\x1b \x01(\v24.talos.resource.definitions.network.BridgeMasterSpecR\fbridgeMaster\x12S\n" +
-	"\vbond_master\x18\x1c \x01(\v22.talos.resource.definitions.network.BondMasterSpecR\n" +
+	"\x04port\x18\x18 \x01(\x0e20.chubo.resource.definitions.enums.NethelpersPortR\x04port\x12J\n" +
+	"\x06duplex\x18\x19 \x01(\x0e22.chubo.resource.definitions.enums.NethelpersDuplexR\x06duplex\x12@\n" +
+	"\x04vlan\x18\x1a \x01(\v2,.chubo.resource.definitions.network.VLANSpecR\x04vlan\x12Y\n" +
+	"\rbridge_master\x18\x1b \x01(\v24.chubo.resource.definitions.network.BridgeMasterSpecR\fbridgeMaster\x12S\n" +
+	"\vbond_master\x18\x1c \x01(\v22.chubo.resource.definitions.network.BondMasterSpecR\n" +
 	"bondMaster\x12O\n" +
-	"\twireguard\x18\x1d \x01(\v21.talos.resource.definitions.network.WireguardSpecR\twireguard\x12%\n" +
+	"\twireguard\x18\x1d \x01(\v21.chubo.resource.definitions.network.WireguardSpecR\twireguard\x12%\n" +
 	"\x0epermanent_addr\x18\x1e \x01(\fR\rpermanentAddr\x12\x14\n" +
 	"\x05alias\x18\x1f \x01(\tR\x05alias\x12\x1b\n" +
 	"\talt_names\x18  \x03(\tR\baltNames\"\xaa\x01\n" +
@@ -4941,24 +4941,24 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x06invert\x18\x03 \x01(\bR\x06invert\"\xf6\x02\n" +
 	"\x11NfTablesChainSpec\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12Q\n" +
-	"\x04hook\x18\x02 \x01(\x0e2=.talos.resource.definitions.enums.NethelpersNfTablesChainHookR\x04hook\x12]\n" +
-	"\bpriority\x18\x03 \x01(\x0e2A.talos.resource.definitions.enums.NethelpersNfTablesChainPriorityR\bpriority\x12F\n" +
-	"\x05rules\x18\x04 \x03(\v20.talos.resource.definitions.network.NfTablesRuleR\x05rules\x12S\n" +
-	"\x06policy\x18\x05 \x01(\x0e2;.talos.resource.definitions.enums.NethelpersNfTablesVerdictR\x06policy\"$\n" +
+	"\x04hook\x18\x02 \x01(\x0e2=.chubo.resource.definitions.enums.NethelpersNfTablesChainHookR\x04hook\x12]\n" +
+	"\bpriority\x18\x03 \x01(\x0e2A.chubo.resource.definitions.enums.NethelpersNfTablesChainPriorityR\bpriority\x12F\n" +
+	"\x05rules\x18\x04 \x03(\v20.chubo.resource.definitions.network.NfTablesRuleR\x05rules\x12S\n" +
+	"\x06policy\x18\x05 \x01(\x0e2;.chubo.resource.definitions.enums.NethelpersNfTablesVerdictR\x06policy\"$\n" +
 	"\x10NfTablesClampMSS\x12\x10\n" +
 	"\x03mtu\x18\x01 \x01(\rR\x03mtu\"q\n" +
 	"\x1bNfTablesConntrackStateMatch\x12R\n" +
-	"\x06states\x18\x01 \x03(\x0e2:.talos.resource.definitions.enums.NethelpersConntrackStateR\x06states\"c\n" +
+	"\x06states\x18\x01 \x03(\x0e2:.chubo.resource.definitions.enums.NethelpersConntrackStateR\x06states\"c\n" +
 	"\x15NfTablesICMPTypeMatch\x12J\n" +
-	"\x05types\x18\x01 \x03(\x0e24.talos.resource.definitions.enums.NethelpersICMPTypeR\x05types\"\x95\x01\n" +
+	"\x05types\x18\x01 \x03(\x0e24.chubo.resource.definitions.enums.NethelpersICMPTypeR\x05types\"\x95\x01\n" +
 	"\x13NfTablesIfNameMatch\x12U\n" +
-	"\boperator\x18\x02 \x01(\x0e29.talos.resource.definitions.enums.NethelpersMatchOperatorR\boperator\x12'\n" +
+	"\boperator\x18\x02 \x01(\x0e29.chubo.resource.definitions.enums.NethelpersMatchOperatorR\boperator\x12'\n" +
 	"\x0finterface_names\x18\x03 \x03(\tR\x0einterfaceNames\"\x9a\x03\n" +
 	"\x13NfTablesLayer4Match\x12P\n" +
-	"\bprotocol\x18\x01 \x01(\x0e24.talos.resource.definitions.enums.NethelpersProtocolR\bprotocol\x12a\n" +
-	"\x11match_source_port\x18\x02 \x01(\v25.talos.resource.definitions.network.NfTablesPortMatchR\x0fmatchSourcePort\x12k\n" +
-	"\x16match_destination_port\x18\x03 \x01(\v25.talos.resource.definitions.network.NfTablesPortMatchR\x14matchDestinationPort\x12a\n" +
-	"\x0fmatch_icmp_type\x18\x04 \x01(\v29.talos.resource.definitions.network.NfTablesICMPTypeMatchR\rmatchIcmpType\"I\n" +
+	"\bprotocol\x18\x01 \x01(\x0e24.chubo.resource.definitions.enums.NethelpersProtocolR\bprotocol\x12a\n" +
+	"\x11match_source_port\x18\x02 \x01(\v25.chubo.resource.definitions.network.NfTablesPortMatchR\x0fmatchSourcePort\x12k\n" +
+	"\x16match_destination_port\x18\x03 \x01(\v25.chubo.resource.definitions.network.NfTablesPortMatchR\x14matchDestinationPort\x12a\n" +
+	"\x0fmatch_icmp_type\x18\x04 \x01(\v29.chubo.resource.definitions.network.NfTablesICMPTypeMatchR\rmatchIcmpType\"I\n" +
 	"\x12NfTablesLimitMatch\x123\n" +
 	"\x16packet_rate_per_second\x18\x01 \x01(\x04R\x13packetRatePerSecond\"J\n" +
 	"\fNfTablesMark\x12\x12\n" +
@@ -4966,60 +4966,60 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x03xor\x18\x02 \x01(\rR\x03xor\x12\x14\n" +
 	"\x05value\x18\x03 \x01(\rR\x05value\"Z\n" +
 	"\x11NfTablesPortMatch\x12E\n" +
-	"\x06ranges\x18\x01 \x03(\v2-.talos.resource.definitions.network.PortRangeR\x06ranges\"\xc5\b\n" +
+	"\x06ranges\x18\x01 \x03(\v2-.chubo.resource.definitions.network.PortRangeR\x06ranges\"\xc5\b\n" +
 	"\fNfTablesRule\x12^\n" +
-	"\x0fmatch_o_if_name\x18\x01 \x01(\v27.talos.resource.definitions.network.NfTablesIfNameMatchR\fmatchOIfName\x12U\n" +
-	"\averdict\x18\x02 \x01(\x0e2;.talos.resource.definitions.enums.NethelpersNfTablesVerdictR\averdict\x12O\n" +
+	"\x0fmatch_o_if_name\x18\x01 \x01(\v27.chubo.resource.definitions.network.NfTablesIfNameMatchR\fmatchOIfName\x12U\n" +
+	"\averdict\x18\x02 \x01(\x0e2;.chubo.resource.definitions.enums.NethelpersNfTablesVerdictR\averdict\x12O\n" +
 	"\n" +
-	"match_mark\x18\x03 \x01(\v20.talos.resource.definitions.network.NfTablesMarkR\tmatchMark\x12K\n" +
-	"\bset_mark\x18\x04 \x01(\v20.talos.resource.definitions.network.NfTablesMarkR\asetMark\x12j\n" +
-	"\x14match_source_address\x18\x05 \x01(\v28.talos.resource.definitions.network.NfTablesAddressMatchR\x12matchSourceAddress\x12t\n" +
-	"\x19match_destination_address\x18\x06 \x01(\v28.talos.resource.definitions.network.NfTablesAddressMatchR\x17matchDestinationAddress\x12Z\n" +
-	"\fmatch_layer4\x18\a \x01(\v27.talos.resource.definitions.network.NfTablesLayer4MatchR\vmatchLayer4\x12^\n" +
-	"\x0fmatch_i_if_name\x18\b \x01(\v27.talos.resource.definitions.network.NfTablesIfNameMatchR\fmatchIIfName\x12Q\n" +
-	"\tclamp_mss\x18\t \x01(\v24.talos.resource.definitions.network.NfTablesClampMSSR\bclampMss\x12W\n" +
+	"match_mark\x18\x03 \x01(\v20.chubo.resource.definitions.network.NfTablesMarkR\tmatchMark\x12K\n" +
+	"\bset_mark\x18\x04 \x01(\v20.chubo.resource.definitions.network.NfTablesMarkR\asetMark\x12j\n" +
+	"\x14match_source_address\x18\x05 \x01(\v28.chubo.resource.definitions.network.NfTablesAddressMatchR\x12matchSourceAddress\x12t\n" +
+	"\x19match_destination_address\x18\x06 \x01(\v28.chubo.resource.definitions.network.NfTablesAddressMatchR\x17matchDestinationAddress\x12Z\n" +
+	"\fmatch_layer4\x18\a \x01(\v27.chubo.resource.definitions.network.NfTablesLayer4MatchR\vmatchLayer4\x12^\n" +
+	"\x0fmatch_i_if_name\x18\b \x01(\v27.chubo.resource.definitions.network.NfTablesIfNameMatchR\fmatchIIfName\x12Q\n" +
+	"\tclamp_mss\x18\t \x01(\v24.chubo.resource.definitions.network.NfTablesClampMSSR\bclampMss\x12W\n" +
 	"\vmatch_limit\x18\n" +
-	" \x01(\v26.talos.resource.definitions.network.NfTablesLimitMatchR\n" +
+	" \x01(\v26.chubo.resource.definitions.network.NfTablesLimitMatchR\n" +
 	"matchLimit\x12s\n" +
-	"\x15match_conntrack_state\x18\v \x01(\v2?.talos.resource.definitions.network.NfTablesConntrackStateMatchR\x13matchConntrackState\x12!\n" +
+	"\x15match_conntrack_state\x18\v \x01(\v2?.chubo.resource.definitions.network.NfTablesConntrackStateMatchR\x13matchConntrackState\x12!\n" +
 	"\fanon_counter\x18\f \x01(\bR\vanonCounter\"\x93\x01\n" +
 	"\x15NodeAddressFilterSpec\x12<\n" +
 	"\x0finclude_subnets\x18\x01 \x03(\v2\x13.common.NetIPPrefixR\x0eincludeSubnets\x12<\n" +
 	"\x0fexclude_subnets\x18\x02 \x03(\v2\x13.common.NetIPPrefixR\x0eexcludeSubnets\"~\n" +
 	"\x1cNodeAddressSortAlgorithmSpec\x12^\n" +
-	"\talgorithm\x18\x01 \x01(\x0e2@.talos.resource.definitions.enums.NethelpersAddressSortAlgorithmR\talgorithm\"\xad\x01\n" +
+	"\talgorithm\x18\x01 \x01(\x0e2@.chubo.resource.definitions.enums.NethelpersAddressSortAlgorithmR\talgorithm\"\xad\x01\n" +
 	"\x0fNodeAddressSpec\x121\n" +
 	"\taddresses\x18\x01 \x03(\v2\x13.common.NetIPPrefixR\taddresses\x12g\n" +
-	"\x0esort_algorithm\x18\x02 \x01(\x0e2@.talos.resource.definitions.enums.NethelpersAddressSortAlgorithmR\rsortAlgorithm\"\xd7\x03\n" +
+	"\x0esort_algorithm\x18\x02 \x01(\x0e2@.chubo.resource.definitions.enums.NethelpersAddressSortAlgorithmR\rsortAlgorithm\"\xd7\x03\n" +
 	"\x10OperatorSpecSpec\x12M\n" +
-	"\boperator\x18\x01 \x01(\x0e21.talos.resource.definitions.enums.NetworkOperatorR\boperator\x12\x1b\n" +
+	"\boperator\x18\x01 \x01(\x0e21.chubo.resource.definitions.enums.NetworkOperatorR\boperator\x12\x1b\n" +
 	"\tlink_name\x18\x02 \x01(\tR\blinkName\x12\x1d\n" +
 	"\n" +
 	"require_up\x18\x03 \x01(\bR\trequireUp\x12K\n" +
-	"\x05dhcp4\x18\x04 \x01(\v25.talos.resource.definitions.network.DHCP4OperatorSpecR\x05dhcp4\x12K\n" +
-	"\x05dhcp6\x18\x05 \x01(\v25.talos.resource.definitions.network.DHCP6OperatorSpecR\x05dhcp6\x12E\n" +
-	"\x03vip\x18\x06 \x01(\v23.talos.resource.definitions.network.VIPOperatorSpecR\x03vip\x12W\n" +
-	"\fconfig_layer\x18\a \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"\xa4\x06\n" +
+	"\x05dhcp4\x18\x04 \x01(\v25.chubo.resource.definitions.network.DHCP4OperatorSpecR\x05dhcp4\x12K\n" +
+	"\x05dhcp6\x18\x05 \x01(\v25.chubo.resource.definitions.network.DHCP6OperatorSpecR\x05dhcp6\x12E\n" +
+	"\x03vip\x18\x06 \x01(\v23.chubo.resource.definitions.network.VIPOperatorSpecR\x03vip\x12W\n" +
+	"\fconfig_layer\x18\a \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"\xa4\x06\n" +
 	"\x12PlatformConfigSpec\x12Q\n" +
-	"\taddresses\x18\x01 \x03(\v23.talos.resource.definitions.network.AddressSpecSpecR\taddresses\x12F\n" +
-	"\x05links\x18\x02 \x03(\v20.talos.resource.definitions.network.LinkSpecSpecR\x05links\x12I\n" +
-	"\x06routes\x18\x03 \x03(\v21.talos.resource.definitions.network.RouteSpecSpecR\x06routes\x12R\n" +
-	"\thostnames\x18\x04 \x03(\v24.talos.resource.definitions.network.HostnameSpecSpecR\thostnames\x12R\n" +
-	"\tresolvers\x18\x05 \x03(\v24.talos.resource.definitions.network.ResolverSpecSpecR\tresolvers\x12Y\n" +
-	"\ftime_servers\x18\x06 \x03(\v26.talos.resource.definitions.network.TimeServerSpecSpecR\vtimeServers\x12R\n" +
-	"\toperators\x18\a \x03(\v24.talos.resource.definitions.network.OperatorSpecSpecR\toperators\x120\n" +
+	"\taddresses\x18\x01 \x03(\v23.chubo.resource.definitions.network.AddressSpecSpecR\taddresses\x12F\n" +
+	"\x05links\x18\x02 \x03(\v20.chubo.resource.definitions.network.LinkSpecSpecR\x05links\x12I\n" +
+	"\x06routes\x18\x03 \x03(\v21.chubo.resource.definitions.network.RouteSpecSpecR\x06routes\x12R\n" +
+	"\thostnames\x18\x04 \x03(\v24.chubo.resource.definitions.network.HostnameSpecSpecR\thostnames\x12R\n" +
+	"\tresolvers\x18\x05 \x03(\v24.chubo.resource.definitions.network.ResolverSpecSpecR\tresolvers\x12Y\n" +
+	"\ftime_servers\x18\x06 \x03(\v26.chubo.resource.definitions.network.TimeServerSpecSpecR\vtimeServers\x12R\n" +
+	"\toperators\x18\a \x03(\v24.chubo.resource.definitions.network.OperatorSpecSpecR\toperators\x120\n" +
 	"\fexternal_ips\x18\b \x03(\v2\r.common.NetIPR\vexternalIps\x12I\n" +
-	"\x06probes\x18\t \x03(\v21.talos.resource.definitions.network.ProbeSpecSpecR\x06probes\x12T\n" +
+	"\x06probes\x18\t \x03(\v21.chubo.resource.definitions.network.ProbeSpecSpecR\x06probes\x12T\n" +
 	"\bmetadata\x18\n" +
-	" \x01(\v28.talos.resource.definitions.runtime.PlatformMetadataSpecR\bmetadata\"+\n" +
+	" \x01(\v28.chubo.resource.definitions.runtime.PlatformMetadataSpecR\bmetadata\"+\n" +
 	"\tPortRange\x12\x0e\n" +
 	"\x02lo\x18\x01 \x01(\rR\x02lo\x12\x0e\n" +
 	"\x02hi\x18\x02 \x01(\rR\x02hi\"\x90\x02\n" +
 	"\rProbeSpecSpec\x125\n" +
 	"\binterval\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\binterval\x12+\n" +
 	"\x11failure_threshold\x18\x02 \x01(\x03R\x10failureThreshold\x12B\n" +
-	"\x03tcp\x18\x03 \x01(\v20.talos.resource.definitions.network.TCPProbeSpecR\x03tcp\x12W\n" +
-	"\fconfig_layer\x18\x04 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"J\n" +
+	"\x03tcp\x18\x03 \x01(\v20.chubo.resource.definitions.network.TCPProbeSpecR\x03tcp\x12W\n" +
+	"\fconfig_layer\x18\x04 \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"J\n" +
 	"\x0fProbeStatusSpec\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
 	"\n" +
@@ -5027,41 +5027,41 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x10ResolverSpecSpec\x12.\n" +
 	"\vdns_servers\x18\x01 \x03(\v2\r.common.NetIPR\n" +
 	"dnsServers\x12W\n" +
-	"\fconfig_layer\x18\x02 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12%\n" +
+	"\fconfig_layer\x18\x02 \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12%\n" +
 	"\x0esearch_domains\x18\x03 \x03(\tR\rsearchDomains\"k\n" +
 	"\x12ResolverStatusSpec\x12.\n" +
 	"\vdns_servers\x18\x01 \x03(\v2\r.common.NetIPR\n" +
 	"dnsServers\x12%\n" +
 	"\x0esearch_domains\x18\x02 \x03(\tR\rsearchDomains\"\xde\x05\n" +
 	"\rRouteSpecSpec\x12J\n" +
-	"\x06family\x18\x01 \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x125\n" +
+	"\x06family\x18\x01 \x01(\x0e22.chubo.resource.definitions.enums.NethelpersFamilyR\x06family\x125\n" +
 	"\vdestination\x18\x02 \x01(\v2\x13.common.NetIPPrefixR\vdestination\x12%\n" +
 	"\x06source\x18\x03 \x01(\v2\r.common.NetIPR\x06source\x12'\n" +
 	"\agateway\x18\x04 \x01(\v2\r.common.NetIPR\agateway\x12\"\n" +
 	"\rout_link_name\x18\x05 \x01(\tR\voutLinkName\x12N\n" +
-	"\x05table\x18\x06 \x01(\x0e28.talos.resource.definitions.enums.NethelpersRoutingTableR\x05table\x12\x1a\n" +
+	"\x05table\x18\x06 \x01(\x0e28.chubo.resource.definitions.enums.NethelpersRoutingTableR\x05table\x12\x1a\n" +
 	"\bpriority\x18\a \x01(\rR\bpriority\x12G\n" +
-	"\x05scope\x18\b \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12I\n" +
-	"\x04type\x18\t \x01(\x0e25.talos.resource.definitions.enums.NethelpersRouteTypeR\x04type\x12\x14\n" +
+	"\x05scope\x18\b \x01(\x0e21.chubo.resource.definitions.enums.NethelpersScopeR\x05scope\x12I\n" +
+	"\x04type\x18\t \x01(\x0e25.chubo.resource.definitions.enums.NethelpersRouteTypeR\x04type\x12\x14\n" +
 	"\x05flags\x18\n" +
 	" \x01(\rR\x05flags\x12U\n" +
-	"\bprotocol\x18\v \x01(\x0e29.talos.resource.definitions.enums.NethelpersRouteProtocolR\bprotocol\x12W\n" +
-	"\fconfig_layer\x18\f \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12\x10\n" +
+	"\bprotocol\x18\v \x01(\x0e29.chubo.resource.definitions.enums.NethelpersRouteProtocolR\bprotocol\x12W\n" +
+	"\fconfig_layer\x18\f \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12\x10\n" +
 	"\x03mtu\x18\r \x01(\rR\x03mtu\"\xad\x05\n" +
 	"\x0fRouteStatusSpec\x12J\n" +
-	"\x06family\x18\x01 \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x125\n" +
+	"\x06family\x18\x01 \x01(\x0e22.chubo.resource.definitions.enums.NethelpersFamilyR\x06family\x125\n" +
 	"\vdestination\x18\x02 \x01(\v2\x13.common.NetIPPrefixR\vdestination\x12%\n" +
 	"\x06source\x18\x03 \x01(\v2\r.common.NetIPR\x06source\x12'\n" +
 	"\agateway\x18\x04 \x01(\v2\r.common.NetIPR\agateway\x12$\n" +
 	"\x0eout_link_index\x18\x05 \x01(\rR\foutLinkIndex\x12\"\n" +
 	"\rout_link_name\x18\x06 \x01(\tR\voutLinkName\x12N\n" +
-	"\x05table\x18\a \x01(\x0e28.talos.resource.definitions.enums.NethelpersRoutingTableR\x05table\x12\x1a\n" +
+	"\x05table\x18\a \x01(\x0e28.chubo.resource.definitions.enums.NethelpersRoutingTableR\x05table\x12\x1a\n" +
 	"\bpriority\x18\b \x01(\rR\bpriority\x12G\n" +
-	"\x05scope\x18\t \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12I\n" +
+	"\x05scope\x18\t \x01(\x0e21.chubo.resource.definitions.enums.NethelpersScopeR\x05scope\x12I\n" +
 	"\x04type\x18\n" +
-	" \x01(\x0e25.talos.resource.definitions.enums.NethelpersRouteTypeR\x04type\x12\x14\n" +
+	" \x01(\x0e25.chubo.resource.definitions.enums.NethelpersRouteTypeR\x04type\x12\x14\n" +
 	"\x05flags\x18\v \x01(\rR\x05flags\x12U\n" +
-	"\bprotocol\x18\f \x01(\x0e29.talos.resource.definitions.enums.NethelpersRouteProtocolR\bprotocol\x12\x10\n" +
+	"\bprotocol\x18\f \x01(\x0e29.chubo.resource.definitions.enums.NethelpersRouteProtocolR\bprotocol\x12\x10\n" +
 	"\x03mtu\x18\r \x01(\rR\x03mtu\"#\n" +
 	"\aSTPSpec\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\"\xaf\x01\n" +
@@ -5077,7 +5077,7 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x12TimeServerSpecSpec\x12\x1f\n" +
 	"\vntp_servers\x18\x01 \x03(\tR\n" +
 	"ntpServers\x12W\n" +
-	"\fconfig_layer\x18\x02 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"7\n" +
+	"\fconfig_layer\x18\x02 \x01(\x0e24.chubo.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"7\n" +
 	"\x14TimeServerStatusSpec\x12\x1f\n" +
 	"\vntp_servers\x18\x01 \x03(\tR\n" +
 	"ntpServers\"n\n" +
@@ -5094,11 +5094,11 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\x0fVIPOperatorSpec\x12\x1d\n" +
 	"\x02ip\x18\x01 \x01(\v2\r.common.NetIPR\x02ip\x12%\n" +
 	"\x0egratuitous_arp\x18\x02 \x01(\bR\rgratuitousArp\x12\\\n" +
-	"\requinix_metal\x18\x03 \x01(\v27.talos.resource.definitions.network.VIPEquinixMetalSpecR\fequinixMetal\x12J\n" +
-	"\ah_cloud\x18\x04 \x01(\v21.talos.resource.definitions.network.VIPHCloudSpecR\x06hCloud\"r\n" +
+	"\requinix_metal\x18\x03 \x01(\v27.chubo.resource.definitions.network.VIPEquinixMetalSpecR\fequinixMetal\x12J\n" +
+	"\ah_cloud\x18\x04 \x01(\v21.chubo.resource.definitions.network.VIPHCloudSpecR\x06hCloud\"r\n" +
 	"\bVLANSpec\x12\x10\n" +
 	"\x03vid\x18\x01 \x01(\rR\x03vid\x12T\n" +
-	"\bprotocol\x18\x02 \x01(\x0e28.talos.resource.definitions.enums.NethelpersVLANProtocolR\bprotocol\"\x84\x02\n" +
+	"\bprotocol\x18\x02 \x01(\x0e28.chubo.resource.definitions.enums.NethelpersVLANProtocolR\bprotocol\"\x84\x02\n" +
 	"\rWireguardPeer\x12\x1d\n" +
 	"\n" +
 	"public_key\x18\x01 \x01(\tR\tpublicKey\x12#\n" +
@@ -5115,7 +5115,7 @@ const file_resource_definitions_network_network_proto_rawDesc = "" +
 	"\vlisten_port\x18\x03 \x01(\x03R\n" +
 	"listenPort\x12#\n" +
 	"\rfirewall_mark\x18\x04 \x01(\x03R\ffirewallMark\x12G\n" +
-	"\x05peers\x18\x05 \x03(\v21.talos.resource.definitions.network.WireguardPeerR\x05peersBw\n" +
+	"\x05peers\x18\x05 \x03(\v21.chubo.resource.definitions.network.WireguardPeerR\x05peersBw\n" +
 	"*dev.chubo.api.resource.definitions.networkZIgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/networkb\x06proto3"
 
 var (
@@ -5132,238 +5132,238 @@ func file_resource_definitions_network_network_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_network_network_proto_msgTypes = make([]protoimpl.MessageInfo, 61)
 var file_resource_definitions_network_network_proto_goTypes = []any{
-	(*AddressSpecSpec)(nil),                    // 0: talos.resource.definitions.network.AddressSpecSpec
-	(*AddressStatusSpec)(nil),                  // 1: talos.resource.definitions.network.AddressStatusSpec
-	(*BondMasterSpec)(nil),                     // 2: talos.resource.definitions.network.BondMasterSpec
-	(*BondSlave)(nil),                          // 3: talos.resource.definitions.network.BondSlave
-	(*BridgeMasterSpec)(nil),                   // 4: talos.resource.definitions.network.BridgeMasterSpec
-	(*BridgeSlave)(nil),                        // 5: talos.resource.definitions.network.BridgeSlave
-	(*BridgeVLANSpec)(nil),                     // 6: talos.resource.definitions.network.BridgeVLANSpec
-	(*ClientIdentifierSpec)(nil),               // 7: talos.resource.definitions.network.ClientIdentifierSpec
-	(*DHCP4OperatorSpec)(nil),                  // 8: talos.resource.definitions.network.DHCP4OperatorSpec
-	(*DHCP6OperatorSpec)(nil),                  // 9: talos.resource.definitions.network.DHCP6OperatorSpec
-	(*DNSResolveCacheSpec)(nil),                // 10: talos.resource.definitions.network.DNSResolveCacheSpec
-	(*EthernetChannelsSpec)(nil),               // 11: talos.resource.definitions.network.EthernetChannelsSpec
-	(*EthernetChannelsStatus)(nil),             // 12: talos.resource.definitions.network.EthernetChannelsStatus
-	(*EthernetFeatureStatus)(nil),              // 13: talos.resource.definitions.network.EthernetFeatureStatus
-	(*EthernetRingsSpec)(nil),                  // 14: talos.resource.definitions.network.EthernetRingsSpec
-	(*EthernetRingsStatus)(nil),                // 15: talos.resource.definitions.network.EthernetRingsStatus
-	(*EthernetSpecSpec)(nil),                   // 16: talos.resource.definitions.network.EthernetSpecSpec
-	(*EthernetStatusSpec)(nil),                 // 17: talos.resource.definitions.network.EthernetStatusSpec
-	(*HardwareAddrSpec)(nil),                   // 18: talos.resource.definitions.network.HardwareAddrSpec
-	(*HostDNSConfigSpec)(nil),                  // 19: talos.resource.definitions.network.HostDNSConfigSpec
-	(*HostnameSpecSpec)(nil),                   // 20: talos.resource.definitions.network.HostnameSpecSpec
-	(*HostnameStatusSpec)(nil),                 // 21: talos.resource.definitions.network.HostnameStatusSpec
-	(*LinkAliasSpecSpec)(nil),                  // 22: talos.resource.definitions.network.LinkAliasSpecSpec
-	(*LinkRefreshSpec)(nil),                    // 23: talos.resource.definitions.network.LinkRefreshSpec
-	(*LinkSpecSpec)(nil),                       // 24: talos.resource.definitions.network.LinkSpecSpec
-	(*LinkStatusSpec)(nil),                     // 25: talos.resource.definitions.network.LinkStatusSpec
-	(*NfTablesAddressMatch)(nil),               // 26: talos.resource.definitions.network.NfTablesAddressMatch
-	(*NfTablesChainSpec)(nil),                  // 27: talos.resource.definitions.network.NfTablesChainSpec
-	(*NfTablesClampMSS)(nil),                   // 28: talos.resource.definitions.network.NfTablesClampMSS
-	(*NfTablesConntrackStateMatch)(nil),        // 29: talos.resource.definitions.network.NfTablesConntrackStateMatch
-	(*NfTablesICMPTypeMatch)(nil),              // 30: talos.resource.definitions.network.NfTablesICMPTypeMatch
-	(*NfTablesIfNameMatch)(nil),                // 31: talos.resource.definitions.network.NfTablesIfNameMatch
-	(*NfTablesLayer4Match)(nil),                // 32: talos.resource.definitions.network.NfTablesLayer4Match
-	(*NfTablesLimitMatch)(nil),                 // 33: talos.resource.definitions.network.NfTablesLimitMatch
-	(*NfTablesMark)(nil),                       // 34: talos.resource.definitions.network.NfTablesMark
-	(*NfTablesPortMatch)(nil),                  // 35: talos.resource.definitions.network.NfTablesPortMatch
-	(*NfTablesRule)(nil),                       // 36: talos.resource.definitions.network.NfTablesRule
-	(*NodeAddressFilterSpec)(nil),              // 37: talos.resource.definitions.network.NodeAddressFilterSpec
-	(*NodeAddressSortAlgorithmSpec)(nil),       // 38: talos.resource.definitions.network.NodeAddressSortAlgorithmSpec
-	(*NodeAddressSpec)(nil),                    // 39: talos.resource.definitions.network.NodeAddressSpec
-	(*OperatorSpecSpec)(nil),                   // 40: talos.resource.definitions.network.OperatorSpecSpec
-	(*PlatformConfigSpec)(nil),                 // 41: talos.resource.definitions.network.PlatformConfigSpec
-	(*PortRange)(nil),                          // 42: talos.resource.definitions.network.PortRange
-	(*ProbeSpecSpec)(nil),                      // 43: talos.resource.definitions.network.ProbeSpecSpec
-	(*ProbeStatusSpec)(nil),                    // 44: talos.resource.definitions.network.ProbeStatusSpec
-	(*ResolverSpecSpec)(nil),                   // 45: talos.resource.definitions.network.ResolverSpecSpec
-	(*ResolverStatusSpec)(nil),                 // 46: talos.resource.definitions.network.ResolverStatusSpec
-	(*RouteSpecSpec)(nil),                      // 47: talos.resource.definitions.network.RouteSpecSpec
-	(*RouteStatusSpec)(nil),                    // 48: talos.resource.definitions.network.RouteStatusSpec
-	(*STPSpec)(nil),                            // 49: talos.resource.definitions.network.STPSpec
-	(*StatusSpec)(nil),                         // 50: talos.resource.definitions.network.StatusSpec
-	(*TCPProbeSpec)(nil),                       // 51: talos.resource.definitions.network.TCPProbeSpec
-	(*TimeServerSpecSpec)(nil),                 // 52: talos.resource.definitions.network.TimeServerSpecSpec
-	(*TimeServerStatusSpec)(nil),               // 53: talos.resource.definitions.network.TimeServerStatusSpec
-	(*VIPEquinixMetalSpec)(nil),                // 54: talos.resource.definitions.network.VIPEquinixMetalSpec
-	(*VIPHCloudSpec)(nil),                      // 55: talos.resource.definitions.network.VIPHCloudSpec
-	(*VIPOperatorSpec)(nil),                    // 56: talos.resource.definitions.network.VIPOperatorSpec
-	(*VLANSpec)(nil),                           // 57: talos.resource.definitions.network.VLANSpec
-	(*WireguardPeer)(nil),                      // 58: talos.resource.definitions.network.WireguardPeer
-	(*WireguardSpec)(nil),                      // 59: talos.resource.definitions.network.WireguardSpec
-	nil,                                        // 60: talos.resource.definitions.network.EthernetSpecSpec.FeaturesEntry
+	(*AddressSpecSpec)(nil),                    // 0: chubo.resource.definitions.network.AddressSpecSpec
+	(*AddressStatusSpec)(nil),                  // 1: chubo.resource.definitions.network.AddressStatusSpec
+	(*BondMasterSpec)(nil),                     // 2: chubo.resource.definitions.network.BondMasterSpec
+	(*BondSlave)(nil),                          // 3: chubo.resource.definitions.network.BondSlave
+	(*BridgeMasterSpec)(nil),                   // 4: chubo.resource.definitions.network.BridgeMasterSpec
+	(*BridgeSlave)(nil),                        // 5: chubo.resource.definitions.network.BridgeSlave
+	(*BridgeVLANSpec)(nil),                     // 6: chubo.resource.definitions.network.BridgeVLANSpec
+	(*ClientIdentifierSpec)(nil),               // 7: chubo.resource.definitions.network.ClientIdentifierSpec
+	(*DHCP4OperatorSpec)(nil),                  // 8: chubo.resource.definitions.network.DHCP4OperatorSpec
+	(*DHCP6OperatorSpec)(nil),                  // 9: chubo.resource.definitions.network.DHCP6OperatorSpec
+	(*DNSResolveCacheSpec)(nil),                // 10: chubo.resource.definitions.network.DNSResolveCacheSpec
+	(*EthernetChannelsSpec)(nil),               // 11: chubo.resource.definitions.network.EthernetChannelsSpec
+	(*EthernetChannelsStatus)(nil),             // 12: chubo.resource.definitions.network.EthernetChannelsStatus
+	(*EthernetFeatureStatus)(nil),              // 13: chubo.resource.definitions.network.EthernetFeatureStatus
+	(*EthernetRingsSpec)(nil),                  // 14: chubo.resource.definitions.network.EthernetRingsSpec
+	(*EthernetRingsStatus)(nil),                // 15: chubo.resource.definitions.network.EthernetRingsStatus
+	(*EthernetSpecSpec)(nil),                   // 16: chubo.resource.definitions.network.EthernetSpecSpec
+	(*EthernetStatusSpec)(nil),                 // 17: chubo.resource.definitions.network.EthernetStatusSpec
+	(*HardwareAddrSpec)(nil),                   // 18: chubo.resource.definitions.network.HardwareAddrSpec
+	(*HostDNSConfigSpec)(nil),                  // 19: chubo.resource.definitions.network.HostDNSConfigSpec
+	(*HostnameSpecSpec)(nil),                   // 20: chubo.resource.definitions.network.HostnameSpecSpec
+	(*HostnameStatusSpec)(nil),                 // 21: chubo.resource.definitions.network.HostnameStatusSpec
+	(*LinkAliasSpecSpec)(nil),                  // 22: chubo.resource.definitions.network.LinkAliasSpecSpec
+	(*LinkRefreshSpec)(nil),                    // 23: chubo.resource.definitions.network.LinkRefreshSpec
+	(*LinkSpecSpec)(nil),                       // 24: chubo.resource.definitions.network.LinkSpecSpec
+	(*LinkStatusSpec)(nil),                     // 25: chubo.resource.definitions.network.LinkStatusSpec
+	(*NfTablesAddressMatch)(nil),               // 26: chubo.resource.definitions.network.NfTablesAddressMatch
+	(*NfTablesChainSpec)(nil),                  // 27: chubo.resource.definitions.network.NfTablesChainSpec
+	(*NfTablesClampMSS)(nil),                   // 28: chubo.resource.definitions.network.NfTablesClampMSS
+	(*NfTablesConntrackStateMatch)(nil),        // 29: chubo.resource.definitions.network.NfTablesConntrackStateMatch
+	(*NfTablesICMPTypeMatch)(nil),              // 30: chubo.resource.definitions.network.NfTablesICMPTypeMatch
+	(*NfTablesIfNameMatch)(nil),                // 31: chubo.resource.definitions.network.NfTablesIfNameMatch
+	(*NfTablesLayer4Match)(nil),                // 32: chubo.resource.definitions.network.NfTablesLayer4Match
+	(*NfTablesLimitMatch)(nil),                 // 33: chubo.resource.definitions.network.NfTablesLimitMatch
+	(*NfTablesMark)(nil),                       // 34: chubo.resource.definitions.network.NfTablesMark
+	(*NfTablesPortMatch)(nil),                  // 35: chubo.resource.definitions.network.NfTablesPortMatch
+	(*NfTablesRule)(nil),                       // 36: chubo.resource.definitions.network.NfTablesRule
+	(*NodeAddressFilterSpec)(nil),              // 37: chubo.resource.definitions.network.NodeAddressFilterSpec
+	(*NodeAddressSortAlgorithmSpec)(nil),       // 38: chubo.resource.definitions.network.NodeAddressSortAlgorithmSpec
+	(*NodeAddressSpec)(nil),                    // 39: chubo.resource.definitions.network.NodeAddressSpec
+	(*OperatorSpecSpec)(nil),                   // 40: chubo.resource.definitions.network.OperatorSpecSpec
+	(*PlatformConfigSpec)(nil),                 // 41: chubo.resource.definitions.network.PlatformConfigSpec
+	(*PortRange)(nil),                          // 42: chubo.resource.definitions.network.PortRange
+	(*ProbeSpecSpec)(nil),                      // 43: chubo.resource.definitions.network.ProbeSpecSpec
+	(*ProbeStatusSpec)(nil),                    // 44: chubo.resource.definitions.network.ProbeStatusSpec
+	(*ResolverSpecSpec)(nil),                   // 45: chubo.resource.definitions.network.ResolverSpecSpec
+	(*ResolverStatusSpec)(nil),                 // 46: chubo.resource.definitions.network.ResolverStatusSpec
+	(*RouteSpecSpec)(nil),                      // 47: chubo.resource.definitions.network.RouteSpecSpec
+	(*RouteStatusSpec)(nil),                    // 48: chubo.resource.definitions.network.RouteStatusSpec
+	(*STPSpec)(nil),                            // 49: chubo.resource.definitions.network.STPSpec
+	(*StatusSpec)(nil),                         // 50: chubo.resource.definitions.network.StatusSpec
+	(*TCPProbeSpec)(nil),                       // 51: chubo.resource.definitions.network.TCPProbeSpec
+	(*TimeServerSpecSpec)(nil),                 // 52: chubo.resource.definitions.network.TimeServerSpecSpec
+	(*TimeServerStatusSpec)(nil),               // 53: chubo.resource.definitions.network.TimeServerStatusSpec
+	(*VIPEquinixMetalSpec)(nil),                // 54: chubo.resource.definitions.network.VIPEquinixMetalSpec
+	(*VIPHCloudSpec)(nil),                      // 55: chubo.resource.definitions.network.VIPHCloudSpec
+	(*VIPOperatorSpec)(nil),                    // 56: chubo.resource.definitions.network.VIPOperatorSpec
+	(*VLANSpec)(nil),                           // 57: chubo.resource.definitions.network.VLANSpec
+	(*WireguardPeer)(nil),                      // 58: chubo.resource.definitions.network.WireguardPeer
+	(*WireguardSpec)(nil),                      // 59: chubo.resource.definitions.network.WireguardSpec
+	nil,                                        // 60: chubo.resource.definitions.network.EthernetSpecSpec.FeaturesEntry
 	(*common.NetIPPrefix)(nil),                 // 61: common.NetIPPrefix
-	(enums.NethelpersFamily)(0),                // 62: talos.resource.definitions.enums.NethelpersFamily
-	(enums.NethelpersScope)(0),                 // 63: talos.resource.definitions.enums.NethelpersScope
-	(enums.NetworkConfigLayer)(0),              // 64: talos.resource.definitions.enums.NetworkConfigLayer
+	(enums.NethelpersFamily)(0),                // 62: chubo.resource.definitions.enums.NethelpersFamily
+	(enums.NethelpersScope)(0),                 // 63: chubo.resource.definitions.enums.NethelpersScope
+	(enums.NetworkConfigLayer)(0),              // 64: chubo.resource.definitions.enums.NetworkConfigLayer
 	(*common.NetIP)(nil),                       // 65: common.NetIP
-	(enums.NethelpersBondMode)(0),              // 66: talos.resource.definitions.enums.NethelpersBondMode
-	(enums.NethelpersBondXmitHashPolicy)(0),    // 67: talos.resource.definitions.enums.NethelpersBondXmitHashPolicy
-	(enums.NethelpersLACPRate)(0),              // 68: talos.resource.definitions.enums.NethelpersLACPRate
-	(enums.NethelpersARPValidate)(0),           // 69: talos.resource.definitions.enums.NethelpersARPValidate
-	(enums.NethelpersARPAllTargets)(0),         // 70: talos.resource.definitions.enums.NethelpersARPAllTargets
-	(enums.NethelpersPrimaryReselect)(0),       // 71: talos.resource.definitions.enums.NethelpersPrimaryReselect
-	(enums.NethelpersFailOverMAC)(0),           // 72: talos.resource.definitions.enums.NethelpersFailOverMAC
-	(enums.NethelpersADSelect)(0),              // 73: talos.resource.definitions.enums.NethelpersADSelect
-	(enums.NethelpersADLACPActive)(0),          // 74: talos.resource.definitions.enums.NethelpersADLACPActive
-	(enums.NethelpersClientIdentifier)(0),      // 75: talos.resource.definitions.enums.NethelpersClientIdentifier
-	(enums.NethelpersWOLMode)(0),               // 76: talos.resource.definitions.enums.NethelpersWOLMode
-	(enums.NethelpersPort)(0),                  // 77: talos.resource.definitions.enums.NethelpersPort
-	(enums.NethelpersDuplex)(0),                // 78: talos.resource.definitions.enums.NethelpersDuplex
+	(enums.NethelpersBondMode)(0),              // 66: chubo.resource.definitions.enums.NethelpersBondMode
+	(enums.NethelpersBondXmitHashPolicy)(0),    // 67: chubo.resource.definitions.enums.NethelpersBondXmitHashPolicy
+	(enums.NethelpersLACPRate)(0),              // 68: chubo.resource.definitions.enums.NethelpersLACPRate
+	(enums.NethelpersARPValidate)(0),           // 69: chubo.resource.definitions.enums.NethelpersARPValidate
+	(enums.NethelpersARPAllTargets)(0),         // 70: chubo.resource.definitions.enums.NethelpersARPAllTargets
+	(enums.NethelpersPrimaryReselect)(0),       // 71: chubo.resource.definitions.enums.NethelpersPrimaryReselect
+	(enums.NethelpersFailOverMAC)(0),           // 72: chubo.resource.definitions.enums.NethelpersFailOverMAC
+	(enums.NethelpersADSelect)(0),              // 73: chubo.resource.definitions.enums.NethelpersADSelect
+	(enums.NethelpersADLACPActive)(0),          // 74: chubo.resource.definitions.enums.NethelpersADLACPActive
+	(enums.NethelpersClientIdentifier)(0),      // 75: chubo.resource.definitions.enums.NethelpersClientIdentifier
+	(enums.NethelpersWOLMode)(0),               // 76: chubo.resource.definitions.enums.NethelpersWOLMode
+	(enums.NethelpersPort)(0),                  // 77: chubo.resource.definitions.enums.NethelpersPort
+	(enums.NethelpersDuplex)(0),                // 78: chubo.resource.definitions.enums.NethelpersDuplex
 	(*common.NetIPPort)(nil),                   // 79: common.NetIPPort
-	(enums.NethelpersLinkType)(0),              // 80: talos.resource.definitions.enums.NethelpersLinkType
-	(enums.NethelpersOperationalState)(0),      // 81: talos.resource.definitions.enums.NethelpersOperationalState
-	(enums.NethelpersNfTablesChainHook)(0),     // 82: talos.resource.definitions.enums.NethelpersNfTablesChainHook
-	(enums.NethelpersNfTablesChainPriority)(0), // 83: talos.resource.definitions.enums.NethelpersNfTablesChainPriority
-	(enums.NethelpersNfTablesVerdict)(0),       // 84: talos.resource.definitions.enums.NethelpersNfTablesVerdict
-	(enums.NethelpersConntrackState)(0),        // 85: talos.resource.definitions.enums.NethelpersConntrackState
-	(enums.NethelpersICMPType)(0),              // 86: talos.resource.definitions.enums.NethelpersICMPType
-	(enums.NethelpersMatchOperator)(0),         // 87: talos.resource.definitions.enums.NethelpersMatchOperator
-	(enums.NethelpersProtocol)(0),              // 88: talos.resource.definitions.enums.NethelpersProtocol
-	(enums.NethelpersAddressSortAlgorithm)(0),  // 89: talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
-	(enums.NetworkOperator)(0),                 // 90: talos.resource.definitions.enums.NetworkOperator
-	(*runtime.PlatformMetadataSpec)(nil),       // 91: talos.resource.definitions.runtime.PlatformMetadataSpec
+	(enums.NethelpersLinkType)(0),              // 80: chubo.resource.definitions.enums.NethelpersLinkType
+	(enums.NethelpersOperationalState)(0),      // 81: chubo.resource.definitions.enums.NethelpersOperationalState
+	(enums.NethelpersNfTablesChainHook)(0),     // 82: chubo.resource.definitions.enums.NethelpersNfTablesChainHook
+	(enums.NethelpersNfTablesChainPriority)(0), // 83: chubo.resource.definitions.enums.NethelpersNfTablesChainPriority
+	(enums.NethelpersNfTablesVerdict)(0),       // 84: chubo.resource.definitions.enums.NethelpersNfTablesVerdict
+	(enums.NethelpersConntrackState)(0),        // 85: chubo.resource.definitions.enums.NethelpersConntrackState
+	(enums.NethelpersICMPType)(0),              // 86: chubo.resource.definitions.enums.NethelpersICMPType
+	(enums.NethelpersMatchOperator)(0),         // 87: chubo.resource.definitions.enums.NethelpersMatchOperator
+	(enums.NethelpersProtocol)(0),              // 88: chubo.resource.definitions.enums.NethelpersProtocol
+	(enums.NethelpersAddressSortAlgorithm)(0),  // 89: chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm
+	(enums.NetworkOperator)(0),                 // 90: chubo.resource.definitions.enums.NetworkOperator
+	(*runtime.PlatformMetadataSpec)(nil),       // 91: chubo.resource.definitions.runtime.PlatformMetadataSpec
 	(*durationpb.Duration)(nil),                // 92: google.protobuf.Duration
-	(enums.NethelpersRoutingTable)(0),          // 93: talos.resource.definitions.enums.NethelpersRoutingTable
-	(enums.NethelpersRouteType)(0),             // 94: talos.resource.definitions.enums.NethelpersRouteType
-	(enums.NethelpersRouteProtocol)(0),         // 95: talos.resource.definitions.enums.NethelpersRouteProtocol
-	(enums.NethelpersVLANProtocol)(0),          // 96: talos.resource.definitions.enums.NethelpersVLANProtocol
+	(enums.NethelpersRoutingTable)(0),          // 93: chubo.resource.definitions.enums.NethelpersRoutingTable
+	(enums.NethelpersRouteType)(0),             // 94: chubo.resource.definitions.enums.NethelpersRouteType
+	(enums.NethelpersRouteProtocol)(0),         // 95: chubo.resource.definitions.enums.NethelpersRouteProtocol
+	(enums.NethelpersVLANProtocol)(0),          // 96: chubo.resource.definitions.enums.NethelpersVLANProtocol
 }
 var file_resource_definitions_network_network_proto_depIdxs = []int32{
-	61,  // 0: talos.resource.definitions.network.AddressSpecSpec.address:type_name -> common.NetIPPrefix
-	62,  // 1: talos.resource.definitions.network.AddressSpecSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
-	63,  // 2: talos.resource.definitions.network.AddressSpecSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
-	64,  // 3: talos.resource.definitions.network.AddressSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	61,  // 4: talos.resource.definitions.network.AddressStatusSpec.address:type_name -> common.NetIPPrefix
-	65,  // 5: talos.resource.definitions.network.AddressStatusSpec.local:type_name -> common.NetIP
-	65,  // 6: talos.resource.definitions.network.AddressStatusSpec.broadcast:type_name -> common.NetIP
-	65,  // 7: talos.resource.definitions.network.AddressStatusSpec.anycast:type_name -> common.NetIP
-	65,  // 8: talos.resource.definitions.network.AddressStatusSpec.multicast:type_name -> common.NetIP
-	62,  // 9: talos.resource.definitions.network.AddressStatusSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
-	63,  // 10: talos.resource.definitions.network.AddressStatusSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
-	66,  // 11: talos.resource.definitions.network.BondMasterSpec.mode:type_name -> talos.resource.definitions.enums.NethelpersBondMode
-	67,  // 12: talos.resource.definitions.network.BondMasterSpec.hash_policy:type_name -> talos.resource.definitions.enums.NethelpersBondXmitHashPolicy
-	68,  // 13: talos.resource.definitions.network.BondMasterSpec.lacp_rate:type_name -> talos.resource.definitions.enums.NethelpersLACPRate
-	69,  // 14: talos.resource.definitions.network.BondMasterSpec.arp_validate:type_name -> talos.resource.definitions.enums.NethelpersARPValidate
-	70,  // 15: talos.resource.definitions.network.BondMasterSpec.arp_all_targets:type_name -> talos.resource.definitions.enums.NethelpersARPAllTargets
-	71,  // 16: talos.resource.definitions.network.BondMasterSpec.primary_reselect:type_name -> talos.resource.definitions.enums.NethelpersPrimaryReselect
-	72,  // 17: talos.resource.definitions.network.BondMasterSpec.fail_over_mac:type_name -> talos.resource.definitions.enums.NethelpersFailOverMAC
-	73,  // 18: talos.resource.definitions.network.BondMasterSpec.ad_select:type_name -> talos.resource.definitions.enums.NethelpersADSelect
-	65,  // 19: talos.resource.definitions.network.BondMasterSpec.arpip_targets:type_name -> common.NetIP
-	65,  // 20: talos.resource.definitions.network.BondMasterSpec.nsip6_targets:type_name -> common.NetIP
-	74,  // 21: talos.resource.definitions.network.BondMasterSpec.adlacp_active:type_name -> talos.resource.definitions.enums.NethelpersADLACPActive
-	49,  // 22: talos.resource.definitions.network.BridgeMasterSpec.stp:type_name -> talos.resource.definitions.network.STPSpec
-	6,   // 23: talos.resource.definitions.network.BridgeMasterSpec.vlan:type_name -> talos.resource.definitions.network.BridgeVLANSpec
-	75,  // 24: talos.resource.definitions.network.ClientIdentifierSpec.client_identifier:type_name -> talos.resource.definitions.enums.NethelpersClientIdentifier
-	7,   // 25: talos.resource.definitions.network.DHCP4OperatorSpec.client_identifier:type_name -> talos.resource.definitions.network.ClientIdentifierSpec
-	7,   // 26: talos.resource.definitions.network.DHCP6OperatorSpec.client_identifier:type_name -> talos.resource.definitions.network.ClientIdentifierSpec
-	14,  // 27: talos.resource.definitions.network.EthernetSpecSpec.rings:type_name -> talos.resource.definitions.network.EthernetRingsSpec
-	60,  // 28: talos.resource.definitions.network.EthernetSpecSpec.features:type_name -> talos.resource.definitions.network.EthernetSpecSpec.FeaturesEntry
-	11,  // 29: talos.resource.definitions.network.EthernetSpecSpec.channels:type_name -> talos.resource.definitions.network.EthernetChannelsSpec
-	76,  // 30: talos.resource.definitions.network.EthernetSpecSpec.wake_on_lan:type_name -> talos.resource.definitions.enums.NethelpersWOLMode
-	77,  // 31: talos.resource.definitions.network.EthernetStatusSpec.port:type_name -> talos.resource.definitions.enums.NethelpersPort
-	78,  // 32: talos.resource.definitions.network.EthernetStatusSpec.duplex:type_name -> talos.resource.definitions.enums.NethelpersDuplex
-	15,  // 33: talos.resource.definitions.network.EthernetStatusSpec.rings:type_name -> talos.resource.definitions.network.EthernetRingsStatus
-	13,  // 34: talos.resource.definitions.network.EthernetStatusSpec.features:type_name -> talos.resource.definitions.network.EthernetFeatureStatus
-	12,  // 35: talos.resource.definitions.network.EthernetStatusSpec.channels:type_name -> talos.resource.definitions.network.EthernetChannelsStatus
-	76,  // 36: talos.resource.definitions.network.EthernetStatusSpec.wake_on_lan:type_name -> talos.resource.definitions.enums.NethelpersWOLMode
-	79,  // 37: talos.resource.definitions.network.HostDNSConfigSpec.listen_addresses:type_name -> common.NetIPPort
-	65,  // 38: talos.resource.definitions.network.HostDNSConfigSpec.service_host_dns_address:type_name -> common.NetIP
-	64,  // 39: talos.resource.definitions.network.HostnameSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	80,  // 40: talos.resource.definitions.network.LinkSpecSpec.type:type_name -> talos.resource.definitions.enums.NethelpersLinkType
-	3,   // 41: talos.resource.definitions.network.LinkSpecSpec.bond_slave:type_name -> talos.resource.definitions.network.BondSlave
-	5,   // 42: talos.resource.definitions.network.LinkSpecSpec.bridge_slave:type_name -> talos.resource.definitions.network.BridgeSlave
-	57,  // 43: talos.resource.definitions.network.LinkSpecSpec.vlan:type_name -> talos.resource.definitions.network.VLANSpec
-	2,   // 44: talos.resource.definitions.network.LinkSpecSpec.bond_master:type_name -> talos.resource.definitions.network.BondMasterSpec
-	4,   // 45: talos.resource.definitions.network.LinkSpecSpec.bridge_master:type_name -> talos.resource.definitions.network.BridgeMasterSpec
-	59,  // 46: talos.resource.definitions.network.LinkSpecSpec.wireguard:type_name -> talos.resource.definitions.network.WireguardSpec
-	64,  // 47: talos.resource.definitions.network.LinkSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	80,  // 48: talos.resource.definitions.network.LinkStatusSpec.type:type_name -> talos.resource.definitions.enums.NethelpersLinkType
-	81,  // 49: talos.resource.definitions.network.LinkStatusSpec.operational_state:type_name -> talos.resource.definitions.enums.NethelpersOperationalState
-	77,  // 50: talos.resource.definitions.network.LinkStatusSpec.port:type_name -> talos.resource.definitions.enums.NethelpersPort
-	78,  // 51: talos.resource.definitions.network.LinkStatusSpec.duplex:type_name -> talos.resource.definitions.enums.NethelpersDuplex
-	57,  // 52: talos.resource.definitions.network.LinkStatusSpec.vlan:type_name -> talos.resource.definitions.network.VLANSpec
-	4,   // 53: talos.resource.definitions.network.LinkStatusSpec.bridge_master:type_name -> talos.resource.definitions.network.BridgeMasterSpec
-	2,   // 54: talos.resource.definitions.network.LinkStatusSpec.bond_master:type_name -> talos.resource.definitions.network.BondMasterSpec
-	59,  // 55: talos.resource.definitions.network.LinkStatusSpec.wireguard:type_name -> talos.resource.definitions.network.WireguardSpec
-	61,  // 56: talos.resource.definitions.network.NfTablesAddressMatch.include_subnets:type_name -> common.NetIPPrefix
-	61,  // 57: talos.resource.definitions.network.NfTablesAddressMatch.exclude_subnets:type_name -> common.NetIPPrefix
-	82,  // 58: talos.resource.definitions.network.NfTablesChainSpec.hook:type_name -> talos.resource.definitions.enums.NethelpersNfTablesChainHook
-	83,  // 59: talos.resource.definitions.network.NfTablesChainSpec.priority:type_name -> talos.resource.definitions.enums.NethelpersNfTablesChainPriority
-	36,  // 60: talos.resource.definitions.network.NfTablesChainSpec.rules:type_name -> talos.resource.definitions.network.NfTablesRule
-	84,  // 61: talos.resource.definitions.network.NfTablesChainSpec.policy:type_name -> talos.resource.definitions.enums.NethelpersNfTablesVerdict
-	85,  // 62: talos.resource.definitions.network.NfTablesConntrackStateMatch.states:type_name -> talos.resource.definitions.enums.NethelpersConntrackState
-	86,  // 63: talos.resource.definitions.network.NfTablesICMPTypeMatch.types:type_name -> talos.resource.definitions.enums.NethelpersICMPType
-	87,  // 64: talos.resource.definitions.network.NfTablesIfNameMatch.operator:type_name -> talos.resource.definitions.enums.NethelpersMatchOperator
-	88,  // 65: talos.resource.definitions.network.NfTablesLayer4Match.protocol:type_name -> talos.resource.definitions.enums.NethelpersProtocol
-	35,  // 66: talos.resource.definitions.network.NfTablesLayer4Match.match_source_port:type_name -> talos.resource.definitions.network.NfTablesPortMatch
-	35,  // 67: talos.resource.definitions.network.NfTablesLayer4Match.match_destination_port:type_name -> talos.resource.definitions.network.NfTablesPortMatch
-	30,  // 68: talos.resource.definitions.network.NfTablesLayer4Match.match_icmp_type:type_name -> talos.resource.definitions.network.NfTablesICMPTypeMatch
-	42,  // 69: talos.resource.definitions.network.NfTablesPortMatch.ranges:type_name -> talos.resource.definitions.network.PortRange
-	31,  // 70: talos.resource.definitions.network.NfTablesRule.match_o_if_name:type_name -> talos.resource.definitions.network.NfTablesIfNameMatch
-	84,  // 71: talos.resource.definitions.network.NfTablesRule.verdict:type_name -> talos.resource.definitions.enums.NethelpersNfTablesVerdict
-	34,  // 72: talos.resource.definitions.network.NfTablesRule.match_mark:type_name -> talos.resource.definitions.network.NfTablesMark
-	34,  // 73: talos.resource.definitions.network.NfTablesRule.set_mark:type_name -> talos.resource.definitions.network.NfTablesMark
-	26,  // 74: talos.resource.definitions.network.NfTablesRule.match_source_address:type_name -> talos.resource.definitions.network.NfTablesAddressMatch
-	26,  // 75: talos.resource.definitions.network.NfTablesRule.match_destination_address:type_name -> talos.resource.definitions.network.NfTablesAddressMatch
-	32,  // 76: talos.resource.definitions.network.NfTablesRule.match_layer4:type_name -> talos.resource.definitions.network.NfTablesLayer4Match
-	31,  // 77: talos.resource.definitions.network.NfTablesRule.match_i_if_name:type_name -> talos.resource.definitions.network.NfTablesIfNameMatch
-	28,  // 78: talos.resource.definitions.network.NfTablesRule.clamp_mss:type_name -> talos.resource.definitions.network.NfTablesClampMSS
-	33,  // 79: talos.resource.definitions.network.NfTablesRule.match_limit:type_name -> talos.resource.definitions.network.NfTablesLimitMatch
-	29,  // 80: talos.resource.definitions.network.NfTablesRule.match_conntrack_state:type_name -> talos.resource.definitions.network.NfTablesConntrackStateMatch
-	61,  // 81: talos.resource.definitions.network.NodeAddressFilterSpec.include_subnets:type_name -> common.NetIPPrefix
-	61,  // 82: talos.resource.definitions.network.NodeAddressFilterSpec.exclude_subnets:type_name -> common.NetIPPrefix
-	89,  // 83: talos.resource.definitions.network.NodeAddressSortAlgorithmSpec.algorithm:type_name -> talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
-	61,  // 84: talos.resource.definitions.network.NodeAddressSpec.addresses:type_name -> common.NetIPPrefix
-	89,  // 85: talos.resource.definitions.network.NodeAddressSpec.sort_algorithm:type_name -> talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
-	90,  // 86: talos.resource.definitions.network.OperatorSpecSpec.operator:type_name -> talos.resource.definitions.enums.NetworkOperator
-	8,   // 87: talos.resource.definitions.network.OperatorSpecSpec.dhcp4:type_name -> talos.resource.definitions.network.DHCP4OperatorSpec
-	9,   // 88: talos.resource.definitions.network.OperatorSpecSpec.dhcp6:type_name -> talos.resource.definitions.network.DHCP6OperatorSpec
-	56,  // 89: talos.resource.definitions.network.OperatorSpecSpec.vip:type_name -> talos.resource.definitions.network.VIPOperatorSpec
-	64,  // 90: talos.resource.definitions.network.OperatorSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	0,   // 91: talos.resource.definitions.network.PlatformConfigSpec.addresses:type_name -> talos.resource.definitions.network.AddressSpecSpec
-	24,  // 92: talos.resource.definitions.network.PlatformConfigSpec.links:type_name -> talos.resource.definitions.network.LinkSpecSpec
-	47,  // 93: talos.resource.definitions.network.PlatformConfigSpec.routes:type_name -> talos.resource.definitions.network.RouteSpecSpec
-	20,  // 94: talos.resource.definitions.network.PlatformConfigSpec.hostnames:type_name -> talos.resource.definitions.network.HostnameSpecSpec
-	45,  // 95: talos.resource.definitions.network.PlatformConfigSpec.resolvers:type_name -> talos.resource.definitions.network.ResolverSpecSpec
-	52,  // 96: talos.resource.definitions.network.PlatformConfigSpec.time_servers:type_name -> talos.resource.definitions.network.TimeServerSpecSpec
-	40,  // 97: talos.resource.definitions.network.PlatformConfigSpec.operators:type_name -> talos.resource.definitions.network.OperatorSpecSpec
-	65,  // 98: talos.resource.definitions.network.PlatformConfigSpec.external_ips:type_name -> common.NetIP
-	43,  // 99: talos.resource.definitions.network.PlatformConfigSpec.probes:type_name -> talos.resource.definitions.network.ProbeSpecSpec
-	91,  // 100: talos.resource.definitions.network.PlatformConfigSpec.metadata:type_name -> talos.resource.definitions.runtime.PlatformMetadataSpec
-	92,  // 101: talos.resource.definitions.network.ProbeSpecSpec.interval:type_name -> google.protobuf.Duration
-	51,  // 102: talos.resource.definitions.network.ProbeSpecSpec.tcp:type_name -> talos.resource.definitions.network.TCPProbeSpec
-	64,  // 103: talos.resource.definitions.network.ProbeSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	65,  // 104: talos.resource.definitions.network.ResolverSpecSpec.dns_servers:type_name -> common.NetIP
-	64,  // 105: talos.resource.definitions.network.ResolverSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	65,  // 106: talos.resource.definitions.network.ResolverStatusSpec.dns_servers:type_name -> common.NetIP
-	62,  // 107: talos.resource.definitions.network.RouteSpecSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
-	61,  // 108: talos.resource.definitions.network.RouteSpecSpec.destination:type_name -> common.NetIPPrefix
-	65,  // 109: talos.resource.definitions.network.RouteSpecSpec.source:type_name -> common.NetIP
-	65,  // 110: talos.resource.definitions.network.RouteSpecSpec.gateway:type_name -> common.NetIP
-	93,  // 111: talos.resource.definitions.network.RouteSpecSpec.table:type_name -> talos.resource.definitions.enums.NethelpersRoutingTable
-	63,  // 112: talos.resource.definitions.network.RouteSpecSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
-	94,  // 113: talos.resource.definitions.network.RouteSpecSpec.type:type_name -> talos.resource.definitions.enums.NethelpersRouteType
-	95,  // 114: talos.resource.definitions.network.RouteSpecSpec.protocol:type_name -> talos.resource.definitions.enums.NethelpersRouteProtocol
-	64,  // 115: talos.resource.definitions.network.RouteSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	62,  // 116: talos.resource.definitions.network.RouteStatusSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
-	61,  // 117: talos.resource.definitions.network.RouteStatusSpec.destination:type_name -> common.NetIPPrefix
-	65,  // 118: talos.resource.definitions.network.RouteStatusSpec.source:type_name -> common.NetIP
-	65,  // 119: talos.resource.definitions.network.RouteStatusSpec.gateway:type_name -> common.NetIP
-	93,  // 120: talos.resource.definitions.network.RouteStatusSpec.table:type_name -> talos.resource.definitions.enums.NethelpersRoutingTable
-	63,  // 121: talos.resource.definitions.network.RouteStatusSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
-	94,  // 122: talos.resource.definitions.network.RouteStatusSpec.type:type_name -> talos.resource.definitions.enums.NethelpersRouteType
-	95,  // 123: talos.resource.definitions.network.RouteStatusSpec.protocol:type_name -> talos.resource.definitions.enums.NethelpersRouteProtocol
-	92,  // 124: talos.resource.definitions.network.TCPProbeSpec.timeout:type_name -> google.protobuf.Duration
-	64,  // 125: talos.resource.definitions.network.TimeServerSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
-	65,  // 126: talos.resource.definitions.network.VIPOperatorSpec.ip:type_name -> common.NetIP
-	54,  // 127: talos.resource.definitions.network.VIPOperatorSpec.equinix_metal:type_name -> talos.resource.definitions.network.VIPEquinixMetalSpec
-	55,  // 128: talos.resource.definitions.network.VIPOperatorSpec.h_cloud:type_name -> talos.resource.definitions.network.VIPHCloudSpec
-	96,  // 129: talos.resource.definitions.network.VLANSpec.protocol:type_name -> talos.resource.definitions.enums.NethelpersVLANProtocol
-	92,  // 130: talos.resource.definitions.network.WireguardPeer.persistent_keepalive_interval:type_name -> google.protobuf.Duration
-	61,  // 131: talos.resource.definitions.network.WireguardPeer.allowed_ips:type_name -> common.NetIPPrefix
-	58,  // 132: talos.resource.definitions.network.WireguardSpec.peers:type_name -> talos.resource.definitions.network.WireguardPeer
+	61,  // 0: chubo.resource.definitions.network.AddressSpecSpec.address:type_name -> common.NetIPPrefix
+	62,  // 1: chubo.resource.definitions.network.AddressSpecSpec.family:type_name -> chubo.resource.definitions.enums.NethelpersFamily
+	63,  // 2: chubo.resource.definitions.network.AddressSpecSpec.scope:type_name -> chubo.resource.definitions.enums.NethelpersScope
+	64,  // 3: chubo.resource.definitions.network.AddressSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	61,  // 4: chubo.resource.definitions.network.AddressStatusSpec.address:type_name -> common.NetIPPrefix
+	65,  // 5: chubo.resource.definitions.network.AddressStatusSpec.local:type_name -> common.NetIP
+	65,  // 6: chubo.resource.definitions.network.AddressStatusSpec.broadcast:type_name -> common.NetIP
+	65,  // 7: chubo.resource.definitions.network.AddressStatusSpec.anycast:type_name -> common.NetIP
+	65,  // 8: chubo.resource.definitions.network.AddressStatusSpec.multicast:type_name -> common.NetIP
+	62,  // 9: chubo.resource.definitions.network.AddressStatusSpec.family:type_name -> chubo.resource.definitions.enums.NethelpersFamily
+	63,  // 10: chubo.resource.definitions.network.AddressStatusSpec.scope:type_name -> chubo.resource.definitions.enums.NethelpersScope
+	66,  // 11: chubo.resource.definitions.network.BondMasterSpec.mode:type_name -> chubo.resource.definitions.enums.NethelpersBondMode
+	67,  // 12: chubo.resource.definitions.network.BondMasterSpec.hash_policy:type_name -> chubo.resource.definitions.enums.NethelpersBondXmitHashPolicy
+	68,  // 13: chubo.resource.definitions.network.BondMasterSpec.lacp_rate:type_name -> chubo.resource.definitions.enums.NethelpersLACPRate
+	69,  // 14: chubo.resource.definitions.network.BondMasterSpec.arp_validate:type_name -> chubo.resource.definitions.enums.NethelpersARPValidate
+	70,  // 15: chubo.resource.definitions.network.BondMasterSpec.arp_all_targets:type_name -> chubo.resource.definitions.enums.NethelpersARPAllTargets
+	71,  // 16: chubo.resource.definitions.network.BondMasterSpec.primary_reselect:type_name -> chubo.resource.definitions.enums.NethelpersPrimaryReselect
+	72,  // 17: chubo.resource.definitions.network.BondMasterSpec.fail_over_mac:type_name -> chubo.resource.definitions.enums.NethelpersFailOverMAC
+	73,  // 18: chubo.resource.definitions.network.BondMasterSpec.ad_select:type_name -> chubo.resource.definitions.enums.NethelpersADSelect
+	65,  // 19: chubo.resource.definitions.network.BondMasterSpec.arpip_targets:type_name -> common.NetIP
+	65,  // 20: chubo.resource.definitions.network.BondMasterSpec.nsip6_targets:type_name -> common.NetIP
+	74,  // 21: chubo.resource.definitions.network.BondMasterSpec.adlacp_active:type_name -> chubo.resource.definitions.enums.NethelpersADLACPActive
+	49,  // 22: chubo.resource.definitions.network.BridgeMasterSpec.stp:type_name -> chubo.resource.definitions.network.STPSpec
+	6,   // 23: chubo.resource.definitions.network.BridgeMasterSpec.vlan:type_name -> chubo.resource.definitions.network.BridgeVLANSpec
+	75,  // 24: chubo.resource.definitions.network.ClientIdentifierSpec.client_identifier:type_name -> chubo.resource.definitions.enums.NethelpersClientIdentifier
+	7,   // 25: chubo.resource.definitions.network.DHCP4OperatorSpec.client_identifier:type_name -> chubo.resource.definitions.network.ClientIdentifierSpec
+	7,   // 26: chubo.resource.definitions.network.DHCP6OperatorSpec.client_identifier:type_name -> chubo.resource.definitions.network.ClientIdentifierSpec
+	14,  // 27: chubo.resource.definitions.network.EthernetSpecSpec.rings:type_name -> chubo.resource.definitions.network.EthernetRingsSpec
+	60,  // 28: chubo.resource.definitions.network.EthernetSpecSpec.features:type_name -> chubo.resource.definitions.network.EthernetSpecSpec.FeaturesEntry
+	11,  // 29: chubo.resource.definitions.network.EthernetSpecSpec.channels:type_name -> chubo.resource.definitions.network.EthernetChannelsSpec
+	76,  // 30: chubo.resource.definitions.network.EthernetSpecSpec.wake_on_lan:type_name -> chubo.resource.definitions.enums.NethelpersWOLMode
+	77,  // 31: chubo.resource.definitions.network.EthernetStatusSpec.port:type_name -> chubo.resource.definitions.enums.NethelpersPort
+	78,  // 32: chubo.resource.definitions.network.EthernetStatusSpec.duplex:type_name -> chubo.resource.definitions.enums.NethelpersDuplex
+	15,  // 33: chubo.resource.definitions.network.EthernetStatusSpec.rings:type_name -> chubo.resource.definitions.network.EthernetRingsStatus
+	13,  // 34: chubo.resource.definitions.network.EthernetStatusSpec.features:type_name -> chubo.resource.definitions.network.EthernetFeatureStatus
+	12,  // 35: chubo.resource.definitions.network.EthernetStatusSpec.channels:type_name -> chubo.resource.definitions.network.EthernetChannelsStatus
+	76,  // 36: chubo.resource.definitions.network.EthernetStatusSpec.wake_on_lan:type_name -> chubo.resource.definitions.enums.NethelpersWOLMode
+	79,  // 37: chubo.resource.definitions.network.HostDNSConfigSpec.listen_addresses:type_name -> common.NetIPPort
+	65,  // 38: chubo.resource.definitions.network.HostDNSConfigSpec.service_host_dns_address:type_name -> common.NetIP
+	64,  // 39: chubo.resource.definitions.network.HostnameSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	80,  // 40: chubo.resource.definitions.network.LinkSpecSpec.type:type_name -> chubo.resource.definitions.enums.NethelpersLinkType
+	3,   // 41: chubo.resource.definitions.network.LinkSpecSpec.bond_slave:type_name -> chubo.resource.definitions.network.BondSlave
+	5,   // 42: chubo.resource.definitions.network.LinkSpecSpec.bridge_slave:type_name -> chubo.resource.definitions.network.BridgeSlave
+	57,  // 43: chubo.resource.definitions.network.LinkSpecSpec.vlan:type_name -> chubo.resource.definitions.network.VLANSpec
+	2,   // 44: chubo.resource.definitions.network.LinkSpecSpec.bond_master:type_name -> chubo.resource.definitions.network.BondMasterSpec
+	4,   // 45: chubo.resource.definitions.network.LinkSpecSpec.bridge_master:type_name -> chubo.resource.definitions.network.BridgeMasterSpec
+	59,  // 46: chubo.resource.definitions.network.LinkSpecSpec.wireguard:type_name -> chubo.resource.definitions.network.WireguardSpec
+	64,  // 47: chubo.resource.definitions.network.LinkSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	80,  // 48: chubo.resource.definitions.network.LinkStatusSpec.type:type_name -> chubo.resource.definitions.enums.NethelpersLinkType
+	81,  // 49: chubo.resource.definitions.network.LinkStatusSpec.operational_state:type_name -> chubo.resource.definitions.enums.NethelpersOperationalState
+	77,  // 50: chubo.resource.definitions.network.LinkStatusSpec.port:type_name -> chubo.resource.definitions.enums.NethelpersPort
+	78,  // 51: chubo.resource.definitions.network.LinkStatusSpec.duplex:type_name -> chubo.resource.definitions.enums.NethelpersDuplex
+	57,  // 52: chubo.resource.definitions.network.LinkStatusSpec.vlan:type_name -> chubo.resource.definitions.network.VLANSpec
+	4,   // 53: chubo.resource.definitions.network.LinkStatusSpec.bridge_master:type_name -> chubo.resource.definitions.network.BridgeMasterSpec
+	2,   // 54: chubo.resource.definitions.network.LinkStatusSpec.bond_master:type_name -> chubo.resource.definitions.network.BondMasterSpec
+	59,  // 55: chubo.resource.definitions.network.LinkStatusSpec.wireguard:type_name -> chubo.resource.definitions.network.WireguardSpec
+	61,  // 56: chubo.resource.definitions.network.NfTablesAddressMatch.include_subnets:type_name -> common.NetIPPrefix
+	61,  // 57: chubo.resource.definitions.network.NfTablesAddressMatch.exclude_subnets:type_name -> common.NetIPPrefix
+	82,  // 58: chubo.resource.definitions.network.NfTablesChainSpec.hook:type_name -> chubo.resource.definitions.enums.NethelpersNfTablesChainHook
+	83,  // 59: chubo.resource.definitions.network.NfTablesChainSpec.priority:type_name -> chubo.resource.definitions.enums.NethelpersNfTablesChainPriority
+	36,  // 60: chubo.resource.definitions.network.NfTablesChainSpec.rules:type_name -> chubo.resource.definitions.network.NfTablesRule
+	84,  // 61: chubo.resource.definitions.network.NfTablesChainSpec.policy:type_name -> chubo.resource.definitions.enums.NethelpersNfTablesVerdict
+	85,  // 62: chubo.resource.definitions.network.NfTablesConntrackStateMatch.states:type_name -> chubo.resource.definitions.enums.NethelpersConntrackState
+	86,  // 63: chubo.resource.definitions.network.NfTablesICMPTypeMatch.types:type_name -> chubo.resource.definitions.enums.NethelpersICMPType
+	87,  // 64: chubo.resource.definitions.network.NfTablesIfNameMatch.operator:type_name -> chubo.resource.definitions.enums.NethelpersMatchOperator
+	88,  // 65: chubo.resource.definitions.network.NfTablesLayer4Match.protocol:type_name -> chubo.resource.definitions.enums.NethelpersProtocol
+	35,  // 66: chubo.resource.definitions.network.NfTablesLayer4Match.match_source_port:type_name -> chubo.resource.definitions.network.NfTablesPortMatch
+	35,  // 67: chubo.resource.definitions.network.NfTablesLayer4Match.match_destination_port:type_name -> chubo.resource.definitions.network.NfTablesPortMatch
+	30,  // 68: chubo.resource.definitions.network.NfTablesLayer4Match.match_icmp_type:type_name -> chubo.resource.definitions.network.NfTablesICMPTypeMatch
+	42,  // 69: chubo.resource.definitions.network.NfTablesPortMatch.ranges:type_name -> chubo.resource.definitions.network.PortRange
+	31,  // 70: chubo.resource.definitions.network.NfTablesRule.match_o_if_name:type_name -> chubo.resource.definitions.network.NfTablesIfNameMatch
+	84,  // 71: chubo.resource.definitions.network.NfTablesRule.verdict:type_name -> chubo.resource.definitions.enums.NethelpersNfTablesVerdict
+	34,  // 72: chubo.resource.definitions.network.NfTablesRule.match_mark:type_name -> chubo.resource.definitions.network.NfTablesMark
+	34,  // 73: chubo.resource.definitions.network.NfTablesRule.set_mark:type_name -> chubo.resource.definitions.network.NfTablesMark
+	26,  // 74: chubo.resource.definitions.network.NfTablesRule.match_source_address:type_name -> chubo.resource.definitions.network.NfTablesAddressMatch
+	26,  // 75: chubo.resource.definitions.network.NfTablesRule.match_destination_address:type_name -> chubo.resource.definitions.network.NfTablesAddressMatch
+	32,  // 76: chubo.resource.definitions.network.NfTablesRule.match_layer4:type_name -> chubo.resource.definitions.network.NfTablesLayer4Match
+	31,  // 77: chubo.resource.definitions.network.NfTablesRule.match_i_if_name:type_name -> chubo.resource.definitions.network.NfTablesIfNameMatch
+	28,  // 78: chubo.resource.definitions.network.NfTablesRule.clamp_mss:type_name -> chubo.resource.definitions.network.NfTablesClampMSS
+	33,  // 79: chubo.resource.definitions.network.NfTablesRule.match_limit:type_name -> chubo.resource.definitions.network.NfTablesLimitMatch
+	29,  // 80: chubo.resource.definitions.network.NfTablesRule.match_conntrack_state:type_name -> chubo.resource.definitions.network.NfTablesConntrackStateMatch
+	61,  // 81: chubo.resource.definitions.network.NodeAddressFilterSpec.include_subnets:type_name -> common.NetIPPrefix
+	61,  // 82: chubo.resource.definitions.network.NodeAddressFilterSpec.exclude_subnets:type_name -> common.NetIPPrefix
+	89,  // 83: chubo.resource.definitions.network.NodeAddressSortAlgorithmSpec.algorithm:type_name -> chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm
+	61,  // 84: chubo.resource.definitions.network.NodeAddressSpec.addresses:type_name -> common.NetIPPrefix
+	89,  // 85: chubo.resource.definitions.network.NodeAddressSpec.sort_algorithm:type_name -> chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm
+	90,  // 86: chubo.resource.definitions.network.OperatorSpecSpec.operator:type_name -> chubo.resource.definitions.enums.NetworkOperator
+	8,   // 87: chubo.resource.definitions.network.OperatorSpecSpec.dhcp4:type_name -> chubo.resource.definitions.network.DHCP4OperatorSpec
+	9,   // 88: chubo.resource.definitions.network.OperatorSpecSpec.dhcp6:type_name -> chubo.resource.definitions.network.DHCP6OperatorSpec
+	56,  // 89: chubo.resource.definitions.network.OperatorSpecSpec.vip:type_name -> chubo.resource.definitions.network.VIPOperatorSpec
+	64,  // 90: chubo.resource.definitions.network.OperatorSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	0,   // 91: chubo.resource.definitions.network.PlatformConfigSpec.addresses:type_name -> chubo.resource.definitions.network.AddressSpecSpec
+	24,  // 92: chubo.resource.definitions.network.PlatformConfigSpec.links:type_name -> chubo.resource.definitions.network.LinkSpecSpec
+	47,  // 93: chubo.resource.definitions.network.PlatformConfigSpec.routes:type_name -> chubo.resource.definitions.network.RouteSpecSpec
+	20,  // 94: chubo.resource.definitions.network.PlatformConfigSpec.hostnames:type_name -> chubo.resource.definitions.network.HostnameSpecSpec
+	45,  // 95: chubo.resource.definitions.network.PlatformConfigSpec.resolvers:type_name -> chubo.resource.definitions.network.ResolverSpecSpec
+	52,  // 96: chubo.resource.definitions.network.PlatformConfigSpec.time_servers:type_name -> chubo.resource.definitions.network.TimeServerSpecSpec
+	40,  // 97: chubo.resource.definitions.network.PlatformConfigSpec.operators:type_name -> chubo.resource.definitions.network.OperatorSpecSpec
+	65,  // 98: chubo.resource.definitions.network.PlatformConfigSpec.external_ips:type_name -> common.NetIP
+	43,  // 99: chubo.resource.definitions.network.PlatformConfigSpec.probes:type_name -> chubo.resource.definitions.network.ProbeSpecSpec
+	91,  // 100: chubo.resource.definitions.network.PlatformConfigSpec.metadata:type_name -> chubo.resource.definitions.runtime.PlatformMetadataSpec
+	92,  // 101: chubo.resource.definitions.network.ProbeSpecSpec.interval:type_name -> google.protobuf.Duration
+	51,  // 102: chubo.resource.definitions.network.ProbeSpecSpec.tcp:type_name -> chubo.resource.definitions.network.TCPProbeSpec
+	64,  // 103: chubo.resource.definitions.network.ProbeSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	65,  // 104: chubo.resource.definitions.network.ResolverSpecSpec.dns_servers:type_name -> common.NetIP
+	64,  // 105: chubo.resource.definitions.network.ResolverSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	65,  // 106: chubo.resource.definitions.network.ResolverStatusSpec.dns_servers:type_name -> common.NetIP
+	62,  // 107: chubo.resource.definitions.network.RouteSpecSpec.family:type_name -> chubo.resource.definitions.enums.NethelpersFamily
+	61,  // 108: chubo.resource.definitions.network.RouteSpecSpec.destination:type_name -> common.NetIPPrefix
+	65,  // 109: chubo.resource.definitions.network.RouteSpecSpec.source:type_name -> common.NetIP
+	65,  // 110: chubo.resource.definitions.network.RouteSpecSpec.gateway:type_name -> common.NetIP
+	93,  // 111: chubo.resource.definitions.network.RouteSpecSpec.table:type_name -> chubo.resource.definitions.enums.NethelpersRoutingTable
+	63,  // 112: chubo.resource.definitions.network.RouteSpecSpec.scope:type_name -> chubo.resource.definitions.enums.NethelpersScope
+	94,  // 113: chubo.resource.definitions.network.RouteSpecSpec.type:type_name -> chubo.resource.definitions.enums.NethelpersRouteType
+	95,  // 114: chubo.resource.definitions.network.RouteSpecSpec.protocol:type_name -> chubo.resource.definitions.enums.NethelpersRouteProtocol
+	64,  // 115: chubo.resource.definitions.network.RouteSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	62,  // 116: chubo.resource.definitions.network.RouteStatusSpec.family:type_name -> chubo.resource.definitions.enums.NethelpersFamily
+	61,  // 117: chubo.resource.definitions.network.RouteStatusSpec.destination:type_name -> common.NetIPPrefix
+	65,  // 118: chubo.resource.definitions.network.RouteStatusSpec.source:type_name -> common.NetIP
+	65,  // 119: chubo.resource.definitions.network.RouteStatusSpec.gateway:type_name -> common.NetIP
+	93,  // 120: chubo.resource.definitions.network.RouteStatusSpec.table:type_name -> chubo.resource.definitions.enums.NethelpersRoutingTable
+	63,  // 121: chubo.resource.definitions.network.RouteStatusSpec.scope:type_name -> chubo.resource.definitions.enums.NethelpersScope
+	94,  // 122: chubo.resource.definitions.network.RouteStatusSpec.type:type_name -> chubo.resource.definitions.enums.NethelpersRouteType
+	95,  // 123: chubo.resource.definitions.network.RouteStatusSpec.protocol:type_name -> chubo.resource.definitions.enums.NethelpersRouteProtocol
+	92,  // 124: chubo.resource.definitions.network.TCPProbeSpec.timeout:type_name -> google.protobuf.Duration
+	64,  // 125: chubo.resource.definitions.network.TimeServerSpecSpec.config_layer:type_name -> chubo.resource.definitions.enums.NetworkConfigLayer
+	65,  // 126: chubo.resource.definitions.network.VIPOperatorSpec.ip:type_name -> common.NetIP
+	54,  // 127: chubo.resource.definitions.network.VIPOperatorSpec.equinix_metal:type_name -> chubo.resource.definitions.network.VIPEquinixMetalSpec
+	55,  // 128: chubo.resource.definitions.network.VIPOperatorSpec.h_cloud:type_name -> chubo.resource.definitions.network.VIPHCloudSpec
+	96,  // 129: chubo.resource.definitions.network.VLANSpec.protocol:type_name -> chubo.resource.definitions.enums.NethelpersVLANProtocol
+	92,  // 130: chubo.resource.definitions.network.WireguardPeer.persistent_keepalive_interval:type_name -> google.protobuf.Duration
+	61,  // 131: chubo.resource.definitions.network.WireguardPeer.allowed_ips:type_name -> common.NetIPPrefix
+	58,  // 132: chubo.resource.definitions.network.WireguardSpec.peers:type_name -> chubo.resource.definitions.network.WireguardPeer
 	133, // [133:133] is the sub-list for method output_type
 	133, // [133:133] is the sub-list for method input_type
 	133, // [133:133] is the sub-list for extension type_name

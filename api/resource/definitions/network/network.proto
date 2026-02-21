@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.network;
+package chubo.resource.definitions.network;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network";
 option java_package = "dev.chubo.api.resource.definitions.network";
@@ -14,11 +14,11 @@ import "resource/definitions/runtime/runtime.proto";
 message AddressSpecSpec {
   common.NetIPPrefix address = 1;
   string link_name = 2;
-  talos.resource.definitions.enums.NethelpersFamily family = 3;
-  talos.resource.definitions.enums.NethelpersScope scope = 4;
+  chubo.resource.definitions.enums.NethelpersFamily family = 3;
+  chubo.resource.definitions.enums.NethelpersScope scope = 4;
   uint32 flags = 5;
   bool announce_with_arp = 6;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 7;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 7;
   uint32 priority = 8;
 }
 
@@ -31,23 +31,23 @@ message AddressStatusSpec {
   common.NetIP multicast = 5;
   uint32 link_index = 6;
   string link_name = 7;
-  talos.resource.definitions.enums.NethelpersFamily family = 8;
-  talos.resource.definitions.enums.NethelpersScope scope = 9;
+  chubo.resource.definitions.enums.NethelpersFamily family = 8;
+  chubo.resource.definitions.enums.NethelpersScope scope = 9;
   uint32 flags = 10;
   uint32 priority = 11;
 }
 
 // BondMasterSpec describes bond settings if Kind == "bond".
 message BondMasterSpec {
-  talos.resource.definitions.enums.NethelpersBondMode mode = 1;
-  talos.resource.definitions.enums.NethelpersBondXmitHashPolicy hash_policy = 2;
-  talos.resource.definitions.enums.NethelpersLACPRate lacp_rate = 3;
-  talos.resource.definitions.enums.NethelpersARPValidate arp_validate = 4;
-  talos.resource.definitions.enums.NethelpersARPAllTargets arp_all_targets = 5;
+  chubo.resource.definitions.enums.NethelpersBondMode mode = 1;
+  chubo.resource.definitions.enums.NethelpersBondXmitHashPolicy hash_policy = 2;
+  chubo.resource.definitions.enums.NethelpersLACPRate lacp_rate = 3;
+  chubo.resource.definitions.enums.NethelpersARPValidate arp_validate = 4;
+  chubo.resource.definitions.enums.NethelpersARPAllTargets arp_all_targets = 5;
   uint32 primary_index = 6;
-  talos.resource.definitions.enums.NethelpersPrimaryReselect primary_reselect = 7;
-  talos.resource.definitions.enums.NethelpersFailOverMAC fail_over_mac = 8;
-  talos.resource.definitions.enums.NethelpersADSelect ad_select = 9;
+  chubo.resource.definitions.enums.NethelpersPrimaryReselect primary_reselect = 7;
+  chubo.resource.definitions.enums.NethelpersFailOverMAC fail_over_mac = 8;
+  chubo.resource.definitions.enums.NethelpersADSelect ad_select = 9;
   uint32 mii_mon = 10;
   uint32 up_delay = 11;
   uint32 down_delay = 12;
@@ -65,7 +65,7 @@ message BondMasterSpec {
   uint32 peer_notify_delay = 24;
   repeated common.NetIP arpip_targets = 25;
   repeated common.NetIP nsip6_targets = 26;
-  talos.resource.definitions.enums.NethelpersADLACPActive adlacp_active = 27;
+  chubo.resource.definitions.enums.NethelpersADLACPActive adlacp_active = 27;
   uint32 missed_max = 28;
 }
 
@@ -93,7 +93,7 @@ message BridgeVLANSpec {
 
 // ClientIdentifierSpec is a shared DHCP4/DHCP6 client identifier spec.
 message ClientIdentifierSpec {
-  talos.resource.definitions.enums.NethelpersClientIdentifier client_identifier = 1;
+  chubo.resource.definitions.enums.NethelpersClientIdentifier client_identifier = 1;
   string duid_raw_hex = 2;
 }
 
@@ -180,21 +180,21 @@ message EthernetSpecSpec {
   EthernetRingsSpec rings = 1;
   map<string, bool> features = 2;
   EthernetChannelsSpec channels = 3;
-  repeated talos.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 4;
+  repeated chubo.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 4;
 }
 
 // EthernetStatusSpec describes status of rendered secrets.
 message EthernetStatusSpec {
   bool link_state = 1;
   int64 speed_megabits = 2;
-  talos.resource.definitions.enums.NethelpersPort port = 3;
-  talos.resource.definitions.enums.NethelpersDuplex duplex = 4;
+  chubo.resource.definitions.enums.NethelpersPort port = 3;
+  chubo.resource.definitions.enums.NethelpersDuplex duplex = 4;
   repeated string our_modes = 5;
   repeated string peer_modes = 6;
   EthernetRingsStatus rings = 7;
   repeated EthernetFeatureStatus features = 8;
   EthernetChannelsStatus channels = 9;
-  repeated talos.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 10;
+  repeated chubo.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 10;
 }
 
 // HardwareAddrSpec describes spec for the link.
@@ -215,7 +215,7 @@ message HostDNSConfigSpec {
 message HostnameSpecSpec {
   string hostname = 1;
   string domainname = 2;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 3;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 3;
 }
 
 // HostnameStatusSpec describes node hostname.
@@ -241,7 +241,7 @@ message LinkSpecSpec {
   bool up = 3;
   uint32 mtu = 4;
   string kind = 5;
-  talos.resource.definitions.enums.NethelpersLinkType type = 6;
+  chubo.resource.definitions.enums.NethelpersLinkType type = 6;
   string parent_name = 7;
   BondSlave bond_slave = 8;
   BridgeSlave bridge_slave = 9;
@@ -249,7 +249,7 @@ message LinkSpecSpec {
   BondMasterSpec bond_master = 11;
   BridgeMasterSpec bridge_master = 12;
   WireguardSpec wireguard = 13;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 14;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 14;
   bytes hardware_address = 15;
   bool multicast = 16;
 }
@@ -257,7 +257,7 @@ message LinkSpecSpec {
 // LinkStatusSpec describes status of rendered secrets.
 message LinkStatusSpec {
   uint32 index = 1;
-  talos.resource.definitions.enums.NethelpersLinkType type = 2;
+  chubo.resource.definitions.enums.NethelpersLinkType type = 2;
   uint32 link_index = 3;
   uint32 flags = 4;
   bytes hardware_addr = 5;
@@ -265,7 +265,7 @@ message LinkStatusSpec {
   uint32 mtu = 7;
   string queue_disc = 8;
   uint32 master_index = 9;
-  talos.resource.definitions.enums.NethelpersOperationalState operational_state = 10;
+  chubo.resource.definitions.enums.NethelpersOperationalState operational_state = 10;
   string kind = 11;
   string slave_kind = 12;
   string bus_path = 13;
@@ -279,8 +279,8 @@ message LinkStatusSpec {
   string vendor = 21;
   bool link_state = 22;
   int64 speed_megabits = 23;
-  talos.resource.definitions.enums.NethelpersPort port = 24;
-  talos.resource.definitions.enums.NethelpersDuplex duplex = 25;
+  chubo.resource.definitions.enums.NethelpersPort port = 24;
+  chubo.resource.definitions.enums.NethelpersDuplex duplex = 25;
   VLANSpec vlan = 26;
   BridgeMasterSpec bridge_master = 27;
   BondMasterSpec bond_master = 28;
@@ -300,10 +300,10 @@ message NfTablesAddressMatch {
 // NfTablesChainSpec describes status of rendered secrets.
 message NfTablesChainSpec {
   string type = 1;
-  talos.resource.definitions.enums.NethelpersNfTablesChainHook hook = 2;
-  talos.resource.definitions.enums.NethelpersNfTablesChainPriority priority = 3;
+  chubo.resource.definitions.enums.NethelpersNfTablesChainHook hook = 2;
+  chubo.resource.definitions.enums.NethelpersNfTablesChainPriority priority = 3;
   repeated NfTablesRule rules = 4;
-  talos.resource.definitions.enums.NethelpersNfTablesVerdict policy = 5;
+  chubo.resource.definitions.enums.NethelpersNfTablesVerdict policy = 5;
 }
 
 // NfTablesClampMSS describes the TCP MSS clamping operation.
@@ -317,23 +317,23 @@ message NfTablesClampMSS {
 
 // NfTablesConntrackStateMatch describes the match on the connection tracking state.
 message NfTablesConntrackStateMatch {
-  repeated talos.resource.definitions.enums.NethelpersConntrackState states = 1;
+  repeated chubo.resource.definitions.enums.NethelpersConntrackState states = 1;
 }
 
 // NfTablesICMPTypeMatch describes the match on the ICMP type.
 message NfTablesICMPTypeMatch {
-  repeated talos.resource.definitions.enums.NethelpersICMPType types = 1;
+  repeated chubo.resource.definitions.enums.NethelpersICMPType types = 1;
 }
 
 // NfTablesIfNameMatch describes the match on the interface name.
 message NfTablesIfNameMatch {
-  talos.resource.definitions.enums.NethelpersMatchOperator operator = 2;
+  chubo.resource.definitions.enums.NethelpersMatchOperator operator = 2;
   repeated string interface_names = 3;
 }
 
 // NfTablesLayer4Match describes the match on the transport layer protocol.
 message NfTablesLayer4Match {
-  talos.resource.definitions.enums.NethelpersProtocol protocol = 1;
+  chubo.resource.definitions.enums.NethelpersProtocol protocol = 1;
   NfTablesPortMatch match_source_port = 2;
   NfTablesPortMatch match_destination_port = 3;
   NfTablesICMPTypeMatch match_icmp_type = 4;
@@ -365,7 +365,7 @@ message NfTablesPortMatch {
 // NfTablesRule describes a single rule in the nftables chain.
 message NfTablesRule {
   NfTablesIfNameMatch match_o_if_name = 1;
-  talos.resource.definitions.enums.NethelpersNfTablesVerdict verdict = 2;
+  chubo.resource.definitions.enums.NethelpersNfTablesVerdict verdict = 2;
   NfTablesMark match_mark = 3;
   NfTablesMark set_mark = 4;
   NfTablesAddressMatch match_source_address = 5;
@@ -386,24 +386,24 @@ message NodeAddressFilterSpec {
 
 // NodeAddressSortAlgorithmSpec describes a filter for NodeAddresses.
 message NodeAddressSortAlgorithmSpec {
-  talos.resource.definitions.enums.NethelpersAddressSortAlgorithm algorithm = 1;
+  chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm algorithm = 1;
 }
 
 // NodeAddressSpec describes a set of node addresses.
 message NodeAddressSpec {
   repeated common.NetIPPrefix addresses = 1;
-  talos.resource.definitions.enums.NethelpersAddressSortAlgorithm sort_algorithm = 2;
+  chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm sort_algorithm = 2;
 }
 
 // OperatorSpecSpec describes operator specification.
 message OperatorSpecSpec {
-  talos.resource.definitions.enums.NetworkOperator operator = 1;
+  chubo.resource.definitions.enums.NetworkOperator operator = 1;
   string link_name = 2;
   bool require_up = 3;
   DHCP4OperatorSpec dhcp4 = 4;
   DHCP6OperatorSpec dhcp6 = 5;
   VIPOperatorSpec vip = 6;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 7;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 7;
 }
 
 // PlatformConfigSpec describes platform network configuration.
@@ -420,7 +420,7 @@ message PlatformConfigSpec {
   repeated OperatorSpecSpec operators = 7;
   repeated common.NetIP external_ips = 8;
   repeated ProbeSpecSpec probes = 9;
-  talos.resource.definitions.runtime.PlatformMetadataSpec metadata = 10;
+  chubo.resource.definitions.runtime.PlatformMetadataSpec metadata = 10;
 }
 
 // PortRange describes a range of ports.
@@ -436,7 +436,7 @@ message ProbeSpecSpec {
   google.protobuf.Duration interval = 1;
   int64 failure_threshold = 2;
   TCPProbeSpec tcp = 3;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 4;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 4;
 }
 
 // ProbeStatusSpec describes the Probe.
@@ -448,7 +448,7 @@ message ProbeStatusSpec {
 // ResolverSpecSpec describes DNS resolvers.
 message ResolverSpecSpec {
   repeated common.NetIP dns_servers = 1;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 2;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 2;
   repeated string search_domains = 3;
 }
 
@@ -460,35 +460,35 @@ message ResolverStatusSpec {
 
 // RouteSpecSpec describes the route.
 message RouteSpecSpec {
-  talos.resource.definitions.enums.NethelpersFamily family = 1;
+  chubo.resource.definitions.enums.NethelpersFamily family = 1;
   common.NetIPPrefix destination = 2;
   common.NetIP source = 3;
   common.NetIP gateway = 4;
   string out_link_name = 5;
-  talos.resource.definitions.enums.NethelpersRoutingTable table = 6;
+  chubo.resource.definitions.enums.NethelpersRoutingTable table = 6;
   uint32 priority = 7;
-  talos.resource.definitions.enums.NethelpersScope scope = 8;
-  talos.resource.definitions.enums.NethelpersRouteType type = 9;
+  chubo.resource.definitions.enums.NethelpersScope scope = 8;
+  chubo.resource.definitions.enums.NethelpersRouteType type = 9;
   uint32 flags = 10;
-  talos.resource.definitions.enums.NethelpersRouteProtocol protocol = 11;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 12;
+  chubo.resource.definitions.enums.NethelpersRouteProtocol protocol = 11;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 12;
   uint32 mtu = 13;
 }
 
 // RouteStatusSpec describes status of rendered secrets.
 message RouteStatusSpec {
-  talos.resource.definitions.enums.NethelpersFamily family = 1;
+  chubo.resource.definitions.enums.NethelpersFamily family = 1;
   common.NetIPPrefix destination = 2;
   common.NetIP source = 3;
   common.NetIP gateway = 4;
   uint32 out_link_index = 5;
   string out_link_name = 6;
-  talos.resource.definitions.enums.NethelpersRoutingTable table = 7;
+  chubo.resource.definitions.enums.NethelpersRoutingTable table = 7;
   uint32 priority = 8;
-  talos.resource.definitions.enums.NethelpersScope scope = 9;
-  talos.resource.definitions.enums.NethelpersRouteType type = 10;
+  chubo.resource.definitions.enums.NethelpersScope scope = 9;
+  chubo.resource.definitions.enums.NethelpersRouteType type = 10;
   uint32 flags = 11;
-  talos.resource.definitions.enums.NethelpersRouteProtocol protocol = 12;
+  chubo.resource.definitions.enums.NethelpersRouteProtocol protocol = 12;
   uint32 mtu = 13;
 }
 
@@ -514,7 +514,7 @@ message TCPProbeSpec {
 // TimeServerSpecSpec describes NTP servers.
 message TimeServerSpecSpec {
   repeated string ntp_servers = 1;
-  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 2;
+  chubo.resource.definitions.enums.NetworkConfigLayer config_layer = 2;
 }
 
 // TimeServerStatusSpec describes NTP servers.
@@ -547,7 +547,7 @@ message VIPOperatorSpec {
 // VLANSpec describes VLAN settings if Kind == "vlan".
 message VLANSpec {
   uint32 vid = 1;
-  talos.resource.definitions.enums.NethelpersVLANProtocol protocol = 2;
+  chubo.resource.definitions.enums.NethelpersVLANProtocol protocol = 2;
 }
 
 // WireguardPeer describes a single peer.

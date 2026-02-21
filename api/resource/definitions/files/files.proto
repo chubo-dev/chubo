@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.files;
+package chubo.resource.definitions.files;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/files";
 option java_package = "dev.chubo.api.resource.definitions.files";

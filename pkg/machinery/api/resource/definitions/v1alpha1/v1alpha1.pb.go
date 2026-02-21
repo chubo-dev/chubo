@@ -87,7 +87,7 @@ var File_resource_definitions_v1alpha1_v1alpha1_proto protoreflect.FileDescripto
 
 const file_resource_definitions_v1alpha1_v1alpha1_proto_rawDesc = "" +
 	"\n" +
-	",resource/definitions/v1alpha1/v1alpha1.proto\x12#talos.resource.definitions.v1alpha1\"[\n" +
+	",resource/definitions/v1alpha1/v1alpha1.proto\x12#chubo.resource.definitions.v1alpha1\"[\n" +
 	"\vServiceSpec\x12\x18\n" +
 	"\arunning\x18\x01 \x01(\bR\arunning\x12\x18\n" +
 	"\ahealthy\x18\x02 \x01(\bR\ahealthy\x12\x18\n" +
@@ -108,7 +108,7 @@ func file_resource_definitions_v1alpha1_v1alpha1_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_v1alpha1_v1alpha1_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_resource_definitions_v1alpha1_v1alpha1_proto_goTypes = []any{
-	(*ServiceSpec)(nil), // 0: talos.resource.definitions.v1alpha1.ServiceSpec
+	(*ServiceSpec)(nil), // 0: chubo.resource.definitions.v1alpha1.ServiceSpec
 }
 var file_resource_definitions_v1alpha1_v1alpha1_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

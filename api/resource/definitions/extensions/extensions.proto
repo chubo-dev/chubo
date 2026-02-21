@@ -1,13 +1,14 @@
 syntax = "proto3";
 
-package talos.resource.definitions.extensions;
+package chubo.resource.definitions.extensions;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/extensions";
 option java_package = "dev.chubo.api.resource.definitions.extensions";
 
 // Compatibility describes extension compatibility.
 message Compatibility {
-  Constraint talos = 1;
+  Constraint legacy = 1;
+  Constraint chubo = 2;
 }
 
 // Constraint describes compatibility constraint.

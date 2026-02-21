@@ -665,10 +665,10 @@ var File_resource_definitions_perf_perf_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_perf_perf_proto_rawDesc = "" +
 	"\n" +
-	"$resource/definitions/perf/perf.proto\x12\x1ftalos.resource.definitions.perf\"\xf5\x02\n" +
+	"$resource/definitions/perf/perf.proto\x12\x1fchubo.resource.definitions.perf\"\xf5\x02\n" +
 	"\aCPUSpec\x12:\n" +
-	"\x03cpu\x18\x01 \x03(\v2(.talos.resource.definitions.perf.CPUStatR\x03cpu\x12E\n" +
-	"\tcpu_total\x18\x02 \x01(\v2(.talos.resource.definitions.perf.CPUStatR\bcpuTotal\x12\x1b\n" +
+	"\x03cpu\x18\x01 \x03(\v2(.chubo.resource.definitions.perf.CPUStatR\x03cpu\x12E\n" +
+	"\tcpu_total\x18\x02 \x01(\v2(.chubo.resource.definitions.perf.CPUStatR\bcpuTotal\x12\x1b\n" +
 	"\tirq_total\x18\x03 \x01(\x04R\birqTotal\x12)\n" +
 	"\x10context_switches\x18\x04 \x01(\x04R\x0fcontextSwitches\x12'\n" +
 	"\x0fprocess_created\x18\x05 \x01(\x04R\x0eprocessCreated\x12'\n" +
@@ -762,13 +762,13 @@ func file_resource_definitions_perf_perf_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_perf_perf_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_resource_definitions_perf_perf_proto_goTypes = []any{
-	(*CPUSpec)(nil),    // 0: talos.resource.definitions.perf.CPUSpec
-	(*CPUStat)(nil),    // 1: talos.resource.definitions.perf.CPUStat
-	(*MemorySpec)(nil), // 2: talos.resource.definitions.perf.MemorySpec
+	(*CPUSpec)(nil),    // 0: chubo.resource.definitions.perf.CPUSpec
+	(*CPUStat)(nil),    // 1: chubo.resource.definitions.perf.CPUStat
+	(*MemorySpec)(nil), // 2: chubo.resource.definitions.perf.MemorySpec
 }
 var file_resource_definitions_perf_perf_proto_depIdxs = []int32{
-	1, // 0: talos.resource.definitions.perf.CPUSpec.cpu:type_name -> talos.resource.definitions.perf.CPUStat
-	1, // 1: talos.resource.definitions.perf.CPUSpec.cpu_total:type_name -> talos.resource.definitions.perf.CPUStat
+	1, // 0: chubo.resource.definitions.perf.CPUSpec.cpu:type_name -> chubo.resource.definitions.perf.CPUStat
+	1, // 1: chubo.resource.definitions.perf.CPUSpec.cpu_total:type_name -> chubo.resource.definitions.perf.CPUStat
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

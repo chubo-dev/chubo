@@ -134,7 +134,7 @@
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf format
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/bufbuild/buf/cmd/buf lint
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/gotagsrewrite .
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/structprotogen github.com/chubo-dev/chubo/pkg/machinery/... /api/resource/definitions/
+./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/chubo-dev/chubo/tools/structprotogen --resource-namespace=chubo.resource.definitions github.com/chubo-dev/chubo/pkg/machinery/... /api/resource/definitions/
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool github.com/siderolabs/importvet/cmd/importvet github.com/chubo-dev/chubo/...
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo ./
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache go tool golang.org/x/tools/cmd/goimports -w -local github.com/chubo-dev/chubo ./pkg/
@@ -211,94 +211,6 @@
 ./api/machine/machine.proto:  // Features describe individual Talos features that can be switched on or off.
 ./api/machine/machine.proto:// CopyRequest describes a request to copy data out of Talos node
 ./api/machine/machine.proto:// FeaturesInfo describes individual Talos features that can be switched on or off.
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionKeyType type = 2;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 12;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 7;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockEncryptionProviderType provider = 1;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFSParameterType type = 1;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFilesystemType filesystem = 10;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFilesystemType filesystem = 4;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockFilesystemType type = 1;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumePhase phase = 1;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumePhase pre_fail_phase = 6;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumeType type = 16;
-./api/resource/definitions/block/block.proto:  talos.resource.definitions.enums.BlockVolumeType type = 2;
-./api/resource/definitions/block/block.proto:package talos.resource.definitions.block;
-./api/resource/definitions/chubo/chubo.proto:package talos.resource.definitions.chubo;
-./api/resource/definitions/cluster/cluster.proto:  talos.resource.definitions.enums.MachineType machine_type = 4;
-./api/resource/definitions/cluster/cluster.proto:  talos.resource.definitions.enums.MachineType machine_type = 6;
-./api/resource/definitions/cluster/cluster.proto:package talos.resource.definitions.cluster;
-./api/resource/definitions/cri/cri.proto:  talos.resource.definitions.enums.CriImageCacheCopyStatus copy_status = 3;
-./api/resource/definitions/cri/cri.proto:  talos.resource.definitions.enums.CriImageCacheStatus status = 1;
-./api/resource/definitions/cri/cri.proto:package talos.resource.definitions.cri;
-./api/resource/definitions/enums/enums.proto:// NetworkOperator enumerates Talos network operators.
-./api/resource/definitions/enums/enums.proto:package talos.resource.definitions.enums;
-./api/resource/definitions/extensions/extensions.proto:  Constraint talos = 1;
-./api/resource/definitions/extensions/extensions.proto:package talos.resource.definitions.extensions;
-./api/resource/definitions/files/files.proto:package talos.resource.definitions.files;
-./api/resource/definitions/hardware/hardware.proto:package talos.resource.definitions.hardware;
-./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersConntrackState states = 1;
-./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersICMPType types = 1;
-./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 10;
-./api/resource/definitions/network/network.proto:  repeated talos.resource.definitions.enums.NethelpersWOLMode wake_on_lan = 4;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersADLACPActive adlacp_active = 27;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersADSelect ad_select = 9;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersARPAllTargets arp_all_targets = 5;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersARPValidate arp_validate = 4;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersAddressSortAlgorithm algorithm = 1;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersAddressSortAlgorithm sort_algorithm = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersBondMode mode = 1;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersBondXmitHashPolicy hash_policy = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersClientIdentifier client_identifier = 1;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersDuplex duplex = 25;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersDuplex duplex = 4;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFailOverMAC fail_over_mac = 8;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFamily family = 1;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFamily family = 3;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersFamily family = 8;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersLACPRate lacp_rate = 3;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersLinkType type = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersLinkType type = 6;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersMatchOperator operator = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesChainHook hook = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesChainPriority priority = 3;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesVerdict policy = 5;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersNfTablesVerdict verdict = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersOperationalState operational_state = 10;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersPort port = 24;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersPort port = 3;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersPrimaryReselect primary_reselect = 7;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersProtocol protocol = 1;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteProtocol protocol = 11;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteProtocol protocol = 12;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteType type = 10;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRouteType type = 9;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRoutingTable table = 6;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersRoutingTable table = 7;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersScope scope = 4;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersScope scope = 8;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersScope scope = 9;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NethelpersVLANProtocol protocol = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 12;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 14;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 2;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 3;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 4;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkConfigLayer config_layer = 7;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.enums.NetworkOperator operator = 1;
-./api/resource/definitions/network/network.proto:  talos.resource.definitions.runtime.PlatformMetadataSpec metadata = 10;
-./api/resource/definitions/network/network.proto:package talos.resource.definitions.network;
-./api/resource/definitions/perf/perf.proto:package talos.resource.definitions.perf;
-./api/resource/definitions/proto/proto.proto:package talos.resource.definitions.proto;
-./api/resource/definitions/runtime/runtime.proto:  talos.resource.definitions.enums.RuntimeFIPSState fips_state = 6;
-./api/resource/definitions/runtime/runtime.proto:  talos.resource.definitions.enums.RuntimeMachineStage stage = 1;
-./api/resource/definitions/runtime/runtime.proto:  talos.resource.definitions.enums.RuntimeSELinuxState se_linux_state = 4;
-./api/resource/definitions/runtime/runtime.proto:// EventSinkConfigSpec describes configuration of Talos event log streaming.
-./api/resource/definitions/runtime/runtime.proto:package talos.resource.definitions.runtime;
-./api/resource/definitions/secrets/secrets.proto:package talos.resource.definitions.secrets;
-./api/resource/definitions/siderolink/siderolink.proto:package talos.resource.definitions.siderolink;
-./api/resource/definitions/time/time.proto:package talos.resource.definitions.time;
-./api/resource/definitions/v1alpha1/v1alpha1.proto:package talos.resource.definitions.v1alpha1;
 ./api/storage/storage.proto:  // SystemDisk indicates that the disk is used as Talos system disk.
 ./cmd/chuboctl/cmd/constants/constants.go:	ImageFactoryURL = "https://factory.talos.dev/"
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.events.sink") != nil,

@@ -568,7 +568,7 @@ var File_resource_definitions_hardware_hardware_proto protoreflect.FileDescripto
 
 const file_resource_definitions_hardware_hardware_proto_rawDesc = "" +
 	"\n" +
-	",resource/definitions/hardware/hardware.proto\x12#talos.resource.definitions.hardware\"\x8f\x02\n" +
+	",resource/definitions/hardware/hardware.proto\x12#chubo.resource.definitions.hardware\"\x8f\x02\n" +
 	"\x10MemoryModuleSpec\x12\x12\n" +
 	"\x04size\x18\x01 \x01(\rR\x04size\x12%\n" +
 	"\x0edevice_locator\x18\x02 \x01(\tR\rdeviceLocator\x12!\n" +
@@ -639,12 +639,12 @@ func file_resource_definitions_hardware_hardware_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_hardware_hardware_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_resource_definitions_hardware_hardware_proto_goTypes = []any{
-	(*MemoryModuleSpec)(nil),          // 0: talos.resource.definitions.hardware.MemoryModuleSpec
-	(*PCIDeviceSpec)(nil),             // 1: talos.resource.definitions.hardware.PCIDeviceSpec
-	(*PCIDriverRebindConfigSpec)(nil), // 2: talos.resource.definitions.hardware.PCIDriverRebindConfigSpec
-	(*PCIDriverRebindStatusSpec)(nil), // 3: talos.resource.definitions.hardware.PCIDriverRebindStatusSpec
-	(*ProcessorSpec)(nil),             // 4: talos.resource.definitions.hardware.ProcessorSpec
-	(*SystemInformationSpec)(nil),     // 5: talos.resource.definitions.hardware.SystemInformationSpec
+	(*MemoryModuleSpec)(nil),          // 0: chubo.resource.definitions.hardware.MemoryModuleSpec
+	(*PCIDeviceSpec)(nil),             // 1: chubo.resource.definitions.hardware.PCIDeviceSpec
+	(*PCIDriverRebindConfigSpec)(nil), // 2: chubo.resource.definitions.hardware.PCIDriverRebindConfigSpec
+	(*PCIDriverRebindStatusSpec)(nil), // 3: chubo.resource.definitions.hardware.PCIDriverRebindStatusSpec
+	(*ProcessorSpec)(nil),             // 4: chubo.resource.definitions.hardware.ProcessorSpec
+	(*SystemInformationSpec)(nil),     // 5: chubo.resource.definitions.hardware.SystemInformationSpec
 }
 var file_resource_definitions_hardware_hardware_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

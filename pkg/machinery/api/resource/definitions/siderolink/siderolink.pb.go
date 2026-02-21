@@ -243,7 +243,7 @@ var File_resource_definitions_siderolink_siderolink_proto protoreflect.FileDescr
 
 const file_resource_definitions_siderolink_siderolink_proto_rawDesc = "" +
 	"\n" +
-	"0resource/definitions/siderolink/siderolink.proto\x12%talos.resource.definitions.siderolink\x1a\x13common/common.proto\"\x96\x01\n" +
+	"0resource/definitions/siderolink/siderolink.proto\x12%chubo.resource.definitions.siderolink\x1a\x13common/common.proto\"\x96\x01\n" +
 	"\n" +
 	"ConfigSpec\x12!\n" +
 	"\fapi_endpoint\x18\x01 \x01(\tR\vapiEndpoint\x12\x12\n" +
@@ -281,13 +281,13 @@ func file_resource_definitions_siderolink_siderolink_proto_rawDescGZIP() []byte 
 
 var file_resource_definitions_siderolink_siderolink_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_resource_definitions_siderolink_siderolink_proto_goTypes = []any{
-	(*ConfigSpec)(nil),       // 0: talos.resource.definitions.siderolink.ConfigSpec
-	(*StatusSpec)(nil),       // 1: talos.resource.definitions.siderolink.StatusSpec
-	(*TunnelSpec)(nil),       // 2: talos.resource.definitions.siderolink.TunnelSpec
+	(*ConfigSpec)(nil),       // 0: chubo.resource.definitions.siderolink.ConfigSpec
+	(*StatusSpec)(nil),       // 1: chubo.resource.definitions.siderolink.StatusSpec
+	(*TunnelSpec)(nil),       // 2: chubo.resource.definitions.siderolink.TunnelSpec
 	(*common.NetIPPort)(nil), // 3: common.NetIPPort
 }
 var file_resource_definitions_siderolink_siderolink_proto_depIdxs = []int32{
-	3, // 0: talos.resource.definitions.siderolink.TunnelSpec.node_address:type_name -> common.NetIPPort
+	3, // 0: chubo.resource.definitions.siderolink.TunnelSpec.node_address:type_name -> common.NetIPPort
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

@@ -200,7 +200,7 @@ const (
 	// This node will perform the initial steps to bootstrap the cluster -- generation of TLS assets, starting of the control plane, etc.
 	MachineType_TYPE_INIT MachineType = 1
 	// TypeControlPlane designates the node as a control plane member.
-	// This means it will host etcd along with the Kubernetes controlplane components such as API Server, Controller Manager, Scheduler.
+	// This means it will host the control-plane services required to manage cluster state.
 	MachineType_TYPE_CONTROL_PLANE MachineType = 2
 	// TypeWorker designates the node as a worker node.
 	// This means it will be an available compute node for scheduling workloads.
@@ -3635,7 +3635,7 @@ var File_resource_definitions_enums_enums_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_enums_enums_proto_rawDesc = "" +
 	"\n" +
-	"&resource/definitions/enums/enums.proto\x12 talos.resource.definitions.enums*\x9b\x02\n" +
+	"&resource/definitions/enums/enums.proto\x12 chubo.resource.definitions.enums*\x9b\x02\n" +
 	"\x13RuntimeMachineStage\x12\x19\n" +
 	"\x15MACHINE_STAGE_UNKNOWN\x10\x00\x12\x19\n" +
 	"\x15MACHINE_STAGE_BOOTING\x10\x01\x12\x1c\n" +
@@ -4305,52 +4305,52 @@ func file_resource_definitions_enums_enums_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 46)
 var file_resource_definitions_enums_enums_proto_goTypes = []any{
-	(RuntimeMachineStage)(0),             // 0: talos.resource.definitions.enums.RuntimeMachineStage
-	(RuntimeSELinuxState)(0),             // 1: talos.resource.definitions.enums.RuntimeSELinuxState
-	(RuntimeFIPSState)(0),                // 2: talos.resource.definitions.enums.RuntimeFIPSState
-	(MachineType)(0),                     // 3: talos.resource.definitions.enums.MachineType
-	(NethelpersAddressFlag)(0),           // 4: talos.resource.definitions.enums.NethelpersAddressFlag
-	(NethelpersAddressSortAlgorithm)(0),  // 5: talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
-	(NethelpersADLACPActive)(0),          // 6: talos.resource.definitions.enums.NethelpersADLACPActive
-	(NethelpersADSelect)(0),              // 7: talos.resource.definitions.enums.NethelpersADSelect
-	(NethelpersARPAllTargets)(0),         // 8: talos.resource.definitions.enums.NethelpersARPAllTargets
-	(NethelpersARPValidate)(0),           // 9: talos.resource.definitions.enums.NethelpersARPValidate
-	(NethelpersAutoHostnameKind)(0),      // 10: talos.resource.definitions.enums.NethelpersAutoHostnameKind
-	(NethelpersBondMode)(0),              // 11: talos.resource.definitions.enums.NethelpersBondMode
-	(NethelpersBondXmitHashPolicy)(0),    // 12: talos.resource.definitions.enums.NethelpersBondXmitHashPolicy
-	(NethelpersClientIdentifier)(0),      // 13: talos.resource.definitions.enums.NethelpersClientIdentifier
-	(NethelpersConntrackState)(0),        // 14: talos.resource.definitions.enums.NethelpersConntrackState
-	(NethelpersDuplex)(0),                // 15: talos.resource.definitions.enums.NethelpersDuplex
-	(NethelpersFailOverMAC)(0),           // 16: talos.resource.definitions.enums.NethelpersFailOverMAC
-	(NethelpersFamily)(0),                // 17: talos.resource.definitions.enums.NethelpersFamily
-	(NethelpersICMPType)(0),              // 18: talos.resource.definitions.enums.NethelpersICMPType
-	(NethelpersLACPRate)(0),              // 19: talos.resource.definitions.enums.NethelpersLACPRate
-	(NethelpersLinkType)(0),              // 20: talos.resource.definitions.enums.NethelpersLinkType
-	(NethelpersMatchOperator)(0),         // 21: talos.resource.definitions.enums.NethelpersMatchOperator
-	(NethelpersNfTablesChainHook)(0),     // 22: talos.resource.definitions.enums.NethelpersNfTablesChainHook
-	(NethelpersNfTablesChainPriority)(0), // 23: talos.resource.definitions.enums.NethelpersNfTablesChainPriority
-	(NethelpersNfTablesVerdict)(0),       // 24: talos.resource.definitions.enums.NethelpersNfTablesVerdict
-	(NethelpersOperationalState)(0),      // 25: talos.resource.definitions.enums.NethelpersOperationalState
-	(NethelpersPort)(0),                  // 26: talos.resource.definitions.enums.NethelpersPort
-	(NethelpersPrimaryReselect)(0),       // 27: talos.resource.definitions.enums.NethelpersPrimaryReselect
-	(NethelpersProtocol)(0),              // 28: talos.resource.definitions.enums.NethelpersProtocol
-	(NethelpersRouteFlag)(0),             // 29: talos.resource.definitions.enums.NethelpersRouteFlag
-	(NethelpersRouteProtocol)(0),         // 30: talos.resource.definitions.enums.NethelpersRouteProtocol
-	(NethelpersRouteType)(0),             // 31: talos.resource.definitions.enums.NethelpersRouteType
-	(NethelpersRoutingTable)(0),          // 32: talos.resource.definitions.enums.NethelpersRoutingTable
-	(NethelpersScope)(0),                 // 33: talos.resource.definitions.enums.NethelpersScope
-	(NethelpersVLANProtocol)(0),          // 34: talos.resource.definitions.enums.NethelpersVLANProtocol
-	(NethelpersWOLMode)(0),               // 35: talos.resource.definitions.enums.NethelpersWOLMode
-	(BlockEncryptionKeyType)(0),          // 36: talos.resource.definitions.enums.BlockEncryptionKeyType
-	(BlockEncryptionProviderType)(0),     // 37: talos.resource.definitions.enums.BlockEncryptionProviderType
-	(BlockFilesystemType)(0),             // 38: talos.resource.definitions.enums.BlockFilesystemType
-	(BlockFSParameterType)(0),            // 39: talos.resource.definitions.enums.BlockFSParameterType
-	(BlockVolumePhase)(0),                // 40: talos.resource.definitions.enums.BlockVolumePhase
-	(BlockVolumeType)(0),                 // 41: talos.resource.definitions.enums.BlockVolumeType
-	(CriImageCacheStatus)(0),             // 42: talos.resource.definitions.enums.CriImageCacheStatus
-	(CriImageCacheCopyStatus)(0),         // 43: talos.resource.definitions.enums.CriImageCacheCopyStatus
-	(NetworkConfigLayer)(0),              // 44: talos.resource.definitions.enums.NetworkConfigLayer
-	(NetworkOperator)(0),                 // 45: talos.resource.definitions.enums.NetworkOperator
+	(RuntimeMachineStage)(0),             // 0: chubo.resource.definitions.enums.RuntimeMachineStage
+	(RuntimeSELinuxState)(0),             // 1: chubo.resource.definitions.enums.RuntimeSELinuxState
+	(RuntimeFIPSState)(0),                // 2: chubo.resource.definitions.enums.RuntimeFIPSState
+	(MachineType)(0),                     // 3: chubo.resource.definitions.enums.MachineType
+	(NethelpersAddressFlag)(0),           // 4: chubo.resource.definitions.enums.NethelpersAddressFlag
+	(NethelpersAddressSortAlgorithm)(0),  // 5: chubo.resource.definitions.enums.NethelpersAddressSortAlgorithm
+	(NethelpersADLACPActive)(0),          // 6: chubo.resource.definitions.enums.NethelpersADLACPActive
+	(NethelpersADSelect)(0),              // 7: chubo.resource.definitions.enums.NethelpersADSelect
+	(NethelpersARPAllTargets)(0),         // 8: chubo.resource.definitions.enums.NethelpersARPAllTargets
+	(NethelpersARPValidate)(0),           // 9: chubo.resource.definitions.enums.NethelpersARPValidate
+	(NethelpersAutoHostnameKind)(0),      // 10: chubo.resource.definitions.enums.NethelpersAutoHostnameKind
+	(NethelpersBondMode)(0),              // 11: chubo.resource.definitions.enums.NethelpersBondMode
+	(NethelpersBondXmitHashPolicy)(0),    // 12: chubo.resource.definitions.enums.NethelpersBondXmitHashPolicy
+	(NethelpersClientIdentifier)(0),      // 13: chubo.resource.definitions.enums.NethelpersClientIdentifier
+	(NethelpersConntrackState)(0),        // 14: chubo.resource.definitions.enums.NethelpersConntrackState
+	(NethelpersDuplex)(0),                // 15: chubo.resource.definitions.enums.NethelpersDuplex
+	(NethelpersFailOverMAC)(0),           // 16: chubo.resource.definitions.enums.NethelpersFailOverMAC
+	(NethelpersFamily)(0),                // 17: chubo.resource.definitions.enums.NethelpersFamily
+	(NethelpersICMPType)(0),              // 18: chubo.resource.definitions.enums.NethelpersICMPType
+	(NethelpersLACPRate)(0),              // 19: chubo.resource.definitions.enums.NethelpersLACPRate
+	(NethelpersLinkType)(0),              // 20: chubo.resource.definitions.enums.NethelpersLinkType
+	(NethelpersMatchOperator)(0),         // 21: chubo.resource.definitions.enums.NethelpersMatchOperator
+	(NethelpersNfTablesChainHook)(0),     // 22: chubo.resource.definitions.enums.NethelpersNfTablesChainHook
+	(NethelpersNfTablesChainPriority)(0), // 23: chubo.resource.definitions.enums.NethelpersNfTablesChainPriority
+	(NethelpersNfTablesVerdict)(0),       // 24: chubo.resource.definitions.enums.NethelpersNfTablesVerdict
+	(NethelpersOperationalState)(0),      // 25: chubo.resource.definitions.enums.NethelpersOperationalState
+	(NethelpersPort)(0),                  // 26: chubo.resource.definitions.enums.NethelpersPort
+	(NethelpersPrimaryReselect)(0),       // 27: chubo.resource.definitions.enums.NethelpersPrimaryReselect
+	(NethelpersProtocol)(0),              // 28: chubo.resource.definitions.enums.NethelpersProtocol
+	(NethelpersRouteFlag)(0),             // 29: chubo.resource.definitions.enums.NethelpersRouteFlag
+	(NethelpersRouteProtocol)(0),         // 30: chubo.resource.definitions.enums.NethelpersRouteProtocol
+	(NethelpersRouteType)(0),             // 31: chubo.resource.definitions.enums.NethelpersRouteType
+	(NethelpersRoutingTable)(0),          // 32: chubo.resource.definitions.enums.NethelpersRoutingTable
+	(NethelpersScope)(0),                 // 33: chubo.resource.definitions.enums.NethelpersScope
+	(NethelpersVLANProtocol)(0),          // 34: chubo.resource.definitions.enums.NethelpersVLANProtocol
+	(NethelpersWOLMode)(0),               // 35: chubo.resource.definitions.enums.NethelpersWOLMode
+	(BlockEncryptionKeyType)(0),          // 36: chubo.resource.definitions.enums.BlockEncryptionKeyType
+	(BlockEncryptionProviderType)(0),     // 37: chubo.resource.definitions.enums.BlockEncryptionProviderType
+	(BlockFilesystemType)(0),             // 38: chubo.resource.definitions.enums.BlockFilesystemType
+	(BlockFSParameterType)(0),            // 39: chubo.resource.definitions.enums.BlockFSParameterType
+	(BlockVolumePhase)(0),                // 40: chubo.resource.definitions.enums.BlockVolumePhase
+	(BlockVolumeType)(0),                 // 41: chubo.resource.definitions.enums.BlockVolumeType
+	(CriImageCacheStatus)(0),             // 42: chubo.resource.definitions.enums.CriImageCacheStatus
+	(CriImageCacheCopyStatus)(0),         // 43: chubo.resource.definitions.enums.CriImageCacheCopyStatus
+	(NetworkConfigLayer)(0),              // 44: chubo.resource.definitions.enums.NetworkConfigLayer
+	(NetworkOperator)(0),                 // 45: chubo.resource.definitions.enums.NetworkOperator
 }
 var file_resource_definitions_enums_enums_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type

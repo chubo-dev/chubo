@@ -29,9 +29,9 @@ const (
 // ImageCacheConfigSpec represents the ImageCacheConfig.
 type ImageCacheConfigSpec struct {
 	state         protoimpl.MessageState        `protogen:"open.v1"`
-	Status        enums.CriImageCacheStatus     `protobuf:"varint,1,opt,name=status,proto3,enum=talos.resource.definitions.enums.CriImageCacheStatus" json:"status,omitempty"`
+	Status        enums.CriImageCacheStatus     `protobuf:"varint,1,opt,name=status,proto3,enum=chubo.resource.definitions.enums.CriImageCacheStatus" json:"status,omitempty"`
 	Roots         []string                      `protobuf:"bytes,2,rep,name=roots,proto3" json:"roots,omitempty"`
-	CopyStatus    enums.CriImageCacheCopyStatus `protobuf:"varint,3,opt,name=copy_status,json=copyStatus,proto3,enum=talos.resource.definitions.enums.CriImageCacheCopyStatus" json:"copy_status,omitempty"`
+	CopyStatus    enums.CriImageCacheCopyStatus `protobuf:"varint,3,opt,name=copy_status,json=copyStatus,proto3,enum=chubo.resource.definitions.enums.CriImageCacheCopyStatus" json:"copy_status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -441,25 +441,25 @@ var File_resource_definitions_cri_cri_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_cri_cri_proto_rawDesc = "" +
 	"\n" +
-	"\"resource/definitions/cri/cri.proto\x12\x1etalos.resource.definitions.cri\x1a\x13common/common.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a&resource/definitions/enums/enums.proto\"\xd7\x01\n" +
+	"\"resource/definitions/cri/cri.proto\x12\x1echubo.resource.definitions.cri\x1a\x13common/common.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a&resource/definitions/enums/enums.proto\"\xd7\x01\n" +
 	"\x14ImageCacheConfigSpec\x12M\n" +
-	"\x06status\x18\x01 \x01(\x0e25.talos.resource.definitions.enums.CriImageCacheStatusR\x06status\x12\x14\n" +
+	"\x06status\x18\x01 \x01(\x0e25.chubo.resource.definitions.enums.CriImageCacheStatusR\x06status\x12\x14\n" +
 	"\x05roots\x18\x02 \x03(\tR\x05roots\x12Z\n" +
-	"\vcopy_status\x18\x03 \x01(\x0e29.talos.resource.definitions.enums.CriImageCacheCopyStatusR\n" +
+	"\vcopy_status\x18\x03 \x01(\x0e29.chubo.resource.definitions.enums.CriImageCacheCopyStatusR\n" +
 	"copyStatus\"\xce\x05\n" +
 	"\x14RegistriesConfigSpec\x12t\n" +
-	"\x10registry_mirrors\x18\x01 \x03(\v2I.talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntryR\x0fregistryMirrors\x12n\n" +
-	"\x0eregistry_auths\x18\x02 \x03(\v2G.talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntryR\rregistryAuths\x12l\n" +
-	"\x0eregistry_tl_ss\x18\x03 \x03(\v2F.talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntryR\fregistryTlSs\x1ax\n" +
+	"\x10registry_mirrors\x18\x01 \x03(\v2I.chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntryR\x0fregistryMirrors\x12n\n" +
+	"\x0eregistry_auths\x18\x02 \x03(\v2G.chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntryR\rregistryAuths\x12l\n" +
+	"\x0eregistry_tl_ss\x18\x03 \x03(\v2F.chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntryR\fregistryTlSs\x1ax\n" +
 	"\x14RegistryMirrorsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12J\n" +
-	"\x05value\x18\x02 \x01(\v24.talos.resource.definitions.cri.RegistryMirrorConfigR\x05value:\x028\x01\x1at\n" +
+	"\x05value\x18\x02 \x01(\v24.chubo.resource.definitions.cri.RegistryMirrorConfigR\x05value:\x028\x01\x1at\n" +
 	"\x12RegistryAuthsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12H\n" +
-	"\x05value\x18\x02 \x01(\v22.talos.resource.definitions.cri.RegistryAuthConfigR\x05value:\x028\x01\x1ar\n" +
+	"\x05value\x18\x02 \x01(\v22.chubo.resource.definitions.cri.RegistryAuthConfigR\x05value:\x028\x01\x1ar\n" +
 	"\x11RegistryTlSsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12G\n" +
-	"\x05value\x18\x02 \x01(\v21.talos.resource.definitions.cri.RegistryTLSConfigR\x05value:\x028\x01\"\xcb\x01\n" +
+	"\x05value\x18\x02 \x01(\v21.chubo.resource.definitions.cri.RegistryTLSConfigR\x05value:\x028\x01\"\xcb\x01\n" +
 	"\x12RegistryAuthConfig\x12+\n" +
 	"\x11registry_username\x18\x01 \x01(\tR\x10registryUsername\x12+\n" +
 	"\x11registry_password\x18\x02 \x01(\tR\x10registryPassword\x12#\n" +
@@ -469,7 +469,7 @@ const file_resource_definitions_cri_cri_proto_rawDesc = "" +
 	"\x11endpoint_endpoint\x18\x01 \x01(\tR\x10endpointEndpoint\x124\n" +
 	"\x16endpoint_override_path\x18\x02 \x01(\bR\x14endpointOverridePath\"\xab\x01\n" +
 	"\x14RegistryMirrorConfig\x12a\n" +
-	"\x10mirror_endpoints\x18\x01 \x03(\v26.talos.resource.definitions.cri.RegistryEndpointConfigR\x0fmirrorEndpoints\x120\n" +
+	"\x10mirror_endpoints\x18\x01 \x03(\v26.chubo.resource.definitions.cri.RegistryEndpointConfigR\x0fmirrorEndpoints\x120\n" +
 	"\x14mirror_skip_fallback\x18\x03 \x01(\bR\x12mirrorSkipFallback\"\xb7\x01\n" +
 	"\x11RegistryTLSConfig\x12S\n" +
 	"\x13tls_client_identity\x18\x01 \x01(\v2#.common.PEMEncodedCertificateAndKeyR\x11tlsClientIdentity\x12\x14\n" +
@@ -494,33 +494,33 @@ func file_resource_definitions_cri_cri_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_cri_cri_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_resource_definitions_cri_cri_proto_goTypes = []any{
-	(*ImageCacheConfigSpec)(nil),       // 0: talos.resource.definitions.cri.ImageCacheConfigSpec
-	(*RegistriesConfigSpec)(nil),       // 1: talos.resource.definitions.cri.RegistriesConfigSpec
-	(*RegistryAuthConfig)(nil),         // 2: talos.resource.definitions.cri.RegistryAuthConfig
-	(*RegistryEndpointConfig)(nil),     // 3: talos.resource.definitions.cri.RegistryEndpointConfig
-	(*RegistryMirrorConfig)(nil),       // 4: talos.resource.definitions.cri.RegistryMirrorConfig
-	(*RegistryTLSConfig)(nil),          // 5: talos.resource.definitions.cri.RegistryTLSConfig
-	(*SeccompProfileSpec)(nil),         // 6: talos.resource.definitions.cri.SeccompProfileSpec
-	nil,                                // 7: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry
-	nil,                                // 8: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry
-	nil,                                // 9: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry
-	(enums.CriImageCacheStatus)(0),     // 10: talos.resource.definitions.enums.CriImageCacheStatus
-	(enums.CriImageCacheCopyStatus)(0), // 11: talos.resource.definitions.enums.CriImageCacheCopyStatus
+	(*ImageCacheConfigSpec)(nil),       // 0: chubo.resource.definitions.cri.ImageCacheConfigSpec
+	(*RegistriesConfigSpec)(nil),       // 1: chubo.resource.definitions.cri.RegistriesConfigSpec
+	(*RegistryAuthConfig)(nil),         // 2: chubo.resource.definitions.cri.RegistryAuthConfig
+	(*RegistryEndpointConfig)(nil),     // 3: chubo.resource.definitions.cri.RegistryEndpointConfig
+	(*RegistryMirrorConfig)(nil),       // 4: chubo.resource.definitions.cri.RegistryMirrorConfig
+	(*RegistryTLSConfig)(nil),          // 5: chubo.resource.definitions.cri.RegistryTLSConfig
+	(*SeccompProfileSpec)(nil),         // 6: chubo.resource.definitions.cri.SeccompProfileSpec
+	nil,                                // 7: chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry
+	nil,                                // 8: chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry
+	nil,                                // 9: chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry
+	(enums.CriImageCacheStatus)(0),     // 10: chubo.resource.definitions.enums.CriImageCacheStatus
+	(enums.CriImageCacheCopyStatus)(0), // 11: chubo.resource.definitions.enums.CriImageCacheCopyStatus
 	(*common.PEMEncodedCertificateAndKey)(nil), // 12: common.PEMEncodedCertificateAndKey
 	(*structpb.Struct)(nil),                    // 13: google.protobuf.Struct
 }
 var file_resource_definitions_cri_cri_proto_depIdxs = []int32{
-	10, // 0: talos.resource.definitions.cri.ImageCacheConfigSpec.status:type_name -> talos.resource.definitions.enums.CriImageCacheStatus
-	11, // 1: talos.resource.definitions.cri.ImageCacheConfigSpec.copy_status:type_name -> talos.resource.definitions.enums.CriImageCacheCopyStatus
-	7,  // 2: talos.resource.definitions.cri.RegistriesConfigSpec.registry_mirrors:type_name -> talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry
-	8,  // 3: talos.resource.definitions.cri.RegistriesConfigSpec.registry_auths:type_name -> talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry
-	9,  // 4: talos.resource.definitions.cri.RegistriesConfigSpec.registry_tl_ss:type_name -> talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry
-	3,  // 5: talos.resource.definitions.cri.RegistryMirrorConfig.mirror_endpoints:type_name -> talos.resource.definitions.cri.RegistryEndpointConfig
-	12, // 6: talos.resource.definitions.cri.RegistryTLSConfig.tls_client_identity:type_name -> common.PEMEncodedCertificateAndKey
-	13, // 7: talos.resource.definitions.cri.SeccompProfileSpec.value:type_name -> google.protobuf.Struct
-	4,  // 8: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry.value:type_name -> talos.resource.definitions.cri.RegistryMirrorConfig
-	2,  // 9: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry.value:type_name -> talos.resource.definitions.cri.RegistryAuthConfig
-	5,  // 10: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry.value:type_name -> talos.resource.definitions.cri.RegistryTLSConfig
+	10, // 0: chubo.resource.definitions.cri.ImageCacheConfigSpec.status:type_name -> chubo.resource.definitions.enums.CriImageCacheStatus
+	11, // 1: chubo.resource.definitions.cri.ImageCacheConfigSpec.copy_status:type_name -> chubo.resource.definitions.enums.CriImageCacheCopyStatus
+	7,  // 2: chubo.resource.definitions.cri.RegistriesConfigSpec.registry_mirrors:type_name -> chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry
+	8,  // 3: chubo.resource.definitions.cri.RegistriesConfigSpec.registry_auths:type_name -> chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry
+	9,  // 4: chubo.resource.definitions.cri.RegistriesConfigSpec.registry_tl_ss:type_name -> chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry
+	3,  // 5: chubo.resource.definitions.cri.RegistryMirrorConfig.mirror_endpoints:type_name -> chubo.resource.definitions.cri.RegistryEndpointConfig
+	12, // 6: chubo.resource.definitions.cri.RegistryTLSConfig.tls_client_identity:type_name -> common.PEMEncodedCertificateAndKey
+	13, // 7: chubo.resource.definitions.cri.SeccompProfileSpec.value:type_name -> google.protobuf.Struct
+	4,  // 8: chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry.value:type_name -> chubo.resource.definitions.cri.RegistryMirrorConfig
+	2,  // 9: chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry.value:type_name -> chubo.resource.definitions.cri.RegistryAuthConfig
+	5,  // 10: chubo.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry.value:type_name -> chubo.resource.definitions.cri.RegistryTLSConfig
 	11, // [11:11] is the sub-list for method output_type
 	11, // [11:11] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name

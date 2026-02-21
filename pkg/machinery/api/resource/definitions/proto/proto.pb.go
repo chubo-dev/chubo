@@ -172,7 +172,7 @@ var File_resource_definitions_proto_proto_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_proto_proto_proto_rawDesc = "" +
 	"\n" +
-	"&resource/definitions/proto/proto.proto\x12 talos.resource.definitions.proto\"`\n" +
+	"&resource/definitions/proto/proto.proto\x12 chubo.resource.definitions.proto\"`\n" +
 	"\x0eLinuxIDMapping\x12!\n" +
 	"\fcontainer_id\x18\x01 \x01(\rR\vcontainerId\x12\x17\n" +
 	"\ahost_id\x18\x02 \x01(\rR\x06hostId\x12\x12\n" +
@@ -182,8 +182,8 @@ const file_resource_definitions_proto_proto_proto_rawDesc = "" +
 	"\x04type\x18\x02 \x01(\tR\x04type\x12\x16\n" +
 	"\x06source\x18\x03 \x01(\tR\x06source\x12\x18\n" +
 	"\aoptions\x18\x04 \x03(\tR\aoptions\x12S\n" +
-	"\fuid_mappings\x18\x05 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vuidMappings\x12S\n" +
-	"\fgid_mappings\x18\x06 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vgidMappingsBs\n" +
+	"\fuid_mappings\x18\x05 \x03(\v20.chubo.resource.definitions.proto.LinuxIDMappingR\vuidMappings\x12S\n" +
+	"\fgid_mappings\x18\x06 \x03(\v20.chubo.resource.definitions.proto.LinuxIDMappingR\vgidMappingsBs\n" +
 	"(dev.chubo.api.resource.definitions.protoZGgithub.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/protob\x06proto3"
 
 var (
@@ -200,12 +200,12 @@ func file_resource_definitions_proto_proto_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_proto_proto_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_definitions_proto_proto_proto_goTypes = []any{
-	(*LinuxIDMapping)(nil), // 0: talos.resource.definitions.proto.LinuxIDMapping
-	(*Mount)(nil),          // 1: talos.resource.definitions.proto.Mount
+	(*LinuxIDMapping)(nil), // 0: chubo.resource.definitions.proto.LinuxIDMapping
+	(*Mount)(nil),          // 1: chubo.resource.definitions.proto.Mount
 }
 var file_resource_definitions_proto_proto_proto_depIdxs = []int32{
-	0, // 0: talos.resource.definitions.proto.Mount.uid_mappings:type_name -> talos.resource.definitions.proto.LinuxIDMapping
-	0, // 1: talos.resource.definitions.proto.Mount.gid_mappings:type_name -> talos.resource.definitions.proto.LinuxIDMapping
+	0, // 0: chubo.resource.definitions.proto.Mount.uid_mappings:type_name -> chubo.resource.definitions.proto.LinuxIDMapping
+	0, // 1: chubo.resource.definitions.proto.Mount.gid_mappings:type_name -> chubo.resource.definitions.proto.LinuxIDMapping
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

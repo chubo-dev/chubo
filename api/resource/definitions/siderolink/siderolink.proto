@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.siderolink;
+package chubo.resource.definitions.siderolink;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/siderolink";
 option java_package = "dev.chubo.api.resource.definitions.siderolink";

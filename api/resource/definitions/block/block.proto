@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.block;
+package chubo.resource.definitions.block;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block";
 option java_package = "dev.chubo.api.resource.definitions.block";
@@ -86,7 +86,7 @@ message DiskSpec {
 // EncryptionKey is the spec for volume encryption key.
 message EncryptionKey {
   int64 slot = 1;
-  talos.resource.definitions.enums.BlockEncryptionKeyType type = 2;
+  chubo.resource.definitions.enums.BlockEncryptionKeyType type = 2;
   bytes static_passphrase = 3;
   string kms_endpoint = 4;
   bool tpm_check_secureboot_status_on_enroll = 5;
@@ -97,7 +97,7 @@ message EncryptionKey {
 
 // EncryptionSpec is the spec for volume encryption.
 message EncryptionSpec {
-  talos.resource.definitions.enums.BlockEncryptionProviderType provider = 1;
+  chubo.resource.definitions.enums.BlockEncryptionProviderType provider = 1;
   repeated EncryptionKey keys = 2;
   string cipher = 3;
   uint64 key_size = 4;
@@ -107,7 +107,7 @@ message EncryptionSpec {
 
 // FilesystemSpec is the spec for volume filesystem.
 message FilesystemSpec {
-  talos.resource.definitions.enums.BlockFilesystemType type = 1;
+  chubo.resource.definitions.enums.BlockFilesystemType type = 1;
   string label = 2;
 }
 
@@ -148,16 +148,16 @@ message MountStatusSpec {
   MountRequestSpec spec = 1;
   string target = 2;
   string source = 3;
-  talos.resource.definitions.enums.BlockFilesystemType filesystem = 4;
+  chubo.resource.definitions.enums.BlockFilesystemType filesystem = 4;
   bool read_only = 5;
   bool project_quota_support = 6;
-  talos.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 7;
+  chubo.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 7;
   bool detached = 8;
 }
 
 // ParameterSpec is a mount parameter.
 message ParameterSpec {
-  talos.resource.definitions.enums.BlockFSParameterType type = 1;
+  chubo.resource.definitions.enums.BlockFSParameterType type = 1;
   string name = 2;
   string string = 3;
   bytes binary = 5;
@@ -225,7 +225,7 @@ message UserDiskConfigStatusSpec {
 // VolumeConfigSpec is the spec for VolumeConfig resource.
 message VolumeConfigSpec {
   string parent_id = 1;
-  talos.resource.definitions.enums.BlockVolumeType type = 2;
+  chubo.resource.definitions.enums.BlockVolumeType type = 2;
   ProvisioningSpec provisioning = 3;
   LocatorSpec locator = 4;
   MountSpec mount = 5;
@@ -256,22 +256,22 @@ message VolumeMountStatusSpec {
 
 // VolumeStatusSpec is the spec for VolumeStatus resource.
 message VolumeStatusSpec {
-  talos.resource.definitions.enums.BlockVolumePhase phase = 1;
+  chubo.resource.definitions.enums.BlockVolumePhase phase = 1;
   string location = 2;
   string error_message = 3;
   string uuid = 4;
   string partition_uuid = 5;
-  talos.resource.definitions.enums.BlockVolumePhase pre_fail_phase = 6;
+  chubo.resource.definitions.enums.BlockVolumePhase pre_fail_phase = 6;
   string parent_location = 7;
   int64 partition_index = 8;
   uint64 size = 9;
-  talos.resource.definitions.enums.BlockFilesystemType filesystem = 10;
+  chubo.resource.definitions.enums.BlockFilesystemType filesystem = 10;
   string mount_location = 11;
-  talos.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 12;
+  chubo.resource.definitions.enums.BlockEncryptionProviderType encryption_provider = 12;
   string pretty_size = 13;
   repeated string encryption_failed_syncs = 14;
   MountSpec mount_spec = 15;
-  talos.resource.definitions.enums.BlockVolumeType type = 16;
+  chubo.resource.definitions.enums.BlockVolumeType type = 16;
   repeated string configured_encryption_keys = 17;
   SymlinkProvisioningSpec symlink_spec = 18;
   string parent_id = 19;

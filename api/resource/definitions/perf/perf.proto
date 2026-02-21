@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.perf;
+package chubo.resource.definitions.perf;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/perf";
 option java_package = "dev.chubo.api.resource.definitions.perf";

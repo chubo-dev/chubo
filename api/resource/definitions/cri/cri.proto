@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.cri;
+package chubo.resource.definitions.cri;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cri";
 option java_package = "dev.chubo.api.resource.definitions.cri";
@@ -11,9 +11,9 @@ import "resource/definitions/enums/enums.proto";
 
 // ImageCacheConfigSpec represents the ImageCacheConfig.
 message ImageCacheConfigSpec {
-  talos.resource.definitions.enums.CriImageCacheStatus status = 1;
+  chubo.resource.definitions.enums.CriImageCacheStatus status = 1;
   repeated string roots = 2;
-  talos.resource.definitions.enums.CriImageCacheCopyStatus copy_status = 3;
+  chubo.resource.definitions.enums.CriImageCacheCopyStatus copy_status = 3;
 }
 
 // RegistriesConfigSpec describes status of rendered secrets.

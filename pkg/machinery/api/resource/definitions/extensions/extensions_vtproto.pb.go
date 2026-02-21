@@ -49,8 +49,18 @@ func (m *Compatibility) MarshalToSizedBufferVT(dAtA []byte) (int, error) {
 		i -= len(m.unknownFields)
 		copy(dAtA[i:], m.unknownFields)
 	}
-	if m.Talos != nil {
-		size, err := m.Talos.MarshalToSizedBufferVT(dAtA[:i])
+	if m.Chubo != nil {
+		size, err := m.Chubo.MarshalToSizedBufferVT(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = protohelpers.EncodeVarint(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Legacy != nil {
+		size, err := m.Legacy.MarshalToSizedBufferVT(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -236,8 +246,12 @@ func (m *Compatibility) SizeVT() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Talos != nil {
-		l = m.Talos.SizeVT()
+	if m.Legacy != nil {
+		l = m.Legacy.SizeVT()
+		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
+	}
+	if m.Chubo != nil {
+		l = m.Chubo.SizeVT()
 		n += 1 + l + protohelpers.SizeOfVarint(uint64(l))
 	}
 	n += len(m.unknownFields)
@@ -341,7 +355,7 @@ func (m *Compatibility) UnmarshalVT(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Talos", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Legacy", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -368,10 +382,46 @@ func (m *Compatibility) UnmarshalVT(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Talos == nil {
-				m.Talos = &Constraint{}
+			if m.Legacy == nil {
+				m.Legacy = &Constraint{}
 			}
-			if err := m.Talos.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Legacy.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Chubo", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protohelpers.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return protohelpers.ErrInvalidLength
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Chubo == nil {
+				m.Chubo = &Constraint{}
+			}
+			if err := m.Chubo.UnmarshalVT(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

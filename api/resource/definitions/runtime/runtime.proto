@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.runtime;
+package chubo.resource.definitions.runtime;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/runtime";
 option java_package = "dev.chubo.api.resource.definitions.runtime";
@@ -30,7 +30,7 @@ message EnvironmentSpec {
   repeated string variables = 1;
 }
 
-// EventSinkConfigSpec describes configuration of Talos event log streaming.
+// EventSinkConfigSpec describes configuration of Chubo event log streaming.
 message EventSinkConfigSpec {
   string endpoint = 1;
 }
@@ -92,7 +92,7 @@ message LoadedKernelModuleSpec {
 
 // MachineStatusSpec describes status of the defined sysctls.
 message MachineStatusSpec {
-  talos.resource.definitions.enums.RuntimeMachineStage stage = 1;
+  chubo.resource.definitions.enums.RuntimeMachineStage stage = 1;
   MachineStatusStatus status = 2;
 }
 
@@ -165,9 +165,9 @@ message SecurityStateSpec {
   bool secure_boot = 1;
   string uki_signing_key_fingerprint = 2;
   string pcr_signing_key_fingerprint = 3;
-  talos.resource.definitions.enums.RuntimeSELinuxState se_linux_state = 4;
+  chubo.resource.definitions.enums.RuntimeSELinuxState se_linux_state = 4;
   bool booted_with_uki = 5;
-  talos.resource.definitions.enums.RuntimeFIPSState fips_state = 6;
+  chubo.resource.definitions.enums.RuntimeFIPSState fips_state = 6;
   bool module_signature_enforced = 7;
 }
 

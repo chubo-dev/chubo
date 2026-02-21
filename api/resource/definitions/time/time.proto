@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.time;
+package chubo.resource.definitions.time;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/time";
 option java_package = "dev.chubo.api.resource.definitions.time";

@@ -659,7 +659,7 @@ func (x *DiskSpec) GetSymlinks() []string {
 type EncryptionKey struct {
 	state                            protoimpl.MessageState       `protogen:"open.v1"`
 	Slot                             int64                        `protobuf:"varint,1,opt,name=slot,proto3" json:"slot,omitempty"`
-	Type                             enums.BlockEncryptionKeyType `protobuf:"varint,2,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockEncryptionKeyType" json:"type,omitempty"`
+	Type                             enums.BlockEncryptionKeyType `protobuf:"varint,2,opt,name=type,proto3,enum=chubo.resource.definitions.enums.BlockEncryptionKeyType" json:"type,omitempty"`
 	StaticPassphrase                 []byte                       `protobuf:"bytes,3,opt,name=static_passphrase,json=staticPassphrase,proto3" json:"static_passphrase,omitempty"`
 	KmsEndpoint                      string                       `protobuf:"bytes,4,opt,name=kms_endpoint,json=kmsEndpoint,proto3" json:"kms_endpoint,omitempty"`
 	TpmCheckSecurebootStatusOnEnroll bool                         `protobuf:"varint,5,opt,name=tpm_check_secureboot_status_on_enroll,json=tpmCheckSecurebootStatusOnEnroll,proto3" json:"tpm_check_secureboot_status_on_enroll,omitempty"`
@@ -759,7 +759,7 @@ func (x *EncryptionKey) GetTpmPubKeyPcRs() []int64 {
 // EncryptionSpec is the spec for volume encryption.
 type EncryptionSpec struct {
 	state         protoimpl.MessageState            `protogen:"open.v1"`
-	Provider      enums.BlockEncryptionProviderType `protobuf:"varint,1,opt,name=provider,proto3,enum=talos.resource.definitions.enums.BlockEncryptionProviderType" json:"provider,omitempty"`
+	Provider      enums.BlockEncryptionProviderType `protobuf:"varint,1,opt,name=provider,proto3,enum=chubo.resource.definitions.enums.BlockEncryptionProviderType" json:"provider,omitempty"`
 	Keys          []*EncryptionKey                  `protobuf:"bytes,2,rep,name=keys,proto3" json:"keys,omitempty"`
 	Cipher        string                            `protobuf:"bytes,3,opt,name=cipher,proto3" json:"cipher,omitempty"`
 	KeySize       uint64                            `protobuf:"varint,4,opt,name=key_size,json=keySize,proto3" json:"key_size,omitempty"`
@@ -844,7 +844,7 @@ func (x *EncryptionSpec) GetPerfOptions() []string {
 // FilesystemSpec is the spec for volume filesystem.
 type FilesystemSpec struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Type          enums.BlockFilesystemType `protobuf:"varint,1,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockFilesystemType" json:"type,omitempty"`
+	Type          enums.BlockFilesystemType `protobuf:"varint,1,opt,name=type,proto3,enum=chubo.resource.definitions.enums.BlockFilesystemType" json:"type,omitempty"`
 	Label         string                    `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1171,10 +1171,10 @@ type MountStatusSpec struct {
 	Spec                *MountRequestSpec                 `protobuf:"bytes,1,opt,name=spec,proto3" json:"spec,omitempty"`
 	Target              string                            `protobuf:"bytes,2,opt,name=target,proto3" json:"target,omitempty"`
 	Source              string                            `protobuf:"bytes,3,opt,name=source,proto3" json:"source,omitempty"`
-	Filesystem          enums.BlockFilesystemType         `protobuf:"varint,4,opt,name=filesystem,proto3,enum=talos.resource.definitions.enums.BlockFilesystemType" json:"filesystem,omitempty"`
+	Filesystem          enums.BlockFilesystemType         `protobuf:"varint,4,opt,name=filesystem,proto3,enum=chubo.resource.definitions.enums.BlockFilesystemType" json:"filesystem,omitempty"`
 	ReadOnly            bool                              `protobuf:"varint,5,opt,name=read_only,json=readOnly,proto3" json:"read_only,omitempty"`
 	ProjectQuotaSupport bool                              `protobuf:"varint,6,opt,name=project_quota_support,json=projectQuotaSupport,proto3" json:"project_quota_support,omitempty"`
-	EncryptionProvider  enums.BlockEncryptionProviderType `protobuf:"varint,7,opt,name=encryption_provider,json=encryptionProvider,proto3,enum=talos.resource.definitions.enums.BlockEncryptionProviderType" json:"encryption_provider,omitempty"`
+	EncryptionProvider  enums.BlockEncryptionProviderType `protobuf:"varint,7,opt,name=encryption_provider,json=encryptionProvider,proto3,enum=chubo.resource.definitions.enums.BlockEncryptionProviderType" json:"encryption_provider,omitempty"`
 	Detached            bool                              `protobuf:"varint,8,opt,name=detached,proto3" json:"detached,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
@@ -1269,7 +1269,7 @@ func (x *MountStatusSpec) GetDetached() bool {
 // ParameterSpec is a mount parameter.
 type ParameterSpec struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Type          enums.BlockFSParameterType `protobuf:"varint,1,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockFSParameterType" json:"type,omitempty"`
+	Type          enums.BlockFSParameterType `protobuf:"varint,1,opt,name=type,proto3,enum=chubo.resource.definitions.enums.BlockFSParameterType" json:"type,omitempty"`
 	Name          string                     `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	String_       string                     `protobuf:"bytes,3,opt,name=string,proto3" json:"string,omitempty"`
 	Binary        []byte                     `protobuf:"bytes,5,opt,name=binary,proto3" json:"binary,omitempty"`
@@ -1851,7 +1851,7 @@ func (x *UserDiskConfigStatusSpec) GetTornDown() bool {
 type VolumeConfigSpec struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	ParentId      string                   `protobuf:"bytes,1,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
-	Type          enums.BlockVolumeType    `protobuf:"varint,2,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockVolumeType" json:"type,omitempty"`
+	Type          enums.BlockVolumeType    `protobuf:"varint,2,opt,name=type,proto3,enum=chubo.resource.definitions.enums.BlockVolumeType" json:"type,omitempty"`
 	Provisioning  *ProvisioningSpec        `protobuf:"bytes,3,opt,name=provisioning,proto3" json:"provisioning,omitempty"`
 	Locator       *LocatorSpec             `protobuf:"bytes,4,opt,name=locator,proto3" json:"locator,omitempty"`
 	Mount         *MountSpec               `protobuf:"bytes,5,opt,name=mount,proto3" json:"mount,omitempty"`
@@ -2121,22 +2121,22 @@ func (x *VolumeMountStatusSpec) GetSecure() bool {
 // VolumeStatusSpec is the spec for VolumeStatus resource.
 type VolumeStatusSpec struct {
 	state                    protoimpl.MessageState            `protogen:"open.v1"`
-	Phase                    enums.BlockVolumePhase            `protobuf:"varint,1,opt,name=phase,proto3,enum=talos.resource.definitions.enums.BlockVolumePhase" json:"phase,omitempty"`
+	Phase                    enums.BlockVolumePhase            `protobuf:"varint,1,opt,name=phase,proto3,enum=chubo.resource.definitions.enums.BlockVolumePhase" json:"phase,omitempty"`
 	Location                 string                            `protobuf:"bytes,2,opt,name=location,proto3" json:"location,omitempty"`
 	ErrorMessage             string                            `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 	Uuid                     string                            `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	PartitionUuid            string                            `protobuf:"bytes,5,opt,name=partition_uuid,json=partitionUuid,proto3" json:"partition_uuid,omitempty"`
-	PreFailPhase             enums.BlockVolumePhase            `protobuf:"varint,6,opt,name=pre_fail_phase,json=preFailPhase,proto3,enum=talos.resource.definitions.enums.BlockVolumePhase" json:"pre_fail_phase,omitempty"`
+	PreFailPhase             enums.BlockVolumePhase            `protobuf:"varint,6,opt,name=pre_fail_phase,json=preFailPhase,proto3,enum=chubo.resource.definitions.enums.BlockVolumePhase" json:"pre_fail_phase,omitempty"`
 	ParentLocation           string                            `protobuf:"bytes,7,opt,name=parent_location,json=parentLocation,proto3" json:"parent_location,omitempty"`
 	PartitionIndex           int64                             `protobuf:"varint,8,opt,name=partition_index,json=partitionIndex,proto3" json:"partition_index,omitempty"`
 	Size                     uint64                            `protobuf:"varint,9,opt,name=size,proto3" json:"size,omitempty"`
-	Filesystem               enums.BlockFilesystemType         `protobuf:"varint,10,opt,name=filesystem,proto3,enum=talos.resource.definitions.enums.BlockFilesystemType" json:"filesystem,omitempty"`
+	Filesystem               enums.BlockFilesystemType         `protobuf:"varint,10,opt,name=filesystem,proto3,enum=chubo.resource.definitions.enums.BlockFilesystemType" json:"filesystem,omitempty"`
 	MountLocation            string                            `protobuf:"bytes,11,opt,name=mount_location,json=mountLocation,proto3" json:"mount_location,omitempty"`
-	EncryptionProvider       enums.BlockEncryptionProviderType `protobuf:"varint,12,opt,name=encryption_provider,json=encryptionProvider,proto3,enum=talos.resource.definitions.enums.BlockEncryptionProviderType" json:"encryption_provider,omitempty"`
+	EncryptionProvider       enums.BlockEncryptionProviderType `protobuf:"varint,12,opt,name=encryption_provider,json=encryptionProvider,proto3,enum=chubo.resource.definitions.enums.BlockEncryptionProviderType" json:"encryption_provider,omitempty"`
 	PrettySize               string                            `protobuf:"bytes,13,opt,name=pretty_size,json=prettySize,proto3" json:"pretty_size,omitempty"`
 	EncryptionFailedSyncs    []string                          `protobuf:"bytes,14,rep,name=encryption_failed_syncs,json=encryptionFailedSyncs,proto3" json:"encryption_failed_syncs,omitempty"`
 	MountSpec                *MountSpec                        `protobuf:"bytes,15,opt,name=mount_spec,json=mountSpec,proto3" json:"mount_spec,omitempty"`
-	Type                     enums.BlockVolumeType             `protobuf:"varint,16,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockVolumeType" json:"type,omitempty"`
+	Type                     enums.BlockVolumeType             `protobuf:"varint,16,opt,name=type,proto3,enum=chubo.resource.definitions.enums.BlockVolumeType" json:"type,omitempty"`
 	ConfiguredEncryptionKeys []string                          `protobuf:"bytes,17,rep,name=configured_encryption_keys,json=configuredEncryptionKeys,proto3" json:"configured_encryption_keys,omitempty"`
 	SymlinkSpec              *SymlinkProvisioningSpec          `protobuf:"bytes,18,opt,name=symlink_spec,json=symlinkSpec,proto3" json:"symlink_spec,omitempty"`
 	ParentId                 string                            `protobuf:"bytes,19,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
@@ -2452,7 +2452,7 @@ var File_resource_definitions_block_block_proto protoreflect.FileDescriptor
 
 const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\n" +
-	"&resource/definitions/block/block.proto\x12 talos.resource.definitions.block\x1a&google/api/expr/v1alpha1/checked.proto\x1a&resource/definitions/enums/enums.proto\"\x99\x02\n" +
+	"&resource/definitions/block/block.proto\x12 chubo.resource.definitions.block\x1a&google/api/expr/v1alpha1/checked.proto\x1a&resource/definitions/enums/enums.proto\"\x99\x02\n" +
 	"\n" +
 	"DeviceSpec\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x14\n" +
@@ -2528,7 +2528,7 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\bsymlinks\x18\x12 \x03(\tR\bsymlinks\"\xfb\x02\n" +
 	"\rEncryptionKey\x12\x12\n" +
 	"\x04slot\x18\x01 \x01(\x03R\x04slot\x12L\n" +
-	"\x04type\x18\x02 \x01(\x0e28.talos.resource.definitions.enums.BlockEncryptionKeyTypeR\x04type\x12+\n" +
+	"\x04type\x18\x02 \x01(\x0e28.chubo.resource.definitions.enums.BlockEncryptionKeyTypeR\x04type\x12+\n" +
 	"\x11static_passphrase\x18\x03 \x01(\fR\x10staticPassphrase\x12!\n" +
 	"\fkms_endpoint\x18\x04 \x01(\tR\vkmsEndpoint\x12O\n" +
 	"%tpm_check_secureboot_status_on_enroll\x18\x05 \x01(\bR tpmCheckSecurebootStatusOnEnroll\x12\"\n" +
@@ -2536,15 +2536,15 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\btpmpc_rs\x18\a \x03(\x03R\atpmpcRs\x12(\n" +
 	"\x11tpm_pub_key_pc_rs\x18\b \x03(\x03R\rtpmPubKeyPcRs\"\xa5\x02\n" +
 	"\x0eEncryptionSpec\x12Y\n" +
-	"\bprovider\x18\x01 \x01(\x0e2=.talos.resource.definitions.enums.BlockEncryptionProviderTypeR\bprovider\x12C\n" +
-	"\x04keys\x18\x02 \x03(\v2/.talos.resource.definitions.block.EncryptionKeyR\x04keys\x12\x16\n" +
+	"\bprovider\x18\x01 \x01(\x0e2=.chubo.resource.definitions.enums.BlockEncryptionProviderTypeR\bprovider\x12C\n" +
+	"\x04keys\x18\x02 \x03(\v2/.chubo.resource.definitions.block.EncryptionKeyR\x04keys\x12\x16\n" +
 	"\x06cipher\x18\x03 \x01(\tR\x06cipher\x12\x19\n" +
 	"\bkey_size\x18\x04 \x01(\x04R\akeySize\x12\x1d\n" +
 	"\n" +
 	"block_size\x18\x05 \x01(\x04R\tblockSize\x12!\n" +
 	"\fperf_options\x18\x06 \x03(\tR\vperfOptions\"q\n" +
 	"\x0eFilesystemSpec\x12I\n" +
-	"\x04type\x18\x01 \x01(\x0e25.talos.resource.definitions.enums.BlockFilesystemTypeR\x04type\x12\x14\n" +
+	"\x04type\x18\x01 \x01(\x0e25.chubo.resource.definitions.enums.BlockFilesystemTypeR\x04type\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\"\x90\x01\n" +
 	"\vLocatorSpec\x12;\n" +
 	"\x05match\x18\x01 \x01(\v2%.google.api.expr.v1alpha1.CheckedExprR\x05match\x12D\n" +
@@ -2575,21 +2575,21 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"bindTarget\x12O\n" +
 	"\n" +
 	"parameters\x18\n" +
-	" \x03(\v2/.talos.resource.definitions.block.ParameterSpecR\n" +
+	" \x03(\v2/.chubo.resource.definitions.block.ParameterSpecR\n" +
 	"parameters\"\xbd\x03\n" +
 	"\x0fMountStatusSpec\x12F\n" +
-	"\x04spec\x18\x01 \x01(\v22.talos.resource.definitions.block.MountRequestSpecR\x04spec\x12\x16\n" +
+	"\x04spec\x18\x01 \x01(\v22.chubo.resource.definitions.block.MountRequestSpecR\x04spec\x12\x16\n" +
 	"\x06target\x18\x02 \x01(\tR\x06target\x12\x16\n" +
 	"\x06source\x18\x03 \x01(\tR\x06source\x12U\n" +
 	"\n" +
-	"filesystem\x18\x04 \x01(\x0e25.talos.resource.definitions.enums.BlockFilesystemTypeR\n" +
+	"filesystem\x18\x04 \x01(\x0e25.chubo.resource.definitions.enums.BlockFilesystemTypeR\n" +
 	"filesystem\x12\x1b\n" +
 	"\tread_only\x18\x05 \x01(\bR\breadOnly\x122\n" +
 	"\x15project_quota_support\x18\x06 \x01(\bR\x13projectQuotaSupport\x12n\n" +
-	"\x13encryption_provider\x18\a \x01(\x0e2=.talos.resource.definitions.enums.BlockEncryptionProviderTypeR\x12encryptionProvider\x12\x1a\n" +
+	"\x13encryption_provider\x18\a \x01(\x0e2=.chubo.resource.definitions.enums.BlockEncryptionProviderTypeR\x12encryptionProvider\x12\x1a\n" +
 	"\bdetached\x18\b \x01(\bR\bdetached\"\x9f\x01\n" +
 	"\rParameterSpec\x12J\n" +
-	"\x04type\x18\x01 \x01(\x0e26.talos.resource.definitions.enums.BlockFSParameterTypeR\x04type\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\x0e26.chubo.resource.definitions.enums.BlockFSParameterTypeR\x04type\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
 	"\x06string\x18\x03 \x01(\tR\x06string\x12\x16\n" +
 	"\x06binary\x18\x05 \x01(\fR\x06binary\"\xe4\x01\n" +
@@ -2602,10 +2602,10 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\x11relative_max_size\x18\x06 \x01(\x04R\x0frelativeMaxSize\x12*\n" +
 	"\x11negative_max_size\x18\a \x01(\bR\x0fnegativeMaxSize\"\xae\x02\n" +
 	"\x10ProvisioningSpec\x12S\n" +
-	"\rdisk_selector\x18\x01 \x01(\v2..talos.resource.definitions.block.DiskSelectorR\fdiskSelector\x12V\n" +
-	"\x0epartition_spec\x18\x02 \x01(\v2/.talos.resource.definitions.block.PartitionSpecR\rpartitionSpec\x12\x12\n" +
+	"\rdisk_selector\x18\x01 \x01(\v2..chubo.resource.definitions.block.DiskSelectorR\fdiskSelector\x12V\n" +
+	"\x0epartition_spec\x18\x02 \x01(\v2/.chubo.resource.definitions.block.PartitionSpecR\rpartitionSpec\x12\x12\n" +
 	"\x04wave\x18\x03 \x01(\x03R\x04wave\x12Y\n" +
-	"\x0ffilesystem_spec\x18\x04 \x01(\v20.talos.resource.definitions.block.FilesystemSpecR\x0efilesystemSpec\"\xd4\x01\n" +
+	"\x0ffilesystem_spec\x18\x04 \x01(\v20.chubo.resource.definitions.block.FilesystemSpecR\x0efilesystemSpec\"\xd4\x01\n" +
 	"\x0eSwapStatusSpec\x12\x16\n" +
 	"\x06device\x18\x01 \x01(\tR\x06device\x12\x1d\n" +
 	"\n" +
@@ -2635,14 +2635,14 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\ttorn_down\x18\x02 \x01(\bR\btornDown\"\x81\x04\n" +
 	"\x10VolumeConfigSpec\x12\x1b\n" +
 	"\tparent_id\x18\x01 \x01(\tR\bparentId\x12E\n" +
-	"\x04type\x18\x02 \x01(\x0e21.talos.resource.definitions.enums.BlockVolumeTypeR\x04type\x12V\n" +
-	"\fprovisioning\x18\x03 \x01(\v22.talos.resource.definitions.block.ProvisioningSpecR\fprovisioning\x12G\n" +
-	"\alocator\x18\x04 \x01(\v2-.talos.resource.definitions.block.LocatorSpecR\alocator\x12A\n" +
-	"\x05mount\x18\x05 \x01(\v2+.talos.resource.definitions.block.MountSpecR\x05mount\x12P\n" +
+	"\x04type\x18\x02 \x01(\x0e21.chubo.resource.definitions.enums.BlockVolumeTypeR\x04type\x12V\n" +
+	"\fprovisioning\x18\x03 \x01(\v22.chubo.resource.definitions.block.ProvisioningSpecR\fprovisioning\x12G\n" +
+	"\alocator\x18\x04 \x01(\v2-.chubo.resource.definitions.block.LocatorSpecR\alocator\x12A\n" +
+	"\x05mount\x18\x05 \x01(\v2+.chubo.resource.definitions.block.MountSpecR\x05mount\x12P\n" +
 	"\n" +
-	"encryption\x18\x06 \x01(\v20.talos.resource.definitions.block.EncryptionSpecR\n" +
+	"encryption\x18\x06 \x01(\v20.chubo.resource.definitions.block.EncryptionSpecR\n" +
 	"encryption\x12S\n" +
-	"\asymlink\x18\a \x01(\v29.talos.resource.definitions.block.SymlinkProvisioningSpecR\asymlink\"\xd4\x01\n" +
+	"\asymlink\x18\a \x01(\v29.chubo.resource.definitions.block.SymlinkProvisioningSpecR\asymlink\"\xd4\x01\n" +
 	"\x16VolumeMountRequestSpec\x12\x1b\n" +
 	"\tvolume_id\x18\x01 \x01(\tR\bvolumeId\x12\x1c\n" +
 	"\trequester\x18\x02 \x01(\tR\trequester\x12\x1b\n" +
@@ -2660,33 +2660,33 @@ const file_resource_definitions_block_block_proto_rawDesc = "" +
 	"\x06secure\x18\a \x01(\bR\x06secure\"\x83\n" +
 	"\n" +
 	"\x10VolumeStatusSpec\x12H\n" +
-	"\x05phase\x18\x01 \x01(\x0e22.talos.resource.definitions.enums.BlockVolumePhaseR\x05phase\x12\x1a\n" +
+	"\x05phase\x18\x01 \x01(\x0e22.chubo.resource.definitions.enums.BlockVolumePhaseR\x05phase\x12\x1a\n" +
 	"\blocation\x18\x02 \x01(\tR\blocation\x12#\n" +
 	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\x12\x12\n" +
 	"\x04uuid\x18\x04 \x01(\tR\x04uuid\x12%\n" +
 	"\x0epartition_uuid\x18\x05 \x01(\tR\rpartitionUuid\x12X\n" +
-	"\x0epre_fail_phase\x18\x06 \x01(\x0e22.talos.resource.definitions.enums.BlockVolumePhaseR\fpreFailPhase\x12'\n" +
+	"\x0epre_fail_phase\x18\x06 \x01(\x0e22.chubo.resource.definitions.enums.BlockVolumePhaseR\fpreFailPhase\x12'\n" +
 	"\x0fparent_location\x18\a \x01(\tR\x0eparentLocation\x12'\n" +
 	"\x0fpartition_index\x18\b \x01(\x03R\x0epartitionIndex\x12\x12\n" +
 	"\x04size\x18\t \x01(\x04R\x04size\x12U\n" +
 	"\n" +
 	"filesystem\x18\n" +
-	" \x01(\x0e25.talos.resource.definitions.enums.BlockFilesystemTypeR\n" +
+	" \x01(\x0e25.chubo.resource.definitions.enums.BlockFilesystemTypeR\n" +
 	"filesystem\x12%\n" +
 	"\x0emount_location\x18\v \x01(\tR\rmountLocation\x12n\n" +
-	"\x13encryption_provider\x18\f \x01(\x0e2=.talos.resource.definitions.enums.BlockEncryptionProviderTypeR\x12encryptionProvider\x12\x1f\n" +
+	"\x13encryption_provider\x18\f \x01(\x0e2=.chubo.resource.definitions.enums.BlockEncryptionProviderTypeR\x12encryptionProvider\x12\x1f\n" +
 	"\vpretty_size\x18\r \x01(\tR\n" +
 	"prettySize\x126\n" +
 	"\x17encryption_failed_syncs\x18\x0e \x03(\tR\x15encryptionFailedSyncs\x12J\n" +
 	"\n" +
-	"mount_spec\x18\x0f \x01(\v2+.talos.resource.definitions.block.MountSpecR\tmountSpec\x12E\n" +
-	"\x04type\x18\x10 \x01(\x0e21.talos.resource.definitions.enums.BlockVolumeTypeR\x04type\x12<\n" +
+	"mount_spec\x18\x0f \x01(\v2+.chubo.resource.definitions.block.MountSpecR\tmountSpec\x12E\n" +
+	"\x04type\x18\x10 \x01(\x0e21.chubo.resource.definitions.enums.BlockVolumeTypeR\x04type\x12<\n" +
 	"\x1aconfigured_encryption_keys\x18\x11 \x03(\tR\x18configuredEncryptionKeys\x12\\\n" +
-	"\fsymlink_spec\x18\x12 \x01(\v29.talos.resource.definitions.block.SymlinkProvisioningSpecR\vsymlinkSpec\x12\x1b\n" +
+	"\fsymlink_spec\x18\x12 \x01(\v29.chubo.resource.definitions.block.SymlinkProvisioningSpecR\vsymlinkSpec\x12\x1b\n" +
 	"\tparent_id\x18\x13 \x01(\tR\bparentId\x12;\n" +
 	"\x1aencryption_locked_to_state\x18\x14 \x01(\bR\x17encryptionLockedToState\x12'\n" +
 	"\x0fencryption_slot\x18\x15 \x01(\x03R\x0eencryptionSlot\x12p\n" +
-	"\x16tpm_encryption_options\x18\x16 \x01(\v2:.talos.resource.definitions.block.TPMEncryptionOptionsInfoR\x14tpmEncryptionOptions\"\xd0\x03\n" +
+	"\x16tpm_encryption_options\x18\x16 \x01(\v2:.chubo.resource.definitions.block.TPMEncryptionOptionsInfoR\x14tpmEncryptionOptions\"\xd0\x03\n" +
 	"\x0fZswapStatusSpec\x12(\n" +
 	"\x10total_size_bytes\x18\x01 \x01(\x04R\x0etotalSizeBytes\x12(\n" +
 	"\x10total_size_human\x18\x02 \x01(\tR\x0etotalSizeHuman\x12!\n" +
@@ -2715,71 +2715,71 @@ func file_resource_definitions_block_block_proto_rawDescGZIP() []byte {
 
 var file_resource_definitions_block_block_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_resource_definitions_block_block_proto_goTypes = []any{
-	(*DeviceSpec)(nil),                     // 0: talos.resource.definitions.block.DeviceSpec
-	(*DiscoveredVolumeSpec)(nil),           // 1: talos.resource.definitions.block.DiscoveredVolumeSpec
-	(*DiscoveryRefreshRequestSpec)(nil),    // 2: talos.resource.definitions.block.DiscoveryRefreshRequestSpec
-	(*DiscoveryRefreshStatusSpec)(nil),     // 3: talos.resource.definitions.block.DiscoveryRefreshStatusSpec
-	(*DiskSelector)(nil),                   // 4: talos.resource.definitions.block.DiskSelector
-	(*DiskSpec)(nil),                       // 5: talos.resource.definitions.block.DiskSpec
-	(*EncryptionKey)(nil),                  // 6: talos.resource.definitions.block.EncryptionKey
-	(*EncryptionSpec)(nil),                 // 7: talos.resource.definitions.block.EncryptionSpec
-	(*FilesystemSpec)(nil),                 // 8: talos.resource.definitions.block.FilesystemSpec
-	(*LocatorSpec)(nil),                    // 9: talos.resource.definitions.block.LocatorSpec
-	(*MountRequestSpec)(nil),               // 10: talos.resource.definitions.block.MountRequestSpec
-	(*MountSpec)(nil),                      // 11: talos.resource.definitions.block.MountSpec
-	(*MountStatusSpec)(nil),                // 12: talos.resource.definitions.block.MountStatusSpec
-	(*ParameterSpec)(nil),                  // 13: talos.resource.definitions.block.ParameterSpec
-	(*PartitionSpec)(nil),                  // 14: talos.resource.definitions.block.PartitionSpec
-	(*ProvisioningSpec)(nil),               // 15: talos.resource.definitions.block.ProvisioningSpec
-	(*SwapStatusSpec)(nil),                 // 16: talos.resource.definitions.block.SwapStatusSpec
-	(*SymlinkProvisioningSpec)(nil),        // 17: talos.resource.definitions.block.SymlinkProvisioningSpec
-	(*SymlinkSpec)(nil),                    // 18: talos.resource.definitions.block.SymlinkSpec
-	(*SystemDiskSpec)(nil),                 // 19: talos.resource.definitions.block.SystemDiskSpec
-	(*TPMEncryptionOptionsInfo)(nil),       // 20: talos.resource.definitions.block.TPMEncryptionOptionsInfo
-	(*UserDiskConfigStatusSpec)(nil),       // 21: talos.resource.definitions.block.UserDiskConfigStatusSpec
-	(*VolumeConfigSpec)(nil),               // 22: talos.resource.definitions.block.VolumeConfigSpec
-	(*VolumeMountRequestSpec)(nil),         // 23: talos.resource.definitions.block.VolumeMountRequestSpec
-	(*VolumeMountStatusSpec)(nil),          // 24: talos.resource.definitions.block.VolumeMountStatusSpec
-	(*VolumeStatusSpec)(nil),               // 25: talos.resource.definitions.block.VolumeStatusSpec
-	(*ZswapStatusSpec)(nil),                // 26: talos.resource.definitions.block.ZswapStatusSpec
+	(*DeviceSpec)(nil),                     // 0: chubo.resource.definitions.block.DeviceSpec
+	(*DiscoveredVolumeSpec)(nil),           // 1: chubo.resource.definitions.block.DiscoveredVolumeSpec
+	(*DiscoveryRefreshRequestSpec)(nil),    // 2: chubo.resource.definitions.block.DiscoveryRefreshRequestSpec
+	(*DiscoveryRefreshStatusSpec)(nil),     // 3: chubo.resource.definitions.block.DiscoveryRefreshStatusSpec
+	(*DiskSelector)(nil),                   // 4: chubo.resource.definitions.block.DiskSelector
+	(*DiskSpec)(nil),                       // 5: chubo.resource.definitions.block.DiskSpec
+	(*EncryptionKey)(nil),                  // 6: chubo.resource.definitions.block.EncryptionKey
+	(*EncryptionSpec)(nil),                 // 7: chubo.resource.definitions.block.EncryptionSpec
+	(*FilesystemSpec)(nil),                 // 8: chubo.resource.definitions.block.FilesystemSpec
+	(*LocatorSpec)(nil),                    // 9: chubo.resource.definitions.block.LocatorSpec
+	(*MountRequestSpec)(nil),               // 10: chubo.resource.definitions.block.MountRequestSpec
+	(*MountSpec)(nil),                      // 11: chubo.resource.definitions.block.MountSpec
+	(*MountStatusSpec)(nil),                // 12: chubo.resource.definitions.block.MountStatusSpec
+	(*ParameterSpec)(nil),                  // 13: chubo.resource.definitions.block.ParameterSpec
+	(*PartitionSpec)(nil),                  // 14: chubo.resource.definitions.block.PartitionSpec
+	(*ProvisioningSpec)(nil),               // 15: chubo.resource.definitions.block.ProvisioningSpec
+	(*SwapStatusSpec)(nil),                 // 16: chubo.resource.definitions.block.SwapStatusSpec
+	(*SymlinkProvisioningSpec)(nil),        // 17: chubo.resource.definitions.block.SymlinkProvisioningSpec
+	(*SymlinkSpec)(nil),                    // 18: chubo.resource.definitions.block.SymlinkSpec
+	(*SystemDiskSpec)(nil),                 // 19: chubo.resource.definitions.block.SystemDiskSpec
+	(*TPMEncryptionOptionsInfo)(nil),       // 20: chubo.resource.definitions.block.TPMEncryptionOptionsInfo
+	(*UserDiskConfigStatusSpec)(nil),       // 21: chubo.resource.definitions.block.UserDiskConfigStatusSpec
+	(*VolumeConfigSpec)(nil),               // 22: chubo.resource.definitions.block.VolumeConfigSpec
+	(*VolumeMountRequestSpec)(nil),         // 23: chubo.resource.definitions.block.VolumeMountRequestSpec
+	(*VolumeMountStatusSpec)(nil),          // 24: chubo.resource.definitions.block.VolumeMountStatusSpec
+	(*VolumeStatusSpec)(nil),               // 25: chubo.resource.definitions.block.VolumeStatusSpec
+	(*ZswapStatusSpec)(nil),                // 26: chubo.resource.definitions.block.ZswapStatusSpec
 	(*v1alpha1.CheckedExpr)(nil),           // 27: google.api.expr.v1alpha1.CheckedExpr
-	(enums.BlockEncryptionKeyType)(0),      // 28: talos.resource.definitions.enums.BlockEncryptionKeyType
-	(enums.BlockEncryptionProviderType)(0), // 29: talos.resource.definitions.enums.BlockEncryptionProviderType
-	(enums.BlockFilesystemType)(0),         // 30: talos.resource.definitions.enums.BlockFilesystemType
-	(enums.BlockFSParameterType)(0),        // 31: talos.resource.definitions.enums.BlockFSParameterType
-	(enums.BlockVolumeType)(0),             // 32: talos.resource.definitions.enums.BlockVolumeType
-	(enums.BlockVolumePhase)(0),            // 33: talos.resource.definitions.enums.BlockVolumePhase
+	(enums.BlockEncryptionKeyType)(0),      // 28: chubo.resource.definitions.enums.BlockEncryptionKeyType
+	(enums.BlockEncryptionProviderType)(0), // 29: chubo.resource.definitions.enums.BlockEncryptionProviderType
+	(enums.BlockFilesystemType)(0),         // 30: chubo.resource.definitions.enums.BlockFilesystemType
+	(enums.BlockFSParameterType)(0),        // 31: chubo.resource.definitions.enums.BlockFSParameterType
+	(enums.BlockVolumeType)(0),             // 32: chubo.resource.definitions.enums.BlockVolumeType
+	(enums.BlockVolumePhase)(0),            // 33: chubo.resource.definitions.enums.BlockVolumePhase
 }
 var file_resource_definitions_block_block_proto_depIdxs = []int32{
-	27, // 0: talos.resource.definitions.block.DiskSelector.match:type_name -> google.api.expr.v1alpha1.CheckedExpr
-	28, // 1: talos.resource.definitions.block.EncryptionKey.type:type_name -> talos.resource.definitions.enums.BlockEncryptionKeyType
-	29, // 2: talos.resource.definitions.block.EncryptionSpec.provider:type_name -> talos.resource.definitions.enums.BlockEncryptionProviderType
-	6,  // 3: talos.resource.definitions.block.EncryptionSpec.keys:type_name -> talos.resource.definitions.block.EncryptionKey
-	30, // 4: talos.resource.definitions.block.FilesystemSpec.type:type_name -> talos.resource.definitions.enums.BlockFilesystemType
-	27, // 5: talos.resource.definitions.block.LocatorSpec.match:type_name -> google.api.expr.v1alpha1.CheckedExpr
-	27, // 6: talos.resource.definitions.block.LocatorSpec.disk_match:type_name -> google.api.expr.v1alpha1.CheckedExpr
-	13, // 7: talos.resource.definitions.block.MountSpec.parameters:type_name -> talos.resource.definitions.block.ParameterSpec
-	10, // 8: talos.resource.definitions.block.MountStatusSpec.spec:type_name -> talos.resource.definitions.block.MountRequestSpec
-	30, // 9: talos.resource.definitions.block.MountStatusSpec.filesystem:type_name -> talos.resource.definitions.enums.BlockFilesystemType
-	29, // 10: talos.resource.definitions.block.MountStatusSpec.encryption_provider:type_name -> talos.resource.definitions.enums.BlockEncryptionProviderType
-	31, // 11: talos.resource.definitions.block.ParameterSpec.type:type_name -> talos.resource.definitions.enums.BlockFSParameterType
-	4,  // 12: talos.resource.definitions.block.ProvisioningSpec.disk_selector:type_name -> talos.resource.definitions.block.DiskSelector
-	14, // 13: talos.resource.definitions.block.ProvisioningSpec.partition_spec:type_name -> talos.resource.definitions.block.PartitionSpec
-	8,  // 14: talos.resource.definitions.block.ProvisioningSpec.filesystem_spec:type_name -> talos.resource.definitions.block.FilesystemSpec
-	32, // 15: talos.resource.definitions.block.VolumeConfigSpec.type:type_name -> talos.resource.definitions.enums.BlockVolumeType
-	15, // 16: talos.resource.definitions.block.VolumeConfigSpec.provisioning:type_name -> talos.resource.definitions.block.ProvisioningSpec
-	9,  // 17: talos.resource.definitions.block.VolumeConfigSpec.locator:type_name -> talos.resource.definitions.block.LocatorSpec
-	11, // 18: talos.resource.definitions.block.VolumeConfigSpec.mount:type_name -> talos.resource.definitions.block.MountSpec
-	7,  // 19: talos.resource.definitions.block.VolumeConfigSpec.encryption:type_name -> talos.resource.definitions.block.EncryptionSpec
-	17, // 20: talos.resource.definitions.block.VolumeConfigSpec.symlink:type_name -> talos.resource.definitions.block.SymlinkProvisioningSpec
-	33, // 21: talos.resource.definitions.block.VolumeStatusSpec.phase:type_name -> talos.resource.definitions.enums.BlockVolumePhase
-	33, // 22: talos.resource.definitions.block.VolumeStatusSpec.pre_fail_phase:type_name -> talos.resource.definitions.enums.BlockVolumePhase
-	30, // 23: talos.resource.definitions.block.VolumeStatusSpec.filesystem:type_name -> talos.resource.definitions.enums.BlockFilesystemType
-	29, // 24: talos.resource.definitions.block.VolumeStatusSpec.encryption_provider:type_name -> talos.resource.definitions.enums.BlockEncryptionProviderType
-	11, // 25: talos.resource.definitions.block.VolumeStatusSpec.mount_spec:type_name -> talos.resource.definitions.block.MountSpec
-	32, // 26: talos.resource.definitions.block.VolumeStatusSpec.type:type_name -> talos.resource.definitions.enums.BlockVolumeType
-	17, // 27: talos.resource.definitions.block.VolumeStatusSpec.symlink_spec:type_name -> talos.resource.definitions.block.SymlinkProvisioningSpec
-	20, // 28: talos.resource.definitions.block.VolumeStatusSpec.tpm_encryption_options:type_name -> talos.resource.definitions.block.TPMEncryptionOptionsInfo
+	27, // 0: chubo.resource.definitions.block.DiskSelector.match:type_name -> google.api.expr.v1alpha1.CheckedExpr
+	28, // 1: chubo.resource.definitions.block.EncryptionKey.type:type_name -> chubo.resource.definitions.enums.BlockEncryptionKeyType
+	29, // 2: chubo.resource.definitions.block.EncryptionSpec.provider:type_name -> chubo.resource.definitions.enums.BlockEncryptionProviderType
+	6,  // 3: chubo.resource.definitions.block.EncryptionSpec.keys:type_name -> chubo.resource.definitions.block.EncryptionKey
+	30, // 4: chubo.resource.definitions.block.FilesystemSpec.type:type_name -> chubo.resource.definitions.enums.BlockFilesystemType
+	27, // 5: chubo.resource.definitions.block.LocatorSpec.match:type_name -> google.api.expr.v1alpha1.CheckedExpr
+	27, // 6: chubo.resource.definitions.block.LocatorSpec.disk_match:type_name -> google.api.expr.v1alpha1.CheckedExpr
+	13, // 7: chubo.resource.definitions.block.MountSpec.parameters:type_name -> chubo.resource.definitions.block.ParameterSpec
+	10, // 8: chubo.resource.definitions.block.MountStatusSpec.spec:type_name -> chubo.resource.definitions.block.MountRequestSpec
+	30, // 9: chubo.resource.definitions.block.MountStatusSpec.filesystem:type_name -> chubo.resource.definitions.enums.BlockFilesystemType
+	29, // 10: chubo.resource.definitions.block.MountStatusSpec.encryption_provider:type_name -> chubo.resource.definitions.enums.BlockEncryptionProviderType
+	31, // 11: chubo.resource.definitions.block.ParameterSpec.type:type_name -> chubo.resource.definitions.enums.BlockFSParameterType
+	4,  // 12: chubo.resource.definitions.block.ProvisioningSpec.disk_selector:type_name -> chubo.resource.definitions.block.DiskSelector
+	14, // 13: chubo.resource.definitions.block.ProvisioningSpec.partition_spec:type_name -> chubo.resource.definitions.block.PartitionSpec
+	8,  // 14: chubo.resource.definitions.block.ProvisioningSpec.filesystem_spec:type_name -> chubo.resource.definitions.block.FilesystemSpec
+	32, // 15: chubo.resource.definitions.block.VolumeConfigSpec.type:type_name -> chubo.resource.definitions.enums.BlockVolumeType
+	15, // 16: chubo.resource.definitions.block.VolumeConfigSpec.provisioning:type_name -> chubo.resource.definitions.block.ProvisioningSpec
+	9,  // 17: chubo.resource.definitions.block.VolumeConfigSpec.locator:type_name -> chubo.resource.definitions.block.LocatorSpec
+	11, // 18: chubo.resource.definitions.block.VolumeConfigSpec.mount:type_name -> chubo.resource.definitions.block.MountSpec
+	7,  // 19: chubo.resource.definitions.block.VolumeConfigSpec.encryption:type_name -> chubo.resource.definitions.block.EncryptionSpec
+	17, // 20: chubo.resource.definitions.block.VolumeConfigSpec.symlink:type_name -> chubo.resource.definitions.block.SymlinkProvisioningSpec
+	33, // 21: chubo.resource.definitions.block.VolumeStatusSpec.phase:type_name -> chubo.resource.definitions.enums.BlockVolumePhase
+	33, // 22: chubo.resource.definitions.block.VolumeStatusSpec.pre_fail_phase:type_name -> chubo.resource.definitions.enums.BlockVolumePhase
+	30, // 23: chubo.resource.definitions.block.VolumeStatusSpec.filesystem:type_name -> chubo.resource.definitions.enums.BlockFilesystemType
+	29, // 24: chubo.resource.definitions.block.VolumeStatusSpec.encryption_provider:type_name -> chubo.resource.definitions.enums.BlockEncryptionProviderType
+	11, // 25: chubo.resource.definitions.block.VolumeStatusSpec.mount_spec:type_name -> chubo.resource.definitions.block.MountSpec
+	32, // 26: chubo.resource.definitions.block.VolumeStatusSpec.type:type_name -> chubo.resource.definitions.enums.BlockVolumeType
+	17, // 27: chubo.resource.definitions.block.VolumeStatusSpec.symlink_spec:type_name -> chubo.resource.definitions.block.SymlinkProvisioningSpec
+	20, // 28: chubo.resource.definitions.block.VolumeStatusSpec.tpm_encryption_options:type_name -> chubo.resource.definitions.block.TPMEncryptionOptionsInfo
 	29, // [29:29] is the sub-list for method output_type
 	29, // [29:29] is the sub-list for method input_type
 	29, // [29:29] is the sub-list for extension type_name

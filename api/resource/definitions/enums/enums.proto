@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package talos.resource.definitions.enums;
+package chubo.resource.definitions.enums;
 
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/enums";
 option java_package = "dev.chubo.api.resource.definitions.enums";
@@ -40,7 +40,7 @@ enum MachineType {
   // This node will perform the initial steps to bootstrap the cluster -- generation of TLS assets, starting of the control plane, etc.
   TYPE_INIT = 1;
   // TypeControlPlane designates the node as a control plane member.
-  // This means it will host control-plane services.
+  // This means it will host the control-plane services required to manage cluster state.
   TYPE_CONTROL_PLANE = 2;
   // TypeWorker designates the node as a worker node.
   // This means it will be an available compute node for scheduling workloads.
@@ -763,9 +763,10 @@ enum NetworkConfigLayer {
   CONFIG_MACHINE_CONFIGURATION = 4;
 }
 
-// NetworkOperator enumerates Talos network operators.
+// NetworkOperator enumerates Chubo network operators.
 enum NetworkOperator {
   OPERATOR_DHCP4 = 0;
   OPERATOR_DHCP6 = 1;
   OPERATOR_VIP = 2;
 }
+
