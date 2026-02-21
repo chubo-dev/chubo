@@ -378,7 +378,7 @@
 ./pkg/machinery/client/connection.go:		return client.NewKeyProvider("talos/keys")
 ./pkg/machinery/client/connection.go:		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
 ./pkg/machinery/client/connection.go:	return client.NewKeyProviderWithFallback("talos/keys", chuboDir, "keys", true)
-./pkg/machinery/client/events.go:		if typeURL == "talos/runtime/"+string(eventType.ProtoReflect().Descriptor().FullName()) {
+./pkg/machinery/client/events.go:	legacyRuntimeEventTypeURLPrefix = "talos/runtime/"
 ./pkg/machinery/config/configpatcher/json6902.go:			return 0, errors.New("talos machine config is not a yaml document")
 ./pkg/machinery/config/configpatcher/json6902.go:			return 0, fmt.Errorf("failure decoding talos machine config: %s", err)
 ./pkg/machinery/config/configpatcher/json6902.go:		return nil, fmt.Errorf("failure applying rfc6902 patches to talos machine config: %s", err)

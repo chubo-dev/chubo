@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"strings"
 	"sync"
 	"time"
 
@@ -144,6 +145,11 @@ type EventResult struct {
 	Error error
 }
 
+const (
+	legacyRuntimeEventTypeURLPrefix = "talos/runtime/"
+	chuboRuntimeEventTypeURLPrefix  = "chubo/runtime/"
+)
+
 // EventsWatchV2 watches events of a single node and wraps the Events by providing a simpler interface.
 // It blocks until the first (empty) event is received, then spawns a goroutine that sends events to the given channel.
 // EventResult objects sent into the channel contain either the errors or the received events.
@@ -230,6 +236,7 @@ func (c *Client) EventsWatchV2(ctx context.Context, ch chan<- EventResult, opts 
 // UnmarshalEvent decodes the event coming from the gRPC stream from any to the exact type.
 func UnmarshalEvent(event *machineapi.Event) (*Event, error) {
 	typeURL := event.GetData().GetTypeUrl()
+	descriptorName := strings.TrimPrefix(strings.TrimPrefix(typeURL, legacyRuntimeEventTypeURLPrefix), chuboRuntimeEventTypeURLPrefix)
 
 	var msg proto.Message
 
@@ -244,7 +251,7 @@ func UnmarshalEvent(event *machineapi.Event) (*Event, error) {
 		&machineapi.MachineStatusEvent{},
 		&machineapi.RestartEvent{},
 	} {
-		if typeURL == "talos/runtime/"+string(eventType.ProtoReflect().Descriptor().FullName()) {
+		if descriptorName == string(eventType.ProtoReflect().Descriptor().FullName()) {
 			msg = eventType
 
 			break
