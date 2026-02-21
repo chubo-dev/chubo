@@ -595,7 +595,7 @@ func (s *Server) ServiceList(ctx context.Context, in *emptypb.Empty) (result *ma
 }
 
 // ServiceStart implements the machine.MachineServer interface and starts a
-// service running on Talos.
+// service running on Chubo.
 func (s *Server) ServiceStart(ctx context.Context, in *machine.ServiceStartRequest) (reply *machine.ServiceStartResponse, err error) {
 	if err = system.Services(s.Controller.Runtime()).APIStart(ctx, in.Id); err != nil {
 		return &machine.ServiceStartResponse{}, err
@@ -613,7 +613,7 @@ func (s *Server) ServiceStart(ctx context.Context, in *machine.ServiceStartReque
 }
 
 // ServiceStop implements the machine.MachineServer interface and stops a
-// service running on Talos.
+// service running on Chubo.
 func (s *Server) ServiceStop(ctx context.Context, in *machine.ServiceStopRequest) (reply *machine.ServiceStopResponse, err error) {
 	if err = system.Services(s.Controller.Runtime()).APIStop(ctx, in.Id); err != nil {
 		return &machine.ServiceStopResponse{}, err
@@ -631,7 +631,7 @@ func (s *Server) ServiceStop(ctx context.Context, in *machine.ServiceStopRequest
 }
 
 // ServiceRestart implements the machine.MachineServer interface and stops a
-// service running on Talos.
+// service running on Chubo.
 func (s *Server) ServiceRestart(ctx context.Context, in *machine.ServiceRestartRequest) (reply *machine.ServiceRestartResponse, err error) {
 	if err = system.Services(s.Controller.Runtime()).APIRestart(ctx, in.Id); err != nil {
 		return &machine.ServiceRestartResponse{}, err
@@ -648,7 +648,7 @@ func (s *Server) ServiceRestart(ctx context.Context, in *machine.ServiceRestartR
 	return reply, err
 }
 
-// Copy implements the machine.MachineServer interface and copies data out of Talos node.
+// Copy implements the machine.MachineServer interface and copies data out of Chubo node.
 func (s *Server) Copy(req *machine.CopyRequest, obj machine.MachineService_CopyServer) error {
 	path := req.RootPath
 	path = filepath.Clean(path)

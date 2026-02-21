@@ -11,25 +11,25 @@ import (
 	"github.com/siderolabs/gen/maps"
 )
 
-// Role represents Talos user role.
-// Its string value is used everywhere: as the Organization value of Talos client certificate,
-// as the value of talosctl flag, etc.
+// Role represents Chubo user role.
+// Its string value is used everywhere: as the Organization value of Chubo client certificate,
+// as the value of chuboctl flag, etc.
 type Role string
 
 const (
 	// Prefix for all built-in roles.
 	Prefix = string("os:")
 
-	// Admin defines Talos role for admins (every API is available).
+	// Admin defines Chubo role for admins (every API is available).
 	Admin = Role(Prefix + "admin")
 
-	// Operator defines Talos role for operators (Reader + management APIs which do not allow secret access, e.g. rebooting a node).
+	// Operator defines Chubo role for operators (Reader + management APIs which do not allow secret access, e.g. rebooting a node).
 	Operator = Role(Prefix + "operator")
 
-	// Reader defines Talos role for readers who can access read-only APIs that do not expose secrets.
+	// Reader defines Chubo role for readers who can access read-only APIs that do not expose secrets.
 	Reader = Role(Prefix + "reader")
 
-	// Impersonator defines Talos role for impersonating another user (and their role).
+	// Impersonator defines Chubo role for impersonating another user (and their role).
 	// Used internally, but may also be granted to the user.
 	Impersonator = Role(Prefix + "impersonator")
 )

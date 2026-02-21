@@ -44,7 +44,7 @@ func (c *Client) getConn(opts ...grpc.DialOption) (*grpcConnectionWrapper, error
 	dialOpts := slices.Concat(
 		[]grpc.DialOption{
 			grpc.WithDefaultCallOptions( // enable compression by default
-				// TODO: enable compression for Talos 1.7+
+				// TODO: enable compression for Chubo 1.7+
 				// grpc.UseCompressor(gzip.Name),
 				grpc.MaxCallRecvMsgSize(constants.GRPCMaxMessageSize),
 			),

@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package platforms provides meta information about supported Talos platforms.
+// Package platforms provides meta information about supported Chubo platforms.
 package platforms
 
 import (
@@ -11,7 +11,7 @@ import (
 	"github.com/blang/semver/v4"
 )
 
-// Arch represents an architecture supported by Talos.
+// Arch represents an architecture supported by Chubo.
 type Arch = string
 
 // Architecture constants.
@@ -20,7 +20,7 @@ const (
 	ArchArm64 = "arm64"
 )
 
-// BootMethod represents a boot method supported by Talos.
+// BootMethod represents a boot method supported by Chubo.
 type BootMethod = string
 
 // BootMethod constants.
@@ -30,7 +30,7 @@ const (
 	BootMethodPXE       = "pxe"
 )
 
-// Platform represents a platform supported by Talos.
+// Platform represents a platform supported by Chubo.
 type Platform struct {
 	Name string
 

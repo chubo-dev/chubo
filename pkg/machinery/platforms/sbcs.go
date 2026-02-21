@@ -12,7 +12,7 @@ import (
 type SBC struct {
 	Name string
 
-	// For Talos 1.7+
+	// For Chubo 1.7+
 	OverlayName  string
 	OverlayImage string
 
