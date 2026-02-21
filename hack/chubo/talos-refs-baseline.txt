@@ -351,7 +351,6 @@
 ./internal/pkg/uki/uki.go:	builder.scratchDir, err = os.MkdirTemp("", "talos-uki")
 ./pkg/cluster/bootstrap.go:	fmt.Fprintln(out, "waiting for Talos API (to bootstrap the cluster)")
 ./pkg/imager/cache/cache.go:	tmpDir, err := os.MkdirTemp("", "talos-image-cache-gen")
-./pkg/imager/embed.go:				Talos: extensions.Constraint{
 ./pkg/imager/imager.go:			return "", fmt.Errorf("UKI output is not supported in this Talos version")
 ./pkg/imager/imager.go:		// pass META values as kernel talos.environment args which will be passed via the environment to the installer
 ./pkg/imager/iso/grub.cfg:	linux /boot/vmlinuz {{ quote .Cmdline }} talos.experimental.wipe=system
