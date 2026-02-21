@@ -319,10 +319,6 @@
 ./internal/app/machined/pkg/controllers/network/operator/vip/equinix_metal.go:	client := packngo.NewClientWithAuth("talos", spec.APIToken, nil)
 ./internal/app/machined/pkg/controllers/runtime/security_state.go:					if strings.HasPrefix(filepath.Base(strings.ReplaceAll(stubImageIdentifier, "\\", "/")), "Talos-") {
 ./internal/app/machined/pkg/controllers/runtime/security_state.go:				if strings.HasPrefix(defaultEntry, "Talos-") {
-./internal/app/machined/pkg/runtime/events.go:		// In the future, we can publish `talos/runtime`, and
-./internal/app/machined/pkg/runtime/events.go:		// TypeURL: fmt.Sprintf("talos/runtime/%s", protoreflect.MessageDescriptor.FullName(msg)),
-./internal/app/machined/pkg/runtime/events.go:		// `talos/plugin/<plugin>` (or something along those lines) events.
-./internal/app/machined/pkg/runtime/events.go:		typeURL = fmt.Sprintf("talos/runtime/%s", payload.ProtoReflect().Descriptor().FullName())
 ./internal/app/machined/pkg/runtime/logging/circular.go:			"talos-service": id,
 ./internal/app/machined/pkg/runtime/logging/sender_jsonlines.go:	m["talos-level"] = e.Level.String()
 ./internal/app/machined/pkg/runtime/logging/sender_jsonlines.go:	m["talos-time"] = e.Time.Format(time.RFC3339Nano)

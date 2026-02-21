@@ -17,6 +17,8 @@ import (
 	"github.com/chubo-dev/chubo/pkg/machinery/proto"
 )
 
+const runtimeEventTypeURLPrefix = "chubo/runtime/"
+
 // ActorIDCtxKey is the context key used for event actor id.
 type ActorIDCtxKey struct{}
 
@@ -127,13 +129,11 @@ type EventStream interface {
 func NewEvent(payload proto.Message, actorID string) Event {
 	typeURL := ""
 	if payload != nil {
-		typeURL = fmt.Sprintf("talos/runtime/%s", payload.ProtoReflect().Descriptor().FullName())
+		typeURL = fmt.Sprintf("%s%s", runtimeEventTypeURLPrefix, payload.ProtoReflect().Descriptor().FullName())
 	}
 
 	return Event{
-		// In the future, we can publish `talos/runtime`, and
-		// `talos/plugin/<plugin>` (or something along those lines) events.
-		// TypeURL: fmt.Sprintf("talos/runtime/%s", protoreflect.MessageDescriptor.FullName(msg)),
+		// Runtime event TypeURLs are emitted with the chubo prefix.
 		TypeURL: typeURL,
 		Payload: payload,
 		ID:      xid.New(),
