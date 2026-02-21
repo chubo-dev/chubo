@@ -53,7 +53,7 @@ service MachineService {
   rpc SystemStat(google.protobuf.Empty) returns (SystemStatResponse);
   rpc Upgrade(UpgradeRequest) returns (UpgradeResponse);
   rpc Version(google.protobuf.Empty) returns (VersionResponse);
-  // GenerateClientConfiguration generates talosctl client configuration (talosconfig).
+  // GenerateClientConfiguration generates chuboctl client configuration.
   rpc GenerateClientConfiguration(GenerateClientConfigurationRequest) returns (GenerateClientConfigurationResponse);
   // PacketCapture performs packet capture and streams back pcap file.
   rpc PacketCapture(PacketCaptureRequest) returns (stream common.Data);
@@ -971,7 +971,7 @@ message GenerateClientConfiguration {
   bytes crt = 3;
   // PEM-encoded generated client key.
   bytes key = 4;
-  // Client configuration (talosconfig) file content.
+  // Client configuration content (legacy field name: talosconfig).
   bytes talosconfig = 5;
 }
 
