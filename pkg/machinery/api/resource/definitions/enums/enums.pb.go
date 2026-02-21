@@ -3581,7 +3581,7 @@ func (NetworkConfigLayer) EnumDescriptor() ([]byte, []int) {
 	return file_resource_definitions_enums_enums_proto_rawDescGZIP(), []int{44}
 }
 
-// NetworkOperator enumerates Talos network operators.
+// NetworkOperator enumerates Chubo network operators.
 type NetworkOperator int32
 
 const (

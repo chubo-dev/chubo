@@ -114,7 +114,7 @@ type MachineServiceClient interface {
 	SystemStat(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*SystemStatResponse, error)
 	Upgrade(ctx context.Context, in *UpgradeRequest, opts ...grpc.CallOption) (*UpgradeResponse, error)
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
-	// GenerateClientConfiguration generates talosctl client configuration (talosconfig).
+	// GenerateClientConfiguration generates chuboctl client configuration (talosconfig).
 	GenerateClientConfiguration(ctx context.Context, in *GenerateClientConfigurationRequest, opts ...grpc.CallOption) (*GenerateClientConfigurationResponse, error)
 	// PacketCapture performs packet capture and streams back pcap file.
 	PacketCapture(ctx context.Context, in *PacketCaptureRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[common.Data], error)
@@ -730,7 +730,7 @@ type MachineServiceServer interface {
 	SystemStat(context.Context, *emptypb.Empty) (*SystemStatResponse, error)
 	Upgrade(context.Context, *UpgradeRequest) (*UpgradeResponse, error)
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
-	// GenerateClientConfiguration generates talosctl client configuration (talosconfig).
+	// GenerateClientConfiguration generates chuboctl client configuration (talosconfig).
 	GenerateClientConfiguration(context.Context, *GenerateClientConfigurationRequest) (*GenerateClientConfigurationResponse, error)
 	// PacketCapture performs packet capture and streams back pcap file.
 	PacketCapture(*PacketCaptureRequest, grpc.ServerStreamingServer[common.Data]) error

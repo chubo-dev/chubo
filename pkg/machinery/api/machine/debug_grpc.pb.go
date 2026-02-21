@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// DebugService provides debugging and inspection capabilities for a Talos node.
+// DebugService provides debugging and inspection capabilities for a Chubo node.
 type DebugServiceClient interface {
 	// ContainerRun runs a debug container, attaches to it, and streams I/O.
 	ContainerRun(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[DebugContainerRunRequest, DebugContainerRunResponse], error)
@@ -58,7 +58,7 @@ type DebugService_ContainerRunClient = grpc.BidiStreamingClient[DebugContainerRu
 // All implementations must embed UnimplementedDebugServiceServer
 // for forward compatibility.
 //
-// DebugService provides debugging and inspection capabilities for a Talos node.
+// DebugService provides debugging and inspection capabilities for a Chubo node.
 type DebugServiceServer interface {
 	// ContainerRun runs a debug container, attaches to it, and streams I/O.
 	ContainerRun(grpc.BidiStreamingServer[DebugContainerRunRequest, DebugContainerRunResponse]) error

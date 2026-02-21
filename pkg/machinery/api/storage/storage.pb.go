@@ -154,7 +154,7 @@ type Disk struct {
 	Type Disk_DiskType `protobuf:"varint,9,opt,name=type,proto3,enum=storage.Disk_DiskType" json:"type,omitempty"`
 	// BusPath is the bus path of the disk.
 	BusPath string `protobuf:"bytes,10,opt,name=bus_path,json=busPath,proto3" json:"bus_path,omitempty"`
-	// SystemDisk indicates that the disk is used as Talos system disk.
+	// SystemDisk indicates that the disk is used as Chubo system disk.
 	SystemDisk bool `protobuf:"varint,11,opt,name=system_disk,json=systemDisk,proto3" json:"system_disk,omitempty"`
 	// Subsystem is the symlink path in the `/sys/block/<dev>/subsystem`.
 	Subsystem string `protobuf:"bytes,12,opt,name=subsystem,proto3" json:"subsystem,omitempty"`

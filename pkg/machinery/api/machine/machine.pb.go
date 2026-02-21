@@ -3176,7 +3176,7 @@ func (x *ServiceRestartResponse) GetMessages() []*ServiceRestart {
 	return nil
 }
 
-// CopyRequest describes a request to copy data out of Talos node
+// CopyRequest describes a request to copy data out of Chubo node
 //
 // Copy produces .tar.gz archive which is streamed back to the caller
 type CopyRequest struct {
@@ -3834,7 +3834,7 @@ type Version struct {
 	Metadata *common.Metadata       `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	Version  *VersionInfo           `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
 	Platform *PlatformInfo          `protobuf:"bytes,3,opt,name=platform,proto3" json:"platform,omitempty"`
-	// Features describe individual Talos features that can be switched on or off.
+	// Features describe individual Chubo features that can be switched on or off.
 	Features      *FeaturesInfo `protobuf:"bytes,4,opt,name=features,proto3" json:"features,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -4078,7 +4078,7 @@ func (x *PlatformInfo) GetMode() string {
 	return ""
 }
 
-// FeaturesInfo describes individual Talos features that can be switched on or off.
+// FeaturesInfo describes individual Chubo features that can be switched on or off.
 type FeaturesInfo struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// RBAC is true if role-based access control is enabled.

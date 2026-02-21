@@ -917,7 +917,7 @@ var file_common_common_proto_extTypes = []protoimpl.ExtensionInfo{
 
 // Extension fields to descriptorpb.MessageOptions.
 var (
-	// Indicates the Talos version when this deprecated message will be removed from API.
+	// Indicates the Chubo version when this deprecated message will be removed from API.
 	//
 	// optional string remove_deprecated_message = 93117;
 	E_RemoveDeprecatedMessage = &file_common_common_proto_extTypes[0]
@@ -925,7 +925,7 @@ var (
 
 // Extension fields to descriptorpb.FieldOptions.
 var (
-	// Indicates the Talos version when this deprecated filed will be removed from API.
+	// Indicates the Chubo version when this deprecated filed will be removed from API.
 	//
 	// optional string remove_deprecated_field = 93117;
 	E_RemoveDeprecatedField = &file_common_common_proto_extTypes[1]
@@ -933,7 +933,7 @@ var (
 
 // Extension fields to descriptorpb.EnumOptions.
 var (
-	// Indicates the Talos version when this deprecated enum will be removed from API.
+	// Indicates the Chubo version when this deprecated enum will be removed from API.
 	//
 	// optional string remove_deprecated_enum = 93117;
 	E_RemoveDeprecatedEnum = &file_common_common_proto_extTypes[2]
@@ -941,7 +941,7 @@ var (
 
 // Extension fields to descriptorpb.EnumValueOptions.
 var (
-	// Indicates the Talos version when this deprecated enum value will be removed from API.
+	// Indicates the Chubo version when this deprecated enum value will be removed from API.
 	//
 	// optional string remove_deprecated_enum_value = 93117;
 	E_RemoveDeprecatedEnumValue = &file_common_common_proto_extTypes[3]
@@ -949,7 +949,7 @@ var (
 
 // Extension fields to descriptorpb.MethodOptions.
 var (
-	// Indicates the Talos version when this deprecated method will be removed from API.
+	// Indicates the Chubo version when this deprecated method will be removed from API.
 	//
 	// optional string remove_deprecated_method = 93117;
 	E_RemoveDeprecatedMethod = &file_common_common_proto_extTypes[4]
@@ -957,7 +957,7 @@ var (
 
 // Extension fields to descriptorpb.ServiceOptions.
 var (
-	// Indicates the Talos version when this deprecated service will be removed from API.
+	// Indicates the Chubo version when this deprecated service will be removed from API.
 	//
 	// optional string remove_deprecated_service = 93117;
 	E_RemoveDeprecatedService = &file_common_common_proto_extTypes[5]

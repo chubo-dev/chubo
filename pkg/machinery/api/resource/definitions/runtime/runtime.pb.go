@@ -214,7 +214,7 @@ func (x *EnvironmentSpec) GetVariables() []string {
 	return nil
 }
 
-// EventSinkConfigSpec describes configuration of Talos event log streaming.
+// EventSinkConfigSpec describes configuration of Chubo event log streaming.
 type EventSinkConfigSpec struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Endpoint      string                 `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
