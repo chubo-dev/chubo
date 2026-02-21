@@ -538,10 +538,6 @@
 ./internal/pkg/encryption/keys/token.go:	TokenTypeTPM = "talos-tpm2"
 ./internal/pkg/extensions/kernel_modules.go:				Author:      "Talos Machinery",
 ./internal/pkg/install/install.go:// Package install provides functionality to run the installer container for Talos.
-./internal/pkg/meta/internal/adv/talos/talos.go:// ADV implements the Talos extended ADV.
-./internal/pkg/meta/internal/adv/talos/talos.go:// Package talos implements modern ADV which supports large size for the values and tags.
-./internal/pkg/meta/internal/adv/talos/talos.go:package talos
-./internal/pkg/meta/meta.go:	metaadv "github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
 ./internal/pkg/mount/switchroot/switchroot.go:	if val := procfs.ProcCmdline().Get("talos.debugshell"); val != nil {
 ./internal/pkg/mount/switchroot/switchroot.go:	if val := procfs.ProcCmdline().Get("talos.fips140"); val != nil && fipsmode.Enabled() {
 ./internal/pkg/secureboot/secureboot.go:// In the case of Talos disk decryption, happens in machined, so we need to only sign EnterMachined

@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// Package talos implements modern ADV which supports large size for the values and tags.
-package talos
+// Package chubo implements the modern ADV format with large value/tag support.
+package chubo
 
 import (
 	"bytes"
@@ -40,7 +40,7 @@ type Tag uint8
 // Value stored for the tag.
 type Value []byte
 
-// ADV implements the Talos extended ADV.
+// ADV implements the modern extended ADV format.
 //
 // Layout (all in big-endian):
 //

@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-package talos_test
+package chubo_test
 
 import (
 	"bytes"
@@ -13,11 +13,11 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
-	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
+	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/chubo"
 )
 
 func TestMarshalUnmarshal(t *testing.T) {
-	a, err := talos.NewADV(bytes.NewReader(make([]byte, talos.Size)))
+	a, err := chubo.NewADV(bytes.NewReader(make([]byte, chubo.Size)))
 	assert.Error(t, err)
 	require.NotNil(t, a)
 
@@ -33,7 +33,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 
 	b, err := a.Bytes()
 	require.NoError(t, err)
-	assert.Len(t, b, talos.Size)
+	assert.Len(t, b, chubo.Size)
 
 	// test recoverable corruption
 	for _, c := range []struct {
@@ -58,7 +58,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 		},
 		{
 			zeroOut: [][2]int{
-				{0, talos.Length},
+				{0, chubo.Length},
 			},
 		},
 	} {
@@ -68,7 +68,7 @@ func TestMarshalUnmarshal(t *testing.T) {
 			copy(corrupted[z[0]:z[0]+z[1]], make([]byte, z[1]))
 		}
 
-		a, err = talos.NewADV(bytes.NewReader(b))
+		a, err = chubo.NewADV(bytes.NewReader(b))
 		require.NoError(t, err)
 		require.NotNil(t, a)
 

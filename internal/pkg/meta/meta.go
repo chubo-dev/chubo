@@ -22,8 +22,8 @@ import (
 	"golang.org/x/sys/unix"
 
 	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv"
+	metaadv "github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/chubo"
 	"github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/syslinux"
-	metaadv "github.com/chubo-dev/chubo/internal/pkg/meta/internal/adv/talos"
 	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/block"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/runtime"
