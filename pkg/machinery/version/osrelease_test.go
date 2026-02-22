@@ -29,7 +29,7 @@ func TestOSReleaseFor(t *testing.T) {
 
 	assert.Equal(
 		t,
-		"NAME=\"Talos\"\nID=talos\nVERSION_ID=v1.0.0\nPRETTY_NAME=\"Talos (v1.0.0)\"\nHOME_URL=\"https://www.talos.dev/\"\nBUG_REPORT_URL=\"https://github.com/chubo-dev/chubo/issues\"\nVENDOR_NAME=\"Sidero Labs\"\nVENDOR_URL=\"https://www.siderolabs.com/\"\n", //nolint:lll
+		"NAME=\"Talos\"\nID=talos\nVERSION_ID=v1.0.0\nPRETTY_NAME=\"Talos (v1.0.0)\"\nHOME_URL=\"https://www.chubo.dev/\"\nBUG_REPORT_URL=\"https://github.com/chubo-dev/chubo/issues\"\nVENDOR_NAME=\"Sidero Labs\"\nVENDOR_URL=\"https://www.siderolabs.com/\"\n", //nolint:lll
 		string(contents),
 	)
 }

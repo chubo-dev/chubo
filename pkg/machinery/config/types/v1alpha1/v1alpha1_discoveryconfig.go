@@ -29,7 +29,7 @@ func (c RegistryServiceConfig) Enabled() bool {
 // Endpoint implements the config.ServiceRegistry interface.
 func (c RegistryServiceConfig) Endpoint() string {
 	if c.RegistryEndpoint == "" {
-		return constants.DefaultDiscoveryServiceEndpoint
+		return constants.EffectiveDiscoveryServiceEndpoint()
 	}
 
 	return c.RegistryEndpoint

@@ -720,7 +720,7 @@ const (
 	// NodeIdentityFilename is the filename to cache node identity across reboots.
 	NodeIdentityFilename = "node-identity.yaml"
 
-	// DefaultDiscoveryServiceEndpoint is the default endpoint for the legacy discovery service.
+	// DefaultDiscoveryServiceEndpoint is the fallback endpoint for the discovery service.
 	DefaultDiscoveryServiceEndpoint = "https://discovery.talos.dev/"
 
 	// NetworkSelfIPsAnnotation stores a comma-separated list of host IPs discovered by OS tooling.
@@ -1017,7 +1017,7 @@ const OSReleaseTemplate = `NAME="%[1]s"
 ID=%[2]s
 VERSION_ID=%[3]s
 PRETTY_NAME="%[1]s (%[3]s)"
-HOME_URL="https://www.talos.dev/"
+HOME_URL="https://www.chubo.dev/"
 BUG_REPORT_URL="https://github.com/chubo-dev/chubo/issues"
 VENDOR_NAME="Sidero Labs"
 VENDOR_URL="https://www.siderolabs.com/"

@@ -17,3 +17,7 @@ func ReduceURLsToAddresses(endpoints []string) []string {
 func BuildTLSConfig(configContext *clientconfig.Context) (*tls.Config, error) {
 	return buildTLSConfig(configContext)
 }
+
+func ResolveSideroV1XDGKeysDir() string {
+	return resolveSideroV1XDGKeysDir()
+}

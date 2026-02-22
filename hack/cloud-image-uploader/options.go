@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+
+	cmdconstants "github.com/chubo-dev/chubo/cmd/chuboctl/cmd/constants"
 )
 
 // Options for the cli.
@@ -33,7 +35,7 @@ var DefaultOptions = Options{
 	ArtifactsPath: "_out/",
 	Architectures: []string{"amd64", "arm64"},
 	TargetClouds:  []string{"aws"},
-	FactoryHost:   "https://factory.talos.dev",
+	FactoryHost:   strings.TrimRight(cmdconstants.ImageFactoryURL, "/"),
 	FactorySchematics: []string{
 		"aws:10e276a06c1f86b182757a962258ac00655d3425e5957f617bdc82f06894e39b",
 	},

@@ -12,9 +12,12 @@ import (
 	"fmt"
 	"net"
 	"net/url"
+	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 
+	"github.com/adrg/xdg"
 	"github.com/siderolabs/gen/xslices"
 	"github.com/siderolabs/go-api-signature/pkg/client/interceptor"
 	"github.com/siderolabs/go-api-signature/pkg/pgp/client"
@@ -112,18 +115,44 @@ func (c *Client) getConn(opts ...grpc.DialOption) (*grpcConnectionWrapper, error
 	return c.makeConnection(target, creds, dialOpts)
 }
 
+const (
+	chuboSideroV1XDGKeysDir = "chubo/keys"
+)
+
 func getKeyProvider(customKeysDir string) *client.KeyProvider {
+	xdgKeysDir := resolveSideroV1XDGKeysDir()
+
 	if customKeysDir != "" {
-		return client.NewKeyProviderWithFallback("talos/keys", customKeysDir, "", true)
+		return client.NewKeyProviderWithFallback(xdgKeysDir, customKeysDir, "", true)
 	}
 
 	chuboDir, err := clientconfig.GetChuboDirectory()
 	if err != nil {
 		// TODO: start failing instead of falling back to XDG data directory if we can't resolve config directory
-		return client.NewKeyProvider("talos/keys")
+		return client.NewKeyProvider(xdgKeysDir)
 	}
 
-	return client.NewKeyProviderWithFallback("talos/keys", chuboDir, "keys", true)
+	return client.NewKeyProviderWithFallback(xdgKeysDir, chuboDir, constants.SideroV1KeysDir, true)
+}
+
+func resolveSideroV1XDGKeysDir() string {
+	if pathExists(filepath.Join(xdg.DataHome, chuboSideroV1XDGKeysDir)) {
+		return chuboSideroV1XDGKeysDir
+	}
+
+	legacySideroV1XDGKeysDir := strings.TrimPrefix(constants.TalosDir, ".") + "/keys"
+
+	if pathExists(filepath.Join(xdg.DataHome, legacySideroV1XDGKeysDir)) {
+		return legacySideroV1XDGKeysDir
+	}
+
+	return chuboSideroV1XDGKeysDir
+}
+
+func pathExists(path string) bool {
+	_, err := os.Stat(path)
+
+	return err == nil
 }
 
 func buildTLSConfig(configContext *clientconfig.Context) (*tls.Config, error) {

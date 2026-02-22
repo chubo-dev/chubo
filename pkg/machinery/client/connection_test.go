@@ -8,8 +8,11 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/base64"
+	"os"
+	"path/filepath"
 	"testing"
 
+	"github.com/adrg/xdg"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/chubo-dev/chubo/pkg/machinery/client"
@@ -147,5 +150,35 @@ func TestBuildTLSConfig(t *testing.T) {
 
 		assert.Equal(t, expectedCerts, tlsConfig.Certificates)
 		assert.Equal(t, tls.RequireAndVerifyClientCert, tlsConfig.ClientAuth)
+	})
+}
+
+func TestResolveSideroV1XDGKeysDir(t *testing.T) {
+	tempDataHome := t.TempDir()
+
+	originalDataHome := xdg.DataHome
+	xdg.DataHome = tempDataHome
+	t.Cleanup(func() {
+		xdg.DataHome = originalDataHome
+	})
+
+	t.Run("defaults to chubo path when no keys exist", func(t *testing.T) {
+		assert.Equal(t, "chubo/keys", client.ResolveSideroV1XDGKeysDir())
+	})
+
+	t.Run("uses legacy path when only talos keys exist", func(t *testing.T) {
+		legacyDir := filepath.Join(tempDataHome, "talos/keys")
+		assert.NoError(t, os.MkdirAll(legacyDir, 0o755))
+
+		assert.Equal(t, "talos/keys", client.ResolveSideroV1XDGKeysDir())
+
+		assert.NoError(t, os.RemoveAll(filepath.Join(tempDataHome, "talos")))
+	})
+
+	t.Run("prefers chubo path when both key dirs exist", func(t *testing.T) {
+		assert.NoError(t, os.MkdirAll(filepath.Join(tempDataHome, "talos/keys"), 0o755))
+		assert.NoError(t, os.MkdirAll(filepath.Join(tempDataHome, "chubo/keys"), 0o755))
+
+		assert.Equal(t, "chubo/keys", client.ResolveSideroV1XDGKeysDir())
 	})
 }
