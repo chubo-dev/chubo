@@ -535,160 +535,148 @@ RUN chmod +x /chubo-agent
 
 # The CLI targets build the binaries.
 
-FROM base AS talosctl-linux-amd64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-linux-amd64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
 ARG GOAMD64
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-amd64
-RUN chmod +x /talosctl-linux-amd64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-amd64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-linux-amd64
+RUN chmod +x /chuboctl-linux-amd64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-linux-amd64
 
-FROM base AS talosctl-linux-arm64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-linux-arm64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-arm64
-RUN chmod +x /talosctl-linux-arm64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-arm64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-linux-arm64
+RUN chmod +x /chuboctl-linux-arm64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-linux-arm64
 
-FROM base AS talosctl-linux-armv7-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-linux-armv7-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm GOARM=7 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-armv7
-RUN chmod +x /talosctl-linux-armv7
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-armv7
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm GOARM=7 go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-linux-armv7
+RUN chmod +x /chuboctl-linux-armv7
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-linux-armv7
 
-FROM base AS talosctl-linux-riscv64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-linux-riscv64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=riscv64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-riscv64
-RUN chmod +x /talosctl-linux-riscv64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-riscv64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=riscv64 go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-linux-riscv64
+RUN chmod +x /chuboctl-linux-riscv64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-linux-riscv64
 
-FROM base AS talosctl-darwin-amd64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
-ARG GO_LDFLAGS
-ARG GOAMD64
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=darwin GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-amd64
-RUN chmod +x /talosctl-darwin-amd64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-darwin-amd64
-
-FROM base AS talosctl-darwin-arm64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
-ARG GO_LDFLAGS
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=darwin GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-arm64
-RUN chmod +x /talosctl-darwin-arm64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" talosctl-darwin-arm64
-
-FROM base AS talosctl-windows-amd64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-darwin-amd64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
 ARG GOAMD64
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=windows GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-amd64.exe
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-amd64.exe
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=darwin GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-darwin-amd64
+RUN chmod +x /chuboctl-darwin-amd64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-darwin-amd64
 
-FROM base AS talosctl-windows-arm64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-darwin-arm64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=windows GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-arm64.exe
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-arm64.exe
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=darwin GOARCH=arm64 go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-darwin-arm64
+RUN chmod +x /chuboctl-darwin-arm64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-darwin-arm64
 
-FROM base AS talosctl-freebsd-amd64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-windows-amd64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
 ARG GOAMD64
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=freebsd GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-amd64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-amd64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=windows GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-windows-amd64.exe
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-windows-amd64.exe
 
-FROM base AS talosctl-freebsd-arm64-build
-WORKDIR /src/cmd/talosctl
-ARG GO_BUILDFLAGS_TALOSCTL
+FROM base AS chuboctl-windows-arm64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
 ARG GO_LDFLAGS
-RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=freebsd GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-arm64
-RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-arm64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=windows GOARCH=arm64 go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-windows-arm64.exe
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-windows-arm64.exe
 
-FROM scratch AS talosctl-linux-amd64
-COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /talosctl-linux-amd64
+FROM base AS chuboctl-freebsd-amd64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
+ARG GO_LDFLAGS
+ARG GOAMD64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=freebsd GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-freebsd-amd64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-freebsd-amd64
 
-FROM scratch AS talosctl-linux-arm64
-COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /talosctl-linux-arm64
-
-FROM scratch AS talosctl-linux-armv7
-COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
-
-FROM scratch AS talosctl-linux-riscv64
-COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
-
-FROM scratch AS talosctl-darwin-amd64
-COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
-
-FROM scratch AS talosctl-darwin-arm64
-COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /talosctl-darwin-arm64
-
-FROM scratch AS talosctl-freebsd-amd64
-COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /talosctl-freebsd-amd64
-
-FROM scratch AS talosctl-freebsd-arm64
-COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /talosctl-freebsd-arm64
-
-FROM scratch AS talosctl-windows-amd64
-COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
-
-FROM scratch AS talosctl-windows-arm64
-COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
+FROM base AS chuboctl-freebsd-arm64-build
+WORKDIR /src/cmd/chuboctl
+ARG GO_BUILDFLAGS_CHUBOCTL
+ARG GO_LDFLAGS
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=freebsd GOARCH=arm64 go build ${GO_BUILDFLAGS_CHUBOCTL} -ldflags "${GO_LDFLAGS}" -o /chuboctl-freebsd-arm64
+RUN touch --date="@${SOURCE_DATE_EPOCH}" /chuboctl-freebsd-arm64
 
 FROM scratch AS chuboctl-linux-amd64
-COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /chuboctl-linux-amd64
+COPY --from=chuboctl-linux-amd64-build /chuboctl-linux-amd64 /chuboctl-linux-amd64
 
 FROM scratch AS chuboctl-linux-arm64
-COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /chuboctl-linux-arm64
+COPY --from=chuboctl-linux-arm64-build /chuboctl-linux-arm64 /chuboctl-linux-arm64
 
 FROM scratch AS chuboctl-linux-armv7
-COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /chuboctl-linux-armv7
+COPY --from=chuboctl-linux-armv7-build /chuboctl-linux-armv7 /chuboctl-linux-armv7
 
 FROM scratch AS chuboctl-linux-riscv64
-COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /chuboctl-linux-riscv64
+COPY --from=chuboctl-linux-riscv64-build /chuboctl-linux-riscv64 /chuboctl-linux-riscv64
 
 FROM scratch AS chuboctl-darwin-amd64
-COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /chuboctl-darwin-amd64
+COPY --from=chuboctl-darwin-amd64-build /chuboctl-darwin-amd64 /chuboctl-darwin-amd64
 
 FROM scratch AS chuboctl-darwin-arm64
-COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /chuboctl-darwin-arm64
+COPY --from=chuboctl-darwin-arm64-build /chuboctl-darwin-arm64 /chuboctl-darwin-arm64
 
 FROM scratch AS chuboctl-freebsd-amd64
-COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /chuboctl-freebsd-amd64
+COPY --from=chuboctl-freebsd-amd64-build /chuboctl-freebsd-amd64 /chuboctl-freebsd-amd64
 
 FROM scratch AS chuboctl-freebsd-arm64
-COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /chuboctl-freebsd-arm64
+COPY --from=chuboctl-freebsd-arm64-build /chuboctl-freebsd-arm64 /chuboctl-freebsd-arm64
 
 FROM scratch AS chuboctl-windows-amd64
-COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /chuboctl-windows-amd64.exe
+COPY --from=chuboctl-windows-amd64-build /chuboctl-windows-amd64.exe /chuboctl-windows-amd64.exe
 
 FROM scratch AS chuboctl-windows-arm64
-COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /chuboctl-windows-arm64.exe
+COPY --from=chuboctl-windows-arm64-build /chuboctl-windows-arm64.exe /chuboctl-windows-arm64.exe
 
-FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
+FROM scratch AS talosctl-linux-amd64
+COPY --from=chuboctl-linux-amd64 /chuboctl-linux-amd64 /talosctl-linux-amd64
+
+FROM scratch AS talosctl-linux-arm64
+COPY --from=chuboctl-linux-arm64 /chuboctl-linux-arm64 /talosctl-linux-arm64
+
+FROM scratch AS talosctl-linux-armv7
+COPY --from=chuboctl-linux-armv7 /chuboctl-linux-armv7 /talosctl-linux-armv7
+
+FROM scratch AS talosctl-linux-riscv64
+COPY --from=chuboctl-linux-riscv64 /chuboctl-linux-riscv64 /talosctl-linux-riscv64
+
+FROM scratch AS talosctl-darwin-amd64
+COPY --from=chuboctl-darwin-amd64 /chuboctl-darwin-amd64 /talosctl-darwin-amd64
+
+FROM scratch AS talosctl-darwin-arm64
+COPY --from=chuboctl-darwin-arm64 /chuboctl-darwin-arm64 /talosctl-darwin-arm64
+
+FROM scratch AS talosctl-freebsd-amd64
+COPY --from=chuboctl-freebsd-amd64 /chuboctl-freebsd-amd64 /talosctl-freebsd-amd64
+
+FROM scratch AS talosctl-freebsd-arm64
+COPY --from=chuboctl-freebsd-arm64 /chuboctl-freebsd-arm64 /talosctl-freebsd-arm64
+
+FROM scratch AS talosctl-windows-amd64
+COPY --from=chuboctl-windows-amd64 /chuboctl-windows-amd64.exe /talosctl-windows-amd64.exe
+
+FROM scratch AS talosctl-windows-arm64
+COPY --from=chuboctl-windows-arm64 /chuboctl-windows-arm64.exe /talosctl-windows-arm64.exe
+
 FROM --platform=${BUILDPLATFORM} chuboctl-${TARGETOS}-${TARGETARCH} AS chuboctl-targetarch
-
-FROM scratch AS talosctl-all
-COPY --from=talosctl-linux-amd64 / /
-COPY --from=talosctl-linux-arm64 / /
-COPY --from=talosctl-linux-armv7 / /
-COPY --from=talosctl-linux-riscv64 / /
-COPY --from=talosctl-darwin-amd64 / /
-COPY --from=talosctl-darwin-arm64 / /
-COPY --from=talosctl-freebsd-amd64 / /
-COPY --from=talosctl-freebsd-arm64 / /
-COPY --from=talosctl-windows-amd64 / /
-COPY --from=talosctl-windows-arm64 / /
+FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
 
 FROM scratch AS chuboctl-all
 COPY --from=chuboctl-linux-amd64 / /
@@ -701,6 +689,18 @@ COPY --from=chuboctl-freebsd-amd64 / /
 COPY --from=chuboctl-freebsd-arm64 / /
 COPY --from=chuboctl-windows-amd64 / /
 COPY --from=chuboctl-windows-arm64 / /
+
+FROM scratch AS talosctl-all
+COPY --from=talosctl-linux-amd64 / /
+COPY --from=talosctl-linux-arm64 / /
+COPY --from=talosctl-linux-armv7 / /
+COPY --from=talosctl-linux-riscv64 / /
+COPY --from=talosctl-darwin-amd64 / /
+COPY --from=talosctl-darwin-arm64 / /
+COPY --from=talosctl-freebsd-amd64 / /
+COPY --from=talosctl-freebsd-arm64 / /
+COPY --from=talosctl-windows-amd64 / /
+COPY --from=talosctl-windows-arm64 / /
 
 FROM scratch AS chuboctl
 ARG TARGETARCH

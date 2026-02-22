@@ -20,6 +20,16 @@
 ./Dockerfile:# The installer target generates an image that can be used to install Talos to
 ./Dockerfile:# The rootfs target provides the Talos rootfs.
 ./Dockerfile:# The talos target is retained as a compatibility alias for the Chubo OS image.
+./Dockerfile:COPY --from=chuboctl-darwin-amd64 /chuboctl-darwin-amd64 /talosctl-darwin-amd64
+./Dockerfile:COPY --from=chuboctl-darwin-arm64 /chuboctl-darwin-arm64 /talosctl-darwin-arm64
+./Dockerfile:COPY --from=chuboctl-freebsd-amd64 /chuboctl-freebsd-amd64 /talosctl-freebsd-amd64
+./Dockerfile:COPY --from=chuboctl-freebsd-arm64 /chuboctl-freebsd-arm64 /talosctl-freebsd-arm64
+./Dockerfile:COPY --from=chuboctl-linux-amd64 /chuboctl-linux-amd64 /talosctl-linux-amd64
+./Dockerfile:COPY --from=chuboctl-linux-arm64 /chuboctl-linux-arm64 /talosctl-linux-arm64
+./Dockerfile:COPY --from=chuboctl-linux-armv7 /chuboctl-linux-armv7 /talosctl-linux-armv7
+./Dockerfile:COPY --from=chuboctl-linux-riscv64 /chuboctl-linux-riscv64 /talosctl-linux-riscv64
+./Dockerfile:COPY --from=chuboctl-windows-amd64 /chuboctl-windows-amd64.exe /talosctl-windows-amd64.exe
+./Dockerfile:COPY --from=chuboctl-windows-arm64 /chuboctl-windows-arm64.exe /talosctl-windows-arm64.exe
 ./Dockerfile:COPY --from=sbom-amd64 /talos-amd64.spdx.json /usr/install/amd64/talos.spdx.json
 ./Dockerfile:COPY --from=sbom-amd64-generate /rootfs/usr/share/spdx/talos-amd64.spdx.json /
 ./Dockerfile:COPY --from=sbom-arm64 /talos-arm64.spdx.json /talos-arm64.spdx.json
@@ -30,35 +40,15 @@
 ./Dockerfile:COPY --from=talos-vex /generate-vex /generate-vex
 ./Dockerfile:COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
 ./Dockerfile:COPY --from=talosctl-darwin-amd64 / /
-./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /chuboctl-darwin-amd64
-./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
 ./Dockerfile:COPY --from=talosctl-darwin-arm64 / /
-./Dockerfile:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /chuboctl-darwin-arm64
-./Dockerfile:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /talosctl-darwin-arm64
 ./Dockerfile:COPY --from=talosctl-freebsd-amd64 / /
-./Dockerfile:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /chuboctl-freebsd-amd64
-./Dockerfile:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /talosctl-freebsd-amd64
 ./Dockerfile:COPY --from=talosctl-freebsd-arm64 / /
-./Dockerfile:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /chuboctl-freebsd-arm64
-./Dockerfile:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /talosctl-freebsd-arm64
 ./Dockerfile:COPY --from=talosctl-linux-amd64 / /
-./Dockerfile:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /chuboctl-linux-amd64
-./Dockerfile:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /talosctl-linux-amd64
 ./Dockerfile:COPY --from=talosctl-linux-arm64 / /
-./Dockerfile:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /chuboctl-linux-arm64
-./Dockerfile:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /talosctl-linux-arm64
 ./Dockerfile:COPY --from=talosctl-linux-armv7 / /
-./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /chuboctl-linux-armv7
-./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
 ./Dockerfile:COPY --from=talosctl-linux-riscv64 / /
-./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /chuboctl-linux-riscv64
-./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
 ./Dockerfile:COPY --from=talosctl-windows-amd64 / /
-./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /chuboctl-windows-amd64.exe
-./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
 ./Dockerfile:COPY --from=talosctl-windows-arm64 / /
-./Dockerfile:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /chuboctl-windows-arm64.exe
-./Dockerfile:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
 ./Dockerfile:COPY --from=vex /talos.grype.yaml /talos.grype.yaml
 ./Dockerfile:COPY --from=vex /talos.vex.json /talos.vex.json
 ./Dockerfile:COPY --from=vex-generate /talos.grype.yaml /talos.grype.yaml
@@ -66,16 +56,6 @@
 ./Dockerfile:ENTRYPOINT ["/talosctl"]
 ./Dockerfile:FROM ${GENERATE_VEX_PREFIX}:${GENERATE_VEX} AS talos-vex
 ./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
-./Dockerfile:FROM base AS talosctl-darwin-amd64-build
-./Dockerfile:FROM base AS talosctl-darwin-arm64-build
-./Dockerfile:FROM base AS talosctl-freebsd-amd64-build
-./Dockerfile:FROM base AS talosctl-freebsd-arm64-build
-./Dockerfile:FROM base AS talosctl-linux-amd64-build
-./Dockerfile:FROM base AS talosctl-linux-arm64-build
-./Dockerfile:FROM base AS talosctl-linux-armv7-build
-./Dockerfile:FROM base AS talosctl-linux-riscv64-build
-./Dockerfile:FROM base AS talosctl-windows-amd64-build
-./Dockerfile:FROM base AS talosctl-windows-arm64-build
 ./Dockerfile:FROM chuboctl-cni-bundle AS talosctl-cni-bundle
 ./Dockerfile:FROM pkgs-chuboctl-cni-bundle AS pkgs-talosctl-cni-bundle
 ./Dockerfile:FROM scratch AS talos
@@ -93,39 +73,12 @@
 ./Dockerfile:FROM scratch AS talosctl-windows-arm64
 ./Dockerfile:FROM talos AS chubo
 ./Dockerfile:LABEL "alpha.talos.dev/version"="${VERSION}"
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=darwin GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-amd64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=darwin GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-arm64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=freebsd GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-amd64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=freebsd GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-arm64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-amd64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm GOARM=7 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-armv7
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-arm64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=riscv64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-riscv64
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=windows GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-amd64.exe
-./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=windows GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-arm64.exe
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache sbom.sh /tmp/sbom-src/ talos-amd64.spdx.json
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache sbom.sh /tmp/sbom-src/ talos-arm64.spdx.json
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache sbom.sh /tmp/sbom-src/ talos-container-amd64.spdx.json
 ./Dockerfile:RUN --mount=type=cache,target=/.cache,id=chubo/.cache sbom.sh /tmp/sbom-src/ talos-container-arm64.spdx.json
 ./Dockerfile:RUN /generate-vex gen --target-version $TAG > /talos.vex.json
 ./Dockerfile:RUN /generate-vex grype-config --target-version $TAG > /talos.grype.yaml
-./Dockerfile:RUN chmod +x /talosctl-darwin-amd64
-./Dockerfile:RUN chmod +x /talosctl-darwin-arm64
-./Dockerfile:RUN chmod +x /talosctl-linux-amd64
-./Dockerfile:RUN chmod +x /talosctl-linux-arm64
-./Dockerfile:RUN chmod +x /talosctl-linux-armv7
-./Dockerfile:RUN chmod +x /talosctl-linux-riscv64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-darwin-amd64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-amd64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-arm64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-amd64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-arm64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-armv7
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-riscv64
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-amd64.exe
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-arm64.exe
-./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" talosctl-darwin-arm64
-./Dockerfile:WORKDIR /src/cmd/talosctl
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/initramfs-amd64.xz" \
 ./Makefile:			curl -L -o "$(ARTIFACTS)/$(TALOS_RELEASE)/$*" "https://github.com/siderolabs/talos/releases/download/$(TALOS_RELEASE)/vmlinuz-amd64" \
 ./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(CHUBOCTL_DEFAULT_TARGET)-amd64 \
