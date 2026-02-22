@@ -290,7 +290,7 @@ ENV GOCACHE=/.cache/go-build
 ENV GOMODCACHE=/.cache/mod
 ARG SOURCE_DATE_EPOCH
 ENV SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH}
-# Go standard library is shipped with Talos, thus it must be tracked in SBOM
+# Go standard library is shipped with Chubo, thus it must be tracked in SBOM
 COPY --link --from=tools /usr/share/spdx/golang.spdx.json /rootfs/usr/share/spdx/golang.spdx.json
 WORKDIR /src
 
@@ -335,13 +335,13 @@ ARG ABBREV_TAG
 RUN echo -n "undefined" > pkg/machinery/gendata/data/sha && \
     echo -n ${ABBREV_TAG} > pkg/machinery/gendata/data/tag
 RUN mkdir -p _out && \
-    echo PKGS=${PKGS} >> _out/talos-metadata && \
-    echo TOOLS=${TOOLS} >> _out/talos-metadata && \
-    echo TAG=${TAG} >> _out/talos-metadata
+    echo PKGS=${PKGS} >> _out/chubo-metadata && \
+    echo TOOLS=${TOOLS} >> _out/chubo-metadata && \
+    echo TAG=${TAG} >> _out/chubo-metadata
 
 FROM scratch AS embed-abbrev
 COPY --from=embed-abbrev-generate /src/pkg/machinery/gendata/data /pkg/machinery/gendata/data
-COPY --from=embed-abbrev-generate /src/_out/talos-metadata /_out/talos-metadata
+COPY --from=embed-abbrev-generate /src/_out/chubo-metadata /_out/chubo-metadata
 
 FROM ${EMBED_TARGET} AS embed-target
 

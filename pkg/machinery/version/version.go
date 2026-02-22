@@ -11,6 +11,7 @@ import (
 	"os"
 	"regexp"
 	"runtime"
+	"strings"
 
 	machineapi "github.com/chubo-dev/chubo/pkg/machinery/api/machine"
 	"github.com/chubo-dev/chubo/pkg/machinery/gendata"
@@ -18,7 +19,7 @@ import (
 
 var (
 	// Name is set at build time.
-	Name = gendata.VersionName
+	Name = strings.TrimSpace(gendata.VersionName)
 	// Tag is set at build time.
 	Tag = gendata.VersionTag
 	// SHA is set at build time.

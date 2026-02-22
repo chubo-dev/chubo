@@ -24,12 +24,12 @@ func TestOSRelease(t *testing.T) {
 func TestOSReleaseFor(t *testing.T) {
 	t.Parallel()
 
-	contents, err := version.OSReleaseFor("Talos", "v1.0.0")
+	contents, err := version.OSReleaseFor("Chubo", "v1.0.0")
 	require.NoError(t, err)
 
 	assert.Equal(
 		t,
-		"NAME=\"Talos\"\nID=talos\nVERSION_ID=v1.0.0\nPRETTY_NAME=\"Talos (v1.0.0)\"\nHOME_URL=\"https://www.chubo.dev/\"\nBUG_REPORT_URL=\"https://github.com/chubo-dev/chubo/issues\"\nVENDOR_NAME=\"Sidero Labs\"\nVENDOR_URL=\"https://www.siderolabs.com/\"\n", //nolint:lll
+		"NAME=\"Chubo\"\nID=chubo\nVERSION_ID=v1.0.0\nPRETTY_NAME=\"Chubo (v1.0.0)\"\nHOME_URL=\"https://www.chubo.dev/\"\nBUG_REPORT_URL=\"https://github.com/chubo-dev/chubo/issues\"\nVENDOR_NAME=\"Sidero Labs\"\nVENDOR_URL=\"https://www.siderolabs.com/\"\n", //nolint:lll
 		string(contents),
 	)
 }

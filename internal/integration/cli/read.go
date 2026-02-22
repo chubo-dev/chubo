@@ -25,7 +25,7 @@ func (suite *ReadSuite) SuiteName() string {
 // TestSuccess runs comand with success.
 func (suite *ReadSuite) TestSuccess() {
 	suite.RunCLI([]string{"read", "--nodes", suite.RandomDiscoveredNodeInternalIP(), "/etc/os-release"},
-		base.StdoutShouldMatch(regexp.MustCompile(`ID=talos`)))
+		base.StdoutShouldMatch(regexp.MustCompile(`ID=(chubo|talos)`)))
 }
 
 // TestMultiNodeFail verifies that command fails with multiple nodes.
