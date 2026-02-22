@@ -1,8 +1,8 @@
 # commit to be tagged for new release
 commit = "HEAD"
 
-project_name = "Talos"
-github_repo = "siderolabs/talos"
+project_name = "Chubo"
+github_repo = "chubo-dev/chubo"
 match_deps = "^github.com/((talos-systems|siderolabs)/[a-zA-Z0-9-]+)$"
 ignore_deps = ["github.com/coredns/coredns"]
 
@@ -26,14 +26,14 @@ runc: 1.4.0
 systemd: 259
 cryptsetup: 2.8.3
 
-Talos is built with Go 1.25.7.
+Chubo is built with Go 1.25.7.
 """
 
     [notes.external_volumes]
         title = "External Volumes"
         description = """\
-Talos now supports virtiofs-based external volumes via the new
-[ExternalVolumeConfig](https://www.talos.dev/v1.13/reference/configuration/block/externalvolumeconfig/)
+Chubo now supports virtiofs-based external volumes via the new
+[ExternalVolumeConfig](https://www.chubo.dev/v1.13/reference/configuration/block/externalvolumeconfig/)
 document.
 
 These virtiofs external volumes are not supported when SELinux is running
@@ -55,15 +55,15 @@ Talos now ships with `igzip` (amd64) and `pigz` (arm64) to speed up container im
 """
 
     [notes.imager]
-        title = "Talos Imager Enhancements"
+        title = "Chubo Imager Enhancements"
         description = """\
-Talos imager now supports running rootless. `--privileged` and `-v /dev:/dev` are no longer required.
+Chubo imager now supports running rootless. `--privileged` and `-v /dev:/dev` are no longer required.
 """
 
     [notes.reproducible_images]
         title = "Reproducible Disk Images"
         description = """\
-Talos disk images are now reproducible. Building the same version of Talos multiple times will yield
+Chubo disk images are now reproducible. Building the same version of Chubo multiple times will yield
 identical disk images.
 
 Note: VHD and VMDK (Azure and VMware) images are not currently reproducible due to limitations in the underlying image creation tools.
@@ -73,14 +73,14 @@ Users verifying reproducible images should use raw images, verify checksums, and
     [notes.vm]
         title = "VM Hot-Add Support"
         description = """\
-Talos now includes udev rules to support hot-adding of CPUs in virtualized environments.
+Chubo now includes udev rules to support hot-adding of CPUs in virtualized environments.
 """
 
     [notest.interactive-installer]
         title = "Interactive Installer Removal"
         description = """\
 The interactive installer mode has been removed from `chuboctl apply-config` (`--mode=interactive`).
-It has been deprecated since Talos v1.12.0, and now fully removed.
+It has been deprecated since Chubo v1.12.0, and now fully removed.
 The related `GenerateConfiguration` API method has also been removed.
 Users are encouraged to use other installation methods, such as using pre-generated configuration files, or using Omni.
 """
@@ -109,7 +109,7 @@ The `chuboctl image source-bundle` command now accepts optional version override
     [notes.environment_config]
         title = "Environment Configuration Document"
         description = """\
-A new `EnvironmentConfig` document has been introduced to allow users to specify environment variables for Talos components.
+A new `EnvironmentConfig` document has been introduced to allow users to specify environment variables for Chubo components.
 It replaces and deprecates the previous method of setting environment variables via the `.machine.env` field.
 
 Multiple values for the same environment variable will replace previous values, with the last one taking precedence.
@@ -120,7 +120,7 @@ To remove an environment variable, remove it from the `EnvironmentConfig` docume
     [notes.extraArgs]
         title = "Extra Arguments accept slices in addition to strings"
         description = """\
-Several Talos configuration fields that previously accepted single string values for extra arguments have been updated to accept slices of strings as well.
+Several Chubo configuration fields that previously accepted single string values for extra arguments have been updated to accept slices of strings as well.
 This includes fields such as `.cluster.apiServer.extraArgs`.
 
 BREAKING: Several legacy control-plane resource payloads changed from `map<string,string>` to `map<string,message>`.

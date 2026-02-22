@@ -268,23 +268,11 @@
 ./hack/qemu/chubo-qemu.sh:# Optional extra kernel args, e.g. 'talos.platform=qemu' or debugging flags.
 ./hack/qemu/chubo-qemu.sh:# This script boots Talos via systemd-boot from a FAT "EFI drive" directory and forwards the
 ./hack/qemu/chubo-qemu.sh:options talos.platform=metal talos.halt_if_installed=${HALT_IF_INSTALLED} net.ifnames=0 slab_nomerge pti=on talos.dashboard.disabled=1 console=tty0 console=ttyAMA0 printk.devkmsg=on consoleblank=0 ${EXTRA_KERNEL_ARGS}
-./hack/release.toml:        title = "Talos Imager Enhancements"
-./hack/release.toml:A new `EnvironmentConfig` document has been introduced to allow users to specify environment variables for Talos components.
-./hack/release.toml:It has been deprecated since Talos v1.12.0, and now fully removed.
-./hack/release.toml:Several Talos configuration fields that previously accepted single string values for extra arguments have been updated to accept slices of strings as well.
-./hack/release.toml:Talos disk images are now reproducible. Building the same version of Talos multiple times will yield
-./hack/release.toml:Talos imager now supports running rootless. `--privileged` and `-v /dev:/dev` are no longer required.
-./hack/release.toml:Talos is built with Go 1.25.7.
-./hack/release.toml:Talos now includes udev rules to support hot-adding of CPUs in virtualized environments.
 ./hack/release.toml:Talos now ships with `igzip` (amd64) and `pigz` (arm64) to speed up container image decompression.
-./hack/release.toml:Talos now supports virtiofs-based external volumes via the new
 ./hack/release.toml:Talos now uses inventory backed server-side apply when applying bootsrap manifests (including `extraManifests` and `inlineManifests`).
-./hack/release.toml:[ExternalVolumeConfig](https://www.talos.dev/v1.13/reference/configuration/block/externalvolumeconfig/)
-./hack/release.toml:github_repo = "siderolabs/talos"
 ./hack/release.toml:match_deps = "^github.com/((talos-systems|siderolabs)/[a-zA-Z0-9-]+)$"
-./hack/release.toml:project_name = "Talos"
-./hack/start-registry-proxies.sh:    --name registry-factory.talos.dev registry:2
-./hack/start-registry-proxies.sh:    -e REGISTRY_PROXY_REMOTEURL=https://factory.talos.dev \
+./hack/start-registry-proxies.sh:factory_proxy_name="${CHUBO_FACTORY_PROXY_NAME:-registry-factory.talos.dev}"
+./hack/start-registry-proxies.sh:factory_proxy_remoteurl="${CHUBO_IMAGE_FACTORY_URL:-${TALOS_IMAGE_FACTORY_URL:-https://factory.talos.dev}}"
 ./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go list -mod=readonly all >/dev/null
 ./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go mod download
 ./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go mod verify
