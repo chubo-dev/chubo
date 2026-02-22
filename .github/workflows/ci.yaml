@@ -33,6 +33,18 @@ jobs:
       - name: unit-tests
         run: make unit-tests
 
+  cli-target-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+      - name: chuboctl/talosctl target smoke
+        run: |
+          make target-chuboctl-linux-amd64
+          make target-talosctl-linux-amd64
+
   chubo-guardrails:
     runs-on: ubuntu-latest
     steps:
