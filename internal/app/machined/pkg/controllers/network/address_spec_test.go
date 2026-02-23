@@ -59,6 +59,14 @@ func assertLinkAddress(asrt *assert.Assertions, linkName, address string) {
 			continue
 		}
 
+		if linkAddress.Attributes == nil {
+			continue
+		}
+
+		if linkAddress.Attributes.Address == nil {
+			continue
+		}
+
 		if !linkAddress.Attributes.Address.Equal(addr.Addr().AsSlice()) {
 			continue
 		}
@@ -84,6 +92,10 @@ func assertNoLinkAddress(asrt *assert.Assertions, linkName, address string) {
 	asrt.NoError(err)
 
 	for _, linkAddress := range linkAddresses {
+		if linkAddress.Attributes == nil || linkAddress.Attributes.Address == nil {
+			continue
+		}
+
 		if linkAddress.Index == uint32(iface.Index) && int(linkAddress.PrefixLength) == addr.Bits() && linkAddress.Attributes.Address.Equal(addr.Addr().AsSlice()) {
 			asrt.Failf("address is still there", "address %s is assigned to %q", addr, linkName)
 		}
