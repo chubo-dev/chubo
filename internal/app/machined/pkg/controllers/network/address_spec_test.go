@@ -175,6 +175,10 @@ func (suite *AddressSpecSuite) TestDummy() {
 
 	defer conn.Link.Delete(uint32(iface.Index)) //nolint:errcheck
 
+	for _, res := range []resource.Resource{dummy} {
+		suite.Create(res)
+	}
+
 	suite.Assert().EventuallyWithT(func(collect *assert.CollectT) {
 		assertLinkAddress(assert.New(collect), dummyInterface, "10.0.0.1/8")
 	}, 3*time.Second, 10*time.Millisecond)
@@ -211,11 +215,6 @@ func (suite *AddressSpecSuite) TestDummyAlias() {
 		Scope:       nethelpers.ScopeGlobal,
 		ConfigLayer: network.ConfigDefault,
 		Flags:       nethelpers.AddressFlags(nethelpers.AddressPermanent),
-	}
-
-	// it's fine to create the address before the interface is actually created
-	for _, res := range []resource.Resource{dummy} {
-		suite.Create(res)
 	}
 
 	// create dummy interface
