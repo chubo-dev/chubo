@@ -30,8 +30,18 @@ jobs:
       - uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
+      - name: preflight-disk-cleanup
+        run: |
+          df -h
+          docker buildx prune -af || true
+          docker system prune -af --volumes || true
+          df -h
       - name: unit-tests
-        run: make unit-tests
+        run: |
+          make unit-tests > /tmp/unit-tests.log 2>&1 || {
+            tail -n 400 /tmp/unit-tests.log
+            exit 1
+          }
 
   cli-target-smoke:
     runs-on: ubuntu-latest
@@ -56,6 +66,12 @@ jobs:
       - uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
+      - name: preflight-disk-cleanup
+        run: |
+          df -h
+          docker buildx prune -af || true
+          docker system prune -af --volumes || true
+          df -h
       - name: chubo-guardrails
         run: make chubo-guardrails
 
