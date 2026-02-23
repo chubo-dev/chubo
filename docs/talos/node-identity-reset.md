@@ -1,0 +1,45 @@
+# Talos Review - Node identity and reset
+
+Subsystem name: Node identity lifecycle + reset
+
+- Chubo goal: manage node identity lifecycle (certs/IDs) and provide an explicit, audited reset that leaves the node in a clean bootstrap state.
+- Talos equivalent (module/area): machine reset API + sequencer reset flow; cluster identity resource; secrets controllers (cert/SAN lifecycle).
+- Talos code paths (file/dir):
+  - `internal/app/machined/internal/server/v1alpha1/v1alpha1_server.go` (Reset API)
+  - `internal/app/machined/pkg/runtime/sequencer.go` + `internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer.go` (reset sequence)
+  - `internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go` (wipe/reset tasks)
+  - `pkg/machinery/resources/runtime/machine_reset_signal.go` (reset signal resource)
+  - `pkg/machinery/resources/cluster/identity.go` (NodeID persisted in state)
+  - `internal/app/machined/pkg/controllers/secrets/` (cert rotation, SANs, trusted roots)
+- Key algorithms / state machines:
+  - Reset sequencing gates wiping, reboot, and final reset signal emission.
+  - Reset validates user disk targets and system partitions before wiping.
+  - Identity NodeID persists across reboots but resets on wipe.
+  - Secrets controllers regenerate certs when inputs change (SANs, CAs).
+- Config model / API surface:
+  - `machine.ResetRequest` / `ResetResponse` gRPC API.
+  - Reset options include mode, wipe targets, reboot/halt policy.
+  - Identity exposed as a resource in the runtime graph.
+- Failure handling / recovery:
+  - Reset rejects invalid wipe targets and disallowed mode combinations.
+  - Sequencer emits reset signal once network communication is no longer needed.
+  - Wipe failures are surfaced and abort the sequence.
+- Test strategy (unit/contract/integration):
+  - `internal/app/machined/pkg/runtime/sequencer_test.go`
+  - `internal/integration/api/reset.go`
+  - `internal/integration/base/api.go` (ResetNode helper)
+- What we will reuse:
+  - Explicit reset gating and validation patterns.
+  - Reset sequencing concept (stop services → wipe → reboot → signal).
+- What we will adapt:
+  - Narrow reset scope to chubo base dir + certs/config for Phase 10.
+  - Lightweight reset record instead of Talos resource graph.
+- What we will avoid (and why):
+  - Full disk/partition wiping and bootloader reset until Phase 10+ (beyond chubo minimal reset).
+  - Talos COSI runtime resource graph (too heavy for chubo).
+- Action items:
+  - Add chubo reset API with explicit confirmation and audit record.
+  - Define reset modes (state vs full) and reboot behavior.
+  - Decide CSR/identity rotation flow once bootstrap trust is finalized.
+- Chubo status:
+  - Persist `node.json` under `/var/lib/chubo/state` (node id + created timestamp) and surface it in status.

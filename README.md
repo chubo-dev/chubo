@@ -16,13 +16,13 @@ Kubernetes/etcd are not part of the product surface (they are being removed from
 ## Workspace Layout
 
 In the `chubo-os` workspace, docs and control-plane tooling live in the sibling repo:
-- `../chubo/docs/talos/deep-fork-plan.md`
-- `../chubo/docs/talos/chubo-product-source-clean-plan.md`
+- `docs/talos/deep-fork-plan.md`
+- `docs/talos/chubo-product-source-clean-plan.md`
 - `../chubo/docs/dev/chubo-os-qemu-devloop.md`
 
 ## Build, Test, and Fast Iteration
 
-From `talos/`:
+From `chubo/`:
 
 - Unit tests: `make unit-tests`
 - Guardrails (k8s-less deps + rootfs + CLI surface): `make chubo-guardrails`

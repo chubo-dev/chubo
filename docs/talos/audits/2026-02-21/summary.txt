@@ -1,0 +1,6 @@
+proto_package_files=16
+proto_package_lines=16
+generated_stub_files_with_talos_namespace=16
+generated_stub_lines_with_talos_namespace=720
+structprotogen_talos_namespace_lines=13
+other_non_generated_talos_namespace_lines=13

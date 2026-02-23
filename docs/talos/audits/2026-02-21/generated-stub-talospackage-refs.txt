@@ -1,0 +1,720 @@
+pkg/machinery/api/resource/definitions/block/block.pb.go:662:	Type                             enums.BlockEncryptionKeyType `protobuf:"varint,2,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockEncryptionKeyType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:762:	Provider      enums.BlockEncryptionProviderType `protobuf:"varint,1,opt,name=provider,proto3,enum=talos.resource.definitions.enums.BlockEncryptionProviderType" json:"provider,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:847:	Type          enums.BlockFilesystemType `protobuf:"varint,1,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockFilesystemType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:1174:	Filesystem          enums.BlockFilesystemType         `protobuf:"varint,4,opt,name=filesystem,proto3,enum=talos.resource.definitions.enums.BlockFilesystemType" json:"filesystem,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:1177:	EncryptionProvider  enums.BlockEncryptionProviderType `protobuf:"varint,7,opt,name=encryption_provider,json=encryptionProvider,proto3,enum=talos.resource.definitions.enums.BlockEncryptionProviderType" json:"encryption_provider,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:1272:	Type          enums.BlockFSParameterType `protobuf:"varint,1,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockFSParameterType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:1854:	Type          enums.BlockVolumeType    `protobuf:"varint,2,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockVolumeType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:2124:	Phase                    enums.BlockVolumePhase            `protobuf:"varint,1,opt,name=phase,proto3,enum=talos.resource.definitions.enums.BlockVolumePhase" json:"phase,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:2129:	PreFailPhase             enums.BlockVolumePhase            `protobuf:"varint,6,opt,name=pre_fail_phase,json=preFailPhase,proto3,enum=talos.resource.definitions.enums.BlockVolumePhase" json:"pre_fail_phase,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:2133:	Filesystem               enums.BlockFilesystemType         `protobuf:"varint,10,opt,name=filesystem,proto3,enum=talos.resource.definitions.enums.BlockFilesystemType" json:"filesystem,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:2135:	EncryptionProvider       enums.BlockEncryptionProviderType `protobuf:"varint,12,opt,name=encryption_provider,json=encryptionProvider,proto3,enum=talos.resource.definitions.enums.BlockEncryptionProviderType" json:"encryption_provider,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:2139:	Type                     enums.BlockVolumeType             `protobuf:"varint,16,opt,name=type,proto3,enum=talos.resource.definitions.enums.BlockVolumeType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/block/block.pb.go:2455:	"&resource/definitions/block/block.proto\x12 talos.resource.definitions.block\x1a&google/api/expr/v1alpha1/checked.proto\x1a&resource/definitions/enums/enums.proto\"\x99\x02\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2531:	"\x04type\x18\x02 \x01(\x0e28.talos.resource.definitions.enums.BlockEncryptionKeyTypeR\x04type\x12+\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2539:	"\bprovider\x18\x01 \x01(\x0e2=.talos.resource.definitions.enums.BlockEncryptionProviderTypeR\bprovider\x12C\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2540:	"\x04keys\x18\x02 \x03(\v2/.talos.resource.definitions.block.EncryptionKeyR\x04keys\x12\x16\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2547:	"\x04type\x18\x01 \x01(\x0e25.talos.resource.definitions.enums.BlockFilesystemTypeR\x04type\x12\x14\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2578:	" \x03(\v2/.talos.resource.definitions.block.ParameterSpecR\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2581:	"\x04spec\x18\x01 \x01(\v22.talos.resource.definitions.block.MountRequestSpecR\x04spec\x12\x16\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2585:	"filesystem\x18\x04 \x01(\x0e25.talos.resource.definitions.enums.BlockFilesystemTypeR\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2589:	"\x13encryption_provider\x18\a \x01(\x0e2=.talos.resource.definitions.enums.BlockEncryptionProviderTypeR\x12encryptionProvider\x12\x1a\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2592:	"\x04type\x18\x01 \x01(\x0e26.talos.resource.definitions.enums.BlockFSParameterTypeR\x04type\x12\x12\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2605:	"\rdisk_selector\x18\x01 \x01(\v2..talos.resource.definitions.block.DiskSelectorR\fdiskSelector\x12V\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2606:	"\x0epartition_spec\x18\x02 \x01(\v2/.talos.resource.definitions.block.PartitionSpecR\rpartitionSpec\x12\x12\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2608:	"\x0ffilesystem_spec\x18\x04 \x01(\v20.talos.resource.definitions.block.FilesystemSpecR\x0efilesystemSpec\"\xd4\x01\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2638:	"\x04type\x18\x02 \x01(\x0e21.talos.resource.definitions.enums.BlockVolumeTypeR\x04type\x12V\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2639:	"\fprovisioning\x18\x03 \x01(\v22.talos.resource.definitions.block.ProvisioningSpecR\fprovisioning\x12G\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2640:	"\alocator\x18\x04 \x01(\v2-.talos.resource.definitions.block.LocatorSpecR\alocator\x12A\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2641:	"\x05mount\x18\x05 \x01(\v2+.talos.resource.definitions.block.MountSpecR\x05mount\x12P\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2643:	"encryption\x18\x06 \x01(\v20.talos.resource.definitions.block.EncryptionSpecR\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2645:	"\asymlink\x18\a \x01(\v29.talos.resource.definitions.block.SymlinkProvisioningSpecR\asymlink\"\xd4\x01\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2663:	"\x05phase\x18\x01 \x01(\x0e22.talos.resource.definitions.enums.BlockVolumePhaseR\x05phase\x12\x1a\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2668:	"\x0epre_fail_phase\x18\x06 \x01(\x0e22.talos.resource.definitions.enums.BlockVolumePhaseR\fpreFailPhase\x12'\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2674:	" \x01(\x0e25.talos.resource.definitions.enums.BlockFilesystemTypeR\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2677:	"\x13encryption_provider\x18\f \x01(\x0e2=.talos.resource.definitions.enums.BlockEncryptionProviderTypeR\x12encryptionProvider\x12\x1f\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2682:	"mount_spec\x18\x0f \x01(\v2+.talos.resource.definitions.block.MountSpecR\tmountSpec\x12E\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2683:	"\x04type\x18\x10 \x01(\x0e21.talos.resource.definitions.enums.BlockVolumeTypeR\x04type\x12<\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2685:	"\fsymlink_spec\x18\x12 \x01(\v29.talos.resource.definitions.block.SymlinkProvisioningSpecR\vsymlinkSpec\x12\x1b\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2689:	"\x16tpm_encryption_options\x18\x16 \x01(\v2:.talos.resource.definitions.block.TPMEncryptionOptionsInfoR\x14tpmEncryptionOptions\"\xd0\x03\n" +
+pkg/machinery/api/resource/definitions/block/block.pb.go:2718:	(*DeviceSpec)(nil),                     // 0: talos.resource.definitions.block.DeviceSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2719:	(*DiscoveredVolumeSpec)(nil),           // 1: talos.resource.definitions.block.DiscoveredVolumeSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2720:	(*DiscoveryRefreshRequestSpec)(nil),    // 2: talos.resource.definitions.block.DiscoveryRefreshRequestSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2721:	(*DiscoveryRefreshStatusSpec)(nil),     // 3: talos.resource.definitions.block.DiscoveryRefreshStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2722:	(*DiskSelector)(nil),                   // 4: talos.resource.definitions.block.DiskSelector
+pkg/machinery/api/resource/definitions/block/block.pb.go:2723:	(*DiskSpec)(nil),                       // 5: talos.resource.definitions.block.DiskSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2724:	(*EncryptionKey)(nil),                  // 6: talos.resource.definitions.block.EncryptionKey
+pkg/machinery/api/resource/definitions/block/block.pb.go:2725:	(*EncryptionSpec)(nil),                 // 7: talos.resource.definitions.block.EncryptionSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2726:	(*FilesystemSpec)(nil),                 // 8: talos.resource.definitions.block.FilesystemSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2727:	(*LocatorSpec)(nil),                    // 9: talos.resource.definitions.block.LocatorSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2728:	(*MountRequestSpec)(nil),               // 10: talos.resource.definitions.block.MountRequestSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2729:	(*MountSpec)(nil),                      // 11: talos.resource.definitions.block.MountSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2730:	(*MountStatusSpec)(nil),                // 12: talos.resource.definitions.block.MountStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2731:	(*ParameterSpec)(nil),                  // 13: talos.resource.definitions.block.ParameterSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2732:	(*PartitionSpec)(nil),                  // 14: talos.resource.definitions.block.PartitionSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2733:	(*ProvisioningSpec)(nil),               // 15: talos.resource.definitions.block.ProvisioningSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2734:	(*SwapStatusSpec)(nil),                 // 16: talos.resource.definitions.block.SwapStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2735:	(*SymlinkProvisioningSpec)(nil),        // 17: talos.resource.definitions.block.SymlinkProvisioningSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2736:	(*SymlinkSpec)(nil),                    // 18: talos.resource.definitions.block.SymlinkSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2737:	(*SystemDiskSpec)(nil),                 // 19: talos.resource.definitions.block.SystemDiskSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2738:	(*TPMEncryptionOptionsInfo)(nil),       // 20: talos.resource.definitions.block.TPMEncryptionOptionsInfo
+pkg/machinery/api/resource/definitions/block/block.pb.go:2739:	(*UserDiskConfigStatusSpec)(nil),       // 21: talos.resource.definitions.block.UserDiskConfigStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2740:	(*VolumeConfigSpec)(nil),               // 22: talos.resource.definitions.block.VolumeConfigSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2741:	(*VolumeMountRequestSpec)(nil),         // 23: talos.resource.definitions.block.VolumeMountRequestSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2742:	(*VolumeMountStatusSpec)(nil),          // 24: talos.resource.definitions.block.VolumeMountStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2743:	(*VolumeStatusSpec)(nil),               // 25: talos.resource.definitions.block.VolumeStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2744:	(*ZswapStatusSpec)(nil),                // 26: talos.resource.definitions.block.ZswapStatusSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2746:	(enums.BlockEncryptionKeyType)(0),      // 28: talos.resource.definitions.enums.BlockEncryptionKeyType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2747:	(enums.BlockEncryptionProviderType)(0), // 29: talos.resource.definitions.enums.BlockEncryptionProviderType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2748:	(enums.BlockFilesystemType)(0),         // 30: talos.resource.definitions.enums.BlockFilesystemType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2749:	(enums.BlockFSParameterType)(0),        // 31: talos.resource.definitions.enums.BlockFSParameterType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2750:	(enums.BlockVolumeType)(0),             // 32: talos.resource.definitions.enums.BlockVolumeType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2751:	(enums.BlockVolumePhase)(0),            // 33: talos.resource.definitions.enums.BlockVolumePhase
+pkg/machinery/api/resource/definitions/block/block.pb.go:2754:	27, // 0: talos.resource.definitions.block.DiskSelector.match:type_name -> google.api.expr.v1alpha1.CheckedExpr
+pkg/machinery/api/resource/definitions/block/block.pb.go:2755:	28, // 1: talos.resource.definitions.block.EncryptionKey.type:type_name -> talos.resource.definitions.enums.BlockEncryptionKeyType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2756:	29, // 2: talos.resource.definitions.block.EncryptionSpec.provider:type_name -> talos.resource.definitions.enums.BlockEncryptionProviderType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2757:	6,  // 3: talos.resource.definitions.block.EncryptionSpec.keys:type_name -> talos.resource.definitions.block.EncryptionKey
+pkg/machinery/api/resource/definitions/block/block.pb.go:2758:	30, // 4: talos.resource.definitions.block.FilesystemSpec.type:type_name -> talos.resource.definitions.enums.BlockFilesystemType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2759:	27, // 5: talos.resource.definitions.block.LocatorSpec.match:type_name -> google.api.expr.v1alpha1.CheckedExpr
+pkg/machinery/api/resource/definitions/block/block.pb.go:2760:	27, // 6: talos.resource.definitions.block.LocatorSpec.disk_match:type_name -> google.api.expr.v1alpha1.CheckedExpr
+pkg/machinery/api/resource/definitions/block/block.pb.go:2761:	13, // 7: talos.resource.definitions.block.MountSpec.parameters:type_name -> talos.resource.definitions.block.ParameterSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2762:	10, // 8: talos.resource.definitions.block.MountStatusSpec.spec:type_name -> talos.resource.definitions.block.MountRequestSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2763:	30, // 9: talos.resource.definitions.block.MountStatusSpec.filesystem:type_name -> talos.resource.definitions.enums.BlockFilesystemType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2764:	29, // 10: talos.resource.definitions.block.MountStatusSpec.encryption_provider:type_name -> talos.resource.definitions.enums.BlockEncryptionProviderType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2765:	31, // 11: talos.resource.definitions.block.ParameterSpec.type:type_name -> talos.resource.definitions.enums.BlockFSParameterType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2766:	4,  // 12: talos.resource.definitions.block.ProvisioningSpec.disk_selector:type_name -> talos.resource.definitions.block.DiskSelector
+pkg/machinery/api/resource/definitions/block/block.pb.go:2767:	14, // 13: talos.resource.definitions.block.ProvisioningSpec.partition_spec:type_name -> talos.resource.definitions.block.PartitionSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2768:	8,  // 14: talos.resource.definitions.block.ProvisioningSpec.filesystem_spec:type_name -> talos.resource.definitions.block.FilesystemSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2769:	32, // 15: talos.resource.definitions.block.VolumeConfigSpec.type:type_name -> talos.resource.definitions.enums.BlockVolumeType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2770:	15, // 16: talos.resource.definitions.block.VolumeConfigSpec.provisioning:type_name -> talos.resource.definitions.block.ProvisioningSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2771:	9,  // 17: talos.resource.definitions.block.VolumeConfigSpec.locator:type_name -> talos.resource.definitions.block.LocatorSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2772:	11, // 18: talos.resource.definitions.block.VolumeConfigSpec.mount:type_name -> talos.resource.definitions.block.MountSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2773:	7,  // 19: talos.resource.definitions.block.VolumeConfigSpec.encryption:type_name -> talos.resource.definitions.block.EncryptionSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2774:	17, // 20: talos.resource.definitions.block.VolumeConfigSpec.symlink:type_name -> talos.resource.definitions.block.SymlinkProvisioningSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2775:	33, // 21: talos.resource.definitions.block.VolumeStatusSpec.phase:type_name -> talos.resource.definitions.enums.BlockVolumePhase
+pkg/machinery/api/resource/definitions/block/block.pb.go:2776:	33, // 22: talos.resource.definitions.block.VolumeStatusSpec.pre_fail_phase:type_name -> talos.resource.definitions.enums.BlockVolumePhase
+pkg/machinery/api/resource/definitions/block/block.pb.go:2777:	30, // 23: talos.resource.definitions.block.VolumeStatusSpec.filesystem:type_name -> talos.resource.definitions.enums.BlockFilesystemType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2778:	29, // 24: talos.resource.definitions.block.VolumeStatusSpec.encryption_provider:type_name -> talos.resource.definitions.enums.BlockEncryptionProviderType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2779:	11, // 25: talos.resource.definitions.block.VolumeStatusSpec.mount_spec:type_name -> talos.resource.definitions.block.MountSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2780:	32, // 26: talos.resource.definitions.block.VolumeStatusSpec.type:type_name -> talos.resource.definitions.enums.BlockVolumeType
+pkg/machinery/api/resource/definitions/block/block.pb.go:2781:	17, // 27: talos.resource.definitions.block.VolumeStatusSpec.symlink_spec:type_name -> talos.resource.definitions.block.SymlinkProvisioningSpec
+pkg/machinery/api/resource/definitions/block/block.pb.go:2782:	20, // 28: talos.resource.definitions.block.VolumeStatusSpec.tpm_encryption_options:type_name -> talos.resource.definitions.block.TPMEncryptionOptionsInfo
+pkg/machinery/api/resource/definitions/siderolink/siderolink.pb.go:246:	"0resource/definitions/siderolink/siderolink.proto\x12%talos.resource.definitions.siderolink\x1a\x13common/common.proto\"\x96\x01\n" +
+pkg/machinery/api/resource/definitions/siderolink/siderolink.pb.go:284:	(*ConfigSpec)(nil),       // 0: talos.resource.definitions.siderolink.ConfigSpec
+pkg/machinery/api/resource/definitions/siderolink/siderolink.pb.go:285:	(*StatusSpec)(nil),       // 1: talos.resource.definitions.siderolink.StatusSpec
+pkg/machinery/api/resource/definitions/siderolink/siderolink.pb.go:286:	(*TunnelSpec)(nil),       // 2: talos.resource.definitions.siderolink.TunnelSpec
+pkg/machinery/api/resource/definitions/siderolink/siderolink.pb.go:290:	3, // 0: talos.resource.definitions.siderolink.TunnelSpec.node_address:type_name -> common.NetIPPort
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:668:	"$resource/definitions/perf/perf.proto\x12\x1ftalos.resource.definitions.perf\"\xf5\x02\n" +
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:670:	"\x03cpu\x18\x01 \x03(\v2(.talos.resource.definitions.perf.CPUStatR\x03cpu\x12E\n" +
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:671:	"\tcpu_total\x18\x02 \x01(\v2(.talos.resource.definitions.perf.CPUStatR\bcpuTotal\x12\x1b\n" +
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:765:	(*CPUSpec)(nil),    // 0: talos.resource.definitions.perf.CPUSpec
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:766:	(*CPUStat)(nil),    // 1: talos.resource.definitions.perf.CPUStat
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:767:	(*MemorySpec)(nil), // 2: talos.resource.definitions.perf.MemorySpec
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:770:	1, // 0: talos.resource.definitions.perf.CPUSpec.cpu:type_name -> talos.resource.definitions.perf.CPUStat
+pkg/machinery/api/resource/definitions/perf/perf.pb.go:771:	1, // 1: talos.resource.definitions.perf.CPUSpec.cpu_total:type_name -> talos.resource.definitions.perf.CPUStat
+pkg/machinery/api/resource/definitions/files/files.pb.go:135:	"&resource/definitions/files/files.proto\x12 talos.resource.definitions.files\"f\n" +
+pkg/machinery/api/resource/definitions/files/files.pb.go:158:	(*EtcFileSpecSpec)(nil),   // 0: talos.resource.definitions.files.EtcFileSpecSpec
+pkg/machinery/api/resource/definitions/files/files.pb.go:159:	(*EtcFileStatusSpec)(nil), // 1: talos.resource.definitions.files.EtcFileStatusSpec
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:257:	"0resource/definitions/extensions/extensions.proto\x12%talos.resource.definitions.extensions\"X\n" +
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:259:	"\x05talos\x18\x01 \x01(\v21.talos.resource.definitions.extensions.ConstraintR\x05talos\"&\n" +
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:265:	"\bmetadata\x18\x02 \x01(\v2/.talos.resource.definitions.extensions.MetadataR\bmetadata\"\xed\x01\n" +
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:271:	"\rcompatibility\x18\x05 \x01(\v24.talos.resource.definitions.extensions.CompatibilityR\rcompatibility\x12\x1d\n" +
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:290:	(*Compatibility)(nil), // 0: talos.resource.definitions.extensions.Compatibility
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:291:	(*Constraint)(nil),    // 1: talos.resource.definitions.extensions.Constraint
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:292:	(*Layer)(nil),         // 2: talos.resource.definitions.extensions.Layer
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:293:	(*Metadata)(nil),      // 3: talos.resource.definitions.extensions.Metadata
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:296:	1, // 0: talos.resource.definitions.extensions.Compatibility.talos:type_name -> talos.resource.definitions.extensions.Constraint
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:297:	3, // 1: talos.resource.definitions.extensions.Layer.metadata:type_name -> talos.resource.definitions.extensions.Metadata
+pkg/machinery/api/resource/definitions/extensions/extensions.pb.go:298:	0, // 2: talos.resource.definitions.extensions.Metadata.compatibility:type_name -> talos.resource.definitions.extensions.Compatibility
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:750:	Stage         enums.RuntimeMachineStage `protobuf:"varint,1,opt,name=stage,proto3,enum=talos.resource.definitions.enums.RuntimeMachineStage" json:"stage,omitempty"`
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1358:	SeLinuxState             enums.RuntimeSELinuxState `protobuf:"varint,4,opt,name=se_linux_state,json=seLinuxState,proto3,enum=talos.resource.definitions.enums.RuntimeSELinuxState" json:"se_linux_state,omitempty"`
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1360:	FipsState                enums.RuntimeFIPSState    `protobuf:"varint,6,opt,name=fips_state,json=fipsState,proto3,enum=talos.resource.definitions.enums.RuntimeFIPSState" json:"fips_state,omitempty"`
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1661:	"*resource/definitions/runtime/runtime.proto\x12\"talos.resource.definitions.runtime\x1a\x13common/common.proto\x1a\x1egoogle/protobuf/duration.proto\x1a&resource/definitions/enums/enums.proto\"4\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1678:	"\x05files\x18\x01 \x03(\v2>.talos.resource.definitions.runtime.ExtensionServiceConfigFileR\x05files\x12 \n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1705:	"\x05stage\x18\x01 \x01(\x0e25.talos.resource.definitions.enums.RuntimeMachineStageR\x05stage\x12O\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1706:	"\x06status\x18\x02 \x01(\v27.talos.resource.definitions.runtime.MachineStatusStatusR\x06status\"\x8a\x01\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1709:	"\x10unmet_conditions\x18\x02 \x03(\v22.talos.resource.definitions.runtime.UnmetConditionR\x0funmetConditions\"\x85\x01\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1742:	"\x04tags\x18\v \x03(\v2B.talos.resource.definitions.runtime.PlatformMetadataSpec.TagsEntryR\x04tags\x1a7\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1758:	"\x0ese_linux_state\x18\x04 \x01(\x0e25.talos.resource.definitions.enums.RuntimeSELinuxStateR\fseLinuxState\x12&\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1761:	"fips_state\x18\x06 \x01(\x0e22.talos.resource.definitions.enums.RuntimeFIPSStateR\tfipsState\x12:\n" +
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1791:	(*BootedEntrySpec)(nil),                  // 0: talos.resource.definitions.runtime.BootedEntrySpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1792:	(*DevicesStatusSpec)(nil),                // 1: talos.resource.definitions.runtime.DevicesStatusSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1793:	(*DiagnosticSpec)(nil),                   // 2: talos.resource.definitions.runtime.DiagnosticSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1794:	(*EnvironmentSpec)(nil),                  // 3: talos.resource.definitions.runtime.EnvironmentSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1795:	(*EventSinkConfigSpec)(nil),              // 4: talos.resource.definitions.runtime.EventSinkConfigSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1796:	(*ExtensionServiceConfigFile)(nil),       // 5: talos.resource.definitions.runtime.ExtensionServiceConfigFile
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1797:	(*ExtensionServiceConfigSpec)(nil),       // 6: talos.resource.definitions.runtime.ExtensionServiceConfigSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1798:	(*ExtensionServiceConfigStatusSpec)(nil), // 7: talos.resource.definitions.runtime.ExtensionServiceConfigStatusSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1799:	(*KernelCmdlineSpec)(nil),                // 8: talos.resource.definitions.runtime.KernelCmdlineSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1800:	(*KernelModuleSpecSpec)(nil),             // 9: talos.resource.definitions.runtime.KernelModuleSpecSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1801:	(*KernelParamSpecSpec)(nil),              // 10: talos.resource.definitions.runtime.KernelParamSpecSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1802:	(*KernelParamStatusSpec)(nil),            // 11: talos.resource.definitions.runtime.KernelParamStatusSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1803:	(*KmsgLogConfigSpec)(nil),                // 12: talos.resource.definitions.runtime.KmsgLogConfigSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1804:	(*LoadedKernelModuleSpec)(nil),           // 13: talos.resource.definitions.runtime.LoadedKernelModuleSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1805:	(*MachineStatusSpec)(nil),                // 14: talos.resource.definitions.runtime.MachineStatusSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1806:	(*MachineStatusStatus)(nil),              // 15: talos.resource.definitions.runtime.MachineStatusStatus
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1807:	(*MaintenanceServiceConfigSpec)(nil),     // 16: talos.resource.definitions.runtime.MaintenanceServiceConfigSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1808:	(*MetaKeySpec)(nil),                      // 17: talos.resource.definitions.runtime.MetaKeySpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1809:	(*MetaLoadedSpec)(nil),                   // 18: talos.resource.definitions.runtime.MetaLoadedSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1810:	(*MountStatusSpec)(nil),                  // 19: talos.resource.definitions.runtime.MountStatusSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1811:	(*OOMActionSpec)(nil),                    // 20: talos.resource.definitions.runtime.OOMActionSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1812:	(*PlatformMetadataSpec)(nil),             // 21: talos.resource.definitions.runtime.PlatformMetadataSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1813:	(*SBOMItemSpec)(nil),                     // 22: talos.resource.definitions.runtime.SBOMItemSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1814:	(*SecurityStateSpec)(nil),                // 23: talos.resource.definitions.runtime.SecurityStateSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1815:	(*UniqueMachineTokenSpec)(nil),           // 24: talos.resource.definitions.runtime.UniqueMachineTokenSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1816:	(*UnmetCondition)(nil),                   // 25: talos.resource.definitions.runtime.UnmetCondition
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1817:	(*WatchdogTimerConfigSpec)(nil),          // 26: talos.resource.definitions.runtime.WatchdogTimerConfigSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1818:	(*WatchdogTimerStatusSpec)(nil),          // 27: talos.resource.definitions.runtime.WatchdogTimerStatusSpec
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1819:	nil,                                      // 28: talos.resource.definitions.runtime.PlatformMetadataSpec.TagsEntry
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1821:	(enums.RuntimeMachineStage)(0),           // 30: talos.resource.definitions.enums.RuntimeMachineStage
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1823:	(enums.RuntimeSELinuxState)(0),           // 32: talos.resource.definitions.enums.RuntimeSELinuxState
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1824:	(enums.RuntimeFIPSState)(0),              // 33: talos.resource.definitions.enums.RuntimeFIPSState
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1828:	5,  // 0: talos.resource.definitions.runtime.ExtensionServiceConfigSpec.files:type_name -> talos.resource.definitions.runtime.ExtensionServiceConfigFile
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1829:	29, // 1: talos.resource.definitions.runtime.KmsgLogConfigSpec.destinations:type_name -> common.URL
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1830:	30, // 2: talos.resource.definitions.runtime.MachineStatusSpec.stage:type_name -> talos.resource.definitions.enums.RuntimeMachineStage
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1831:	15, // 3: talos.resource.definitions.runtime.MachineStatusSpec.status:type_name -> talos.resource.definitions.runtime.MachineStatusStatus
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1832:	25, // 4: talos.resource.definitions.runtime.MachineStatusStatus.unmet_conditions:type_name -> talos.resource.definitions.runtime.UnmetCondition
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1833:	31, // 5: talos.resource.definitions.runtime.MaintenanceServiceConfigSpec.reachable_addresses:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1834:	28, // 6: talos.resource.definitions.runtime.PlatformMetadataSpec.tags:type_name -> talos.resource.definitions.runtime.PlatformMetadataSpec.TagsEntry
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1835:	32, // 7: talos.resource.definitions.runtime.SecurityStateSpec.se_linux_state:type_name -> talos.resource.definitions.enums.RuntimeSELinuxState
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1836:	33, // 8: talos.resource.definitions.runtime.SecurityStateSpec.fips_state:type_name -> talos.resource.definitions.enums.RuntimeFIPSState
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1837:	34, // 9: talos.resource.definitions.runtime.WatchdogTimerConfigSpec.timeout:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1838:	34, // 10: talos.resource.definitions.runtime.WatchdogTimerStatusSpec.timeout:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/runtime/runtime.pb.go:1839:	34, // 11: talos.resource.definitions.runtime.WatchdogTimerStatusSpec.feed_interval:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:3638:	"&resource/definitions/enums/enums.proto\x12 talos.resource.definitions.enums*\x9b\x02\n" +
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4308:	(RuntimeMachineStage)(0),             // 0: talos.resource.definitions.enums.RuntimeMachineStage
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4309:	(RuntimeSELinuxState)(0),             // 1: talos.resource.definitions.enums.RuntimeSELinuxState
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4310:	(RuntimeFIPSState)(0),                // 2: talos.resource.definitions.enums.RuntimeFIPSState
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4311:	(MachineType)(0),                     // 3: talos.resource.definitions.enums.MachineType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4312:	(NethelpersAddressFlag)(0),           // 4: talos.resource.definitions.enums.NethelpersAddressFlag
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4313:	(NethelpersAddressSortAlgorithm)(0),  // 5: talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4314:	(NethelpersADLACPActive)(0),          // 6: talos.resource.definitions.enums.NethelpersADLACPActive
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4315:	(NethelpersADSelect)(0),              // 7: talos.resource.definitions.enums.NethelpersADSelect
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4316:	(NethelpersARPAllTargets)(0),         // 8: talos.resource.definitions.enums.NethelpersARPAllTargets
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4317:	(NethelpersARPValidate)(0),           // 9: talos.resource.definitions.enums.NethelpersARPValidate
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4318:	(NethelpersAutoHostnameKind)(0),      // 10: talos.resource.definitions.enums.NethelpersAutoHostnameKind
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4319:	(NethelpersBondMode)(0),              // 11: talos.resource.definitions.enums.NethelpersBondMode
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4320:	(NethelpersBondXmitHashPolicy)(0),    // 12: talos.resource.definitions.enums.NethelpersBondXmitHashPolicy
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4321:	(NethelpersClientIdentifier)(0),      // 13: talos.resource.definitions.enums.NethelpersClientIdentifier
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4322:	(NethelpersConntrackState)(0),        // 14: talos.resource.definitions.enums.NethelpersConntrackState
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4323:	(NethelpersDuplex)(0),                // 15: talos.resource.definitions.enums.NethelpersDuplex
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4324:	(NethelpersFailOverMAC)(0),           // 16: talos.resource.definitions.enums.NethelpersFailOverMAC
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4325:	(NethelpersFamily)(0),                // 17: talos.resource.definitions.enums.NethelpersFamily
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4326:	(NethelpersICMPType)(0),              // 18: talos.resource.definitions.enums.NethelpersICMPType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4327:	(NethelpersLACPRate)(0),              // 19: talos.resource.definitions.enums.NethelpersLACPRate
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4328:	(NethelpersLinkType)(0),              // 20: talos.resource.definitions.enums.NethelpersLinkType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4329:	(NethelpersMatchOperator)(0),         // 21: talos.resource.definitions.enums.NethelpersMatchOperator
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4330:	(NethelpersNfTablesChainHook)(0),     // 22: talos.resource.definitions.enums.NethelpersNfTablesChainHook
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4331:	(NethelpersNfTablesChainPriority)(0), // 23: talos.resource.definitions.enums.NethelpersNfTablesChainPriority
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4332:	(NethelpersNfTablesVerdict)(0),       // 24: talos.resource.definitions.enums.NethelpersNfTablesVerdict
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4333:	(NethelpersOperationalState)(0),      // 25: talos.resource.definitions.enums.NethelpersOperationalState
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4334:	(NethelpersPort)(0),                  // 26: talos.resource.definitions.enums.NethelpersPort
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4335:	(NethelpersPrimaryReselect)(0),       // 27: talos.resource.definitions.enums.NethelpersPrimaryReselect
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4336:	(NethelpersProtocol)(0),              // 28: talos.resource.definitions.enums.NethelpersProtocol
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4337:	(NethelpersRouteFlag)(0),             // 29: talos.resource.definitions.enums.NethelpersRouteFlag
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4338:	(NethelpersRouteProtocol)(0),         // 30: talos.resource.definitions.enums.NethelpersRouteProtocol
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4339:	(NethelpersRouteType)(0),             // 31: talos.resource.definitions.enums.NethelpersRouteType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4340:	(NethelpersRoutingTable)(0),          // 32: talos.resource.definitions.enums.NethelpersRoutingTable
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4341:	(NethelpersScope)(0),                 // 33: talos.resource.definitions.enums.NethelpersScope
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4342:	(NethelpersVLANProtocol)(0),          // 34: talos.resource.definitions.enums.NethelpersVLANProtocol
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4343:	(NethelpersWOLMode)(0),               // 35: talos.resource.definitions.enums.NethelpersWOLMode
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4344:	(BlockEncryptionKeyType)(0),          // 36: talos.resource.definitions.enums.BlockEncryptionKeyType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4345:	(BlockEncryptionProviderType)(0),     // 37: talos.resource.definitions.enums.BlockEncryptionProviderType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4346:	(BlockFilesystemType)(0),             // 38: talos.resource.definitions.enums.BlockFilesystemType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4347:	(BlockFSParameterType)(0),            // 39: talos.resource.definitions.enums.BlockFSParameterType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4348:	(BlockVolumePhase)(0),                // 40: talos.resource.definitions.enums.BlockVolumePhase
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4349:	(BlockVolumeType)(0),                 // 41: talos.resource.definitions.enums.BlockVolumeType
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4350:	(CriImageCacheStatus)(0),             // 42: talos.resource.definitions.enums.CriImageCacheStatus
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4351:	(CriImageCacheCopyStatus)(0),         // 43: talos.resource.definitions.enums.CriImageCacheCopyStatus
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4352:	(NetworkConfigLayer)(0),              // 44: talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/enums/enums.pb.go:4353:	(NetworkOperator)(0),                 // 45: talos.resource.definitions.enums.NetworkOperator
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:691:	"&resource/definitions/chubo/chubo.proto\x12 talos.resource.definitions.chubo\"v\n" +
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:796:	(*BootstrapStatusSpec)(nil),           // 0: talos.resource.definitions.chubo.BootstrapStatusSpec
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:797:	(*OpenBaoJobStatusSpec)(nil),          // 1: talos.resource.definitions.chubo.OpenBaoJobStatusSpec
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:798:	(*OpenGyozaBootstrapStatusSpec)(nil),  // 2: talos.resource.definitions.chubo.OpenGyozaBootstrapStatusSpec
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:799:	(*OpenGyozaStatusSpec)(nil),           // 3: talos.resource.definitions.chubo.OpenGyozaStatusSpec
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:800:	(*OpenWontonBootstrapStatusSpec)(nil), // 4: talos.resource.definitions.chubo.OpenWontonBootstrapStatusSpec
+pkg/machinery/api/resource/definitions/chubo/chubo.pb.go:801:	(*OpenWontonStatusSpec)(nil),          // 5: talos.resource.definitions.chubo.OpenWontonStatusSpec
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:32:	Status        enums.CriImageCacheStatus     `protobuf:"varint,1,opt,name=status,proto3,enum=talos.resource.definitions.enums.CriImageCacheStatus" json:"status,omitempty"`
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:34:	CopyStatus    enums.CriImageCacheCopyStatus `protobuf:"varint,3,opt,name=copy_status,json=copyStatus,proto3,enum=talos.resource.definitions.enums.CriImageCacheCopyStatus" json:"copy_status,omitempty"`
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:444:	"\"resource/definitions/cri/cri.proto\x12\x1etalos.resource.definitions.cri\x1a\x13common/common.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a&resource/definitions/enums/enums.proto\"\xd7\x01\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:446:	"\x06status\x18\x01 \x01(\x0e25.talos.resource.definitions.enums.CriImageCacheStatusR\x06status\x12\x14\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:448:	"\vcopy_status\x18\x03 \x01(\x0e29.talos.resource.definitions.enums.CriImageCacheCopyStatusR\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:451:	"\x10registry_mirrors\x18\x01 \x03(\v2I.talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntryR\x0fregistryMirrors\x12n\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:452:	"\x0eregistry_auths\x18\x02 \x03(\v2G.talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntryR\rregistryAuths\x12l\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:453:	"\x0eregistry_tl_ss\x18\x03 \x03(\v2F.talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntryR\fregistryTlSs\x1ax\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:456:	"\x05value\x18\x02 \x01(\v24.talos.resource.definitions.cri.RegistryMirrorConfigR\x05value:\x028\x01\x1at\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:459:	"\x05value\x18\x02 \x01(\v22.talos.resource.definitions.cri.RegistryAuthConfigR\x05value:\x028\x01\x1ar\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:462:	"\x05value\x18\x02 \x01(\v21.talos.resource.definitions.cri.RegistryTLSConfigR\x05value:\x028\x01\"\xcb\x01\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:472:	"\x10mirror_endpoints\x18\x01 \x03(\v26.talos.resource.definitions.cri.RegistryEndpointConfigR\x0fmirrorEndpoints\x120\n" +
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:497:	(*ImageCacheConfigSpec)(nil),       // 0: talos.resource.definitions.cri.ImageCacheConfigSpec
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:498:	(*RegistriesConfigSpec)(nil),       // 1: talos.resource.definitions.cri.RegistriesConfigSpec
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:499:	(*RegistryAuthConfig)(nil),         // 2: talos.resource.definitions.cri.RegistryAuthConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:500:	(*RegistryEndpointConfig)(nil),     // 3: talos.resource.definitions.cri.RegistryEndpointConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:501:	(*RegistryMirrorConfig)(nil),       // 4: talos.resource.definitions.cri.RegistryMirrorConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:502:	(*RegistryTLSConfig)(nil),          // 5: talos.resource.definitions.cri.RegistryTLSConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:503:	(*SeccompProfileSpec)(nil),         // 6: talos.resource.definitions.cri.SeccompProfileSpec
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:504:	nil,                                // 7: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:505:	nil,                                // 8: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:506:	nil,                                // 9: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:507:	(enums.CriImageCacheStatus)(0),     // 10: talos.resource.definitions.enums.CriImageCacheStatus
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:508:	(enums.CriImageCacheCopyStatus)(0), // 11: talos.resource.definitions.enums.CriImageCacheCopyStatus
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:513:	10, // 0: talos.resource.definitions.cri.ImageCacheConfigSpec.status:type_name -> talos.resource.definitions.enums.CriImageCacheStatus
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:514:	11, // 1: talos.resource.definitions.cri.ImageCacheConfigSpec.copy_status:type_name -> talos.resource.definitions.enums.CriImageCacheCopyStatus
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:515:	7,  // 2: talos.resource.definitions.cri.RegistriesConfigSpec.registry_mirrors:type_name -> talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:516:	8,  // 3: talos.resource.definitions.cri.RegistriesConfigSpec.registry_auths:type_name -> talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:517:	9,  // 4: talos.resource.definitions.cri.RegistriesConfigSpec.registry_tl_ss:type_name -> talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:518:	3,  // 5: talos.resource.definitions.cri.RegistryMirrorConfig.mirror_endpoints:type_name -> talos.resource.definitions.cri.RegistryEndpointConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:519:	12, // 6: talos.resource.definitions.cri.RegistryTLSConfig.tls_client_identity:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:520:	13, // 7: talos.resource.definitions.cri.SeccompProfileSpec.value:type_name -> google.protobuf.Struct
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:521:	4,  // 8: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryMirrorsEntry.value:type_name -> talos.resource.definitions.cri.RegistryMirrorConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:522:	2,  // 9: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryAuthsEntry.value:type_name -> talos.resource.definitions.cri.RegistryAuthConfig
+pkg/machinery/api/resource/definitions/cri/cri.pb.go:523:	5,  // 10: talos.resource.definitions.cri.RegistriesConfigSpec.RegistryTlSsEntry.value:type_name -> talos.resource.definitions.cri.RegistryTLSConfig
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:424:	"*resource/definitions/secrets/secrets.proto\x12\"talos.resource.definitions.secrets\x1a\x13common/common.proto\"\xcb\x01\n" +
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:468:	(*APICertsSpec)(nil),                       // 0: talos.resource.definitions.secrets.APICertsSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:469:	(*CertSANSpec)(nil),                        // 1: talos.resource.definitions.secrets.CertSANSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:470:	(*EncryptionSaltSpec)(nil),                 // 2: talos.resource.definitions.secrets.EncryptionSaltSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:471:	(*MaintenanceRootSpec)(nil),                // 3: talos.resource.definitions.secrets.MaintenanceRootSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:472:	(*MaintenanceServiceCertsSpec)(nil),        // 4: talos.resource.definitions.secrets.MaintenanceServiceCertsSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:473:	(*OSRootSpec)(nil),                         // 5: talos.resource.definitions.secrets.OSRootSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:474:	(*TrustdCertsSpec)(nil),                    // 6: talos.resource.definitions.secrets.TrustdCertsSpec
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:480:	7,  // 0: talos.resource.definitions.secrets.APICertsSpec.client:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:481:	7,  // 1: talos.resource.definitions.secrets.APICertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:482:	8,  // 2: talos.resource.definitions.secrets.APICertsSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:483:	9,  // 3: talos.resource.definitions.secrets.CertSANSpec.i_ps:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:484:	7,  // 4: talos.resource.definitions.secrets.MaintenanceRootSpec.ca:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:485:	7,  // 5: talos.resource.definitions.secrets.MaintenanceServiceCertsSpec.ca:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:486:	7,  // 6: talos.resource.definitions.secrets.MaintenanceServiceCertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:487:	7,  // 7: talos.resource.definitions.secrets.OSRootSpec.issuing_ca:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:488:	9,  // 8: talos.resource.definitions.secrets.OSRootSpec.cert_sani_ps:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:489:	8,  // 9: talos.resource.definitions.secrets.OSRootSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:490:	7,  // 10: talos.resource.definitions.secrets.TrustdCertsSpec.server:type_name -> common.PEMEncodedCertificateAndKey
+pkg/machinery/api/resource/definitions/secrets/secrets.pb.go:491:	8,  // 11: talos.resource.definitions.secrets.TrustdCertsSpec.accepted_c_as:type_name -> common.PEMEncodedCertificate
+pkg/machinery/api/resource/definitions/v1alpha1/v1alpha1.pb.go:90:	",resource/definitions/v1alpha1/v1alpha1.proto\x12#talos.resource.definitions.v1alpha1\"[\n" +
+pkg/machinery/api/resource/definitions/v1alpha1/v1alpha1.pb.go:111:	(*ServiceSpec)(nil), // 0: talos.resource.definitions.v1alpha1.ServiceSpec
+pkg/machinery/api/resource/definitions/time/time.pb.go:192:	"$resource/definitions/time/time.proto\x12\x1ftalos.resource.definitions.time\x1a\x1egoogle/protobuf/duration.proto\"\xdf\x02\n" +
+pkg/machinery/api/resource/definitions/time/time.pb.go:224:	(*AdjtimeStatusSpec)(nil),   // 0: talos.resource.definitions.time.AdjtimeStatusSpec
+pkg/machinery/api/resource/definitions/time/time.pb.go:225:	(*StatusSpec)(nil),          // 1: talos.resource.definitions.time.StatusSpec
+pkg/machinery/api/resource/definitions/time/time.pb.go:229:	2, // 0: talos.resource.definitions.time.AdjtimeStatusSpec.offset:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/time/time.pb.go:230:	2, // 1: talos.resource.definitions.time.AdjtimeStatusSpec.max_error:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/time/time.pb.go:231:	2, // 2: talos.resource.definitions.time.AdjtimeStatusSpec.est_error:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/network/network.pb.go:35:	Family          enums.NethelpersFamily   `protobuf:"varint,3,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:36:	Scope           enums.NethelpersScope    `protobuf:"varint,4,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:39:	ConfigLayer     enums.NetworkConfigLayer `protobuf:"varint,7,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:141:	Family        enums.NethelpersFamily `protobuf:"varint,8,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:142:	Scope         enums.NethelpersScope  `protobuf:"varint,9,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:259:	Mode            enums.NethelpersBondMode           `protobuf:"varint,1,opt,name=mode,proto3,enum=talos.resource.definitions.enums.NethelpersBondMode" json:"mode,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:260:	HashPolicy      enums.NethelpersBondXmitHashPolicy `protobuf:"varint,2,opt,name=hash_policy,json=hashPolicy,proto3,enum=talos.resource.definitions.enums.NethelpersBondXmitHashPolicy" json:"hash_policy,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:261:	LacpRate        enums.NethelpersLACPRate           `protobuf:"varint,3,opt,name=lacp_rate,json=lacpRate,proto3,enum=talos.resource.definitions.enums.NethelpersLACPRate" json:"lacp_rate,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:262:	ArpValidate     enums.NethelpersARPValidate        `protobuf:"varint,4,opt,name=arp_validate,json=arpValidate,proto3,enum=talos.resource.definitions.enums.NethelpersARPValidate" json:"arp_validate,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:263:	ArpAllTargets   enums.NethelpersARPAllTargets      `protobuf:"varint,5,opt,name=arp_all_targets,json=arpAllTargets,proto3,enum=talos.resource.definitions.enums.NethelpersARPAllTargets" json:"arp_all_targets,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:265:	PrimaryReselect enums.NethelpersPrimaryReselect    `protobuf:"varint,7,opt,name=primary_reselect,json=primaryReselect,proto3,enum=talos.resource.definitions.enums.NethelpersPrimaryReselect" json:"primary_reselect,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:266:	FailOverMac     enums.NethelpersFailOverMAC        `protobuf:"varint,8,opt,name=fail_over_mac,json=failOverMac,proto3,enum=talos.resource.definitions.enums.NethelpersFailOverMAC" json:"fail_over_mac,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:267:	AdSelect        enums.NethelpersADSelect           `protobuf:"varint,9,opt,name=ad_select,json=adSelect,proto3,enum=talos.resource.definitions.enums.NethelpersADSelect" json:"ad_select,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:285:	AdlacpActive    enums.NethelpersADLACPActive       `protobuf:"varint,27,opt,name=adlacp_active,json=adlacpActive,proto3,enum=talos.resource.definitions.enums.NethelpersADLACPActive" json:"adlacp_active,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:716:	ClientIdentifier enums.NethelpersClientIdentifier `protobuf:"varint,1,opt,name=client_identifier,json=clientIdentifier,proto3,enum=talos.resource.definitions.enums.NethelpersClientIdentifier" json:"client_identifier,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1436:	WakeOnLan     []enums.NethelpersWOLMode `protobuf:"varint,4,rep,packed,name=wake_on_lan,json=wakeOnLan,proto3,enum=talos.resource.definitions.enums.NethelpersWOLMode" json:"wake_on_lan,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1504:	Port          enums.NethelpersPort      `protobuf:"varint,3,opt,name=port,proto3,enum=talos.resource.definitions.enums.NethelpersPort" json:"port,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1505:	Duplex        enums.NethelpersDuplex    `protobuf:"varint,4,opt,name=duplex,proto3,enum=talos.resource.definitions.enums.NethelpersDuplex" json:"duplex,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1511:	WakeOnLan     []enums.NethelpersWOLMode `protobuf:"varint,10,rep,packed,name=wake_on_lan,json=wakeOnLan,proto3,enum=talos.resource.definitions.enums.NethelpersWOLMode" json:"wake_on_lan,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1743:	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,3,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1950:	Type            enums.NethelpersLinkType `protobuf:"varint,6,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersLinkType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:1958:	ConfigLayer     enums.NetworkConfigLayer `protobuf:"varint,14,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2111:	Type             enums.NethelpersLinkType         `protobuf:"varint,2,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersLinkType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2119:	OperationalState enums.NethelpersOperationalState `protobuf:"varint,10,opt,name=operational_state,json=operationalState,proto3,enum=talos.resource.definitions.enums.NethelpersOperationalState" json:"operational_state,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2133:	Port             enums.NethelpersPort             `protobuf:"varint,24,opt,name=port,proto3,enum=talos.resource.definitions.enums.NethelpersPort" json:"port,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2134:	Duplex           enums.NethelpersDuplex           `protobuf:"varint,25,opt,name=duplex,proto3,enum=talos.resource.definitions.enums.NethelpersDuplex" json:"duplex,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2465:	Hook          enums.NethelpersNfTablesChainHook     `protobuf:"varint,2,opt,name=hook,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesChainHook" json:"hook,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2466:	Priority      enums.NethelpersNfTablesChainPriority `protobuf:"varint,3,opt,name=priority,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesChainPriority" json:"priority,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2468:	Policy        enums.NethelpersNfTablesVerdict       `protobuf:"varint,5,opt,name=policy,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesVerdict" json:"policy,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2590:	States        []enums.NethelpersConntrackState `protobuf:"varint,1,rep,packed,name=states,proto3,enum=talos.resource.definitions.enums.NethelpersConntrackState" json:"states,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2635:	Types         []enums.NethelpersICMPType `protobuf:"varint,1,rep,packed,name=types,proto3,enum=talos.resource.definitions.enums.NethelpersICMPType" json:"types,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2680:	Operator       enums.NethelpersMatchOperator `protobuf:"varint,2,opt,name=operator,proto3,enum=talos.resource.definitions.enums.NethelpersMatchOperator" json:"operator,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2733:	Protocol             enums.NethelpersProtocol `protobuf:"varint,1,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersProtocol" json:"protocol,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:2960:	Verdict                 enums.NethelpersNfTablesVerdict `protobuf:"varint,2,opt,name=verdict,proto3,enum=talos.resource.definitions.enums.NethelpersNfTablesVerdict" json:"verdict,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3145:	Algorithm     enums.NethelpersAddressSortAlgorithm `protobuf:"varint,1,opt,name=algorithm,proto3,enum=talos.resource.definitions.enums.NethelpersAddressSortAlgorithm" json:"algorithm,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3191:	SortAlgorithm enums.NethelpersAddressSortAlgorithm `protobuf:"varint,2,opt,name=sort_algorithm,json=sortAlgorithm,proto3,enum=talos.resource.definitions.enums.NethelpersAddressSortAlgorithm" json:"sort_algorithm,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3243:	Operator      enums.NetworkOperator    `protobuf:"varint,1,opt,name=operator,proto3,enum=talos.resource.definitions.enums.NetworkOperator" json:"operator,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3249:	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,7,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3514:	ConfigLayer      enums.NetworkConfigLayer `protobuf:"varint,4,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3634:	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,2,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3747:	Family        enums.NethelpersFamily        `protobuf:"varint,1,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3752:	Table         enums.NethelpersRoutingTable  `protobuf:"varint,6,opt,name=table,proto3,enum=talos.resource.definitions.enums.NethelpersRoutingTable" json:"table,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3754:	Scope         enums.NethelpersScope         `protobuf:"varint,8,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3755:	Type          enums.NethelpersRouteType     `protobuf:"varint,9,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersRouteType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3757:	Protocol      enums.NethelpersRouteProtocol `protobuf:"varint,11,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersRouteProtocol" json:"protocol,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3758:	ConfigLayer   enums.NetworkConfigLayer      `protobuf:"varint,12,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3888:	Family        enums.NethelpersFamily        `protobuf:"varint,1,opt,name=family,proto3,enum=talos.resource.definitions.enums.NethelpersFamily" json:"family,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3894:	Table         enums.NethelpersRoutingTable  `protobuf:"varint,7,opt,name=table,proto3,enum=talos.resource.definitions.enums.NethelpersRoutingTable" json:"table,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3896:	Scope         enums.NethelpersScope         `protobuf:"varint,9,opt,name=scope,proto3,enum=talos.resource.definitions.enums.NethelpersScope" json:"scope,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3897:	Type          enums.NethelpersRouteType     `protobuf:"varint,10,opt,name=type,proto3,enum=talos.resource.definitions.enums.NethelpersRouteType" json:"type,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:3899:	Protocol      enums.NethelpersRouteProtocol `protobuf:"varint,12,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersRouteProtocol" json:"protocol,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:4197:	ConfigLayer   enums.NetworkConfigLayer `protobuf:"varint,2,opt,name=config_layer,json=configLayer,proto3,enum=talos.resource.definitions.enums.NetworkConfigLayer" json:"config_layer,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:4486:	Protocol      enums.NethelpersVLANProtocol `protobuf:"varint,2,opt,name=protocol,proto3,enum=talos.resource.definitions.enums.NethelpersVLANProtocol" json:"protocol,omitempty"`
+pkg/machinery/api/resource/definitions/network/network.pb.go:4693:	"*resource/definitions/network/network.proto\x12\"talos.resource.definitions.network\x1a\x13common/common.proto\x1a\x1egoogle/protobuf/duration.proto\x1a&resource/definitions/enums/enums.proto\x1a*resource/definitions/runtime/runtime.proto\"\xa9\x03\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4697:	"\x06family\x18\x03 \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x12G\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4698:	"\x05scope\x18\x04 \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12\x14\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4701:	"\fconfig_layer\x18\a \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12\x1a\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4712:	"\x06family\x18\b \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x12G\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4713:	"\x05scope\x18\t \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12\x14\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4718:	"\x04mode\x18\x01 \x01(\x0e24.talos.resource.definitions.enums.NethelpersBondModeR\x04mode\x12_\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4719:	"\vhash_policy\x18\x02 \x01(\x0e2>.talos.resource.definitions.enums.NethelpersBondXmitHashPolicyR\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4721:	"\tlacp_rate\x18\x03 \x01(\x0e24.talos.resource.definitions.enums.NethelpersLACPRateR\blacpRate\x12Z\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4722:	"\farp_validate\x18\x04 \x01(\x0e27.talos.resource.definitions.enums.NethelpersARPValidateR\varpValidate\x12a\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4723:	"\x0farp_all_targets\x18\x05 \x01(\x0e29.talos.resource.definitions.enums.NethelpersARPAllTargetsR\rarpAllTargets\x12#\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4725:	"\x10primary_reselect\x18\a \x01(\x0e2;.talos.resource.definitions.enums.NethelpersPrimaryReselectR\x0fprimaryReselect\x12[\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4726:	"\rfail_over_mac\x18\b \x01(\x0e27.talos.resource.definitions.enums.NethelpersFailOverMACR\vfailOverMac\x12Q\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4727:	"\tad_select\x18\t \x01(\x0e24.talos.resource.definitions.enums.NethelpersADSelectR\badSelect\x12\x17\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4750:	"\radlacp_active\x18\x1b \x01(\x0e28.talos.resource.definitions.enums.NethelpersADLACPActiveR\fadlacpActive\x12\x1d\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4759:	"\x03stp\x18\x01 \x01(\v2+.talos.resource.definitions.network.STPSpecR\x03stp\x12F\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4760:	"\x04vlan\x18\x02 \x01(\v22.talos.resource.definitions.network.BridgeVLANSpecR\x04vlan\".\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4767:	"\x11client_identifier\x18\x01 \x01(\x0e2<.talos.resource.definitions.enums.NethelpersClientIdentifierR\x10clientIdentifier\x12 \n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4773:	"\x11client_identifier\x18\x03 \x01(\v28.talos.resource.definitions.network.ClientIdentifierSpecR\x10clientIdentifier\"\xd1\x01\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4777:	"\x11client_identifier\x18\x04 \x01(\v28.talos.resource.definitions.network.ClientIdentifierSpecR\x10clientIdentifier\"-\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4830:	"\x05rings\x18\x01 \x01(\v25.talos.resource.definitions.network.EthernetRingsSpecR\x05rings\x12^\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4831:	"\bfeatures\x18\x02 \x03(\v2B.talos.resource.definitions.network.EthernetSpecSpec.FeaturesEntryR\bfeatures\x12T\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4832:	"\bchannels\x18\x03 \x01(\v28.talos.resource.definitions.network.EthernetChannelsSpecR\bchannels\x12S\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4833:	"\vwake_on_lan\x18\x04 \x03(\x0e23.talos.resource.definitions.enums.NethelpersWOLModeR\twakeOnLan\x1a;\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4841:	"\x04port\x18\x03 \x01(\x0e20.talos.resource.definitions.enums.NethelpersPortR\x04port\x12J\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4842:	"\x06duplex\x18\x04 \x01(\x0e22.talos.resource.definitions.enums.NethelpersDuplexR\x06duplex\x12\x1b\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4846:	"\x05rings\x18\a \x01(\v27.talos.resource.definitions.network.EthernetRingsStatusR\x05rings\x12U\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4847:	"\bfeatures\x18\b \x03(\v29.talos.resource.definitions.network.EthernetFeatureStatusR\bfeatures\x12V\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4848:	"\bchannels\x18\t \x01(\v2:.talos.resource.definitions.network.EthernetChannelsStatusR\bchannels\x12S\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4850:	" \x03(\x0e23.talos.resource.definitions.enums.NethelpersWOLModeR\twakeOnLan\"K\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4864:	"\fconfig_layer\x18\x03 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"P\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4882:	"\x04type\x18\x06 \x01(\x0e24.talos.resource.definitions.enums.NethelpersLinkTypeR\x04type\x12\x1f\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4886:	"bond_slave\x18\b \x01(\v2-.talos.resource.definitions.network.BondSlaveR\tbondSlave\x12R\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4887:	"\fbridge_slave\x18\t \x01(\v2/.talos.resource.definitions.network.BridgeSlaveR\vbridgeSlave\x12@\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4889:	" \x01(\v2,.talos.resource.definitions.network.VLANSpecR\x04vlan\x12S\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4890:	"\vbond_master\x18\v \x01(\v22.talos.resource.definitions.network.BondMasterSpecR\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4892:	"\rbridge_master\x18\f \x01(\v24.talos.resource.definitions.network.BridgeMasterSpecR\fbridgeMaster\x12O\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4893:	"\twireguard\x18\r \x01(\v21.talos.resource.definitions.network.WireguardSpecR\twireguard\x12W\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4894:	"\fconfig_layer\x18\x0e \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12)\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4900:	"\x04type\x18\x02 \x01(\x0e24.talos.resource.definitions.enums.NethelpersLinkTypeR\x04type\x12\x1d\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4911:	" \x01(\x0e2<.talos.resource.definitions.enums.NethelpersOperationalStateR\x10operationalState\x12\x12\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4928:	"\x04port\x18\x18 \x01(\x0e20.talos.resource.definitions.enums.NethelpersPortR\x04port\x12J\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4929:	"\x06duplex\x18\x19 \x01(\x0e22.talos.resource.definitions.enums.NethelpersDuplexR\x06duplex\x12@\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4930:	"\x04vlan\x18\x1a \x01(\v2,.talos.resource.definitions.network.VLANSpecR\x04vlan\x12Y\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4931:	"\rbridge_master\x18\x1b \x01(\v24.talos.resource.definitions.network.BridgeMasterSpecR\fbridgeMaster\x12S\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4932:	"\vbond_master\x18\x1c \x01(\v22.talos.resource.definitions.network.BondMasterSpecR\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4934:	"\twireguard\x18\x1d \x01(\v21.talos.resource.definitions.network.WireguardSpecR\twireguard\x12%\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4944:	"\x04hook\x18\x02 \x01(\x0e2=.talos.resource.definitions.enums.NethelpersNfTablesChainHookR\x04hook\x12]\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4945:	"\bpriority\x18\x03 \x01(\x0e2A.talos.resource.definitions.enums.NethelpersNfTablesChainPriorityR\bpriority\x12F\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4946:	"\x05rules\x18\x04 \x03(\v20.talos.resource.definitions.network.NfTablesRuleR\x05rules\x12S\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4947:	"\x06policy\x18\x05 \x01(\x0e2;.talos.resource.definitions.enums.NethelpersNfTablesVerdictR\x06policy\"$\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4951:	"\x06states\x18\x01 \x03(\x0e2:.talos.resource.definitions.enums.NethelpersConntrackStateR\x06states\"c\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4953:	"\x05types\x18\x01 \x03(\x0e24.talos.resource.definitions.enums.NethelpersICMPTypeR\x05types\"\x95\x01\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4955:	"\boperator\x18\x02 \x01(\x0e29.talos.resource.definitions.enums.NethelpersMatchOperatorR\boperator\x12'\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4958:	"\bprotocol\x18\x01 \x01(\x0e24.talos.resource.definitions.enums.NethelpersProtocolR\bprotocol\x12a\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4959:	"\x11match_source_port\x18\x02 \x01(\v25.talos.resource.definitions.network.NfTablesPortMatchR\x0fmatchSourcePort\x12k\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4960:	"\x16match_destination_port\x18\x03 \x01(\v25.talos.resource.definitions.network.NfTablesPortMatchR\x14matchDestinationPort\x12a\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4961:	"\x0fmatch_icmp_type\x18\x04 \x01(\v29.talos.resource.definitions.network.NfTablesICMPTypeMatchR\rmatchIcmpType\"I\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4969:	"\x06ranges\x18\x01 \x03(\v2-.talos.resource.definitions.network.PortRangeR\x06ranges\"\xc5\b\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4971:	"\x0fmatch_o_if_name\x18\x01 \x01(\v27.talos.resource.definitions.network.NfTablesIfNameMatchR\fmatchOIfName\x12U\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4972:	"\averdict\x18\x02 \x01(\x0e2;.talos.resource.definitions.enums.NethelpersNfTablesVerdictR\averdict\x12O\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4974:	"match_mark\x18\x03 \x01(\v20.talos.resource.definitions.network.NfTablesMarkR\tmatchMark\x12K\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4975:	"\bset_mark\x18\x04 \x01(\v20.talos.resource.definitions.network.NfTablesMarkR\asetMark\x12j\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4976:	"\x14match_source_address\x18\x05 \x01(\v28.talos.resource.definitions.network.NfTablesAddressMatchR\x12matchSourceAddress\x12t\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4977:	"\x19match_destination_address\x18\x06 \x01(\v28.talos.resource.definitions.network.NfTablesAddressMatchR\x17matchDestinationAddress\x12Z\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4978:	"\fmatch_layer4\x18\a \x01(\v27.talos.resource.definitions.network.NfTablesLayer4MatchR\vmatchLayer4\x12^\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4979:	"\x0fmatch_i_if_name\x18\b \x01(\v27.talos.resource.definitions.network.NfTablesIfNameMatchR\fmatchIIfName\x12Q\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4980:	"\tclamp_mss\x18\t \x01(\v24.talos.resource.definitions.network.NfTablesClampMSSR\bclampMss\x12W\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4982:	" \x01(\v26.talos.resource.definitions.network.NfTablesLimitMatchR\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4984:	"\x15match_conntrack_state\x18\v \x01(\v2?.talos.resource.definitions.network.NfTablesConntrackStateMatchR\x13matchConntrackState\x12!\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4990:	"\talgorithm\x18\x01 \x01(\x0e2@.talos.resource.definitions.enums.NethelpersAddressSortAlgorithmR\talgorithm\"\xad\x01\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4993:	"\x0esort_algorithm\x18\x02 \x01(\x0e2@.talos.resource.definitions.enums.NethelpersAddressSortAlgorithmR\rsortAlgorithm\"\xd7\x03\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4995:	"\boperator\x18\x01 \x01(\x0e21.talos.resource.definitions.enums.NetworkOperatorR\boperator\x12\x1b\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:4999:	"\x05dhcp4\x18\x04 \x01(\v25.talos.resource.definitions.network.DHCP4OperatorSpecR\x05dhcp4\x12K\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5000:	"\x05dhcp6\x18\x05 \x01(\v25.talos.resource.definitions.network.DHCP6OperatorSpecR\x05dhcp6\x12E\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5001:	"\x03vip\x18\x06 \x01(\v23.talos.resource.definitions.network.VIPOperatorSpecR\x03vip\x12W\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5002:	"\fconfig_layer\x18\a \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"\xa4\x06\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5004:	"\taddresses\x18\x01 \x03(\v23.talos.resource.definitions.network.AddressSpecSpecR\taddresses\x12F\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5005:	"\x05links\x18\x02 \x03(\v20.talos.resource.definitions.network.LinkSpecSpecR\x05links\x12I\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5006:	"\x06routes\x18\x03 \x03(\v21.talos.resource.definitions.network.RouteSpecSpecR\x06routes\x12R\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5007:	"\thostnames\x18\x04 \x03(\v24.talos.resource.definitions.network.HostnameSpecSpecR\thostnames\x12R\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5008:	"\tresolvers\x18\x05 \x03(\v24.talos.resource.definitions.network.ResolverSpecSpecR\tresolvers\x12Y\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5009:	"\ftime_servers\x18\x06 \x03(\v26.talos.resource.definitions.network.TimeServerSpecSpecR\vtimeServers\x12R\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5010:	"\toperators\x18\a \x03(\v24.talos.resource.definitions.network.OperatorSpecSpecR\toperators\x120\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5012:	"\x06probes\x18\t \x03(\v21.talos.resource.definitions.network.ProbeSpecSpecR\x06probes\x12T\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5014:	" \x01(\v28.talos.resource.definitions.runtime.PlatformMetadataSpecR\bmetadata\"+\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5021:	"\x03tcp\x18\x03 \x01(\v20.talos.resource.definitions.network.TCPProbeSpecR\x03tcp\x12W\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5022:	"\fconfig_layer\x18\x04 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"J\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5030:	"\fconfig_layer\x18\x02 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12%\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5037:	"\x06family\x18\x01 \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x125\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5042:	"\x05table\x18\x06 \x01(\x0e28.talos.resource.definitions.enums.NethelpersRoutingTableR\x05table\x12\x1a\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5044:	"\x05scope\x18\b \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12I\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5045:	"\x04type\x18\t \x01(\x0e25.talos.resource.definitions.enums.NethelpersRouteTypeR\x04type\x12\x14\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5048:	"\bprotocol\x18\v \x01(\x0e29.talos.resource.definitions.enums.NethelpersRouteProtocolR\bprotocol\x12W\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5049:	"\fconfig_layer\x18\f \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\x12\x10\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5052:	"\x06family\x18\x01 \x01(\x0e22.talos.resource.definitions.enums.NethelpersFamilyR\x06family\x125\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5058:	"\x05table\x18\a \x01(\x0e28.talos.resource.definitions.enums.NethelpersRoutingTableR\x05table\x12\x1a\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5060:	"\x05scope\x18\t \x01(\x0e21.talos.resource.definitions.enums.NethelpersScopeR\x05scope\x12I\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5062:	" \x01(\x0e25.talos.resource.definitions.enums.NethelpersRouteTypeR\x04type\x12\x14\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5064:	"\bprotocol\x18\f \x01(\x0e29.talos.resource.definitions.enums.NethelpersRouteProtocolR\bprotocol\x12\x10\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5080:	"\fconfig_layer\x18\x02 \x01(\x0e24.talos.resource.definitions.enums.NetworkConfigLayerR\vconfigLayer\"7\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5097:	"\requinix_metal\x18\x03 \x01(\v27.talos.resource.definitions.network.VIPEquinixMetalSpecR\fequinixMetal\x12J\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5098:	"\ah_cloud\x18\x04 \x01(\v21.talos.resource.definitions.network.VIPHCloudSpecR\x06hCloud\"r\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5101:	"\bprotocol\x18\x02 \x01(\x0e28.talos.resource.definitions.enums.NethelpersVLANProtocolR\bprotocol\"\x84\x02\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5118:	"\x05peers\x18\x05 \x03(\v21.talos.resource.definitions.network.WireguardPeerR\x05peersBw\n" +
+pkg/machinery/api/resource/definitions/network/network.pb.go:5135:	(*AddressSpecSpec)(nil),                    // 0: talos.resource.definitions.network.AddressSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5136:	(*AddressStatusSpec)(nil),                  // 1: talos.resource.definitions.network.AddressStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5137:	(*BondMasterSpec)(nil),                     // 2: talos.resource.definitions.network.BondMasterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5138:	(*BondSlave)(nil),                          // 3: talos.resource.definitions.network.BondSlave
+pkg/machinery/api/resource/definitions/network/network.pb.go:5139:	(*BridgeMasterSpec)(nil),                   // 4: talos.resource.definitions.network.BridgeMasterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5140:	(*BridgeSlave)(nil),                        // 5: talos.resource.definitions.network.BridgeSlave
+pkg/machinery/api/resource/definitions/network/network.pb.go:5141:	(*BridgeVLANSpec)(nil),                     // 6: talos.resource.definitions.network.BridgeVLANSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5142:	(*ClientIdentifierSpec)(nil),               // 7: talos.resource.definitions.network.ClientIdentifierSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5143:	(*DHCP4OperatorSpec)(nil),                  // 8: talos.resource.definitions.network.DHCP4OperatorSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5144:	(*DHCP6OperatorSpec)(nil),                  // 9: talos.resource.definitions.network.DHCP6OperatorSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5145:	(*DNSResolveCacheSpec)(nil),                // 10: talos.resource.definitions.network.DNSResolveCacheSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5146:	(*EthernetChannelsSpec)(nil),               // 11: talos.resource.definitions.network.EthernetChannelsSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5147:	(*EthernetChannelsStatus)(nil),             // 12: talos.resource.definitions.network.EthernetChannelsStatus
+pkg/machinery/api/resource/definitions/network/network.pb.go:5148:	(*EthernetFeatureStatus)(nil),              // 13: talos.resource.definitions.network.EthernetFeatureStatus
+pkg/machinery/api/resource/definitions/network/network.pb.go:5149:	(*EthernetRingsSpec)(nil),                  // 14: talos.resource.definitions.network.EthernetRingsSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5150:	(*EthernetRingsStatus)(nil),                // 15: talos.resource.definitions.network.EthernetRingsStatus
+pkg/machinery/api/resource/definitions/network/network.pb.go:5151:	(*EthernetSpecSpec)(nil),                   // 16: talos.resource.definitions.network.EthernetSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5152:	(*EthernetStatusSpec)(nil),                 // 17: talos.resource.definitions.network.EthernetStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5153:	(*HardwareAddrSpec)(nil),                   // 18: talos.resource.definitions.network.HardwareAddrSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5154:	(*HostDNSConfigSpec)(nil),                  // 19: talos.resource.definitions.network.HostDNSConfigSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5155:	(*HostnameSpecSpec)(nil),                   // 20: talos.resource.definitions.network.HostnameSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5156:	(*HostnameStatusSpec)(nil),                 // 21: talos.resource.definitions.network.HostnameStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5157:	(*LinkAliasSpecSpec)(nil),                  // 22: talos.resource.definitions.network.LinkAliasSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5158:	(*LinkRefreshSpec)(nil),                    // 23: talos.resource.definitions.network.LinkRefreshSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5159:	(*LinkSpecSpec)(nil),                       // 24: talos.resource.definitions.network.LinkSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5160:	(*LinkStatusSpec)(nil),                     // 25: talos.resource.definitions.network.LinkStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5161:	(*NfTablesAddressMatch)(nil),               // 26: talos.resource.definitions.network.NfTablesAddressMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5162:	(*NfTablesChainSpec)(nil),                  // 27: talos.resource.definitions.network.NfTablesChainSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5163:	(*NfTablesClampMSS)(nil),                   // 28: talos.resource.definitions.network.NfTablesClampMSS
+pkg/machinery/api/resource/definitions/network/network.pb.go:5164:	(*NfTablesConntrackStateMatch)(nil),        // 29: talos.resource.definitions.network.NfTablesConntrackStateMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5165:	(*NfTablesICMPTypeMatch)(nil),              // 30: talos.resource.definitions.network.NfTablesICMPTypeMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5166:	(*NfTablesIfNameMatch)(nil),                // 31: talos.resource.definitions.network.NfTablesIfNameMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5167:	(*NfTablesLayer4Match)(nil),                // 32: talos.resource.definitions.network.NfTablesLayer4Match
+pkg/machinery/api/resource/definitions/network/network.pb.go:5168:	(*NfTablesLimitMatch)(nil),                 // 33: talos.resource.definitions.network.NfTablesLimitMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5169:	(*NfTablesMark)(nil),                       // 34: talos.resource.definitions.network.NfTablesMark
+pkg/machinery/api/resource/definitions/network/network.pb.go:5170:	(*NfTablesPortMatch)(nil),                  // 35: talos.resource.definitions.network.NfTablesPortMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5171:	(*NfTablesRule)(nil),                       // 36: talos.resource.definitions.network.NfTablesRule
+pkg/machinery/api/resource/definitions/network/network.pb.go:5172:	(*NodeAddressFilterSpec)(nil),              // 37: talos.resource.definitions.network.NodeAddressFilterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5173:	(*NodeAddressSortAlgorithmSpec)(nil),       // 38: talos.resource.definitions.network.NodeAddressSortAlgorithmSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5174:	(*NodeAddressSpec)(nil),                    // 39: talos.resource.definitions.network.NodeAddressSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5175:	(*OperatorSpecSpec)(nil),                   // 40: talos.resource.definitions.network.OperatorSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5176:	(*PlatformConfigSpec)(nil),                 // 41: talos.resource.definitions.network.PlatformConfigSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5177:	(*PortRange)(nil),                          // 42: talos.resource.definitions.network.PortRange
+pkg/machinery/api/resource/definitions/network/network.pb.go:5178:	(*ProbeSpecSpec)(nil),                      // 43: talos.resource.definitions.network.ProbeSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5179:	(*ProbeStatusSpec)(nil),                    // 44: talos.resource.definitions.network.ProbeStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5180:	(*ResolverSpecSpec)(nil),                   // 45: talos.resource.definitions.network.ResolverSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5181:	(*ResolverStatusSpec)(nil),                 // 46: talos.resource.definitions.network.ResolverStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5182:	(*RouteSpecSpec)(nil),                      // 47: talos.resource.definitions.network.RouteSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5183:	(*RouteStatusSpec)(nil),                    // 48: talos.resource.definitions.network.RouteStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5184:	(*STPSpec)(nil),                            // 49: talos.resource.definitions.network.STPSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5185:	(*StatusSpec)(nil),                         // 50: talos.resource.definitions.network.StatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5186:	(*TCPProbeSpec)(nil),                       // 51: talos.resource.definitions.network.TCPProbeSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5187:	(*TimeServerSpecSpec)(nil),                 // 52: talos.resource.definitions.network.TimeServerSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5188:	(*TimeServerStatusSpec)(nil),               // 53: talos.resource.definitions.network.TimeServerStatusSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5189:	(*VIPEquinixMetalSpec)(nil),                // 54: talos.resource.definitions.network.VIPEquinixMetalSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5190:	(*VIPHCloudSpec)(nil),                      // 55: talos.resource.definitions.network.VIPHCloudSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5191:	(*VIPOperatorSpec)(nil),                    // 56: talos.resource.definitions.network.VIPOperatorSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5192:	(*VLANSpec)(nil),                           // 57: talos.resource.definitions.network.VLANSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5193:	(*WireguardPeer)(nil),                      // 58: talos.resource.definitions.network.WireguardPeer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5194:	(*WireguardSpec)(nil),                      // 59: talos.resource.definitions.network.WireguardSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5195:	nil,                                        // 60: talos.resource.definitions.network.EthernetSpecSpec.FeaturesEntry
+pkg/machinery/api/resource/definitions/network/network.pb.go:5197:	(enums.NethelpersFamily)(0),                // 62: talos.resource.definitions.enums.NethelpersFamily
+pkg/machinery/api/resource/definitions/network/network.pb.go:5198:	(enums.NethelpersScope)(0),                 // 63: talos.resource.definitions.enums.NethelpersScope
+pkg/machinery/api/resource/definitions/network/network.pb.go:5199:	(enums.NetworkConfigLayer)(0),              // 64: talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5201:	(enums.NethelpersBondMode)(0),              // 66: talos.resource.definitions.enums.NethelpersBondMode
+pkg/machinery/api/resource/definitions/network/network.pb.go:5202:	(enums.NethelpersBondXmitHashPolicy)(0),    // 67: talos.resource.definitions.enums.NethelpersBondXmitHashPolicy
+pkg/machinery/api/resource/definitions/network/network.pb.go:5203:	(enums.NethelpersLACPRate)(0),              // 68: talos.resource.definitions.enums.NethelpersLACPRate
+pkg/machinery/api/resource/definitions/network/network.pb.go:5204:	(enums.NethelpersARPValidate)(0),           // 69: talos.resource.definitions.enums.NethelpersARPValidate
+pkg/machinery/api/resource/definitions/network/network.pb.go:5205:	(enums.NethelpersARPAllTargets)(0),         // 70: talos.resource.definitions.enums.NethelpersARPAllTargets
+pkg/machinery/api/resource/definitions/network/network.pb.go:5206:	(enums.NethelpersPrimaryReselect)(0),       // 71: talos.resource.definitions.enums.NethelpersPrimaryReselect
+pkg/machinery/api/resource/definitions/network/network.pb.go:5207:	(enums.NethelpersFailOverMAC)(0),           // 72: talos.resource.definitions.enums.NethelpersFailOverMAC
+pkg/machinery/api/resource/definitions/network/network.pb.go:5208:	(enums.NethelpersADSelect)(0),              // 73: talos.resource.definitions.enums.NethelpersADSelect
+pkg/machinery/api/resource/definitions/network/network.pb.go:5209:	(enums.NethelpersADLACPActive)(0),          // 74: talos.resource.definitions.enums.NethelpersADLACPActive
+pkg/machinery/api/resource/definitions/network/network.pb.go:5210:	(enums.NethelpersClientIdentifier)(0),      // 75: talos.resource.definitions.enums.NethelpersClientIdentifier
+pkg/machinery/api/resource/definitions/network/network.pb.go:5211:	(enums.NethelpersWOLMode)(0),               // 76: talos.resource.definitions.enums.NethelpersWOLMode
+pkg/machinery/api/resource/definitions/network/network.pb.go:5212:	(enums.NethelpersPort)(0),                  // 77: talos.resource.definitions.enums.NethelpersPort
+pkg/machinery/api/resource/definitions/network/network.pb.go:5213:	(enums.NethelpersDuplex)(0),                // 78: talos.resource.definitions.enums.NethelpersDuplex
+pkg/machinery/api/resource/definitions/network/network.pb.go:5215:	(enums.NethelpersLinkType)(0),              // 80: talos.resource.definitions.enums.NethelpersLinkType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5216:	(enums.NethelpersOperationalState)(0),      // 81: talos.resource.definitions.enums.NethelpersOperationalState
+pkg/machinery/api/resource/definitions/network/network.pb.go:5217:	(enums.NethelpersNfTablesChainHook)(0),     // 82: talos.resource.definitions.enums.NethelpersNfTablesChainHook
+pkg/machinery/api/resource/definitions/network/network.pb.go:5218:	(enums.NethelpersNfTablesChainPriority)(0), // 83: talos.resource.definitions.enums.NethelpersNfTablesChainPriority
+pkg/machinery/api/resource/definitions/network/network.pb.go:5219:	(enums.NethelpersNfTablesVerdict)(0),       // 84: talos.resource.definitions.enums.NethelpersNfTablesVerdict
+pkg/machinery/api/resource/definitions/network/network.pb.go:5220:	(enums.NethelpersConntrackState)(0),        // 85: talos.resource.definitions.enums.NethelpersConntrackState
+pkg/machinery/api/resource/definitions/network/network.pb.go:5221:	(enums.NethelpersICMPType)(0),              // 86: talos.resource.definitions.enums.NethelpersICMPType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5222:	(enums.NethelpersMatchOperator)(0),         // 87: talos.resource.definitions.enums.NethelpersMatchOperator
+pkg/machinery/api/resource/definitions/network/network.pb.go:5223:	(enums.NethelpersProtocol)(0),              // 88: talos.resource.definitions.enums.NethelpersProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5224:	(enums.NethelpersAddressSortAlgorithm)(0),  // 89: talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
+pkg/machinery/api/resource/definitions/network/network.pb.go:5225:	(enums.NetworkOperator)(0),                 // 90: talos.resource.definitions.enums.NetworkOperator
+pkg/machinery/api/resource/definitions/network/network.pb.go:5226:	(*runtime.PlatformMetadataSpec)(nil),       // 91: talos.resource.definitions.runtime.PlatformMetadataSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5228:	(enums.NethelpersRoutingTable)(0),          // 93: talos.resource.definitions.enums.NethelpersRoutingTable
+pkg/machinery/api/resource/definitions/network/network.pb.go:5229:	(enums.NethelpersRouteType)(0),             // 94: talos.resource.definitions.enums.NethelpersRouteType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5230:	(enums.NethelpersRouteProtocol)(0),         // 95: talos.resource.definitions.enums.NethelpersRouteProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5231:	(enums.NethelpersVLANProtocol)(0),          // 96: talos.resource.definitions.enums.NethelpersVLANProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5234:	61,  // 0: talos.resource.definitions.network.AddressSpecSpec.address:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5235:	62,  // 1: talos.resource.definitions.network.AddressSpecSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
+pkg/machinery/api/resource/definitions/network/network.pb.go:5236:	63,  // 2: talos.resource.definitions.network.AddressSpecSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
+pkg/machinery/api/resource/definitions/network/network.pb.go:5237:	64,  // 3: talos.resource.definitions.network.AddressSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5238:	61,  // 4: talos.resource.definitions.network.AddressStatusSpec.address:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5239:	65,  // 5: talos.resource.definitions.network.AddressStatusSpec.local:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5240:	65,  // 6: talos.resource.definitions.network.AddressStatusSpec.broadcast:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5241:	65,  // 7: talos.resource.definitions.network.AddressStatusSpec.anycast:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5242:	65,  // 8: talos.resource.definitions.network.AddressStatusSpec.multicast:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5243:	62,  // 9: talos.resource.definitions.network.AddressStatusSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
+pkg/machinery/api/resource/definitions/network/network.pb.go:5244:	63,  // 10: talos.resource.definitions.network.AddressStatusSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
+pkg/machinery/api/resource/definitions/network/network.pb.go:5245:	66,  // 11: talos.resource.definitions.network.BondMasterSpec.mode:type_name -> talos.resource.definitions.enums.NethelpersBondMode
+pkg/machinery/api/resource/definitions/network/network.pb.go:5246:	67,  // 12: talos.resource.definitions.network.BondMasterSpec.hash_policy:type_name -> talos.resource.definitions.enums.NethelpersBondXmitHashPolicy
+pkg/machinery/api/resource/definitions/network/network.pb.go:5247:	68,  // 13: talos.resource.definitions.network.BondMasterSpec.lacp_rate:type_name -> talos.resource.definitions.enums.NethelpersLACPRate
+pkg/machinery/api/resource/definitions/network/network.pb.go:5248:	69,  // 14: talos.resource.definitions.network.BondMasterSpec.arp_validate:type_name -> talos.resource.definitions.enums.NethelpersARPValidate
+pkg/machinery/api/resource/definitions/network/network.pb.go:5249:	70,  // 15: talos.resource.definitions.network.BondMasterSpec.arp_all_targets:type_name -> talos.resource.definitions.enums.NethelpersARPAllTargets
+pkg/machinery/api/resource/definitions/network/network.pb.go:5250:	71,  // 16: talos.resource.definitions.network.BondMasterSpec.primary_reselect:type_name -> talos.resource.definitions.enums.NethelpersPrimaryReselect
+pkg/machinery/api/resource/definitions/network/network.pb.go:5251:	72,  // 17: talos.resource.definitions.network.BondMasterSpec.fail_over_mac:type_name -> talos.resource.definitions.enums.NethelpersFailOverMAC
+pkg/machinery/api/resource/definitions/network/network.pb.go:5252:	73,  // 18: talos.resource.definitions.network.BondMasterSpec.ad_select:type_name -> talos.resource.definitions.enums.NethelpersADSelect
+pkg/machinery/api/resource/definitions/network/network.pb.go:5253:	65,  // 19: talos.resource.definitions.network.BondMasterSpec.arpip_targets:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5254:	65,  // 20: talos.resource.definitions.network.BondMasterSpec.nsip6_targets:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5255:	74,  // 21: talos.resource.definitions.network.BondMasterSpec.adlacp_active:type_name -> talos.resource.definitions.enums.NethelpersADLACPActive
+pkg/machinery/api/resource/definitions/network/network.pb.go:5256:	49,  // 22: talos.resource.definitions.network.BridgeMasterSpec.stp:type_name -> talos.resource.definitions.network.STPSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5257:	6,   // 23: talos.resource.definitions.network.BridgeMasterSpec.vlan:type_name -> talos.resource.definitions.network.BridgeVLANSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5258:	75,  // 24: talos.resource.definitions.network.ClientIdentifierSpec.client_identifier:type_name -> talos.resource.definitions.enums.NethelpersClientIdentifier
+pkg/machinery/api/resource/definitions/network/network.pb.go:5259:	7,   // 25: talos.resource.definitions.network.DHCP4OperatorSpec.client_identifier:type_name -> talos.resource.definitions.network.ClientIdentifierSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5260:	7,   // 26: talos.resource.definitions.network.DHCP6OperatorSpec.client_identifier:type_name -> talos.resource.definitions.network.ClientIdentifierSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5261:	14,  // 27: talos.resource.definitions.network.EthernetSpecSpec.rings:type_name -> talos.resource.definitions.network.EthernetRingsSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5262:	60,  // 28: talos.resource.definitions.network.EthernetSpecSpec.features:type_name -> talos.resource.definitions.network.EthernetSpecSpec.FeaturesEntry
+pkg/machinery/api/resource/definitions/network/network.pb.go:5263:	11,  // 29: talos.resource.definitions.network.EthernetSpecSpec.channels:type_name -> talos.resource.definitions.network.EthernetChannelsSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5264:	76,  // 30: talos.resource.definitions.network.EthernetSpecSpec.wake_on_lan:type_name -> talos.resource.definitions.enums.NethelpersWOLMode
+pkg/machinery/api/resource/definitions/network/network.pb.go:5265:	77,  // 31: talos.resource.definitions.network.EthernetStatusSpec.port:type_name -> talos.resource.definitions.enums.NethelpersPort
+pkg/machinery/api/resource/definitions/network/network.pb.go:5266:	78,  // 32: talos.resource.definitions.network.EthernetStatusSpec.duplex:type_name -> talos.resource.definitions.enums.NethelpersDuplex
+pkg/machinery/api/resource/definitions/network/network.pb.go:5267:	15,  // 33: talos.resource.definitions.network.EthernetStatusSpec.rings:type_name -> talos.resource.definitions.network.EthernetRingsStatus
+pkg/machinery/api/resource/definitions/network/network.pb.go:5268:	13,  // 34: talos.resource.definitions.network.EthernetStatusSpec.features:type_name -> talos.resource.definitions.network.EthernetFeatureStatus
+pkg/machinery/api/resource/definitions/network/network.pb.go:5269:	12,  // 35: talos.resource.definitions.network.EthernetStatusSpec.channels:type_name -> talos.resource.definitions.network.EthernetChannelsStatus
+pkg/machinery/api/resource/definitions/network/network.pb.go:5270:	76,  // 36: talos.resource.definitions.network.EthernetStatusSpec.wake_on_lan:type_name -> talos.resource.definitions.enums.NethelpersWOLMode
+pkg/machinery/api/resource/definitions/network/network.pb.go:5271:	79,  // 37: talos.resource.definitions.network.HostDNSConfigSpec.listen_addresses:type_name -> common.NetIPPort
+pkg/machinery/api/resource/definitions/network/network.pb.go:5272:	65,  // 38: talos.resource.definitions.network.HostDNSConfigSpec.service_host_dns_address:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5273:	64,  // 39: talos.resource.definitions.network.HostnameSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5274:	80,  // 40: talos.resource.definitions.network.LinkSpecSpec.type:type_name -> talos.resource.definitions.enums.NethelpersLinkType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5275:	3,   // 41: talos.resource.definitions.network.LinkSpecSpec.bond_slave:type_name -> talos.resource.definitions.network.BondSlave
+pkg/machinery/api/resource/definitions/network/network.pb.go:5276:	5,   // 42: talos.resource.definitions.network.LinkSpecSpec.bridge_slave:type_name -> talos.resource.definitions.network.BridgeSlave
+pkg/machinery/api/resource/definitions/network/network.pb.go:5277:	57,  // 43: talos.resource.definitions.network.LinkSpecSpec.vlan:type_name -> talos.resource.definitions.network.VLANSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5278:	2,   // 44: talos.resource.definitions.network.LinkSpecSpec.bond_master:type_name -> talos.resource.definitions.network.BondMasterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5279:	4,   // 45: talos.resource.definitions.network.LinkSpecSpec.bridge_master:type_name -> talos.resource.definitions.network.BridgeMasterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5280:	59,  // 46: talos.resource.definitions.network.LinkSpecSpec.wireguard:type_name -> talos.resource.definitions.network.WireguardSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5281:	64,  // 47: talos.resource.definitions.network.LinkSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5282:	80,  // 48: talos.resource.definitions.network.LinkStatusSpec.type:type_name -> talos.resource.definitions.enums.NethelpersLinkType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5283:	81,  // 49: talos.resource.definitions.network.LinkStatusSpec.operational_state:type_name -> talos.resource.definitions.enums.NethelpersOperationalState
+pkg/machinery/api/resource/definitions/network/network.pb.go:5284:	77,  // 50: talos.resource.definitions.network.LinkStatusSpec.port:type_name -> talos.resource.definitions.enums.NethelpersPort
+pkg/machinery/api/resource/definitions/network/network.pb.go:5285:	78,  // 51: talos.resource.definitions.network.LinkStatusSpec.duplex:type_name -> talos.resource.definitions.enums.NethelpersDuplex
+pkg/machinery/api/resource/definitions/network/network.pb.go:5286:	57,  // 52: talos.resource.definitions.network.LinkStatusSpec.vlan:type_name -> talos.resource.definitions.network.VLANSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5287:	4,   // 53: talos.resource.definitions.network.LinkStatusSpec.bridge_master:type_name -> talos.resource.definitions.network.BridgeMasterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5288:	2,   // 54: talos.resource.definitions.network.LinkStatusSpec.bond_master:type_name -> talos.resource.definitions.network.BondMasterSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5289:	59,  // 55: talos.resource.definitions.network.LinkStatusSpec.wireguard:type_name -> talos.resource.definitions.network.WireguardSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5290:	61,  // 56: talos.resource.definitions.network.NfTablesAddressMatch.include_subnets:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5291:	61,  // 57: talos.resource.definitions.network.NfTablesAddressMatch.exclude_subnets:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5292:	82,  // 58: talos.resource.definitions.network.NfTablesChainSpec.hook:type_name -> talos.resource.definitions.enums.NethelpersNfTablesChainHook
+pkg/machinery/api/resource/definitions/network/network.pb.go:5293:	83,  // 59: talos.resource.definitions.network.NfTablesChainSpec.priority:type_name -> talos.resource.definitions.enums.NethelpersNfTablesChainPriority
+pkg/machinery/api/resource/definitions/network/network.pb.go:5294:	36,  // 60: talos.resource.definitions.network.NfTablesChainSpec.rules:type_name -> talos.resource.definitions.network.NfTablesRule
+pkg/machinery/api/resource/definitions/network/network.pb.go:5295:	84,  // 61: talos.resource.definitions.network.NfTablesChainSpec.policy:type_name -> talos.resource.definitions.enums.NethelpersNfTablesVerdict
+pkg/machinery/api/resource/definitions/network/network.pb.go:5296:	85,  // 62: talos.resource.definitions.network.NfTablesConntrackStateMatch.states:type_name -> talos.resource.definitions.enums.NethelpersConntrackState
+pkg/machinery/api/resource/definitions/network/network.pb.go:5297:	86,  // 63: talos.resource.definitions.network.NfTablesICMPTypeMatch.types:type_name -> talos.resource.definitions.enums.NethelpersICMPType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5298:	87,  // 64: talos.resource.definitions.network.NfTablesIfNameMatch.operator:type_name -> talos.resource.definitions.enums.NethelpersMatchOperator
+pkg/machinery/api/resource/definitions/network/network.pb.go:5299:	88,  // 65: talos.resource.definitions.network.NfTablesLayer4Match.protocol:type_name -> talos.resource.definitions.enums.NethelpersProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5300:	35,  // 66: talos.resource.definitions.network.NfTablesLayer4Match.match_source_port:type_name -> talos.resource.definitions.network.NfTablesPortMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5301:	35,  // 67: talos.resource.definitions.network.NfTablesLayer4Match.match_destination_port:type_name -> talos.resource.definitions.network.NfTablesPortMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5302:	30,  // 68: talos.resource.definitions.network.NfTablesLayer4Match.match_icmp_type:type_name -> talos.resource.definitions.network.NfTablesICMPTypeMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5303:	42,  // 69: talos.resource.definitions.network.NfTablesPortMatch.ranges:type_name -> talos.resource.definitions.network.PortRange
+pkg/machinery/api/resource/definitions/network/network.pb.go:5304:	31,  // 70: talos.resource.definitions.network.NfTablesRule.match_o_if_name:type_name -> talos.resource.definitions.network.NfTablesIfNameMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5305:	84,  // 71: talos.resource.definitions.network.NfTablesRule.verdict:type_name -> talos.resource.definitions.enums.NethelpersNfTablesVerdict
+pkg/machinery/api/resource/definitions/network/network.pb.go:5306:	34,  // 72: talos.resource.definitions.network.NfTablesRule.match_mark:type_name -> talos.resource.definitions.network.NfTablesMark
+pkg/machinery/api/resource/definitions/network/network.pb.go:5307:	34,  // 73: talos.resource.definitions.network.NfTablesRule.set_mark:type_name -> talos.resource.definitions.network.NfTablesMark
+pkg/machinery/api/resource/definitions/network/network.pb.go:5308:	26,  // 74: talos.resource.definitions.network.NfTablesRule.match_source_address:type_name -> talos.resource.definitions.network.NfTablesAddressMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5309:	26,  // 75: talos.resource.definitions.network.NfTablesRule.match_destination_address:type_name -> talos.resource.definitions.network.NfTablesAddressMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5310:	32,  // 76: talos.resource.definitions.network.NfTablesRule.match_layer4:type_name -> talos.resource.definitions.network.NfTablesLayer4Match
+pkg/machinery/api/resource/definitions/network/network.pb.go:5311:	31,  // 77: talos.resource.definitions.network.NfTablesRule.match_i_if_name:type_name -> talos.resource.definitions.network.NfTablesIfNameMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5312:	28,  // 78: talos.resource.definitions.network.NfTablesRule.clamp_mss:type_name -> talos.resource.definitions.network.NfTablesClampMSS
+pkg/machinery/api/resource/definitions/network/network.pb.go:5313:	33,  // 79: talos.resource.definitions.network.NfTablesRule.match_limit:type_name -> talos.resource.definitions.network.NfTablesLimitMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5314:	29,  // 80: talos.resource.definitions.network.NfTablesRule.match_conntrack_state:type_name -> talos.resource.definitions.network.NfTablesConntrackStateMatch
+pkg/machinery/api/resource/definitions/network/network.pb.go:5315:	61,  // 81: talos.resource.definitions.network.NodeAddressFilterSpec.include_subnets:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5316:	61,  // 82: talos.resource.definitions.network.NodeAddressFilterSpec.exclude_subnets:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5317:	89,  // 83: talos.resource.definitions.network.NodeAddressSortAlgorithmSpec.algorithm:type_name -> talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
+pkg/machinery/api/resource/definitions/network/network.pb.go:5318:	61,  // 84: talos.resource.definitions.network.NodeAddressSpec.addresses:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5319:	89,  // 85: talos.resource.definitions.network.NodeAddressSpec.sort_algorithm:type_name -> talos.resource.definitions.enums.NethelpersAddressSortAlgorithm
+pkg/machinery/api/resource/definitions/network/network.pb.go:5320:	90,  // 86: talos.resource.definitions.network.OperatorSpecSpec.operator:type_name -> talos.resource.definitions.enums.NetworkOperator
+pkg/machinery/api/resource/definitions/network/network.pb.go:5321:	8,   // 87: talos.resource.definitions.network.OperatorSpecSpec.dhcp4:type_name -> talos.resource.definitions.network.DHCP4OperatorSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5322:	9,   // 88: talos.resource.definitions.network.OperatorSpecSpec.dhcp6:type_name -> talos.resource.definitions.network.DHCP6OperatorSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5323:	56,  // 89: talos.resource.definitions.network.OperatorSpecSpec.vip:type_name -> talos.resource.definitions.network.VIPOperatorSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5324:	64,  // 90: talos.resource.definitions.network.OperatorSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5325:	0,   // 91: talos.resource.definitions.network.PlatformConfigSpec.addresses:type_name -> talos.resource.definitions.network.AddressSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5326:	24,  // 92: talos.resource.definitions.network.PlatformConfigSpec.links:type_name -> talos.resource.definitions.network.LinkSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5327:	47,  // 93: talos.resource.definitions.network.PlatformConfigSpec.routes:type_name -> talos.resource.definitions.network.RouteSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5328:	20,  // 94: talos.resource.definitions.network.PlatformConfigSpec.hostnames:type_name -> talos.resource.definitions.network.HostnameSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5329:	45,  // 95: talos.resource.definitions.network.PlatformConfigSpec.resolvers:type_name -> talos.resource.definitions.network.ResolverSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5330:	52,  // 96: talos.resource.definitions.network.PlatformConfigSpec.time_servers:type_name -> talos.resource.definitions.network.TimeServerSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5331:	40,  // 97: talos.resource.definitions.network.PlatformConfigSpec.operators:type_name -> talos.resource.definitions.network.OperatorSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5332:	65,  // 98: talos.resource.definitions.network.PlatformConfigSpec.external_ips:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5333:	43,  // 99: talos.resource.definitions.network.PlatformConfigSpec.probes:type_name -> talos.resource.definitions.network.ProbeSpecSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5334:	91,  // 100: talos.resource.definitions.network.PlatformConfigSpec.metadata:type_name -> talos.resource.definitions.runtime.PlatformMetadataSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5335:	92,  // 101: talos.resource.definitions.network.ProbeSpecSpec.interval:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/network/network.pb.go:5336:	51,  // 102: talos.resource.definitions.network.ProbeSpecSpec.tcp:type_name -> talos.resource.definitions.network.TCPProbeSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5337:	64,  // 103: talos.resource.definitions.network.ProbeSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5338:	65,  // 104: talos.resource.definitions.network.ResolverSpecSpec.dns_servers:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5339:	64,  // 105: talos.resource.definitions.network.ResolverSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5340:	65,  // 106: talos.resource.definitions.network.ResolverStatusSpec.dns_servers:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5341:	62,  // 107: talos.resource.definitions.network.RouteSpecSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
+pkg/machinery/api/resource/definitions/network/network.pb.go:5342:	61,  // 108: talos.resource.definitions.network.RouteSpecSpec.destination:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5343:	65,  // 109: talos.resource.definitions.network.RouteSpecSpec.source:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5344:	65,  // 110: talos.resource.definitions.network.RouteSpecSpec.gateway:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5345:	93,  // 111: talos.resource.definitions.network.RouteSpecSpec.table:type_name -> talos.resource.definitions.enums.NethelpersRoutingTable
+pkg/machinery/api/resource/definitions/network/network.pb.go:5346:	63,  // 112: talos.resource.definitions.network.RouteSpecSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
+pkg/machinery/api/resource/definitions/network/network.pb.go:5347:	94,  // 113: talos.resource.definitions.network.RouteSpecSpec.type:type_name -> talos.resource.definitions.enums.NethelpersRouteType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5348:	95,  // 114: talos.resource.definitions.network.RouteSpecSpec.protocol:type_name -> talos.resource.definitions.enums.NethelpersRouteProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5349:	64,  // 115: talos.resource.definitions.network.RouteSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5350:	62,  // 116: talos.resource.definitions.network.RouteStatusSpec.family:type_name -> talos.resource.definitions.enums.NethelpersFamily
+pkg/machinery/api/resource/definitions/network/network.pb.go:5351:	61,  // 117: talos.resource.definitions.network.RouteStatusSpec.destination:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5352:	65,  // 118: talos.resource.definitions.network.RouteStatusSpec.source:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5353:	65,  // 119: talos.resource.definitions.network.RouteStatusSpec.gateway:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5354:	93,  // 120: talos.resource.definitions.network.RouteStatusSpec.table:type_name -> talos.resource.definitions.enums.NethelpersRoutingTable
+pkg/machinery/api/resource/definitions/network/network.pb.go:5355:	63,  // 121: talos.resource.definitions.network.RouteStatusSpec.scope:type_name -> talos.resource.definitions.enums.NethelpersScope
+pkg/machinery/api/resource/definitions/network/network.pb.go:5356:	94,  // 122: talos.resource.definitions.network.RouteStatusSpec.type:type_name -> talos.resource.definitions.enums.NethelpersRouteType
+pkg/machinery/api/resource/definitions/network/network.pb.go:5357:	95,  // 123: talos.resource.definitions.network.RouteStatusSpec.protocol:type_name -> talos.resource.definitions.enums.NethelpersRouteProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5358:	92,  // 124: talos.resource.definitions.network.TCPProbeSpec.timeout:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/network/network.pb.go:5359:	64,  // 125: talos.resource.definitions.network.TimeServerSpecSpec.config_layer:type_name -> talos.resource.definitions.enums.NetworkConfigLayer
+pkg/machinery/api/resource/definitions/network/network.pb.go:5360:	65,  // 126: talos.resource.definitions.network.VIPOperatorSpec.ip:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/network/network.pb.go:5361:	54,  // 127: talos.resource.definitions.network.VIPOperatorSpec.equinix_metal:type_name -> talos.resource.definitions.network.VIPEquinixMetalSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5362:	55,  // 128: talos.resource.definitions.network.VIPOperatorSpec.h_cloud:type_name -> talos.resource.definitions.network.VIPHCloudSpec
+pkg/machinery/api/resource/definitions/network/network.pb.go:5363:	96,  // 129: talos.resource.definitions.network.VLANSpec.protocol:type_name -> talos.resource.definitions.enums.NethelpersVLANProtocol
+pkg/machinery/api/resource/definitions/network/network.pb.go:5364:	92,  // 130: talos.resource.definitions.network.WireguardPeer.persistent_keepalive_interval:type_name -> google.protobuf.Duration
+pkg/machinery/api/resource/definitions/network/network.pb.go:5365:	61,  // 131: talos.resource.definitions.network.WireguardPeer.allowed_ips:type_name -> common.NetIPPrefix
+pkg/machinery/api/resource/definitions/network/network.pb.go:5366:	58,  // 132: talos.resource.definitions.network.WireguardSpec.peers:type_name -> talos.resource.definitions.network.WireguardPeer
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:175:	"&resource/definitions/proto/proto.proto\x12 talos.resource.definitions.proto\"`\n" +
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:185:	"\fuid_mappings\x18\x05 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vuidMappings\x12S\n" +
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:186:	"\fgid_mappings\x18\x06 \x03(\v20.talos.resource.definitions.proto.LinuxIDMappingR\vgidMappingsBs\n" +
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:203:	(*LinuxIDMapping)(nil), // 0: talos.resource.definitions.proto.LinuxIDMapping
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:204:	(*Mount)(nil),          // 1: talos.resource.definitions.proto.Mount
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:207:	0, // 0: talos.resource.definitions.proto.Mount.uid_mappings:type_name -> talos.resource.definitions.proto.LinuxIDMapping
+pkg/machinery/api/resource/definitions/proto/proto.pb.go:208:	0, // 1: talos.resource.definitions.proto.Mount.gid_mappings:type_name -> talos.resource.definitions.proto.LinuxIDMapping
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:571:	",resource/definitions/hardware/hardware.proto\x12#talos.resource.definitions.hardware\"\x8f\x02\n" +
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:642:	(*MemoryModuleSpec)(nil),          // 0: talos.resource.definitions.hardware.MemoryModuleSpec
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:643:	(*PCIDeviceSpec)(nil),             // 1: talos.resource.definitions.hardware.PCIDeviceSpec
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:644:	(*PCIDriverRebindConfigSpec)(nil), // 2: talos.resource.definitions.hardware.PCIDriverRebindConfigSpec
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:645:	(*PCIDriverRebindStatusSpec)(nil), // 3: talos.resource.definitions.hardware.PCIDriverRebindStatusSpec
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:646:	(*ProcessorSpec)(nil),             // 4: talos.resource.definitions.hardware.ProcessorSpec
+pkg/machinery/api/resource/definitions/hardware/hardware.pb.go:647:	(*SystemInformationSpec)(nil),     // 5: talos.resource.definitions.hardware.SystemInformationSpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:36:	MachineType     enums.MachineType      `protobuf:"varint,6,opt,name=machine_type,json=machineType,proto3,enum=talos.resource.definitions.enums.MachineType" json:"machine_type,omitempty"`
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:411:	MachineType     enums.MachineType      `protobuf:"varint,4,opt,name=machine_type,json=machineType,proto3,enum=talos.resource.definitions.enums.MachineType" json:"machine_type,omitempty"`
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:494:	"*resource/definitions/cluster/cluster.proto\x12\"talos.resource.definitions.cluster\x1a\x13common/common.proto\x1a&resource/definitions/enums/enums.proto\"\xe1\x02\n" +
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:501:	"\fmachine_type\x18\x06 \x01(\x0e2-.talos.resource.definitions.enums.MachineTypeR\vmachineType\x12U\n" +
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:502:	"\rcontrol_plane\x18\b \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlane\"\xbe\x02\n" +
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:527:	"\fmachine_type\x18\x04 \x01(\x0e2-.talos.resource.definitions.enums.MachineTypeR\vmachineType\x12)\n" +
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:529:	"\rcontrol_plane\x18\x06 \x01(\v20.talos.resource.definitions.cluster.ControlPlaneR\fcontrolPlaneBw\n" +
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:546:	(*AffiliateSpec)(nil),            // 0: talos.resource.definitions.cluster.AffiliateSpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:547:	(*ConfigSpec)(nil),               // 1: talos.resource.definitions.cluster.ConfigSpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:548:	(*ControlPlane)(nil),             // 2: talos.resource.definitions.cluster.ControlPlane
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:549:	(*ControlPlaneEndpointSpec)(nil), // 3: talos.resource.definitions.cluster.ControlPlaneEndpointSpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:550:	(*IdentitySpec)(nil),             // 4: talos.resource.definitions.cluster.IdentitySpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:551:	(*InfoSpec)(nil),                 // 5: talos.resource.definitions.cluster.InfoSpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:552:	(*MemberSpec)(nil),               // 6: talos.resource.definitions.cluster.MemberSpec
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:554:	(enums.MachineType)(0),           // 8: talos.resource.definitions.enums.MachineType
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:557:	7, // 0: talos.resource.definitions.cluster.AffiliateSpec.addresses:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:558:	8, // 1: talos.resource.definitions.cluster.AffiliateSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:559:	2, // 2: talos.resource.definitions.cluster.AffiliateSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:560:	7, // 3: talos.resource.definitions.cluster.ControlPlaneEndpointSpec.addresses:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:561:	7, // 4: talos.resource.definitions.cluster.MemberSpec.addresses:type_name -> common.NetIP
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:562:	8, // 5: talos.resource.definitions.cluster.MemberSpec.machine_type:type_name -> talos.resource.definitions.enums.MachineType
+pkg/machinery/api/resource/definitions/cluster/cluster.pb.go:563:	2, // 6: talos.resource.definitions.cluster.MemberSpec.control_plane:type_name -> talos.resource.definitions.cluster.ControlPlane

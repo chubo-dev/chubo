@@ -1,0 +1,8 @@
+active-talos-refs.txt
+active-talosctl-refs.txt
+collect.sh
+meta.txt
+raw-files.txt
+summary.txt
+talos-refs-baseline.txt
+talos-refs-compat-paths.txt

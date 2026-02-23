@@ -1,0 +1,16 @@
+api/resource/definitions/block/block.proto:3:package talos.resource.definitions.block;
+api/resource/definitions/siderolink/siderolink.proto:3:package talos.resource.definitions.siderolink;
+api/resource/definitions/perf/perf.proto:3:package talos.resource.definitions.perf;
+api/resource/definitions/network/network.proto:3:package talos.resource.definitions.network;
+api/resource/definitions/runtime/runtime.proto:3:package talos.resource.definitions.runtime;
+api/resource/definitions/v1alpha1/v1alpha1.proto:3:package talos.resource.definitions.v1alpha1;
+api/resource/definitions/cri/cri.proto:3:package talos.resource.definitions.cri;
+api/resource/definitions/files/files.proto:3:package talos.resource.definitions.files;
+api/resource/definitions/secrets/secrets.proto:3:package talos.resource.definitions.secrets;
+api/resource/definitions/chubo/chubo.proto:3:package talos.resource.definitions.chubo;
+api/resource/definitions/enums/enums.proto:3:package talos.resource.definitions.enums;
+api/resource/definitions/extensions/extensions.proto:3:package talos.resource.definitions.extensions;
+api/resource/definitions/proto/proto.proto:3:package talos.resource.definitions.proto;
+api/resource/definitions/cluster/cluster.proto:3:package talos.resource.definitions.cluster;
+api/resource/definitions/hardware/hardware.proto:3:package talos.resource.definitions.hardware;
+api/resource/definitions/time/time.proto:3:package talos.resource.definitions.time;

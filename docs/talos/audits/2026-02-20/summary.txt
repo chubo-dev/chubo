@@ -1,0 +1,20 @@
+active-talosctl-refs.txt: 384 matches
+  hack: 227
+  Dockerfile: 89
+  Makefile: 52
+  pkg: 11
+  internal: 3
+  api: 1
+  cmd: 1
+
+active-talos-refs.txt: 2293 matches
+  hack: 1215
+  pkg: 633
+  internal: 171
+  api: 104
+  Dockerfile: 100
+  cmd: 36
+  Makefile: 15
+  tools: 14
+  go.mod: 5
+

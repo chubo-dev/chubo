@@ -1,0 +1,62 @@
+# Talos Review - Host tuning and time sync
+
+Subsystem name: Host tuning (sysctl/sysfs/kernel modules/rlimits) + time sync
+
+- Chubo goal: Apply a small allowlist of host tuning knobs (sysctl/sysfs, kernel modules, rlimits) deterministically and manage time sync policy/status without shelling out.
+- Talos equivalent (module/area): runtime kernel param and module controllers; time sync controller + NTP syncer; network time server config/merge.
+- Talos code paths (file/dir):
+  - `internal/app/machined/pkg/controllers/runtime/kernel_param_config.go`
+  - `internal/app/machined/pkg/controllers/runtime/kernel_param_spec.go`
+  - `internal/app/machined/pkg/controllers/runtime/kernel_module_config.go`
+  - `internal/app/machined/pkg/controllers/runtime/kernel_module_spec.go`
+  - `internal/app/machined/pkg/controllers/runtime/loaded_kernel_module.go`
+  - `pkg/machinery/kernel/kernel.go`
+  - `internal/app/machined/pkg/controllers/time/sync.go`
+  - `internal/app/machined/pkg/controllers/network/timeserver_config.go`
+  - `internal/app/machined/pkg/controllers/network/timeserver_merge.go`
+  - `internal/pkg/ntp/ntp.go`
+  - `internal/pkg/ntp/internal/spike/spike.go`
+  - `internal/app/machined/internal/server/v1alpha1/v1alpha1_time.go`
+  - `pkg/machinery/config/types/network/time_sync.go`
+  - `internal/app/machined/pkg/startup/tasks.go` (SetRLimit)
+- Key algorithms / state machines:
+  - KernelParamConfigController maps MachineConfig sysctls/sysfs to KernelParamSpec resources.
+  - KernelParamSpecController writes params, stores defaults, resets removed params, and tolerates missing params via `IgnoreErrors`; warns on KSPP overrides.
+  - KernelModule controllers materialize specs and load modules via kmod (no unload), aggregating errors.
+  - TimeServerConfig merges default + cmdline + machine config; TimeServerMerge consolidates layered specs into final status.
+  - SyncController starts/stops NTP sync based on config, exposes `time.Status` (Synced/Epoch/SyncDisabled), and honors boot timeout.
+  - NTP Syncer performs polling with spike detection, epoch change tracking, and adjtimex updates, using RTC when available.
+- Config model / API surface:
+  - `machine.sysctls` / `machine.sysfs` map in v1alpha1 config.
+  - `machine.kernel.modules` list for module load + parameters.
+  - `TimeSyncConfig` (NTP/PTP, servers, boot timeout, disable) under network config.
+  - `MachineService.Time` and `TimeCheck` APIs for on-demand inspection.
+- Failure handling / recovery:
+  - Sysctl writes retain defaults for rollback; missing params can be flagged unsupported.
+  - Module load errors are aggregated and retried on reconcile.
+  - Time sync is gated by TimeServerStatus and can be disabled; boot timeout allows progress even without sync.
+  - NTP spike detection and kiss-of-death handling avoid bad jumps; epoch changes tracked explicitly.
+- Test strategy (unit/contract/integration):
+  - `internal/app/machined/pkg/controllers/runtime/kernel_param_config_test.go`
+  - `internal/app/machined/pkg/controllers/runtime/kernel_param_spec_test.go`
+  - `internal/app/machined/pkg/controllers/runtime/kernel_module_config_test.go`
+  - `internal/app/machined/pkg/controllers/runtime/loaded_kernel_module_test.go`
+  - `internal/app/machined/pkg/controllers/time/sync_test.go`
+  - `internal/app/machined/pkg/controllers/network/timeserver_config_test.go`
+  - `internal/app/machined/pkg/controllers/network/timeserver_merge_test.go`
+  - `internal/pkg/ntp/ntp_test.go`
+- What we will reuse:
+  - Kernel param path normalization (`pkg/machinery/kernel/kernel.go`) and default/reset behavior.
+  - Layered time server selection and merge model.
+  - NTP spike detection/epoch handling as a reference for safe time sync.
+- What we will adapt:
+  - Map chubo MachineConfig allowlists into a minimal controller set (sysctl/sysfs/modules/rlimits).
+  - Time sync handling using Flatcar/systemd timesync interfaces (or a lightweight NTP syncer) while keeping Talos’s boot-time gating and status semantics.
+- What we will avoid (and why):
+  - Full Talos runtime controller graph and resource model (too heavyweight for Phase 8).
+  - Kernel module unloading/rollback in phase 1 (risk vs. value).
+- Chubo status: not implemented yet.
+- Action items:
+  - Define sysctl/sysfs/module allowlists and how changes are validated and persisted.
+  - Decide time sync implementation (systemd-timesyncd integration vs. embedded NTP syncer).
+  - Add status fields for time sync and tuning drift once the adapter is in place.

@@ -1,0 +1,16 @@
+api/resource/definitions/block/block.proto
+api/resource/definitions/chubo/chubo.proto
+api/resource/definitions/cluster/cluster.proto
+api/resource/definitions/cri/cri.proto
+api/resource/definitions/enums/enums.proto
+api/resource/definitions/extensions/extensions.proto
+api/resource/definitions/files/files.proto
+api/resource/definitions/hardware/hardware.proto
+api/resource/definitions/network/network.proto
+api/resource/definitions/perf/perf.proto
+api/resource/definitions/proto/proto.proto
+api/resource/definitions/runtime/runtime.proto
+api/resource/definitions/secrets/secrets.proto
+api/resource/definitions/siderolink/siderolink.proto
+api/resource/definitions/time/time.proto
+api/resource/definitions/v1alpha1/v1alpha1.proto

@@ -33,7 +33,7 @@ macOS + Colima notes:
 
 In this workspace, the canonical operator docs and execution checklist live in the sibling repo:
 - `../chubo/docs/dev/chubo-os-qemu-devloop.md` (quick iteration, NOPASSWD sudoers, troubleshooting)
-- `../chubo/docs/talos/plan.md` (execution checklist with commit references)
+- `docs/talos/plan.md` (execution checklist with commit references)
 
 ## Coding Style & Naming Conventions
 
@@ -46,4 +46,4 @@ In this workspace, the canonical operator docs and execution checklist live in t
 ## Commit & Pull Request Guidelines
 
 - Small, imperative commits (one concern per commit).
-- When completing checklist items, reference the commit hashes in `../chubo/docs/talos/plan.md` and/or `../chubo/docs/talos/chubo-product-source-clean-plan.md`.
+- When completing checklist items, reference the commit hashes in `docs/talos/plan.md` and/or `docs/talos/chubo-product-source-clean-plan.md`.

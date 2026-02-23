@@ -1,0 +1,5 @@
+date: 2026-02-20T11:58:18+01:00
+talos_head: 7f3564485ce49e5c0bd19766f8519d79c00bfd7e
+go: go version go1.25.6 darwin/arm64
+uname: Darwin MacBookPro.localdomain 25.2.0 Darwin Kernel Version 25.2.0: Tue Nov 18 21:09:40 PST 2025; root:xnu-12377.61.12~1/RELEASE_ARM64_T6000 arm64
+rg: ripgrep 15.1.0

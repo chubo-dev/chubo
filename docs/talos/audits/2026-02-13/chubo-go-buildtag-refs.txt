@@ -1,0 +1,1112 @@
+./cmd/talosctl/cmd/talos/bootstrap.go:16:	snapshot "go.etcd.io/etcd/etcdutl/v3/snapshot"
+./cmd/talosctl/cmd/talos/bootstrap.go:31:	Short: "Bootstrap the etcd cluster on the specified node.",
+./cmd/talosctl/cmd/talos/bootstrap.go:32:	Long: `When Talos cluster is created etcd service on control plane nodes enter the join loop waiting
+./cmd/talosctl/cmd/talos/bootstrap.go:33:to join etcd peers from other control plane nodes. One node should be picked as the bootstrap node.
+./cmd/talosctl/cmd/talos/bootstrap.go:34:When bootstrap command is issued, the node aborts join process and bootstraps etcd cluster as a single node cluster.
+./cmd/talosctl/cmd/talos/bootstrap.go:35:Other control plane nodes will join etcd cluster once Kubernetes is bootstrapped on the bootstrap node.
+./cmd/talosctl/cmd/talos/bootstrap.go:39:Talos etcd cluster can be recovered from a known snapshot with '--recover-from=' flag.`,
+./cmd/talosctl/cmd/talos/bootstrap.go:65:				_, err = c.EtcdRecover(ctx, snapshot)
+./cmd/talosctl/cmd/talos/bootstrap.go:72:				RecoverEtcd:          bootstrapCmdFlags.recoverFrom != "",
+./cmd/talosctl/cmd/talos/bootstrap.go:84:	bootstrapCmd.Flags().StringVar(&bootstrapCmdFlags.recoverFrom, "recover-from", "", "recover etcd cluster from the snapshot")
+./cmd/talosctl/cmd/talos/bootstrap.go:85:	bootstrapCmd.Flags().BoolVar(&bootstrapCmdFlags.recoverSkipHashCheck, "recover-skip-hash-check", false, "skip integrity check when recovering etcd (use when recovering from data directory copy)")
+./cmd/talosctl/cmd/talos/rotate-ca.go:22:	"github.com/chubo-dev/chubo/pkg/rotate/pki/kubernetes"
+./cmd/talosctl/cmd/talos/rotate-ca.go:34:	rotateKubernetes bool
+./cmd/talosctl/cmd/talos/rotate-ca.go:40:	Short: "Rotate cluster CAs (Talos and Kubernetes APIs).",
+./cmd/talosctl/cmd/talos/rotate-ca.go:41:	Long: `The command can rotate both Talos and Kubernetes root CAs (for the API).
+./cmd/talosctl/cmd/talos/rotate-ca.go:45:For Kubernetes, the command only rotates the API server issuing CA, and other Kubernetes
+./cmd/talosctl/cmd/talos/rotate-ca.go:95:	if rotateCACmdFlags.rotateKubernetes {
+./cmd/talosctl/cmd/talos/rotate-ca.go:96:		if err = rotateKubernetesCA(ctx, c, encoderOpt, clusterInfo, newBundle); err != nil {
+./cmd/talosctl/cmd/talos/rotate-ca.go:97:			return fmt.Errorf("error rotating Kubernetes CA: %w", err)
+./cmd/talosctl/cmd/talos/rotate-ca.go:148:func rotateKubernetesCA(ctx context.Context, c *client.Client, encoderOpt encoder.Option, clusterInfo cluster.Info, newBundle *secrets.Bundle) error {
+./cmd/talosctl/cmd/talos/rotate-ca.go:149:	options := kubernetes.Options{
+./cmd/talosctl/cmd/talos/rotate-ca.go:155:		KubernetesEndpoint: rotateCACmdFlags.forceEndpoint,
+./cmd/talosctl/cmd/talos/rotate-ca.go:157:		NewKubernetesCA: newBundle.Certs.K8s,
+./cmd/talosctl/cmd/talos/rotate-ca.go:164:	if err := kubernetes.Rotate(ctx, options); err != nil {
+./cmd/talosctl/cmd/talos/rotate-ca.go:174:	fmt.Printf("> Kubernetes CA rotation done, new 'kubeconfig' can be fetched with `chuboctl kubeconfig`.\n")
+./cmd/talosctl/cmd/talos/rotate-ca.go:184:	rotateCACmd.Flags().StringVar(&rotateCACmdFlags.forceEndpoint, "k8s-endpoint", "", "use endpoint instead of kubeconfig default")
+./cmd/talosctl/cmd/talos/rotate-ca.go:190:	rotateCACmd.Flags().BoolVarP(&rotateCACmdFlags.rotateKubernetes, "kubernetes", "", true, "rotate Kubernetes API CA")
+./cmd/talosctl/cmd/talos/image_containerd_driver_default_test.go:19:		t.Fatalf("expected CRI driver, got %v", got)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:13:	"github.com/siderolabs/go-kubernetes/kubernetes/manifests"
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:14:	"github.com/siderolabs/go-kubernetes/kubernetes/upgrade"
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:16:	"sigs.k8s.io/cli-utils/pkg/inventory"
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:20:	k8s "github.com/chubo-dev/chubo/pkg/cluster/kubernetes"
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:26:// upgradeK8sCmd represents the upgrade-k8s command.
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:27:var upgradeK8sCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:28:	Use:   "upgrade-k8s",
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:29:	Short: "Upgrade Kubernetes control plane in the Talos cluster.",
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:30:	Long:  `Command runs upgrade of Kubernetes control plane components between specified versions.`,
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:33:		return WithClient(upgradeKubernetes)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:37:var upgradeOptions k8s.UpgradeOptions
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:39:var upgradeK8sCmdFlags struct {
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:51:	upgradeK8sCmd.Flags().StringVar(&upgradeK8sCmdFlags.FromVersion, "from", "", "the Kubernetes control plane version to upgrade from")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:52:	upgradeK8sCmd.Flags().StringVar(&upgradeK8sCmdFlags.ToVersion, "to", constants.DefaultKubernetesVersion, "the Kubernetes control plane version to upgrade to")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:53:	upgradeK8sCmd.Flags().StringVar(&upgradeOptions.ControlPlaneEndpoint, "endpoint", "", "the cluster control plane endpoint")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:54:	upgradeK8sCmd.Flags().BoolVarP(&upgradeK8sCmdFlags.withExamples, "with-examples", "", true, "patch all machine configs with the commented examples")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:55:	upgradeK8sCmd.Flags().BoolVarP(&upgradeK8sCmdFlags.withDocs, "with-docs", "", true, "patch all machine configs adding the documentation for each field")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:56:	upgradeK8sCmd.Flags().BoolVar(&upgradeOptions.PrePullImages, "pre-pull-images", true, "pre-pull images before upgrade")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:57:	upgradeK8sCmd.Flags().BoolVar(&upgradeOptions.UpgradeKubelet, "upgrade-kubelet", true, "upgrade kubelet service")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:58:	upgradeK8sCmd.Flags().BoolVar(&upgradeOptions.DryRun, "dry-run", false, "skip the actual upgrade and show the upgrade plan instead")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:60:	upgradeK8sCmd.Flags().StringVar(&upgradeOptions.KubeletImage, "kubelet-image", constants.KubeletImage, "kubelet image to use")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:61:	upgradeK8sCmd.Flags().StringVar(&upgradeOptions.APIServerImage, "apiserver-image", constants.KubernetesAPIServerImage, "kube-apiserver image to use")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:62:	upgradeK8sCmd.Flags().StringVar(&upgradeOptions.ControllerManagerImage, "controller-manager-image", constants.KubernetesControllerManagerImage, "kube-controller-manager image to use")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:63:	upgradeK8sCmd.Flags().StringVar(&upgradeOptions.SchedulerImage, "scheduler-image", constants.KubernetesSchedulerImage, "kube-scheduler image to use")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:64:	upgradeK8sCmd.Flags().StringVar(&upgradeOptions.ProxyImage, "proxy-image", constants.KubeProxyImage, "kube-proxy image to use")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:67:	upgradeK8sCmd.Flags().BoolVar(&upgradeOptions.ForceConflicts, "manifests-force-conflicts", ssaDefaults.ForceConflicts, "overwrite the fields when applying even if the field manager differs")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:68:	upgradeK8sCmd.Flags().BoolVar(&upgradeOptions.NoPrune, "manifests-no-prune", ssaDefaults.NoPrune, "whether pruning of previously applied objects should happen after apply")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:69:	upgradeK8sCmd.Flags().StringVar(&upgradeK8sCmdFlags.inventoryPolicy, "manifests-inventory-policy", ssaDefaults.InventoryPolicy.String(),
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:70:		"kubernetes SSA inventory policy (one of 'MustMatch', 'AdoptIfNoInventory' or 'AdoptAll')")
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:71:	upgradeK8sCmd.Flags().DurationVar(&upgradeOptions.PruneTimeout, "manifests-prune-timeout", ssaDefaults.PruneTimeout,
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:73:	upgradeK8sCmd.Flags().DurationVar(&upgradeOptions.ReconcileTimeout, "manifests-reconcile-timeout", ssaDefaults.ReconcileTimeout,
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:76:	addCommand(upgradeK8sCmd)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:79:func upgradeKubernetes(ctx context.Context, c *client.Client) error {
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:80:	if err := helpers.FailIfMultiNodes(ctx, "upgrade-k8s"); err != nil {
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:95:		cluster.K8sProvider
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:98:		K8sProvider: &cluster.KubernetesClient{
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:106:	if upgradeK8sCmdFlags.FromVersion == "" {
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:107:		upgradeK8sCmdFlags.FromVersion, err = k8s.DetectLowestVersion(ctx, &state, upgradeOptions)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:109:			return fmt.Errorf("error detecting the lowest Kubernetes version %w", err)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:112:		upgradeOptions.Log("automatically detected the lowest Kubernetes version %s", upgradeK8sCmdFlags.FromVersion)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:115:	upgradeOptions.Path, err = upgrade.NewPath(upgradeK8sCmdFlags.FromVersion, upgradeK8sCmdFlags.ToVersion)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:121:	if upgradeK8sCmdFlags.withDocs {
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:125:	if upgradeK8sCmdFlags.withExamples {
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:129:	policy, err := parseInventoryPolicy(upgradeK8sCmdFlags.inventoryPolicy)
+./cmd/talosctl/cmd/talos/upgrade-k8s.go:137:	return k8s.Upgrade(ctx, &state, upgradeOptions)
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_chubo.go:26:		fmt.Fprintln(os.Stderr, "chubo build: skipping Kubernetes/etcd readiness checks for `cluster create`.")
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_chubo.go:29:	if cOps.SkipKubeconfig {
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_chubo.go:33:	return mergeKubeconfig(ctx, clusterAccess)
+./cmd/talosctl/cmd/talos/kubeconfig.go:20:	"github.com/siderolabs/go-kubeconfig"
+./cmd/talosctl/cmd/talos/kubeconfig.go:22:	"k8s.io/client-go/tools/clientcmd"
+./cmd/talosctl/cmd/talos/kubeconfig.go:30:var kubeconfigFlags struct {
+./cmd/talosctl/cmd/talos/kubeconfig.go:36:// kubeconfigCmd represents the kubeconfig command.
+./cmd/talosctl/cmd/talos/kubeconfig.go:37:var kubeconfigCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/kubeconfig.go:38:	Use:   "kubeconfig [local-path]",
+./cmd/talosctl/cmd/talos/kubeconfig.go:39:	Short: "Download the admin kubeconfig from the node",
+./cmd/talosctl/cmd/talos/kubeconfig.go:40:	Long: `Download the admin kubeconfig from the node.
+./cmd/talosctl/cmd/talos/kubeconfig.go:41:If merge flag is true, config will be merged with ~/.kube/config or [local-path] if specified.
+./cmd/talosctl/cmd/talos/kubeconfig.go:42:Otherwise, kubeconfig will be written to PWD or [local-path] if specified.
+./cmd/talosctl/cmd/talos/kubeconfig.go:48:			if err := helpers.FailIfMultiNodes(ctx, "kubeconfig"); err != nil {
+./cmd/talosctl/cmd/talos/kubeconfig.go:58:				if kubeconfigFlags.merge {
+./cmd/talosctl/cmd/talos/kubeconfig.go:59:					localPath, err = kubeconfig.SinglePath()
+./cmd/talosctl/cmd/talos/kubeconfig.go:86:				// only dir name was given, append `kubeconfig` by default
+./cmd/talosctl/cmd/talos/kubeconfig.go:87:				localPath = filepath.Join(localPath, "kubeconfig")
+./cmd/talosctl/cmd/talos/kubeconfig.go:91:			if err == nil && !(kubeconfigFlags.force || kubeconfigFlags.merge) {
+./cmd/talosctl/cmd/talos/kubeconfig.go:92:				return fmt.Errorf("kubeconfig file already exists, use --force to overwrite: %q", localPath)
+./cmd/talosctl/cmd/talos/kubeconfig.go:96:					kubeconfigFlags.merge = false
+./cmd/talosctl/cmd/talos/kubeconfig.go:102:			r, err := c.KubeconfigRaw(ctx)
+./cmd/talosctl/cmd/talos/kubeconfig.go:109:			data, err := helpers.ExtractFileFromTarGz("kubeconfig", r)
+./cmd/talosctl/cmd/talos/kubeconfig.go:114:			if kubeconfigFlags.merge {
+./cmd/talosctl/cmd/talos/kubeconfig.go:135:	merger, err := kubeconfig.Load(localPath)
+./cmd/talosctl/cmd/talos/kubeconfig.go:142:	err = merger.Merge(config, kubeconfig.MergeOptions{
+./cmd/talosctl/cmd/talos/kubeconfig.go:144:		ForceContextName: kubeconfigFlags.forceContextName,
+./cmd/talosctl/cmd/talos/kubeconfig.go:146:		ConflictHandler: func(component kubeconfig.ConfigComponent, name string) (kubeconfig.ConflictDecision, error) {
+./cmd/talosctl/cmd/talos/kubeconfig.go:147:			if kubeconfigFlags.force {
+./cmd/talosctl/cmd/talos/kubeconfig.go:148:				return kubeconfig.OverwriteDecision, nil
+./cmd/talosctl/cmd/talos/kubeconfig.go:152:				return kubeconfig.RenameDecision, nil
+./cmd/talosctl/cmd/talos/kubeconfig.go:165:func askOverwriteOrRename(prompt string) (kubeconfig.ConflictDecision, error) {
+./cmd/talosctl/cmd/talos/kubeconfig.go:178:			return kubeconfig.OverwriteDecision, nil
+./cmd/talosctl/cmd/talos/kubeconfig.go:180:			return kubeconfig.RenameDecision, nil
+./cmd/talosctl/cmd/talos/kubeconfig.go:186:	kubeconfigCmd.Flags().BoolVarP(&kubeconfigFlags.force, "force", "f", false, "Force overwrite of kubeconfig if already present, force overwrite on kubeconfig merge")
+./cmd/talosctl/cmd/talos/kubeconfig.go:187:	kubeconfigCmd.Flags().StringVar(&kubeconfigFlags.forceContextName, "force-context-name", "", "Force context name for kubeconfig merge")
+./cmd/talosctl/cmd/talos/kubeconfig.go:188:	kubeconfigCmd.Flags().BoolVarP(&kubeconfigFlags.merge, "merge", "m", true, "Merge with existing kubeconfig")
+./cmd/talosctl/cmd/talos/kubeconfig.go:189:	addCommand(kubeconfigCmd)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_default.go:18:	"github.com/chubo-dev/chubo/pkg/kubeconfig"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_default.go:23:// Kubeconfig implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_default.go:24:func (s *Server) Kubeconfig(_ *emptypb.Empty, obj machine.MachineService_KubeconfigServer) error {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_default.go:25:	if err := s.checkControlplane("kubeconfig"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_default.go:31:	if err := kubeconfig.GenerateAdmin(s.Controller.Runtime().Config().Cluster(), &b); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_default.go:43:		Name:     "kubeconfig",
+./internal/app/machined/pkg/controllers/network/operator/vip.go:21:	"go.etcd.io/etcd/client/v3/concurrency"
+./internal/app/machined/pkg/controllers/network/operator/vip.go:25:	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+./internal/app/machined/pkg/controllers/network/operator/vip.go:28:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/controllers/network/operator/vip.go:152:func (vip *VIP) etcdElectionKey() string {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:153:	return fmt.Sprintf("%s:vip:election:%s", constants.EtcdRootTalosKey, vip.sharedIP.String())
+./internal/app/machined/pkg/controllers/network/operator/vip.go:157:	//  wait for the etcd to be up
+./internal/app/machined/pkg/controllers/network/operator/vip.go:158:	_, err := vip.state.WatchFor(ctx, resource.NewMetadata(v1alpha1.NamespaceName, v1alpha1.ServiceType, "etcd", resource.VersionUndefined),
+./internal/app/machined/pkg/controllers/network/operator/vip.go:169:		return fmt.Errorf("etcd health wait failure: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:172:	// wait for the kubelet lifecycle to be up, and not being torn down
+./internal/app/machined/pkg/controllers/network/operator/vip.go:173:	_, err = vip.state.WatchFor(ctx, resource.NewMetadata(k8s.NamespaceName, k8s.KubeletLifecycleType, k8s.KubeletLifecycleID, resource.VersionUndefined),
+./internal/app/machined/pkg/controllers/network/operator/vip.go:186:		return fmt.Errorf("kubelet lifecycle wait failure: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:201:	// put a finalizer on the kubelet lifecycle and remove once the campaign is done
+./internal/app/machined/pkg/controllers/network/operator/vip.go:202:	kubeletLifecycle := resource.NewMetadata(k8s.NamespaceName, k8s.KubeletLifecycleType, k8s.KubeletLifecycleID, resource.VersionUndefined)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:203:	if err := vip.state.AddFinalizer(ctx, kubeletLifecycle, vip.Prefix()); err != nil {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:204:		return fmt.Errorf("error adding kubelet lifecycle finalizer: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:208:		vip.state.RemoveFinalizer(ctx, kubeletLifecycle, vip.Prefix()) //nolint:errcheck
+./internal/app/machined/pkg/controllers/network/operator/vip.go:211:	hostname, err := os.Hostname() // TODO: this should be etcd nodename
+./internal/app/machined/pkg/controllers/network/operator/vip.go:216:	ec, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:218:		return fmt.Errorf("failed to create local etcd client: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:229:	election := concurrency.NewElection(sess, vip.etcdElectionKey())
+./internal/app/machined/pkg/controllers/network/operator/vip.go:240:		resumedElection := concurrency.ResumeElection(sess, vip.etcdElectionKey(), string(node.Kvs[0].Key), node.Kvs[0].CreateRevision)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:255:	if err = vip.state.Watch(ctx, resource.NewMetadata(v1alpha1.NamespaceName, v1alpha1.ServiceType, "etcd", resource.VersionUndefined), watchCh); err != nil {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:256:		return fmt.Errorf("error setting up etcd watch: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:259:	if err = vip.state.Watch(ctx, kubeletLifecycle, watchCh); err != nil {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:260:		return fmt.Errorf("error setting up etcd watch: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:263:	err = vip.state.WatchKind(ctx, resource.NewMetadata(k8s.NamespaceName, k8s.StaticPodStatusType, "", resource.VersionUndefined), watchCh)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:265:		return fmt.Errorf("kube-apiserver health wait failure: %w", err)
+./internal/app/machined/pkg/controllers/network/operator/vip.go:268:	// wait for the etcd election campaign to be complete
+./internal/app/machined/pkg/controllers/network/operator/vip.go:269:	// while waiting, also observe the kubelet lifecycle object (if the node is shutting down) and etcd status
+./internal/app/machined/pkg/controllers/network/operator/vip.go:281:			vip.logger.Info("etcd session closed")
+./internal/app/machined/pkg/controllers/network/operator/vip.go:287:			// note: here we don't wait for kube-apiserver, as it might not be up on cluster bootstrap, but VIP should be still assigned
+./internal/app/machined/pkg/controllers/network/operator/vip.go:288:			// break the loop when etcd is stopped
+./internal/app/machined/pkg/controllers/network/operator/vip.go:289:			if event.Type == state.Destroyed && event.Resource.Metadata().ID() == "etcd" {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:293:			// break the loop if the kubelet lifecycle is entering teardown phase
+./internal/app/machined/pkg/controllers/network/operator/vip.go:295:				if event.Resource.Metadata().Type() == kubeletLifecycle.Type() && event.Resource.Metadata().ID() == kubeletLifecycle.ID() && event.Resource.Metadata().Phase() == resource.PhaseTearingDown {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:330:			vip.logger.Info("etcd session closed")
+./internal/app/machined/pkg/controllers/network/operator/vip.go:346:			// break the loop when etcd is stopped or kube-apiserver is stopped
+./internal/app/machined/pkg/controllers/network/operator/vip.go:348:				if event.Resource.Metadata().ID() == "etcd" || strings.HasPrefix(event.Resource.Metadata().ID(), "kube-system/kube-apiserver-") {
+./internal/app/machined/pkg/controllers/network/operator/vip.go:353:			// break the loop if the kubelet lifecycle is entering teardown phase
+./internal/app/machined/pkg/controllers/network/operator/vip.go:355:				if event.Resource.Metadata().Type() == kubeletLifecycle.Type() && event.Resource.Metadata().ID() == kubeletLifecycle.ID() && event.Resource.Metadata().Phase() == resource.PhaseTearingDown {
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_chubo.go:16:func mergeKubeconfig(ctx context.Context, clusterAccess *access.Adapter) error {
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_chubo.go:20:	return errors.New("kubeconfig export is not supported in chubo build (use --skip-kubeconfig)")
+./cmd/talosctl/cmd/talos/edit.go:24:	"k8s.io/kubectl/pkg/cmd/util/editor"
+./cmd/talosctl/cmd/talos/edit.go:25:	"k8s.io/kubectl/pkg/cmd/util/editor/crlf"
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_default.go:37:	if cOps.SkipK8sNodeReadinessCheck {
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_default.go:38:		checks = slices.Concat(check.PreBootSequenceChecks(), check.K8sComponentsReadinessChecks())
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_default.go:47:	if cOps.SkipKubeconfig {
+./cmd/talosctl/cmd/mgmt/cluster/create/bootstrap_cluster_default.go:51:	return mergeKubeconfig(ctx, clusterAccess)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:16:	"github.com/siderolabs/go-kubeconfig"
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:17:	"k8s.io/client-go/tools/clientcmd"
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:22:func mergeKubeconfig(ctx context.Context, clusterAccess *access.Adapter) error {
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:23:	kubeconfigPath, err := kubeconfig.SinglePath()
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:28:	fmt.Fprintf(os.Stderr, "\nmerging kubeconfig into %q\n", kubeconfigPath)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:30:	k8sconfig, err := clusterAccess.Kubeconfig(ctx)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:32:		return fmt.Errorf("error fetching kubeconfig: %w", err)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:35:	kubeConfig, err := clientcmd.Load(k8sconfig)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:37:		return fmt.Errorf("error parsing kubeconfig: %w", err)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:41:		for name := range kubeConfig.Clusters {
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:42:			kubeConfig.Clusters[name].Server = clusterAccess.ForceEndpoint
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:46:	_, err = os.Stat(kubeconfigPath)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:52:		return clientcmd.WriteToFile(*kubeConfig, kubeconfigPath)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:55:	merger, err := kubeconfig.Load(kubeconfigPath)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:57:		return fmt.Errorf("error loading existing kubeconfig: %w", err)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:60:	err = merger.Merge(kubeConfig, kubeconfig.MergeOptions{
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:63:		ConflictHandler: func(component kubeconfig.ConfigComponent, name string) (kubeconfig.ConflictDecision, error) {
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:64:			return kubeconfig.RenameDecision, nil
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:68:		return fmt.Errorf("error merging kubeconfig: %w", err)
+./cmd/talosctl/cmd/mgmt/cluster/create/merge_kubeconfig_default.go:71:	return merger.Write(kubeconfigPath)
+./cmd/talosctl/cmd/talos/conformance.go:27:var conformanceKubernetesCmdFlags struct {
+./cmd/talosctl/cmd/talos/conformance.go:31:var conformanceKubernetesCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/conformance.go:32:	Use:     "kubernetes",
+./cmd/talosctl/cmd/talos/conformance.go:33:	Aliases: []string{"k8s"},
+./cmd/talosctl/cmd/talos/conformance.go:34:	Short:   "Run Kubernetes conformance tests",
+./cmd/talosctl/cmd/talos/conformance.go:45:				cluster.K8sProvider
+./cmd/talosctl/cmd/talos/conformance.go:47:				K8sProvider: &cluster.KubernetesClient{
+./cmd/talosctl/cmd/talos/conformance.go:53:			switch conformanceKubernetesCmdFlags.mode {
+./cmd/talosctl/cmd/talos/conformance.go:59:				return fmt.Errorf("unsupported conformance mode %v", conformanceKubernetesCmdFlags.mode)
+./cmd/talosctl/cmd/talos/conformance.go:66:	conformanceKubernetesCmd.Flags().StringVar(&conformanceKubernetesCmdFlags.mode, "mode", "fast", "conformance test mode: [fast, certified]")
+./cmd/talosctl/cmd/talos/conformance.go:67:	conformanceCmd.AddCommand(conformanceKubernetesCmd)
+./cmd/talosctl/cmd/talos/output/jsonpath_test.go:15:	"k8s.io/client-go/util/jsonpath"
+./cmd/talosctl/cmd/talos/etcd.go:22:	snapshot "go.etcd.io/etcd/etcdutl/v3/snapshot"
+./cmd/talosctl/cmd/talos/etcd.go:30:	etcdresource "github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+./cmd/talosctl/cmd/talos/etcd.go:33:// etcdCmd represents the etcd command.
+./cmd/talosctl/cmd/talos/etcd.go:34:var etcdCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:35:	Use:   "etcd",
+./cmd/talosctl/cmd/talos/etcd.go:36:	Short: "Manage etcd",
+./cmd/talosctl/cmd/talos/etcd.go:40:// etcdAlarmCmd represents the etcd alarm command.
+./cmd/talosctl/cmd/talos/etcd.go:41:var etcdAlarmCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:43:	Short: "Manage etcd alarms",
+./cmd/talosctl/cmd/talos/etcd.go:49:	GetMemberAlarms() []*machine.EtcdMemberAlarm
+./cmd/talosctl/cmd/talos/etcd.go:74:				etcdresource.FormatMemberID(alarm.GetMemberId()),
+./cmd/talosctl/cmd/talos/etcd.go:88:// etcdAlarmListCmd represents the etcd alarm list command.
+./cmd/talosctl/cmd/talos/etcd.go:89:var etcdAlarmListCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:91:	Short: "List the etcd alarms for the node.",
+./cmd/talosctl/cmd/talos/etcd.go:96:			response, err := c.EtcdAlarmList(ctx)
+./cmd/talosctl/cmd/talos/etcd.go:104:			return displayAlarms(xslices.Map(response.Messages, func(v *machine.EtcdAlarm) alarmMessage {
+./cmd/talosctl/cmd/talos/etcd.go:111:// etcdAlarmDisarmCmd represents the etcd alarm disarm command.
+./cmd/talosctl/cmd/talos/etcd.go:112:var etcdAlarmDisarmCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:114:	Short: "Disarm the etcd alarms for the node.",
+./cmd/talosctl/cmd/talos/etcd.go:119:			response, err := c.EtcdAlarmDisarm(ctx)
+./cmd/talosctl/cmd/talos/etcd.go:127:			return displayAlarms(xslices.Map(response.Messages, func(v *machine.EtcdAlarmDisarm) alarmMessage {
+./cmd/talosctl/cmd/talos/etcd.go:134:// etcdDefragCmd represents the etcd defrag command.
+./cmd/talosctl/cmd/talos/etcd.go:135:var etcdDefragCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:137:	Short: "Defragment etcd database on the node",
+./cmd/talosctl/cmd/talos/etcd.go:138:	Long: `Defragmentation is a maintenance operation that releases unused space from the etcd database file.
+./cmd/talosctl/cmd/talos/etcd.go:143:			if err := helpers.FailIfMultiNodes(ctx, "etcd defrag"); err != nil {
+./cmd/talosctl/cmd/talos/etcd.go:147:			_, err := c.EtcdDefragment(ctx)
+./cmd/talosctl/cmd/talos/etcd.go:154:var etcdLeaveCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:156:	Short: "Tell nodes to leave etcd cluster",
+./cmd/talosctl/cmd/talos/etcd.go:161:			if err := helpers.FailIfMultiNodes(ctx, "etcd leave"); err != nil {
+./cmd/talosctl/cmd/talos/etcd.go:165:			return c.EtcdLeaveCluster(ctx, &machine.EtcdLeaveClusterRequest{})
+./cmd/talosctl/cmd/talos/etcd.go:170:var etcdMemberRemoveCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:172:	Short: "Remove the node from etcd cluster",
+./cmd/talosctl/cmd/talos/etcd.go:174:If there is no access to the node, or the node can't access etcd to call etcd leave.
+./cmd/talosctl/cmd/talos/etcd.go:175:Always prefer etcd leave over this command.`,
+./cmd/talosctl/cmd/talos/etcd.go:179:			memberID, err := etcdresource.ParseMemberID(args[0])
+./cmd/talosctl/cmd/talos/etcd.go:184:			return c.EtcdRemoveMemberByID(ctx, &machine.EtcdRemoveMemberByIDRequest{
+./cmd/talosctl/cmd/talos/etcd.go:191:var etcdForfeitLeadershipCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:193:	Short: "Tell node to forfeit etcd cluster leadership",
+./cmd/talosctl/cmd/talos/etcd.go:198:			_, err := c.EtcdForfeitLeadership(ctx, &machine.EtcdForfeitLeadershipRequest{})
+./cmd/talosctl/cmd/talos/etcd.go:205:var etcdMemberListCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:207:	Short: "Get the list of etcd cluster members",
+./cmd/talosctl/cmd/talos/etcd.go:212:			response, err := c.EtcdMemberList(ctx, &machine.EtcdMemberListRequest{
+./cmd/talosctl/cmd/talos/etcd.go:246:						etcdresource.FormatMemberID(member.Id),
+./cmd/talosctl/cmd/talos/etcd.go:265:var etcdStatusCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:267:	Short: "Get the status of etcd cluster member",
+./cmd/talosctl/cmd/talos/etcd.go:268:	Long:  `Returns the status of etcd member on the node, use multiple nodes to get status of all members.`,
+./cmd/talosctl/cmd/talos/etcd.go:272:			response, err := c.EtcdStatus(ctx)
+./cmd/talosctl/cmd/talos/etcd.go:306:					etcdresource.FormatMemberID(message.GetMemberStatus().GetMemberId()),
+./cmd/talosctl/cmd/talos/etcd.go:310:					etcdresource.FormatMemberID(message.GetMemberStatus().GetLeader()),
+./cmd/talosctl/cmd/talos/etcd.go:331:var etcdSnapshotCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:333:	Short: "Stream snapshot of the etcd node to the path.",
+./cmd/talosctl/cmd/talos/etcd.go:338:			if err := helpers.FailIfMultiNodes(ctx, "etcd snapshot"); err != nil {
+./cmd/talosctl/cmd/talos/etcd.go:354:			r, err := c.EtcdSnapshot(ctx, &machine.EtcdSnapshotRequest{})
+./cmd/talosctl/cmd/talos/etcd.go:370:			// this check is from https://github.com/etcd-io/etcd/blob/client/v3.5.0-alpha.0/client/v3/snapshot/v3_snapshot.go#L46
+./cmd/talosctl/cmd/talos/etcd.go:383:			fmt.Printf("etcd snapshot saved to %q (%d bytes)\n", dbPath, size)
+./cmd/talosctl/cmd/talos/etcd.go:400:var etcdDowngradeCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:402:	Short: "Manage etcd storage system downgrades",
+./cmd/talosctl/cmd/talos/etcd.go:407:	etcdDowngradePattern = "%s\n"
+./cmd/talosctl/cmd/talos/etcd.go:408:	etcdDowngradeHeader  = "MESSAGE"
+./cmd/talosctl/cmd/talos/etcd.go:411:var etcdDowngradeValidateCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:413:	Short: "Validate if the etcd storage system can be downgraded to the specified version.",
+./cmd/talosctl/cmd/talos/etcd.go:418:			if err := helpers.FailIfMultiNodes(ctx, "etcd downgrade validate"); err != nil {
+./cmd/talosctl/cmd/talos/etcd.go:424:			r, err := c.EtcdDowngradeValidate(ctx, &machine.EtcdDowngradeValidateRequest{Version: version})
+./cmd/talosctl/cmd/talos/etcd.go:431:			pattern := etcdDowngradePattern
+./cmd/talosctl/cmd/talos/etcd.go:432:			header := etcdDowngradeHeader
+./cmd/talosctl/cmd/talos/etcd.go:465:var etcdDowngradeEnableCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:467:	Short: "Enable etcd storage system downgrade to the specified version.",
+./cmd/talosctl/cmd/talos/etcd.go:472:			if err := helpers.FailIfMultiNodes(ctx, "etcd downgrade enable"); err != nil {
+./cmd/talosctl/cmd/talos/etcd.go:478:			r, err := c.EtcdDowngradeEnable(ctx, &machine.EtcdDowngradeEnableRequest{Version: version})
+./cmd/talosctl/cmd/talos/etcd.go:485:			pattern := etcdDowngradePattern
+./cmd/talosctl/cmd/talos/etcd.go:486:			header := etcdDowngradeHeader
+./cmd/talosctl/cmd/talos/etcd.go:519:var etcdDowngradeCancelCmd = &cobra.Command{
+./cmd/talosctl/cmd/talos/etcd.go:521:	Short: "Cancel etcd storage system downgrade.",
+./cmd/talosctl/cmd/talos/etcd.go:526:			if err := helpers.FailIfMultiNodes(ctx, "etcd downgrade cancel"); err != nil {
+./cmd/talosctl/cmd/talos/etcd.go:530:			r, err := c.EtcdDowngradeCancel(ctx)
+./cmd/talosctl/cmd/talos/etcd.go:537:			pattern := etcdDowngradePattern
+./cmd/talosctl/cmd/talos/etcd.go:538:			header := etcdDowngradeHeader
+./cmd/talosctl/cmd/talos/etcd.go:572:	etcdAlarmCmd.AddCommand(
+./cmd/talosctl/cmd/talos/etcd.go:573:		etcdAlarmListCmd,
+./cmd/talosctl/cmd/talos/etcd.go:574:		etcdAlarmDisarmCmd,
+./cmd/talosctl/cmd/talos/etcd.go:577:	etcdDowngradeCmd.AddCommand(
+./cmd/talosctl/cmd/talos/etcd.go:578:		etcdDowngradeValidateCmd,
+./cmd/talosctl/cmd/talos/etcd.go:579:		etcdDowngradeEnableCmd,
+./cmd/talosctl/cmd/talos/etcd.go:580:		etcdDowngradeCancelCmd,
+./cmd/talosctl/cmd/talos/etcd.go:583:	etcdCmd.AddCommand(
+./cmd/talosctl/cmd/talos/etcd.go:584:		etcdAlarmCmd,
+./cmd/talosctl/cmd/talos/etcd.go:585:		etcdDefragCmd,
+./cmd/talosctl/cmd/talos/etcd.go:586:		etcdForfeitLeadershipCmd,
+./cmd/talosctl/cmd/talos/etcd.go:587:		etcdLeaveCmd,
+./cmd/talosctl/cmd/talos/etcd.go:588:		etcdMemberListCmd,
+./cmd/talosctl/cmd/talos/etcd.go:589:		etcdMemberRemoveCmd,
+./cmd/talosctl/cmd/talos/etcd.go:590:		etcdSnapshotCmd,
+./cmd/talosctl/cmd/talos/etcd.go:591:		etcdStatusCmd,
+./cmd/talosctl/cmd/talos/etcd.go:592:		etcdDowngradeCmd,
+./cmd/talosctl/cmd/talos/etcd.go:595:	addCommand(etcdCmd)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_chubo.go:17:// Kubeconfig is intentionally disabled in chubo mode.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_chubo.go:18:func (s *Server) Kubeconfig(_ *emptypb.Empty, _ machine.MachineService_KubeconfigServer) error {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_kubeconfig_chubo.go:19:	return status.Error(codes.Unimplemented, "kubeconfig is not available in chubo mode")
+./internal/app/machined/pkg/controllers/secrets/etcd.go:20:	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+./internal/app/machined/pkg/controllers/secrets/etcd.go:21:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/controllers/secrets/etcd.go:28:// EtcdController manages secrets.Etcd based on configuration.
+./internal/app/machined/pkg/controllers/secrets/etcd.go:29:type EtcdController struct{}
+./internal/app/machined/pkg/controllers/secrets/etcd.go:32:func (ctrl *EtcdController) Name() string {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:33:	return "secrets.EtcdController"
+./internal/app/machined/pkg/controllers/secrets/etcd.go:37:func (ctrl *EtcdController) Inputs() []controller.Input {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:41:			Type:      secrets.EtcdRootType,
+./internal/app/machined/pkg/controllers/secrets/etcd.go:42:			ID:        optional.Some(secrets.EtcdRootID),
+./internal/app/machined/pkg/controllers/secrets/etcd.go:66:			ID:        optional.Some(network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s)),
+./internal/app/machined/pkg/controllers/secrets/etcd.go:73:func (ctrl *EtcdController) Outputs() []controller.Output {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:76:			Type: secrets.EtcdType,
+./internal/app/machined/pkg/controllers/secrets/etcd.go:85:func (ctrl *EtcdController) Run(ctx context.Context, r controller.Runtime, _ *zap.Logger) error {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:93:		etcdRootRes, err := safe.ReaderGet[*secrets.EtcdRoot](ctx, r, resource.NewMetadata(secrets.NamespaceName, secrets.EtcdRootType, secrets.EtcdRootID, resource.VersionUndefined))
+./internal/app/machined/pkg/controllers/secrets/etcd.go:103:			return fmt.Errorf("error getting etcd root secrets: %w", err)
+./internal/app/machined/pkg/controllers/secrets/etcd.go:106:		etcdRoot := etcdRootRes.TypedSpec()
+./internal/app/machined/pkg/controllers/secrets/etcd.go:153:				network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s),
+./internal/app/machined/pkg/controllers/secrets/etcd.go:165:		if err = safe.WriterModify(ctx, r, secrets.NewEtcd(), func(r *secrets.Etcd) error {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:166:			return ctrl.updateSecrets(etcdRoot, nodeAddrs, hostnameStatus, r.TypedSpec())
+./internal/app/machined/pkg/controllers/secrets/etcd.go:175:func (ctrl *EtcdController) updateSecrets(etcdRoot *secrets.EtcdRootSpec, nodeAddress *network.NodeAddress, hostnameStatus *network.HostnameStatus, etcdCerts *secrets.EtcdCertsSpec) error {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:176:	generator := etcd.CertificateGenerator{
+./internal/app/machined/pkg/controllers/secrets/etcd.go:177:		CA: etcdRoot.EtcdCA,
+./internal/app/machined/pkg/controllers/secrets/etcd.go:185:	etcdCerts.Etcd, err = generator.GenerateServerCert()
+./internal/app/machined/pkg/controllers/secrets/etcd.go:187:		return fmt.Errorf("error generating etcd client certs: %w", err)
+./internal/app/machined/pkg/controllers/secrets/etcd.go:190:	etcdCerts.EtcdPeer, err = generator.GeneratePeerCert()
+./internal/app/machined/pkg/controllers/secrets/etcd.go:192:		return fmt.Errorf("error generating etcd peer certs: %w", err)
+./internal/app/machined/pkg/controllers/secrets/etcd.go:195:	etcdCerts.EtcdAdmin, err = generator.GenerateClientCert("talos")
+./internal/app/machined/pkg/controllers/secrets/etcd.go:200:	etcdCerts.EtcdAPIServer, err = generator.GenerateClientCert("kube-apiserver")
+./internal/app/machined/pkg/controllers/secrets/etcd.go:202:		return fmt.Errorf("error generating kube-apiserver etcd client certs: %w", err)
+./internal/app/machined/pkg/controllers/secrets/etcd.go:208:func (ctrl *EtcdController) teardownAll(ctx context.Context, r controller.Runtime) error {
+./internal/app/machined/pkg/controllers/secrets/etcd.go:209:	list, err := r.List(ctx, resource.NewMetadata(secrets.NamespaceName, secrets.EtcdType, "", resource.VersionUndefined))
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster_chubo.go:19:// Chubo-OS intentionally disables Kubernetes-oriented cluster checks.
+./cmd/talosctl/cmd/talos/output/table.go:21:	"k8s.io/client-go/util/jsonpath"
+./cmd/talosctl/cmd/talos/health.go:134:		cluster.K8sProvider
+./cmd/talosctl/cmd/talos/health.go:138:		K8sProvider: &cluster.KubernetesClient{
+./cmd/talosctl/cmd/talos/health.go:200:		state := &cluster.KubernetesClient{
+./cmd/talosctl/cmd/talos/health.go:222:	healthCmd.Flags().StringVar(&healthCmdFlags.forceEndpoint, "k8s-endpoint", "", "use endpoint instead of kubeconfig default")
+./cmd/talosctl/cmd/talos/health.go:224:	healthCmd.Flags().BoolVar(&healthCmdFlags.runE2E, "run-e2e", false, "run Kubernetes e2e test")
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans_chubo.go:26:// Talos upstream uses a filtered NodeAddress resource (excluding Kubernetes pod/service CIDRs),
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans_chubo.go:27:// but `chubo` has no Kubernetes stack and doesn't create that filter. Use the unfiltered
+./cmd/talosctl/cmd/talos/support.go:36:	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+./cmd/talosctl/cmd/talos/support.go:37:	k8s "k8s.io/client-go/kubernetes"
+./cmd/talosctl/cmd/talos/support.go:38:	"k8s.io/client-go/tools/clientcmd"
+./cmd/talosctl/cmd/talos/support.go:63:	- All kube-system pods logs.
+./cmd/talosctl/cmd/talos/support.go:74:	- Kubernetes nodes and kube-system pods manifests.
+./cmd/talosctl/cmd/talos/support.go:128:		kubernetesEnabled, err := isKubernetesEnabled(ctx, c)
+./cmd/talosctl/cmd/talos/support.go:130:			fmt.Fprintf(os.Stderr, "Failed to discover kubernetes service state %s\n", err)
+./cmd/talosctl/cmd/talos/support.go:132:			kubernetesEnabled = true
+./cmd/talosctl/cmd/talos/support.go:135:		var clientset *k8s.Clientset
+./cmd/talosctl/cmd/talos/support.go:137:		if kubernetesEnabled {
+./cmd/talosctl/cmd/talos/support.go:138:			clientset, err = getKubernetesClient(ctx, c)
+./cmd/talosctl/cmd/talos/support.go:140:				fmt.Fprintf(os.Stderr, "Failed to create kubernetes client %s\n", err)
+./cmd/talosctl/cmd/talos/support.go:143:			fmt.Fprintln(os.Stderr, "Kubernetes services not present, collecting Talos-only support bundle.")
+./cmd/talosctl/cmd/talos/support.go:148:			bundle.WithKubernetesClient(clientset),
+./cmd/talosctl/cmd/talos/support.go:163:			if !kubernetesEnabled && isNoKubernetesCollectorError(err) {
+./cmd/talosctl/cmd/talos/support.go:179:		if collectErr != nil && !kubernetesEnabled && isNoKubernetesCollectorError(collectErr) {
+./cmd/talosctl/cmd/talos/support.go:180:			fmt.Fprintf(os.Stderr, "Ignoring unsupported Kubernetes collector error in Talos-only mode: %s\n", collectErr)
+./cmd/talosctl/cmd/talos/support.go:599:func isKubernetesEnabled(ctx context.Context, c *client.Client) (bool, error) {
+./cmd/talosctl/cmd/talos/support.go:607:			if svc.Id == "kubelet" || svc.Id == "cri" {
+./cmd/talosctl/cmd/talos/support.go:616:func isNoKubernetesCollectorError(err error) bool {
+./cmd/talosctl/cmd/talos/support.go:624:		strings.Contains(msg, "kube-system") ||
+./cmd/talosctl/cmd/talos/support.go:628:func getKubernetesClient(ctx context.Context, c *client.Client) (*k8s.Clientset, error) {
+./cmd/talosctl/cmd/talos/support.go:629:	kubeconfig, err := c.Kubeconfig(ctx)
+./cmd/talosctl/cmd/talos/support.go:634:	config, err := clientcmd.NewClientConfigFromBytes(kubeconfig)
+./cmd/talosctl/cmd/talos/support.go:644:	clientset, err := k8s.NewForConfig(restconfig)
+./cmd/talosctl/cmd/talos/support.go:649:	// just checking that k8s responds
+./cmd/talosctl/cmd/talos/support.go:650:	_, err = clientset.CoreV1().Namespaces().Get(ctx, "kube-system", v1.GetOptions{})
+./cmd/talosctl/cmd/talos/output/jsonpath.go:19:	"k8s.io/client-go/third_party/forked/golang/template"
+./cmd/talosctl/cmd/talos/output/jsonpath.go:20:	"k8s.io/client-go/util/jsonpath"
+./cmd/talosctl/cmd/talos/output/output.go:19:	"k8s.io/client-go/util/jsonpath"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_chubo.go:19:	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/cri"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_chubo.go:94:		// Installation uses containerd but relies on CRI resource controllers (image cache + registries)
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_chubo.go:96:		&cri.ImageCacheConfigController{
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_chubo.go:99:		&cri.RegistriesConfigController{},
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_chubo.go:23:	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_chubo.go:28:// Chubo mode skips etcd upgrade prechecks.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_chubo.go:101:func shouldRunEtcdUpgradePrechecks(machineType machinetype.Type, force bool, serviceIDs []string) bool {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_chubo.go:110:	return slices.Contains(serviceIDs, "etcd")
+./pkg/cluster/crashdump.go:20:	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+./pkg/cluster/crashdump.go:21:	k8s "k8s.io/client-go/kubernetes"
+./pkg/cluster/crashdump.go:22:	"k8s.io/client-go/tools/clientcmd"
+./pkg/cluster/crashdump.go:64:	kubeclient, err := getKubernetesClient(ctx, c, controlplane)
+./pkg/cluster/crashdump.go:65:	// ignore error if we can't get a k8s client
+./pkg/cluster/crashdump.go:67:		opts = append(opts, bundle.WithKubernetesClient(kubeclient))
+./pkg/cluster/crashdump.go:86:func getKubernetesClient(ctx context.Context, c *client.Client, endpoint string) (*k8s.Clientset, error) {
+./pkg/cluster/crashdump.go:87:	kubeconfig, err := c.Kubeconfig(client.WithNodes(ctx, endpoint))
+./pkg/cluster/crashdump.go:92:	config, err := clientcmd.NewClientConfigFromBytes(kubeconfig)
+./pkg/cluster/crashdump.go:102:	clientset, err := k8s.NewForConfig(restconfig)
+./pkg/cluster/crashdump.go:107:	// just checking that k8s responds
+./pkg/cluster/crashdump.go:108:	_, err = clientset.CoreV1().Namespaces().Get(ctx, "kube-system", v1.GetOptions{})
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:16:	"github.com/chubo-dev/chubo/internal/pkg/containers/cri"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:24:		if namespace != constants.K8sContainerdNamespace {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:25:			return nil, errors.New("CRI inspector is supported only for K8s namespace")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:28:		return cri.NewInspector(ctx)
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:23:	v1 "k8s.io/api/certificates/v1"
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:24:	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:25:	"k8s.io/apimachinery/pkg/fields"
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:27:	"github.com/chubo-dev/chubo/pkg/kubernetes"
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:28:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:33:// KubeletCSRNotApprovedCheck checks for kubelet server certificate rotation and no CSR approvers.
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:36:func KubeletCSRNotApprovedCheck(ctx context.Context, r controller.Reader, logger *zap.Logger) (*runtime.DiagnosticSpec, error) {
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:37:	// check kubelet status to make sure it's running & health before proceeding any further
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:38:	kubeletService, err := safe.ReaderGetByID[*v1alpha1.Service](ctx, r, "kubelet")
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:44:		return nil, fmt.Errorf("error reading kubelet service: %w", err)
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:47:	if !kubeletService.TypedSpec().Running || !kubeletService.TypedSpec().Healthy {
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:52:	nodeName, err := safe.ReaderGetByID[*k8s.Nodename](ctx, r, k8s.NodenameID)
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:61:	// try to access kubelet API to see if we get 'tls: internal error'
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:82:	k8sClient, err := kubernetes.NewClientFromKubeletKubeconfig()
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:84:		return nil, fmt.Errorf("error creating k8s client: %w", err)
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:87:	defer k8sClient.Close() //nolint:errcheck
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:89:	csrs, err := k8sClient.Clientset.CertificatesV1().CertificateSigningRequests().List(ctx,
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:91:			FieldSelector: fields.OneTermEqualSelector("spec.signerName", "kubernetes.io/kubelet-serving").String(),
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:120:		Message: "kubelet server certificate rotation is enabled, but CSR is not approved",
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved.go:122:			fmt.Sprintf("kubelet API error: %s", netError),
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:21:	v1 "k8s.io/api/core/v1"
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:23:	k8sadapter "github.com/chubo-dev/chubo/internal/app/machined/pkg/adapters/k8s"
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:29:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:75:			Namespace: k8s.NamespaceName,
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:76:			Type:      k8s.StaticPodStatusType,
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:86:			Namespace: k8s.NamespaceName,
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:87:			Type:      k8s.NodenameType,
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:88:			ID:        optional.Some(k8s.NodenameID),
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:92:			Namespace: k8s.NamespaceName,
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:93:			Type:      k8s.NodeStatusType,
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:189:		"kubelet",
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:194:			"etcd",
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:313:	staticPodList, err := safe.ReaderListAll[*k8s.StaticPodStatus](ctx, r)
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:321:		status, err := k8sadapter.StaticPodStatus(staticPod).Status()
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:357:	nodename, err := safe.ReaderGetByID[*k8s.Nodename](ctx, r, k8s.NodenameID)
+./internal/app/machined/pkg/controllers/runtime/machine_status.go:372:	nodeStatus, err := safe.ReaderGetByID[*k8s.NodeStatus](ctx, r, nodename.TypedSpec().Nodename)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:24:	"github.com/chubo-dev/chubo/pkg/kubeconfig"
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:32:// KubernetesCertificateValidityDuration is the validity duration for the certificates created with this controller.
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:35:const KubernetesCertificateValidityDuration = constants.KubernetesDefaultCertificateValidityDuration
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:37:// KubernetesController manages secrets.Kubernetes based on configuration.
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:38:type KubernetesController struct{}
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:41:func (ctrl *KubernetesController) Name() string {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:42:	return "secrets.KubernetesController"
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:46:func (ctrl *KubernetesController) Inputs() []controller.Input {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:50:			Type:      secrets.KubernetesRootType,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:51:			ID:        optional.Some(secrets.KubernetesRootID),
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:64:func (ctrl *KubernetesController) Outputs() []controller.Output {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:67:			Type: secrets.KubernetesType,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:76:func (ctrl *KubernetesController) Run(ctx context.Context, r controller.Runtime, _ *zap.Logger) error {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:77:	refreshTicker := time.NewTicker(KubernetesCertificateValidityDuration / 2)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:88:		k8sRoot, err := safe.ReaderGet[*secrets.KubernetesRoot](ctx, r, resource.NewMetadata(secrets.NamespaceName, secrets.KubernetesRootType, secrets.KubernetesRootID, resource.VersionUndefined))
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:98:			return fmt.Errorf("error getting root k8s secrets: %w", err)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:115:		if err = safe.WriterModify(ctx, r, secrets.NewKubernetes(), func(r *secrets.Kubernetes) error {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:116:			return ctrl.updateSecrets(k8sRoot.TypedSpec(), r.TypedSpec())
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:125:func (ctrl *KubernetesController) updateSecrets(k8sRoot *secrets.KubernetesRootSpec, k8sSecrets *secrets.KubernetesCertsSpec) error {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:128:	if err := kubeconfig.Generate(&kubeconfig.GenerateInput{
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:129:		ClusterName: k8sRoot.Name,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:131:		IssuingCA:           k8sRoot.IssuingCA,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:132:		AcceptedCAs:         k8sRoot.AcceptedCAs,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:133:		CertificateLifetime: KubernetesCertificateValidityDuration,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:135:		CommonName:   constants.KubernetesControllerManagerOrganization,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:136:		Organization: constants.KubernetesControllerManagerOrganization,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:138:		Endpoint:    k8sRoot.LocalEndpoint.String(),
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:139:		Username:    constants.KubernetesControllerManagerOrganization,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:142:		return fmt.Errorf("failed to generate controller manager kubeconfig: %w", err)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:145:	k8sSecrets.ControllerManagerKubeconfig = buf.String()
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:149:	if err := kubeconfig.Generate(&kubeconfig.GenerateInput{
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:150:		ClusterName: k8sRoot.Name,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:152:		IssuingCA:           k8sRoot.IssuingCA,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:153:		AcceptedCAs:         k8sRoot.AcceptedCAs,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:154:		CertificateLifetime: KubernetesCertificateValidityDuration,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:156:		CommonName:   constants.KubernetesSchedulerOrganization,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:157:		Organization: constants.KubernetesSchedulerOrganization,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:159:		Endpoint:    k8sRoot.LocalEndpoint.String(),
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:160:		Username:    constants.KubernetesSchedulerOrganization,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:163:		return fmt.Errorf("failed to generate scheduler kubeconfig: %w", err)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:166:	k8sSecrets.SchedulerKubeconfig = buf.String()
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:170:	if err := kubeconfig.GenerateAdmin(&generateAdminAdapter{
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:171:		k8sRoot:  k8sRoot,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:172:		endpoint: k8sRoot.Endpoint,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:174:		return fmt.Errorf("failed to generate admin kubeconfig: %w", err)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:177:	k8sSecrets.AdminKubeconfig = buf.String()
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:181:	if err := kubeconfig.GenerateAdmin(&generateAdminAdapter{
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:182:		k8sRoot:  k8sRoot,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:183:		endpoint: k8sRoot.LocalEndpoint,
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:185:		return fmt.Errorf("failed to generate admin kubeconfig: %w", err)
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:188:	k8sSecrets.LocalhostAdminKubeconfig = buf.String()
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:193:func (ctrl *KubernetesController) teardownAll(ctx context.Context, r controller.Runtime) error {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:194:	list, err := r.List(ctx, resource.NewMetadata(secrets.NamespaceName, secrets.KubernetesType, "", resource.VersionUndefined))
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:212:	k8sRoot  *secrets.KubernetesRootSpec
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:217:	return adapter.k8sRoot.Name
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:225:	return adapter.k8sRoot.IssuingCA
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:229:	return adapter.k8sRoot.AcceptedCAs
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:232:func (adapter *generateAdminAdapter) AdminKubeconfig() config.AdminKubeconfig {
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:238:	return KubernetesCertificateValidityDuration
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:242:	return constants.KubernetesTalosAdminCertCommonName
+./internal/app/machined/pkg/controllers/secrets/kubernetes.go:246:	return constants.KubernetesAdminCertOrganization
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:21:	corev1 "k8s.io/api/core/v1"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:22:	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:40:	k8sProvider := &cluster.KubernetesClient{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:44:	defer k8sProvider.K8sClose() //nolint:errcheck
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:55:	clusterInfo, err := buildClusterInfo(checkCtx, in, r, *k8sProvider)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:62:		cluster.K8sProvider
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:66:		K8sProvider:    k8sProvider,
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:127:	cli cluster.KubernetesClient,
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:165:	k8sCli, err := cli.K8sClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:170:	nodeList, err := k8sCli.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:179:		nodeInfo, err2 := k8sNodeToNodeInfo(&node)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_cluster.go:199:func k8sNodeToNodeInfo(node *corev1.Node) (*cluster.NodeInfo, error) {
+./pkg/conditions/kubeconfig.go:17:	"k8s.io/client-go/tools/clientcmd"
+./pkg/conditions/kubeconfig.go:20:type kubeconfig string
+./pkg/conditions/kubeconfig.go:22:func (filename kubeconfig) Wait(ctx context.Context) error {
+./pkg/conditions/kubeconfig.go:38:		//       https://github.com/kubernetes/kubernetes/pull/105080
+./pkg/conditions/kubeconfig.go:48:func (filename kubeconfig) String() string {
+./pkg/conditions/kubeconfig.go:49:	return fmt.Sprintf("kubeconfig %q to be ready", string(filename))
+./pkg/conditions/kubeconfig.go:52:// WaitForKubeconfigReady is a condition that will wait for the kubeconfig to be ready.
+./pkg/conditions/kubeconfig.go:53:func WaitForKubeconfigReady(filename string) Condition {
+./pkg/conditions/kubeconfig.go:54:	return kubeconfig(filename)
+./internal/app/machined/pkg/runtime/v1alpha1/start_all_services_default.go:40:		// load the kubelet service, but don't start it;
+./internal/app/machined/pkg/runtime/v1alpha1/start_all_services_default.go:41:		// KubeletServiceController will start it once it's ready.
+./internal/app/machined/pkg/runtime/v1alpha1/start_all_services_default.go:43:			&services.Kubelet{},
+./internal/app/machined/pkg/runtime/v1alpha1/start_all_services_default.go:47:			&services.CRI{},
+./internal/app/machined/pkg/runtime/v1alpha1/start_all_services_default.go:54:				&services.Etcd{Bootstrap: true},
+./internal/app/machined/pkg/runtime/v1alpha1/start_all_services_default.go:59:				&services.Etcd{},
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_chubo.go:26:// Chubo doesn't ship Kubernetes, etcd, or CRI management.
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_chubo.go:46:		// Treat opengyoza quorum checks like Talos' etcd health checks: blocking by default,
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_chubo.go:147:func LeaveEtcd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_chubo.go:149:		logger.Printf("skipping etcd leave (chubo build)")
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_chubo.go:152:	}, "leaveEtcd"
+./internal/app/machined/pkg/system/services/etcd.go:32:	clientv3 "go.etcd.io/etcd/client/v3"
+./internal/app/machined/pkg/system/services/etcd.go:33:	"go.etcd.io/etcd/etcdutl/v3/snapshot"
+./internal/app/machined/pkg/system/services/etcd.go:45:	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+./internal/app/machined/pkg/system/services/etcd.go:55:	"github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+./internal/app/machined/pkg/system/services/etcd.go:56:	etcdresource "github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+./internal/app/machined/pkg/system/services/etcd.go:57:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/system/services/etcd.go:62:var _ system.HealthcheckedService = (*Etcd)(nil)
+./internal/app/machined/pkg/system/services/etcd.go:64:// Etcd implements the Service interface. It serves as the concrete type with
+./internal/app/machined/pkg/system/services/etcd.go:66:type Etcd struct {
+./internal/app/machined/pkg/system/services/etcd.go:72:	client *etcd.Client
+./internal/app/machined/pkg/system/services/etcd.go:83:func (e *Etcd) ID(runtime.Runtime) string {
+./internal/app/machined/pkg/system/services/etcd.go:84:	return "etcd"
+./internal/app/machined/pkg/system/services/etcd.go:90:func (e *Etcd) PreFunc(ctx context.Context, r runtime.Runtime) error {
+./internal/app/machined/pkg/system/services/etcd.go:101:	spec, err := safe.ReaderGet[*etcdresource.Spec](ctx, r.State().V1Alpha2().Resources(), etcdresource.NewSpec(etcdresource.NamespaceName, etcdresource.SpecID).Metadata())
+./internal/app/machined/pkg/system/services/etcd.go:104:		return fmt.Errorf("failed to get etcd spec: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:107:	img, err := image.Pull(containerdctx, cri.RegistryBuilder(r.State().V1Alpha2().Resources()), client, spec.TypedSpec().Image,
+./internal/app/machined/pkg/system/services/etcd.go:138:		return fmt.Errorf("failed to generate etcd PKI: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:145:func (e *Etcd) PostFunc(runtime.Runtime, events.ServiceState) (err error) {
+./internal/app/machined/pkg/system/services/etcd.go:160:func (e *Etcd) Condition(r runtime.Runtime) conditions.Condition {
+./internal/app/machined/pkg/system/services/etcd.go:164:		etcdresource.NewSpecReadyCondition(r.State().V1Alpha2().Resources()),
+./internal/app/machined/pkg/system/services/etcd.go:169:func (e *Etcd) DependsOn(runtime.Runtime) []string {
+./internal/app/machined/pkg/system/services/etcd.go:170:	return []string{"cri"}
+./internal/app/machined/pkg/system/services/etcd.go:174:func (e *Etcd) Volumes(runtime.Runtime) []string {
+./internal/app/machined/pkg/system/services/etcd.go:177:		constants.EtcdDataVolumeID,
+./internal/app/machined/pkg/system/services/etcd.go:182:func (e *Etcd) Runner(r runtime.Runtime) (runner.Runner, error) {
+./internal/app/machined/pkg/system/services/etcd.go:186:		ProcessArgs: append([]string{"/usr/local/bin/etcd"}, e.args...),
+./internal/app/machined/pkg/system/services/etcd.go:190:		{Type: "bind", Destination: constants.EtcdPKIPath, Source: constants.EtcdPKIPath, Options: []string{"rbind", "ro"}},
+./internal/app/machined/pkg/system/services/etcd.go:191:		{Type: "bind", Destination: constants.EtcdDataPath, Source: constants.EtcdDataPath, Options: []string{"rbind", "rw"}},
+./internal/app/machined/pkg/system/services/etcd.go:198:		env = append(env, "ETCD_UNSUPPORTED_ARCH="+goruntime.GOARCH)
+./internal/app/machined/pkg/system/services/etcd.go:201:	env = append(env, "ETCD_CIPHER_SUITES=TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305") //nolint:lll
+./internal/app/machined/pkg/system/services/etcd.go:212:				log.Printf("successfully promoted etcd member")
+./internal/app/machined/pkg/system/services/etcd.go:224:		runner.WithCgroupPath(constants.CgroupEtcd),
+./internal/app/machined/pkg/system/services/etcd.go:225:		runner.WithSelinuxLabel(constants.SELinuxLabelEtcd),
+./internal/app/machined/pkg/system/services/etcd.go:230:			oci.WithUser(fmt.Sprintf("%d:%d", constants.EtcdUserID, constants.EtcdUserID)),
+./internal/app/machined/pkg/system/services/etcd.go:239:func (e *Etcd) HealthFunc(runtime.Runtime) health.Check {
+./internal/app/machined/pkg/system/services/etcd.go:244:			e.client, err = etcd.NewLocalClient(ctx)
+./internal/app/machined/pkg/system/services/etcd.go:255:func (e *Etcd) HealthSettings(runtime.Runtime) *health.Settings {
+./internal/app/machined/pkg/system/services/etcd.go:265:		resource.NewMetadata(etcdresource.NamespaceName, etcdresource.PKIStatusType, etcdresource.PKIID, resource.VersionUndefined),
+./internal/app/machined/pkg/system/services/etcd.go:273:	client, err := etcd.NewClientFromControlPlaneIPs(ctx, r.State().V1Alpha2().Resources())
+./internal/app/machined/pkg/system/services/etcd.go:285:		return nil, 0, fmt.Errorf("error getting etcd member list: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:289:		// addMember only gets called when the etcd data directory is empty, so the node is about to join the etcd cluster
+./internal/app/machined/pkg/system/services/etcd.go:307:		return nil, 0, fmt.Errorf("error getting second etcd member list: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:319:	err = retry.Constant(constants.EtcdJoinTimeout,
+./internal/app/machined/pkg/system/services/etcd.go:329:			log.Printf("etcd is waiting to join the cluster, if this node is the first node in the cluster, please run `talosctl bootstrap` against one of the following IPs:")
+./internal/app/machined/pkg/system/services/etcd.go:331:			// we "allow" a failure here since we want to fallthrough and attempt to add the etcd member regardless of
+./internal/app/machined/pkg/system/services/etcd.go:336:				resource.NewMetadata(network.NamespaceName, network.NodeAddressType, network.FilteredNodeAddressID(network.NodeAddressCurrentID, k8s.NodeAddressFilterNoK8s), resource.VersionUndefined),
+./internal/app/machined/pkg/system/services/etcd.go:385:func (e *Etcd) argsForInit(ctx context.Context, r runtime.Runtime, spec *etcdresource.SpecSpec) error {
+./internal/app/machined/pkg/system/services/etcd.go:394:		"data-dir":                           {constants.EtcdDataPath},
+./internal/app/machined/pkg/system/services/etcd.go:395:		"listen-peer-urls":                   {formatEtcdURLs(spec.ListenPeerAddresses, constants.EtcdPeerPort)},
+./internal/app/machined/pkg/system/services/etcd.go:396:		"listen-client-urls":                 {formatEtcdURLs(spec.ListenClientAddresses, constants.EtcdClientPort)},
+./internal/app/machined/pkg/system/services/etcd.go:398:		"cert-file":                          {constants.EtcdCert},
+./internal/app/machined/pkg/system/services/etcd.go:399:		"key-file":                           {constants.EtcdKey},
+./internal/app/machined/pkg/system/services/etcd.go:400:		"trusted-ca-file":                    {constants.EtcdCACert},
+./internal/app/machined/pkg/system/services/etcd.go:402:		"peer-cert-file":                     {constants.EtcdPeerCert},
+./internal/app/machined/pkg/system/services/etcd.go:403:		"peer-key-file":                      {constants.EtcdPeerKey},
+./internal/app/machined/pkg/system/services/etcd.go:404:		"peer-trusted-ca-file":               {constants.EtcdCACert},
+./internal/app/machined/pkg/system/services/etcd.go:424:		ok, err := IsDirEmpty(constants.EtcdDataPath)
+./internal/app/machined/pkg/system/services/etcd.go:430:			initialCluster := formatClusterURLs(spec.Name, getEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort))
+./internal/app/machined/pkg/system/services/etcd.go:435:				initialCluster, e.learnerMemberID, err = buildInitialCluster(ctx, r, spec.Name, getEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort))
+./internal/app/machined/pkg/system/services/etcd.go:449:			argsbuilder.Value{formatEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort)},
+./internal/app/machined/pkg/system/services/etcd.go:455:			argsbuilder.Value{formatEtcdURLs(spec.AdvertisedAddresses, constants.EtcdClientPort)},
+./internal/app/machined/pkg/system/services/etcd.go:469:func (e *Etcd) argsForControlPlane(ctx context.Context, r runtime.Runtime, spec *etcdresource.SpecSpec) error {
+./internal/app/machined/pkg/system/services/etcd.go:474:		"data-dir":                           {constants.EtcdDataPath},
+./internal/app/machined/pkg/system/services/etcd.go:475:		"listen-peer-urls":                   {formatEtcdURLs(spec.ListenPeerAddresses, constants.EtcdPeerPort)},
+./internal/app/machined/pkg/system/services/etcd.go:476:		"listen-client-urls":                 {formatEtcdURLs(spec.ListenClientAddresses, constants.EtcdClientPort)},
+./internal/app/machined/pkg/system/services/etcd.go:478:		"cert-file":                          {constants.EtcdCert},
+./internal/app/machined/pkg/system/services/etcd.go:479:		"key-file":                           {constants.EtcdKey},
+./internal/app/machined/pkg/system/services/etcd.go:480:		"trusted-ca-file":                    {constants.EtcdCACert},
+./internal/app/machined/pkg/system/services/etcd.go:482:		"peer-cert-file":                     {constants.EtcdPeerCert},
+./internal/app/machined/pkg/system/services/etcd.go:483:		"peer-key-file":                      {constants.EtcdPeerKey},
+./internal/app/machined/pkg/system/services/etcd.go:484:		"peer-trusted-ca-file":               {constants.EtcdCACert},
+./internal/app/machined/pkg/system/services/etcd.go:503:	ok, err := IsDirEmpty(constants.EtcdDataPath)
+./internal/app/machined/pkg/system/services/etcd.go:523:				initialCluster = formatClusterURLs(spec.Name, getEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort))
+./internal/app/machined/pkg/system/services/etcd.go:525:				initialCluster, e.learnerMemberID, err = buildInitialCluster(ctx, r, spec.Name, getEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort))
+./internal/app/machined/pkg/system/services/etcd.go:527:					return fmt.Errorf("failed to build initial etcd cluster: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:537:			argsbuilder.Value{formatEtcdURLs(spec.AdvertisedAddresses, constants.EtcdClientPort)},
+./internal/app/machined/pkg/system/services/etcd.go:543:			argsbuilder.Value{formatEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort)},
+./internal/app/machined/pkg/system/services/etcd.go:556:// recoverFromSnapshot recovers etcd data directory from the snapshot uploaded previously.
+./internal/app/machined/pkg/system/services/etcd.go:557:func (e *Etcd) recoverFromSnapshot(spec *etcdresource.SpecSpec) error {
+./internal/app/machined/pkg/system/services/etcd.go:560:	status, err := manager.Status(constants.EtcdRecoverySnapshotPath)
+./internal/app/machined/pkg/system/services/etcd.go:565:	log.Printf("recovering etcd from snapshot: hash %08x, revision %d, total keys %d, total size %d\n",
+./internal/app/machined/pkg/system/services/etcd.go:569:		SnapshotPath: constants.EtcdRecoverySnapshotPath,
+./internal/app/machined/pkg/system/services/etcd.go:572:		OutputDataDir: constants.EtcdDataPath,
+./internal/app/machined/pkg/system/services/etcd.go:574:		PeerURLs: getEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort),
+./internal/app/machined/pkg/system/services/etcd.go:576:		InitialCluster: formatClusterURLs(spec.Name, getEtcdURLs(spec.AdvertisedAddresses, constants.EtcdPeerPort)),
+./internal/app/machined/pkg/system/services/etcd.go:583:	if err = os.Remove(constants.EtcdRecoverySnapshotPath); err != nil {
+./internal/app/machined/pkg/system/services/etcd.go:587:	return filetree.ChownRecursive(constants.EtcdDataPath, constants.EtcdUserID, constants.EtcdUserID)
+./internal/app/machined/pkg/system/services/etcd.go:605:		endpoints, err := etcd.GetEndpoints(ctx, r.State().V1Alpha2().Resources())
+./internal/app/machined/pkg/system/services/etcd.go:636:	client, err := etcd.NewClient(ctx, []string{endpoint})
+./internal/app/machined/pkg/system/services/etcd.go:665:// BootstrapEtcd bootstraps the etcd cluster.
+./internal/app/machined/pkg/system/services/etcd.go:667:// Current instance of etcd (not joined yet) is stopped, and new instance is started in bootstrap mode.
+./internal/app/machined/pkg/system/services/etcd.go:668:func BootstrapEtcd(ctx context.Context, r runtime.Runtime, req *machineapi.BootstrapRequest) error {
+./internal/app/machined/pkg/system/services/etcd.go:669:	if err := system.Services(r).Stop(ctx, "etcd"); err != nil {
+./internal/app/machined/pkg/system/services/etcd.go:670:		return fmt.Errorf("failed to stop etcd: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:676:		if svc.AsProto().GetId() == "etcd" {
+./internal/app/machined/pkg/system/services/etcd.go:683:	if entries, _ := os.ReadDir(constants.EtcdDataPath); len(entries) > 0 { //nolint:errcheck
+./internal/app/machined/pkg/system/services/etcd.go:684:		return errors.New("etcd data directory is not empty")
+./internal/app/machined/pkg/system/services/etcd.go:687:	svc := &Etcd{
+./internal/app/machined/pkg/system/services/etcd.go:689:		RecoverFromSnapshot:  req.RecoverEtcd,
+./internal/app/machined/pkg/system/services/etcd.go:700:		return fmt.Errorf("error starting etcd in bootstrap mode: %w", err)
+./internal/app/machined/pkg/system/services/etcd.go:706:func formatEtcdURL(addr netip.Addr, port int) string {
+./internal/app/machined/pkg/system/services/etcd.go:710:func getEtcdURLs(addrs []netip.Addr, port int) []string {
+./internal/app/machined/pkg/system/services/etcd.go:712:		return formatEtcdURL(addr, port)
+./internal/app/machined/pkg/system/services/etcd.go:716:func formatEtcdURLs(addrs []netip.Addr, port int) string {
+./internal/app/machined/pkg/system/services/etcd.go:717:	return strings.Join(getEtcdURLs(addrs, port), ",")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:18:	"go.etcd.io/etcd/client/v3/concurrency"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:21:	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:27:	crires "github.com/chubo-dev/chubo/pkg/machinery/resources/cri"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:30:// MinimumEtcdUpgradeLeaseLockSeconds indicates the minimum number of seconds for which we open a lease lock for upgrading Etcd nodes.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:34:const MinimumEtcdUpgradeLeaseLockSeconds = 60
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:57:	if shouldRunEtcdUpgradePrechecks(s.Controller.Runtime().Config().Machine().Type(), in.GetForce(), serviceIDs) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:58:		etcdClient, err := etcd.NewClientFromControlPlaneIPs(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:60:			return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:64:		unlocker, err := tryLockUpgradeMutex(ctx, etcdClient)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:72:		if err = etcdClient.ValidateForUpgrade(ctx, s.Controller.Runtime().Config()); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:73:			return nil, fmt.Errorf("error validating etcd for upgrade: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:76:		log.Printf("skipping etcd upgrade validation: etcd service is not registered")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:133:func shouldRunEtcdUpgradePrechecks(machineType machinetype.Type, force bool, serviceIDs []string) bool {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:142:	return slices.Contains(serviceIDs, "etcd")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:145:func tryLockUpgradeMutex(ctx context.Context, etcdClient *etcd.Client) (unlock func(), err error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:146:	sess, err := concurrency.NewSession(etcdClient.Client,
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:148:		concurrency.WithTTL(MinimumEtcdUpgradeLeaseLockSeconds),
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:151:		return nil, fmt.Errorf("error establishing etcd concurrency session: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:154:	mu := concurrency.NewMutex(sess, constants.EtcdTalosEtcdUpgradeMutex)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:157:		return nil, fmt.Errorf("error trying to lock etcd upgrade mutex: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:160:	log.Printf("etcd upgrade mutex locked with session ID %08x", sess.Lease())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:167:			log.Printf("error unlocking etcd upgrade mutex: %v", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:171:			log.Printf("error closing etcd upgrade mutex session: %v", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_upgrade_default.go:174:		log.Printf("etcd upgrade mutex unlocked and session closed")
+./pkg/cluster/cluster.go:19:	"k8s.io/client-go/kubernetes"
+./pkg/cluster/cluster.go:20:	"k8s.io/client-go/rest"
+./pkg/cluster/cluster.go:22:	k8s "github.com/chubo-dev/chubo/pkg/kubernetes"
+./pkg/cluster/cluster.go:38:// K8sProvider builds Kubernetes client to access Talos cluster.
+./pkg/cluster/cluster.go:39:type K8sProvider interface {
+./pkg/cluster/cluster.go:40:	Kubeconfig(ctx context.Context) ([]byte, error)
+./pkg/cluster/cluster.go:41:	K8sRestConfig(ctx context.Context) (*rest.Config, error)
+./pkg/cluster/cluster.go:42:	K8sClient(ctx context.Context) (*kubernetes.Clientset, error)
+./pkg/cluster/cluster.go:43:	K8sHelper(ctx context.Context) (*k8s.Client, error)
+./pkg/cluster/cluster.go:44:	K8sClose() error
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:22:	"go.etcd.io/etcd/api/v3/etcdserverpb"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:23:	"go.etcd.io/etcd/api/v3/v3rpc/rpctypes"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:24:	clientv3 "go.etcd.io/etcd/client/v3"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:29:	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:35:	etcdresource "github.com/chubo-dev/chubo/pkg/machinery/resources/etcd"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:38:// EtcdMemberList implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:39:func (s *Server) EtcdMemberList(ctx context.Context, in *machine.EtcdMemberListRequest) (*machine.EtcdMemberListResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:40:	if err := s.checkControlplaneService("member list", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:45:		client *etcd.Client
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:50:		client, err = etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:52:		client, err = etcd.NewClientFromControlPlaneIPs(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:69:	return &machine.EtcdMemberListResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:70:		Messages: []*machine.EtcdMembers{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:72:				LegacyMembers: xslices.Map(resp.Members, (*etcdserverpb.Member).GetName),
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:73:				Members: xslices.Map(resp.Members, func(member *etcdserverpb.Member) *machine.EtcdMember {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:74:					return &machine.EtcdMember{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:87:// EtcdRemoveMemberByID implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:88:func (s *Server) EtcdRemoveMemberByID(ctx context.Context, in *machine.EtcdRemoveMemberByIDRequest) (*machine.EtcdRemoveMemberByIDResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:89:	if err := s.checkControlplaneService("etcd remove member", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:93:	client, err := etcd.NewClientFromControlPlaneIPs(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:95:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:110:	return &machine.EtcdRemoveMemberByIDResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:111:		Messages: []*machine.EtcdRemoveMemberByID{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:117:// EtcdLeaveCluster implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:118:func (s *Server) EtcdLeaveCluster(ctx context.Context, in *machine.EtcdLeaveClusterRequest) (*machine.EtcdLeaveClusterResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:119:	if err := s.checkControlplaneService("etcd leave", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:123:	client, err := etcd.NewClientFromControlPlaneIPs(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:125:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:136:	return &machine.EtcdLeaveClusterResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:137:		Messages: []*machine.EtcdLeaveCluster{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:143:// EtcdForfeitLeadership implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:144:func (s *Server) EtcdForfeitLeadership(ctx context.Context, in *machine.EtcdForfeitLeadershipRequest) (*machine.EtcdForfeitLeadershipResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:145:	if err := s.checkControlplaneService("etcd forfeit leadership", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:149:	client, err := etcd.NewClientFromControlPlaneIPs(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:151:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:158:	memberID, err := etcd.GetLocalMemberID(ctx, s.Controller.Runtime().State().V1Alpha2().Resources())
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:163:	leader, err := client.ForfeitLeadership(ctx, etcdresource.FormatMemberID(memberID))
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:168:	return &machine.EtcdForfeitLeadershipResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:169:		Messages: []*machine.EtcdForfeitLeadership{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:177:// EtcdSnapshot implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:178:func (s *Server) EtcdSnapshot(in *machine.EtcdSnapshotRequest, srv machine.MachineService_EtcdSnapshotServer) error {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:179:	if err := s.checkControlplaneService("etcd snapshot", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:186:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:188:		return fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:196:		return fmt.Errorf("failed reading etcd snapshot: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:214:// EtcdRecover implements the machine.MachineServer interface.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:217:func (s *Server) EtcdRecover(srv machine.MachineService_EtcdRecoverServer) error {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:218:	if _, err := os.Stat(filepath.Dir(constants.EtcdRecoverySnapshotPath)); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:220:			return status.Error(codes.FailedPrecondition, "etcd service is not ready for recovery yet")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:226:	if err := s.checkControlplaneService("etcd recover", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:230:	snapshot, err := os.OpenFile(constants.EtcdRecoverySnapshotPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o700)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:232:		return fmt.Errorf("error creating etcd recovery snapshot: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:273:	return srv.SendAndClose(&machine.EtcdRecoverResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:274:		Messages: []*machine.EtcdRecover{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:280:func mapAlarms(alarms []*etcdserverpb.AlarmMember) []*machine.EtcdMemberAlarm {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:281:	mapAlarmType := func(alarmType etcdserverpb.AlarmType) machine.EtcdMemberAlarm_AlarmType {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:283:		case etcdserverpb.AlarmType_NOSPACE:
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:284:			return machine.EtcdMemberAlarm_NOSPACE
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:285:		case etcdserverpb.AlarmType_CORRUPT:
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:286:			return machine.EtcdMemberAlarm_CORRUPT
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:287:		case etcdserverpb.AlarmType_NONE:
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:288:			return machine.EtcdMemberAlarm_NONE
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:290:			return machine.EtcdMemberAlarm_NONE
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:294:	return xslices.Map(alarms, func(alarm *etcdserverpb.AlarmMember) *machine.EtcdMemberAlarm {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:295:		return &machine.EtcdMemberAlarm{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:302:// EtcdAlarmList lists etcd alarms for the current node.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:304:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:305:func (s *Server) EtcdAlarmList(ctx context.Context, in *emptypb.Empty) (*machine.EtcdAlarmListResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:306:	if err := s.checkControlplaneService("etcd alarm list", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:310:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:312:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:320:		return nil, fmt.Errorf("failed to list etcd alarms: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:323:	return &machine.EtcdAlarmListResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:324:		Messages: []*machine.EtcdAlarm{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:332:// EtcdAlarmDisarm disarms etcd alarms for the current node.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:334:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:335:func (s *Server) EtcdAlarmDisarm(ctx context.Context, in *emptypb.Empty) (*machine.EtcdAlarmDisarmResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:336:	if err := s.checkControlplaneService("etcd alarm list", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:340:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:342:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:350:		return nil, fmt.Errorf("failed to disarm etcd alarm: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:353:	return &machine.EtcdAlarmDisarmResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:354:		Messages: []*machine.EtcdAlarmDisarm{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:362:// EtcdDefragment defragments etcd data directory for the current node.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:367:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:368:func (s *Server) EtcdDefragment(ctx context.Context, in *emptypb.Empty) (*machine.EtcdDefragmentResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:369:	if err := s.checkControlplaneService("etcd defragment", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:373:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:375:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:381:	_, err = client.Defragment(ctx, nethelpers.JoinHostPort("localhost", constants.EtcdClientPort))
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:383:		return nil, fmt.Errorf("failed to defragment etcd: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:386:	return &machine.EtcdDefragmentResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:387:		Messages: []*machine.EtcdDefragment{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:393:// EtcdStatus returns etcd status for the member of the cluster.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:395:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:396:func (s *Server) EtcdStatus(ctx context.Context, in *emptypb.Empty) (*machine.EtcdStatusResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:397:	if err := s.checkControlplaneService("etcd status", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:401:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:403:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:409:	resp, err := client.Status(ctx, nethelpers.JoinHostPort("localhost", constants.EtcdClientPort))
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:411:		return nil, fmt.Errorf("failed to query etcd status: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:415:	// NOTE: this field is only filled on >3.6.0, thus we need a workaround for previous ETCD versions
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:426:	return &machine.EtcdStatusResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:427:		Messages: []*machine.EtcdStatus{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:429:				MemberStatus: &machine.EtcdMemberStatus{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:447:// EtcdDowngradeCancel cancels etcd cluster downgrade that is in progress.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:449:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:450:func (s *Server) EtcdDowngradeCancel(ctx context.Context, _ *emptypb.Empty) (*machine.EtcdDowngradeCancelResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:451:	if err := s.checkControlplaneService("etcd downgrade cancel", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:455:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:457:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:465:		return nil, fmt.Errorf("failed to query etcd status: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:468:	return &machine.EtcdDowngradeCancelResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:469:		Messages: []*machine.EtcdDowngradeCancel{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:471:				ClusterDowngrade: &machine.EtcdClusterDowngrade{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:479:// EtcdDowngradeEnable enables etcd cluster downgrade to a specific version.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:481:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:484:func (s *Server) EtcdDowngradeEnable(ctx context.Context, in *machine.EtcdDowngradeEnableRequest) (*machine.EtcdDowngradeEnableResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:485:	if err := s.checkControlplaneService("etcd downgrade cancel", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:493:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:495:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:503:		return nil, fmt.Errorf("failed to query etcd status: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:506:	return &machine.EtcdDowngradeEnableResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:507:		Messages: []*machine.EtcdDowngradeEnable{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:509:				ClusterDowngrade: &machine.EtcdClusterDowngrade{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:517:// EtcdDowngradeValidate validates etcd cluster for downgrade to a specific version.
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:519:// This method is available only on control plane nodes (which run etcd).
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:522:func (s *Server) EtcdDowngradeValidate(ctx context.Context, in *machine.EtcdDowngradeValidateRequest) (*machine.EtcdDowngradeValidateResponse, error) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:523:	if err := s.checkControlplaneService("etcd downgrade cancel", "etcd"); err != nil {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:531:	client, err := etcd.NewLocalClient(ctx)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:533:		return nil, fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:541:		return nil, fmt.Errorf("failed to query etcd status: %w", err)
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:544:	return &machine.EtcdDowngradeValidateResponse{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:545:		Messages: []*machine.EtcdDowngradeValidate{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:547:				ClusterDowngrade: &machine.EtcdClusterDowngrade{
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:555:var minEtcdDowngradeVersion = semver.Version{Major: 3, Minor: 5}
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:559:		return status.Error(codes.InvalidArgument, "version is required for etcd downgrade")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:578:	if semverVersion.LT(minEtcdDowngradeVersion) {
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_etcd_default.go:579:		return status.Error(codes.InvalidArgument, "etcd downgrade is only supported to 3.5 and later versions")
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans.go:20:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans.go:53:			ID:        optional.Some(network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s)),
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans.go:90:			return fmt.Errorf("error getting root k8s secrets: %w", err)
+./internal/app/machined/pkg/controllers/secrets/api_cert_sans.go:107:			resource.NewMetadata(network.NamespaceName, network.NodeAddressType, network.FilteredNodeAddressID(network.NodeAddressAccumulativeID, k8s.NodeAddressFilterNoK8s), resource.VersionUndefined))
+./internal/app/machined/pkg/runtime/v1alpha1/node_name_default.go:16:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/runtime/v1alpha1/node_name_default.go:21:	nodenameResource, err := safe.ReaderGet[*k8s.Nodename](
+./internal/app/machined/pkg/runtime/v1alpha1/node_name_default.go:24:		resource.NewMetadata(k8s.NamespaceName, k8s.NodenameType, k8s.NodenameID, resource.VersionUndefined),
+./pkg/cluster/cluster_chubo.go:35:// K8sProvider is intentionally empty in chubo builds.
+./pkg/cluster/cluster_chubo.go:37:// Chubo runtime flows avoid Kubernetes client integrations.
+./pkg/cluster/cluster_chubo.go:38:type K8sProvider interface{}
+./pkg/cluster/kubelet.go:12:	k8s "k8s.io/client-go/kubernetes"
+./pkg/cluster/kubelet.go:14:	"github.com/chubo-dev/chubo/pkg/kubernetes"
+./pkg/cluster/kubelet.go:17:// KubernetesFromKubeletClient provides Kubernetes client built from local kubelet config.
+./pkg/cluster/kubelet.go:18:type KubernetesFromKubeletClient struct {
+./pkg/cluster/kubelet.go:19:	KubeHelper *kubernetes.Client
+./pkg/cluster/kubelet.go:20:	clientset  *k8s.Clientset
+./pkg/cluster/kubelet.go:23:// K8sClient builds Kubernetes client from local kubelet config.
+./pkg/cluster/kubelet.go:25:// Kubernetes client instance is cached.
+./pkg/cluster/kubelet.go:26:func (k *KubernetesFromKubeletClient) K8sClient(ctx context.Context) (*k8s.Clientset, error) {
+./pkg/cluster/kubelet.go:32:	if k.KubeHelper, err = kubernetes.NewClientFromKubeletKubeconfig(); err != nil {
+./pkg/cluster/kubelet.go:36:	k.clientset = k.KubeHelper.Clientset
+./pkg/cluster/kubelet.go:41:// K8sHelper returns wrapper around K8sClient.
+./pkg/cluster/kubelet.go:42:func (k *KubernetesFromKubeletClient) K8sHelper(ctx context.Context) (*kubernetes.Client, error) {
+./pkg/cluster/kubelet.go:43:	if k.KubeHelper != nil {
+./pkg/cluster/kubelet.go:44:		return k.KubeHelper, nil
+./pkg/cluster/kubelet.go:47:	_, err := k.K8sClient(ctx)
+./pkg/cluster/kubelet.go:52:	return k.KubeHelper, nil
+./pkg/cluster/kubelet.go:55:// K8sClose closes Kubernetes client.
+./pkg/cluster/kubelet.go:56:func (k *KubernetesFromKubeletClient) K8sClose() error {
+./pkg/cluster/kubelet.go:57:	if k.KubeHelper == nil {
+./pkg/cluster/kubelet.go:61:	return k.KubeHelper.Close()
+./internal/app/machined/pkg/controllers/secrets/kubernetes_chubo.go:11:// KubernetesCertificateValidityDuration is kept for chubo build compatibility.
+./internal/app/machined/pkg/controllers/secrets/kubernetes_chubo.go:12:const KubernetesCertificateValidityDuration = constants.KubernetesDefaultCertificateValidityDuration
+./pkg/machinery/config/bundle/bundle_test.go:30:				KubeVersion: "1.222.2",
+./pkg/machinery/config/config_schema_test.go:69:				setNestedField(t, rawConfig, "100y", "cluster", "adminKubeconfig", "certLifetime")
+./pkg/machinery/config/config_schema_test.go:136:	input, err := generate.NewInput("test", "https://doesntmatter:6443", constants.DefaultKubernetesVersion)
+./internal/app/machined/pkg/system/services/etcd_chubo.go:17:// BootstrapEtcd is a no-op in chubo mode, where etcd is not part of the runtime.
+./internal/app/machined/pkg/system/services/etcd_chubo.go:18:func BootstrapEtcd(context.Context, runtime.Runtime, *machineapi.BootstrapRequest) error {
+./internal/app/machined/pkg/system/services/etcd_chubo.go:19:	log.Printf("bootstrap: etcd bootstrap skipped in chubo mode")
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:19:	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/cri"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:20:	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/etcd"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:23:	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/k8s"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:24:	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubeaccess"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:25:	"github.com/chubo-dev/chubo/internal/app/machined/pkg/controllers/kubespan"
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:78:		&cluster.KubernetesPullController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:79:		&cluster.KubernetesPushController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:100:		&cri.ImageCacheConfigController{
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:103:		cri.NewImageGCController("containerd", false),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:104:		cri.NewImageGCController("cri", true),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:105:		&cri.RegistriesConfigController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:106:		&cri.SeccompProfileController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:107:		&cri.SeccompProfileFileController{
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:111:		&etcd.AdvertisedPeerController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:112:		etcd.NewConfigController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:113:		&etcd.PKIController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:114:		&etcd.SpecController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:115:		&etcd.MemberController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:143:		&k8s.AddressFilterController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:144:		k8s.NewControlPlaneAPIServerController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:145:		k8s.NewControlPlaneAdmissionControlController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:146:		k8s.NewControlPlaneAuditPolicyController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:147:		k8s.NewControlPlaneAuthorizationController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:148:		k8s.NewControlPlaneBootstrapManifestsController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:149:		k8s.NewControlPlaneControllerManagerController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:150:		k8s.NewControlPlaneExtraManifestsController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:151:		k8s.NewControlPlaneSchedulerController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:152:		&k8s.ControlPlaneStaticPodController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:153:		&k8s.EndpointController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:154:		&k8s.ExtraManifestController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:155:		k8s.NewKubeletConfigController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:156:		&k8s.KubeletServiceController{
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:160:		&k8s.KubeletSpecController{
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:163:		&k8s.KubeletStaticPodController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:164:		k8s.NewKubePrismEndpointsController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:165:		k8s.NewKubePrismConfigController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:166:		&k8s.KubePrismController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:167:		&k8s.ManifestApplyController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:168:		&k8s.ManifestController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:169:		k8s.NewNodeIPConfigController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:170:		&k8s.NodeIPController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:171:		&k8s.NodeAnnotationSpecController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:172:		&k8s.NodeApplyController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:173:		&k8s.NodeCordonedSpecController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:174:		&k8s.NodeLabelSpecController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:175:		&k8s.NodeStatusController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:176:		&k8s.NodeTaintSpecController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:177:		&k8s.NodenameController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:178:		&k8s.RenderConfigsStaticPodController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:179:		&k8s.RenderSecretsStaticPodController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:180:		&k8s.StaticEndpointController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:181:		&k8s.StaticPodConfigController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:182:		&k8s.StaticPodServerController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:183:		kubeaccess.NewConfigController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:184:		&kubeaccess.CRDController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:185:		&kubeaccess.EndpointController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:186:		kubespan.NewConfigController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:187:		&kubespan.EndpointController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:188:		&kubespan.IdentityController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:189:		&kubespan.ManagerController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:190:		&kubespan.PeerSpecController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:362:		&secrets.EtcdController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:363:		secrets.NewKubeletController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:364:		&secrets.KubernetesCertSANsController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:365:		&secrets.KubernetesDynamicCertsController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:366:		&secrets.KubernetesController{},
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:370:		secrets.NewRootEtcdController(),
+./internal/app/machined/pkg/runtime/v1alpha2/controllers_default.go:371:		secrets.NewRootKubernetesController(),
+./pkg/conditions/kubeconfig_chubo.go:18:type kubeconfig string
+./pkg/conditions/kubeconfig_chubo.go:20:func (filename kubeconfig) Wait(ctx context.Context) error {
+./pkg/conditions/kubeconfig_chubo.go:42:func (filename kubeconfig) String() string {
+./pkg/conditions/kubeconfig_chubo.go:43:	return fmt.Sprintf("kubeconfig %q to be ready", string(filename))
+./pkg/conditions/kubeconfig_chubo.go:46:// WaitForKubeconfigReady is a condition that will wait for the kubeconfig to be ready.
+./pkg/conditions/kubeconfig_chubo.go:47:func WaitForKubeconfigReady(filename string) Condition {
+./pkg/conditions/kubeconfig_chubo.go:48:	return kubeconfig(filename)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:21:	clientv3 "go.etcd.io/etcd/client/v3"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:22:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:28:	"github.com/chubo-dev/chubo/internal/pkg/cri"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:29:	"github.com/chubo-dev/chubo/internal/pkg/etcd"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:31:	"github.com/chubo-dev/chubo/pkg/kubernetes"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:33:	"github.com/chubo-dev/chubo/pkg/machinery/resources/k8s"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:37:// k8s.io namespace.
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:41:		if _, err = os.Stat("/var/lib/kubelet/pki/kubelet-client-current.pem"); err != nil {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:61:		var kubeHelper *kubernetes.Client
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:63:		if kubeHelper, err = kubernetes.NewClientFromKubeletKubeconfig(); err != nil {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:67:		defer kubeHelper.Close() //nolint:errcheck
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:69:		return kubeHelper.Drain(ctx, nodename)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:81:		k8s.NewNodeStatus(k8s.NamespaceName, nodename).Metadata(),
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:87:			nodeStatus, ok := r.(*k8s.NodeStatus)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:99:// LeaveEtcd represents the task for removing a control plane node from etcd.
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:102:func LeaveEtcd(runtime.Sequence, any) (runtime.TaskExecutionFunc, string) {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:104:		_, err = os.Stat(filepath.Join(constants.EtcdDataPath, "/member"))
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:113:		etcdID := (&services.Etcd{}).ID(r)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:117:		shouldLeaveEtcd := false
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:120:			if service.AsProto().Id != etcdID {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:130:				shouldLeaveEtcd = true
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:136:		if !shouldLeaveEtcd {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:140:		client, err := etcd.NewClientFromControlPlaneIPs(ctx, r.State().V1Alpha2().Resources())
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:142:			return fmt.Errorf("failed to create etcd client: %w", err)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:155:	}, "leaveEtcd"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:160:	return stopAndRemoveAllPods(cri.StopAndRemove), "removeAllPods"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:165:	return stopAndRemoveAllPods(cri.StopOnly), "stopAllPods"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:168:func waitForKubeletLifecycleFinalizers(ctx context.Context, logger *log.Logger, r runtime.Runtime) error {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:169:	logger.Printf("waiting for kubelet lifecycle finalizers")
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:174:	lifecycle := resource.NewMetadata(k8s.NamespaceName, k8s.KubeletLifecycleType, k8s.KubeletLifecycleID, resource.VersionUndefined)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:195:func stopAndRemoveAllPods(stopAction cri.StopAction) runtime.TaskExecutionFunc {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:197:		if err = waitForKubeletLifecycleFinalizers(ctx, logger, r); err != nil {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:198:			logger.Printf("failed waiting for kubelet lifecycle finalizers: %s", err)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:201:		logger.Printf("shutting down kubelet gracefully")
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:210:		if err = system.Services(nil).Stop(ctx, "kubelet"); err != nil {
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:214:		// Check that the CRI is running and the socket is available, if not, skip the rest.
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:219:		client, err := cri.NewClient("unix://"+constants.CRIContainerdAddress, 10*time.Second)
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks_k8s_default.go:232:		// CNI, preventing the CRI from cleaning up the pod's networking.
+./pkg/provision/access/adapter.go:18:	cluster.KubernetesClient
+./pkg/provision/access/adapter.go:73:		KubernetesClient: cluster.KubernetesClient{
+./pkg/provision/access/adapter.go:75:			ForceEndpoint:  options.KubernetesEndpoint,
+./pkg/machinery/config/generate/secrets/validate_test.go:31:	* certs.etcd is invalid: failed to parse PEM block
+./pkg/machinery/config/generate/secrets/validate_test.go:32:	* certs.k8saggregator is required
+./pkg/machinery/config/generate/secrets/pki_chubo.go:11:// In the `chubo` build variant, Kubernetes/etcd PKI is intentionally omitted.
+./pkg/machinery/config/generate/secrets/pki_chubo.go:12:func (bundle *Bundle) populateKubernetesEtcd(_ *config.VersionContract) error {
+./pkg/machinery/config/generate/secrets/pki_chubo.go:16:func (bundle *Bundle) validateKubernetesEtcdCerts() error {
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved_chubo.go:18:// KubeletCSRNotApprovedCheck is disabled in chubo mode.
+./internal/app/machined/pkg/controllers/runtime/internal/diagnostics/kubelet_csr_not_approved_chubo.go:19:func KubeletCSRNotApprovedCheck(context.Context, controller.Reader, *zap.Logger) (*runtime.DiagnosticSpec, error) {
+./pkg/machinery/config/generate/secrets/pki_default.go:18:// populateKubernetesEtcd fills Kubernetes/etcd PKI into the secrets bundle.
+./pkg/machinery/config/generate/secrets/pki_default.go:21:// Kubernetes/etcd PKI entirely.
+./pkg/machinery/config/generate/secrets/pki_default.go:22:func (bundle *Bundle) populateKubernetesEtcd(versionContract *config.VersionContract) error {
+./pkg/machinery/config/generate/secrets/pki_default.go:23:	if bundle.Certs.Etcd == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:24:		etcd, err := NewEtcdCA(bundle.Clock.Now(), versionContract)
+./pkg/machinery/config/generate/secrets/pki_default.go:29:		bundle.Certs.Etcd = &x509.PEMEncodedCertificateAndKey{
+./pkg/machinery/config/generate/secrets/pki_default.go:30:			Crt: etcd.CrtPEM,
+./pkg/machinery/config/generate/secrets/pki_default.go:31:			Key: etcd.KeyPEM,
+./pkg/machinery/config/generate/secrets/pki_default.go:35:	if bundle.Certs.K8s == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:36:		kubernetesCA, err := NewKubernetesCA(bundle.Clock.Now(), versionContract)
+./pkg/machinery/config/generate/secrets/pki_default.go:41:		bundle.Certs.K8s = &x509.PEMEncodedCertificateAndKey{
+./pkg/machinery/config/generate/secrets/pki_default.go:42:			Crt: kubernetesCA.CrtPEM,
+./pkg/machinery/config/generate/secrets/pki_default.go:43:			Key: kubernetesCA.KeyPEM,
+./pkg/machinery/config/generate/secrets/pki_default.go:47:	if bundle.Certs.K8sAggregator == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:53:		bundle.Certs.K8sAggregator = &x509.PEMEncodedCertificateAndKey{
+./pkg/machinery/config/generate/secrets/pki_default.go:59:	if bundle.Certs.K8sServiceAccount == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:66:			bundle.Certs.K8sServiceAccount = &x509.PEMEncodedKey{
+./pkg/machinery/config/generate/secrets/pki_default.go:75:			bundle.Certs.K8sServiceAccount = &x509.PEMEncodedKey{
+./pkg/machinery/config/generate/secrets/pki_default.go:84:func (bundle *Bundle) validateKubernetesEtcdCerts() error {
+./pkg/machinery/config/generate/secrets/pki_default.go:87:	if bundle.Certs.Etcd == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:88:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.etcd is required"))
+./pkg/machinery/config/generate/secrets/pki_default.go:89:	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.Etcd); err != nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:90:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.etcd is invalid: %w", err))
+./pkg/machinery/config/generate/secrets/pki_default.go:93:	if bundle.Certs.K8s == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:94:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8s is required"))
+./pkg/machinery/config/generate/secrets/pki_default.go:95:	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.K8s); err != nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:96:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8s is invalid: %w", err))
+./pkg/machinery/config/generate/secrets/pki_default.go:99:	if bundle.Certs.K8sAggregator == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:100:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8saggregator is required"))
+./pkg/machinery/config/generate/secrets/pki_default.go:101:	} else if err := validatePEMEncodedCertificateAndKey(bundle.Certs.K8sAggregator); err != nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:102:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8saggregator is invalid: %w", err))
+./pkg/machinery/config/generate/secrets/pki_default.go:105:	if bundle.Certs.K8sServiceAccount == nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:106:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8sserviceaccount is required"))
+./pkg/machinery/config/generate/secrets/pki_default.go:107:	} else if _, err := bundle.Certs.K8sServiceAccount.GetKey(); err != nil {
+./pkg/machinery/config/generate/secrets/pki_default.go:108:		multiErr = multierror.Append(multiErr, fmt.Errorf("certs.k8sserviceaccount.key is invalid: %w", err))
+./pkg/machinery/config/generate/generate_test.go:92:	suite.input, err = generate.NewInput("test", "https://10.0.1.5", constants.DefaultKubernetesVersion, suite.genOptions...)
+./pkg/machinery/config/generate/generate_test.go:145:	input, err := generate.NewInput("test", "https://10.0.1.5", constants.DefaultKubernetesVersion,
+./pkg/cluster/kubernetes.go:15:	"k8s.io/client-go/kubernetes"
+./pkg/cluster/kubernetes.go:16:	"k8s.io/client-go/rest"
+./pkg/cluster/kubernetes.go:17:	"k8s.io/client-go/tools/clientcmd"
+./pkg/cluster/kubernetes.go:18:	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
+./pkg/cluster/kubernetes.go:20:	k8s "github.com/chubo-dev/chubo/pkg/kubernetes"
+./pkg/cluster/kubernetes.go:24:// KubernetesClient provides Kubernetes client built via Talos API Kubeconfig.
+./pkg/cluster/kubernetes.go:25:type KubernetesClient struct {
+./pkg/cluster/kubernetes.go:29:	// ForceEndpoint overrides default Kubernetes API endpoint.
+./pkg/cluster/kubernetes.go:32:	KubeHelper *k8s.Client
+./pkg/cluster/kubernetes.go:34:	kubeconfig []byte
+./pkg/cluster/kubernetes.go:35:	clientset  *kubernetes.Clientset
+./pkg/cluster/kubernetes.go:38:// Kubeconfig returns raw kubeconfig.
+./pkg/cluster/kubernetes.go:40:// Kubeconfig is cached.
+./pkg/cluster/kubernetes.go:41:func (k *KubernetesClient) Kubeconfig(ctx context.Context) ([]byte, error) {
+./pkg/cluster/kubernetes.go:42:	if k.kubeconfig != nil {
+./pkg/cluster/kubernetes.go:43:		return k.kubeconfig, nil
+./pkg/cluster/kubernetes.go:51:	k.kubeconfig, err = client.Kubeconfig(ctx)
+./pkg/cluster/kubernetes.go:53:	return k.kubeconfig, err
+./pkg/cluster/kubernetes.go:56:// K8sRestConfig returns *rest.Config (parsed kubeconfig).
+./pkg/cluster/kubernetes.go:57:func (k *KubernetesClient) K8sRestConfig(ctx context.Context) (*rest.Config, error) {
+./pkg/cluster/kubernetes.go:58:	kubeconfig, err := k.Kubeconfig(ctx)
+./pkg/cluster/kubernetes.go:63:	config, err := clientcmd.BuildConfigFromKubeconfigGetter("", func() (*clientcmdapi.Config, error) {
+./pkg/cluster/kubernetes.go:64:		return clientcmd.Load(kubeconfig)
+./pkg/cluster/kubernetes.go:85:// K8sClient builds Kubernetes client via Talos Kubeconfig API.
+./pkg/cluster/kubernetes.go:87:// Kubernetes client instance is cached.
+./pkg/cluster/kubernetes.go:88:func (k *KubernetesClient) K8sClient(ctx context.Context) (*kubernetes.Clientset, error) {
+./pkg/cluster/kubernetes.go:93:	config, err := k.K8sRestConfig(ctx)
+./pkg/cluster/kubernetes.go:98:	if k.KubeHelper, err = k8s.NewForConfig(config); err != nil {
+./pkg/cluster/kubernetes.go:102:	k.clientset = k.KubeHelper.Clientset
+./pkg/cluster/kubernetes.go:107:// K8sHelper returns wrapper around K8sClient.
+./pkg/cluster/kubernetes.go:108:func (k *KubernetesClient) K8sHelper(ctx context.Context) (*k8s.Client, error) {
+./pkg/cluster/kubernetes.go:109:	if k.KubeHelper != nil {
+./pkg/cluster/kubernetes.go:110:		return k.KubeHelper, nil
+./pkg/cluster/kubernetes.go:113:	_, err := k.K8sClient(ctx)
+./pkg/cluster/kubernetes.go:118:	return k.KubeHelper, nil
+./pkg/cluster/kubernetes.go:121:// K8sClose closes Kubernetes client.
+./pkg/cluster/kubernetes.go:122:func (k *KubernetesClient) K8sClose() error {
+./pkg/cluster/kubernetes.go:123:	if k.KubeHelper == nil {
+./pkg/cluster/kubernetes.go:127:	return k.KubeHelper.Close()
+./pkg/machinery/config/types/v1alpha1/v1alpha1_redact_test.go:20:	input, err := generate.NewInput("test", "https://doesntmatter:6443", constants.DefaultKubernetesVersion)
+./pkg/machinery/config/types/v1alpha1/v1alpha1_redact_test.go:37:	require.NotEmpty(t, config.ClusterConfig.EtcdConfig.RootCA.Key)
+./pkg/machinery/config/types/v1alpha1/v1alpha1_redact_test.go:51:	require.Equal(t, replacement, string(config.Cluster().Etcd().CA().Key))
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1192:			name: "KubeSpanNoDiscovery",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1202:						NetworkKubeSpan: &v1alpha1.NetworkKubeSpan{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1203:							KubeSpanEnabled: pointer.To(true),
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1215:			expectedError: "3 errors occurred:\n\t* .cluster.discovery should be enabled when .machine.network.kubespan is enabled\n" +
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1216:				"\t* .cluster.id should be set when .machine.network.kubespan is enabled\n" +
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1217:				"\t* .cluster.secret should be set when .machine.network.kubespan is enabled\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1275:			name: "EtcdMissingCa",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1291:					EtcdConfig: &v1alpha1.EtcdConfig{},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1297:			name: "EtcdConfigProvidedForWorker",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1312:					EtcdConfig: &v1alpha1.EtcdConfig{},
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1315:			expectedError: "1 error occurred:\n\t* etcd config is only allowed on control plane machines\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1318:			name: "GoodEtcdSubnet",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1334:					EtcdConfig: &v1alpha1.EtcdConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1336:						EtcdAdvertisedSubnets: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1340:						EtcdListenSubnets: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1350:			name: "BadEtcdSubnet",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1366:					EtcdConfig: &v1alpha1.EtcdConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1368:						EtcdAdvertisedSubnets: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1371:						EtcdListenSubnets: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1377:			expectedError: "2 errors occurred:\n\t* etcd advertised subnet is not valid: \"1234:\"\n\t* etcd listen subnet is not valid: \"10\"\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1380:			name: "GoodKubeletSubnet",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1388:					MachineKubelet: &v1alpha1.KubeletConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1389:						KubeletNodeIP: &v1alpha1.KubeletNodeIPConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1390:							KubeletNodeIPValidSubnets: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1409:			name: "BadKubeletSubnet",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1417:					MachineKubelet: &v1alpha1.KubeletConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1418:						KubeletNodeIP: &v1alpha1.KubeletNodeIPConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1419:							KubeletNodeIPValidSubnets: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1435:				"\t* kubelet nodeIP subnet is not valid: \"10.0.0.0.3\"\n" +
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1436:				"\t* kubelet nodeIP subnet is not valid: \"[fd00::169:254:2:53]:344\"\n" +
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1440:			name: "BadKubeletExtraConfig",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1450:					MachineKubelet: &v1alpha1.KubeletConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1451:						KubeletExtraConfig: v1alpha1.Unstructured{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1466:			expectedError: "1 error occurred:\n\t* kubelet configuration field \"port\" can't be overridden\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1564:						KubernetesTalosAPIAccessConfig: &v1alpha1.KubernetesTalosAPIAccessConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1577:			expectedError: "1 error occurred:\n\t* feature Kubernetes Talos API Access can only be enabled on control plane machines\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1591:						KubernetesTalosAPIAccessConfig: &v1alpha1.KubernetesTalosAPIAccessConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1596:								"os:etcd:backup",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1611:				"Kubernetes Talos API Access\n\t* invalid role \"invalid:role2\" in allowed roles for " +
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1612:				"Kubernetes Talos API Access\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1643:			name: "GoodKubeSpanEndpointFilters",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1652:						NetworkKubeSpan: &v1alpha1.NetworkKubeSpan{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1653:							KubeSpanEnabled: pointer.To(true),
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1654:							KubeSpanFilters: &v1alpha1.KubeSpanFilters{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1655:								KubeSpanFiltersEndpoints: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1680:			name: "BadKubeSpanEndpointFilters",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1689:						NetworkKubeSpan: &v1alpha1.NetworkKubeSpan{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1690:							KubeSpanEnabled: pointer.To(true),
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1691:							KubeSpanFilters: &v1alpha1.KubeSpanFilters{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1692:								KubeSpanFiltersEndpoints: []string{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1713:			expectedError: "2 errors occurred:\n\t* KubeSpan endpoint filer is not valid: \"10\"\n\t* KubeSpan endpoint filer is not valid: \"123::/456\"\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1716:			name: "KubeSpanSmallMTU",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1725:						NetworkKubeSpan: &v1alpha1.NetworkKubeSpan{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1726:							KubeSpanEnabled: pointer.To(true),
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1727:							KubeSpanMTU:     pointer.To(uint32(576)),
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:1744:			expectedError: "1 error occurred:\n\t* kubespan link MTU must be at least 1280\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2079:func TestKubernetesVersionFromImageRef(t *testing.T) {
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2088:			imageRef:        "ghcr.io/siderolabs/kubelet:v1.32.2",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2092:			imageRef:        "ghcr.io/siderolabs/kubelet:v1.32.2@sha256:123456",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2099:			version, err := v1alpha1.KubernetesVersionFromImageRef(test.imageRef)
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2137:			name: "old kubelet version",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2148:					MachineKubelet: &v1alpha1.KubeletConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2149:						KubeletImage: constants.KubeletImage + ":v1.24.0",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2153:			expectedError: "1 error occurred:\n\t* kubelet image is not valid: version of Kubernetes 1.24.0 is too old to be used with Talos VERSION\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2165:						ContainerImage: constants.KubernetesAPIServerImage + ":v1.24.0",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2170:					MachineKubelet: &v1alpha1.KubeletConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2171:						KubeletImage: constants.KubeletImage + ":v" + constants.DefaultKubernetesVersion,
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2175:			expectedError: "1 error occurred:\n\t* kube-apiserver image is not valid: version of Kubernetes 1.24.0 is too old to be used with Talos VERSION\n\n",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2187:						ContainerImage: constants.KubernetesAPIServerImage + ":v" + constants.DefaultKubernetesVersion,
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2190:						ContainerImage: constants.KubernetesControllerManagerImage + ":v1.24.0",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2193:						ContainerImage: constants.KubernetesSchedulerImage + ":v1.24.0",
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2198:					MachineKubelet: &v1alpha1.KubeletConfig{
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2199:						KubeletImage: constants.KubeletImage + ":v" + constants.DefaultKubernetesVersion,
+./pkg/machinery/config/types/v1alpha1/v1alpha1_validation_test.go:2203:			expectedError: "2 errors occurred:\n\t* kube-controller-manager image is not valid: version of Kubernetes 1.24.0 is too old to be used with Talos VERSION\n\t* kube-scheduler image is not valid: version of Kubernetes 1.24.0 is too old to be used with Talos VERSION\n\n", //nolint:lll

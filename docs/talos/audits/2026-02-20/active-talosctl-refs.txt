@@ -1,0 +1,384 @@
+./Dockerfile:1341:COPY --from=talosctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/talosctl
+./Dockerfile:1342:RUN env HOME=/home/user TAG=latest /bin/talosctl docs --config /tmp/configuration \
+./Dockerfile:1343:    && env HOME=/home/user TAG=latest /bin/talosctl docs --cli /tmp
+./Dockerfile:1355:# The talosctl-cni-bundle builds the CNI bundle for talosctl.
+./Dockerfile:1357:FROM scratch AS talosctl-cni-bundle
+./Dockerfile:1359:COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
+./Dockerfile:267:FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
+./Dockerfile:534:# The talosctl targets build the talosctl binaries.
+./Dockerfile:536:FROM base AS talosctl-linux-amd64-build
+./Dockerfile:537:WORKDIR /src/cmd/talosctl
+./Dockerfile:541:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-amd64
+./Dockerfile:542:RUN chmod +x /talosctl-linux-amd64
+./Dockerfile:543:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-amd64
+./Dockerfile:545:FROM base AS talosctl-linux-arm64-build
+./Dockerfile:546:WORKDIR /src/cmd/talosctl
+./Dockerfile:549:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-arm64
+./Dockerfile:550:RUN chmod +x /talosctl-linux-arm64
+./Dockerfile:551:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-arm64
+./Dockerfile:553:FROM base AS talosctl-linux-armv7-build
+./Dockerfile:554:WORKDIR /src/cmd/talosctl
+./Dockerfile:557:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm GOARM=7 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-armv7
+./Dockerfile:558:RUN chmod +x /talosctl-linux-armv7
+./Dockerfile:559:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-armv7
+./Dockerfile:561:FROM base AS talosctl-linux-riscv64-build
+./Dockerfile:562:WORKDIR /src/cmd/talosctl
+./Dockerfile:565:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=riscv64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-riscv64
+./Dockerfile:566:RUN chmod +x /talosctl-linux-riscv64
+./Dockerfile:567:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-riscv64
+./Dockerfile:569:FROM base AS talosctl-darwin-amd64-build
+./Dockerfile:570:WORKDIR /src/cmd/talosctl
+./Dockerfile:574:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-amd64
+./Dockerfile:575:RUN chmod +x /talosctl-darwin-amd64
+./Dockerfile:576:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-darwin-amd64
+./Dockerfile:578:FROM base AS talosctl-darwin-arm64-build
+./Dockerfile:579:WORKDIR /src/cmd/talosctl
+./Dockerfile:582:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-arm64
+./Dockerfile:583:RUN chmod +x /talosctl-darwin-arm64
+./Dockerfile:584:RUN touch --date="@${SOURCE_DATE_EPOCH}" talosctl-darwin-arm64
+./Dockerfile:586:FROM base AS talosctl-windows-amd64-build
+./Dockerfile:587:WORKDIR /src/cmd/talosctl
+./Dockerfile:591:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=windows GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-amd64.exe
+./Dockerfile:592:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-amd64.exe
+./Dockerfile:594:FROM base AS talosctl-windows-arm64-build
+./Dockerfile:595:WORKDIR /src/cmd/talosctl
+./Dockerfile:598:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=windows GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-arm64.exe
+./Dockerfile:599:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-arm64.exe
+./Dockerfile:601:FROM base AS talosctl-freebsd-amd64-build
+./Dockerfile:602:WORKDIR /src/cmd/talosctl
+./Dockerfile:606:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=freebsd GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-amd64
+./Dockerfile:607:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-amd64
+./Dockerfile:609:FROM base AS talosctl-freebsd-arm64-build
+./Dockerfile:610:WORKDIR /src/cmd/talosctl
+./Dockerfile:613:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=freebsd GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-arm64
+./Dockerfile:614:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-arm64
+./Dockerfile:616:FROM scratch AS talosctl-linux-amd64
+./Dockerfile:617:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /talosctl-linux-amd64
+./Dockerfile:619:FROM scratch AS talosctl-linux-arm64
+./Dockerfile:620:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /talosctl-linux-arm64
+./Dockerfile:622:FROM scratch AS talosctl-linux-armv7
+./Dockerfile:623:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
+./Dockerfile:625:FROM scratch AS talosctl-linux-riscv64
+./Dockerfile:626:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
+./Dockerfile:628:FROM scratch AS talosctl-darwin-amd64
+./Dockerfile:629:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
+./Dockerfile:631:FROM scratch AS talosctl-darwin-arm64
+./Dockerfile:632:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /talosctl-darwin-arm64
+./Dockerfile:634:FROM scratch AS talosctl-freebsd-amd64
+./Dockerfile:635:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /talosctl-freebsd-amd64
+./Dockerfile:637:FROM scratch AS talosctl-freebsd-arm64
+./Dockerfile:638:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /talosctl-freebsd-arm64
+./Dockerfile:640:FROM scratch AS talosctl-windows-amd64
+./Dockerfile:641:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
+./Dockerfile:643:FROM scratch AS talosctl-windows-arm64
+./Dockerfile:644:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
+./Dockerfile:646:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
+./Dockerfile:648:FROM scratch AS talosctl-all
+./Dockerfile:649:COPY --from=talosctl-linux-amd64 / /
+./Dockerfile:650:COPY --from=talosctl-linux-arm64 / /
+./Dockerfile:651:COPY --from=talosctl-linux-armv7 / /
+./Dockerfile:652:COPY --from=talosctl-linux-riscv64 / /
+./Dockerfile:653:COPY --from=talosctl-darwin-amd64 / /
+./Dockerfile:654:COPY --from=talosctl-darwin-arm64 / /
+./Dockerfile:655:COPY --from=talosctl-freebsd-amd64 / /
+./Dockerfile:656:COPY --from=talosctl-freebsd-arm64 / /
+./Dockerfile:657:COPY --from=talosctl-windows-amd64 / /
+./Dockerfile:658:COPY --from=talosctl-windows-arm64 / /
+./Dockerfile:660:FROM scratch AS talosctl
+./Dockerfile:662:COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
+./Dockerfile:667:ENTRYPOINT ["/talosctl"]
+./Makefile:103:TALOSCTL_DEFAULT_TARGET := talosctl-$(OPERATING_SYSTEM)
+./Makefile:270:all: initramfs kernel installer imager talosctl talosctl-image talos
+./Makefile:354:docs: ## Generates the documentation for machine config, and talosctl.
+./Makefile:388:.PHONY: talosctl-image
+./Makefile:389:talosctl-image: ## Builds the talosctl container image and outputs it to the registry.
+./Makefile:390:	@$(MAKE) registry-talosctl
+./Makefile:392:talosctl-all-image:
+./Makefile:393:	@$(MAKE) registry-talosctl-all
+./Makefile:395:talosctl-all:
+./Makefile:396:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
+./Makefile:398:talosctl-linux-amd64:
+./Makefile:399:	@$(MAKE) local-talosctl-linux-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:401:talosctl-linux-arm64:
+./Makefile:402:	@$(MAKE) local-talosctl-linux-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:404:talosctl-linux-armv7:
+./Makefile:405:	@$(MAKE) local-talosctl-linux-armv7 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:407:talosctl-linux-riscv64:
+./Makefile:408:	@$(MAKE) local-talosctl-linux-riscv64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:410:talosctl-darwin-amd64:
+./Makefile:411:	@$(MAKE) local-talosctl-darwin-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:413:talosctl-darwin-arm64:
+./Makefile:414:	@$(MAKE) local-talosctl-darwin-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:416:talosctl-freebsd-amd64:
+./Makefile:417:	@$(MAKE) local-talosctl-freebsd-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:419:talosctl-freebsd-arm64:
+./Makefile:420:	@$(MAKE) local-talosctl-freebsd-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:422:talosctl-windows-amd64:
+./Makefile:423:	@$(MAKE) local-talosctl-windows-amd64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:425:talosctl-windows-arm64:
+./Makefile:426:	@$(MAKE) local-talosctl-windows-arm64 DEST=$(ARTIFACTS) PUSH=false
+./Makefile:428:.PHONY: talosctl
+./Makefile:429:talosctl:
+./Makefile:430:	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
+./Makefile:435:# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
+./Makefile:436:# Build chuboctl by reusing the talosctl artifact and renaming it.
+./Makefile:439:	@$(MAKE) -B talosctl-$*
+./Makefile:441:	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
+./Makefile:506:.PHONY: talosctl-cni-bundle
+./Makefile:507:talosctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for talosctl.
+./Makefile:511:		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
+./Makefile:513:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
+./Makefile:525:uki-certs: talosctl ## Generate test certificates for SecureBoot/PCR Signing
+./Makefile:681:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+./Makefile:693:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+./Makefile:699:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+./Makefile:752:push: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the generated tag.
+./Makefile:757:	@$(MAKE) talosctl-image PUSH=true
+./Makefile:758:	@$(MAKE) talosctl-all-image PUSH=true
+./Makefile:760:push-%: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the specified tag (e.g. push-latest).
+./Makefile:769:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+./Makefile:784:	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
+./Makefile:89:PKG_TALOSCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
+./api/machine/machine.proto:56:  // GenerateClientConfiguration generates talosctl client configuration (talosconfig).
+./cmd/talosctl/main.go:5:// Command talosctl is a legacy compatibility entrypoint for chuboctl.
+./hack/chubo/check-go-deps.sh:11:#   * cmd/talosctl has any forbidden deps
+./hack/chubo/check-go-deps.sh:56:	"linux amd64 0 cmd/talosctl"
+./hack/chubo/check-go-deps.sh:86:	if [[ "${target}" == "cmd/talosctl" ]]; then
+./hack/chubo/check-go-deps.sh:8:# - cmd/talosctl is strict: zero forbidden deps allowed
+./hack/chubo/check-go-deps.sh:94:	echo "FAIL: cmd/talosctl must not import forbidden package deps:" >&2
+./hack/chubo/check-runtime-surface.sh:14:# - `--talosctl` is a legacy alias for `--chuboctl` during the rename wave.
+./hack/chubo/check-runtime-surface.sh:17:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-./_out/chuboctl-darwin-arm64}}"
+./hack/chubo/check-runtime-surface.sh:28:	--talosctl)
+./hack/chubo/check-talos-refs.sh:11:#   - fails if any talos/talosctl references exist outside compat paths
+./hack/chubo/check-talos-refs.sh:12:#   - fails if new talos/talosctl references are added inside compat paths
+./hack/chubo/check-talos-refs.sh:143:		echo "forbidden talos/talosctl references detected outside compat paths:" >&2
+./hack/chubo/check-talos-refs.sh:157:		echo "new talos/talosctl references detected in compat paths:" >&2
+./hack/chubo/check-talos-refs.sh:163:		echo "note: talos/talosctl references were removed (baseline can be refreshed):"
+./hack/chubo/check-talos-refs.sh:4:# Verifies Talos/Talosctl naming stays confined to explicit compatibility paths.
+./hack/chubo/e2e-cluster-qemu.sh:21:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-cluster-qemu.sh:830:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-cluster-qemu.sh:831:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-core-docker.sh:114:	if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-core-docker.sh:115:		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-core-docker.sh:20:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-core-qemu.sh:23:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-core-qemu.sh:468:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-core-qemu.sh:469:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/e2e-core-qemu.sh:7:# This script is Linux/amd64 oriented for CI. It uses `talosctl cluster create dev`
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:22:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:441:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/e2e-opengyoza-quorum-qemu.sh:442:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/talos-refs-baseline.txt:100:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=freebsd GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-arm64
+./hack/chubo/talos-refs-baseline.txt:102:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-amd64
+./hack/chubo/talos-refs-baseline.txt:108:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm GOARM=7 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-armv7
+./hack/chubo/talos-refs-baseline.txt:109:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-arm64
+./hack/chubo/talos-refs-baseline.txt:10:./.golangci.yml:        path: cmd/talosctl/pkg/talos/helpers
+./hack/chubo/talos-refs-baseline.txt:114:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=linux GOARCH=riscv64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-linux-riscv64
+./hack/chubo/talos-refs-baseline.txt:115:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=windows GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-amd64.exe
+./hack/chubo/talos-refs-baseline.txt:116:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=windows GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-windows-arm64.exe
+./hack/chubo/talos-refs-baseline.txt:11:./Dockerfile:    && env HOME=/home/user TAG=latest /bin/talosctl docs --cli /tmp
+./hack/chubo/talos-refs-baseline.txt:1221:./pkg/machinery/role/role.go:// as the value of talosctl flag, etc.
+./hack/chubo/talos-refs-baseline.txt:1250:./pkg/provision/providers/qemu/launch.go:// This function is invoked from 'talosctl qemu-launch' hidden command
+./hack/chubo/talos-refs-baseline.txt:1267:./pkg/provision/request.go:	// Path to talosctl executable to re-execute itself as needed.
+./hack/chubo/talos-refs-baseline.txt:1268:./pkg/provision/state.go:			"state directory %q already exists, is the cluster %q already running? remove cluster state with talosctl cluster destroy",
+./hack/chubo/talos-refs-baseline.txt:151:./Dockerfile:RUN chmod +x /talosctl-darwin-amd64
+./hack/chubo/talos-refs-baseline.txt:152:./Dockerfile:RUN chmod +x /talosctl-darwin-arm64
+./hack/chubo/talos-refs-baseline.txt:153:./Dockerfile:RUN chmod +x /talosctl-linux-amd64
+./hack/chubo/talos-refs-baseline.txt:154:./Dockerfile:RUN chmod +x /talosctl-linux-arm64
+./hack/chubo/talos-refs-baseline.txt:155:./Dockerfile:RUN chmod +x /talosctl-linux-armv7
+./hack/chubo/talos-refs-baseline.txt:156:./Dockerfile:RUN chmod +x /talosctl-linux-riscv64
+./hack/chubo/talos-refs-baseline.txt:157:./Dockerfile:RUN env HOME=/home/user TAG=latest /bin/talosctl docs --config /tmp/configuration \
+./hack/chubo/talos-refs-baseline.txt:158:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-darwin-amd64
+./hack/chubo/talos-refs-baseline.txt:159:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-amd64
+./hack/chubo/talos-refs-baseline.txt:160:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-freebsd-arm64
+./hack/chubo/talos-refs-baseline.txt:161:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-amd64
+./hack/chubo/talos-refs-baseline.txt:162:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-arm64
+./hack/chubo/talos-refs-baseline.txt:163:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-armv7
+./hack/chubo/talos-refs-baseline.txt:164:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-linux-riscv64
+./hack/chubo/talos-refs-baseline.txt:165:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-amd64.exe
+./hack/chubo/talos-refs-baseline.txt:166:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" /talosctl-windows-arm64.exe
+./hack/chubo/talos-refs-baseline.txt:167:./Dockerfile:RUN touch --date="@${SOURCE_DATE_EPOCH}" talosctl-darwin-arm64
+./hack/chubo/talos-refs-baseline.txt:168:./Dockerfile:WORKDIR /src/cmd/talosctl
+./hack/chubo/talos-refs-baseline.txt:172:./Makefile:		TALOSCTL=$(PWD)/$(ARTIFACTS)/$(TALOSCTL_DEFAULT_TARGET)-amd64 \
+./hack/chubo/talos-refs-baseline.txt:173:./Makefile:		tar  -C $(ARTIFACTS)/talosctl-cni-bundle-$${arch} -czf $(ARTIFACTS)/talosctl-cni-bundle-$${arch}.tar.gz . ; \
+./hack/chubo/talos-refs-baseline.txt:174:./Makefile:	@$(MAKE) -B talosctl-$(OPERATING_SYSTEM)-$(ARCH)
+./hack/chubo/talos-refs-baseline.txt:175:./Makefile:	@$(MAKE) -B talosctl-$*
+./hack/chubo/talos-refs-baseline.txt:176:./Makefile:	@$(MAKE) local-talosctl-all DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:177:./Makefile:	@$(MAKE) local-talosctl-darwin-amd64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:178:./Makefile:	@$(MAKE) local-talosctl-darwin-arm64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:179:./Makefile:	@$(MAKE) local-talosctl-freebsd-amd64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:180:./Makefile:	@$(MAKE) local-talosctl-freebsd-arm64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:181:./Makefile:	@$(MAKE) local-talosctl-linux-amd64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:182:./Makefile:	@$(MAKE) local-talosctl-linux-arm64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:183:./Makefile:	@$(MAKE) local-talosctl-linux-armv7 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:184:./Makefile:	@$(MAKE) local-talosctl-linux-riscv64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:185:./Makefile:	@$(MAKE) local-talosctl-windows-amd64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:186:./Makefile:	@$(MAKE) local-talosctl-windows-arm64 DEST=$(ARTIFACTS) PUSH=false
+./hack/chubo/talos-refs-baseline.txt:187:./Makefile:	@$(MAKE) registry-talosctl
+./hack/chubo/talos-refs-baseline.txt:188:./Makefile:	@$(MAKE) registry-talosctl-all
+./hack/chubo/talos-refs-baseline.txt:189:./Makefile:	@$(MAKE) reproducibility-test-docker-talos reproducibility-test-docker-installer-base reproducibility-test-docker-imager reproducibility-test-docker-talosctl PLATFORM=linux/$(ARCH)
+./hack/chubo/talos-refs-baseline.txt:191:./Makefile:	@$(MAKE) talosctl-all-image PUSH=true
+./hack/chubo/talos-refs-baseline.txt:192:./Makefile:	@$(MAKE) talosctl-image PUSH=true
+./hack/chubo/talos-refs-baseline.txt:194:./Makefile:	@cp -f $(ARTIFACTS)/talosctl-$* $(ARTIFACTS)/chuboctl-$*
+./hack/chubo/talos-refs-baseline.txt:195:./Makefile:	@echo -n installer installer-base talos imager talosctl talosctl-all | xargs -d ' ' -I{} sh -c 'echo $(REGISTRY_AND_USERNAME)/{}:$(IMAGE_TAG_IN)' | xargs -I{} sh -c 'echo {}@$$( $(CRANE) $(CRANE_FLAGS) digest {} )'
+./hack/chubo/talos-refs-baseline.txt:196:./Makefile:	@rm -rf $(ARTIFACTS)/talosctl-cni-bundle-*/
+./hack/chubo/talos-refs-baseline.txt:197:./Makefile:# Build chuboctl by reusing the talosctl artifact and renaming it.
+./hack/chubo/talos-refs-baseline.txt:198:./Makefile:# chuboctl is the primary CLI name, but we keep talosctl as a compatibility alias.
+./hack/chubo/talos-refs-baseline.txt:1:./.conform.yaml:          - talosctl
+./hack/chubo/talos-refs-baseline.txt:200:./Makefile:.PHONY: talosctl
+./hack/chubo/talos-refs-baseline.txt:201:./Makefile:.PHONY: talosctl-cni-bundle
+./hack/chubo/talos-refs-baseline.txt:202:./Makefile:.PHONY: talosctl-image
+./hack/chubo/talos-refs-baseline.txt:206:./Makefile:PKG_TALOSCTL_CNI_BUNDLE ?= $(PKGS_PREFIX)/talosctl-cni-bundle:$(PKGS)
+./hack/chubo/talos-refs-baseline.txt:207:./Makefile:TALOSCTL_DEFAULT_TARGET := talosctl-$(OPERATING_SYSTEM)
+./hack/chubo/talos-refs-baseline.txt:208:./Makefile:all: initramfs kernel installer imager talosctl talosctl-image talos
+./hack/chubo/talos-refs-baseline.txt:209:./Makefile:docs: ## Generates the documentation for machine config, and talosctl.
+./hack/chubo/talos-refs-baseline.txt:210:./Makefile:push-%: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the specified tag (e.g. push-latest).
+./hack/chubo/talos-refs-baseline.txt:211:./Makefile:push: ## Pushes the installer, imager, talos and talosctl images to the configured container registry with the generated tag.
+./hack/chubo/talos-refs-baseline.txt:213:./Makefile:talosctl-all-image:
+./hack/chubo/talos-refs-baseline.txt:214:./Makefile:talosctl-all:
+./hack/chubo/talos-refs-baseline.txt:215:./Makefile:talosctl-cni-bundle: ## Creates a compressed tarball that includes CNI bundle for talosctl.
+./hack/chubo/talos-refs-baseline.txt:216:./Makefile:talosctl-darwin-amd64:
+./hack/chubo/talos-refs-baseline.txt:217:./Makefile:talosctl-darwin-arm64:
+./hack/chubo/talos-refs-baseline.txt:218:./Makefile:talosctl-freebsd-amd64:
+./hack/chubo/talos-refs-baseline.txt:219:./Makefile:talosctl-freebsd-arm64:
+./hack/chubo/talos-refs-baseline.txt:220:./Makefile:talosctl-image: ## Builds the talosctl container image and outputs it to the registry.
+./hack/chubo/talos-refs-baseline.txt:221:./Makefile:talosctl-linux-amd64:
+./hack/chubo/talos-refs-baseline.txt:222:./Makefile:talosctl-linux-arm64:
+./hack/chubo/talos-refs-baseline.txt:223:./Makefile:talosctl-linux-armv7:
+./hack/chubo/talos-refs-baseline.txt:224:./Makefile:talosctl-linux-riscv64:
+./hack/chubo/talos-refs-baseline.txt:225:./Makefile:talosctl-windows-amd64:
+./hack/chubo/talos-refs-baseline.txt:226:./Makefile:talosctl-windows-arm64:
+./hack/chubo/talos-refs-baseline.txt:227:./Makefile:talosctl:
+./hack/chubo/talos-refs-baseline.txt:228:./Makefile:uki-certs: talosctl ## Generate test certificates for SecureBoot/PCR Signing
+./hack/chubo/talos-refs-baseline.txt:238:./api/machine/machine.proto:  // GenerateClientConfiguration generates talosctl client configuration (talosconfig).
+./hack/chubo/talos-refs-baseline.txt:28:./Dockerfile:# The talosctl targets build the talosctl binaries.
+./hack/chubo/talos-refs-baseline.txt:29:./Dockerfile:# The talosctl-cni-bundle builds the CNI bundle for talosctl.
+./hack/chubo/talos-refs-baseline.txt:31:./Dockerfile:COPY --from=pkgs-talosctl-cni-bundle /opt/cni/bin/ /talosctl-cni-bundle-${TARGETARCH}/
+./hack/chubo/talos-refs-baseline.txt:365:./cmd/talosctl/main.go:// Command talosctl is a legacy compatibility entrypoint for chuboctl.
+./hack/chubo/talos-refs-baseline.txt:372:./hack/chubo/check-go-deps.sh:	"linux amd64 0 cmd/talosctl"
+./hack/chubo/talos-refs-baseline.txt:373:./hack/chubo/check-go-deps.sh:	echo "FAIL: cmd/talosctl must not import forbidden package deps:" >&2
+./hack/chubo/talos-refs-baseline.txt:374:./hack/chubo/check-go-deps.sh:	if [[ "${target}" == "cmd/talosctl" ]]; then
+./hack/chubo/talos-refs-baseline.txt:375:./hack/chubo/check-go-deps.sh:#   * cmd/talosctl has any forbidden deps
+./hack/chubo/talos-refs-baseline.txt:376:./hack/chubo/check-go-deps.sh:# - cmd/talosctl is strict: zero forbidden deps allowed
+./hack/chubo/talos-refs-baseline.txt:377:./hack/chubo/check-runtime-surface.sh:	--talosctl)
+./hack/chubo/talos-refs-baseline.txt:378:./hack/chubo/check-runtime-surface.sh:# - `--talosctl` is a legacy alias for `--chuboctl` during the rename wave.
+./hack/chubo/talos-refs-baseline.txt:379:./hack/chubo/check-runtime-surface.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-./_out/chuboctl-darwin-arm64}}"
+./hack/chubo/talos-refs-baseline.txt:381:./hack/chubo/e2e-cluster-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/talos-refs-baseline.txt:382:./hack/chubo/e2e-cluster-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/talos-refs-baseline.txt:383:./hack/chubo/e2e-cluster-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/talos-refs-baseline.txt:384:./hack/chubo/e2e-core-docker.sh:		ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/talos-refs-baseline.txt:387:./hack/chubo/e2e-core-docker.sh:	if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/talos-refs-baseline.txt:388:./hack/chubo/e2e-core-docker.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/talos-refs-baseline.txt:394:./hack/chubo/e2e-core-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/talos-refs-baseline.txt:395:./hack/chubo/e2e-core-qemu.sh:# This script is Linux/amd64 oriented for CI. It uses `talosctl cluster create dev`
+./hack/chubo/talos-refs-baseline.txt:396:./hack/chubo/e2e-core-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/talos-refs-baseline.txt:397:./hack/chubo/e2e-core-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/talos-refs-baseline.txt:400:./hack/chubo/e2e-opengyoza-quorum-qemu.sh:	ctl_target="talosctl-${HOST_GOOS}-${HOST_GOARCH}"
+./hack/chubo/talos-refs-baseline.txt:403:./hack/chubo/e2e-opengyoza-quorum-qemu.sh:CHUBOCTL="${CHUBOCTL:-${TALOSCTL:-${TALOS_ROOT}/_out/chuboctl-${HOST_GOOS}-${HOST_GOARCH}}}"
+./hack/chubo/talos-refs-baseline.txt:404:./hack/chubo/e2e-opengyoza-quorum-qemu.sh:if [[ "${CHUBOCTL##*/}" == talosctl-* ]]; then
+./hack/chubo/talos-refs-baseline.txt:405:./hack/chuboos/check-runtime-surface.sh:	export TALOSCTL="${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)"
+./hack/chubo/talos-refs-baseline.txt:406:./hack/chuboos/check-runtime-surface.sh:if [[ -z "${TALOSCTL:-}" ]] && [[ -x "${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)" ]]; then
+./hack/chubo/talos-refs-baseline.txt:40:./Dockerfile:COPY --from=talosctl-all /talosctl-linux-${TARGETARCH} /talosctl
+./hack/chubo/talos-refs-baseline.txt:41:./Dockerfile:COPY --from=talosctl-darwin-amd64 / /
+./hack/chubo/talos-refs-baseline.txt:421:./hack/qemu/chubo-qemu.sh:  talosctl apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f <config.yaml>
+./hack/chubo/talos-refs-baseline.txt:422:./hack/qemu/chubo-qemu.sh:# - `talosctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
+./hack/chubo/talos-refs-baseline.txt:426:./hack/release.sh:  ${ARTIFACTS}/talosctl-linux-amd64 image talos-bundle --overlays=false --extensions=false >> ${1}
+./hack/chubo/talos-refs-baseline.txt:428:./hack/release.toml:        title = "Talosctl images talos-bundle subcommand accepts version parameter"
+./hack/chubo/talos-refs-baseline.txt:429:./hack/release.toml:        title = "`talosctl images talos-bundle` can ignore reaching to the registry"
+./hack/chubo/talos-refs-baseline.txt:42:./Dockerfile:COPY --from=talosctl-darwin-amd64-build /talosctl-darwin-amd64 /talosctl-darwin-amd64
+./hack/chubo/talos-refs-baseline.txt:430:./hack/release.toml:        title = "talosctl debug"
+./hack/chubo/talos-refs-baseline.txt:43:./Dockerfile:COPY --from=talosctl-darwin-arm64 / /
+./hack/chubo/talos-refs-baseline.txt:443:./hack/release.toml:The CLI commands `talosctl image pull`, `talosctl image list` and `talosctl image remove` have been updated to interact with the new APIs.
+./hack/chubo/talos-refs-baseline.txt:444:./hack/release.toml:The `talosctl images talos-bundle` command now accepts an optional version overrides arguments.
+./hack/chubo/talos-refs-baseline.txt:445:./hack/release.toml:The `talosctl images talos-bundle` command now accepts optional `--overlays` and `--extensions` flags.
+./hack/chubo/talos-refs-baseline.txt:446:./hack/release.toml:The interactive installer mode has been removed from `talosctl apply-config` (`--mode=interactive`).
+./hack/chubo/talos-refs-baseline.txt:44:./Dockerfile:COPY --from=talosctl-darwin-arm64-build /talosctl-darwin-arm64 /talosctl-darwin-arm64
+./hack/chubo/talos-refs-baseline.txt:45:./Dockerfile:COPY --from=talosctl-freebsd-amd64 / /
+./hack/chubo/talos-refs-baseline.txt:46:./Dockerfile:COPY --from=talosctl-freebsd-amd64-build /talosctl-freebsd-amd64 /talosctl-freebsd-amd64
+./hack/chubo/talos-refs-baseline.txt:47:./Dockerfile:COPY --from=talosctl-freebsd-arm64 / /
+./hack/chubo/talos-refs-baseline.txt:48:./Dockerfile:COPY --from=talosctl-freebsd-arm64-build /talosctl-freebsd-arm64 /talosctl-freebsd-arm64
+./hack/chubo/talos-refs-baseline.txt:49:./Dockerfile:COPY --from=talosctl-linux-amd64 / /
+./hack/chubo/talos-refs-baseline.txt:4:./.golangci.yml:        path: cmd/talosctl/cmd
+./hack/chubo/talos-refs-baseline.txt:50:./Dockerfile:COPY --from=talosctl-linux-amd64-build /talosctl-linux-amd64 /talosctl-linux-amd64
+./hack/chubo/talos-refs-baseline.txt:511:./internal/app/machined/pkg/controllers/runtime/maintenance_service.go:			logger.Sugar().Info("upload configuration using talosctl:")
+./hack/chubo/talos-refs-baseline.txt:51:./Dockerfile:COPY --from=talosctl-linux-arm64 / /
+./hack/chubo/talos-refs-baseline.txt:52:./Dockerfile:COPY --from=talosctl-linux-arm64-build /talosctl-linux-arm64 /talosctl-linux-arm64
+./hack/chubo/talos-refs-baseline.txt:53:./Dockerfile:COPY --from=talosctl-linux-armv7 / /
+./hack/chubo/talos-refs-baseline.txt:54:./Dockerfile:COPY --from=talosctl-linux-armv7-build /talosctl-linux-armv7 /talosctl-linux-armv7
+./hack/chubo/talos-refs-baseline.txt:55:./Dockerfile:COPY --from=talosctl-linux-riscv64 / /
+./hack/chubo/talos-refs-baseline.txt:56:./Dockerfile:COPY --from=talosctl-linux-riscv64-build /talosctl-linux-riscv64 /talosctl-linux-riscv64
+./hack/chubo/talos-refs-baseline.txt:57:./Dockerfile:COPY --from=talosctl-targetarch /talosctl-${TARGETOS}-${TARGETARCH} /bin/talosctl
+./hack/chubo/talos-refs-baseline.txt:582:./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:				logger.Printf("%s failed, rebooting in %.0f minutes. You can use talosctl apply-config or talosctl edit mc to fix the issues, error:\n%s", name, timeout.Minutes(), err)
+./hack/chubo/talos-refs-baseline.txt:58:./Dockerfile:COPY --from=talosctl-windows-amd64 / /
+./hack/chubo/talos-refs-baseline.txt:59:./Dockerfile:COPY --from=talosctl-windows-amd64-build /talosctl-windows-amd64.exe /talosctl-windows-amd64.exe
+./hack/chubo/talos-refs-baseline.txt:5:./.golangci.yml:        path: cmd/talosctl/cmd/mgmt
+./hack/chubo/talos-refs-baseline.txt:604:./internal/pkg/cgroups/tar.go:// It is assumed to work with output of `talosctl cp /sys/fs/cgroup -`.
+./hack/chubo/talos-refs-baseline.txt:60:./Dockerfile:COPY --from=talosctl-windows-arm64 / /
+./hack/chubo/talos-refs-baseline.txt:61:./Dockerfile:COPY --from=talosctl-windows-arm64-build /talosctl-windows-arm64.exe /talosctl-windows-arm64.exe
+./hack/chubo/talos-refs-baseline.txt:664:./pkg/cluster/crashdump_chubo.go:// Chubo support collection is handled by dedicated talosctl support flows.
+./hack/chubo/talos-refs-baseline.txt:66:./Dockerfile:ENTRYPOINT ["/talosctl"]
+./hack/chubo/talos-refs-baseline.txt:68:./Dockerfile:FROM ${PKG_TALOSCTL_CNI_BUNDLE} AS pkgs-talosctl-cni-bundle
+./hack/chubo/talos-refs-baseline.txt:697:./pkg/images/images.go:	// talosctl-all image.
+./hack/chubo/talos-refs-baseline.txt:69:./Dockerfile:FROM --platform=${BUILDPLATFORM} talosctl-${TARGETOS}-${TARGETARCH} AS talosctl-targetarch
+./hack/chubo/talos-refs-baseline.txt:6:./.golangci.yml:        path: cmd/talosctl/cmd/mgmt/inject
+./hack/chubo/talos-refs-baseline.txt:700:./pkg/images/images.go:	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+./hack/chubo/talos-refs-baseline.txt:70:./Dockerfile:FROM base AS talosctl-darwin-amd64-build
+./hack/chubo/talos-refs-baseline.txt:71:./Dockerfile:FROM base AS talosctl-darwin-arm64-build
+./hack/chubo/talos-refs-baseline.txt:72:./Dockerfile:FROM base AS talosctl-freebsd-amd64-build
+./hack/chubo/talos-refs-baseline.txt:73:./Dockerfile:FROM base AS talosctl-freebsd-arm64-build
+./hack/chubo/talos-refs-baseline.txt:74:./Dockerfile:FROM base AS talosctl-linux-amd64-build
+./hack/chubo/talos-refs-baseline.txt:75:./Dockerfile:FROM base AS talosctl-linux-arm64-build
+./hack/chubo/talos-refs-baseline.txt:76:./Dockerfile:FROM base AS talosctl-linux-armv7-build
+./hack/chubo/talos-refs-baseline.txt:77:./Dockerfile:FROM base AS talosctl-linux-riscv64-build
+./hack/chubo/talos-refs-baseline.txt:78:./Dockerfile:FROM base AS talosctl-windows-amd64-build
+./hack/chubo/talos-refs-baseline.txt:79:./Dockerfile:FROM base AS talosctl-windows-arm64-build
+./hack/chubo/talos-refs-baseline.txt:7:./.golangci.yml:        path: cmd/talosctl/cmd/talos
+./hack/chubo/talos-refs-baseline.txt:81:./Dockerfile:FROM scratch AS talosctl
+./hack/chubo/talos-refs-baseline.txt:82:./Dockerfile:FROM scratch AS talosctl-all
+./hack/chubo/talos-refs-baseline.txt:835:./pkg/machinery/config/schemas/config.schema.json:          "description": "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse talosctl get ethernetstatus \u0026lt;link\u0026gt; -o yaml to get the list of available features and\ntheir current status.\n",
+./hack/chubo/talos-refs-baseline.txt:83:./Dockerfile:FROM scratch AS talosctl-cni-bundle
+./hack/chubo/talos-refs-baseline.txt:846:./pkg/machinery/config/schemas/config.schema.json:          "markdownDescription": "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse `talosctl get ethernetstatus \u003clink\u003e -o yaml` to get the list of available features and\ntheir current status.",
+./hack/chubo/talos-refs-baseline.txt:84:./Dockerfile:FROM scratch AS talosctl-darwin-amd64
+./hack/chubo/talos-refs-baseline.txt:85:./Dockerfile:FROM scratch AS talosctl-darwin-arm64
+./hack/chubo/talos-refs-baseline.txt:86:./Dockerfile:FROM scratch AS talosctl-freebsd-amd64
+./hack/chubo/talos-refs-baseline.txt:87:./Dockerfile:FROM scratch AS talosctl-freebsd-arm64
+./hack/chubo/talos-refs-baseline.txt:886:./pkg/machinery/config/types/network/ethernet.go:	//     Use `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and
+./hack/chubo/talos-refs-baseline.txt:889:./pkg/machinery/config/types/network/network_doc.go:				Description: "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and\ntheir current status.",
+./hack/chubo/talos-refs-baseline.txt:88:./Dockerfile:FROM scratch AS talosctl-linux-amd64
+./hack/chubo/talos-refs-baseline.txt:89:./Dockerfile:FROM scratch AS talosctl-linux-arm64
+./hack/chubo/talos-refs-baseline.txt:8:./.golangci.yml:        path: cmd/talosctl/pkg/talos/action
+./hack/chubo/talos-refs-baseline.txt:90:./Dockerfile:FROM scratch AS talosctl-linux-armv7
+./hack/chubo/talos-refs-baseline.txt:91:./Dockerfile:FROM scratch AS talosctl-linux-riscv64
+./hack/chubo/talos-refs-baseline.txt:92:./Dockerfile:FROM scratch AS talosctl-windows-amd64
+./hack/chubo/talos-refs-baseline.txt:93:./Dockerfile:FROM scratch AS talosctl-windows-arm64
+./hack/chubo/talos-refs-baseline.txt:96:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-amd64
+./hack/chubo/talos-refs-baseline.txt:97:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=darwin GOARCH=arm64 go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-darwin-arm64
+./hack/chubo/talos-refs-baseline.txt:99:./Dockerfile:RUN --mount=type=cache,target=/.cache,id=talos/.cache GOOS=freebsd GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS_TALOSCTL} -ldflags "${GO_LDFLAGS}" -o /talosctl-freebsd-amd64
+./hack/chubo/talos-refs-baseline.txt:9:./.golangci.yml:        path: cmd/talosctl/pkg/talos/global
+./hack/chubo/talos-refs-compat-paths.txt:1:# Explicit compatibility surface where talos/talosctl naming is currently tolerated.
+./hack/chuboos/check-runtime-surface.sh:5:if [[ -z "${TALOSCTL:-}" ]] && [[ -x "${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)" ]]; then
+./hack/chuboos/check-runtime-surface.sh:6:	export TALOSCTL="${SCRIPT_DIR}/../../_out/talosctl-$(go env GOOS)-$(go env GOARCH)"
+./hack/qemu/chubo-qemu.sh:120:  talosctl apply-config -i -e 127.0.0.1 -n 127.0.0.1 -f <config.yaml>
+./hack/qemu/chubo-qemu.sh:7:# - `talosctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
+./hack/release.sh:25:  ${ARTIFACTS}/talosctl-linux-amd64 image talos-bundle --overlays=false --extensions=false >> ${1}
+./hack/release.toml:104:        title = "Talosctl images talos-bundle subcommand accepts version parameter"
+./hack/release.toml:106:The `talosctl images talos-bundle` command now accepts an optional version overrides arguments.
+./hack/release.toml:166:The CLI commands `talosctl image pull`, `talosctl image list` and `talosctl image remove` have been updated to interact with the new APIs.
+./hack/release.toml:170:        title = "talosctl debug"
+./hack/release.toml:82:The interactive installer mode has been removed from `talosctl apply-config` (`--mode=interactive`).
+./hack/release.toml:97:        title = "`talosctl images talos-bundle` can ignore reaching to the registry"
+./hack/release.toml:99:The `talosctl images talos-bundle` command now accepts optional `--overlays` and `--extensions` flags.
+./internal/app/machined/pkg/controllers/runtime/maintenance_service.go:293:			logger.Sugar().Info("upload configuration using talosctl:")
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_tasks.go:1596:				logger.Printf("%s failed, rebooting in %.0f minutes. You can use talosctl apply-config or talosctl edit mc to fix the issues, error:\n%s", name, timeout.Minutes(), err)
+./internal/pkg/cgroups/tar.go:17:// It is assumed to work with output of `talosctl cp /sys/fs/cgroup -`.
+./pkg/cluster/crashdump_chubo.go:17:// Chubo support collection is handled by dedicated talosctl support flows.
+./pkg/images/images.go:51:	// talosctl-all image.
+./pkg/images/images.go:52:	DefaultTalosctlAllImageRepository = Registry + "/" + Username + "/talosctl-all"
+./pkg/machinery/config/schemas/config.schema.json:2467:          "description": "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse talosctl get ethernetstatus \u0026lt;link\u0026gt; -o yaml to get the list of available features and\ntheir current status.\n",
+./pkg/machinery/config/schemas/config.schema.json:2468:          "markdownDescription": "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse `talosctl get ethernetstatus \u003clink\u003e -o yaml` to get the list of available features and\ntheir current status.",
+./pkg/machinery/config/types/network/ethernet.go:60:	//     Use `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and
+./pkg/machinery/config/types/network/network_doc.go:650:				Description: "Configuration for Ethernet features.\n\nSet of features available and whether they can be enabled or disabled is driver specific.\nUse `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and\ntheir current status.",
+./pkg/machinery/role/role.go:16:// as the value of talosctl flag, etc.
+./pkg/provision/providers/qemu/launch.go:427:// This function is invoked from 'talosctl qemu-launch' hidden command
+./pkg/provision/request.go:44:	// Path to talosctl executable to re-execute itself as needed.
+./pkg/provision/state.go:44:			"state directory %q already exists, is the cluster %q already running? remove cluster state with talosctl cluster destroy",

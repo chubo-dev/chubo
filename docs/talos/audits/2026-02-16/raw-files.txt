@@ -1,0 +1,13 @@
+active-cri-refs.txt
+active-refs.txt
+chubo-go-buildtag-cri-refs.txt
+chubo-go-buildtag-files.txt
+chubo-go-buildtag-refs.txt
+collect.sh
+deps-machined-forbidden.txt
+deps-machined-linux-arm64.txt
+deps-talosctl-forbidden.txt
+deps-talosctl-linux-amd64.txt
+meta.txt
+raw-files.txt
+raw-refs.txt

@@ -1,0 +1,28 @@
+./cmd/talosctl/cmd/talos/image_namespace_alias_default_test.go:14:	if !isWorkloadImageNamespace("cri") {
+./cmd/talosctl/cmd/talos/image_namespace_alias_default_test.go:15:		t.Fatalf("expected cri alias to be accepted")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:16:	"github.com/chubo-dev/chubo/internal/pkg/containers/cri"
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:25:			return nil, errors.New("CRI inspector is supported only for the workload namespace")
+./internal/app/machined/internal/server/v1alpha1/v1alpha1_server_inspector_default.go:28:		return cri.NewInspector(ctx)
+./cmd/talosctl/cmd/talos/cgroups_resolve_flag_default.go:12:	cmd.Flags().BoolVar(target, "skip-cri-resolve", false, "do not resolve cgroup names via a request to CRI")
+./internal/pkg/containers/cri/cri_test.go:23:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/containers/cri/cri_test.go:30:	"github.com/chubo-dev/chubo/internal/pkg/containers/cri"
+./internal/pkg/containers/cri/cri_test.go:31:	criclient "github.com/chubo-dev/chubo/internal/pkg/cri"
+./internal/pkg/containers/cri/cri_test.go:131:	suite.inspector, err = cri.NewInspector(suite.ctx, cri.WithCRIEndpoint("unix:"+suite.containerdAddress))
+./internal/pkg/containers/cri/cri.go:7:// Package cri implements containers.Inspector via CRI
+./internal/pkg/containers/cri/cri.go:8:package cri
+./internal/pkg/containers/cri/cri.go:19:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/containers/cri/cri.go:22:	criclient "github.com/chubo-dev/chubo/internal/pkg/cri"
+./internal/pkg/containers/cri/cri.go:38:// WithCRIEndpoint configures CRI endpoint to use.
+./internal/pkg/containers/cri/cri.go:45:// NewInspector builds new Inspector instance for CRI.
+./internal/pkg/containers/cri/cri.go:179:	// I'm sure that we can proabably find container using CRI labels, but
+./internal/pkg/containers/cri/cri.go:384:	// CRI doesn't seem to have an easy way to do that
+./cmd/talosctl/cmd/talos/image_namespace_default_default.go:10:	return "cri"
+./internal/app/machined/pkg/runtime/v1alpha1/v1alpha1_sequencer_install_wait_chubo.go:22:// CRI-based registry plumbing in the install path.
+./cmd/talosctl/cmd/talos/image_help_default.go:10:	return "namespace to use: `system` (core system images), `cri` (workload runtime images), or `inmem` (in-memory containerd instance)"
+./cmd/talosctl/cmd/talos/image_namespace_alias_chubo_test.go:18:	if isWorkloadImageNamespace("cri") {
+./cmd/talosctl/cmd/talos/image_namespace_alias_chubo_test.go:19:		t.Fatalf("expected cri alias to be rejected")
+./cmd/talosctl/cmd/talos/image_namespace_alias_default.go:10:	return namespace == "cri" || namespace == "workload"
+./cmd/talosctl/cmd/talos/workload_legacy_driver_flag_default.go:12:	cmd.Flags().Bool("use-cri", false, "use the CRI driver")
+./cmd/talosctl/cmd/talos/workload_legacy_driver_flag_default.go:13:	cmd.Flags().MarkHidden("use-cri") //nolint:errcheck
+./cmd/talosctl/cmd/talos/workload_container_driver_default_test.go:19:		t.Fatalf("expected CRI driver, got %v", got)
+./cmd/talosctl/cmd/talos/image_containerd_driver_default_test.go:19:		t.Fatalf("expected CRI driver, got %v", got)

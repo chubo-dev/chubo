@@ -1,0 +1,34 @@
+./internal/pkg/containers/cri/cri_test.go:23:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/containers/cri/cri_test.go:38:	// pauseImage         = "k8s.gcr.io/pause:3.1".
+./internal/pkg/containers/cri/cri_test.go:152:			Name:      "etcd-master-1",
+./internal/pkg/containers/cri/cri_test.go:154:			Namespace: "kube-system",
+./internal/pkg/containers/cri/cri_test.go:158:			"io.kubernetes.pod.name":      "etcd-master-1",
+./internal/pkg/containers/cri/cri_test.go:159:			"io.kubernetes.pod.namespace": "kube-system",
+./internal/pkg/containers/cri/cri_test.go:187:				Name: "etcd",
+./internal/pkg/containers/cri/cri_test.go:190:				"io.kubernetes.container.name": "etcd",
+./internal/pkg/containers/cri/cri_test.go:191:				"io.kubernetes.pod.name":       "etcd-master-1",
+./internal/pkg/containers/cri/cri_test.go:192:				"io.kubernetes.pod.namespace":  "kube-system",
+./internal/pkg/containers/cri/cri_test.go:195:				"io.kubernetes.container.restartCount": "1",
+./internal/pkg/containers/cri/cri_test.go:225:	suite.Assert().Equal("kube-system/etcd-master-1", pods[0].Name)
+./internal/pkg/containers/cri/cri_test.go:236:	suite.Assert().Equal("kube-system/etcd-master-1:etcd", pods[0].Containers[1].Display)
+./internal/pkg/containers/cri/cri_test.go:237:	suite.Assert().Equal("etcd", pods[0].Containers[1].Name)
+./internal/pkg/containers/cri/cri_test.go:255:	container, err := suite.inspector.Container("kube-system/etcd-master-1")
+./internal/pkg/containers/cri/cri_test.go:258:	suite.Assert().Equal("kube-system/etcd-master-1", container.Display)
+./internal/pkg/containers/cri/cri_test.go:264:	container, err = suite.inspector.Container("kube-system/etcd-master-1:etcd")
+./internal/pkg/containers/cri/cri_test.go:267:	suite.Assert().Equal("kube-system/etcd-master-1:etcd", container.Display)
+./internal/pkg/containers/cri/cri_test.go:268:	suite.Assert().Equal("etcd", container.Name)
+./internal/pkg/containers/cri/cri_test.go:275:	container, err = suite.inspector.Container("kube-system/etcd-master-1:etcd2")
+./internal/pkg/containers/cri/cri_test.go:279:	container, err = suite.inspector.Container("kube-system/etcd-master-2")
+./cmd/talosctl/cmd/talos/workload_namespace_flag_default.go:12:	cmd.Flags().BoolVarP(&workloadNamespaceFlag, "kubernetes", "k", false, "use the k8s.io containerd namespace")
+./cmd/talosctl/cmd/talos/image_help_default.go:14:	return []string{"docker.io", "ghcr.io", "registry.k8s.io"}
+./internal/pkg/containers/cri/cri.go:19:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/containers/cri/cri.go:127:					"io.kubernetes.pod.name":      pod,
+./internal/pkg/containers/cri/cri.go:128:					"io.kubernetes.pod.namespace": namespace,
+./internal/pkg/containers/cri/cri.go:152:				"io.kubernetes.pod.name":       pod,
+./internal/pkg/containers/cri/cri.go:153:				"io.kubernetes.pod.namespace":  namespace,
+./internal/pkg/containers/cri/cri.go:154:				"io.kubernetes.container.name": name,
+./internal/pkg/containers/cri/cri.go:261:	podName := container.Labels["io.kubernetes.pod.namespace"] + "/" + container.Labels["io.kubernetes.pod.name"]
+./internal/pkg/containers/cri/cri.go:271:		RestartCount: container.Annotations["io.kubernetes.container.restartCount"],
+./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:13:	cmd.Flags().BoolVar(&workloadNamespaceFlag, "kubernetes", false, "alias for --workload")
+./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:14:	cmd.Flags().MarkHidden("kubernetes") //nolint:errcheck
+./cmd/talosctl/cmd/talos/netstat_workload_flag_default.go:12:	cmd.Flags().BoolVarP(target, "pods", "k", false, "show sockets used by Kubernetes pods")

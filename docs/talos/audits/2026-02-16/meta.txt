@@ -1,0 +1,8 @@
+date: 2026-02-16T20:26:33+01:00
+talos_head: 30b1452a35e130b61bf1e74f5d128f914e256a89
+chubo_head: 5b26793089064daf916a8fa101c44f52d9076f1b
+go: go version go1.25.6 darwin/arm64
+uname: Darwin MacBookPro.localdomain 25.2.0 Darwin Kernel Version 25.2.0: Tue Nov 18 21:09:40 PST 2025; root:xnu-12377.61.12~1/RELEASE_ARM64_T6000 arm64
+rg: ripgrep 15.1.0
+docker_context: colima
+docker_host: 

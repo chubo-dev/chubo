@@ -1,0 +1,13 @@
+tools/structprotogen/consts/consts.go:231:	fmt.Fprint(w, "package talos.resource.definitions.enums;\n\n")
+tools/structprotogen/proto/proto.go:63:	fmt.Fprintf(w, "package talos.resource.definitions.%s; // %s\n\n", p.Name, p.GoPkg)
+tools/structprotogen/proto/proto.go:71:				importPath = "talos.resource.definitions." + importPath
+tools/structprotogen/proto/proto.go:91:	fmt.Fprintf(w, "package talos.resource.definitions.%s;\n\n", p.Name)
+tools/structprotogen/proto/proto.go:99:				importPath = "talos.resource.definitions." + importPath
+tools/structprotogen/proto/proto.go:253:					typeName = "talos.resource.definitions.enums." + block.ProtoMessageName()
+tools/structprotogen/proto/proto.go:280:					typeName = "repeated talos.resource.definitions.enums." + block.ProtoMessageName()
+tools/structprotogen/proto/proto.go:390:		return "resource/definitions/proto/proto.proto", "talos.resource.definitions.proto.Mount"
+tools/structprotogen/proto/proto.go:401:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryMirrorConfig"
+tools/structprotogen/proto/proto.go:404:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryAuthConfig"
+tools/structprotogen/proto/proto.go:407:		return "resource/definitions/cri/registry.proto", "talos.resource.definitions.cri.RegistryTLSConfig"
+tools/structprotogen/proto/proto.go:409:		return "resource/definitions/runtime/runtime.proto", "talos.resource.definitions.runtime.PlatformMetadataSpec"
+tools/structprotogen/proto/proto.go:411:		return "resource/definitions/block/block.proto", "talos.resource.definitions.block.ParameterSpec"

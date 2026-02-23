@@ -1,0 +1,103 @@
+./Makefile:578:chubo-guardrails: ## Runs chubo-specific regression guardrails (k8s-less image and CLI/API surface).
+./Makefile:590:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+etcd\\b'
+./Makefile:591:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+kubeconfig\\b'
+./Makefile:592:	@! _out/chubo/talosctl-linux-amd64 --help | grep -qE '^[[:space:]]+upgrade-k8s\\b'
+./Makefile:596:		! rg -n -i 'kubernetes|kubectl|kube-system|etcd' "$$docs_tmp" >/dev/null
+./pkg/machinery/go.sum:128:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
+./tools/go.mod:26:	k8s.io/code-generator/cmd/deepcopy-gen
+./tools/go.mod:529:	go.etcd.io/bbolt v1.4.3 // indirect
+./tools/go.mod:580:	k8s.io/code-generator v0.35.0 // indirect
+./tools/go.mod:581:	k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b // indirect
+./tools/go.mod:582:	k8s.io/klog/v2 v2.130.1 // indirect
+./go.sum:114:github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+./go.sum:622:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
+./go.sum:933:k8s.io/cri-api v0.35.0 h1:fxLSKyJHqbyCSUsg1rW4DRpmjSEM/elZ1GXzYTSLoDQ=
+./go.sum:934:k8s.io/cri-api v0.35.0/go.mod h1:Cnt29u/tYl1Se1cBRL30uSZ/oJ5TaIp4sZm1xDLvcMc=
+./go.sum:943:sigs.k8s.io/knftables v0.0.18 h1:6Duvmu0s/HwGifKrtl6G3AyAPYlWiZqTgS8bkVMiyaE=
+./go.sum:944:sigs.k8s.io/knftables v0.0.18/go.mod h1:f/5ZLKYEUPUhVjUCg6l80ACdL7CIIyeL0DxfgojGRTk=
+./go.mod:33:// Kubernetes dependencies sharing the same version.
+./go.mod:34:require k8s.io/cri-api v0.35.0
+./go.mod:314:	sigs.k8s.io/knftables v0.0.18 // indirect
+./tools/go.sum:432:github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+./tools/go.sum:934:github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
+./tools/go.sum:1491:go.etcd.io/bbolt v1.4.3 h1:dEadXpI6G79deX5prL3QRNP6JB8UxVkqo4UPnHaNXJo=
+./tools/go.sum:1492:go.etcd.io/bbolt v1.4.3/go.mod h1:tKQlpPaYCVFctUIgFKFnAlvbmB3tpy1vkTnDWohtc0E=
+./tools/go.sum:1493:go.etcd.io/etcd/api/v3 v3.5.1/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
+./tools/go.sum:1494:go.etcd.io/etcd/client/pkg/v3 v3.5.1/go.mod h1:IJHfcCEKxYu1Os13ZdwCwIUTUVGYTSAM3YSwc9/Ac1g=
+./tools/go.sum:1495:go.etcd.io/etcd/client/v2 v2.305.1/go.mod h1:pMEacxZW7o8pg4CrFE7pquyCJJzZvkvdD2RibOCCCGs=
+./tools/go.sum:2097:k8s.io/code-generator v0.35.0 h1:TvrtfKYZTm9oDF2z+veFKSCcgZE3Igv0svY+ehCmjHQ=
+./tools/go.sum:2098:k8s.io/code-generator v0.35.0/go.mod h1:iS1gvVf3c/T71N5DOGYO+Gt3PdJ6B9LYSvIyQ4FHzgc=
+./tools/go.sum:2099:k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b h1:gMplByicHV/TJBizHd9aVEsTYoJBnnUAT5MHlTkbjhQ=
+./tools/go.sum:2100:k8s.io/gengo/v2 v2.0.0-20250922181213-ec3ebc5fd46b/go.mod h1:CgujABENc3KuTrcsdpGmrrASjtQsWCT7R99mEV4U/fM=
+./tools/go.sum:2101:k8s.io/klog/v2 v2.130.1 h1:n9Xl7H1Xvksem4KFG4PYbdQCQxqc/tTUyrgXaOhHSzk=
+./tools/go.sum:2102:k8s.io/klog/v2 v2.130.1/go.mod h1:3Jpz1GvMt720eyJH1ckRHK1EDfpxISzJ7I9OYgaDtPE=
+./hack/release.sh:25:  ${ARTIFACTS}/talosctl-linux-amd64 image k8s-bundle >> ${1}
+./hack/start-registry-proxies.sh:13:    -e REGISTRY_PROXY_REMOTEURL=https://registry.k8s.io \
+./hack/start-registry-proxies.sh:15:    --name registry-registry.k8s.io registry:2
+./hack/third_party/go-talos-support/go.sum:109:github.com/stoewer/go-strcase v1.3.0 h1:g0eASXYtp+yvN9fK8sH94oCIk0fau9uV1/ZdJ0AVEzs=
+./cmd/talosctl/cmd/talos/workload_namespace_flag_default.go:12:	cmd.Flags().BoolVarP(&workloadNamespaceFlag, "kubernetes", "k", false, "use the k8s.io containerd namespace")
+./internal/pkg/containers/cri/cri.go:19:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/containers/cri/cri.go:127:					"io.kubernetes.pod.name":      pod,
+./internal/pkg/containers/cri/cri.go:128:					"io.kubernetes.pod.namespace": namespace,
+./internal/pkg/containers/cri/cri.go:152:				"io.kubernetes.pod.name":       pod,
+./internal/pkg/containers/cri/cri.go:153:				"io.kubernetes.pod.namespace":  namespace,
+./internal/pkg/containers/cri/cri.go:154:				"io.kubernetes.container.name": name,
+./internal/pkg/containers/cri/cri.go:261:	podName := container.Labels["io.kubernetes.pod.namespace"] + "/" + container.Labels["io.kubernetes.pod.name"]
+./internal/pkg/containers/cri/cri.go:271:		RestartCount: container.Annotations["io.kubernetes.container.restartCount"],
+./cmd/talosctl/cmd/talos/image.go:571:		`talosctl images cache-create --images=ghcr.io/siderolabs/kubelet:v%s --image-cache-path=/tmp/talos-image-cache
+./cmd/talosctl/cmd/mgmt/cluster/create/create.go:159:	// it should not bootstrap legacy control-plane services or attempt kubeconfig export/merge.
+./hack/chubo/forbidden-go-deps-baseline.txt:4:# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*
+./internal/pkg/cri/pods.go:17:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:13:	cmd.Flags().BoolVar(&workloadNamespaceFlag, "kubernetes", false, "alias for --workload")
+./cmd/talosctl/cmd/talos/workload_namespace_flag_chubo.go:14:	cmd.Flags().MarkHidden("kubernetes") //nolint:errcheck
+./internal/pkg/cri/images.go:11:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./cmd/talosctl/cmd/talos/image_help_default.go:14:	return []string{"docker.io", "ghcr.io", "registry.k8s.io"}
+./internal/pkg/cri/containers.go:11:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./internal/pkg/cri/client.go:14:	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
+./cmd/talosctl/cmd/talos/netstat_workload_flag_default.go:12:	cmd.Flags().BoolVarP(target, "pods", "k", false, "show sockets used by Kubernetes pods")
+./hack/release.toml:23:etcd: 3.6.7
+./hack/release.toml:25:Kubernetes: 1.35.0
+./hack/release.toml:91:    [notes.k8s_ssa]
+./hack/release.toml:92:        title = "Kubernetes server-side apply"
+./hack/release.toml:106:    [notes.images_k8s_bundle]
+./hack/release.toml:107:        title = "Talosctl images k8s-bundle subcommand accepts version parameter"
+./hack/release.toml:109:The `talosctl images k8s-bundle` command now accepts an optional version overrides arguments.
+./hack/release.toml:129:BREAKING: If you were relying on the resources EtcdConfigs, KubeletConfigs, ControllerManagerConfigs, SchedulerConfigs or APIServerConfigs, the protobuf format has changed from `map<string,string>` to `map<string,message>`.
+./hack/chubo/check-runtime-surface.sh:116:	kubelet
+./hack/chubo/check-runtime-surface.sh:117:	etcd
+./hack/chubo/check-runtime-surface.sh:144:# Kubernetes/etcd listeners must stay absent in chubo baseline.
+./hack/chubo/check-go-deps.sh:4:# Verifies that chubo build targets don't introduce new Kubernetes/etcd Go package deps.
+./hack/chubo/check-go-deps.sh:7:# - forbidden prefixes: k8s.io/* and go.etcd.io/etcd/*
+./hack/chubo/check-go-deps.sh:80:	sort -u "${target_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${target_forbidden}" || true
+./hack/chubo/check-go-deps.sh:90:sort -u "${current_raw}" | grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' >"${current_file}" || true
+./hack/chubo/check-go-deps.sh:104:		echo "# Forbidden prefixes: k8s.io/*, go.etcd.io/etcd/*"
+./hack/chubo/check-go-deps.sh:121:grep -E '^(k8s\.io/|go\.etcd\.io/etcd)' "${BASELINE}" | sort -u >"${baseline_file}" || true
+./hack/chubo/check-rootfs.sh:4:# Verifies the `chubo` rootfs doesn't accidentally ship Kubernetes/etcd bits.
+./hack/chubo/check-rootfs.sh:53:  'unsquashfs -l rootfs.sqsh | grep -Ei "kube|kubernetes|etcd|opt/cni/bin/flannel" || true' \
+./hack/chubo/check-rootfs.sh:62:echo "OK: no kube/etcd/flannel artifacts found in rootfs"
+./hack/chubo/check-rootfs.sh:65:# does not link Kubernetes/etcd client libraries in the `chubo` build.
+./hack/chubo/check-rootfs.sh:73:forbidden_mods="$(printf '%s\n' "${init_mods}" | grep -E '^dep (k8s\\.io/|go\\.etcd\\.io/)' || true)"
+./hack/chubo/check-rootfs.sh:81:echo "OK: init binary doesn't link k8s.io/go.etcd.io modules"
+./hack/chubo/e2e-core-qemu.sh:427:elif command -v strings >/dev/null 2>&1 && strings "${TALOSCTL}" 2>/dev/null | grep -q "KUBERNETES ENDPOINT"; then
+./hack/chubo/e2e-core-qemu.sh:430:	echo "existing CLI binary is stale (contains 'KUBERNETES ENDPOINT'); rebuilding"
+./pkg/machinery/resources/cluster/config.go:31:	RegistryKubernetesEnabled bool   `yaml:"registryKubernetesEnabled" protobuf:"2"`
+./pkg/machinery/constants/constants.go:212:	// renovate: datasource=github-releases depName=kubernetes/kubernetes
+./pkg/machinery/constants/constants.go:288:	WorkloadContainerdNamespace = "k8s.io"
+./api/resource/definitions/cluster/cluster.proto:25:  bool registry_kubernetes_enabled = 2;
+./pkg/machinery/resources/secrets/trustd.go:26:// TrustdCertsSpec describes etcd certs secrets.
+./pkg/machinery/resources/secrets/api.go:26:// APICertsSpec describes etcd certs secrets.
+./api/machine/machine.proto:137:  bool recover_etcd = 1;
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:86:		{"kubepods/besteffort", runtime.QoSCgroupClassBesteffort},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:87:		{"kubepods/burstable", runtime.QoSCgroupClassBurstable},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:88:		{"kubepods/guaranteed", runtime.QoSCgroupClassGuaranteed},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:215:		{"kubepods/besteffort", runtime.QoSCgroupClassBesteffort},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:216:		{"kubepods/burstable", runtime.QoSCgroupClassBurstable},
+./internal/app/machined/pkg/controllers/runtime/internal/oom/oom.go:217:		{"kubepods/guaranteed", runtime.QoSCgroupClassGuaranteed},
+./internal/app/machined/pkg/controllers/network/nftables_chain.go:202:		Name:  "KUBE-IPTABLES-HINT",
+./internal/app/machined/pkg/controllers/network/nftables_chain.go:208:	logger.Info("pre-created iptables-nft table 'mangle'/'KUBE-IPTABLES-HINT'")
+./internal/app/machined/pkg/controllers/cluster/config.go:48:					res.TypedSpec().RegistryKubernetesEnabled = false
+./internal/app/machined/pkg/controllers/cluster/config.go:88:					res.TypedSpec().RegistryKubernetesEnabled = false
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:66:DgQWBBQahGK8SEwzJQTU7tD2A8QZRtGUazBuBgNVHSMEZzBlgBQahGK8SEwzJQTU7tD2A8QZRtGU
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:109:bjPsMZ57k8HkyWkaPcBrTiJt7qtYTcbQQcEr6k8Sh17rRdhs9ZgC06DYVYoGmRmioHfRMJ6szHXu
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:1128:hsI6yLETcDbYz+70CjTVW0z9B5yiutkBclzzTcHdDrEcDcRjvq30FPuJ7KJBDkzMyFdA0G4Dqs0M
+./internal/app/machined/pkg/controllers/secrets/data/ca-certificates:2189:ywaK8SJJ6ejqkX/GM15oGQOGO0MBzwdw5AgeZYWR5hEit/UCI46uuR59H35s5r0l1ZUa8gWmr4UC

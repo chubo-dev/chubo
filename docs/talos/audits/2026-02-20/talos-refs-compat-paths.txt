@@ -1,0 +1,18 @@
+# Explicit compatibility surface where talos/talosctl naming is currently tolerated.
+# Any match outside this list is forbidden by check-talos-refs.sh.
+#
+# This list is intentionally broad for Phase 0. Subsequent phases must shrink it.
+./.conform.yaml
+./.gitignore
+./.github
+./.golangci.yml
+./Dockerfile
+./Makefile
+./api
+./cmd
+./cmd/chuboctl/main.go
+./go.mod
+./hack
+./internal
+./pkg
+./tools

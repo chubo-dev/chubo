@@ -1,0 +1,46 @@
+# Talos Review - Logging and metrics pipeline
+
+Subsystem name: Logging (journald retention/forwarding) + node metrics
+
+- Chubo goal: manage journald retention/persistence and optional log forwarding; establish a minimal node metrics pipeline without heavy agents.
+- Talos equivalent (module/area): runtime logging manager + kmsg log forwarding + log persistence controller; perf stats controller (CPU/memory).
+- Talos code paths (file/dir):
+  - `pkg/machinery/config/types/v1alpha1/v1alpha1_types.go` (LoggingConfig, LoggingDestination)
+  - `pkg/machinery/config/types/v1alpha1/v1alpha1_logging.go` (validation)
+  - `internal/app/machined/pkg/runtime/logging/` (JSON lines sender, log manager)
+  - `internal/app/machined/pkg/controllers/runtime/kmsg_log_config.go`
+  - `internal/app/machined/pkg/controllers/runtime/kmsg_log_storage.go`
+  - `internal/app/machined/pkg/controllers/runtime/log_persistence.go`
+  - `internal/app/machined/pkg/controllers/perf/perf.go`
+  - `internal/app/machined/pkg/adapters/perf/`
+- Key algorithms / state machines:
+  - JSON-lines log sender over TCP/UDP with connection reuse and retry suppression (`sender_jsonlines.go`).
+  - kmsg log destinations merged from kernel cmdline + machine config.
+  - log persistence gated by volume mount lifecycle, with periodic flush and safe teardown.
+  - perf controller scrapes procfs on a fixed cadence and writes CPU/memory resources.
+- Config model / API surface:
+  - `.machine.logging.destinations[]` with endpoint + format + extra tags.
+  - kernel parameter `talos.logging.kernel` for kmsg forwarding.
+  - perf stats resources exposed via COSI runtime.
+- Failure handling / recovery:
+  - log sender errors short-circuit retry when partial writes happen.
+  - persistence controller blocks until log volume mount is ready; stops cleanly on teardown.
+  - perf controller tolerates procfs read errors by surfacing controller errors.
+- Test strategy (unit/contract/integration):
+  - `internal/app/machined/pkg/runtime/logging/sender_jsonlines_test.go`
+  - `internal/app/machined/pkg/controllers/runtime/kmsg_log_config_test.go`
+  - `internal/app/machined/pkg/controllers/runtime/log_persistence_test.go`
+  - `internal/app/machined/pkg/controllers/perf/perf_test.go`
+- What we will reuse:
+  - JSON-lines log sender structure and endpoint validation as a reference for forwarding.
+  - procfs-based CPU/memory sampling cadence for lightweight metrics.
+- What we will adapt:
+  - journald drop-in management (retention/persistence) instead of Talos’s logging manager.
+  - a minimal forwarding hook later (TCP/UDP JSON lines) without the full COSI graph.
+- What we will avoid (and why):
+  - Talos runtime logging manager + resource graph (too heavyweight for chubo Phase 9).
+  - kmsg-specific logging pipeline until we define a kernel log policy.
+- Action items:
+  - define chubo logging spec and map to journald config.
+  - decide forwarding target format/protocol (if any) and secure transport.
+  - define minimal node metrics surface (procfs snapshot vs agent).
