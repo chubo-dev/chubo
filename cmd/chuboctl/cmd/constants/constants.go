@@ -22,7 +22,7 @@ const (
 
 var (
 	// ImageFactoryURL is the default image factory endpoint used by chuboctl.
-	ImageFactoryURL = "https://factory.talos.dev/"
+	ImageFactoryURL = "https://factory.chubo.dev/"
 )
 
 func init() {

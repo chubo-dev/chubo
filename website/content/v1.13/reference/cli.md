@@ -252,7 +252,7 @@ chuboctl cluster create qemu [flags]
       --cpus-workers string                      the share of CPUs as fraction for each worker/VM (default "2.0")
       --disks disks                              list of disks to create in format "<driver1>:<size1>" (disks after the first one are added only to worker machines) (default virtio:10GiB,virtio:6GiB)
   -h, --help                                     help for qemu
-      --image-factory-url string                 image factory url (default "https://factory.talos.dev/")
+      --image-factory-url string                 image factory url (default "https://factory.chubo.dev/")
       --memory-controlplanes string(mb,gb)       the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --omni-api-endpoint string                 the Omni API endpoint (must include a scheme, a hostname and a join token, e.g. 'https://siderolink.omni.example?jointoken=foobar')
@@ -443,7 +443,7 @@ chuboctl cluster create qemu [flags]
       --cpus-workers string                      the share of CPUs as fraction for each worker/VM (default "2.0")
       --disks disks                              list of disks to create in format "<driver1>:<size1>" (disks after the first one are added only to worker machines) (default virtio:10GiB,virtio:6GiB)
   -h, --help                                     help for qemu
-      --image-factory-url string                 image factory url (default "https://factory.talos.dev/")
+      --image-factory-url string                 image factory url (default "https://factory.chubo.dev/")
       --memory-controlplanes string(mb,gb)       the limit on memory usage for each control plane/VM (default 2.0GiB)
       --memory-workers string(mb,gb)             the limit on memory usage for each worker/VM (default 2.0GiB)
       --omni-api-endpoint string                 the Omni API endpoint (must include a scheme, a hostname and a join token, e.g. 'https://siderolink.omni.example?jointoken=foobar')
@@ -2843,4 +2843,3 @@ nomadconfig, consulconfig, and openbaoconfig.
 * [chuboctl validate](#chuboctl-validate)	 - Validate config
 * [chuboctl version](#chuboctl-version)	 - Prints the version
 * [chuboctl wipe](#chuboctl-wipe)	 - Wipe block device or volumes
-

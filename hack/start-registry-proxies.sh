@@ -4,8 +4,8 @@
 
 set -e
 
-factory_proxy_remoteurl="${CHUBO_IMAGE_FACTORY_URL:-${TALOS_IMAGE_FACTORY_URL:-https://factory.talos.dev}}"
-factory_proxy_name="${CHUBO_FACTORY_PROXY_NAME:-registry-factory.talos.dev}"
+factory_proxy_remoteurl="${CHUBO_IMAGE_FACTORY_URL:-${TALOS_IMAGE_FACTORY_URL:-https://factory.chubo.dev}}"
+factory_proxy_name="${CHUBO_FACTORY_PROXY_NAME:-${TALOS_FACTORY_PROXY_NAME:-registry-factory.chubo.dev}}"
 
 docker run -d -p 5000:5000 \
     -e REGISTRY_PROXY_REMOTEURL=https://registry-1.docker.io \

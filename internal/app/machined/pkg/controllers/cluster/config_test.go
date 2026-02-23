@@ -47,7 +47,7 @@ func (suite *ConfigSuite) TestReconcileConfig() {
 
 			asrt.True(spec.DiscoveryEnabled)
 			asrt.True(spec.RegistryServiceEnabled)
-			asrt.Equal("discovery.talos.dev:443", spec.ServiceEndpoint)
+			asrt.Equal("discovery.chubo.dev:443", spec.ServiceEndpoint)
 			asrt.False(spec.ServiceEndpointInsecure)
 			asrt.Equal("cluster1", spec.ServiceClusterID)
 			asrt.Equal(

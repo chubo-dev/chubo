@@ -1,6 +1,8 @@
 ./.conform.yaml:          - talosctl
 ./.github/ISSUE_TEMPLATE/config.yml:    about: Ask a question about Talos Linux.
 ./.github/ISSUE_TEMPLATE/config.yml:    url: https://github.com/siderolabs/talos/discussions
+./.github/workflows/ci.yaml:          make target-talosctl-linux-amd64
+./.github/workflows/ci.yaml:      - name: chuboctl/talosctl target smoke
 ./.golangci.yml:        path: cmd/talosctl/cmd
 ./.golangci.yml:        path: cmd/talosctl/cmd/mgmt
 ./.golangci.yml:        path: cmd/talosctl/cmd/mgmt/inject
@@ -119,7 +121,6 @@
 ./api/machine/machine.proto:// CopyRequest describes a request to copy data out of Talos node
 ./api/machine/machine.proto:// FeaturesInfo describes individual Talos features that can be switched on or off.
 ./api/storage/storage.proto:  // SystemDisk indicates that the disk is used as Talos system disk.
-./cmd/chuboctl/cmd/constants/constants.go:	ImageFactoryURL = "https://factory.talos.dev/"
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.events.sink") != nil,
 ./cmd/chuboctl/cmd/mgmt/cluster/create/clusterops/configmaker/internal/siderolinkbuilder/builder.go:		extraKernelArgs.Get("talos.logging.kernel") != nil:
 ./cmd/chuboctl/cmd/mgmt/cluster/create/cmd.go:	legacyVersionAliasFlag = "talos-version"
@@ -178,8 +179,6 @@
 ./hack/release.toml:Talos now ships with `igzip` (amd64) and `pigz` (arm64) to speed up container image decompression.
 ./hack/release.toml:Talos now uses inventory backed server-side apply when applying bootsrap manifests (including `extraManifests` and `inlineManifests`).
 ./hack/release.toml:match_deps = "^github.com/((talos-systems|siderolabs)/[a-zA-Z0-9-]+)$"
-./hack/start-registry-proxies.sh:factory_proxy_name="${CHUBO_FACTORY_PROXY_NAME:-registry-factory.talos.dev}"
-./hack/start-registry-proxies.sh:factory_proxy_remoteurl="${CHUBO_IMAGE_FACTORY_URL:-${TALOS_IMAGE_FACTORY_URL:-https://factory.talos.dev}}"
 ./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go list -mod=readonly all >/dev/null
 ./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go mod download
 ./hack/third_party/go-talos-support/Dockerfile:RUN --mount=type=cache,target=/go/pkg,id=go-talos-support/go/pkg go mod verify
@@ -315,15 +314,12 @@
 ./pkg/machinery/config/schemas/config.schema.json:      "description": "KernelConfig struct configures Talos Linux kernel."
 ./pkg/machinery/config/schemas/config.schema.json:      "description": "LoggingConfig struct configures Talos logging."
 ./pkg/machinery/config/schemas/config.schema.json:      "description": "LoggingDestination struct configures Talos logging destination."
-./pkg/machinery/config/schemas/config.schema.json:  "$id": "https://talos.dev/v1.13/schemas/config.schema.json",
 ./pkg/machinery/config/types/block/block_doc.go:		Description: "ExistingVolumeConfig is an existing volume configuration document.\nExisting volumes allow to mount partitions (or whole disks) that were created\noutside of Talos. Volume will be mounted under `/var/mnt/<name>`.\nThe existing volume config name should not conflict with user volume names.\n",
 ./pkg/machinery/config/types/block/block_doc.go:		Description: "ExternalVolumeConfig is an external disk mount configuration document.\nExternal volumes allow to mount volumes that were created outside of Talos,\nover the network or API. Volume will be mounted under `/var/mnt/<name>`.\nThe external volume config name should not conflict with user volume names.\n",
 ./pkg/machinery/config/types/cri/cri_doc.go:				Description: "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
 ./pkg/machinery/config/types/cri/cri_doc.go:				Description: "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
 ./pkg/machinery/config/types/network/network_doc.go:				Description: "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
 ./pkg/machinery/config/types/runtime/runtime_doc.go:				Description: "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
-./pkg/machinery/config/types/v1alpha1/v1alpha1_examples.go:		"kernel.domainname":                   "talos.dev",
-./pkg/machinery/config/types/v1alpha1/v1alpha1_examples.go:		ClusterName:  "talos.local",
 ./pkg/machinery/config/types/v1alpha1/v1alpha1_types.go:	MachineSeccompProfiles []*MachineSeccompProfile `yaml:"seccompProfiles,omitempty" talos:"omitonlyifnil"`
 ./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Comments:    [3]string{"" /* encoder.HeadComment */, "Features describe individual Talos features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
 ./pkg/machinery/config/types/v1alpha1/v1alpha1_types_doc.go:				Description: "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
@@ -351,7 +347,6 @@
 ./pkg/machinery/constants/constants.go:	AnnotationStaticPodConfigVersion = "talos.dev/config-version"
 ./pkg/machinery/constants/constants.go:	AnnotationStaticPodSecretsVersion = "talos.dev/secrets-version"
 ./pkg/machinery/constants/constants.go:	ClusterNodeIDAnnotation = "cluster.talos.dev/node-id"
-./pkg/machinery/constants/constants.go:	DefaultDiscoveryServiceEndpoint = "https://discovery.talos.dev/"
 ./pkg/machinery/constants/constants.go:	DefaultKernelVersion = "6.18.8-talos"
 ./pkg/machinery/constants/constants.go:	DefaultNfTablesTableName = "talos"
 ./pkg/machinery/constants/constants.go:	EmbeddedConfigDirectory = "/usr/local/etc/talos/"
@@ -564,6 +559,5 @@
 ./pkg/provision/providers/vm/dhcpd_darwin.go:		fmt.Printf("warning: failed to start native dhcp server after creating a talos dhcp server: %s", err)
 ./pkg/provision/providers/vm/dhcpd_darwin.go:// starts the talos DHCP server and then starts the apple bootp server again, which is configured such
 ./pkg/provision/providers/vm/network_linux.go:	state.BridgeName = fmt.Sprintf("%s%s", "talos", hex.EncodeToString(networkNameHash[:])[:8])
-./tools/docgen/schema.go:const ConfigSchemaURLFormat = "https://talos.dev/%s/schemas/%s"
 ./tools/structprotogen/consts/consts.go:const DefaultResourceDefinitionsNamespace = "talos.resource.definitions"
 ./tools/structprotogen/proto/proto.go:const DefaultResourceDefinitionsNamespace = "talos.resource.definitions"

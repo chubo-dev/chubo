@@ -1129,7 +1129,7 @@ discovery:
         kubernetes: {}
         # Service registry is using an external service to push and pull information about cluster members.
         service:
-            endpoint: https://discovery.talos.dev/ # External service endpoint.
+            endpoint: https://discovery.chubo.dev/ # External service endpoint.
 {{< /highlight >}}</details> | |
 |`etcd` |<a href="#Config.cluster.etcd">EtcdConfig</a> |Etcd specific configuration options. <details><summary>Show example(s)</summary>{{< highlight yaml >}}
 etcd:
@@ -1842,7 +1842,7 @@ cluster:
             kubernetes: {}
             # Service registry is using an external service to push and pull information about cluster members.
             service:
-                endpoint: https://discovery.talos.dev/ # External service endpoint.
+                endpoint: https://discovery.chubo.dev/ # External service endpoint.
 {{< /highlight >}}
 
 
@@ -1896,7 +1896,7 @@ RegistryServiceConfig struct configures Kubernetes discovery registry.
 |-------|------|-------------|----------|
 |`disabled` |bool |Disable external service discovery registry.  | |
 |`endpoint` |string |External service endpoint. <details><summary>Show example(s)</summary>{{< highlight yaml >}}
-endpoint: https://discovery.talos.dev/
+endpoint: https://discovery.chubo.dev/
 {{< /highlight >}}</details> | |
 
 
@@ -2056,7 +2056,6 @@ cluster:
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
 |`certLifetime` |Duration |Admin kubeconfig certificate lifetime (default is 1 year).<br>Field format accepts any Go time.Duration format ('1h' for one hour, '10m' for ten minutes).  | |
-
 
 
 
