@@ -142,11 +142,6 @@ func (suite *AddressSpecSuite) TestDummy() {
 		Flags:       nethelpers.AddressFlags(nethelpers.AddressPermanent),
 	}
 
-	// it's fine to create the address before the interface is actually created
-	for _, res := range []resource.Resource{dummy} {
-		suite.Create(res)
-	}
-
 	// create dummy interface
 	suite.Require().NoError(
 		conn.Link.New(
@@ -246,6 +241,10 @@ func (suite *AddressSpecSuite) TestDummyAlias() {
 	aliasBytes, err := os.ReadFile(fmt.Sprintf("/sys/class/net/%s/ifalias", dummyInterface))
 	suite.Require().NoError(err)
 	suite.Require().Equal(dummyAlias, strings.TrimSpace(string(aliasBytes)))
+
+	for _, res := range []resource.Resource{dummy} {
+		suite.Create(res)
+	}
 
 	defer conn.Link.Delete(uint32(iface.Index)) //nolint:errcheck
 
