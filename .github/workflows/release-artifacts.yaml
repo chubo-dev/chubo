@@ -1,0 +1,141 @@
+name: release-artifacts
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Artifact tag (defaults to ref name or sha-<short>)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-release-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
+      - name: preflight-disk-cleanup
+        run: |
+          df -h
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+          docker buildx prune -af || true
+          docker system prune -af --volumes || true
+          df -h
+
+      - name: resolve-tag
+        id: resolve_tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          input_tag="${{ inputs.tag }}"
+          ref_tag="${GITHUB_REF_NAME}"
+          sha_tag="sha-${GITHUB_SHA::8}"
+
+          tag="$input_tag"
+
+          if [[ -z "$tag" ]] && [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            tag="$ref_tag"
+          fi
+
+          if [[ -z "$tag" ]]; then
+            tag="$sha_tag"
+          fi
+
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+
+      - name: docker-login-ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build-bootstrap-images
+        env:
+          ARTIFACT_TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          make installer-base imager \
+            REGISTRY=ghcr.io \
+            USERNAME=${{ github.repository_owner }} \
+            TAG="${ARTIFACT_TAG}" \
+            IMAGE_TAG_OUT="${ARTIFACT_TAG}" \
+            PUSH=true
+
+      - name: build-release-files
+        env:
+          ARTIFACT_TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          make \
+            chuboctl-linux-amd64 \
+            chuboctl-linux-arm64 \
+            iso \
+            image-hcloud \
+            image-nocloud \
+            REGISTRY=ghcr.io \
+            USERNAME=${{ github.repository_owner }} \
+            TAG="${ARTIFACT_TAG}" \
+            IMAGE_TAG_IN="${ARTIFACT_TAG}" \
+            IMAGE_TAG_OUT="${ARTIFACT_TAG}" \
+            PLATFORM=linux/amd64
+
+      - name: generate-sha256sums
+        shell: bash
+        run: |
+          set -euo pipefail
+          find _out -maxdepth 1 -type f \
+            \( -name 'chuboctl-linux-amd64' -o -name 'chuboctl-linux-arm64' -o -name '*.iso' -o -name '*hcloud*.raw*' -o -name '*nocloud*.raw*' \) \
+            | sort > /tmp/chubo-release-files.txt
+
+          if [[ ! -s /tmp/chubo-release-files.txt ]]; then
+            echo "no release files discovered under _out"
+            exit 1
+          fi
+
+          xargs -a /tmp/chubo-release-files.txt sha256sum > _out/SHA256SUMS
+
+      - name: upload-workflow-artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: chubo-release-artifacts-${{ steps.resolve_tag.outputs.tag }}
+          if-no-files-found: error
+          path: |
+            _out/chuboctl-linux-amd64
+            _out/chuboctl-linux-arm64
+            _out/*.iso
+            _out/*hcloud*.raw*
+            _out/*nocloud*.raw*
+            _out/SHA256SUMS
+
+      - name: publish-github-release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            _out/chuboctl-linux-amd64
+            _out/chuboctl-linux-arm64
+            _out/*.iso
+            _out/*hcloud*.raw*
+            _out/*nocloud*.raw*
+            _out/SHA256SUMS
