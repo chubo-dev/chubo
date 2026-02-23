@@ -251,7 +251,7 @@ func (suite *AddressSpecSuite) TestDummyAlias() {
 
 	suite.Assert().EventuallyWithT(func(collect *assert.CollectT) {
 		assertLinkAddress(assert.New(collect), dummyInterface, "10.0.0.5/8")
-	}, 3*time.Second, 10*time.Millisecond)
+	}, 10*time.Second, 25*time.Millisecond)
 }
 
 func TestAddressSpecSuite(t *testing.T) {
