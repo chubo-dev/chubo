@@ -16,6 +16,7 @@ This folder contains per-subsystem review stubs. Each review should be completed
 - Deep Talos fork (no K8s/etcd/CRI): `deep-fork-plan.md`
 - Deep fork execution checklist: `plan.md`
 - Chubo naming/env migration + sunset policy: `migration-notes.md`
+- Artifact publishing/consumption for KubeVirt + Hetzner: `artifacts-kubevirt-hetzner.md`
 
 ## Ownership (fill in)
 
