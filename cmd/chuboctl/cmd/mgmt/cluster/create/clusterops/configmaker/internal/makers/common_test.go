@@ -160,12 +160,15 @@ func assertConfigDefaultness[ExtraOps any](t *testing.T, cOps clusterops.Common,
 		generate.WithVersionContract(versionContract),
 	)
 
+	genOps := append([]generate.Option{}, m.GenOps...)
+	genOps = append(genOps, desiredExtraGenOps...)
+
 	in, err := generate.NewInput(cOps.RootOps.ClusterName, "controlplane-endpoint.test", "",
-		desiredExtraGenOps...,
+		genOps...,
 	)
 	require.NoError(t, err)
 
-	m.GenOps = append(m.GenOps, generate.WithSecretsBundle(secretsBundle))
+	m.GenOps = append(m.GenOps, desiredExtraGenOps...)
 
 	clusterCfgs, err := m.GetClusterConfigs()
 	require.NoError(t, err)
