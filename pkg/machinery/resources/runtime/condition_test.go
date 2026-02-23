@@ -21,9 +21,6 @@ import (
 )
 
 func TestCondition(t *testing.T) {
-	ctx, ctxCancel := context.WithTimeout(t.Context(), time.Second)
-	t.Cleanup(ctxCancel)
-
 	t.Parallel()
 
 	for _, tt := range []struct {
@@ -110,6 +107,14 @@ func TestCondition(t *testing.T) {
 	} {
 		t.Run(tt.Name, func(t *testing.T) {
 			t.Parallel()
+
+			timeout := 2 * time.Second
+			if !tt.Succeeds {
+				timeout = 300 * time.Millisecond
+			}
+
+			ctx, ctxCancel := context.WithTimeout(t.Context(), timeout)
+			t.Cleanup(ctxCancel)
 
 			state := state.WrapCore(namespaced.NewState(inmem.Build))
 
