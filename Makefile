@@ -1,8 +1,8 @@
 REGISTRY ?= ghcr.io
 USERNAME ?= siderolabs
 SHA ?= $(shell git describe --match=none --always --abbrev=8 --dirty)
-TAG ?= $(shell git describe --tag --always --dirty --match v[0-9]\*)
-ABBREV_TAG ?= $(shell git describe --tag --always --match v[0-9]\* --abbrev=0 )
+TAG ?= $(shell git describe --tag --dirty --match v[0-9]\* 2>/dev/null || echo v0.0.0-$(SHA))
+ABBREV_TAG ?= $(shell git describe --tag --match v[0-9]\* --abbrev=0 2>/dev/null || echo v0.0.0)
 TAG_SUFFIX ?=
 TAG_SUFFIX_IN ?= $(TAG_SUFFIX)
 TAG_SUFFIX_OUT ?= $(TAG_SUFFIX)

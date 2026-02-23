@@ -98,8 +98,8 @@ func applyPreset(t *testing.T, presets ...string) (clusterops.Common, clusterops
 func TestPXE(t *testing.T) {
 	_, qOps := applyPreset(t, preset.PXE{}.Name())
 
-	require.Equal(t, "factory.chubo.dev/metal-installer/123schematic123:v9.9.9", qOps.NodeInstallImage)
-	require.Equal(t, "https://factory.chubo.dev/pxe/123schematic123/v9.9.9/metal-arm64", qOps.NodeIPXEBootScript)
+	require.Equal(t, "factory.talos.dev/metal-installer/123schematic123:v9.9.9", qOps.NodeInstallImage)
+	require.Equal(t, "https://factory.talos.dev/pxe/123schematic123/v9.9.9/metal-arm64", qOps.NodeIPXEBootScript)
 	require.False(t, qOps.Tpm2Enabled)
 	require.Empty(t, qOps.NodeISOPath)
 }
@@ -107,19 +107,19 @@ func TestPXE(t *testing.T) {
 func TestSecureboot(t *testing.T) {
 	_, qOps := applyPreset(t, preset.ISOSecureBoot{}.Name())
 
-	require.Equal(t, "https://factory.chubo.dev/image/123schematic123/v9.9.9/metal-arm64-secureboot.iso", qOps.NodeISOPath)
+	require.Equal(t, "https://factory.talos.dev/image/123schematic123/v9.9.9/metal-arm64-secureboot.iso", qOps.NodeISOPath)
 	require.True(t, qOps.Tpm2Enabled)
 	require.Contains(t, qOps.DiskEncryptionKeyTypes, "tpm")
 	require.True(t, qOps.EncryptEphemeralPartition)
 	require.True(t, qOps.EncryptStatePartition)
 
-	require.Equal(t, "factory.chubo.dev/metal-installer-secureboot/123schematic123:v9.9.9", qOps.NodeInstallImage)
+	require.Equal(t, "factory.talos.dev/metal-installer-secureboot/123schematic123:v9.9.9", qOps.NodeInstallImage)
 }
 
 func TestDiskImage(t *testing.T) {
 	_, qOps := applyPreset(t, preset.DiskImage{}.Name())
 
-	require.Equal(t, "https://factory.chubo.dev/image/123schematic123/v9.9.9/metal-arm64.raw.zst", qOps.NodeDiskImagePath)
+	require.Equal(t, "https://factory.talos.dev/image/123schematic123/v9.9.9/metal-arm64.raw.zst", qOps.NodeDiskImagePath)
 }
 
 func TestMaintenance(t *testing.T) {

@@ -721,7 +721,7 @@ const (
 	NodeIdentityFilename = "node-identity.yaml"
 
 	// DefaultDiscoveryServiceEndpoint is the fallback endpoint for the discovery service.
-	DefaultDiscoveryServiceEndpoint = "https://discovery.chubo.dev/"
+	DefaultDiscoveryServiceEndpoint = "https://discovery.talos.dev/"
 
 	// NetworkSelfIPsAnnotation stores a comma-separated list of host IPs discovered by OS tooling.
 	NetworkSelfIPsAnnotation = "networking.talos.dev/self-ips"
