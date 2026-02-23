@@ -612,21 +612,9 @@ chuboos-guardrails: ## Legacy alias for chubo-guardrails (Wave B compatibility).
 chubo-e2e-qemu: ## Runs chubo core E2E in QEMU (install, runtime mTLS, upgrade, rollback, support).
 	@./hack/chubo/e2e-core-qemu.sh
 
-.PHONY: chubo-e2e-mixed-version-qemu
-chubo-e2e-mixed-version-qemu: ## Runs mixed-version QEMU core E2E (install image -> upgrade image -> rollback).
-	@if [ -z "$(INSTALLER_IMAGE_NODE)" ] || [ -z "$(INSTALLER_IMAGE_UPGRADE_NODE)" ]; then \
-		echo "set INSTALLER_IMAGE_NODE (install image) and INSTALLER_IMAGE_UPGRADE_NODE (upgrade image)"; \
-		exit 2; \
-	fi
-	@EXPECT_VERSION_CHANGE_ON_UPGRADE=1 ./hack/chubo/e2e-core-qemu.sh --skip-build
-
 .PHONY: chuboos-e2e-qemu
 chuboos-e2e-qemu: ## Legacy alias for chubo-e2e-qemu (Wave B compatibility).
 	@$(MAKE) chubo-e2e-qemu
-
-.PHONY: chuboos-e2e-mixed-version-qemu
-chuboos-e2e-mixed-version-qemu: ## Legacy alias for chubo-e2e-mixed-version-qemu (Wave B compatibility).
-	@$(MAKE) chubo-e2e-mixed-version-qemu
 
 .PHONY: chubo-e2e-full-qemu
 chubo-e2e-full-qemu: ## Runs full chubo QEMU E2E (core flow + helper bundles).
