@@ -129,7 +129,7 @@ func (ctrl *OpenWontonBootstrapStatusController) Run(ctx context.Context, r cont
 				if err != nil {
 					aclLastError = err.Error()
 				} else {
-					aclReady, err = ensureNomadACL(qctx, client, openWontonHTTPAddress, token, desired.Role == openWontonRoleServer)
+					aclReady, err = ensureNomadACL(qctx, client, openWontonHTTPAddress, token, isOpenWontonServerRole(desired.Role))
 					if err != nil {
 						aclLastError = err.Error()
 					}
@@ -141,8 +141,8 @@ func (ctrl *OpenWontonBootstrapStatusController) Run(ctx context.Context, r cont
 						lastError = err.Error()
 					}
 
-					switch desired.Role {
-					case openWontonRoleServer:
+					switch {
+					case isOpenWontonServerRole(desired.Role):
 						clusterReady = leader != "" && peerCount >= desired.BootstrapExpect
 					default:
 						clusterReady = leader != ""

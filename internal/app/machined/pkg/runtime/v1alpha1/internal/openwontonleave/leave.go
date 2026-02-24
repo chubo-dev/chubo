@@ -18,6 +18,7 @@ import (
 const (
 	roleClient       = "client"
 	roleServer       = "server"
+	roleServerClient = "server-client"
 	requestBodyLimit = 4096
 
 	nomadTokenHeader = "X-Nomad-Token"
@@ -43,11 +44,21 @@ type raftServer struct {
 }
 
 func IsClientRole(role string) bool {
-	return strings.TrimSpace(role) == roleClient
+	switch strings.TrimSpace(role) {
+	case roleClient, roleServerClient:
+		return true
+	default:
+		return false
+	}
 }
 
 func IsServerRole(role string) bool {
-	return strings.TrimSpace(role) == roleServer
+	switch strings.TrimSpace(role) {
+	case roleServer, roleServerClient:
+		return true
+	default:
+		return false
+	}
 }
 
 func PurgeNode(ctx context.Context, client *http.Client, baseURL, nodeName string) error {

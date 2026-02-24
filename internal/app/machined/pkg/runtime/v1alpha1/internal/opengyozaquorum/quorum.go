@@ -17,6 +17,7 @@ import (
 
 const (
 	roleServer       = "server"
+	roleServerClient = "server-client"
 	requestBodyLimit = 4096
 )
 
@@ -36,7 +37,12 @@ func ReadRole(path string) (role string, configured bool, err error) {
 }
 
 func IsServerRole(role string) bool {
-	return strings.TrimSpace(role) == roleServer
+	switch strings.TrimSpace(role) {
+	case roleServer, roleServerClient:
+		return true
+	default:
+		return false
+	}
 }
 
 func CheckSafeServerStopFromPeers(peers []string) error {

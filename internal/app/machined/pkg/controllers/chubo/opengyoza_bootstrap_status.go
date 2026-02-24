@@ -127,7 +127,7 @@ func (ctrl *OpenGyozaBootstrapStatusController) Run(ctx context.Context, r contr
 				if err != nil {
 					aclLastError = err.Error()
 				} else {
-					aclReady, err = ensureConsulACL(qctx, client, openGyozaHTTPAddress, token, desired.Role == openGyozaRoleServer)
+					aclReady, err = ensureConsulACL(qctx, client, openGyozaHTTPAddress, token, isOpenGyozaServerRole(desired.Role))
 					if err != nil {
 						aclLastError = err.Error()
 					}
@@ -139,8 +139,8 @@ func (ctrl *OpenGyozaBootstrapStatusController) Run(ctx context.Context, r contr
 						lastError = err.Error()
 					}
 
-					switch desired.Role {
-					case openGyozaRoleServer:
+					switch {
+					case isOpenGyozaServerRole(desired.Role):
 						clusterReady = leader != "" && peerCount >= desired.BootstrapExpect
 					default:
 						clusterReady = leader != ""

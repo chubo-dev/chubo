@@ -19,6 +19,7 @@ import (
 
 const (
 	roleClient       = "client"
+	roleServerClient = "server-client"
 	requestBodyLimit = 4096
 )
 
@@ -43,7 +44,12 @@ func ReadRole(path string) (role string, configured bool, err error) {
 }
 
 func IsClientRole(role string) bool {
-	return strings.TrimSpace(role) == roleClient
+	switch strings.TrimSpace(role) {
+	case roleClient, roleServerClient:
+		return true
+	default:
+		return false
+	}
 }
 
 func DrainNode(ctx context.Context, client *http.Client, baseURL, nodeName string, deadline time.Duration) error {

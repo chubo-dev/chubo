@@ -12,7 +12,7 @@ Chubo bootstraps OpenWonton (Nomad) and OpenGyoza (Consul) ACLs without introduc
 ## Usage
 
 - OS controllers use the derived token to:
-  - Bootstrap ACLs via the native API (server role only).
+  - Bootstrap ACLs via the native API (`server` and `server-client` roles).
   - Validate readiness via `GET /v1/acl/token/self`.
   - Emit helper bundles (`chuboctl nomadconfig`, `chuboctl consulconfig`) which include `acl.token`.
 - OpenGyoza also renders the token into `acl.tokens.master` and `acl.tokens.agent` for agent self-auth.
@@ -32,4 +32,3 @@ Chubo bootstraps OpenWonton (Nomad) and OpenGyoza (Consul) ACLs without introduc
 
 - `chuboctl get openwontonbootstrapstatus` and `chuboctl get opengyozabootstrapstatus` report `ACLReady`/`ACLLastError`.
 - Bootstrap status resources include `ACLTokenSHA256` so you can correlate changes without printing the token.
-

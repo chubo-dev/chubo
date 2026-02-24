@@ -30,8 +30,18 @@ const (
 	openGyozaBinaryPath  = "/var/lib/chubo/bin/opengyoza"
 	openGyozaFallback    = "/usr/bin/init"
 	openGyozaRoleServer  = "server"
+	openGyozaRoleHybrid  = "server-client"
 	openGyozaHTTPAddress = "https://127.0.0.1:8500"
 )
+
+func isOpenGyozaServerRole(role string) bool {
+	switch strings.TrimSpace(role) {
+	case openGyozaRoleServer, openGyozaRoleHybrid:
+		return true
+	default:
+		return false
+	}
+}
 
 // OpenGyozaServiceManager is the interface to v1alpha1 service manager.
 type OpenGyozaServiceManager interface {
@@ -154,7 +164,7 @@ func (ctrl *OpenGyozaServiceController) Run(ctx context.Context, r controller.Ru
 			if err != nil {
 				aclLastError = err.Error()
 			} else {
-				aclReady, qerr = ensureConsulACL(qctx, client, openGyozaHTTPAddress, token, role == openGyozaRoleServer)
+				aclReady, qerr = ensureConsulACL(qctx, client, openGyozaHTTPAddress, token, isOpenGyozaServerRole(role))
 				if qerr != nil {
 					aclLastError = qerr.Error()
 				}
