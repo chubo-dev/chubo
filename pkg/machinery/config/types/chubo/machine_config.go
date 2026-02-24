@@ -873,6 +873,22 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 		clientNetworkInterfaceLine = fmt.Sprintf("  network_interface = %q\n", networkInterface)
 	}
 
+	advertiseBlock := ""
+	if networkInterface != "" {
+		quotedNetworkInterface := fmt.Sprintf("\\\"%s\\\"", networkInterface)
+
+		// Force Nomad/OpenWonton to advertise the configured host interface IP.
+		// This avoids accidental selection of docker0 (172.17.0.1), which breaks raft in
+		// multi-node clusters because all nodes otherwise advertise the same address.
+		advertiseBlock = fmt.Sprintf(`advertise {
+  http = "{{ GetInterfaceIP %s }}"
+  rpc = "{{ GetInterfaceIP %s }}"
+  serf = "{{ GetInterfaceIP %s }}"
+}
+
+`, quotedNetworkInterface, quotedNetworkInterface, quotedNetworkInterface)
+	}
+
 	clientOptionsBlock := ""
 	if clientEnabled {
 		// Keep raw_exec enabled so minimal smoke jobs can run without the exec plugin runtime.
@@ -899,6 +915,8 @@ tls {
   verify_https_client = true
 }
 
+%s
+
 server {
   enabled = %t
   bootstrap_expect = %d
@@ -911,7 +929,7 @@ client {
 %s
 %s
 }
-`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine)
+`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {
