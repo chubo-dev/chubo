@@ -7,8 +7,8 @@ package opengyoza
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
-	"io"
 	"log"
 	"net/http"
 	"os/signal"
@@ -25,9 +25,41 @@ func Main() {
 
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/v1/status/leader", func(w http.ResponseWriter, _ *http.Request) {
+	writeJSON := func(w http.ResponseWriter, v any) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, `"127.0.0.1:8300"`)
+
+		if err := json.NewEncoder(w).Encode(v); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	}
+
+	mux.HandleFunc("/v1/status/leader", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, "127.0.0.1:8300")
+	})
+
+	mux.HandleFunc("/v1/catalog/datacenters", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, []string{"dc1"})
+	})
+
+	mux.HandleFunc("/v1/agent/self", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, map[string]any{
+			"Config": map[string]any{
+				"Datacenter": "dc1",
+				"NodeName":   "opengyoza-mock",
+				"Revision":   "mock",
+				"Server":     true,
+				"Version":    "1.16.4",
+			},
+		})
+	})
+
+	mux.HandleFunc("/v1/agent/members", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, []any{})
+	})
+
+	// Nomad may query health service endpoints for server discovery.
+	mux.HandleFunc("/v1/health/service/", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, []any{})
 	})
 
 	server := &http.Server{
