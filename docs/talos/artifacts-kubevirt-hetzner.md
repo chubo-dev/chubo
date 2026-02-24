@@ -6,7 +6,8 @@ Primary artifacts for homelab/KubeVirt and Hetzner testing:
 
 - `chuboctl-linux-amd64`
 - `chuboctl-linux-arm64`
-- `metal-*.iso`
+- `chuboctl-darwin-amd64`
+- `chuboctl-darwin-arm64`
 - `*nocloud*.raw*`
 - `*hcloud*.raw*`
 - `SHA256SUMS`
