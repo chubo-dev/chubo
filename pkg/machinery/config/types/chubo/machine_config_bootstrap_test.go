@@ -267,6 +267,7 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 			require.Contains(t, f.FileContent, "bootstrap_expect = 3")
 			require.Contains(t, f.FileContent, "server_join {")
 			require.Contains(t, f.FileContent, `retry_join = ["10.0.0.10","10.0.0.11"]`)
+			require.NotContains(t, f.FileContent, `"driver.raw_exec.enable"`)
 		case chuboOpenWontonRolePath:
 			foundRole = true
 			require.Equal(t, "server\n", f.FileContent)
@@ -275,6 +276,129 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 
 	require.True(t, foundConfig)
 	require.True(t, foundRole)
+}
+
+func TestMachineConfigNomadClientRendersOpenWontonServers(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled:          &enabled,
+				Role:             "client",
+				Join:             []string{"10.0.0.10", "10.0.0.11:4647"},
+				NetworkInterface: "enp0s2",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	foundConfig := false
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenWontonConfigPath {
+			continue
+		}
+
+		foundConfig = true
+		require.Contains(t, f.FileContent, "server {\n  enabled = false")
+		require.NotContains(t, f.FileContent, "server_join {")
+		require.Contains(t, f.FileContent, "client {\n  enabled = true")
+		require.Contains(t, f.FileContent, `"driver.raw_exec.enable" = "1"`)
+		require.Contains(t, f.FileContent, `servers = ["10.0.0.10:4647","10.0.0.11:4647"]`)
+		require.Contains(t, f.FileContent, `network_interface = "enp0s2"`)
+	}
+
+	require.True(t, foundConfig)
+}
+
+func TestMachineConfigNomadServerClientRendersOpenWontonServerAndClient(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled:          &enabled,
+				Role:             "server-client",
+				Join:             []string{"10.0.0.10", "10.0.0.11:4647"},
+				NetworkInterface: "enp0s2",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	foundConfig := false
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenWontonConfigPath {
+			continue
+		}
+
+		foundConfig = true
+		require.Contains(t, f.FileContent, "server {\n  enabled = true")
+		require.Contains(t, f.FileContent, "client {\n  enabled = true")
+		require.Contains(t, f.FileContent, `"driver.raw_exec.enable" = "1"`)
+		require.Contains(t, f.FileContent, `servers = ["10.0.0.10:4647","10.0.0.11:4647"]`)
+		require.Contains(t, f.FileContent, `network_interface = "enp0s2"`)
+	}
+
+	require.True(t, foundConfig)
+}
+
+func TestMachineConfigNomadInvalidNetworkInterfaceErrors(t *testing.T) {
+	t.Parallel()
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				NetworkInterface: "   ",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "spec.modules.chubo.nomad.networkInterface must not be empty")
 }
 
 func TestMachineConfigNomadInvalidRoleErrors(t *testing.T) {
@@ -401,6 +525,48 @@ func TestMachineConfigConsulRendersOpenGyozaFiles(t *testing.T) {
 
 	require.True(t, foundConfig)
 	require.True(t, foundRole)
+}
+
+func TestMachineConfigConsulServerClientRendersOpenGyozaServer(t *testing.T) {
+	t.Parallel()
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Consul: &ChuboRoleSpec{
+				Role: "server-client",
+				Join: []string{"10.0.0.20", "10.0.0.21"},
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	foundConfig := false
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenGyozaConfigPath {
+			continue
+		}
+
+		foundConfig = true
+		require.Contains(t, f.FileContent, "server = true")
+		require.Contains(t, f.FileContent, `retry_join = ["10.0.0.20","10.0.0.21"]`)
+	}
+
+	require.True(t, foundConfig)
 }
 
 func TestMachineConfigOpenBaoRendersNomadJobPayload(t *testing.T) {

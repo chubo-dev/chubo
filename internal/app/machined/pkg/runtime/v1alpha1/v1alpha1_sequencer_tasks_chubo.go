@@ -196,21 +196,27 @@ func LeaveClusterMembership(runtime.Sequence, any) (runtime.TaskExecutionFunc, s
 				leaveCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 				defer cancel()
 
-				switch {
-				case openwontonleave.IsClientRole(role):
+				clientRole := openwontonleave.IsClientRole(role)
+				serverRole := openwontonleave.IsServerRole(role)
+
+				if !clientRole && !serverRole {
+					logger.Printf("skipping openwonton leave: unknown role=%q", strings.TrimSpace(role))
+				}
+
+				if clientRole {
 					if err := openwontonleave.PurgeNodeWithToken(leaveCtx, client, openWontonHTTPAddress, nodeName, nomadToken); err != nil {
 						logger.Printf("openwonton node purge skipped: %v", err)
 					} else {
 						logger.Printf("requested openwonton node purge for %q", nodeName)
 					}
-				case openwontonleave.IsServerRole(role):
+				}
+
+				if serverRole {
 					if err := openwontonleave.RemoveServerPeerWithToken(leaveCtx, client, openWontonHTTPAddress, nodeName, nomadToken); err != nil {
 						logger.Printf("openwonton raft peer removal skipped: %v", err)
 					} else {
 						logger.Printf("requested openwonton raft peer removal for %q", nodeName)
 					}
-				default:
-					logger.Printf("skipping openwonton leave: unknown role=%q", strings.TrimSpace(role))
 				}
 			}
 		}

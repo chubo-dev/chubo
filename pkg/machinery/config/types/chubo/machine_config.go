@@ -16,6 +16,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"net"
 	"net/url"
 	"strings"
 
@@ -55,6 +56,10 @@ const (
 
 	chuboRoleServer = "server"
 	chuboRoleClient = "client"
+	// chuboRoleServerClient enables both server and client modes for OpenWonton.
+	//
+	// For OpenGyoza, this role is treated as server.
+	chuboRoleServerClient = "server-client"
 
 	chuboOpenBaoModeNomadJob = "nomadJob"
 	chuboOpenBaoDefaultJobID = "openbao"
@@ -230,7 +235,7 @@ type ChuboRoleSpec struct {
 	// Enabled turns the role on/off.
 	Enabled *bool `yaml:"enabled,omitempty"`
 
-	// Role selects the role (server|client).
+	// Role selects the role (server|client|server-client).
 	Role string `yaml:"role,omitempty"`
 
 	// ArtifactURL overrides the default release artifact URL used to install the component binary.
@@ -245,6 +250,12 @@ type ChuboRoleSpec struct {
 
 	// Join is the ordered list of peer addresses (IP/host) to join/retry-join.
 	Join []string `yaml:"join,omitempty"`
+
+	// NetworkInterface sets openwonton client.network_interface when client mode is enabled.
+	//
+	// This avoids default-route interface auto-detection paths that may rely on
+	// distro-specific helper binaries.
+	NetworkInterface string `yaml:"networkInterface,omitempty"`
 }
 
 type ChuboOpenBaoSpec struct {
@@ -402,6 +413,10 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 				if err := validateChuboJoin("spec.modules.chubo.nomad.join", s.Spec.Modules.Chubo.Nomad.Join); err != nil {
 					return nil, err
 				}
+
+				if err := validateChuboNetworkInterface("spec.modules.chubo.nomad.networkInterface", s.Spec.Modules.Chubo.Nomad.NetworkInterface); err != nil {
+					return nil, err
+				}
 			}
 
 			if s.Spec.Modules.Chubo.Consul != nil && (s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled) {
@@ -548,6 +563,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Nomad.Role)
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Nomad.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Nomad.Join)
+				networkInterface := normalizeChuboNetworkInterface(s.Spec.Modules.Chubo.Nomad.NetworkInterface)
 
 				if url := strings.TrimSpace(s.Spec.Modules.Chubo.Nomad.ArtifactURL); url != "" {
 					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
@@ -559,7 +575,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				}
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join),
+					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, networkInterface),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenWontonConfigPath,
 					FileOp:          "create",
@@ -671,7 +687,7 @@ func slicesClone[T any](in []T) []T {
 
 func validateChuboRole(path string, role string) error {
 	switch strings.TrimSpace(role) {
-	case "", chuboRoleServer, chuboRoleClient:
+	case "", chuboRoleServer, chuboRoleClient, chuboRoleServerClient:
 		return nil
 	default:
 		return fmt.Errorf("unknown %s %q", path, role)
@@ -682,8 +698,28 @@ func normalizeChuboRole(role string) string {
 	switch strings.TrimSpace(role) {
 	case chuboRoleClient:
 		return chuboRoleClient
+	case chuboRoleServerClient:
+		return chuboRoleServerClient
 	default:
 		return chuboRoleServer
+	}
+}
+
+func isChuboServerRole(role string) bool {
+	switch normalizeChuboRole(role) {
+	case chuboRoleServer, chuboRoleServerClient:
+		return true
+	default:
+		return false
+	}
+}
+
+func isChuboClientRole(role string) bool {
+	switch normalizeChuboRole(role) {
+	case chuboRoleClient, chuboRoleServerClient:
+		return true
+	default:
+		return false
 	}
 }
 
@@ -704,6 +740,18 @@ func validateChuboJoin(path string, addrs []string) error {
 		if strings.TrimSpace(raw) == "" {
 			return fmt.Errorf("%s must not contain empty entries", path)
 		}
+	}
+
+	return nil
+}
+
+func validateChuboNetworkInterface(path string, iface string) error {
+	if iface == "" {
+		return nil
+	}
+
+	if strings.TrimSpace(iface) == "" {
+		return fmt.Errorf("%s must not be empty", path)
 	}
 
 	return nil
@@ -753,12 +801,16 @@ func normalizeChuboJoin(addrs []string) []string {
 	return out
 }
 
+func normalizeChuboNetworkInterface(iface string) string {
+	return strings.TrimSpace(iface)
+}
+
 func defaultChuboBootstrapExpect(role string, v *int) int {
 	if v != nil {
 		return *v
 	}
 
-	if role == chuboRoleServer {
+	if isChuboServerRole(role) {
 		return 1
 	}
 
@@ -776,18 +828,58 @@ func renderHCLStringArray(values []string) string {
 	return string(b)
 }
 
-func renderOpenWontonConfig(role string, bootstrapExpect int, join []string) string {
-	serverEnabled := role == chuboRoleServer
-	clientEnabled := role == chuboRoleClient
+func renderOpenWontonClientServers(join []string) string {
+	servers := make([]string, 0, len(join))
+
+	for _, raw := range join {
+		raw = strings.TrimSpace(raw)
+		if raw == "" {
+			continue
+		}
+
+		if _, _, err := net.SplitHostPort(raw); err == nil {
+			servers = append(servers, raw)
+
+			continue
+		}
+
+		servers = append(servers, net.JoinHostPort(raw, "4647"))
+	}
+
+	return renderHCLStringArray(servers)
+}
+
+func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, networkInterface string) string {
+	serverEnabled := isChuboServerRole(role)
+	clientEnabled := isChuboClientRole(role)
 
 	joinBlock := ""
-	if len(join) > 0 {
+	if serverEnabled && len(join) > 0 {
 		joinBlock = fmt.Sprintf(`  server_join {
     retry_join = %s
     retry_max = 0
     retry_interval = "15s"
   }
 `, renderHCLStringArray(join))
+	}
+
+	clientServersLine := ""
+	if clientEnabled && len(join) > 0 {
+		clientServersLine = fmt.Sprintf("  servers = %s\n", renderOpenWontonClientServers(join))
+	}
+
+	clientNetworkInterfaceLine := ""
+	if clientEnabled && networkInterface != "" {
+		clientNetworkInterfaceLine = fmt.Sprintf("  network_interface = %q\n", networkInterface)
+	}
+
+	clientOptionsBlock := ""
+	if clientEnabled {
+		// Keep raw_exec enabled so minimal smoke jobs can run without the exec plugin runtime.
+		clientOptionsBlock = `  options = {
+    "driver.raw_exec.enable" = "1"
+  }
+`
 	}
 
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"
@@ -815,12 +907,15 @@ server {
 
 client {
   enabled = %t
+%s
+%s
+%s
 }
-`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, serverEnabled, bootstrapExpect, joinBlock, clientEnabled)
+`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {
-	serverEnabled := role == chuboRoleServer
+	serverEnabled := isChuboServerRole(role)
 
 	joinLine := ""
 	if len(join) > 0 {

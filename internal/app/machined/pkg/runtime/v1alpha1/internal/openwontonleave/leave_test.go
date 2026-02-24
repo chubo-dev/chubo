@@ -10,6 +10,22 @@ import (
 	"time"
 )
 
+func TestRolePredicates(t *testing.T) {
+	t.Parallel()
+
+	if !IsClientRole("client") {
+		t.Fatalf("expected client role to be client-capable")
+	}
+
+	if !IsServerRole("server") {
+		t.Fatalf("expected server role to be server-capable")
+	}
+
+	if !IsClientRole("server-client") || !IsServerRole("server-client") {
+		t.Fatalf("expected server-client role to be both client/server capable")
+	}
+}
+
 func TestPurgeNodeWithToken(t *testing.T) {
 	t.Parallel()
 

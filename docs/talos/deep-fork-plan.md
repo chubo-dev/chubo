@@ -318,10 +318,10 @@ spec:
         # minimal flags only; Chubo owns the rest via its MachineConfig
       consul:
         enabled: true
-        role: server # server|client
+        role: server # server|client|server-client
       nomad:
         enabled: true
-        role: server # server|client
+        role: server # server|client|server-client
       openbao:
         enabled: false
         mode: nomadJob # nomadJob
