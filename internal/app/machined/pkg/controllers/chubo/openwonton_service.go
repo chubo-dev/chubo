@@ -30,8 +30,18 @@ const (
 	openWontonBinaryPath  = "/var/lib/chubo/bin/openwonton"
 	openWontonFallback    = "/usr/bin/init"
 	openWontonRoleServer  = "server"
+	openWontonRoleHybrid  = "server-client"
 	openWontonHTTPAddress = "https://127.0.0.1:4646"
 )
+
+func isOpenWontonServerRole(role string) bool {
+	switch strings.TrimSpace(role) {
+	case openWontonRoleServer, openWontonRoleHybrid:
+		return true
+	default:
+		return false
+	}
+}
 
 // OpenWontonServiceManager is the interface to v1alpha1 service manager.
 type OpenWontonServiceManager interface {
@@ -154,7 +164,7 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 			if err != nil {
 				aclLastError = err.Error()
 			} else {
-				aclReady, qerr = ensureNomadACL(qctx, client, openWontonHTTPAddress, token, role == openWontonRoleServer)
+				aclReady, qerr = ensureNomadACL(qctx, client, openWontonHTTPAddress, token, isOpenWontonServerRole(role))
 				if qerr != nil {
 					aclLastError = qerr.Error()
 				}

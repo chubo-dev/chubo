@@ -60,6 +60,28 @@ func TestReadRole(t *testing.T) {
 			t.Fatalf("expected client role, got %q", role)
 		}
 	})
+
+	t.Run("hybrid role file", func(t *testing.T) {
+		t.Parallel()
+
+		path := filepath.Join(t.TempDir(), "openwonton.role")
+		if err := os.WriteFile(path, []byte(" server-client \n"), 0o644); err != nil {
+			t.Fatalf("failed writing role file: %v", err)
+		}
+
+		role, configured, err := ReadRole(path)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if !configured {
+			t.Fatalf("expected configured=true")
+		}
+
+		if !IsClientRole(role) {
+			t.Fatalf("expected client-capable role, got %q", role)
+		}
+	})
 }
 
 func TestDrainNodeSuccess(t *testing.T) {
