@@ -179,7 +179,9 @@ func beforeExecCallback(pa *syscall.ProcAttr, data any) error {
 func (p *processRunner) build(extraLogWriter io.Writer) (commandWrapper, error) {
 	wrapper := commandWrapper{}
 
-	env := slices.Concat([]string{constants.EnvPath}, p.opts.Env, os.Environ())
+	// Place service-provided env first so explicit overrides (for example PATH)
+	// take precedence over default and inherited values.
+	env := slices.Concat(p.opts.Env, []string{constants.EnvPath}, os.Environ())
 	launcher := cap.NewLauncher(p.args.ProcessArgs[0], p.args.ProcessArgs, env)
 
 	if p.opts.UID > 0 {
