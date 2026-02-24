@@ -917,14 +917,11 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 	if consulEnabled {
 		consulBlock = fmt.Sprintf(`consul {
   address = "127.0.0.1:8500"
-  ssl = true
-  verify_ssl = true
-%s  ca_file = "%s/ca.pem"
-  cert_file = "%s/server.pem"
-  key_file = "%s/server-key.pem"
+  ssl = false
+%s
 }
 
-`, consulTokenLine, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir)
+`, consulTokenLine)
 	}
 
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"
