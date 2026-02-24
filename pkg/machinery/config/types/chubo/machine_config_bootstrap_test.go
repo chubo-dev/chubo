@@ -429,12 +429,12 @@ func TestMachineConfigNomadRendersConsulIntegrationWhenConsulEnabled(t *testing.
 		foundConfig = true
 		require.Contains(t, f.FileContent, "consul {\n")
 		require.Contains(t, f.FileContent, `address = "127.0.0.1:8500"`)
-		require.Contains(t, f.FileContent, "ssl = true")
-		require.Contains(t, f.FileContent, "verify_ssl = true")
+		require.Contains(t, f.FileContent, "ssl = false")
 		require.Contains(t, f.FileContent, `token = "`+expectedConsulToken+`"`)
-		require.Contains(t, f.FileContent, `ca_file = "/var/lib/chubo/certs/opengyoza/ca.pem"`)
-		require.Contains(t, f.FileContent, `cert_file = "/var/lib/chubo/certs/opengyoza/server.pem"`)
-		require.Contains(t, f.FileContent, `key_file = "/var/lib/chubo/certs/opengyoza/server-key.pem"`)
+		require.NotContains(t, f.FileContent, "verify_ssl =")
+		require.NotContains(t, f.FileContent, `ca_file = "/var/lib/chubo/certs/opengyoza/ca.pem"`)
+		require.NotContains(t, f.FileContent, `cert_file = "/var/lib/chubo/certs/opengyoza/server.pem"`)
+		require.NotContains(t, f.FileContent, `key_file = "/var/lib/chubo/certs/opengyoza/server-key.pem"`)
 	}
 
 	require.True(t, foundConfig)
