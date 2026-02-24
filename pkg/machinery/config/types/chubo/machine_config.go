@@ -556,6 +556,16 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 			})
 		}
 
+		chuboConsulEnabled := false
+		chuboConsulACLToken := ""
+
+		if s.Spec.Modules.Chubo.Consul != nil {
+			chuboConsulEnabled = s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled
+			if chuboConsulEnabled {
+				chuboConsulACLToken = chuboacl.WorkloadToken(s.Spec.Trust.Token, "consul")
+			}
+		}
+
 		// Chubo Nomad/OpenWonton: render minimal host-process config for the OS-managed service.
 		if enabled && s.Spec.Modules.Chubo.Nomad != nil {
 			nomadEnabled := s.Spec.Modules.Chubo.Nomad.Enabled == nil || *s.Spec.Modules.Chubo.Nomad.Enabled
@@ -575,7 +585,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				}
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, networkInterface),
+					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, networkInterface, chuboConsulEnabled, chuboConsulACLToken),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenWontonConfigPath,
 					FileOp:          "create",
@@ -592,12 +602,12 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 
 		// Chubo Consul/OpenGyoza: render minimal host-process config for the OS-managed service.
 		if enabled && s.Spec.Modules.Chubo.Consul != nil {
-			consulEnabled := s.Spec.Modules.Chubo.Consul.Enabled == nil || *s.Spec.Modules.Chubo.Consul.Enabled
+			consulEnabled := chuboConsulEnabled
 			if consulEnabled {
 				role := normalizeChuboRole(s.Spec.Modules.Chubo.Consul.Role)
 				bootstrapExpect := defaultChuboBootstrapExpect(role, s.Spec.Modules.Chubo.Consul.BootstrapExpect)
 				join := normalizeChuboJoin(s.Spec.Modules.Chubo.Consul.Join)
-				aclToken := chuboacl.WorkloadToken(s.Spec.Trust.Token, "consul")
+				aclToken := chuboConsulACLToken
 
 				if url := strings.TrimSpace(s.Spec.Modules.Chubo.Consul.ArtifactURL); url != "" {
 					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
@@ -849,7 +859,7 @@ func renderOpenWontonClientServers(join []string) string {
 	return renderHCLStringArray(servers)
 }
 
-func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, networkInterface string) string {
+func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, networkInterface string, consulEnabled bool, consulACLToken string) string {
 	serverEnabled := isChuboServerRole(role)
 	clientEnabled := isChuboClientRole(role)
 
@@ -898,6 +908,25 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 `
 	}
 
+	consulTokenLine := ""
+	if consulACLToken != "" {
+		consulTokenLine = fmt.Sprintf("  token = %q\n", consulACLToken)
+	}
+
+	consulBlock := ""
+	if consulEnabled {
+		consulBlock = fmt.Sprintf(`consul {
+  address = "127.0.0.1:8500"
+  ssl = true
+  verify_ssl = true
+%s  ca_file = "%s/ca.pem"
+  cert_file = "%s/server.pem"
+  key_file = "%s/server-key.pem"
+}
+
+`, consulTokenLine, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir)
+	}
+
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"
 bind_addr = "0.0.0.0"
 log_level = "INFO"
@@ -916,6 +945,7 @@ tls {
 }
 
 %s
+%s
 
 server {
   enabled = %t
@@ -929,7 +959,7 @@ client {
 %s
 %s
 }
-`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine)
+`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, consulBlock, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {

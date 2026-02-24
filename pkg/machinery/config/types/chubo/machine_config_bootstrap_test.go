@@ -383,6 +383,63 @@ func TestMachineConfigNomadServerClientRendersOpenWontonServerAndClient(t *testi
 	require.True(t, foundConfig)
 }
 
+func TestMachineConfigNomadRendersConsulIntegrationWhenConsulEnabled(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled:          &enabled,
+				Role:             "server-client",
+				Join:             []string{"10.0.0.10", "10.0.0.11:4647"},
+				NetworkInterface: "enp0s2",
+			},
+			Consul: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server-client",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	expectedConsulToken := chuboacl.WorkloadToken("token", "consul")
+	foundConfig := false
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenWontonConfigPath {
+			continue
+		}
+
+		foundConfig = true
+		require.Contains(t, f.FileContent, "consul {\n")
+		require.Contains(t, f.FileContent, `address = "127.0.0.1:8500"`)
+		require.Contains(t, f.FileContent, "ssl = true")
+		require.Contains(t, f.FileContent, "verify_ssl = true")
+		require.Contains(t, f.FileContent, `token = "`+expectedConsulToken+`"`)
+		require.Contains(t, f.FileContent, `ca_file = "/var/lib/chubo/certs/opengyoza/ca.pem"`)
+		require.Contains(t, f.FileContent, `cert_file = "/var/lib/chubo/certs/opengyoza/server.pem"`)
+		require.Contains(t, f.FileContent, `key_file = "/var/lib/chubo/certs/opengyoza/server-key.pem"`)
+	}
+
+	require.True(t, foundConfig)
+}
+
 func TestMachineConfigNomadInvalidNetworkInterfaceErrors(t *testing.T) {
 	t.Parallel()
 
