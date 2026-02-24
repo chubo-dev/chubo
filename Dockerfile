@@ -848,6 +848,8 @@ COPY --chmod=0644 hack/udevd/99-default.link /rootfs/usr/lib/systemd/network/
 COPY --chmod=0644 hack/udevd/40-vm-hotadd.rules hack/udevd/90-selinux.rules /rootfs/usr/lib/udev/rules.d/
 COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
+COPY --chmod=0644 hack/passwd /rootfs/etc/passwd
+COPY --chmod=0644 hack/group /rootfs/etc/group
 COPY --link --from=chubo-agent-build-amd64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
 COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
@@ -944,6 +946,8 @@ COPY --chmod=0644 hack/udevd/99-default.link /rootfs/usr/lib/systemd/network/
 COPY --chmod=0644 hack/udevd/40-vm-hotadd.rules hack/udevd/90-selinux.rules /rootfs/usr/lib/udev/rules.d/
 COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
+COPY --chmod=0644 hack/passwd /rootfs/etc/passwd
+COPY --chmod=0644 hack/group /rootfs/etc/group
 COPY --link --from=chubo-agent-build-arm64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
 COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
