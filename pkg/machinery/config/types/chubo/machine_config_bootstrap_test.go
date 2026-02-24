@@ -322,6 +322,9 @@ func TestMachineConfigNomadClientRendersOpenWontonServers(t *testing.T) {
 		require.Contains(t, f.FileContent, "client {\n  enabled = true")
 		require.Contains(t, f.FileContent, `"driver.raw_exec.enable" = "1"`)
 		require.Contains(t, f.FileContent, `servers = ["10.0.0.10:4647","10.0.0.11:4647"]`)
+		require.Contains(t, f.FileContent, `http = "{{ GetInterfaceIP \"enp0s2\" }}"`)
+		require.Contains(t, f.FileContent, `rpc = "{{ GetInterfaceIP \"enp0s2\" }}"`)
+		require.Contains(t, f.FileContent, `serf = "{{ GetInterfaceIP \"enp0s2\" }}"`)
 		require.Contains(t, f.FileContent, `network_interface = "enp0s2"`)
 	}
 
@@ -371,6 +374,9 @@ func TestMachineConfigNomadServerClientRendersOpenWontonServerAndClient(t *testi
 		require.Contains(t, f.FileContent, "client {\n  enabled = true")
 		require.Contains(t, f.FileContent, `"driver.raw_exec.enable" = "1"`)
 		require.Contains(t, f.FileContent, `servers = ["10.0.0.10:4647","10.0.0.11:4647"]`)
+		require.Contains(t, f.FileContent, `http = "{{ GetInterfaceIP \"enp0s2\" }}"`)
+		require.Contains(t, f.FileContent, `rpc = "{{ GetInterfaceIP \"enp0s2\" }}"`)
+		require.Contains(t, f.FileContent, `serf = "{{ GetInterfaceIP \"enp0s2\" }}"`)
 		require.Contains(t, f.FileContent, `network_interface = "enp0s2"`)
 	}
 
