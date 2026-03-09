@@ -908,6 +908,18 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 `
 	}
 
+	dockerPluginBlock := ""
+	if clientEnabled {
+		// CSI plugins require privileged Docker tasks.
+		dockerPluginBlock = `plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+
+`
+	}
+
 	consulTokenLine := ""
 	if consulACLToken != "" {
 		consulTokenLine = fmt.Sprintf("  token = %q\n", consulACLToken)
@@ -956,7 +968,7 @@ client {
 %s
 %s
 }
-`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, consulBlock, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine)
+%s`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, consulBlock, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine, dockerPluginBlock)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {

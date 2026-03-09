@@ -268,6 +268,7 @@ func TestMachineConfigNomadRendersOpenWontonFiles(t *testing.T) {
 			require.Contains(t, f.FileContent, "server_join {")
 			require.Contains(t, f.FileContent, `retry_join = ["10.0.0.10","10.0.0.11"]`)
 			require.NotContains(t, f.FileContent, `"driver.raw_exec.enable"`)
+			require.NotContains(t, f.FileContent, "allow_privileged = true")
 		case chuboOpenWontonRolePath:
 			foundRole = true
 			require.Equal(t, "server\n", f.FileContent)
@@ -321,6 +322,7 @@ func TestMachineConfigNomadClientRendersOpenWontonServers(t *testing.T) {
 		require.NotContains(t, f.FileContent, "server_join {")
 		require.Contains(t, f.FileContent, "client {\n  enabled = true")
 		require.Contains(t, f.FileContent, `"driver.raw_exec.enable" = "1"`)
+		require.Contains(t, f.FileContent, "allow_privileged = true")
 		require.Contains(t, f.FileContent, `servers = ["10.0.0.10:4647","10.0.0.11:4647"]`)
 		require.Contains(t, f.FileContent, `http = "{{ GetInterfaceIP \"enp0s2\" }}"`)
 		require.Contains(t, f.FileContent, `rpc = "{{ GetInterfaceIP \"enp0s2\" }}"`)
@@ -373,6 +375,7 @@ func TestMachineConfigNomadServerClientRendersOpenWontonServerAndClient(t *testi
 		require.Contains(t, f.FileContent, "server {\n  enabled = true")
 		require.Contains(t, f.FileContent, "client {\n  enabled = true")
 		require.Contains(t, f.FileContent, `"driver.raw_exec.enable" = "1"`)
+		require.Contains(t, f.FileContent, "allow_privileged = true")
 		require.Contains(t, f.FileContent, `servers = ["10.0.0.10:4647","10.0.0.11:4647"]`)
 		require.Contains(t, f.FileContent, `http = "{{ GetInterfaceIP \"enp0s2\" }}"`)
 		require.Contains(t, f.FileContent, `rpc = "{{ GetInterfaceIP \"enp0s2\" }}"`)
