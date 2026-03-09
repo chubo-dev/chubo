@@ -69,6 +69,12 @@ ARG PKG_XFSPROGS=scratch
 ARG PKG_XZ=scratch
 ARG PKG_ZLIB=scratch
 ARG PKG_ZSTD=scratch
+ARG OPENWONTON_VERSION=v1.6.5-rc2
+ARG OPENWONTON_AMD64_ASSET_URL=https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc2/openwonton_release_linux_amd64_1.6.5-rc2_edca5a45ed4a4cc836d2e39cc71b11893e5ba70a.docker.tar
+ARG OPENWONTON_ARM64_ASSET_URL=https://github.com/openwonton/openwonton/releases/download/v1.6.5-rc2/openwonton_release_linux_arm64_1.6.5-rc2_edca5a45ed4a4cc836d2e39cc71b11893e5ba70a.docker.tar
+ARG OPENGYOZA_VERSION=v1.6.4
+ARG OPENGYOZA_AMD64_ASSET_URL=https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_amd64.zip
+ARG OPENGYOZA_ARM64_ASSET_URL=https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_arm64.zip
 
 ARG DEBUG_TOOLS_SOURCE=scratch
 
@@ -78,6 +84,26 @@ ARG EMBED_TARGET=embed
 
 FROM ${PKG_FHS} AS pkg-fhs
 FROM ${PKG_CA_CERTIFICATES} AS pkg-ca-certificates
+
+FROM scratch AS baked-openwonton-archive-amd64
+ARG OPENWONTON_VERSION
+ARG OPENWONTON_AMD64_ASSET_URL
+ADD ${OPENWONTON_AMD64_ASSET_URL} /artifacts/openwonton/${OPENWONTON_VERSION}/amd64/
+
+FROM scratch AS baked-openwonton-archive-arm64
+ARG OPENWONTON_VERSION
+ARG OPENWONTON_ARM64_ASSET_URL
+ADD ${OPENWONTON_ARM64_ASSET_URL} /artifacts/openwonton/${OPENWONTON_VERSION}/arm64/
+
+FROM scratch AS baked-opengyoza-archive-amd64
+ARG OPENGYOZA_VERSION
+ARG OPENGYOZA_AMD64_ASSET_URL
+ADD ${OPENGYOZA_AMD64_ASSET_URL} /artifacts/opengyoza/${OPENGYOZA_VERSION}/amd64/
+
+FROM scratch AS baked-opengyoza-archive-arm64
+ARG OPENGYOZA_VERSION
+ARG OPENGYOZA_ARM64_ASSET_URL
+ADD ${OPENGYOZA_ARM64_ASSET_URL} /artifacts/opengyoza/${OPENGYOZA_VERSION}/arm64/
 
 FROM --platform=amd64 ${PKG_APPARMOR} AS pkg-apparmor-amd64
 FROM --platform=arm64 ${PKG_APPARMOR} AS pkg-apparmor-arm64
@@ -815,6 +841,8 @@ COPY --link --from=pkg-kmod-amd64 /usr/bin/kmod /rootfs/usr/bin/modprobe
 COPY --link --from=pkg-kmod-amd64 usr/share/spdx/kmod.spdx.json /rootfs/usr/share/spdx/kmod.spdx.json
 COPY --link --from=modules-amd64 /usr/lib/modules /rootfs/usr/lib/modules
 COPY --link --from=machined-build-amd64 /machined /rootfs/usr/bin/init
+COPY --link --from=baked-openwonton-archive-amd64 /artifacts/openwonton /rootfs/usr/local/lib/chubo-artifacts/openwonton
+COPY --link --from=baked-opengyoza-archive-amd64 /artifacts/opengyoza /rootfs/usr/local/lib/chubo-artifacts/opengyoza
 
 # this is a no-op as it copies from a scratch image when WITH_DEBUG_SHELL is not set
 COPY --link --from=pkg-debug-tools-amd64 * /rootfs/
@@ -913,6 +941,8 @@ COPY --link --from=pkg-kmod-arm64 /usr/bin/kmod /rootfs/usr/bin/modprobe
 COPY --link --from=pkg-kmod-arm64 /usr/share/spdx/kmod.spdx.json /rootfs/usr/share/spdx/kmod.spdx.json
 COPY --link --from=modules-arm64 /usr/lib/modules /rootfs/usr/lib/modules
 COPY --link --from=machined-build-arm64 /machined /rootfs/usr/bin/init
+COPY --link --from=baked-openwonton-archive-arm64 /artifacts/openwonton /rootfs/usr/local/lib/chubo-artifacts/openwonton
+COPY --link --from=baked-opengyoza-archive-arm64 /artifacts/opengyoza /rootfs/usr/local/lib/chubo-artifacts/opengyoza
 
 # this is a no-op as it copies from a scratch image when WITH_DEBUG_SHELL is not set
 COPY --link --from=pkg-debug-tools-arm64 * /rootfs/
