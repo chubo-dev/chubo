@@ -559,6 +559,21 @@ ARG GO_LDFLAGS
 RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /chubo-agent
 RUN chmod +x /chubo-agent
 
+FROM base AS dfshim-build-amd64
+WORKDIR /src/internal/app/dfshim
+ARG GO_BUILDFLAGS
+ARG GO_LDFLAGS
+ARG GOAMD64
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=amd64 GOAMD64=${GOAMD64} go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /dfshim
+RUN chmod +x /dfshim
+
+FROM base AS dfshim-build-arm64
+WORKDIR /src/internal/app/dfshim
+ARG GO_BUILDFLAGS
+ARG GO_LDFLAGS
+RUN --mount=type=cache,target=/.cache,id=chubo/.cache GOOS=linux GOARCH=arm64 go build ${GO_BUILDFLAGS} -ldflags "${GO_LDFLAGS}" -o /dfshim
+RUN chmod +x /dfshim
+
 # The CLI targets build the binaries.
 
 FROM base AS chuboctl-linux-amd64-build
@@ -878,7 +893,7 @@ COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
 COPY --chmod=0644 hack/passwd /rootfs/etc/passwd
 COPY --chmod=0644 hack/group /rootfs/etc/group
-COPY --link --from=chubo-agent-build-amd64 /chubo-agent /rootfs/usr/bin/df
+COPY --link --from=dfshim-build-amd64 /dfshim /rootfs/usr/bin/df
 COPY --link --from=chubo-agent-build-amd64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
 COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
@@ -981,7 +996,7 @@ COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
 COPY --chmod=0644 hack/passwd /rootfs/etc/passwd
 COPY --chmod=0644 hack/group /rootfs/etc/group
-COPY --link --from=chubo-agent-build-arm64 /chubo-agent /rootfs/usr/bin/df
+COPY --link --from=dfshim-build-arm64 /dfshim /rootfs/usr/bin/df
 COPY --link --from=chubo-agent-build-arm64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
 COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
