@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	goruntime "runtime"
 	"strings"
 	"time"
 
@@ -32,13 +33,14 @@ const (
 	// OpenWontonServiceID is the service ID exposed by machined.
 	OpenWontonServiceID = "openwonton"
 
-	openWontonBinaryPath = "/var/lib/chubo/bin/openwonton"
-	openWontonWontonPath = "/var/lib/chubo/bin/wonton"
-	openWontonDFShimPath = "/var/lib/chubo/bin/df"
-	openWontonConfigPath = "/var/lib/chubo/config/openwonton.hcl"
-	openWontonDataDir    = "/var/lib/chubo/openwonton"
-	openWontonAllocDir   = "/var/lib/chubo/openwonton/alloc"
-	openWontonGlibcDir   = "/var/lib/chubo/lib/openwonton"
+	openWontonBinaryPath      = "/var/lib/chubo/bin/openwonton"
+	openWontonWontonPath      = "/var/lib/chubo/bin/wonton"
+	openWontonDFShimPath      = "/var/lib/chubo/bin/df"
+	openWontonConfigPath      = "/var/lib/chubo/config/openwonton.hcl"
+	openWontonArtifactURLPath = "/var/lib/chubo/config/openwonton.artifact_url"
+	openWontonDataDir         = "/var/lib/chubo/openwonton"
+	openWontonAllocDir        = "/var/lib/chubo/openwonton/alloc"
+	openWontonGlibcDir        = "/var/lib/chubo/lib/openwonton"
 	// Keep the fallback interpreter path short enough to fit PT_INTERP.
 	openWontonInterpreterFallback = "/var/lib/chubo/ld-linux.so"
 	chuboAgentBinaryPath          = "/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent"
@@ -86,10 +88,26 @@ func (s *OpenWonton) PreFunc(ctx context.Context, r runtime.Runtime) error {
 		return err
 	}
 
+	release := openWontonOCIRelease
+
+	if raw, err := os.ReadFile(openWontonArtifactURLPath); err == nil {
+		override := strings.TrimSpace(string(raw))
+		if override != "" {
+			release = openWontonOCIRelease
+			release.AssetURLs = make(map[string]string, len(openWontonOCIRelease.AssetURLs))
+
+			for k, v := range openWontonOCIRelease.AssetURLs {
+				release.AssetURLs[k] = v
+			}
+
+			release.AssetURLs[goruntime.GOARCH] = override
+		}
+	}
+
 	// Prefer real openwonton release artifacts (wonton + glibc bundle from the OCI image tar).
 	// Fall back to the local mock binary path if artifact install is unavailable (for example
 	// network-restricted boots).
-	if err := ensureOpenWontonRuntime(ctx, openWontonBinaryPath, openWontonWontonPath, openWontonGlibcDir); err == nil {
+	if err := ensureOpenWontonRuntime(ctx, openWontonBinaryPath, openWontonWontonPath, openWontonGlibcDir, release); err == nil {
 		// Ensure direct binary execution is possible so re-exec paths (task executor/plugin launch)
 		// resolve os.Executable() to openwonton itself, not the dynamic loader path.
 		if err = ensureOpenWontonInterpreter(openWontonBinaryPath, openWontonGlibcDir); err != nil {
@@ -118,7 +136,7 @@ func (s *OpenWonton) Condition(r runtime.Runtime) conditions.Condition {
 
 // DependsOn implements the Service interface.
 func (s *OpenWonton) DependsOn(runtime.Runtime) []string {
-	return []string{machinedServiceID}
+	return []string{machinedServiceID, DockerServiceID}
 }
 
 // Volumes implements the Service interface.

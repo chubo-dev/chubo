@@ -33,7 +33,7 @@ var openWontonOCIRelease = serviceReleaseOCITar{
 	},
 }
 
-func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, wontonBinaryPath, glibcDir string) error {
+func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, wontonBinaryPath, glibcDir string, release serviceReleaseOCITar) error {
 	// Fast path: already installed.
 	if _, _, err := openWontonLoaderAndLibraryPath(glibcDir); err == nil {
 		targetReady, err := executableFileExists(targetBinaryPath)
@@ -52,12 +52,12 @@ func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, wontonBinary
 	}
 
 	arch := goruntime.GOARCH
-	assetURL, ok := openWontonOCIRelease.AssetURLs[arch]
+	assetURL, ok := release.AssetURLs[arch]
 	if !ok {
-		return fmt.Errorf("%s has no OCI release asset URL for arch %q", openWontonOCIRelease.ServiceName, arch)
+		return fmt.Errorf("%s has no OCI release asset URL for arch %q", release.ServiceName, arch)
 	}
 
-	cacheDir := filepath.Join(chuboArtifactsPath, openWontonOCIRelease.ServiceName, openWontonOCIRelease.Version, arch)
+	cacheDir := filepath.Join(chuboArtifactsPath, release.ServiceName, release.Version, arch)
 	archivePath := filepath.Join(cacheDir, filepath.Base(assetURL))
 	layoutDir := filepath.Join(cacheDir, "oci")
 
@@ -65,14 +65,8 @@ func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, wontonBinary
 		return fmt.Errorf("failed to create openwonton cache dir %q: %w", cacheDir, err)
 	}
 
-	if _, err := os.Stat(archivePath); err != nil {
-		if !os.IsNotExist(err) {
-			return fmt.Errorf("failed to stat cached OCI tar %q: %w", archivePath, err)
-		}
-
-		if err := downloadReleaseArchive(ctx, assetURL, archivePath); err != nil {
-			return err
-		}
+	if err := ensureReleaseArchive(ctx, release.ServiceName, release.Version, arch, assetURL, archivePath); err != nil {
+		return err
 	}
 
 	if _, err := os.Stat(filepath.Join(layoutDir, "index.json")); err != nil {

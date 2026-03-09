@@ -22,10 +22,19 @@ const (
 	releaseDownloadTimeout = 10 * time.Minute
 )
 
+var chuboBakedArtifactsPath = "/usr/local/lib/chubo-artifacts"
+
 type serviceReleaseBinary struct {
 	ServiceName string
 	Version     string
 	ZipEntry    string
+	AssetURLs   map[string]string // key: runtime.GOARCH
+}
+
+type serviceReleaseTarGzBinary struct {
+	ServiceName string
+	Version     string
+	TarEntry    string
 	AssetURLs   map[string]string // key: runtime.GOARCH
 }
 
@@ -108,14 +117,8 @@ func ensureCachedReleaseBinary(ctx context.Context, release serviceReleaseBinary
 		return "", fmt.Errorf("failed to create artifact cache dir %q: %w", cacheDir, err)
 	}
 
-	if _, err := os.Stat(archivePath); err != nil {
-		if !os.IsNotExist(err) {
-			return "", fmt.Errorf("failed to stat cached archive %q: %w", archivePath, err)
-		}
-
-		if err := downloadReleaseArchive(ctx, assetURL, archivePath); err != nil {
-			return "", err
-		}
+	if err := ensureReleaseArchive(ctx, release.ServiceName, release.Version, arch, assetURL, archivePath); err != nil {
+		return "", err
 	}
 
 	if err := extractZipEntryToFile(archivePath, release.ZipEntry, extractedBinaryPath); err != nil {
@@ -171,6 +174,49 @@ func downloadReleaseArchive(ctx context.Context, url string, archivePath string)
 	}
 
 	return nil
+}
+
+func ensureReleaseArchive(ctx context.Context, serviceName, version, arch, assetURL, archivePath string) error {
+	if err := os.MkdirAll(filepath.Dir(archivePath), 0o755); err != nil {
+		return fmt.Errorf("failed to create archive parent dir for %q: %w", archivePath, err)
+	}
+
+	if _, err := os.Stat(archivePath); err == nil {
+		return nil
+	} else if !os.IsNotExist(err) {
+		return fmt.Errorf("failed to stat cached archive %q: %w", archivePath, err)
+	}
+
+	if copied, err := copyBakedReleaseArchiveIfPresent(serviceName, version, arch, assetURL, archivePath); err != nil {
+		return err
+	} else if copied {
+		return nil
+	}
+
+	return downloadReleaseArchive(ctx, assetURL, archivePath)
+}
+
+func copyBakedReleaseArchiveIfPresent(serviceName, version, arch, assetURL, archivePath string) (bool, error) {
+	bakedPath := filepath.Join(chuboBakedArtifactsPath, serviceName, version, arch, filepath.Base(assetURL))
+
+	st, err := os.Stat(bakedPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+
+		return false, fmt.Errorf("failed to stat baked archive %q: %w", bakedPath, err)
+	}
+
+	if !st.Mode().IsRegular() {
+		return false, fmt.Errorf("baked archive %q is not a regular file", bakedPath)
+	}
+
+	if err := copyFile(bakedPath, archivePath, 0o644); err != nil {
+		return false, fmt.Errorf("failed to seed cached archive %q from baked archive %q: %w", archivePath, bakedPath, err)
+	}
+
+	return true, nil
 }
 
 func extractZipEntryToFile(archivePath string, zipEntry string, outputPath string) error {
@@ -234,37 +280,20 @@ func findZipEntry(files []*zip.File, expectedName string) (*zip.File, error) {
 }
 
 func copyExecutable(srcPath string, dstPath string) error {
+	return copyFile(srcPath, dstPath, 0o755)
+}
+
+func copyFile(srcPath string, dstPath string, perm os.FileMode) error {
 	src, err := os.Open(srcPath)
 	if err != nil {
-		return fmt.Errorf("failed to open binary source %q: %w", srcPath, err)
+		return fmt.Errorf("failed to open file source %q: %w", srcPath, err)
 	}
 
 	defer src.Close() //nolint:errcheck
 
 	if err := os.MkdirAll(filepath.Dir(dstPath), 0o755); err != nil {
-		return fmt.Errorf("failed to create binary target dir for %q: %w", dstPath, err)
+		return fmt.Errorf("failed to create file target dir for %q: %w", dstPath, err)
 	}
 
-	partialPath := dstPath + ".part"
-
-	dst, err := os.OpenFile(partialPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o755)
-	if err != nil {
-		return fmt.Errorf("failed to create binary target %q: %w", partialPath, err)
-	}
-
-	if _, err := io.Copy(dst, src); err != nil {
-		_ = dst.Close()
-
-		return fmt.Errorf("failed to copy binary from %q to %q: %w", srcPath, partialPath, err)
-	}
-
-	if err := dst.Close(); err != nil {
-		return fmt.Errorf("failed to finalize binary target %q: %w", partialPath, err)
-	}
-
-	if err := os.Rename(partialPath, dstPath); err != nil {
-		return fmt.Errorf("failed to atomically place binary %q: %w", dstPath, err)
-	}
-
-	return nil
+	return writeFileAtomicFromReader(dstPath, src, perm)
 }
