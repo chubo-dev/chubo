@@ -913,6 +913,9 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 		// CSI plugins require privileged Docker tasks.
 		dockerPluginBlock = `plugin "docker" {
   config {
+    volumes {
+      enabled = true
+    }
     allow_privileged = true
   }
 }
