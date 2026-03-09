@@ -5,7 +5,9 @@
 package services
 
 import (
+	"archive/tar"
 	"archive/zip"
+	"compress/gzip"
 	"context"
 	"fmt"
 	"io"
@@ -40,6 +42,14 @@ type serviceReleaseTarGzBinary struct {
 
 func ensureServiceBinaryWithRelease(ctx context.Context, targetPath string, fallbackPath string, release serviceReleaseBinary) error {
 	if err := installServiceBinaryFromRelease(ctx, targetPath, release); err == nil {
+		return nil
+	}
+
+	return ensureServiceBinary(targetPath, fallbackPath)
+}
+
+func ensureServiceBinaryWithTarGzRelease(ctx context.Context, targetPath string, fallbackPath string, release serviceReleaseTarGzBinary) error {
+	if err := installServiceBinaryFromTarGzRelease(ctx, targetPath, release); err == nil {
 		return nil
 	}
 
@@ -91,6 +101,15 @@ func installServiceBinaryFromRelease(ctx context.Context, targetPath string, rel
 	return copyExecutable(artifactBinaryPath, targetPath)
 }
 
+func installServiceBinaryFromTarGzRelease(ctx context.Context, targetPath string, release serviceReleaseTarGzBinary) error {
+	artifactBinaryPath, err := ensureCachedTarGzReleaseBinary(ctx, release)
+	if err != nil {
+		return err
+	}
+
+	return copyExecutable(artifactBinaryPath, targetPath)
+}
+
 func ensureCachedReleaseBinary(ctx context.Context, release serviceReleaseBinary) (string, error) {
 	arch := goruntime.GOARCH
 
@@ -122,6 +141,43 @@ func ensureCachedReleaseBinary(ctx context.Context, release serviceReleaseBinary
 	}
 
 	if err := extractZipEntryToFile(archivePath, release.ZipEntry, extractedBinaryPath); err != nil {
+		return "", err
+	}
+
+	return extractedBinaryPath, nil
+}
+
+func ensureCachedTarGzReleaseBinary(ctx context.Context, release serviceReleaseTarGzBinary) (string, error) {
+	arch := goruntime.GOARCH
+
+	assetURL, ok := release.AssetURLs[arch]
+	if !ok {
+		return "", fmt.Errorf("%s has no release asset URL for arch %q", release.ServiceName, arch)
+	}
+
+	cacheDir := filepath.Join(chuboArtifactsPath, release.ServiceName, release.Version, arch)
+	archivePath := filepath.Join(cacheDir, filepath.Base(assetURL))
+	extractedBinaryPath := filepath.Join(cacheDir, filepath.Base(release.TarEntry))
+
+	if st, err := os.Stat(extractedBinaryPath); err == nil && st.Mode().IsRegular() {
+		if st.Mode()&0o111 == 0 {
+			if chmodErr := os.Chmod(extractedBinaryPath, 0o755); chmodErr != nil {
+				return "", fmt.Errorf("failed to chmod cached binary %q: %w", extractedBinaryPath, chmodErr)
+			}
+		}
+
+		return extractedBinaryPath, nil
+	}
+
+	if err := os.MkdirAll(cacheDir, 0o755); err != nil {
+		return "", fmt.Errorf("failed to create artifact cache dir %q: %w", cacheDir, err)
+	}
+
+	if err := ensureReleaseArchive(ctx, release.ServiceName, release.Version, arch, assetURL, archivePath); err != nil {
+		return "", err
+	}
+
+	if err := extractTarGzEntryToFile(archivePath, release.TarEntry, extractedBinaryPath); err != nil {
 		return "", err
 	}
 
@@ -261,6 +317,58 @@ func extractZipEntryToFile(archivePath string, zipEntry string, outputPath strin
 	}
 
 	return nil
+}
+
+func extractTarGzEntryToFile(archivePath, tarEntry, outputPath string) error {
+	f, err := os.Open(archivePath)
+	if err != nil {
+		return fmt.Errorf("failed to open release archive %q: %w", archivePath, err)
+	}
+
+	defer f.Close() //nolint:errcheck
+
+	gr, err := gzip.NewReader(f)
+	if err != nil {
+		return fmt.Errorf("failed to open gzip stream for %q: %w", archivePath, err)
+	}
+
+	defer gr.Close() //nolint:errcheck
+
+	tr := tar.NewReader(gr)
+	expectedEntry := cleanTarPath(tarEntry)
+
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			return fmt.Errorf("failed reading tar stream from %q: %w", archivePath, err)
+		}
+
+		name := cleanTarPath(hdr.Name)
+		if name != expectedEntry {
+			continue
+		}
+
+		if hdr.Typeflag != tar.TypeReg && hdr.Typeflag != tar.TypeRegA {
+			return fmt.Errorf("tar entry %q in %q is not a regular file", tarEntry, archivePath)
+		}
+
+		perm := os.FileMode(hdr.Mode) & 0o777
+		if perm&0o111 == 0 {
+			perm = 0o755
+		}
+
+		if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
+			return fmt.Errorf("failed to create extracted binary parent dir %q: %w", filepath.Dir(outputPath), err)
+		}
+
+		return writeFileAtomicFromReader(outputPath, tr, perm)
+	}
+
+	return fmt.Errorf("tar entry %q not found", tarEntry)
 }
 
 func findZipEntry(files []*zip.File, expectedName string) (*zip.File, error) {
