@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	goruntime "runtime"
+	"sort"
 	"strings"
 	"time"
 
@@ -214,7 +215,7 @@ func ensureOpenGyozaRuntimeConfig(ctx context.Context) error {
 		return fmt.Errorf("failed to read opengyoza base config %q: %w", openGyozaConfigPath, err)
 	}
 
-	ip, err := defaultOutboundIPv4(ctx)
+	ip, err := preferredAdvertiseIPv4(ctx)
 	if err != nil {
 		return err
 	}
@@ -248,6 +249,58 @@ func ensureOpenGyozaRuntimeConfig(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func preferredAdvertiseIPv4(ctx context.Context) (string, error) {
+	if ip, err := firstPrivateIPv4(); err == nil {
+		return ip, nil
+	}
+
+	return defaultOutboundIPv4(ctx)
+}
+
+func firstPrivateIPv4() (string, error) {
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		return "", fmt.Errorf("failed to list interfaces: %w", err)
+	}
+
+	return firstPrivateIPv4FromInterfaces(ifaces, func(iface net.Interface) ([]net.Addr, error) {
+		return iface.Addrs()
+	})
+}
+
+func firstPrivateIPv4FromInterfaces(ifaces []net.Interface, addrs func(net.Interface) ([]net.Addr, error)) (string, error) {
+	sort.Slice(ifaces, func(i, j int) bool {
+		return ifaces[i].Name < ifaces[j].Name
+	})
+
+	for _, iface := range ifaces {
+		if iface.Flags&net.FlagUp == 0 || iface.Flags&net.FlagLoopback != 0 {
+			continue
+		}
+
+		addrs, err := addrs(iface)
+		if err != nil {
+			continue
+		}
+
+		for _, addr := range addrs {
+			ipNet, ok := addr.(*net.IPNet)
+			if !ok {
+				continue
+			}
+
+			ip := ipNet.IP.To4()
+			if ip == nil || !ip.IsPrivate() || ip.IsLoopback() || ip.IsUnspecified() {
+				continue
+			}
+
+			return ip.String(), nil
+		}
+	}
+
+	return "", fmt.Errorf("no private IPv4 address found")
 }
 
 func defaultOutboundIPv4(ctx context.Context) (string, error) {
