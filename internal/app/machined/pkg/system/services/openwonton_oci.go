@@ -33,21 +33,31 @@ var openWontonOCIRelease = serviceReleaseOCITar{
 	},
 }
 
-func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, glibcDir string) error {
+func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, wontonBinaryPath, glibcDir string, release serviceReleaseOCITar) error {
 	// Fast path: already installed.
 	if _, _, err := openWontonLoaderAndLibraryPath(glibcDir); err == nil {
-		if st, err := os.Stat(targetBinaryPath); err == nil && st.Mode().IsRegular() && st.Mode()&0o111 != 0 {
+		targetReady, err := executableFileExists(targetBinaryPath)
+		if err != nil {
+			return err
+		}
+
+		wontonReady, err := executableFileExists(wontonBinaryPath)
+		if err != nil {
+			return err
+		}
+
+		if targetReady && wontonReady {
 			return nil
 		}
 	}
 
 	arch := goruntime.GOARCH
-	assetURL, ok := openWontonOCIRelease.AssetURLs[arch]
+	assetURL, ok := release.AssetURLs[arch]
 	if !ok {
-		return fmt.Errorf("%s has no OCI release asset URL for arch %q", openWontonOCIRelease.ServiceName, arch)
+		return fmt.Errorf("%s has no OCI release asset URL for arch %q", release.ServiceName, arch)
 	}
 
-	cacheDir := filepath.Join(chuboArtifactsPath, openWontonOCIRelease.ServiceName, openWontonOCIRelease.Version, arch)
+	cacheDir := filepath.Join(chuboArtifactsPath, release.ServiceName, release.Version, arch)
 	archivePath := filepath.Join(cacheDir, filepath.Base(assetURL))
 	layoutDir := filepath.Join(cacheDir, "oci")
 
@@ -55,14 +65,8 @@ func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, glibcDir str
 		return fmt.Errorf("failed to create openwonton cache dir %q: %w", cacheDir, err)
 	}
 
-	if _, err := os.Stat(archivePath); err != nil {
-		if !os.IsNotExist(err) {
-			return fmt.Errorf("failed to stat cached OCI tar %q: %w", archivePath, err)
-		}
-
-		if err := downloadReleaseArchive(ctx, assetURL, archivePath); err != nil {
-			return err
-		}
+	if err := ensureReleaseArchive(ctx, release.ServiceName, release.Version, arch, assetURL, archivePath); err != nil {
+		return err
 	}
 
 	if _, err := os.Stat(filepath.Join(layoutDir, "index.json")); err != nil {
@@ -90,16 +94,16 @@ func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, glibcDir str
 	binTmp := targetBinaryPath + ".part"
 	_ = os.Remove(binTmp)
 
-	var extractedBinary bool
+	var extractedBinaryPath string
 
 	for _, layerPath := range layerPaths {
-		if err := extractOpenWontonLayer(layerPath, binTmp, glibcTmp, &extractedBinary); err != nil {
+		if err := extractOpenWontonLayer(layerPath, binTmp, glibcTmp, &extractedBinaryPath); err != nil {
 			return err
 		}
 	}
 
-	if !extractedBinary {
-		return errors.New("failed to locate bin/wonton in OCI image layers")
+	if extractedBinaryPath == "" {
+		return errors.New("failed to locate bin/wonton, bin/openwonton, or bin/nomad in OCI image layers")
 	}
 
 	// Atomically replace the glibc directory.
@@ -122,7 +126,44 @@ func ensureOpenWontonRuntime(ctx context.Context, targetBinaryPath, glibcDir str
 		return err
 	}
 
-	return nil
+	return ensureExecutableAlias(targetBinaryPath, wontonBinaryPath)
+}
+
+func executableFileExists(path string) (bool, error) {
+	st, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+
+		return false, err
+	}
+
+	return st.Mode().IsRegular() && st.Mode()&0o111 != 0, nil
+}
+
+func ensureExecutableAlias(srcPath, dstPath string) error {
+	if srcPath == dstPath {
+		return nil
+	}
+
+	_ = os.Remove(dstPath)
+
+	if err := os.Link(srcPath, dstPath); err == nil {
+		return nil
+	}
+
+	if err := os.Symlink(srcPath, dstPath); err == nil {
+		return nil
+	}
+
+	src, err := os.Open(srcPath)
+	if err != nil {
+		return fmt.Errorf("failed to open source executable %q: %w", srcPath, err)
+	}
+	defer src.Close() //nolint:errcheck
+
+	return writeFileAtomicFromReader(dstPath, src, 0o755)
 }
 
 func openWontonLoaderAndLibraryPath(glibcDir string) (loaderPath, libraryPath string, err error) {
@@ -319,7 +360,7 @@ func extractTarToDir(archivePath, destDir string) error {
 	return nil
 }
 
-func extractOpenWontonLayer(layerPath, binTmp, glibcTmp string, extractedBinary *bool) error {
+func extractOpenWontonLayer(layerPath, binTmp, glibcTmp string, extractedBinaryPath *string) error {
 	layerFile, err := os.Open(layerPath)
 	if err != nil {
 		return fmt.Errorf("failed to open OCI layer %q: %w", layerPath, err)
@@ -360,12 +401,26 @@ func extractOpenWontonLayer(layerPath, binTmp, glibcTmp string, extractedBinary 
 			continue
 		}
 
-		// Extract the OpenWonton agent binary.
+		// Prefer the real wonton binary, then openwonton/nomad launchers as fallbacks.
 		if name == "bin/wonton" && (hdr.Typeflag == tar.TypeReg || hdr.Typeflag == tar.TypeRegA) {
 			if err := writeFileAtomicFromReader(binTmp, tr, 0o755); err != nil {
 				return err
 			}
-			*extractedBinary = true
+
+			*extractedBinaryPath = name
+
+			continue
+		}
+
+		if (name == "bin/openwonton" || name == "bin/nomad") &&
+			(hdr.Typeflag == tar.TypeReg || hdr.Typeflag == tar.TypeRegA) &&
+			*extractedBinaryPath == "" {
+			if err := writeFileAtomicFromReader(binTmp, tr, 0o755); err != nil {
+				return err
+			}
+
+			*extractedBinaryPath = name
+
 			continue
 		}
 

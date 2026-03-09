@@ -43,9 +43,8 @@ const (
 
 var openGyozaRelease = serviceReleaseBinary{
 	ServiceName: "opengyoza",
-	// opengyoza publishes Consul-compatible release artifacts as the `gyoza` binary.
-	Version:  "v1.6.4",
-	ZipEntry: "gyoza",
+	Version:     "v1.6.4",
+	ZipEntry:    "gyoza",
 	AssetURLs: map[string]string{
 		"amd64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_amd64.zip",
 		"arm64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_arm64.zip",

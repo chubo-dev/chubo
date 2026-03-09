@@ -46,6 +46,27 @@ require_cmd() {
 	fi
 }
 
+ensure_docker_host() {
+	if [[ -n "${DOCKER_HOST:-}" ]]; then
+		return 0
+	fi
+
+	local context_name context_host
+
+	context_name="$(docker context show 2>/dev/null || true)"
+	if [[ -z "${context_name}" ]]; then
+		return 0
+	fi
+
+	context_host="$(docker context inspect "${context_name}" --format '{{.Endpoints.docker.Host}}' 2>/dev/null || true)"
+	if [[ -z "${context_host}" || "${context_host}" == "<no value>" ]]; then
+		return 0
+	fi
+
+	export DOCKER_HOST="${context_host}"
+	echo "using DOCKER_HOST from docker context ${context_name}: ${DOCKER_HOST}"
+}
+
 check_host_support() {
 	local host_os
 
@@ -108,6 +129,13 @@ require_cmd go
 require_cmd make
 require_cmd unzip
 check_host_support
+ensure_docker_host
+
+if ! docker version >/dev/null 2>&1; then
+	echo "docker CLI is available but cannot connect to a daemon." >&2
+	echo "hint: set DOCKER_HOST explicitly or select a working docker context before running this script." >&2
+	exit 1
+fi
 
 if [[ ! -x "${CHUBOCTL}" ]]; then
 	ctl_target="chuboctl-${HOST_GOOS}-${HOST_GOARCH}"
