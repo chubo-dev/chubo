@@ -36,6 +36,7 @@ const (
 	openWontonBinaryPath      = "/var/lib/chubo/bin/openwonton"
 	openWontonWontonPath      = "/var/lib/chubo/bin/wonton"
 	openWontonDFShimPath      = "/var/lib/chubo/bin/df"
+	openWontonDFBinaryPath    = "/usr/bin/df"
 	openWontonConfigPath      = "/var/lib/chubo/config/openwonton.hcl"
 	openWontonArtifactURLPath = "/var/lib/chubo/config/openwonton.artifact_url"
 	openWontonDataDir         = "/var/lib/chubo/openwonton"
@@ -393,7 +394,7 @@ func ensureOpenWontonDFShim() error {
 	if err == nil {
 		if info.Mode()&os.ModeSymlink != 0 {
 			target, readErr := os.Readlink(openWontonDFShimPath)
-			if readErr == nil && target == chuboAgentBinaryPath {
+			if readErr == nil && target == openWontonDFBinaryPath {
 				return nil
 			}
 		}
@@ -405,7 +406,7 @@ func ensureOpenWontonDFShim() error {
 		return err
 	}
 
-	return os.Symlink(chuboAgentBinaryPath, openWontonDFShimPath)
+	return os.Symlink(openWontonDFBinaryPath, openWontonDFShimPath)
 }
 
 func setEnvVar(env []string, key, value string) []string {
