@@ -878,6 +878,7 @@ COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
 COPY --chmod=0644 hack/passwd /rootfs/etc/passwd
 COPY --chmod=0644 hack/group /rootfs/etc/group
+COPY --link --from=chubo-agent-build-amd64 /chubo-agent /rootfs/usr/bin/df
 COPY --link --from=chubo-agent-build-amd64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
 COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
@@ -889,8 +890,10 @@ RUN <<END
     ln -s /etc/ssl /rootfs/usr/local/share/ca-certificates
     ln -s /etc/ssl /rootfs/etc/ca-certificates
     if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
+        chmod 0755 /rootfs/usr/bin/df
         chmod 0755 /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
     else
+        rm -f /rootfs/usr/bin/df
         rm -rf /rootfs/usr/local/etc/containers/chubo-agent.yaml /rootfs/usr/local/lib/containers/chubo-agent
     fi
 END
@@ -978,6 +981,7 @@ COPY --chmod=0644 hack/lvm.conf /rootfs/etc/lvm/lvm.conf
 COPY --chmod=0644 --from=base /src/pkg/machinery/version/os-release /rootfs/etc/os-release
 COPY --chmod=0644 hack/passwd /rootfs/etc/passwd
 COPY --chmod=0644 hack/group /rootfs/etc/group
+COPY --link --from=chubo-agent-build-arm64 /chubo-agent /rootfs/usr/bin/df
 COPY --link --from=chubo-agent-build-arm64 /chubo-agent /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
 COPY --chmod=0644 hack/chubo-agent.yaml /rootfs/usr/local/etc/containers/chubo-agent.yaml
 RUN <<END
@@ -989,8 +993,10 @@ RUN <<END
     ln -s /etc/ssl /rootfs/usr/local/share/ca-certificates
     ln -s /etc/ssl /rootfs/etc/ca-certificates
     if echo "${GO_BUILDFLAGS}" | grep -Eq 'chubo(os)?'; then
+        chmod 0755 /rootfs/usr/bin/df
         chmod 0755 /rootfs/usr/local/lib/containers/chubo-agent/usr/bin/chubo-agent
     else
+        rm -f /rootfs/usr/bin/df
         rm -rf /rootfs/usr/local/etc/containers/chubo-agent.yaml /rootfs/usr/local/lib/containers/chubo-agent
     fi
 END
