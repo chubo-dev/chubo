@@ -92,7 +92,6 @@ jobs:
             chuboctl-linux-arm64 \
             chuboctl-darwin-amd64 \
             chuboctl-darwin-arm64 \
-            iso \
             image-hcloud \
             image-nocloud \
             REGISTRY=ghcr.io \
@@ -107,7 +106,7 @@ jobs:
         run: |
           set -euo pipefail
           find _out -maxdepth 1 -type f \
-            \( -name 'chuboctl-linux-amd64' -o -name 'chuboctl-linux-arm64' -o -name 'chuboctl-darwin-amd64' -o -name 'chuboctl-darwin-arm64' -o -name '*.iso' -o -name '*hcloud*.raw*' -o -name '*nocloud*.raw*' \) \
+            \( -name 'chuboctl-linux-amd64' -o -name 'chuboctl-linux-arm64' -o -name 'chuboctl-darwin-amd64' -o -name 'chuboctl-darwin-arm64' -o -name '*hcloud*.raw*' -o -name '*nocloud*.raw*' \) \
             | sort > /tmp/chubo-release-files.txt
 
           if [[ ! -s /tmp/chubo-release-files.txt ]]; then
@@ -127,7 +126,6 @@ jobs:
             _out/chuboctl-linux-arm64
             _out/chuboctl-darwin-amd64
             _out/chuboctl-darwin-arm64
-            _out/*.iso
             _out/*hcloud*.raw*
             _out/*nocloud*.raw*
             _out/SHA256SUMS
@@ -141,7 +139,6 @@ jobs:
             _out/chuboctl-linux-arm64
             _out/chuboctl-darwin-amd64
             _out/chuboctl-darwin-arm64
-            _out/*.iso
             _out/*hcloud*.raw*
             _out/*nocloud*.raw*
             _out/SHA256SUMS

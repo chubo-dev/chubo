@@ -8,7 +8,6 @@ Primary artifacts for homelab/KubeVirt and Hetzner testing:
 - `chuboctl-linux-arm64`
 - `chuboctl-darwin-amd64`
 - `chuboctl-darwin-arm64`
-- `metal-*.iso`
 - `*nocloud*.raw*`
 - `*hcloud*.raw*`
 - `SHA256SUMS`
@@ -91,6 +90,7 @@ unzstd -f hcloud-amd64.raw.zst
 
 - Release artifacts are `chuboctl`-first. Do not rely on `talosctl` naming in automation.
 - `hcloud` and `nocloud` artifacts are built with `PLATFORM=linux/amd64` in CI.
+- `metal-*.iso` is not currently part of the automated GitHub release bundle; build it separately until the CI ISO path is fixed.
 
 ## Known-Good Hetzner Pin (2026-02-24)
 
