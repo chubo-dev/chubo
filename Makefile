@@ -316,7 +316,7 @@ respectively.
 
 ## Race Detector
 
-Building with `WITH_RACE=1` enables race detector in the Talos executables. Integration tests are always built with the race detector
+Building with `WITH_RACE=1` enables race detector in the Chubo executables. Integration tests are always built with the race detector
 enabled.
 
 endef

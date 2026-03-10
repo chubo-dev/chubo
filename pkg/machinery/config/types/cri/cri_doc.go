@@ -24,7 +24,7 @@ func (RegistryAuthConfigV1Alpha1) Doc() *encoder.Doc {
 				Name:        "name",
 				Type:        "string",
 				Note:        "",
-				Description: "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
+				Description: "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Registry endpoint to apply the authentication configuration to." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
@@ -150,7 +150,7 @@ func (RegistryTLSConfigV1Alpha1) Doc() *encoder.Doc {
 				Name:        "name",
 				Type:        "string",
 				Note:        "",
-				Description: "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
+				Description: "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Registry endpoint to apply the TLS configuration to." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{

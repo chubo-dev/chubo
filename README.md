@@ -1,6 +1,6 @@
-# Chubo OS (Talos Fork)
+# Chubo OS
 
-This repository is a Talos-derived OS distribution which targets running the Chubo stack:
+This repository contains the Chubo OS distribution for the Chubo stack:
 
 - OpenWonton (Nomad)
 - OpenGyoza (Consul)

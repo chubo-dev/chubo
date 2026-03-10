@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package chubo.resource.definitions.cri;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cri";
-option java_package = "dev.chubo.api.resource.definitions.cri";
-
 import "common/common.proto";
 import "google/protobuf/struct.proto";
 import "resource/definitions/enums/enums.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cri";
+option java_package = "dev.chubo.api.resource.definitions.cri";
 
 // ImageCacheConfigSpec represents the ImageCacheConfig.
 message ImageCacheConfigSpec {
@@ -55,4 +55,3 @@ message SeccompProfileSpec {
   string name = 1;
   google.protobuf.Struct value = 2;
 }
-

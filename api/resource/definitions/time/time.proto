@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package chubo.resource.definitions.time;
 
+import "google/protobuf/duration.proto";
+
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/time";
 option java_package = "dev.chubo.api.resource.definitions.time";
-
-import "google/protobuf/duration.proto";
 
 // AdjtimeStatusSpec describes Linux internal adjtime state.
 message AdjtimeStatusSpec {
@@ -25,4 +25,3 @@ message StatusSpec {
   int64 epoch = 2;
   bool sync_disabled = 3;
 }
-

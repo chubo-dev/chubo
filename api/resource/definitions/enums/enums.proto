@@ -769,4 +769,3 @@ enum NetworkOperator {
   OPERATOR_DHCP6 = 1;
   OPERATOR_VIP = 2;
 }
-

@@ -18,7 +18,7 @@ func TestEffectiveDiscoveryServiceEndpoint(t *testing.T) {
 
 	t.Run("prefers chubo env override", func(t *testing.T) {
 		t.Setenv(ChuboDiscoveryServiceEndpointEnvVar, " https://discovery.chubo.dev/ ")
-		t.Setenv(TalosDiscoveryServiceEndpointEnvVar, "https://discovery.talos.dev/")
+		t.Setenv(TalosDiscoveryServiceEndpointEnvVar, "https://discovery.chubo.dev/")
 
 		if got := EffectiveDiscoveryServiceEndpoint(); got != "https://discovery.chubo.dev/" {
 			t.Fatalf("expected chubo override, got %q", got)

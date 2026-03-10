@@ -402,7 +402,7 @@ func (s *Server) Rollback(ctx context.Context, in *machine.RollbackRequest) (*ma
 // Bootstrap implements machine.MachineService.
 //
 // Chubo bootstrap is configuration-driven and continuously reconciled, so there is no
-// imperative bootstrap RPC like legacy Talos used.
+// imperative bootstrap RPC like the legacy pre-Chubo path used.
 func (s *Server) Bootstrap(context.Context, *machine.BootstrapRequest) (*machine.BootstrapResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "bootstrap RPC is not available in chubo mode; apply MachineConfig and monitor chubobootstrapstatus/openwontonbootstrapstatus/opengyozabootstrapstatus resources")
 }

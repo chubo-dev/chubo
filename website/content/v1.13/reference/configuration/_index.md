@@ -1,9 +1,9 @@
 ---
 title: Configuration
-description: Talos Linux machine configuration reference.
+description: Chubo OS machine configuration reference.
 ---
 
-Talos Linux machine is fully configured via a single YAML file called *machine configuration*.
+Chubo OS machines are fully configured via a single YAML file called *machine configuration*.
 
 The file might contain one or more configuration documents separated by `---` (three dashes) lines.
 At the moment, majority of the configuration options are within the [v1alpha1]({{< relref "./v1alpha1" >}}) document, so
@@ -20,7 +20,7 @@ kind: NetworkRuleConfig # type of document
 name: rule1 # only for named documents
 ```
 
-This section contains the configuration reference, to learn more about Talos Linux machine configuration management, please see:
+This section contains the configuration reference. To learn more about Chubo OS machine configuration management, please see:
 
 * [quick guide to configuration generation]({{< relref "../../introduction/getting-started#configure-talos-linux" >}})
 * [configuration management in production]({{< relref "../../introduction/prodnotes#configure-talos" >}})

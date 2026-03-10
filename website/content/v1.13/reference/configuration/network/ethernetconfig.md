@@ -37,7 +37,7 @@ channels:
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
 |`name` |string |Name of the link (interface).  | |
-|`features` |map[string]bool |Configuration for Ethernet features.<br><br>Set of features available and whether they can be enabled or disabled is driver specific.<br>Use `talosctl get ethernetstatus <link> -o yaml` to get the list of available features and<br>their current status.  | |
+|`features` |map[string]bool |Configuration for Ethernet features.<br><br>Set of features available and whether they can be enabled or disabled is driver specific.<br>Use `chuboctl get ethernetstatus <link> -o yaml` to get the list of available features and<br>their current status.  | |
 |`rings` |<a href="#EthernetConfig.rings">EthernetRingsConfig</a> |Configuration for Ethernet link rings.<br><br>This is similar to `ethtool -G` command.  | |
 |`channels` |<a href="#EthernetConfig.channels">EthernetChannelsConfig</a> |Configuration for Ethernet link channels.<br><br>This is similar to `ethtool -L` command.  | |
 |`wakeOnLan` |[]WOLMode |Wake-on-LAN modes to enable.<br><br>If this field is omitted, Wake-on-LAN configuration is not changed.<br>An empty list disables Wake-on-LAN.<br><br>This is similar to `ethtool -s <link> wol <options>` command. <details><summary>Show example(s)</summary>{{< highlight yaml >}}

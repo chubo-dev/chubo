@@ -3,7 +3,7 @@ container:
   entrypoint: ./hello-world
   args:
     - --msg
-    - Talos Linux Extension Service
+    - Chubo Linux Extension Service
 depends:
   - nothing: true
 restart: random

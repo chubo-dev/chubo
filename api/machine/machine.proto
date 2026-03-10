@@ -404,7 +404,7 @@ message ServiceRestartResponse {
   repeated ServiceRestart messages = 1;
 }
 
-// CopyRequest describes a request to copy data out of Talos node
+// CopyRequest describes a request to copy data out of a Chubo OS node.
 //
 // Copy produces .tar.gz archive which is streamed back to the caller
 message CopyRequest {
@@ -521,7 +521,7 @@ message Version {
   common.Metadata metadata = 1;
   VersionInfo version = 2;
   PlatformInfo platform = 3;
-  // Features describe individual Talos features that can be switched on or off.
+  // Features describe individual OS features that can be switched on or off.
   FeaturesInfo features = 4;
 }
 
@@ -543,7 +543,7 @@ message PlatformInfo {
   string mode = 2;
 }
 
-// FeaturesInfo describes individual Talos features that can be switched on or off.
+// FeaturesInfo describes individual OS features that can be switched on or off.
 message FeaturesInfo {
   // RBAC is true if role-based access control is enabled.
   bool rbac = 1;

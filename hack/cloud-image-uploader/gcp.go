@@ -247,7 +247,7 @@ func (u *GCPUploder) insertImage(imageName, arch string) (operationID, imageLink
 
 	op, err := u.computeService.Images.Insert(u.projectID, &compute.Image{
 		Architecture: archImage,
-		Description:  fmt.Sprintf("Talos %s %s", u.Options.Tag, arch),
+		Description:  fmt.Sprintf("Chubo %s %s", u.Options.Tag, arch),
 		GuestOsFeatures: []*compute.GuestOsFeature{
 			{
 				Type: "VIRTIO_SCSI_MULTIQUEUE",

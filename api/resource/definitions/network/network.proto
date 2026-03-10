@@ -2,13 +2,13 @@ syntax = "proto3";
 
 package chubo.resource.definitions.network;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network";
-option java_package = "dev.chubo.api.resource.definitions.network";
-
 import "common/common.proto";
 import "google/protobuf/duration.proto";
 import "resource/definitions/enums/enums.proto";
 import "resource/definitions/runtime/runtime.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/network";
+option java_package = "dev.chubo.api.resource.definitions.network";
 
 // AddressSpecSpec describes status of rendered secrets.
 message AddressSpecSpec {
@@ -567,4 +567,3 @@ message WireguardSpec {
   int64 firewall_mark = 4;
   repeated WireguardPeer peers = 5;
 }
-

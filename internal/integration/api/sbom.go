@@ -68,7 +68,7 @@ func (suite *SBOMSuite) TestCommon() {
 	rtestutils.AssertResource(ctx, suite.T(), suite.Client.COSI,
 		"Talos",
 		func(item *runtime.SBOMItem, asrt *assert.Assertions) {
-			asrt.Equal(version.Name, item.TypedSpec().Name, "SBOM item name should match Talos version name")
+			asrt.Equal(version.Name, item.TypedSpec().Name, "SBOM item name should match the OS version name")
 			// asrt.Equal(version.Tag, item.TypedSpec().Version, "SBOM item version should match Chubo version")
 		},
 	)

@@ -18,7 +18,7 @@ func (in *Input) generateNetworkConfigs(machine *v1alpha1.MachineConfig) ([]conf
 	var documents []config.Document
 
 	if len(in.Options.NetworkConfigOptions) > 0 {
-		networkConfig := &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+		networkConfig := &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older compatibility versions
 
 		for _, opt := range in.Options.NetworkConfigOptions {
 			if err := opt(machine.Type(), networkConfig); err != nil {
@@ -26,16 +26,16 @@ func (in *Input) generateNetworkConfigs(machine *v1alpha1.MachineConfig) ([]conf
 			}
 		}
 
-		machine.MachineNetwork = networkConfig //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+		machine.MachineNetwork = networkConfig //nolint:staticcheck // using legacy NetworkConfig for older compatibility versions
 	}
 
 	// generate empty machine.network for backwards compatibility with older Chubo versions
-	if machine.MachineNetwork == nil && !in.Options.VersionContract.MultidocNetworkConfigSupported() { //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
-		machine.MachineNetwork = &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older Talos versions
+	if machine.MachineNetwork == nil && !in.Options.VersionContract.MultidocNetworkConfigSupported() { //nolint:staticcheck // using legacy NetworkConfig for older compatibility versions
+		machine.MachineNetwork = &v1alpha1.NetworkConfig{} //nolint:staticcheck // using legacy NetworkConfig for older compatibility versions
 	}
 
 	if in.Options.VersionContract.StableHostnameEnabled() && !in.Options.VersionContract.MultidocNetworkConfigSupported() {
-		machine.MachineFeatures.StableHostname = pointer.To(true) //nolint:staticcheck // using legacy field for older Talos versions
+		machine.MachineFeatures.StableHostname = pointer.To(true) //nolint:staticcheck // using legacy field for older compatibility versions
 	}
 
 	if in.Options.VersionContract.MultidocNetworkConfigSupported() {

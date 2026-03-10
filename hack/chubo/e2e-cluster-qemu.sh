@@ -157,7 +157,7 @@ ensure_buildx_builder() {
 	# Buildx "docker" driver (default with colima) can hang after large builds.
 	# Prefer a docker-container builder for deterministic, non-hanging local runs.
 	if docker buildx inspect --builder "${BUILDX_BUILDER}" --bootstrap >/dev/null 2>&1; then
-		# Talos build relies on `RUN --security=insecure`; require the builder to allow that entitlement.
+		# Chubo builds rely on `RUN --security=insecure`; require the builder to allow that entitlement.
 		if docker buildx inspect --builder "${BUILDX_BUILDER}" 2>/dev/null | grep -q 'BuildKit daemon flags:.*security.insecure'; then
 			return 0
 		fi

@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package cluster;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/cluster";
-option java_package = "dev.chubo.api.cluster";
-
 import "common/common.proto";
 import "google/protobuf/duration.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/cluster";
+option java_package = "dev.chubo.api.cluster";
 
 // The cluster service definition.
 service ClusterService {

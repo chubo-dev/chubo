@@ -2,8 +2,8 @@
  "spdxVersion": "SPDX-2.3",
  "dataLicense": "CC0-1.0",
  "SPDXID": "SPDXRef-DOCUMENT",
- "name": "Talos (amd64)",
- "documentNamespace": "https://anchore.com/syft/dir/Talos%20%28amd64%29-ab5f950d-20cd-5a2f-b198-9e345e29f1c8",
+ "name": "Chubo (amd64)",
+ "documentNamespace": "https://anchore.com/syft/dir/Chubo%20%28amd64%29-ab5f950d-20cd-5a2f-b198-9e345e29f1c8",
  "creationInfo": {
   "licenseListVersion": "3.25",
   "creators": [

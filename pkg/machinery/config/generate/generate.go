@@ -106,7 +106,7 @@ func NewInput(clustername, endpoint, _ string, opts ...Option) (*Input, error) {
 	return input, nil
 }
 
-// Config returns the talos config for a given node type.
+// Config returns the Chubo config for a given node type.
 func (in *Input) Config(t machine.Type) (coreconfig.Provider, error) {
 	var (
 		documents []config.Document

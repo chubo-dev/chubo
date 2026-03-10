@@ -275,7 +275,7 @@
         "apiVersion",
         "kind"
       ],
-      "description": "ExistingVolumeConfig is an existing volume configuration document.\\nExisting volumes allow to mount partitions (or whole disks) that were created\\noutside of Talos. Volume will be mounted under `/var/mnt/\u003cname\u003e`.\\nThe existing volume config name should not conflict with user volume names.\\n"
+      "description": "ExistingVolumeConfig is an existing volume configuration document.\\nExisting volumes allow to mount partitions (or whole disks) that were created\\noutside of Chubo. Volume will be mounted under `/var/mnt/\u003cname\u003e`.\\nThe existing volume config name should not conflict with user volume names.\\n"
     },
     "block.ExternalMountSpec": {
       "properties": {
@@ -363,7 +363,7 @@
         "apiVersion",
         "kind"
       ],
-      "description": "ExternalVolumeConfig is an external disk mount configuration document.\\nExternal volumes allow to mount volumes that were created outside of Talos,\\nover the network or API. Volume will be mounted under `/var/mnt/\u003cname\u003e`.\\nThe external volume config name should not conflict with user volume names.\\n"
+      "description": "ExternalVolumeConfig is an external disk mount configuration document.\\nExternal volumes allow to mount volumes that were created outside of Chubo,\\nover the network or API. Volume will be mounted under `/var/mnt/\u003cname\u003e`.\\nThe external volume config name should not conflict with user volume names.\\n"
     },
     "block.FilesystemSpec": {
       "properties": {
@@ -900,9 +900,9 @@
         "role": {
           "type": "string",
           "title": "role",
-          "description": "Role selects the role (server|client).\n",
-          "markdownDescription": "Role selects the role (server|client).",
-          "x-intellij-html-description": "\u003cp\u003eRole selects the role (server|client).\u003c/p\u003e\n"
+          "description": "Role selects the role (server|client|server-client).\n",
+          "markdownDescription": "Role selects the role (server|client|server-client).",
+          "x-intellij-html-description": "\u003cp\u003eRole selects the role (server|client|server-client).\u003c/p\u003e\n"
         },
         "artifactURL": {
           "type": "string",
@@ -927,6 +927,13 @@
           "description": "Join is the ordered list of peer addresses (IP/host) to join/retry-join.\n",
           "markdownDescription": "Join is the ordered list of peer addresses (IP/host) to join/retry-join.",
           "x-intellij-html-description": "\u003cp\u003eJoin is the ordered list of peer addresses (IP/host) to join/retry-join.\u003c/p\u003e\n"
+        },
+        "networkInterface": {
+          "type": "string",
+          "title": "networkInterface",
+          "description": "NetworkInterface sets openwonton client.network_interface when client mode is enabled.\n\nThis avoids default-route interface auto-detection paths that may rely on\ndistro-specific helper binaries.\n",
+          "markdownDescription": "NetworkInterface sets openwonton client.network_interface when client mode is enabled.\n\nThis avoids default-route interface auto-detection paths that may rely on\ndistro-specific helper binaries.",
+          "x-intellij-html-description": "\u003cp\u003eNetworkInterface sets openwonton client.network_interface when client mode is enabled.\u003c/p\u003e\n\n\u003cp\u003eThis avoids default-route interface auto-detection paths that may rely on\ndistro-specific helper binaries.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,
@@ -1184,16 +1191,16 @@
         "token": {
           "type": "string",
           "title": "token",
-          "description": "Token used by trustd flows (Talos-like).\n",
-          "markdownDescription": "Token used by trustd flows (Talos-like).",
-          "x-intellij-html-description": "\u003cp\u003eToken used by trustd flows (Talos-like).\u003c/p\u003e\n"
+          "description": "Token used by trustd flows (Chubo-like).\n",
+          "markdownDescription": "Token used by trustd flows (Chubo-like).",
+          "x-intellij-html-description": "\u003cp\u003eToken used by trustd flows (Chubo-like).\u003c/p\u003e\n"
         },
         "ca": {
           "$ref": "#/$defs/chubo.CASpec",
           "title": "ca",
-          "description": "Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for chubo we start with the simple model and evolve\nit in Phase 3.\n",
-          "markdownDescription": "Issuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for `chubo` we start with the simple model and evolve\nit in Phase 3.",
-          "x-intellij-html-description": "\u003cp\u003eIssuing CA for the OS API (PEM-encoded). In Talos this key typically lives on\ncontrol plane nodes; for \u003ccode\u003echubo\u003c/code\u003e we start with the simple model and evolve\nit in Phase 3.\u003c/p\u003e\n"
+          "description": "Issuing CA for the OS API (PEM-encoded). In Chubo this key typically lives on\ncontrol plane nodes; for chubo we start with the simple model and evolve\nit in Phase 3.\n",
+          "markdownDescription": "Issuing CA for the OS API (PEM-encoded). In Chubo this key typically lives on\ncontrol plane nodes; for `chubo` we start with the simple model and evolve\nit in Phase 3.",
+          "x-intellij-html-description": "\u003cp\u003eIssuing CA for the OS API (PEM-encoded). In Chubo this key typically lives on\ncontrol plane nodes; for \u003ccode\u003echubo\u003c/code\u003e we start with the simple model and evolve\nit in Phase 3.\u003c/p\u003e\n"
         },
         "acceptedCAs": {
           "items": {
@@ -1246,9 +1253,9 @@
         "name": {
           "type": "string",
           "title": "name",
-          "description": "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. ‘my-mirror.local:5000’ for ‘https://my-mirror.local:5000/v2/’.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\n",
-          "markdownDescription": "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
-          "x-intellij-html-description": "\u003cp\u003eRegistry endpoint to apply the authentication configuration to.\u003c/p\u003e\n\n\u003cp\u003eRegistry endpoint is the hostname part of the endpoint URL,\ne.g. \u0026lsquo;my-mirror.local:5000\u0026rsquo; for \u0026lsquo;\u003ca href=\"https://my-mirror.local:5000/v2/'\" target=\"_blank\"\u003ehttps://my-mirror.local:5000/v2/\u0026rsquo;\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\u003c/p\u003e\n"
+          "description": "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. ‘my-mirror.local:5000’ for ‘https://my-mirror.local:5000/v2/’.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.\n",
+          "markdownDescription": "Registry endpoint to apply the authentication configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.",
+          "x-intellij-html-description": "\u003cp\u003eRegistry endpoint to apply the authentication configuration to.\u003c/p\u003e\n\n\u003cp\u003eRegistry endpoint is the hostname part of the endpoint URL,\ne.g. \u0026lsquo;my-mirror.local:5000\u0026rsquo; for \u0026lsquo;\u003ca href=\"https://my-mirror.local:5000/v2/'\" target=\"_blank\"\u003ehttps://my-mirror.local:5000/v2/\u0026rsquo;\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe authentication configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.\u003c/p\u003e\n"
         },
         "username": {
           "type": "string",
@@ -1390,9 +1397,9 @@
         "name": {
           "type": "string",
           "title": "name",
-          "description": "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. ‘my-mirror.local:5000’ for ‘https://my-mirror.local:5000/v2/’.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\n",
-          "markdownDescription": "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.",
-          "x-intellij-html-description": "\u003cp\u003eRegistry endpoint to apply the TLS configuration to.\u003c/p\u003e\n\n\u003cp\u003eRegistry endpoint is the hostname part of the endpoint URL,\ne.g. \u0026lsquo;my-mirror.local:5000\u0026rsquo; for \u0026lsquo;\u003ca href=\"https://my-mirror.local:5000/v2/'\" target=\"_blank\"\u003ehttps://my-mirror.local:5000/v2/\u0026rsquo;\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by Talos or any workload runtime clients.\u003c/p\u003e\n"
+          "description": "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. ‘my-mirror.local:5000’ for ‘https://my-mirror.local:5000/v2/’.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.\n",
+          "markdownDescription": "Registry endpoint to apply the TLS configuration to.\n\nRegistry endpoint is the hostname part of the endpoint URL,\ne.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.\n\nThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.",
+          "x-intellij-html-description": "\u003cp\u003eRegistry endpoint to apply the TLS configuration to.\u003c/p\u003e\n\n\u003cp\u003eRegistry endpoint is the hostname part of the endpoint URL,\ne.g. \u0026lsquo;my-mirror.local:5000\u0026rsquo; for \u0026lsquo;\u003ca href=\"https://my-mirror.local:5000/v2/'\" target=\"_blank\"\u003ehttps://my-mirror.local:5000/v2/\u0026rsquo;\u003c/a\u003e.\u003c/p\u003e\n\n\u003cp\u003eThe TLS configuration makes sense only for HTTPS endpoints.\nThe TLS configuration will apply to all image pulls for this\nregistry endpoint, by the OS and any scheduled workloads.\u003c/p\u003e\n"
         },
         "clientIdentity": {
           "properties": {
@@ -2628,7 +2635,7 @@
         "kind",
         "name"
       ],
-      "description": "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.\\nVirtual IP configuration should be used only on controlplane nodes to provide virtual control-plane endpoint.\\nAny other use cases are not supported and may lead to unexpected behavior.\\nVirtual IP will be announced from only one node at a time using Hetzner Cloud APIs.\\n"
+      "description": "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.\\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual IP for the cluster API endpoint.\\nAny other use cases are not supported and may lead to unexpected behavior.\\nVirtual IP will be announced from only one node at a time using Hetzner Cloud APIs.\\n"
     },
     "network.HostnameConfigV1Alpha1": {
       "properties": {
@@ -2656,9 +2663,9 @@
             "off"
           ],
           "title": "auto",
-          "description": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - stable - generates a stable hostname based on machine identity\n  - off - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with hostname field.\n",
-          "markdownDescription": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
-          "x-intellij-html-description": "\u003cp\u003eA method to automatically generate a hostname for the machine.\u003c/p\u003e\n\n\u003cp\u003eThere are two methods available:\n  - \u003ccode\u003estable\u003c/code\u003e - generates a stable hostname based on machine identity\n  - \u003ccode\u003eoff\u003c/code\u003e - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\u003c/p\u003e\n\n\u003cp\u003eAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with \u003ccode\u003ehostname\u003c/code\u003e field.\u003c/p\u003e\n"
+          "description": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - stable - generates a stable hostname based on machine identity\n  - off - disables automatic hostname generation, Chubo will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with hostname field.\n",
+          "markdownDescription": "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Chubo will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
+          "x-intellij-html-description": "\u003cp\u003eA method to automatically generate a hostname for the machine.\u003c/p\u003e\n\n\u003cp\u003eThere are two methods available:\n  - \u003ccode\u003estable\u003c/code\u003e - generates a stable hostname based on machine identity\n  - \u003ccode\u003eoff\u003c/code\u003e - disables automatic hostname generation, Chubo will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\u003c/p\u003e\n\n\u003cp\u003eAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with \u003ccode\u003ehostname\u003c/code\u003e field.\u003c/p\u003e\n"
         },
         "hostname": {
           "type": "string",
@@ -2741,7 +2748,7 @@
         "kind",
         "name"
       ],
-      "description": "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.\\nVirtual IP configuration should be used only on controlplane nodes to provide virtual control-plane endpoint.\\nAny other use cases are not supported and may lead to unexpected behavior.\\nVirtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.\\n"
+      "description": "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.\\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual IP for the cluster API endpoint.\\nAny other use cases are not supported and may lead to unexpected behavior.\\nVirtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.\\n"
     },
     "network.LinkAliasConfigV1Alpha1": {
       "properties": {
@@ -2954,9 +2961,9 @@
           },
           "type": "array",
           "title": "nameservers",
-          "description": "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host, and they are also\npropagated to workload DNS resolvers.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.\n",
-          "markdownDescription": "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host, and they are also\npropagated to workload DNS resolvers.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.",
-          "x-intellij-html-description": "\u003cp\u003eA list of nameservers (DNS servers) to use for resolving domain names.\u003c/p\u003e\n\n\u003cp\u003eNameservers are used to resolve domain names on the host, and they are also\npropagated to workload DNS resolvers.\u003c/p\u003e\n\n\u003cp\u003eThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.\u003c/p\u003e\n"
+          "description": "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host and by local workloads.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.\n",
+          "markdownDescription": "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host and by local workloads.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.",
+          "x-intellij-html-description": "\u003cp\u003eA list of nameservers (DNS servers) to use for resolving domain names.\u003c/p\u003e\n\n\u003cp\u003eNameservers are used to resolve domain names on the host and by local workloads.\u003c/p\u003e\n\n\u003cp\u003eThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.\u003c/p\u003e\n"
         },
         "searchDomains": {
           "$ref": "#/$defs/network.SearchDomainsConfig",
@@ -3781,9 +3788,9 @@
           "type": "string",
           "pattern": "^[-+]?(((\\d+(\\.\\d*)?|\\d*(\\.\\d+)+)([nuµm]?s|m|h))|0)+$",
           "title": "timeout",
-          "description": "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.\n",
-          "markdownDescription": "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
-          "x-intellij-html-description": "\u003cp\u003eTimeout for the watchdog.\u003c/p\u003e\n\n\u003cp\u003eIf Talos is unresponsive for this duration, the watchdog will reset the system.\u003c/p\u003e\n\n\u003cp\u003eDefault value is 1 minute, minimum value is 10 seconds.\u003c/p\u003e\n"
+          "description": "Timeout for the watchdog.\n\nIf Chubo is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.\n",
+          "markdownDescription": "Timeout for the watchdog.\n\nIf Chubo is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
+          "x-intellij-html-description": "\u003cp\u003eTimeout for the watchdog.\u003c/p\u003e\n\n\u003cp\u003eIf Chubo is unresponsive for this duration, the watchdog will reset the system.\u003c/p\u003e\n\n\u003cp\u003eDefault value is 1 minute, minimum value is 10 seconds.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,
@@ -3997,9 +4004,9 @@
         "debug": {
           "type": "boolean",
           "title": "debug",
-          "description": "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\nNote: To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.\n",
-          "markdownDescription": "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\n**Note:** To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.",
-          "x-intellij-html-description": "\u003cp\u003eEnable verbose logging to the console.\nAll system containers logs will flow into serial console.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eNote:\u003c/strong\u003e To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.\u003c/p\u003e\n"
+          "description": "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\nNote: To avoid breaking bootstrap flow enable this option only if serial console can handle high message throughput.\n",
+          "markdownDescription": "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\n**Note:** To avoid breaking bootstrap flow enable this option only if serial console can handle high message throughput.",
+          "x-intellij-html-description": "\u003cp\u003eEnable verbose logging to the console.\nAll system containers logs will flow into serial console.\u003c/p\u003e\n\n\u003cp\u003e\u003cstrong\u003eNote:\u003c/strong\u003e To avoid breaking bootstrap flow enable this option only if serial console can handle high message throughput.\u003c/p\u003e\n"
         },
         "machine": {
           "$ref": "#/$defs/v1alpha1.MachineConfig",
@@ -4018,7 +4025,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "Config defines the v1alpha1.Config Talos machine configuration document."
+      "description": "Config defines the v1alpha1.Config machine configuration document."
     },
     "v1alpha1.ControlPlaneConfig": {
       "properties": {
@@ -4154,7 +4161,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "FeaturesConfig describes individual Talos features that can be switched on or off."
+      "description": "FeaturesConfig describes individual OS features that can be switched on or off."
     },
     "v1alpha1.HostDNSConfig": {
       "properties": {
@@ -4210,9 +4217,9 @@
         "image": {
           "type": "string",
           "title": "image",
-          "description": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\nGitHub releases page.\n",
-          "markdownDescription": "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
-          "x-intellij-html-description": "\u003cp\u003eAllows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n\u003ca href=\"https://github.com/chubo-dev/chubo/releases\" target=\"_blank\"\u003eGitHub releases page\u003c/a\u003e.\u003c/p\u003e\n"
+          "description": "Allows for supplying the image used to perform the installation.\nImage reference for each Chubo OS release can be found on\nGitHub releases page.\n",
+          "markdownDescription": "Allows for supplying the image used to perform the installation.\nImage reference for each Chubo OS release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
+          "x-intellij-html-description": "\u003cp\u003eAllows for supplying the image used to perform the installation.\nImage reference for each Chubo OS release can be found on\n\u003ca href=\"https://github.com/chubo-dev/chubo/releases\" target=\"_blank\"\u003eGitHub releases page\u003c/a\u003e.\u003c/p\u003e\n"
         },
         "wipe": {
           "type": "boolean",
@@ -4330,7 +4337,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "KernelConfig struct configures Talos Linux kernel."
+      "description": "KernelConfig struct configures the Linux kernel."
     },
     "v1alpha1.KernelModuleConfig": {
       "properties": {
@@ -4399,7 +4406,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "LoggingConfig struct configures Talos logging."
+      "description": "LoggingConfig struct configures OS logging."
     },
     "v1alpha1.LoggingDestination": {
       "properties": {
@@ -4434,7 +4441,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "LoggingDestination struct configures Talos logging destination."
+      "description": "LoggingDestination struct configures logging destinations."
     },
     "v1alpha1.MachineConfig": {
       "properties": {
@@ -4497,9 +4504,9 @@
         "install": {
           "$ref": "#/$defs/v1alpha1.InstallConfig",
           "title": "install",
-          "description": "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.\n",
-          "markdownDescription": "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.",
-          "x-intellij-html-description": "\u003cp\u003eUsed to provide instructions for installations.\u003c/p\u003e\n\n\u003cp\u003eNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.\u003c/p\u003e\n"
+          "description": "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by images that are considered pre-installed.\nTo make sure installation uses this configuration, boot from ISO or PXE.\n",
+          "markdownDescription": "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by images that are considered pre-installed.\nTo make sure installation uses this configuration, boot from ISO or PXE.",
+          "x-intellij-html-description": "\u003cp\u003eUsed to provide instructions for installations.\u003c/p\u003e\n\n\u003cp\u003eNote that this configuration section gets silently ignored by images that are considered pre-installed.\nTo make sure installation uses this configuration, boot from ISO or PXE.\u003c/p\u003e\n"
         },
         "files": {
           "items": {
@@ -4538,9 +4545,9 @@
         "features": {
           "$ref": "#/$defs/v1alpha1.FeaturesConfig",
           "title": "features",
-          "description": "Features describe individual Talos features that can be switched on or off.\n",
-          "markdownDescription": "Features describe individual Talos features that can be switched on or off.",
-          "x-intellij-html-description": "\u003cp\u003eFeatures describe individual Talos features that can be switched on or off.\u003c/p\u003e\n"
+          "description": "Features describe individual OS features that can be switched on or off.\n",
+          "markdownDescription": "Features describe individual OS features that can be switched on or off.",
+          "x-intellij-html-description": "\u003cp\u003eFeatures describe individual OS features that can be switched on or off.\u003c/p\u003e\n"
         },
         "udev": {
           "$ref": "#/$defs/v1alpha1.UdevConfig",
@@ -4576,9 +4583,9 @@
         "baseRuntimeSpecOverrides": {
           "type": "object",
           "title": "baseRuntimeSpecOverrides",
-          "description": "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set some default container settings which are not configurable via higher-level workload APIs,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.\n",
-          "markdownDescription": "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set some default container settings which are not configurable via higher-level workload APIs,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
-          "x-intellij-html-description": "\u003cp\u003eOverride (patch) settings in the default OCI runtime spec for CRI containers.\u003c/p\u003e\n\n\u003cp\u003eIt can be used to set some default container settings which are not configurable via higher-level workload APIs,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.\u003c/p\u003e\n"
+          "description": "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set default container settings that are not configurable at the scheduler layer,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.\n",
+          "markdownDescription": "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set default container settings that are not configurable at the scheduler layer,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
+          "x-intellij-html-description": "\u003cp\u003eOverride (patch) settings in the default OCI runtime spec for CRI containers.\u003c/p\u003e\n\n\u003cp\u003eIt can be used to set default container settings that are not configurable at the scheduler layer,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.\u003c/p\u003e\n"
         }
       },
       "additionalProperties": false,

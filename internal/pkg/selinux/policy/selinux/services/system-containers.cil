@@ -36,7 +36,7 @@
 ; Trustd socket is created and owned by machined
 (allow trustd_t init_t (unix_stream_socket (connectto)))
 
-; Talos installer
+; Chubo installer
 (type installer_t)
 (call system_container_p (installer_t))
 (allow sys_containerd_t system_var_t (file (execute)))

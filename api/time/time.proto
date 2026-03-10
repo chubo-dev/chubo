@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package time;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/time";
-option java_package = "dev.chubo.api.time";
-
 import "common/common.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/time";
+option java_package = "dev.chubo.api.time";
 
 // The time service definition.
 service TimeService {

@@ -38,7 +38,7 @@ searchDomains:
 
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
-|`nameservers` |<a href="#ResolverConfig.nameservers.">[]NameserverConfig</a> |A list of nameservers (DNS servers) to use for resolving domain names.<br><br>Nameservers are used to resolve domain names on the host, and they are also<br>propagated to Kubernetes DNS (CoreDNS) for use by pods running on the cluster.<br><br>This overrides any nameservers obtained via DHCP or platform configuration.<br>Default configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.  | |
+|`nameservers` |<a href="#ResolverConfig.nameservers.">[]NameserverConfig</a> |A list of nameservers (DNS servers) to use for resolving domain names.<br><br>Nameservers are used to resolve domain names on the host and by local workloads.<br><br>This overrides any nameservers obtained via DHCP or platform configuration.<br>Default configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.  | |
 |`searchDomains` |<a href="#ResolverConfig.searchDomains">SearchDomainsConfig</a> |Configuration for search domains (in /etc/resolv.conf).<br><br>The default is to derive search domains from the hostname FQDN.  | |
 
 

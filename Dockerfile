@@ -301,7 +301,7 @@ ENV GOTOOLCHAIN=local
 ENV CGO_ENABLED=0
 SHELL ["/bin/bash", "-c"]
 
-# The build target creates a container that will be used to build Talos source
+# The build target creates a container that will be used to build Chubo source
 # code.
 
 FROM --platform=${BUILDPLATFORM} tools AS build
@@ -810,7 +810,7 @@ EOF
 FROM scratch AS modules-arm64
 COPY --from=depmod-arm64 /build/usr/lib/modules /usr/lib/modules
 
-# The rootfs target provides the Talos rootfs.
+# The rootfs target provides the Chubo rootfs.
 FROM build AS rootfs-base-amd64
 ARG GO_BUILDFLAGS
 COPY --link --from=pkg-fhs / /rootfs
@@ -1131,7 +1131,7 @@ COPY --from=rootfs-squashfs-amd64 /rootfs.sqsh /
 FROM scratch AS rootfs
 COPY --from=rootfs-base /rootfs /
 
-# The initramfs target provides the Talos initramfs image.
+# The initramfs target provides the Chubo initramfs image.
 
 FROM build AS initramfs-archive-arm64
 WORKDIR /initramfs
@@ -1177,7 +1177,7 @@ ENTRYPOINT ["/sbin/init"]
 # The chubo target is the primary Chubo OS image target.
 FROM talos AS chubo
 
-# The installer target generates an image that can be used to install Talos to
+# The installer target generates an image that can be used to install Chubo OS to
 # various environments.
 
 # Make the installer binary.
@@ -1240,7 +1240,7 @@ COPY --from=installer-base-image / /
 
 # Add metadata.
 # 'installer-base' only contains the installer binary and the tools it uses.
-# 'installer-base' does not contain boot assets or talos itself.
+# 'installer-base' does not contain boot assets or Chubo OS itself.
 FROM installer-base-image-squashed AS installer-base
 ARG TAG
 ENV VERSION=${TAG}
@@ -1249,8 +1249,8 @@ LABEL org.opencontainers.image.source=https://github.com/chubo-dev/chubo
 ENTRYPOINT ["/bin/installer"]
 
 # Imager can be thought of as an extended installer.
-# It has the boot artifacts and tools to build any requested talos image with desired modifications and system extensions.
-# Imager is meant to be run outside of talos and the talos installation flow.
+# It has the boot artifacts and tools to build any requested Chubo OS image with desired modifications and system extensions.
+# Imager is meant to be run outside of Chubo OS and the Chubo installation flow.
 FROM installer-base-image-squashed AS imager-image
 COPY --link --from=pkg-cpio / /
 COPY --link --exclude=**/*.a --exclude=**/*.la  --exclude=usr/lib/pkgconfig --from=pkg-e2fsprogs / /

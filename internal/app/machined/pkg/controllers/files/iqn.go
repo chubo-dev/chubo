@@ -86,7 +86,7 @@ func (ctrl *IQNController) Run(ctx context.Context, r controller.Runtime, _ *zap
 			func(r *files.EtcFileSpec) error {
 				spec := r.TypedSpec()
 
-				// Fri Nov 3 16:19:12 2017 -0700 is the date of the first commit in the talos repository.
+				// Fri Nov 3 16:19:12 2017 -0700 matches the legacy dev.talos IQN prefix date.
 				spec.Contents = fmt.Appendf([]byte{}, "InitiatorName=iqn.2017-11.dev.talos:%s\n", machineID)
 				spec.Mode = 0o600
 				spec.SelinuxLabel = constants.EtcSelinuxLabel

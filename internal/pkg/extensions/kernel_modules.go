@@ -160,7 +160,7 @@ func GenerateKernelModuleDependencyTreeExtension(
 			Metadata: extensions.Metadata{
 				Name:        "modules.dep",
 				Version:     kernelVersionPath,
-				Author:      "Talos Machinery",
+				Author:      "Chubo Machinery",
 				Description: "Combined modules.dep for all extensions",
 			},
 		},

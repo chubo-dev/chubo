@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package chubo.resource.definitions.cluster;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cluster";
-option java_package = "dev.chubo.api.resource.definitions.cluster";
-
 import "common/common.proto";
 import "resource/definitions/enums/enums.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/cluster";
+option java_package = "dev.chubo.api.resource.definitions.cluster";
 
 // AffiliateSpec describes Affiliate state.
 message AffiliateSpec {
@@ -63,4 +63,3 @@ message MemberSpec {
   string operating_system = 5;
   ControlPlane control_plane = 6;
 }
-

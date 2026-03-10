@@ -167,7 +167,7 @@ func (WatchdogTimerV1Alpha1) Doc() *encoder.Doc {
 				Name:        "timeout",
 				Type:        "Duration",
 				Note:        "",
-				Description: "Timeout for the watchdog.\n\nIf Talos is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
+				Description: "Timeout for the watchdog.\n\nIf Chubo is unresponsive for this duration, the watchdog will reset the system.\n\nDefault value is 1 minute, minimum value is 10 seconds.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Timeout for the watchdog." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 		},
