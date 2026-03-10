@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package storage;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/storage";
-option java_package = "dev.chubo.api.storage";
-
 import "common/common.proto";
 import "google/protobuf/empty.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/storage";
+option java_package = "dev.chubo.api.storage";
 
 // StorageService represents the storage service.
 service StorageService {
@@ -49,7 +49,7 @@ message Disk {
   DiskType type = 9;
   // BusPath is the bus path of the disk.
   string bus_path = 10;
-  // SystemDisk indicates that the disk is used as Talos system disk.
+  // SystemDisk indicates that the disk is used as the Chubo OS system disk.
   bool system_disk = 11;
   // Subsystem is the symlink path in the `/sys/block/<dev>/subsystem`.
   string subsystem = 12;

@@ -70,11 +70,11 @@ func NewState() (*State, error) {
 		name        string
 		description string
 	}{
-		{v1alpha1.NamespaceName, "Talos v1alpha1 subsystems glue resources."},
+		{v1alpha1.NamespaceName, "Chubo v1alpha1 subsystems glue resources."},
 		{chubo.NamespaceName, "ChuboOS module resources."},
 		{cluster.NamespaceName, "Cluster configuration and discovery resources."},
 		{cluster.RawNamespaceName, "Cluster unmerged raw resources."},
-		{config.NamespaceName, "Talos node configuration."},
+		{config.NamespaceName, "Chubo node configuration."},
 		{files.NamespaceName, "Files and file-like resources."},
 		{hardware.NamespaceName, "Hardware resources."},
 		{network.NamespaceName, "Networking resources."},

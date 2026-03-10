@@ -111,7 +111,7 @@ func (i *Imager) Execute(ctx context.Context, outputPath string, report *reporte
 	switch i.prof.Output.Kind {
 	case profile.OutKindUKI:
 		if !needBuildUKI {
-			return "", fmt.Errorf("UKI output is not supported in this Talos version")
+			return "", fmt.Errorf("UKI output is not supported in this Chubo version")
 		}
 	case profile.OutKindISO, profile.OutKindInstaller, profile.OutKindImage:
 		needBuildUKI = needBuildUKI || quirks.New(i.prof.Version).UseSDBootForUEFI()

@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package machine;
 
+import "common/common.proto";
+
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/machine";
 option java_package = "dev.chubo.api.machine";
 
-import "common/common.proto";
-
-// DebugService provides debugging and inspection capabilities for a Talos node.
+// DebugService provides debugging and inspection capabilities for a Chubo OS node.
 service DebugService {
   // ContainerRun runs a debug container, attaches to it, and streams I/O.
   rpc ContainerRun(stream DebugContainerRunRequest) returns (stream DebugContainerRunResponse);

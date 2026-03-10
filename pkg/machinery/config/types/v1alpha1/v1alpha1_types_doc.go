@@ -14,8 +14,8 @@ import (
 func (Config) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "Config",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "Config defines the v1alpha1.Config Talos machine configuration document." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "Config defines the v1alpha1.Config Talos machine configuration document.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "Config defines the v1alpha1.Config machine configuration document." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "Config defines the v1alpha1.Config machine configuration document.",
 		Fields: []encoder.Doc{
 			{
 				Name:        "version",
@@ -31,7 +31,7 @@ func (Config) Doc() *encoder.Doc {
 				Name:        "debug",
 				Type:        "bool",
 				Note:        "",
-				Description: "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\n**Note:** To avoid breaking Talos bootstrap flow enable this option only if serial console can handle high message throughput.",
+				Description: "Enable verbose logging to the console.\nAll system containers logs will flow into serial console.\n\n**Note:** To avoid breaking bootstrap flow enable this option only if serial console can handle high message throughput.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Enable verbose logging to the console." /* encoder.LineComment */, "" /* encoder.FootComment */},
 				Values: []string{
 					"true",
@@ -120,7 +120,7 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Name:        "install",
 				Type:        "InstallConfig",
 				Note:        "",
-				Description: "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by Talos images that are considered pre-installed.\nTo make sure Talos installs according to the provided configuration, Talos should be booted with ISO or PXE-booted.",
+				Description: "Used to provide instructions for installations.\n\nNote that this configuration section gets silently ignored by images that are considered pre-installed.\nTo make sure installation uses this configuration, boot from ISO or PXE.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Used to provide instructions for installations." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
@@ -152,8 +152,8 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Name:        "features",
 				Type:        "FeaturesConfig",
 				Note:        "",
-				Description: "Features describe individual Talos features that can be switched on or off.",
-				Comments:    [3]string{"" /* encoder.HeadComment */, "Features describe individual Talos features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
+				Description: "Features describe individual OS features that can be switched on or off.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Features describe individual OS features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{
 				Name:        "udev",
@@ -187,7 +187,7 @@ func (MachineConfig) Doc() *encoder.Doc {
 				Name:        "baseRuntimeSpecOverrides",
 				Type:        "Unstructured",
 				Note:        "",
-				Description: "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set default container settings which are not configurable via higher-level workload APIs,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
+				Description: "Override (patch) settings in the default OCI runtime spec for CRI containers.\n\nIt can be used to set default container settings that are not configurable at the scheduler layer,\nfor example default ulimits.\nNote: this change applies to all newly created containers, and it requires a reboot to take effect.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Override (patch) settings in the default OCI runtime spec for CRI containers." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 		},
@@ -420,7 +420,7 @@ func (InstallConfig) Doc() *encoder.Doc {
 				Name:        "image",
 				Type:        "string",
 				Note:        "",
-				Description: "Allows for supplying the image used to perform the installation.\nImage reference for each Talos release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
+				Description: "Allows for supplying the image used to perform the installation.\nImage reference for each Chubo OS release can be found on\n[GitHub releases page](https://github.com/chubo-dev/chubo/releases).",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "Allows for supplying the image used to perform the installation." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{},
@@ -734,8 +734,8 @@ func (MachineFile) Doc() *encoder.Doc {
 func (FeaturesConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "FeaturesConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "FeaturesConfig describes individual Talos features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "FeaturesConfig describes individual Talos features that can be switched on or off.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "FeaturesConfig describes individual OS features that can be switched on or off." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "FeaturesConfig describes individual OS features that can be switched on or off.",
 		AppearsIn: []encoder.Appearance{
 			{
 				TypeName:  "MachineConfig",
@@ -1026,8 +1026,8 @@ func (UdevConfig) Doc() *encoder.Doc {
 func (LoggingConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "LoggingConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "LoggingConfig struct configures Talos logging." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "LoggingConfig struct configures Talos logging.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "LoggingConfig struct configures OS logging." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "LoggingConfig struct configures OS logging.",
 		AppearsIn: []encoder.Appearance{
 			{
 				TypeName:  "MachineConfig",
@@ -1053,8 +1053,8 @@ func (LoggingConfig) Doc() *encoder.Doc {
 func (LoggingDestination) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "LoggingDestination",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "LoggingDestination struct configures Talos logging destination." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "LoggingDestination struct configures Talos logging destination.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "LoggingDestination struct configures logging destinations." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "LoggingDestination struct configures logging destinations.",
 		AppearsIn: []encoder.Appearance{
 			{
 				TypeName:  "LoggingConfig",
@@ -1098,8 +1098,8 @@ func (LoggingDestination) Doc() *encoder.Doc {
 func (KernelConfig) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "KernelConfig",
-		Comments:    [3]string{"" /* encoder.HeadComment */, "KernelConfig struct configures Talos Linux kernel." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "KernelConfig struct configures Talos Linux kernel.",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "KernelConfig struct configures the Linux kernel." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "KernelConfig struct configures the Linux kernel.",
 		AppearsIn: []encoder.Appearance{
 			{
 				TypeName:  "MachineConfig",
@@ -1158,7 +1158,7 @@ func (KernelModuleConfig) Doc() *encoder.Doc {
 func GetFileDoc() *encoder.FileDoc {
 	return &encoder.FileDoc{
 		Name:        "v1alpha1",
-		Description: "Package v1alpha1 contains definition of the `v1alpha1` configuration document.\n\nEven though the machine configuration in Talos Linux is multi-document, at the moment\nthis configuration document contains most of the configuration options.\n\nIt is expected that new configuration options will be added as new documents, and existing ones\nmigrated to their own documents.\n",
+		Description: "Package v1alpha1 contains definition of the `v1alpha1` configuration document.\n\nEven though the machine configuration in Chubo OS is multi-document, at the moment\nthis configuration document contains most of the configuration options.\n\nIt is expected that new configuration options will be added as new documents, and existing ones\nmigrated to their own documents.\n",
 		Structs: []*encoder.Doc{
 			Config{}.Doc(),
 			MachineConfig{}.Doc(),

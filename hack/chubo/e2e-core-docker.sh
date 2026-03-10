@@ -173,7 +173,7 @@ if ! "${CHUBOCTL}" --state "${STATE_DIR}" --name "${CLUSTER_NAME}" cluster creat
 	if docker ps -a --format '{{.Names}}' | grep -qx "${NODE_CONTAINER}"; then
 		docker logs --tail 120 "${NODE_CONTAINER}" >&2 || true
 	fi
-	echo "hint: docker fallback requires host kernel support for Talos container runtime features." >&2
+	echo "hint: docker fallback requires host kernel support for Chubo container runtime features." >&2
 
 	exit 1
 fi

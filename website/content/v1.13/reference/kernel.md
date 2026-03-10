@@ -5,7 +5,7 @@ description: "Linux kernel reference."
 
 ## Commandline Parameters
 
-Talos supports a number of kernel commandline parameters.  Some are required for
+Chubo OS supports a number of kernel commandline parameters. Some are required for
 it to operate.  Others are optional and useful in certain circumstances.
 
 Several of these are enforced by the Kernel Self Protection Project [KSPP](https://kspp.github.io/Recommended_Settings).
@@ -21,7 +21,7 @@ Several of these are enforced by the Kernel Self Protection Project [KSPP](https
 * `init_on_alloc=1`: advised by KSPP, enabled by default in kernel config
 * `init_on_free=1`: advised by KSPP, enabled by default in kernel config
 
-### Available Talos-specific parameters
+### Available Chubo OS kernel parameters
 
 #### `ip`
 
@@ -31,7 +31,7 @@ Full documentation is available in the [Linux kernel docs](https://www.kernel.or
 
 `ip=<client-ip>:<server-ip>:<gw-ip>:<netmask>:<hostname>:<device>:<autoconf>:<dns0-ip>:<dns1-ip>:<ntp0-ip>`
 
-Talos will use the configuration supplied via the kernel parameter as the initial network configuration.
+Chubo OS will use the configuration supplied via the kernel parameter as the initial network configuration.
 This parameter is useful in the environments where DHCP doesn't provide IP addresses or when default DNS and NTP servers should be overridden
 before loading machine configuration.
 Partial configuration can be applied as well, e.g. `ip=:::::::<dns0-ip>:<dns1-ip>:<ntp0-ip>` sets only the DNS and NTP servers.
@@ -53,7 +53,7 @@ Full documentation is available in the [Dracut kernel docs](https://man7.org/lin
 
 `bond=<bondname>:<bondslaves>:<options>:<mtu>`
 
-Talos will use the `bond=` kernel parameter if supplied to set the initial bond configuration.
+Chubo OS will use the `bond=` kernel parameter if supplied to set the initial bond configuration.
 This parameter is useful in environments where the switch ports are suspended if the machine doesn't setup a LACP bond.
 
 If only the bond name is supplied, the bond will be created with `eth0` and `eth1` as slaves and bond mode set as `balance-rr`
@@ -79,7 +79,7 @@ The interface vlan configuration.
 
 Full documentation is available in the [Dracut kernel docs](https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html).
 
-Talos will use the `vlan=` kernel parameter if supplied to set the initial vlan configuration.
+Chubo OS will use the `vlan=` kernel parameter if supplied to set the initial vlan configuration.
 This parameter is useful in environments where the switch ports are VLAN tagged with no native VLAN.
 
 Only one vlan can be configured at this stage.
@@ -98,7 +98,7 @@ Disable the predictable network interface names by specifying `net.ifnames=0` on
 
 The amount of time to wait after a panic before a reboot is issued.
 
-Talos will always reboot if it encounters an unrecoverable error.
+Chubo OS will always reboot if it encounters an unrecoverable error.
 However, when collecting debug information, it may reboot too quickly for
 humans to read the logs.
 This option allows the user to delay the reboot to give time to collect debug
@@ -130,8 +130,8 @@ For backwards compatibility we insert the system UUID into the query parameter `
 
 ##### `metal-iso`
 
-When the kernel parameter `talos.config=metal-iso` is set, Talos will attempt to load the machine configuration from any block device with a filesystem label of `metal-iso`.
-Talos will look for a file named `config.yaml` in the root of the filesystem.
+When the kernel parameter `talos.config=metal-iso` is set, Chubo OS will attempt to load the machine configuration from any block device with a filesystem label of `metal-iso`.
+Chubo OS will look for a file named `config.yaml` in the root of the filesystem.
 
 For example, such ISO filesystem can be created with:
 
@@ -171,7 +171,7 @@ Please note that configuration from this argument is only loaded if the configur
 
 #### `talos.platform`
 
-The platform name on which Talos will run.
+The platform name on which Chubo OS will run.
 
 Valid options are:
 
@@ -204,7 +204,7 @@ instead.
 
 #### `talos.shutdown`
 
-The type of shutdown to use when Talos is told to shutdown.
+The type of shutdown to use when Chubo OS is told to shutdown.
 
 Valid options are:
 
@@ -213,9 +213,9 @@ Valid options are:
 
 #### `talos.network.interface.ignore`
 
-A network interface which should be ignored and not configured by Talos.
+A network interface which should be ignored and not configured by Chubo OS.
 
-Before a configuration is applied (early on each boot), Talos attempts to
+Before a configuration is applied (early on each boot), Chubo OS attempts to
 configure each network interface by DHCP.
 If there are many network interfaces on the machine which have link but no
 DHCP server, this can add significant boot delays.
@@ -229,16 +229,16 @@ Resets the disk before starting up the system.
 Valid options are:
 
 * `system` resets system disk.
-* `system:EPHEMERAL,STATE` resets ephemeral and state partitions. Doing this reverts Talos into maintenance mode.
+* `system:EPHEMERAL,STATE` resets ephemeral and state partitions. Doing this reverts Chubo OS into maintenance mode.
 
 #### `talos.auditd.disabled`
 
-By default, Talos runs `auditd` service capturing kernel audit events.
+By default, Chubo OS runs the `auditd` service to capture kernel audit events.
 If you set `talos.auditd.disabled=1`, this behavior will be disabled, and you can run your own `auditd` service.
 
 #### `talos.dashboard.disabled`
 
-By default, Talos redirects kernel logs to virtual console `/dev/tty1` and starts the dashboard on `/dev/tty2`,
+By default, Chubo OS redirects kernel logs to virtual console `/dev/tty1` and starts the dashboard on `/dev/tty2`,
 then switches to the dashboard tty.
 
 If you set `talos.dashboard.disabled=1`, this behavior will be disabled.
@@ -248,7 +248,7 @@ It is set to be `1` by default on SBCs.
 
 #### `talos.dashboard.console`
 
-By default, the Talos dashboard runs on `/dev/tty2` with automatic TTY switching.
+By default, the Chubo OS dashboard runs on `/dev/tty2` with automatic TTY switching.
 You can specify a custom console device for the dashboard using this parameter.
 
 For example, to run the dashboard on a serial console:
@@ -265,7 +265,7 @@ When this parameter is specified:
 
 This is useful for headless servers or systems where you want the dashboard accessible through a serial console connection.
 
-> Note: If Talos dashboard is set to use ttyS0, make sure that Linux kernel command line doesn't include
+> Note: If the Chubo OS dashboard is set to use ttyS0, make sure that Linux kernel command line doesn't include
 > `console=ttyS0` or similar, as it will conflict with the dashboard output.
 
 #### `talos.environment`
@@ -282,7 +282,7 @@ talos.environment=http_proxy=http://proxy.example.com:8080 talos.environment=htt
 #### `talos.device.settle_time`
 
 The time in Go duration format to wait for devices to settle before starting the boot process.
-By default, Talos waits for `udevd` to scan and settle, but with some RAID controllers `udevd` might
+By default, Chubo OS waits for `udevd` to scan and settle, but with some RAID controllers `udevd` might
 report settled devices before they are actually ready.
 Adding this kernel argument provides extra settle time on top of `udevd` settle time.
 The maximum value is `10m` (10 minutes).
@@ -295,5 +295,5 @@ talos.device.settle_time=3m
 
 #### `talos.halt_if_installed`
 
-If set to `1`, Talos will pause the boot sequence and keeps printing a message until the boot timeout is reached if it detects that it is already installed.
+If set to `1`, Chubo OS will pause the boot sequence and keep printing a message until the boot timeout is reached if it detects that it is already installed.
 This is useful if booting from ISO/PXE and you want to prevent the machine accidentally booting from the ISO/PXE after installation to the disk.

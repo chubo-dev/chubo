@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package chubo.resource.definitions.runtime;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/runtime";
-option java_package = "dev.chubo.api.resource.definitions.runtime";
-
 import "common/common.proto";
 import "google/protobuf/duration.proto";
 import "resource/definitions/enums/enums.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/runtime";
+option java_package = "dev.chubo.api.resource.definitions.runtime";
 
 // BootedEntrySpec describes the booted entry resource properties.
 message BootedEntrySpec {
@@ -194,4 +194,3 @@ message WatchdogTimerStatusSpec {
   google.protobuf.Duration timeout = 2;
   google.protobuf.Duration feed_interval = 3;
 }
-

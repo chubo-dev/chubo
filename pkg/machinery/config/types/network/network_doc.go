@@ -829,7 +829,7 @@ func (HCloudVIPConfigV1Alpha1) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "HCloudVIPConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual control-plane endpoint.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using Hetzner Cloud APIs.\n",
+		Description: "HCloudVIPConfig is a config document to configure virtual IP using Hetzner Cloud APIs for announcement.\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual IP for the cluster API endpoint.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using Hetzner Cloud APIs.\n",
 		Fields: []encoder.Doc{
 			{
 				Type:   "Meta",
@@ -881,7 +881,7 @@ func (HostnameConfigV1Alpha1) Doc() *encoder.Doc {
 				Name:        "auto",
 				Type:        "AutoHostnameKind",
 				Note:        "",
-				Description: "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
+				Description: "A method to automatically generate a hostname for the machine.\n\nThere are two methods available:\n  - `stable` - generates a stable hostname based on machine identity\n  - `off` - disables automatic hostname generation, Chubo will wait for an external source to provide a hostname (DHCP, cloud-init, etc).\n\nAutomatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.\nConflicts with `hostname` field.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "A method to automatically generate a hostname for the machine." /* encoder.LineComment */, "" /* encoder.FootComment */},
 				Values: []string{
 					"stable",
@@ -912,7 +912,7 @@ func (Layer2VIPConfigV1Alpha1) Doc() *encoder.Doc {
 	doc := &encoder.Doc{
 		Type:        "Layer2VIPConfig",
 		Comments:    [3]string{"" /* encoder.HeadComment */, "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement." /* encoder.LineComment */, "" /* encoder.FootComment */},
-		Description: "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual control-plane endpoint.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.\n",
+		Description: "Layer2VIPConfig is a config document to configure virtual IP using Layer 2 (Ethernet) advertisement.\nVirtual IP configuration should be used only on controlplane nodes to provide a virtual IP for the cluster API endpoint.\nAny other use cases are not supported and may lead to unexpected behavior.\nVirtual IP will be announced from only one node at a time using gratuitous ARP announcements for IPv4.\n",
 		Fields: []encoder.Doc{
 			{
 				Type:   "Meta",
@@ -1224,7 +1224,7 @@ func (ResolverConfigV1Alpha1) Doc() *encoder.Doc {
 				Name:        "nameservers",
 				Type:        "[]NameserverConfig",
 				Note:        "",
-				Description: "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host, and they can also be\npropagated to workload DNS resolvers.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.",
+				Description: "A list of nameservers (DNS servers) to use for resolving domain names.\n\nNameservers are used to resolve domain names on the host and by local workloads.\n\nThis overrides any nameservers obtained via DHCP or platform configuration.\nDefault configuration is to use 1.1.1.1 and 8.8.8.8 as nameservers.",
 				Comments:    [3]string{"" /* encoder.HeadComment */, "A list of nameservers (DNS servers) to use for resolving domain names." /* encoder.LineComment */, "" /* encoder.FootComment */},
 			},
 			{

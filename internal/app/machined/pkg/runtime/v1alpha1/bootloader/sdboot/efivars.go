@@ -24,7 +24,7 @@ const (
 	// ChuboBootEntryDescription is the description of new UEFI boot entries.
 	ChuboBootEntryDescription = constants.ChuboBootEntryDescription
 
-	// TalosBootEntryDescription is the legacy Talos UEFI boot entry description kept for compatibility.
+	// TalosBootEntryDescription is the legacy UEFI boot entry description kept for compatibility.
 	TalosBootEntryDescription = constants.LegacyBootEntryDescription
 )
 

@@ -1,6 +1,6 @@
 # Contributing
 
-More information about contributing to Talos can be found in the [Documentation](https://www.talos.dev/latest/learn-more/developing-talos/).
+Contribution workflow and local development guidance live in [README.md](README.md) and under `docs/`.
 
 ## Developer Certificate of Origin
 

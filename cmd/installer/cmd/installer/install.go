@@ -34,7 +34,7 @@ func init() {
 
 //nolint:gocyclo
 func runInstallCmd(ctx context.Context) (err error) {
-	log.Printf("running Talos installer %s", version.NewVersion().Tag)
+	log.Printf("running Chubo installer %s", version.NewVersion().Tag)
 
 	mode := install.ModeInstall
 

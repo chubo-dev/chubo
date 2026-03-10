@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package chubo.resource.definitions.block;
 
-option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block";
-option java_package = "dev.chubo.api.resource.definitions.block";
-
 import "google/api/expr/v1alpha1/checked.proto";
 import "resource/definitions/enums/enums.proto";
+
+option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/block";
+option java_package = "dev.chubo.api.resource.definitions.block";
 
 // DeviceSpec is the spec for devices status.
 message DeviceSpec {
@@ -293,4 +293,3 @@ message ZswapStatusSpec {
   uint64 reject_compress_poor = 9;
   uint64 written_back_pages = 10;
 }
-

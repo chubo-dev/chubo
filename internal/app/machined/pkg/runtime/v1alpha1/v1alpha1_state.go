@@ -246,7 +246,7 @@ func (s *MachineState) Installed() bool {
 
 			switch vs.TypedSpec().Phase { //nolint:exhaustive
 			case block.VolumePhaseMissing:
-				// no META, talos is not installed
+				// no META, Chubo is not installed
 				return true, nil
 			case block.VolumePhaseReady:
 				// META found

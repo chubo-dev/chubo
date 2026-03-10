@@ -16,11 +16,11 @@ title: RegistryMirrorConfig
 {{< highlight yaml >}}
 apiVersion: v1alpha1
 kind: RegistryMirrorConfig
-name: registry.k8s.io # Registry name to apply the mirror configuration to.
+name: registry.workloads.io # Registry name to apply the mirror configuration to.
 # List of mirror endpoints for the registry.
 endpoints:
     - url: https://my-private-registry.local:5000 # The URL of the registry mirror endpoint.
-    - url: http://my-harbor/v2/registry-k8s.io/ # The URL of the registry mirror endpoint.
+    - url: http://my-harbor/v2/registry-workloads.io/ # The URL of the registry mirror endpoint.
       overridePath: true # Use endpoint path as supplied, without adding `/v2/` suffix.
 skipFallback: true # Skip fallback to the original registry if none of the mirrors are available
 {{< /highlight >}}

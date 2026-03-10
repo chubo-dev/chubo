@@ -21,8 +21,8 @@ import (
 )
 
 // CreateDHCPd creates a DHCP server on darwin.
-// It waits for the interface to appear, shut's down the apple bootp DHCPd server created by qemu by default,
-// starts the talos DHCP server and then starts the apple bootp server again, which is configured such
+// It waits for the interface to appear, shuts down the apple bootp DHCPd server created by qemu by default,
+// starts the Chubo DHCP server and then starts the apple bootp server again, which is configured such
 // that it detects existing dhcp servers on interfaces and doesn't interfare with them.
 func (p *Provisioner) CreateDHCPd(ctx context.Context, state *provision.State, clusterReq provision.ClusterRequest) error {
 	// QEMU's vmnet-shared backend chooses the bridge name internally. We try to predict it
@@ -60,7 +60,7 @@ func (p *Provisioner) CreateDHCPd(ctx context.Context, state *provision.State, c
 
 	err = cmd.Run()
 	if err != nil {
-		fmt.Printf("warning: failed to start native dhcp server after creating a talos dhcp server: %s", err)
+		fmt.Printf("warning: failed to start native dhcp server after creating a Chubo DHCP server: %s", err)
 	}
 
 	return nil

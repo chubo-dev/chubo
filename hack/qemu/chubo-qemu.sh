@@ -7,7 +7,7 @@ set -euo pipefail
 # - `chuboctl cluster create` can require sudo (vmnet/socket_vmnet) on macOS.
 # - slirp/usernet + hostfwd works without privileges and is "good enough" for fast iteration.
 #
-# This script boots Talos via systemd-boot from a FAT "EFI drive" directory and forwards the
+# This script boots Chubo via systemd-boot from a FAT "EFI drive" directory and forwards the
 # maintenance API to 127.0.0.1:$HOST_PORT (default 50000).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

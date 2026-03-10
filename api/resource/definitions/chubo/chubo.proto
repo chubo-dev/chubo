@@ -83,4 +83,3 @@ message OpenWontonStatusSpec {
   bool acl_ready = 9;
   string acl_last_error = 10;
 }
-

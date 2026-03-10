@@ -24,7 +24,7 @@ password: my-password # Username/password authentication.
 
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
-|`name` |string |Registry endpoint to apply the authentication configuration to.<br><br>Registry endpoint is the hostname part of the endpoint URL,<br>e.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.<br><br>The authentication configuration will apply to all image pulls for this<br>registry endpoint, by Talos or any Kubernetes workloads.  | |
+|`name` |string |Registry endpoint to apply the authentication configuration to.<br><br>Registry endpoint is the hostname part of the endpoint URL,<br>e.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.<br><br>The authentication configuration will apply to all image pulls for this<br>registry endpoint, by the OS and any scheduled workloads.  | |
 |`username` |string |Username/password authentication.  | |
 |`password` |string |Username/password authentication.  | |
 |`auth` |string |Raw authentication string.  | |

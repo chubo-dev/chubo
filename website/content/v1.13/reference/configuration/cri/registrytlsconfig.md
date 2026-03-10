@@ -37,7 +37,7 @@ ca: |- # CA registry certificate to add the list of trusted certificates.
 
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
-|`name` |string |Registry endpoint to apply the TLS configuration to.<br><br>Registry endpoint is the hostname part of the endpoint URL,<br>e.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.<br><br>The TLS configuration makes sense only for HTTPS endpoints.<br>The TLS configuration will apply to all image pulls for this<br>registry endpoint, by Talos or any Kubernetes workloads.  | |
+|`name` |string |Registry endpoint to apply the TLS configuration to.<br><br>Registry endpoint is the hostname part of the endpoint URL,<br>e.g. 'my-mirror.local:5000' for 'https://my-mirror.local:5000/v2/'.<br><br>The TLS configuration makes sense only for HTTPS endpoints.<br>The TLS configuration will apply to all image pulls for this<br>registry endpoint, by the OS and any scheduled workloads.  | |
 |`clientIdentity` |CertificateAndKey |Enable mutual TLS authentication with the registry.<br>Client certificate and key should be PEM-encoded. <details><summary>Show example(s)</summary>{{< highlight yaml >}}
 clientIdentity:
     cert: |-

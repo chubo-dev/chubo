@@ -72,7 +72,7 @@ func (p *Profile) Validate() error {
 	}
 
 	if p.SecureBootEnabled() && !quirks.New(p.Version).SupportsUKI() {
-		return fmt.Errorf("secureboot is not supported for Talos version %q", p.Version)
+		return fmt.Errorf("secureboot is not supported for Chubo version %q", p.Version)
 	}
 
 	switch p.Output.Kind {

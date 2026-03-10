@@ -309,9 +309,9 @@ func (au *AWSUploader) registerAMIArch(ctx context.Context, region string, svc *
 	log.Printf("aws: import into %s/%s, image uploaded to S3", region, arch)
 
 	resp, err := svc.ImportSnapshot(ctx, &ec2.ImportSnapshotInput{
-		Description: pointer.To(fmt.Sprintf("Talos Image %s %s %s", au.Options.Tag, arch, region)),
+		Description: pointer.To(fmt.Sprintf("Chubo Image %s %s %s", au.Options.Tag, arch, region)),
 		DiskContainer: &types.SnapshotDiskContainer{
-			Description: pointer.To(fmt.Sprintf("Talos Image %s %s %s", au.Options.Tag, arch, region)),
+			Description: pointer.To(fmt.Sprintf("Chubo Image %s %s %s", au.Options.Tag, arch, region)),
 			Format:      pointer.To("raw"),
 			UserBucket: &types.UserBucket{
 				S3Bucket: pointer.To(bucketName),
@@ -419,7 +419,7 @@ func (au *AWSUploader) registerAMIArch(ctx context.Context, region string, svc *
 		RootDeviceName:     pointer.To("/dev/xvda"),
 		VirtualizationType: pointer.To("hvm"),
 		EnaSupport:         pointer.To(true),
-		Description:        pointer.To(fmt.Sprintf("Talos AMI %s %s %s", au.Options.Tag, arch, region)),
+		Description:        pointer.To(fmt.Sprintf("Chubo AMI %s %s %s", au.Options.Tag, arch, region)),
 		Architecture:       awsArchitectures[arch],
 		ImdsSupport:        types.ImdsSupportValuesV20,
 	}

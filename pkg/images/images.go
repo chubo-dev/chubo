@@ -43,7 +43,7 @@ var (
 	DefaultTalosImageName = Username + "/talos"
 	// DefaultTalosImageRepository is the legacy container repository kept for compatibility.
 	DefaultTalosImageRepository = Registry + "/" + DefaultTalosImageName
-	// DefaultTalosImage is the legacy Talos image kept for compatibility.
+	// DefaultTalosImage is the legacy pre-Chubo image kept for compatibility.
 	DefaultTalosImage = DefaultTalosImageRepository + ":" + version.Tag
 
 	// DefaultInstallerBaseImageRepository is the default container repository for

@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package chubo.resource.definitions.siderolink;
 
+import "common/common.proto";
+
 option go_package = "github.com/chubo-dev/chubo/pkg/machinery/api/resource/definitions/siderolink";
 option java_package = "dev.chubo.api.resource.definitions.siderolink";
-
-import "common/common.proto";
 
 // ConfigSpec describes Siderolink configuration.
 message ConfigSpec {
@@ -31,4 +31,3 @@ message TunnelSpec {
   int64 mtu = 3;
   common.NetIPPort node_address = 4;
 }
-

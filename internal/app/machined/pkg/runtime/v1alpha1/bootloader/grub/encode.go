@@ -66,7 +66,7 @@ terminal_output console
 	if c.AddResetOption {
 		defaultEntry := c.Entries[c.Default]
 
-		fmt.Fprintf(wr, `menuentry "Reset Talos installation and return to maintenance mode" {
+		fmt.Fprintf(wr, `menuentry "Reset Chubo installation and return to maintenance mode" {
   set gfxmode=auto
   set gfxpayload=text
   linux %s %s talos.experimental.wipe=system:EPHEMERAL,STATE

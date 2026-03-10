@@ -173,7 +173,7 @@ func (s *Server) Upgrade(ctx context.Context, in *machine.UpgradeRequest) (reply
 	}
 
 	if !s.controller.Runtime().State().Machine().Installed() {
-		return nil, status.Errorf(codes.FailedPrecondition, "Talos is not installed")
+		return nil, status.Errorf(codes.FailedPrecondition, "Chubo is not installed")
 	}
 
 	actorID := uuid.New().String()
@@ -243,7 +243,7 @@ func (s *Server) Reset(ctx context.Context, in *machine.ResetRequest) (*machine.
 	}
 
 	if systemDisk == nil {
-		return nil, errors.New("reset failed: Talos is not installed")
+		return nil, errors.New("reset failed: Chubo is not installed")
 	}
 
 	dev, err := block.NewFromPath(systemDisk.DevPath, block.OpenForWrite())

@@ -67,7 +67,7 @@ func (suite *ResetSuite) TearDownTest() {
 func (suite *ResetSuite) TestResetNodeByNode() {
 	if suite.Capabilities().SecureBooted {
 		// this is because in secure boot mode, the machine config is only applied and cannot be passed as kernel args
-		suite.T().Skip("skipping as talos is explicitly trusted booted")
+		suite.T().Skip("skipping because the OS boot path is explicitly trusted")
 	}
 
 	nodes := suite.DiscoverNodeInternalIPs(suite.ctx)
@@ -86,7 +86,7 @@ func (suite *ResetSuite) TestResetNodeByNode() {
 func (suite *ResetSuite) testResetNoGraceful(nodeType machine.Type) {
 	if suite.Capabilities().SecureBooted {
 		// this is because in secure boot mode, the machine config is only applied and cannot be passed as kernel args
-		suite.T().Skip("skipping as talos is explicitly trusted booted")
+		suite.T().Skip("skipping because the OS boot path is explicitly trusted")
 	}
 
 	node := suite.RandomDiscoveredNodeInternalIP(nodeType)
@@ -133,7 +133,7 @@ func (suite *ResetSuite) TestResetWithSpecEphemeral() {
 func (suite *ResetSuite) TestResetWithSpecStateAndUserDisks() {
 	if suite.Capabilities().SecureBooted {
 		// this is because in secure boot mode, the machine config is only applied and cannot be passed as kernel args
-		suite.T().Skip("skipping as talos is explicitly trusted booted")
+		suite.T().Skip("skipping because the OS boot path is explicitly trusted")
 	}
 
 	node := suite.RandomDiscoveredNodeInternalIP(machine.TypeWorker)

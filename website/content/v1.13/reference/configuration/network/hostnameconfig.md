@@ -32,7 +32,7 @@ auto: stable # A method to automatically generate a hostname for the machine.
 
 | Field | Type | Description | Value(s) |
 |-------|------|-------------|----------|
-|`auto` |AutoHostnameKind |A method to automatically generate a hostname for the machine.<br><br>There are two methods available:<br>  - `stable` - generates a stable hostname based on machine identity<br>  - `off` - disables automatic hostname generation, Talos will wait for an external source to provide a hostname (DHCP, cloud-init, etc).<br><br>Automatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.<br>Conflicts with `hostname` field.  |`stable`<br />`off`<br /> |
+|`auto` |AutoHostnameKind |A method to automatically generate a hostname for the machine.<br><br>There are two methods available:<br>  - `stable` - generates a stable hostname based on machine identity<br>  - `off` - disables automatic hostname generation, Chubo will wait for an external source to provide a hostname (DHCP, cloud-init, etc).<br><br>Automatic hostnames have the lowest priority over any other hostname sources: DHCP, cloud-init, etc.<br>Conflicts with `hostname` field.  |`stable`<br />`off`<br /> |
 |`hostname` |string |A static hostname to set for the machine.<br><br>This hostname has the highest priority over any other hostname sources: DHCP, cloud-init, etc.<br>Conflicts with `auto` field. <details><summary>Show example(s)</summary>{{< highlight yaml >}}
 hostname: controlplane1
 {{< /highlight >}}{{< highlight yaml >}}
