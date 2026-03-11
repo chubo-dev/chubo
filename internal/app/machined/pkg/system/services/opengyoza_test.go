@@ -33,6 +33,28 @@ func TestFirstPrivateIPv4(t *testing.T) {
 	require.Equal(t, "10.0.0.12", ip)
 }
 
+func TestFirstPrivateIPv4SkipsContainerBridgeInterfaces(t *testing.T) {
+	t.Parallel()
+
+	ifaces := []net.Interface{
+		{Name: "docker0", Flags: net.FlagUp},
+		{Name: "eth1", Flags: net.FlagUp},
+		{Name: "cni0", Flags: net.FlagUp},
+	}
+
+	addrsByName := map[string][]net.Addr{
+		"docker0": {mustCIDR(t, "172.17.0.1/16")},
+		"eth1":    {mustCIDR(t, "10.0.0.12/24")},
+		"cni0":    {mustCIDR(t, "10.88.0.1/16")},
+	}
+
+	ip, err := firstPrivateIPv4FromInterfaces(ifaces, func(iface net.Interface) ([]net.Addr, error) {
+		return addrsByName[iface.Name], nil
+	})
+	require.NoError(t, err)
+	require.Equal(t, "10.0.0.12", ip)
+}
+
 func TestFirstPrivateIPv4ErrorWhenNoPrivateAddress(t *testing.T) {
 	t.Parallel()
 
@@ -53,8 +75,9 @@ func TestFirstPrivateIPv4ErrorWhenNoPrivateAddress(t *testing.T) {
 func mustCIDR(t *testing.T, cidr string) *net.IPNet {
 	t.Helper()
 
-	_, ipNet, err := net.ParseCIDR(cidr)
+	ip, ipNet, err := net.ParseCIDR(cidr)
 	require.NoError(t, err)
+	ipNet.IP = ip
 
 	return ipNet
 }

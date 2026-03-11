@@ -280,6 +280,10 @@ func firstPrivateIPv4FromInterfaces(ifaces []net.Interface, addrs func(net.Inter
 			continue
 		}
 
+		if shouldSkipAdvertiseInterface(iface.Name) {
+			continue
+		}
+
 		addrs, err := addrs(iface)
 		if err != nil {
 			continue
@@ -301,6 +305,29 @@ func firstPrivateIPv4FromInterfaces(ifaces []net.Interface, addrs func(net.Inter
 	}
 
 	return "", fmt.Errorf("no private IPv4 address found")
+}
+
+func shouldSkipAdvertiseInterface(name string) bool {
+	switch {
+	case name == "":
+		return false
+	case strings.HasPrefix(name, "docker"):
+		return true
+	case strings.HasPrefix(name, "cni"):
+		return true
+	case strings.HasPrefix(name, "flannel"):
+		return true
+	case strings.HasPrefix(name, "virbr"):
+		return true
+	case strings.HasPrefix(name, "br-"):
+		return true
+	case strings.HasPrefix(name, "veth"):
+		return true
+	case strings.HasPrefix(name, "cilium"):
+		return true
+	default:
+		return false
+	}
 }
 
 func defaultOutboundIPv4(ctx context.Context) (string, error) {
