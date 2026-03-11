@@ -26,10 +26,10 @@ type serviceReleaseOCITar struct {
 
 var openWontonOCIRelease = serviceReleaseOCITar{
 	ServiceName: "openwonton",
-	Version:     "v1.6.5-opengyoza-connect.1",
+	Version:     "v1.6.5-opengyoza-connect.2",
 	AssetURLs: map[string]string{
-		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-opengyoza-connect.1/openwonton_release_linux_amd64_1.6.5-opengyoza-connect.1_abb9628e80fae2c5417a74b7ee98fa8284226dd6.docker.tar",
-		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-opengyoza-connect.1/openwonton_release_linux_arm64_1.6.5-opengyoza-connect.1_abb9628e80fae2c5417a74b7ee98fa8284226dd6.docker.tar",
+		"amd64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-opengyoza-connect.2/openwonton_release_linux_amd64_1.6.5-opengyoza-connect.2_1594060d3f17b81f8dc5e1b6616e1674db36c69d.docker.tar",
+		"arm64": "https://github.com/openwonton/openwonton/releases/download/v1.6.5-opengyoza-connect.2/openwonton_release_linux_arm64_1.6.5-opengyoza-connect.2_1594060d3f17b81f8dc5e1b6616e1674db36c69d.docker.tar",
 	},
 }
 
