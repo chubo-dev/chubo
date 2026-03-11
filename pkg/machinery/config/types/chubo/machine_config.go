@@ -264,6 +264,15 @@ type ChuboOpenBaoSpec struct {
 
 	// Mode selects the integration mode (nomadJob).
 	Mode string `yaml:"mode,omitempty"`
+
+	// VaultAddress configures the OpenWonton Vault/OpenBao API address.
+	VaultAddress string `yaml:"vaultAddress,omitempty"`
+
+	// VaultToken configures the OpenWonton server parent token used to derive child task tokens.
+	VaultToken string `yaml:"vaultToken,omitempty"`
+
+	// VaultAllowUnauthenticated controls whether job submitters must provide their own Vault token.
+	VaultAllowUnauthenticated *bool `yaml:"vaultAllowUnauthenticated,omitempty"`
 }
 
 type BootstrapSpec struct {
@@ -585,7 +594,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				}
 
 				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, networkInterface, chuboConsulEnabled, chuboConsulACLToken),
+					FileContent:     renderOpenWontonConfig(role, bootstrapExpect, join, networkInterface, chuboConsulEnabled, chuboConsulACLToken, s.Spec.Modules.Chubo.OpenBao),
 					FilePermissions: v1alpha1.FileMode(0o600),
 					FilePath:        chuboOpenWontonConfigPath,
 					FileOp:          "create",
@@ -859,7 +868,7 @@ func renderOpenWontonClientServers(join []string) string {
 	return renderHCLStringArray(servers)
 }
 
-func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, networkInterface string, consulEnabled bool, consulACLToken string) string {
+func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, networkInterface string, consulEnabled bool, consulACLToken string, openBao *ChuboOpenBaoSpec) string {
 	serverEnabled := isChuboServerRole(role)
 	clientEnabled := isChuboClientRole(role)
 
@@ -945,6 +954,34 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 `, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, chuboOpenGyozaTLSDir, consulTokenLine)
 	}
 
+	vaultBlock := ""
+	if openBao != nil && (openBao.Enabled == nil || *openBao.Enabled) {
+		vaultAddress := strings.TrimSpace(openBao.VaultAddress)
+		if vaultAddress == "" {
+			vaultAddress = "http://127.0.0.1:8200"
+		}
+
+		allowUnauthenticated := true
+		if openBao.VaultAllowUnauthenticated != nil {
+			allowUnauthenticated = *openBao.VaultAllowUnauthenticated
+		}
+
+		vaultTokenLine := ""
+		if serverEnabled {
+			if token := strings.TrimSpace(openBao.VaultToken); token != "" {
+				vaultTokenLine = fmt.Sprintf("  token = %q\n", token)
+			}
+		}
+
+		vaultBlock = fmt.Sprintf(`vault {
+  enabled = true
+  address = %q
+  allow_unauthenticated = %t
+%s}
+
+`, vaultAddress, allowUnauthenticated, vaultTokenLine)
+	}
+
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"
 bind_addr = "0.0.0.0"
 log_level = "INFO"
@@ -964,6 +1001,7 @@ tls {
 
 %s
 %s
+%s
 
 server {
   enabled = %t
@@ -977,7 +1015,7 @@ client {
 %s
 %s
 }
-%s`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, consulBlock, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine, dockerPluginBlock)
+%s`, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, chuboOpenWontonTLSDir, consulBlock, vaultBlock, advertiseBlock, serverEnabled, bootstrapExpect, joinBlock, clientEnabled, clientOptionsBlock, clientServersLine, clientNetworkInterfaceLine, dockerPluginBlock)
 }
 
 func renderOpenGyozaConfig(role string, bootstrapExpect int, join []string, aclToken string) string {

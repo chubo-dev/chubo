@@ -14,6 +14,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/siderolabs/go-pointer"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
@@ -442,6 +443,110 @@ func TestMachineConfigNomadRendersConsulIntegrationWhenConsulEnabled(t *testing.
 		require.Contains(t, f.FileContent, `key_file = "/var/lib/chubo/certs/opengyoza/server-key.pem"`)
 		require.Contains(t, f.FileContent, `grpc_address = "127.0.0.1:8502"`)
 		require.Contains(t, f.FileContent, `grpc_ca_file = "/var/lib/chubo/certs/opengyoza/ca.pem"`)
+	}
+
+	require.True(t, foundConfig)
+}
+
+func TestMachineConfigNomadRendersOpenBaoVaultIntegrationWhenOpenBaoEnabled(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server-client",
+			},
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled:                   &enabled,
+				Mode:                      "nomadJob",
+				VaultAddress:              "http://openbao.service.consul:8200",
+				VaultToken:                "root-token",
+				VaultAllowUnauthenticated: pointer.To(true),
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	foundConfig := false
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenWontonConfigPath {
+			continue
+		}
+
+		foundConfig = true
+		require.Contains(t, f.FileContent, "vault {\n")
+		require.Contains(t, f.FileContent, `enabled = true`)
+		require.Contains(t, f.FileContent, `address = "http://openbao.service.consul:8200"`)
+		require.Contains(t, f.FileContent, `allow_unauthenticated = true`)
+		require.Contains(t, f.FileContent, `token = "root-token"`)
+	}
+
+	require.True(t, foundConfig)
+}
+
+func TestMachineConfigNomadClientOmitsOpenBaoVaultServerToken(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "client",
+			},
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled:      &enabled,
+				Mode:         "nomadJob",
+				VaultToken:   "root-token",
+				VaultAddress: "http://127.0.0.1:8200",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	foundConfig := false
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenWontonConfigPath {
+			continue
+		}
+
+		foundConfig = true
+		require.Contains(t, f.FileContent, "vault {\n")
+		require.NotContains(t, f.FileContent, `token = "root-token"`)
 	}
 
 	require.True(t, foundConfig)
