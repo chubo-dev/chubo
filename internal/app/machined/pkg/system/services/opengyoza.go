@@ -44,11 +44,11 @@ const (
 
 var openGyozaRelease = serviceReleaseBinary{
 	ServiceName: "opengyoza",
-	Version:     "v1.6.4",
+	Version:     "v1.6.4-connect-xds-smoke3",
 	ZipEntry:    "gyoza",
 	AssetURLs: map[string]string{
-		"amd64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_amd64.zip",
-		"arm64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4/gyoza_1.6.4_linux_arm64.zip",
+		"amd64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4-connect-xds-smoke3/gyoza_1.6.4_linux_amd64.zip",
+		"arm64": "https://github.com/opengyoza/opengyoza/releases/download/v1.6.4-connect-xds-smoke3/gyoza_1.6.4_linux_arm64.zip",
 	},
 }
 
