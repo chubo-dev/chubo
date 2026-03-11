@@ -120,6 +120,18 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 		}
 
 		if configured {
+			_, dockerRunning, dockerErr := ctrl.V1Alpha1ServiceManager.IsRunning(services.DockerServiceID)
+			if dockerErr != nil {
+				ctrl.V1Alpha1ServiceManager.Load(&services.Docker{})
+				dockerRunning = false
+			}
+
+			if !dockerRunning {
+				if err := ctrl.V1Alpha1ServiceManager.Start(services.DockerServiceID); err != nil {
+					return fmt.Errorf("error starting docker service: %w", err)
+				}
+			}
+
 			_, running, runErr := ctrl.V1Alpha1ServiceManager.IsRunning(services.OpenWontonServiceID)
 			if runErr != nil {
 				ctrl.V1Alpha1ServiceManager.Load(&services.OpenWonton{})
@@ -136,6 +148,13 @@ func (ctrl *OpenWontonServiceController) Run(ctx context.Context, r controller.R
 			if runErr == nil && running {
 				if err := ctrl.V1Alpha1ServiceManager.Stop(ctx, services.OpenWontonServiceID); err != nil {
 					return fmt.Errorf("error stopping openwonton service: %w", err)
+				}
+			}
+
+			_, dockerRunning, dockerErr := ctrl.V1Alpha1ServiceManager.IsRunning(services.DockerServiceID)
+			if dockerErr == nil && dockerRunning {
+				if err := ctrl.V1Alpha1ServiceManager.Stop(ctx, services.DockerServiceID); err != nil {
+					return fmt.Errorf("error stopping docker service: %w", err)
 				}
 			}
 		}
