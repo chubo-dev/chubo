@@ -132,6 +132,32 @@ func TestSupportsZstd(t *testing.T) {
 	}
 }
 
+func TestChuboZeroMajorTagsUseCurrentBehavior(t *testing.T) {
+	for _, test := range []struct {
+		version             string
+		expectSDBootForUEFI bool
+		expectUnified       bool
+	}{
+		{
+			version:             "v0.1.25",
+			expectSDBootForUEFI: true,
+			expectUnified:       true,
+		},
+		{
+			version:             "v0.1.25-dirty",
+			expectSDBootForUEFI: true,
+			expectUnified:       true,
+		},
+	} {
+		t.Run(test.version, func(t *testing.T) {
+			q := quirks.New(test.version)
+
+			assert.Equal(t, test.expectSDBootForUEFI, q.UseSDBootForUEFI())
+			assert.Equal(t, test.expectUnified, q.SupportsUnifiedInstaller())
+		})
+	}
+}
+
 func TestXFSMkfsConfigFile(t *testing.T) {
 	for _, test := range []struct {
 		version string

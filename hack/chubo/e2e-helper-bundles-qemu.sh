@@ -33,6 +33,8 @@ OPENGYOZA_VERSION="${OPENGYOZA_VERSION:-1.6.4}"
 OPENGYOZA_MIRROR_PORT="${OPENGYOZA_MIRROR_PORT:-5010}"
 OPENGYOZA_MIRROR_PID=0
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
+OPENBAO_MODE="${OPENBAO_MODE:-nomadJob}"
+WITH_OPENBAO="${WITH_OPENBAO:-1}"
 
 HOST_PORT_ENV_SET=0
 if [[ -n "${HOST_PORT+x}" ]]; then
@@ -611,10 +613,15 @@ gen_mc_args=(
 	--registry-mirror "${REGISTRY_MIRROR_NODE}"
 	--with-chubo
 	--chubo-role server
-	--with-openbao
-	--openbao-mode nomadJob
 	-o "${MACHINECONFIG_INSTALL}"
 )
+
+if [[ "${WITH_OPENBAO}" == "1" ]]; then
+	gen_mc_args+=(
+		--with-openbao
+		--openbao-mode "${OPENBAO_MODE}"
+	)
+fi
 
 if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
 	gen_mc_args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")

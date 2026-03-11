@@ -19,6 +19,18 @@ func New(osVersion string) Quirks {
 		return Quirks{}
 	}
 
+	// Chubo release tags use a 0.x scheme, but the imager quirks still encode
+	// Talos-era feature gates keyed off 1.x versions. Treat Chubo 0.x tags as
+	// "current fork behavior" so local builds and released artifacts don't fall
+	// back to legacy pre-1.10 installer/image paths.
+	if v.Major == 0 {
+		return Quirks{v: &semver.Version{
+			Major: 1,
+			Minor: 99,
+			Patch: 0,
+		}}
+	}
+
 	// we only care about major, minor, and patch, so that alpha, beta, etc. are ignored
 	return Quirks{v: &semver.Version{
 		Major: v.Major,
