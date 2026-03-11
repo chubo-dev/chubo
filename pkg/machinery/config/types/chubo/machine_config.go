@@ -973,30 +973,37 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 
 	vaultBlock := ""
 	if openBao != nil && (openBao.Enabled == nil || *openBao.Enabled) {
-		vaultAddress := strings.TrimSpace(openBao.VaultAddress)
-		if vaultAddress == "" {
-			vaultAddress = "http://127.0.0.1:8200"
+		mode := strings.TrimSpace(openBao.Mode)
+		if mode == "" {
+			mode = chuboOpenBaoModeNomadJob
 		}
 
-		allowUnauthenticated := true
-		if openBao.VaultAllowUnauthenticated != nil {
-			allowUnauthenticated = *openBao.VaultAllowUnauthenticated
-		}
-
-		vaultTokenLine := ""
-		if serverEnabled {
-			if token := strings.TrimSpace(openBao.VaultToken); token != "" {
-				vaultTokenLine = fmt.Sprintf("  token = %q\n", token)
+		if mode == chuboOpenBaoModeExternal {
+			vaultAddress := strings.TrimSpace(openBao.VaultAddress)
+			if vaultAddress == "" {
+				vaultAddress = "http://127.0.0.1:8200"
 			}
-		}
 
-		vaultBlock = fmt.Sprintf(`vault {
+			allowUnauthenticated := true
+			if openBao.VaultAllowUnauthenticated != nil {
+				allowUnauthenticated = *openBao.VaultAllowUnauthenticated
+			}
+
+			vaultTokenLine := ""
+			if serverEnabled {
+				if token := strings.TrimSpace(openBao.VaultToken); token != "" {
+					vaultTokenLine = fmt.Sprintf("  token = %q\n", token)
+				}
+			}
+
+			vaultBlock = fmt.Sprintf(`vault {
   enabled = true
   address = %q
   allow_unauthenticated = %t
 %s}
 
 `, vaultAddress, allowUnauthenticated, vaultTokenLine)
+		}
 	}
 
 	return fmt.Sprintf(`data_dir = "/var/lib/chubo/openwonton"

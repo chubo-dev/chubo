@@ -448,7 +448,7 @@ func TestMachineConfigNomadRendersConsulIntegrationWhenConsulEnabled(t *testing.
 	require.True(t, foundConfig)
 }
 
-func TestMachineConfigNomadRendersOpenBaoVaultIntegrationWhenOpenBaoEnabled(t *testing.T) {
+func TestMachineConfigNomadRendersOpenBaoVaultIntegrationWhenOpenBaoExternalEnabled(t *testing.T) {
 	t.Parallel()
 
 	enabled := true
@@ -469,7 +469,7 @@ func TestMachineConfigNomadRendersOpenBaoVaultIntegrationWhenOpenBaoEnabled(t *t
 			},
 			OpenBao: &ChuboOpenBaoSpec{
 				Enabled:                   &enabled,
-				Mode:                      "nomadJob",
+				Mode:                      "external",
 				VaultAddress:              "http://openbao.service.consul:8200",
 				VaultToken:                "root-token",
 				VaultAllowUnauthenticated: pointer.To(true),
@@ -523,7 +523,7 @@ func TestMachineConfigNomadClientOmitsOpenBaoVaultServerToken(t *testing.T) {
 			},
 			OpenBao: &ChuboOpenBaoSpec{
 				Enabled:      &enabled,
-				Mode:         "nomadJob",
+				Mode:         "external",
 				VaultToken:   "root-token",
 				VaultAddress: "http://127.0.0.1:8200",
 			},
@@ -550,6 +550,51 @@ func TestMachineConfigNomadClientOmitsOpenBaoVaultServerToken(t *testing.T) {
 	}
 
 	require.True(t, foundConfig)
+}
+
+func TestMachineConfigNomadJobModeOmitsOpenBaoVaultBlock(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server-client",
+			},
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled:                   &enabled,
+				Mode:                      "nomadJob",
+				VaultAddress:              "http://openbao.service.consul:8200",
+				VaultToken:                "root-token",
+				VaultAllowUnauthenticated: pointer.To(true),
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		if f.FilePath != chuboOpenWontonConfigPath {
+			continue
+		}
+
+		require.NotContains(t, f.FileContent, "vault {\n")
+	}
 }
 
 func TestMachineConfigOpenBaoExternalModeRemovesEmbeddedJobFiles(t *testing.T) {

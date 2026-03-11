@@ -35,6 +35,7 @@ OPENGYOZA_MIRROR_PID=0
 BUILDX_BUILDER="${BUILDX_BUILDER:-local}"
 OPENBAO_MODE="${OPENBAO_MODE:-nomadJob}"
 WITH_OPENBAO="${WITH_OPENBAO:-1}"
+REQUESTED_OPENBAO_MODE="${OPENBAO_MODE}"
 
 HOST_PORT_ENV_SET=0
 if [[ -n "${HOST_PORT+x}" ]]; then
@@ -474,6 +475,85 @@ stop_opengyoza_mirror() {
 	OPENGYOZA_MIRROR_PID=0
 }
 
+read_openbao_helper_env() {
+	local key="$1"
+	local env_file="${HELPERS_DIR}/openbaoconfig/openbao.env"
+
+	[[ -f "${env_file}" ]] || return 1
+
+	awk -F= -v key="${key}" '$1 == key {print substr($0, index($0, "=") + 1)}' "${env_file}"
+}
+
+generate_machineconfig() {
+	local mode="$1"
+	local output="$2"
+	local config_image="$3"
+	local wipe="$4"
+	local disk="$5"
+	local openbao_address="${6:-}"
+	local openbao_token="${7:-}"
+	local args=(
+		--with-secrets "${SECRETS_FILE}"
+		--install-disk "${disk}"
+		--install-image "${config_image}"
+		--registry-mirror "${REGISTRY_MIRROR_NODE}"
+		--with-chubo
+		--chubo-role server
+		-o "${output}"
+	)
+
+	if [[ "${wipe}" == "false" ]]; then
+		args+=(--wipe=false)
+	fi
+
+	if [[ "${WITH_OPENBAO}" == "1" ]]; then
+		args+=(
+			--with-openbao
+			--openbao-mode "${mode}"
+		)
+		if [[ -n "${openbao_address}" ]]; then
+			args+=(--openbao-vault-address "${openbao_address}")
+		fi
+		if [[ -n "${openbao_token}" ]]; then
+			args+=(--openbao-vault-token "${openbao_token}")
+		fi
+	fi
+
+	if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
+		args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")
+	fi
+
+	"${CHUBOCTL_CHUBO}" gen machineconfig "${args[@]}"
+}
+
+switch_to_external_openbao_mode() {
+	local helper_addr helper_token runtime_external
+
+	helper_addr="$(read_openbao_helper_env "VAULT_ADDR" || true)"
+	helper_token="$(tr -d ' \r\n' < "${HELPERS_DIR}/openbaoconfig/acl.token" 2>/dev/null || true)"
+
+	if [[ -z "${helper_addr}" || -z "${helper_token}" ]]; then
+		echo "missing OpenBao helper bundle address/token; cannot switch to external mode" >&2
+		return 1
+	fi
+
+	runtime_external="${RUN_DIR}/machineconfig-runtime-external.yaml"
+	generate_machineconfig "external" "${runtime_external}" "" "false" "/dev/vda" "${helper_addr}" "${helper_token}"
+
+	if [[ "${NODE_IP}" == "127.0.0.1" ]]; then
+		ensure_local_api_sans "${runtime_external}"
+	fi
+
+	echo "reapplying runtime config in external OpenBao mode"
+	"${CHUBOCTL_CHUBO}" apply-config --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}" -f "${runtime_external}"
+
+	wait_until "runtime mTLS API (${NODE_IP}) after external OpenBao reapply" "${TIMEOUT_SECONDS}" \
+		"${CHUBOCTL_CHUBO}" version --chuboconfig "${CHUBOCONFIG_FILE}" -e "${NODE_IP}" -n "${NODE_IP}"
+
+	wait_until "openwontonstatus (healthy + aclReady) after external OpenBao reapply" "${TIMEOUT_SECONDS}" openwonton_ready
+	wait_until "opengyozastatus (healthy + aclReady) after external OpenBao reapply" "${TIMEOUT_SECONDS}" opengyoza_ready
+}
+
 trap cleanup EXIT
 
 prune_old_run_dirs
@@ -560,6 +640,13 @@ if [[ "${SKIP_BUILD}" -eq 0 ]]; then
 
 	ensure_buildx_builder
 
+	echo "building chubo boot artifacts"
+	retry make_with_tags initramfs kernel sd-boot \
+		ARTIFACTS="${ARTIFACTS}" \
+		GO_BUILDTAGS="${GO_BUILDTAGS}" \
+		TARGET_ARGS="--builder=${BUILDX_BUILDER} ${TARGET_ARGS:-}" \
+		PLATFORM=linux/arm64
+
 	echo "building installer-base + imager tarballs (${INSTALLER_TAG})"
 	retry make_with_tags docker-installer-base docker-imager \
 		TARGET_ARGS="--builder=${BUILDX_BUILDER} ${TARGET_ARGS:-}" \
@@ -606,37 +693,13 @@ fi
 
 echo "generating secrets + machine config"
 "${CHUBOCTL_BASE}" gen secrets -o "${SECRETS_FILE}"
-gen_mc_args=(
-	--with-secrets "${SECRETS_FILE}"
-	--install-disk /dev/vdb
-	--install-image "${INSTALLER_IMAGE_NODE}"
-	--registry-mirror "${REGISTRY_MIRROR_NODE}"
-	--with-chubo
-	--chubo-role server
-	-o "${MACHINECONFIG_INSTALL}"
-)
-
-if [[ "${WITH_OPENBAO}" == "1" ]]; then
-	gen_mc_args+=(
-		--with-openbao
-		--openbao-mode "${OPENBAO_MODE}"
-	)
+BOOTSTRAP_OPENBAO_MODE="${OPENBAO_MODE}"
+if [[ "${WITH_OPENBAO}" == "1" && "${REQUESTED_OPENBAO_MODE}" == "external" ]]; then
+	BOOTSTRAP_OPENBAO_MODE="nomadJob"
 fi
 
-if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
-	gen_mc_args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")
-fi
-
-"${CHUBOCTL_CHUBO}" gen machineconfig "${gen_mc_args[@]}"
-
-cp "${MACHINECONFIG_INSTALL}" "${MACHINECONFIG_RUNTIME}"
-runtime_tmp="${MACHINECONFIG_RUNTIME}.tmp"
-sed \
-	-e 's|^\([[:space:]]*disk:[[:space:]]*\).*$|\1"/dev/vda"|' \
-	-e 's/^\([[:space:]]*wipe:[[:space:]]*\)true$/\1false/' \
-	-e 's|^\([[:space:]]*image:[[:space:]]*\).*$|\1""|' \
-	"${MACHINECONFIG_RUNTIME}" >"${runtime_tmp}"
-mv "${runtime_tmp}" "${MACHINECONFIG_RUNTIME}"
+generate_machineconfig "${BOOTSTRAP_OPENBAO_MODE}" "${MACHINECONFIG_INSTALL}" "${INSTALLER_IMAGE_NODE}" "true" "/dev/vdb"
+generate_machineconfig "${BOOTSTRAP_OPENBAO_MODE}" "${MACHINECONFIG_RUNTIME}" "" "false" "/dev/vda"
 
 "${CHUBOCTL_BASE}" gen config chubo https://0.0.0.0:6443 \
 	--with-secrets "${SECRETS_FILE}" \
@@ -742,6 +805,10 @@ for bundle in nomadconfig consulconfig openbaoconfig; do
 	test -f "${dir}/acl.token"
 	test -f "${dir}/README"
 done
+
+if [[ "${WITH_OPENBAO}" == "1" && "${REQUESTED_OPENBAO_MODE}" == "external" ]]; then
+	switch_to_external_openbao_mode
+fi
 
 {
 	echo "run=${RUN_DIR}"
