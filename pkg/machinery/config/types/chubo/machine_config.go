@@ -62,6 +62,7 @@ const (
 	chuboRoleServerClient = "server-client"
 
 	chuboOpenBaoModeNomadJob = "nomadJob"
+	chuboOpenBaoModeExternal = "external"
 	chuboOpenBaoDefaultJobID = "openbao"
 	chuboOpenBaoDefaultImage = "ghcr.io/openbao/openbao:latest"
 )
@@ -449,7 +450,7 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 			if s.Spec.Modules.Chubo.OpenBao != nil && (s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled) {
 				mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
 				switch mode {
-				case "", chuboOpenBaoModeNomadJob:
+				case "", chuboOpenBaoModeNomadJob, chuboOpenBaoModeExternal:
 					// valid
 				default:
 					return nil, fmt.Errorf("unknown spec.modules.chubo.openbao.mode %q", s.Spec.Modules.Chubo.OpenBao.Mode)
@@ -651,20 +652,36 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 				mode = chuboOpenBaoModeNomadJob
 			}
 
-			if openBaoEnabled && mode == chuboOpenBaoModeNomadJob {
-				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     renderOpenBaoNomadJobPayload(),
-					FilePermissions: v1alpha1.FileMode(0o600),
-					FilePath:        chuboOpenBaoJobPath,
-					FileOp:          "create",
-				})
+			if openBaoEnabled {
+				switch mode {
+				case chuboOpenBaoModeNomadJob:
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+						FileContent:     renderOpenBaoNomadJobPayload(),
+						FilePermissions: v1alpha1.FileMode(0o600),
+						FilePath:        chuboOpenBaoJobPath,
+						FileOp:          "create",
+					})
 
-				cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
-					FileContent:     mode + "\n",
-					FilePermissions: v1alpha1.FileMode(0o644),
-					FilePath:        chuboOpenBaoModePath,
-					FileOp:          "create",
-				})
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+						FileContent:     mode + "\n",
+						FilePermissions: v1alpha1.FileMode(0o644),
+						FilePath:        chuboOpenBaoModePath,
+						FileOp:          "create",
+					})
+				case chuboOpenBaoModeExternal:
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles,
+						&v1alpha1.MachineFile{
+							FilePermissions: v1alpha1.FileMode(0o600),
+							FilePath:        chuboOpenBaoJobPath,
+							FileOp:          "remove",
+						},
+						&v1alpha1.MachineFile{
+							FilePermissions: v1alpha1.FileMode(0o644),
+							FilePath:        chuboOpenBaoModePath,
+							FileOp:          "remove",
+						},
+					)
+				}
 			}
 		}
 	}

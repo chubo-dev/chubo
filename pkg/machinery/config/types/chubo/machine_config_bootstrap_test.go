@@ -552,6 +552,67 @@ func TestMachineConfigNomadClientOmitsOpenBaoVaultServerToken(t *testing.T) {
 	require.True(t, foundConfig)
 }
 
+func TestMachineConfigOpenBaoExternalModeRemovesEmbeddedJobFiles(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server-client",
+			},
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled:      &enabled,
+				Mode:         "external",
+				VaultAddress: "http://openbao.service.consul:8200",
+				VaultToken:   "root-token",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.NoError(t, err)
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	var (
+		foundVaultBlock bool
+		foundJobRemove  bool
+		foundModeRemove bool
+	)
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		switch f.FilePath {
+		case chuboOpenWontonConfigPath:
+			foundVaultBlock = true
+			require.Contains(t, f.FileContent, "vault {\n")
+			require.Contains(t, f.FileContent, `address = "http://openbao.service.consul:8200"`)
+		case chuboOpenBaoJobPath:
+			foundJobRemove = true
+			require.Equal(t, "remove", f.FileOp)
+		case chuboOpenBaoModePath:
+			foundModeRemove = true
+			require.Equal(t, "remove", f.FileOp)
+		}
+	}
+
+	require.True(t, foundVaultBlock)
+	require.True(t, foundJobRemove)
+	require.True(t, foundModeRemove)
+}
+
 func TestMachineConfigNomadInvalidNetworkInterfaceErrors(t *testing.T) {
 	t.Parallel()
 
