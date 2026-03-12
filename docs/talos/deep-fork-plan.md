@@ -324,7 +324,7 @@ spec:
         role: server # server|client|server-client
       openbao:
         enabled: false
-        mode: nomadJob # nomadJob
+        mode: external # external|hostService|nomadJob
 ```
 
 ## Architecture of the Forked OS
@@ -344,7 +344,7 @@ Baseline approach:
 - Add new process-managed services (Talos-style).
 - Service: `nomad`.
 - Service: `consul`.
-- OpenBao runs as a Nomad job, not an OS host service.
+- OpenBao runs as an OS-managed host service in the steady-state runtime path; the legacy Nomad-job mode remains only for explicit bootstrap/dev flows.
 - Do not ship/run CRI containerd (`cri.go`) or Kubernetes services.
 
 This yields:
@@ -363,7 +363,7 @@ Decision: single external management plane (OS API).
 - OS API also provides minimal "workload access helpers" to bootstrap access to the native APIs (Talos analogy: `MachineService.Kubeconfig()`):
   - Nomad: client config + mTLS/ACL material to talk to openwonton
   - Consul: client config + mTLS/ACL material to talk to opengyoza
-  - OpenBao: client config + bootstrap material to talk to openbao (once scheduled)
+  - OpenBao: client config + bootstrap material to talk to openbao once the local host service has initialized
 - `chuboctl` targets the OS API (analogous to `talosctl`).
 - Chubo runs locally (extension or host service) but does not expose a separate remote API listener.
 - openwonton/opengyoza/openbao keep their native APIs as workload control planes (analogous to the Kubernetes API).
