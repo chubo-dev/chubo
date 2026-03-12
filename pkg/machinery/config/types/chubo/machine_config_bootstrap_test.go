@@ -597,7 +597,7 @@ func TestMachineConfigNomadJobModeOmitsOpenBaoVaultBlock(t *testing.T) {
 	}
 }
 
-func TestMachineConfigOpenBaoExternalModeRemovesEmbeddedJobFiles(t *testing.T) {
+func TestMachineConfigOpenBaoExternalModeWritesModeFileOnly(t *testing.T) {
 	t.Parallel()
 
 	enabled := true
@@ -634,8 +634,7 @@ func TestMachineConfigOpenBaoExternalModeRemovesEmbeddedJobFiles(t *testing.T) {
 
 	var (
 		foundVaultBlock bool
-		foundJobRemove  bool
-		foundModeRemove bool
+		foundModeFile   bool
 	)
 
 	for _, f := range cfg.MachineConfig.MachineFiles {
@@ -644,18 +643,15 @@ func TestMachineConfigOpenBaoExternalModeRemovesEmbeddedJobFiles(t *testing.T) {
 			foundVaultBlock = true
 			require.Contains(t, f.FileContent, "vault {\n")
 			require.Contains(t, f.FileContent, `address = "http://openbao.service.consul:8200"`)
-		case chuboOpenBaoJobPath:
-			foundJobRemove = true
-			require.Equal(t, "remove", f.FileOp)
 		case chuboOpenBaoModePath:
-			foundModeRemove = true
-			require.Equal(t, "remove", f.FileOp)
+			foundModeFile = true
+			require.Equal(t, "create", f.FileOp)
+			require.Equal(t, "external\n", f.FileContent)
 		}
 	}
 
 	require.True(t, foundVaultBlock)
-	require.True(t, foundJobRemove)
-	require.True(t, foundModeRemove)
+	require.True(t, foundModeFile)
 }
 
 func TestMachineConfigNomadInvalidNetworkInterfaceErrors(t *testing.T) {

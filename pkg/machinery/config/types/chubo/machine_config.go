@@ -669,18 +669,12 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 						FileOp:          "create",
 					})
 				case chuboOpenBaoModeExternal:
-					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles,
-						&v1alpha1.MachineFile{
-							FilePermissions: v1alpha1.FileMode(0o600),
-							FilePath:        chuboOpenBaoJobPath,
-							FileOp:          "remove",
-						},
-						&v1alpha1.MachineFile{
-							FilePermissions: v1alpha1.FileMode(0o644),
-							FilePath:        chuboOpenBaoModePath,
-							FileOp:          "remove",
-						},
-					)
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles, &v1alpha1.MachineFile{
+						FileContent:     mode + "\n",
+						FilePermissions: v1alpha1.FileMode(0o644),
+						FilePath:        chuboOpenBaoModePath,
+						FileOp:          "create",
+					})
 				}
 			}
 		}

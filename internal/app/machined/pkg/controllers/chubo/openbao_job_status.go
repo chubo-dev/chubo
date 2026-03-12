@@ -199,6 +199,11 @@ func readOpenBaoIntent(mc *config.MachineConfig) (openBaoIntent, error) {
 		intent.Mode = openBaoModeNomadJob
 	}
 
+	if intent.Mode != "" && intent.Mode != openBaoModeNomadJob {
+		intent.Configured = false
+		intent.NomadPayload = nil
+	}
+
 	return intent, nil
 }
 
