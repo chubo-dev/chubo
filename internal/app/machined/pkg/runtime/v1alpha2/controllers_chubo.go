@@ -90,6 +90,9 @@ func (ctrl *Controller) controllers(
 			V1Alpha1ServiceManager: system.Services(ctrl.v1alpha1Runtime),
 		},
 		&chuboctrl.OpenGyozaBootstrapStatusController{},
+		&chuboctrl.OpenBaoServiceController{
+			V1Alpha1ServiceManager: system.Services(ctrl.v1alpha1Runtime),
+		},
 		&chuboctrl.OpenBaoJobStatusController{},
 		// Keep only installer-required CRI config controllers in chubo mode.
 		// TODO(chubo): remove CRI registries controller once installer pulls no

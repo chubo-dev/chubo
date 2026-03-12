@@ -53,6 +53,7 @@ const (
 	chuboOpenGyozaTLSDir           = "/var/lib/chubo/certs/opengyoza"
 	chuboOpenBaoJobPath            = "/var/lib/chubo/config/openbao.nomad.json"
 	chuboOpenBaoModePath           = "/var/lib/chubo/config/openbao.mode"
+	chuboOpenBaoConfigPath         = "/var/lib/chubo/config/openbao.hcl"
 
 	chuboRoleServer = "server"
 	chuboRoleClient = "client"
@@ -61,10 +62,11 @@ const (
 	// For OpenGyoza, this role is treated as server.
 	chuboRoleServerClient = "server-client"
 
-	chuboOpenBaoModeNomadJob = "nomadJob"
-	chuboOpenBaoModeExternal = "external"
-	chuboOpenBaoDefaultJobID = "openbao"
-	chuboOpenBaoDefaultImage = "ghcr.io/openbao/openbao:latest"
+	chuboOpenBaoModeNomadJob    = "nomadJob"
+	chuboOpenBaoModeExternal    = "external"
+	chuboOpenBaoModeHostService = "hostService"
+	chuboOpenBaoDefaultJobID    = "openbao"
+	chuboOpenBaoDefaultImage    = "ghcr.io/openbao/openbao:latest"
 )
 
 // MachineConfigAPIVersion is the API version string for the minimal machine config.
@@ -217,7 +219,7 @@ type ChuboModuleSpec struct {
 	// Consul configures the opengyoza role and settings.
 	Consul *ChuboRoleSpec `yaml:"consul,omitempty"`
 
-	// OpenBao configures OpenBao integration (currently via Nomad job).
+	// OpenBao configures OpenBao integration.
 	OpenBao *ChuboOpenBaoSpec `yaml:"openbao,omitempty"`
 }
 
@@ -263,7 +265,7 @@ type ChuboOpenBaoSpec struct {
 	// Enabled turns OpenBao integration on/off.
 	Enabled *bool `yaml:"enabled,omitempty"`
 
-	// Mode selects the integration mode (nomadJob).
+	// Mode selects the integration mode (nomadJob|external|hostService).
 	Mode string `yaml:"mode,omitempty"`
 
 	// VaultAddress configures the OpenWonton Vault/OpenBao API address.
@@ -450,7 +452,7 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 			if s.Spec.Modules.Chubo.OpenBao != nil && (s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled) {
 				mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
 				switch mode {
-				case "", chuboOpenBaoModeNomadJob, chuboOpenBaoModeExternal:
+				case "", chuboOpenBaoModeNomadJob, chuboOpenBaoModeExternal, chuboOpenBaoModeHostService:
 					// valid
 				default:
 					return nil, fmt.Errorf("unknown spec.modules.chubo.openbao.mode %q", s.Spec.Modules.Chubo.OpenBao.Mode)
@@ -647,10 +649,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 		// Chubo OpenBao: render default Nomad job payload for the job-presence controller.
 		if enabled && s.Spec.Modules.Chubo.OpenBao != nil {
 			openBaoEnabled := s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled
-			mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
-			if mode == "" {
-				mode = chuboOpenBaoModeExternal
-			}
+			mode := normalizeChuboOpenBaoMode(s.Spec.Modules.Chubo.OpenBao.Mode)
 
 			if openBaoEnabled {
 				switch mode {
@@ -675,6 +674,21 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 						FilePath:        chuboOpenBaoModePath,
 						FileOp:          "create",
 					})
+				case chuboOpenBaoModeHostService:
+					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles,
+						&v1alpha1.MachineFile{
+							FileContent:     mode + "\n",
+							FilePermissions: v1alpha1.FileMode(0o644),
+							FilePath:        chuboOpenBaoModePath,
+							FileOp:          "create",
+						},
+						&v1alpha1.MachineFile{
+							FileContent:     renderOpenBaoHostConfig(),
+							FilePermissions: v1alpha1.FileMode(0o600),
+							FilePath:        chuboOpenBaoConfigPath,
+							FileOp:          "create",
+						},
+					)
 				}
 			}
 		}
@@ -835,6 +849,15 @@ func normalizeChuboNetworkInterface(iface string) string {
 	return strings.TrimSpace(iface)
 }
 
+func normalizeChuboOpenBaoMode(mode string) string {
+	mode = strings.TrimSpace(mode)
+	if mode == "" {
+		return chuboOpenBaoModeExternal
+	}
+
+	return mode
+}
+
 func defaultChuboBootstrapExpect(role string, v *int) int {
 	if v != nil {
 		return *v
@@ -967,12 +990,9 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 
 	vaultBlock := ""
 	if openBao != nil && (openBao.Enabled == nil || *openBao.Enabled) {
-		mode := strings.TrimSpace(openBao.Mode)
-		if mode == "" {
-			mode = chuboOpenBaoModeExternal
-		}
+		mode := normalizeChuboOpenBaoMode(openBao.Mode)
 
-		if mode == chuboOpenBaoModeExternal {
+		if mode == chuboOpenBaoModeExternal || mode == chuboOpenBaoModeHostService {
 			vaultAddress := strings.TrimSpace(openBao.VaultAddress)
 			if vaultAddress == "" {
 				vaultAddress = "http://127.0.0.1:8200"
@@ -1123,6 +1143,26 @@ func renderOpenBaoNomadJobPayload() string {
   }
 }
 `, chuboOpenBaoDefaultJobID, chuboOpenBaoDefaultJobID, chuboOpenBaoDefaultImage)
+}
+
+func renderOpenBaoHostConfig() string {
+	return `disable_mlock = true
+
+listener "tcp" {
+  address = "0.0.0.0:8200"
+  cluster_address = "0.0.0.0:8201"
+  tls_disable = 1
+}
+
+storage "raft" {
+  path = "/var/lib/chubo/openbao/data"
+  node_id = "local"
+}
+
+api_addr = "http://127.0.0.1:8200"
+cluster_addr = "http://127.0.0.1:8201"
+ui = true
+`
 }
 
 // NodeID returns the optional stable node ID, if set.

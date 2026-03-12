@@ -49,6 +49,12 @@ INSTALLER_IMAGE_NODE="${INSTALLER_IMAGE_NODE:-}"
 REGISTRY_MIRROR_NODE="${REGISTRY_MIRROR_NODE:-}"
 OPENWONTON_ARTIFACT_URL="${OPENWONTON_ARTIFACT_URL:-}"
 OPENGYOZA_ARTIFACT_URL="${OPENGYOZA_ARTIFACT_URL:-}"
+WITH_OPENBAO="${WITH_OPENBAO:-0}"
+OPENBAO_MODE="${OPENBAO_MODE:-external}"
+OPENBAO_VAULT_ADDRESS="${OPENBAO_VAULT_ADDRESS:-}"
+OPENBAO_VAULT_TOKEN="${OPENBAO_VAULT_TOKEN:-}"
+OPENBAO_VAULT_ALLOW_UNAUTHENTICATED="${OPENBAO_VAULT_ALLOW_UNAUTHENTICATED:-1}"
+CHUBO_NETWORK_INTERFACE="${CHUBO_NETWORK_INTERFACE:-enp0s2}"
 SKIP_NOMAD_JOB_PROBE="${SKIP_NOMAD_JOB_PROBE:-1}"
 
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1800}"
@@ -83,16 +89,39 @@ while [[ $# -gt 0 ]]; do
 	--skip-build)
 		SKIP_BUILD=1
 		;;
+	--with-openbao)
+		WITH_OPENBAO=1
+		;;
+	--openbao-mode)
+		OPENBAO_MODE="${2:?missing value for --openbao-mode}"
+		shift
+		;;
+	--openbao-vault-address)
+		OPENBAO_VAULT_ADDRESS="${2:?missing value for --openbao-vault-address}"
+		shift
+		;;
+	--openbao-vault-token)
+		OPENBAO_VAULT_TOKEN="${2:?missing value for --openbao-vault-token}"
+		shift
+		;;
+	--openbao-vault-allow-unauthenticated)
+		OPENBAO_VAULT_ALLOW_UNAUTHENTICATED="${2:?missing value for --openbao-vault-allow-unauthenticated}"
+		shift
+		;;
+	--chubo-network-interface)
+		CHUBO_NETWORK_INTERFACE="${2:?missing value for --chubo-network-interface}"
+		shift
+		;;
 	--cleanup-stale-only)
 		CLEANUP_STALE_ONLY=1
 		;;
 	-h | --help)
-		echo "usage: $0 [--skip-build] [--cleanup-stale-only]"
+		echo "usage: $0 [--skip-build] [--cleanup-stale-only] [--with-openbao] [--openbao-mode <external|hostService|nomadJob>] [--openbao-vault-address <addr>] [--openbao-vault-token <token>] [--openbao-vault-allow-unauthenticated <0|1>] [--chubo-network-interface <ifname>]"
 		exit 0
 		;;
 	*)
 		echo "unknown argument: $1" >&2
-		echo "usage: $0 [--skip-build] [--cleanup-stale-only]" >&2
+		echo "usage: $0 [--skip-build] [--cleanup-stale-only] [--with-openbao] [--openbao-mode <external|hostService|nomadJob>] [--openbao-vault-address <addr>] [--openbao-vault-token <token>] [--openbao-vault-allow-unauthenticated <0|1>] [--chubo-network-interface <ifname>]" >&2
 		exit 2
 		;;
 	esac
@@ -363,9 +392,7 @@ apply_install_and_wait() {
 
 	echo "waiting for post-install transition on ${node_ip}"
 	local transition_deadline=$((SECONDS + TIMEOUT_SECONDS))
-	local saw_maintenance_down=0
-	local maintenance_reentered_at=0
-	local maintenance_up_since=0
+	local runtime_fallback_deadline=$((SECONDS + MAINTENANCE_FALLBACK_SECONDS))
 	local runtime_config_applied=0
 
 	while true; do
@@ -374,32 +401,13 @@ apply_install_and_wait() {
 			break
 		fi
 
-		if run_chuboctl get addresses --insecure -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
-			if ((maintenance_up_since == 0)); then
-				maintenance_up_since="${SECONDS}"
-			fi
-
-			if ((saw_maintenance_down == 1)); then
-				if ((maintenance_reentered_at == 0)); then
-					maintenance_reentered_at="${SECONDS}"
-				fi
-
-				if ((SECONDS - maintenance_reentered_at >= MAINTENANCE_PERSIST_SECONDS)); then
-					echo "${node_ip}: maintenance persisted after reboot; applying runtime config and rebooting"
-					"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
-					runtime_config_applied=1
-					break
-				fi
-			elif ((runtime_config_applied == 0)) && ((SECONDS - maintenance_up_since >= MAINTENANCE_FALLBACK_SECONDS)); then
-				echo "${node_ip}: fallback deadline reached; applying runtime config and rebooting"
+		if ((runtime_config_applied == 0)) && ((SECONDS >= runtime_fallback_deadline)); then
+			if run_chuboctl get addresses --insecure -e "${node_ip}" -n "${node_ip}" >/dev/null 2>&1; then
+				echo "${node_ip}: runtime fallback deadline reached; applying runtime config and rebooting"
 				"${CHUBOCTL}" apply-config --insecure -m reboot -e "${node_ip}" -n "${node_ip}" -f "${runtime_cfg}"
 				runtime_config_applied=1
 				break
 			fi
-		else
-			saw_maintenance_down=1
-			maintenance_reentered_at=0
-			maintenance_up_since=0
 		fi
 
 		if ((SECONDS >= transition_deadline)); then
@@ -816,9 +824,16 @@ cat >"${DOCKER_CONFIG}/config.json" <<'EOF'
 {"auths":{}}
 EOF
 mkdir -p "${DOCKER_CONFIG}/cli-plugins"
-if [[ -x /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx ]]; then
-	ln -sf /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx "${DOCKER_CONFIG}/cli-plugins/docker-buildx"
-fi
+for buildx_path in \
+	/Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx \
+	/opt/homebrew/lib/docker/cli-plugins/docker-buildx \
+	/usr/local/lib/docker/cli-plugins/docker-buildx
+do
+	if [[ -x "${buildx_path}" ]]; then
+		ln -sf "${buildx_path}" "${DOCKER_CONFIG}/cli-plugins/docker-buildx"
+		break
+	fi
+done
 
 if ! docker version >/dev/null 2>&1; then
 	echo "docker CLI is available but cannot connect to a daemon." >&2
@@ -935,6 +950,7 @@ create_cluster_with_retry
 install_cfgs=()
 runtime_cfgs=()
 machineconfig_artifact_args=()
+machineconfig_runtime_args=()
 
 if [[ -n "${OPENWONTON_ARTIFACT_URL}" ]]; then
 	machineconfig_artifact_args+=(--openwonton-artifact-url "${OPENWONTON_ARTIFACT_URL}")
@@ -943,6 +959,30 @@ fi
 if [[ -n "${OPENGYOZA_ARTIFACT_URL}" ]]; then
 	machineconfig_artifact_args+=(--opengyoza-artifact-url "${OPENGYOZA_ARTIFACT_URL}")
 fi
+
+if [[ "${WITH_OPENBAO}" == "1" ]]; then
+	machineconfig_artifact_args+=(--with-openbao --openbao-mode "${OPENBAO_MODE}")
+
+	if [[ -n "${OPENBAO_VAULT_ADDRESS}" ]]; then
+		machineconfig_artifact_args+=(--openbao-vault-address "${OPENBAO_VAULT_ADDRESS}")
+	fi
+
+	if [[ -n "${OPENBAO_VAULT_TOKEN}" ]]; then
+		machineconfig_artifact_args+=(--openbao-vault-token "${OPENBAO_VAULT_TOKEN}")
+	fi
+
+	if [[ "${OPENBAO_VAULT_ALLOW_UNAUTHENTICATED}" == "0" ]]; then
+		machineconfig_artifact_args+=(--openbao-vault-allow-unauthenticated=false)
+	fi
+fi
+
+machineconfig_runtime_args=(
+	--with-chubo
+	--chubo-role server
+	--chubo-bootstrap-expect "${CONTROLPLANE_COUNT}"
+	--chubo-network-interface "${CHUBO_NETWORK_INTERFACE}"
+	"${machineconfig_artifact_args[@]}"
+)
 
 echo "generating per-node machine configs (modules.chubo enabled, join/bootstrapExpect set)"
 for idx in "${!controlplane_ips[@]}"; do
@@ -964,19 +1004,22 @@ for idx in "${!controlplane_ips[@]}"; do
 	install_cfg="${WORKDIR}/machineconfig-${idx}-install.yaml"
 	runtime_cfg="${WORKDIR}/machineconfig-${idx}-runtime.yaml"
 
-		"${CHUBOCTL}" gen machineconfig \
-			--with-secrets "${SECRETS_FILE}" \
-			--install-disk "${INSTALL_DISK}" \
-			--install-image "${INSTALLER_IMAGE_NODE}" \
+	"${CHUBOCTL}" gen machineconfig \
+		--with-secrets "${SECRETS_FILE}" \
+		--install-disk "${INSTALL_DISK}" \
+		--install-image "${INSTALLER_IMAGE_NODE}" \
 		--registry-mirror "${REGISTRY_MIRROR_NODE}" \
-		--with-chubo \
-		--chubo-role server \
-		--chubo-bootstrap-expect "${CONTROLPLANE_COUNT}" \
-		"${machineconfig_artifact_args[@]}" \
-		${join_csv:+--chubo-join "${join_csv}"} \
 		-o "${install_cfg}"
 
-	cp "${install_cfg}" "${runtime_cfg}"
+	"${CHUBOCTL}" gen machineconfig \
+		--with-secrets "${SECRETS_FILE}" \
+		--install-disk "${INSTALL_DISK}" \
+		--install-image "${INSTALLER_IMAGE_NODE}" \
+		--registry-mirror "${REGISTRY_MIRROR_NODE}" \
+		"${machineconfig_runtime_args[@]}" \
+		${join_csv:+--chubo-join "${join_csv}"} \
+		-o "${runtime_cfg}"
+
 	runtime_tmp="${runtime_cfg}.tmp"
 	sed \
 		-e 's/^\([[:space:]]*wipe:[[:space:]]*\)true$/\1false/' \

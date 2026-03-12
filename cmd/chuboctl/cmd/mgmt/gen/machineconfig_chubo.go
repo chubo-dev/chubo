@@ -230,7 +230,7 @@ The output is suitable for ` + "`chuboctl apply-config`" + ` in the ` + "`chubo`
 	cmd.Flags().StringSliceVar(&genMachineConfigFlags.chuboJoin, "chubo-join", nil, "peer addresses to join/retry-join for openwonton/opengyoza")
 	cmd.Flags().StringVar(&genMachineConfigFlags.chuboNetworkInterface, "chubo-network-interface", "", "openwonton client network_interface value (optional)")
 	cmd.Flags().BoolVar(&genMachineConfigFlags.withOpenBao, "with-openbao", false, "enable modules.chubo.openbao settings")
-	cmd.Flags().StringVar(&genMachineConfigFlags.openBaoMode, "openbao-mode", "external", "openbao mode when enabled (external|nomadJob)")
+	cmd.Flags().StringVar(&genMachineConfigFlags.openBaoMode, "openbao-mode", "external", "openbao mode when enabled (external|hostService|nomadJob)")
 	cmd.Flags().StringVar(&genMachineConfigFlags.openBaoVaultAddress, "openbao-vault-address", "", "OpenBao/Vault API address for OpenWonton vault integration (default: render-side fallback)")
 	cmd.Flags().StringVar(&genMachineConfigFlags.openBaoVaultToken, "openbao-vault-token", "", "OpenBao/Vault parent token for OpenWonton servers (optional)")
 	cmd.Flags().BoolVar(&genMachineConfigFlags.openBaoVaultAllowUnauthenticated, "openbao-vault-allow-unauthenticated", true, "allow job submissions without an explicit Vault token when OpenBao integration is enabled")

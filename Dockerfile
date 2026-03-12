@@ -75,6 +75,7 @@ ARG OPENWONTON_ARM64_ASSET_URL=https://github.com/openwonton/openwonton/releases
 ARG OPENGYOZA_VERSION=v1.6.4-connect-xds-smoke3
 ARG OPENGYOZA_AMD64_ASSET_URL=https://github.com/opengyoza/opengyoza/releases/download/v1.6.4-connect-xds-smoke3/gyoza_1.6.4_linux_amd64.zip
 ARG OPENGYOZA_ARM64_ASSET_URL=https://github.com/opengyoza/opengyoza/releases/download/v1.6.4-connect-xds-smoke3/gyoza_1.6.4_linux_arm64.zip
+ARG OPENBAO_BINARY_IMAGE=ghcr.io/openbao/openbao:latest
 
 ARG DEBUG_TOOLS_SOURCE=scratch
 
@@ -104,6 +105,9 @@ FROM scratch AS baked-opengyoza-archive-arm64
 ARG OPENGYOZA_VERSION
 ARG OPENGYOZA_ARM64_ASSET_URL
 ADD ${OPENGYOZA_ARM64_ASSET_URL} /artifacts/opengyoza/${OPENGYOZA_VERSION}/arm64/
+
+FROM --platform=amd64 ${OPENBAO_BINARY_IMAGE} AS openbao-bin-amd64
+FROM --platform=arm64 ${OPENBAO_BINARY_IMAGE} AS openbao-bin-arm64
 
 FROM --platform=amd64 ${PKG_APPARMOR} AS pkg-apparmor-amd64
 FROM --platform=arm64 ${PKG_APPARMOR} AS pkg-apparmor-arm64
@@ -858,6 +862,7 @@ COPY --link --from=modules-amd64 /usr/lib/modules /rootfs/usr/lib/modules
 COPY --link --from=machined-build-amd64 /machined /rootfs/usr/bin/init
 COPY --link --from=baked-openwonton-archive-amd64 /artifacts/openwonton /rootfs/usr/local/lib/chubo-artifacts/openwonton
 COPY --link --from=baked-opengyoza-archive-amd64 /artifacts/opengyoza /rootfs/usr/local/lib/chubo-artifacts/opengyoza
+COPY --link --from=openbao-bin-amd64 /bin/bao /rootfs/usr/bin/openbao
 
 # this is a no-op as it copies from a scratch image when WITH_DEBUG_SHELL is not set
 COPY --link --from=pkg-debug-tools-amd64 * /rootfs/
@@ -961,6 +966,7 @@ COPY --link --from=modules-arm64 /usr/lib/modules /rootfs/usr/lib/modules
 COPY --link --from=machined-build-arm64 /machined /rootfs/usr/bin/init
 COPY --link --from=baked-openwonton-archive-arm64 /artifacts/openwonton /rootfs/usr/local/lib/chubo-artifacts/openwonton
 COPY --link --from=baked-opengyoza-archive-arm64 /artifacts/opengyoza /rootfs/usr/local/lib/chubo-artifacts/opengyoza
+COPY --link --from=openbao-bin-arm64 /bin/bao /rootfs/usr/bin/openbao
 
 # this is a no-op as it copies from a scratch image when WITH_DEBUG_SHELL is not set
 COPY --link --from=pkg-debug-tools-arm64 * /rootfs/
