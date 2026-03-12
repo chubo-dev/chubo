@@ -37,6 +37,19 @@ In this workspace, the canonical operator docs and execution checklist live in t
 - `../chubo/docs/dev/chubo-os-qemu-devloop.md` (quick iteration, NOPASSWD sudoers, troubleshooting)
 - `docs/talos/plan.md` (execution checklist with commit references)
 
+## Fastest Loop Rule
+
+- When stuck, do not jump straight to broad or costly test suites if a narrower loop can falsify the current hypothesis faster.
+- Prefer the shortest authoritative loop that exercises the changed code path:
+  - config/render bug: targeted `go test` + generated artifact inspection
+  - runtime/service-manager bug: local QEMU or the smallest relevant E2E fixture
+  - cluster/bootstrap bug: multi-node local QEMU before any cloud lane
+- Before rerunning a full fixture, first ask whether the current failure can be reduced to:
+  - generated config/HCL validation
+  - one job render/submit check
+  - one service/controller smoke path
+- Use full suites only after the fast loop is green or when the bug genuinely depends on the broader system.
+
 ## Coding Style & Naming Conventions
 
 - Go defaults (`gofmt`, standard layout, no shelling out in control paths).

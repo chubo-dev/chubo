@@ -56,6 +56,7 @@ OPENBAO_VAULT_TOKEN="${OPENBAO_VAULT_TOKEN:-}"
 OPENBAO_VAULT_ALLOW_UNAUTHENTICATED="${OPENBAO_VAULT_ALLOW_UNAUTHENTICATED:-1}"
 CHUBO_NETWORK_INTERFACE="${CHUBO_NETWORK_INTERFACE:-enp0s2}"
 SKIP_NOMAD_JOB_PROBE="${SKIP_NOMAD_JOB_PROBE:-1}"
+SKIP_OPENBAO_HOST_PROBE="${SKIP_OPENBAO_HOST_PROBE:-0}"
 
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-1800}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-3}"
@@ -608,7 +609,7 @@ submit_and_verify_nomad_probe_job() {
 		return 0
 	fi
 
-	cat >"${payload_file}" <<EOF
+cat >"${payload_file}" <<EOF
 job "${job_id}" {
   datacenters = ["dc1"]
   type        = "batch"
@@ -648,6 +649,70 @@ EOF
 
 	echo "purging Nomad probe job (${job_id})"
 	nomad_cli_with_fallback "${node_ip}" job stop -detach -purge -yes "${job_id}" >/dev/null || true
+}
+
+verify_openbao_host_service_cluster() {
+	local -a node_ips=("$@")
+	local expected="${#node_ips[@]}"
+
+	if [[ "${WITH_OPENBAO}" != "1" || "${OPENBAO_MODE}" != "hostService" ]]; then
+		return 0
+	fi
+
+	if [[ "${SKIP_OPENBAO_HOST_PROBE}" == "1" ]]; then
+		echo "skipping host-native OpenBao probe job (set SKIP_OPENBAO_HOST_PROBE=0 to enable)"
+		return 0
+	fi
+
+	local baseline_init=""
+	local root_token=""
+	local leader_address=""
+
+	for node_ip in "${node_ips[@]}"; do
+		local init_json
+		init_json="$(run_chuboctl --chuboconfig "${CHUBOCONFIG_FILE}" -e "${node_ip}" -n "${node_ip}" read /var/lib/chubo/certs/openbao-init.json)"
+		if [[ -z "${init_json}" ]]; then
+			echo "missing host-native OpenBao init material on ${node_ip}" >&2
+			return 1
+		fi
+
+		if [[ -z "${baseline_init}" ]]; then
+			baseline_init="${init_json}"
+			root_token="$(jq -r '.root_token // empty' <<<"${init_json}")"
+		elif [[ "${init_json}" != "${baseline_init}" ]]; then
+			echo "OpenBao init material differs on ${node_ip}" >&2
+			return 1
+		fi
+	done
+
+	if [[ -z "${root_token}" ]]; then
+		echo "unable to extract OpenBao root token from host-native init material" >&2
+		return 1
+	fi
+
+	for node_ip in "${node_ips[@]}"; do
+		local leader_json raft_json current_leader peer_count voter_count
+		leader_json="$(curl -fsS -H "X-Vault-Token: ${root_token}" "http://${node_ip}:8200/v1/sys/leader")"
+		raft_json="$(curl -fsS -H "X-Vault-Token: ${root_token}" "http://${node_ip}:8200/v1/sys/storage/raft/configuration")"
+
+		current_leader="$(jq -r '.leader_address // empty' <<<"${leader_json}")"
+		peer_count="$(jq -r '.data.config.servers | length' <<<"${raft_json}")"
+		voter_count="$(jq -r '[.data.config.servers[] | select(.voter == true)] | length' <<<"${raft_json}")"
+
+		echo "host-native OpenBao on ${node_ip}: leader=${current_leader} peers=${peer_count} voters=${voter_count}"
+
+		if [[ -z "${leader_address}" ]]; then
+			leader_address="${current_leader}"
+		elif [[ "${current_leader}" != "${leader_address}" ]]; then
+			echo "OpenBao leader mismatch on ${node_ip}: ${current_leader} != ${leader_address}" >&2
+			return 1
+		fi
+
+		if [[ "${peer_count}" != "${expected}" || "${voter_count}" != "${expected}" ]]; then
+			echo "OpenBao raft peer count mismatch on ${node_ip}: peers=${peer_count} voters=${voter_count} expected=${expected}" >&2
+			return 1
+		fi
+	done
 }
 
 nomad_peers_ok() {
@@ -1059,6 +1124,7 @@ if [[ "${SKIP_NOMAD_JOB_PROBE}" != "1" ]]; then
 fi
 
 submit_and_verify_nomad_probe_job "${controlplane_ips[0]}"
+verify_openbao_host_service_cluster "${controlplane_ips[@]}"
 
 echo "leaders:"
 for node_ip in "${controlplane_ips[@]}"; do
