@@ -5,6 +5,7 @@
 package chubo
 
 import (
+	"net/netip"
 	"os"
 	"path/filepath"
 	"testing"
@@ -43,5 +44,41 @@ func TestPersistOpenBaoInitCreatesParentDir(t *testing.T) {
 	}
 	if len(got.KeysBase64) != 1 || got.KeysBase64[0] != resp.KeysBase64[0] {
 		t.Fatalf("keys = %#v, want %#v", got.KeysBase64, resp.KeysBase64)
+	}
+}
+
+func TestIsOpenBaoBootstrapNode(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name   string
+		local  string
+		peers  []string
+		expect bool
+	}{
+		{
+			name:   "local lowest address bootstraps",
+			local:  "10.0.0.10",
+			peers:  []string{"10.0.0.11", "10.0.0.12"},
+			expect: true,
+		},
+		{
+			name:   "higher address waits",
+			local:  "10.0.0.11",
+			peers:  []string{"10.0.0.10", "10.0.0.12"},
+			expect: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			localIP := netip.MustParseAddr(tt.local)
+
+			if got := isOpenBaoBootstrapNode(localIP, tt.peers); got != tt.expect {
+				t.Fatalf("isOpenBaoBootstrapNode() = %v, want %v", got, tt.expect)
+			}
+		})
 	}
 }

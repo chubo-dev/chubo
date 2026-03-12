@@ -7,11 +7,19 @@ package chubo
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
+	stdlibx509 "crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
+	"io"
+	"net"
 	"net/http"
+	"net/netip"
 	"os"
 	"path/filepath"
+	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -24,15 +32,20 @@ import (
 
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system"
 	"github.com/chubo-dev/chubo/internal/app/machined/pkg/system/services"
+	machineryclient "github.com/chubo-dev/chubo/pkg/machinery/client"
+	gensecrets "github.com/chubo-dev/chubo/pkg/machinery/config/generate/secrets"
+	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 	chubores "github.com/chubo-dev/chubo/pkg/machinery/resources/chubo"
 	"github.com/chubo-dev/chubo/pkg/machinery/resources/config"
 	secretres "github.com/chubo-dev/chubo/pkg/machinery/resources/secrets"
 	v1alpha1res "github.com/chubo-dev/chubo/pkg/machinery/resources/v1alpha1"
+	"github.com/chubo-dev/chubo/pkg/machinery/role"
 )
 
 const (
 	openBaoHostModePath    = "/var/lib/chubo/config/openbao.mode"
 	openBaoHostConfigPath  = "/var/lib/chubo/config/openbao.hcl"
+	openBaoHostSpecPath    = "/var/lib/chubo/config/openbao.host.json"
 	openBaoModeHostService = "hostService"
 	openBaoHTTPAddress     = "http://127.0.0.1:8200"
 	openBaoQueryTimeout    = 5 * time.Second
@@ -156,7 +169,7 @@ func (ctrl *OpenBaoServiceController) Run(ctx context.Context, r controller.Runt
 		lastError := ""
 
 		if configured && healthy {
-			initialized, sealed, lastError = ensureOpenBaoInitState(ctx, r)
+			initialized, sealed, lastError = ensureOpenBaoInitState(ctx, r, mc)
 		}
 
 		if err := safe.WriterModify(ctx, r, chubores.NewOpenBaoStatus(), func(res *chubores.OpenBaoStatus) error {
@@ -226,7 +239,24 @@ type openBaoInitResponse struct {
 	KeysBase64 []string `json:"keys_base64"`
 }
 
-func ensureOpenBaoInitState(ctx context.Context, r controller.Runtime) (initialized bool, sealed bool, lastError string) {
+type openBaoHostSpec struct {
+	NetworkInterface string   `json:"networkInterface"`
+	RetryJoin        []string `json:"retryJoin"`
+}
+
+type openBaoHostPlan struct {
+	LocalIP       netip.Addr
+	NetworkIface  string
+	RetryJoin     []string
+	BootstrapNode bool
+}
+
+func ensureOpenBaoInitState(ctx context.Context, r controller.Runtime, mc *config.MachineConfig) (initialized bool, sealed bool, lastError string) {
+	plan, err := loadOpenBaoHostPlan(mc)
+	if err != nil {
+		return false, false, err.Error()
+	}
+
 	queryCtx, cancel := context.WithTimeout(ctx, openBaoQueryTimeout)
 	status, err := queryOpenBaoSealStatus(queryCtx)
 	cancel()
@@ -235,6 +265,15 @@ func ensureOpenBaoInitState(ctx context.Context, r controller.Runtime) (initiali
 	}
 
 	if !status.Initialized {
+		if !plan.BootstrapNode {
+			fetched, fetchErr := syncOpenBaoInitFromPeers(ctx, r, mc, plan)
+			if fetchErr != nil && fetched {
+				return false, true, fetchErr.Error()
+			}
+
+			return false, true, "waiting for host-native openbao raft join"
+		}
+
 		initCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), openBaoInitTimeout)
 		resp, initErr := initOpenBao(initCtx)
 		cancel()
@@ -266,7 +305,19 @@ func ensureOpenBaoInitState(ctx context.Context, r controller.Runtime) (initiali
 	if status.Sealed {
 		initData, readErr := readOpenBaoInitState(ctx, r)
 		if readErr != nil {
-			return status.Initialized, true, readErr.Error()
+			fetched, fetchErr := syncOpenBaoInitFromPeers(ctx, r, mc, plan)
+			if !fetched {
+				if fetchErr != nil {
+					return status.Initialized, true, fetchErr.Error()
+				}
+
+				return status.Initialized, true, "waiting for host-native openbao init material"
+			}
+
+			initData, readErr = readOpenBaoInitState(ctx, r)
+			if readErr != nil {
+				return status.Initialized, true, readErr.Error()
+			}
 		}
 
 		if len(initData.KeysBase64) == 0 {
@@ -289,6 +340,145 @@ func ensureOpenBaoInitState(ctx context.Context, r controller.Runtime) (initiali
 	}
 
 	return status.Initialized, status.Sealed, ""
+}
+
+func loadOpenBaoHostPlan(mc *config.MachineConfig) (openBaoHostPlan, error) {
+	if mc == nil || mc.Config() == nil || mc.Config().Machine() == nil {
+		return openBaoHostPlan{}, fmt.Errorf("host-native openbao requires active machine config")
+	}
+
+	files, err := mc.Config().Machine().Files()
+	if err != nil {
+		return openBaoHostPlan{}, err
+	}
+
+	var spec openBaoHostSpec
+	found := false
+
+	for _, f := range files {
+		if f.Path() != openBaoHostSpecPath {
+			continue
+		}
+
+		if err := json.Unmarshal([]byte(f.Content()), &spec); err != nil {
+			return openBaoHostPlan{}, fmt.Errorf("failed to parse openbao host spec: %w", err)
+		}
+
+		found = true
+
+		break
+	}
+
+	if !found {
+		return openBaoHostPlan{}, fmt.Errorf("host-native openbao spec file is missing")
+	}
+
+	if strings.TrimSpace(spec.NetworkInterface) == "" {
+		return openBaoHostPlan{}, fmt.Errorf("host-native openbao spec is missing network interface")
+	}
+
+	localIP, err := interfaceFirstGlobalUnicast(spec.NetworkInterface)
+	if err != nil {
+		return openBaoHostPlan{}, err
+	}
+
+	return openBaoHostPlan{
+		LocalIP:       localIP,
+		NetworkIface:  spec.NetworkInterface,
+		RetryJoin:     append([]string(nil), spec.RetryJoin...),
+		BootstrapNode: isOpenBaoBootstrapNode(localIP, spec.RetryJoin),
+	}, nil
+}
+
+func interfaceFirstGlobalUnicast(name string) (netip.Addr, error) {
+	iface, err := net.InterfaceByName(strings.TrimSpace(name))
+	if err != nil {
+		return netip.Addr{}, fmt.Errorf("failed to find interface %q for host-native openbao: %w", name, err)
+	}
+
+	addrs, err := iface.Addrs()
+	if err != nil {
+		return netip.Addr{}, fmt.Errorf("failed to list addresses for %q: %w", name, err)
+	}
+
+	var ipv6Candidate netip.Addr
+
+	for _, addr := range addrs {
+		prefix, err := netip.ParsePrefix(addr.String())
+		if err != nil {
+			continue
+		}
+
+		ip := prefix.Addr().Unmap()
+		if !ip.IsValid() || !ip.IsGlobalUnicast() || ip.IsLoopback() {
+			continue
+		}
+
+		if ip.Is4() {
+			return ip, nil
+		}
+
+		if !ipv6Candidate.IsValid() {
+			ipv6Candidate = ip
+		}
+	}
+
+	if ipv6Candidate.IsValid() {
+		return ipv6Candidate, nil
+	}
+
+	return netip.Addr{}, fmt.Errorf("interface %q has no global unicast address for host-native openbao", name)
+}
+
+func isOpenBaoBootstrapNode(localIP netip.Addr, peers []string) bool {
+	candidates := []netip.Addr{localIP}
+
+	for _, peer := range peers {
+		ip, err := netip.ParseAddr(strings.TrimSpace(peer))
+		if err != nil {
+			continue
+		}
+
+		candidates = append(candidates, ip.Unmap())
+	}
+
+	slices.SortFunc(candidates, func(a, b netip.Addr) int {
+		return a.Compare(b)
+	})
+
+	return len(candidates) > 0 && candidates[0] == localIP
+}
+
+func syncOpenBaoInitFromPeers(ctx context.Context, r controller.Runtime, mc *config.MachineConfig, plan openBaoHostPlan) (bool, error) {
+	var lastErr error
+
+	for _, peer := range plan.RetryJoin {
+		if strings.TrimSpace(peer) == "" {
+			continue
+		}
+
+		resp, err := readOpenBaoInitFromPeer(ctx, mc, peer)
+		if err != nil {
+			lastErr = err
+			continue
+		}
+
+		if err := persistOpenBaoInitState(ctx, r, resp); err != nil {
+			return false, err
+		}
+
+		if err := persistOpenBaoInit(resp); err != nil {
+			return false, err
+		}
+
+		return true, nil
+	}
+
+	if lastErr != nil {
+		return false, lastErr
+	}
+
+	return false, nil
 }
 
 func persistOpenBaoInitState(ctx context.Context, r controller.Runtime, resp openBaoInitResponse) error {
@@ -423,4 +613,94 @@ func readOpenBaoInit() (openBaoInitResponse, error) {
 	}
 
 	return out, nil
+}
+
+func readOpenBaoInitFromPeer(ctx context.Context, mc *config.MachineConfig, peer string) (openBaoInitResponse, error) {
+	c, err := buildOpenBaoPeerClient(ctx, mc, peer)
+	if err != nil {
+		return openBaoInitResponse{}, err
+	}
+	defer c.Close() //nolint:errcheck
+
+	readCtx, cancel := context.WithTimeout(ctx, openBaoQueryTimeout)
+	defer cancel()
+
+	reader, err := c.Read(readCtx, openBaoInitPath)
+	if err != nil {
+		return openBaoInitResponse{}, err
+	}
+	defer reader.Close() //nolint:errcheck
+
+	data, err := io.ReadAll(reader)
+	if err != nil {
+		return openBaoInitResponse{}, err
+	}
+
+	var out openBaoInitResponse
+	if err := json.Unmarshal(data, &out); err != nil {
+		return openBaoInitResponse{}, err
+	}
+
+	if strings.TrimSpace(out.RootToken) == "" || len(out.KeysBase64) == 0 {
+		return openBaoInitResponse{}, fmt.Errorf("peer %s returned incomplete openbao init material", peer)
+	}
+
+	return out, nil
+}
+
+func buildOpenBaoPeerClient(ctx context.Context, mc *config.MachineConfig, peer string) (*machineryclient.Client, error) {
+	if mc == nil || mc.Config() == nil {
+		return nil, fmt.Errorf("machine config is required to build peer client")
+	}
+
+	now := time.Now()
+	secretsBundle := gensecrets.NewBundleFromConfig(gensecrets.NewFixedClock(now), mc.Config())
+
+	caBlock, _ := pem.Decode(secretsBundle.Certs.OS.Crt)
+	if caBlock == nil || caBlock.Type != "CERTIFICATE" {
+		return nil, fmt.Errorf("failed to decode OS CA certificate")
+	}
+
+	caCert, err := stdlibx509.ParseCertificate(caBlock.Bytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse OS CA certificate: %w", err)
+	}
+
+	clientNotBefore := caCert.NotBefore
+	clientNotAfter := now.Add(24 * time.Hour)
+	if clientNotAfter.After(caCert.NotAfter) {
+		clientNotAfter = caCert.NotAfter
+	}
+	if !clientNotAfter.After(clientNotBefore) {
+		clientNotBefore = now.Add(-time.Hour)
+		clientNotAfter = now.Add(24 * time.Hour)
+	}
+
+	clientCert, err := gensecrets.NewAdminCertificateAndKey(clientNotBefore, secretsBundle.Certs.OS, role.MakeSet(role.Admin), clientNotAfter.Sub(clientNotBefore))
+	if err != nil {
+		return nil, err
+	}
+
+	tlsCert, err := tls.X509KeyPair(clientCert.Crt, clientCert.Key)
+	if err != nil {
+		return nil, err
+	}
+
+	rootCAs := stdlibx509.NewCertPool()
+	if !rootCAs.AppendCertsFromPEM(secretsBundle.Certs.OS.Crt) {
+		return nil, fmt.Errorf("failed to append OS CA to root pool")
+	}
+
+	tlsConfig := &tls.Config{
+		MinVersion:   tls.VersionTLS13,
+		RootCAs:      rootCAs,
+		Certificates: []tls.Certificate{tlsCert},
+	}
+
+	endpoint := net.JoinHostPort(strings.TrimSpace(peer), strconv.Itoa(constants.ApidPort))
+
+	return machineryclient.New(ctx,
+		machineryclient.WithTLSConfig(tlsConfig),
+		machineryclient.WithEndpoints(endpoint),
+	)
 }

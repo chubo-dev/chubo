@@ -670,8 +670,10 @@ func TestMachineConfigOpenBaoHostServiceWritesModeAndConfig(t *testing.T) {
 	mc.Spec.Modules = &ModulesSpec{
 		Chubo: &ChuboModuleSpec{
 			Nomad: &ChuboRoleSpec{
-				Enabled: &enabled,
-				Role:    "server-client",
+				Enabled:          &enabled,
+				Role:             "server-client",
+				Join:             []string{"10.0.0.11", "10.0.0.12"},
+				NetworkInterface: "enp0s2",
 			},
 			OpenBao: &ChuboOpenBaoSpec{
 				Enabled:      &enabled,
@@ -693,6 +695,7 @@ func TestMachineConfigOpenBaoHostServiceWritesModeAndConfig(t *testing.T) {
 		foundVaultBlock bool
 		foundModeFile   bool
 		foundConfigFile bool
+		foundHostSpec   bool
 		foundJobFile    bool
 	)
 
@@ -712,6 +715,16 @@ func TestMachineConfigOpenBaoHostServiceWritesModeAndConfig(t *testing.T) {
 			require.Equal(t, "create", f.FileOp)
 			require.Contains(t, f.FileContent, `storage "raft"`)
 			require.Contains(t, f.FileContent, `/var/lib/chubo/openbao/data`)
+			require.Contains(t, f.FileContent, `leader_api_addr = "http://10.0.0.11:8200"`)
+			require.Contains(t, f.FileContent, `leader_api_addr = "http://10.0.0.12:8200"`)
+			require.Contains(t, f.FileContent, `api_addr = "http://{{ GetInterfaceIP \"enp0s2\" }}:8200"`)
+			require.Contains(t, f.FileContent, `cluster_addr = "http://{{ GetInterfaceIP \"enp0s2\" }}:8201"`)
+			require.NotContains(t, f.FileContent, `node_id = "local"`)
+		case chuboOpenBaoHostSpecPath:
+			foundHostSpec = true
+			require.Equal(t, "create", f.FileOp)
+			require.Contains(t, f.FileContent, `"networkInterface": "enp0s2"`)
+			require.Contains(t, f.FileContent, `"retryJoin": [`)
 		case chuboOpenBaoJobPath:
 			foundJobFile = true
 		}
@@ -720,6 +733,7 @@ func TestMachineConfigOpenBaoHostServiceWritesModeAndConfig(t *testing.T) {
 	require.True(t, foundVaultBlock)
 	require.True(t, foundModeFile)
 	require.True(t, foundConfigFile)
+	require.True(t, foundHostSpec)
 	require.False(t, foundJobFile)
 }
 
@@ -777,6 +791,37 @@ func TestMachineConfigOpenBaoDefaultModeUsesExternal(t *testing.T) {
 	require.True(t, foundVaultBlock)
 	require.True(t, foundModeFile)
 	require.False(t, foundJobFile)
+}
+
+func TestMachineConfigOpenBaoHostServiceRequiresNomadNetworkInterface(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server-client",
+			},
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled: &enabled,
+				Mode:    "hostService",
+			},
+		},
+	}
+
+	_, err := mc.Validate(testRuntimeMode{})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "openbao.mode=hostService requires nomad networkInterface")
 }
 
 func TestMachineConfigNomadInvalidNetworkInterfaceErrors(t *testing.T) {

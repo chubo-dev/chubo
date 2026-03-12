@@ -54,6 +54,7 @@ const (
 	chuboOpenBaoJobPath            = "/var/lib/chubo/config/openbao.nomad.json"
 	chuboOpenBaoModePath           = "/var/lib/chubo/config/openbao.mode"
 	chuboOpenBaoConfigPath         = "/var/lib/chubo/config/openbao.hcl"
+	chuboOpenBaoHostSpecPath       = "/var/lib/chubo/config/openbao.host.json"
 
 	chuboRoleServer = "server"
 	chuboRoleClient = "client"
@@ -278,6 +279,11 @@ type ChuboOpenBaoSpec struct {
 	VaultAllowUnauthenticated *bool `yaml:"vaultAllowUnauthenticated,omitempty"`
 }
 
+type chuboOpenBaoHostSpec struct {
+	NetworkInterface string   `json:"networkInterface"`
+	RetryJoin        []string `json:"retryJoin,omitempty"`
+}
+
 type BootstrapSpec struct {
 	// Reserved for future OS-owned bootstrap mechanisms.
 }
@@ -456,6 +462,24 @@ func (s *MachineConfigV1Alpha1) Validate(mode validation.RuntimeMode, _ ...valid
 					// valid
 				default:
 					return nil, fmt.Errorf("unknown spec.modules.chubo.openbao.mode %q", s.Spec.Modules.Chubo.OpenBao.Mode)
+				}
+
+				if normalizeChuboOpenBaoMode(mode) == chuboOpenBaoModeHostService {
+					if s.Spec.Modules.Chubo.Nomad == nil || (s.Spec.Modules.Chubo.Nomad.Enabled != nil && !*s.Spec.Modules.Chubo.Nomad.Enabled) {
+						return nil, errors.New("spec.modules.chubo.openbao.mode=hostService requires spec.modules.chubo.nomad to be enabled")
+					}
+
+					if !isChuboServerRole(s.Spec.Modules.Chubo.Nomad.Role) {
+						return nil, errors.New("spec.modules.chubo.openbao.mode=hostService requires a server or server-client nomad role")
+					}
+
+					if strings.TrimSpace(s.Spec.Modules.Chubo.Nomad.NetworkInterface) == "" {
+						return nil, errors.New("spec.modules.chubo.openbao.mode=hostService requires nomad networkInterface")
+					}
+
+					if err := validateChuboNetworkInterface("spec.modules.chubo.nomad.networkInterface", s.Spec.Modules.Chubo.Nomad.NetworkInterface); err != nil {
+						return nil, fmt.Errorf("spec.modules.chubo.openbao.mode=hostService requires nomad networkInterface: %w", err)
+					}
 				}
 			}
 		}
@@ -675,6 +699,8 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 						FileOp:          "create",
 					})
 				case chuboOpenBaoModeHostService:
+					hostNetworkInterface := normalizeChuboNetworkInterface(s.Spec.Modules.Chubo.Nomad.NetworkInterface)
+					hostRetryJoin := append([]string(nil), s.Spec.Modules.Chubo.Nomad.Join...)
 					cfg.MachineConfig.MachineFiles = append(cfg.MachineConfig.MachineFiles,
 						&v1alpha1.MachineFile{
 							FileContent:     mode + "\n",
@@ -683,9 +709,15 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 							FileOp:          "create",
 						},
 						&v1alpha1.MachineFile{
-							FileContent:     renderOpenBaoHostConfig(),
+							FileContent:     renderOpenBaoHostConfig(hostNetworkInterface, hostRetryJoin),
 							FilePermissions: v1alpha1.FileMode(0o600),
 							FilePath:        chuboOpenBaoConfigPath,
+							FileOp:          "create",
+						},
+						&v1alpha1.MachineFile{
+							FileContent:     renderOpenBaoHostSpec(hostNetworkInterface, hostRetryJoin),
+							FilePermissions: v1alpha1.FileMode(0o600),
+							FilePath:        chuboOpenBaoHostSpecPath,
 							FileOp:          "create",
 						},
 					)
@@ -1145,8 +1177,24 @@ func renderOpenBaoNomadJobPayload() string {
 `, chuboOpenBaoDefaultJobID, chuboOpenBaoDefaultJobID, chuboOpenBaoDefaultImage)
 }
 
-func renderOpenBaoHostConfig() string {
-	return `disable_mlock = true
+func renderOpenBaoHostSpec(networkInterface string, retryJoin []string) string {
+	spec := chuboOpenBaoHostSpec{
+		NetworkInterface: strings.TrimSpace(networkInterface),
+		RetryJoin:        append([]string(nil), retryJoin...),
+	}
+
+	data, err := json.MarshalIndent(spec, "", "  ")
+	if err != nil {
+		panic(fmt.Sprintf("renderOpenBaoHostSpec: %v", err))
+	}
+
+	return string(data) + "\n"
+}
+
+func renderOpenBaoHostConfig(networkInterface string, retryJoin []string) string {
+	var b strings.Builder
+
+	b.WriteString(`disable_mlock = true
 
 listener "tcp" {
   address = "0.0.0.0:8200"
@@ -1156,13 +1204,31 @@ listener "tcp" {
 
 storage "raft" {
   path = "/var/lib/chubo/openbao/data"
-  node_id = "local"
-}
+`)
 
-api_addr = "http://127.0.0.1:8200"
+	for _, peer := range retryJoin {
+		b.WriteString(fmt.Sprintf(`  retry_join {
+    leader_api_addr = "http://%s:8200"
+  }
+`, peer))
+	}
+
+	b.WriteString("}\n\n")
+
+	if strings.TrimSpace(networkInterface) != "" {
+		quotedInterface := fmt.Sprintf("\\\"%s\\\"", networkInterface)
+		b.WriteString(fmt.Sprintf(`api_addr = "http://{{ GetInterfaceIP %s }}:8200"
+cluster_addr = "http://{{ GetInterfaceIP %s }}:8201"
+`, quotedInterface, quotedInterface))
+	} else {
+		b.WriteString(`api_addr = "http://127.0.0.1:8200"
 cluster_addr = "http://127.0.0.1:8201"
-ui = true
-`
+`)
+	}
+
+	b.WriteString("ui = true\n")
+
+	return b.String()
 }
 
 // NodeID returns the optional stable node ID, if set.
