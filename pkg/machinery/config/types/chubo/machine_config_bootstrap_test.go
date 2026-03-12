@@ -654,6 +654,62 @@ func TestMachineConfigOpenBaoExternalModeWritesModeFileOnly(t *testing.T) {
 	require.True(t, foundModeFile)
 }
 
+func TestMachineConfigOpenBaoDefaultModeUsesExternal(t *testing.T) {
+	t.Parallel()
+
+	enabled := true
+
+	mc := NewMachineConfigV1Alpha1()
+	mc.Spec.Trust = &TrustSpec{
+		Token: "token",
+		CA: &CASpec{
+			Crt: "dummy-ca-crt",
+			Key: "dummy-ca-key",
+		},
+	}
+	mc.Spec.Modules = &ModulesSpec{
+		Chubo: &ChuboModuleSpec{
+			Nomad: &ChuboRoleSpec{
+				Enabled: &enabled,
+				Role:    "server-client",
+			},
+			OpenBao: &ChuboOpenBaoSpec{
+				Enabled:      &enabled,
+				VaultAddress: "http://openbao.service.consul:8200",
+			},
+		},
+	}
+
+	cfg, err := mc.ToV1Alpha1()
+	require.NoError(t, err)
+	require.NotNil(t, cfg.MachineConfig)
+
+	var (
+		foundVaultBlock bool
+		foundModeFile   bool
+		foundJobFile    bool
+	)
+
+	for _, f := range cfg.MachineConfig.MachineFiles {
+		switch f.FilePath {
+		case chuboOpenWontonConfigPath:
+			foundVaultBlock = true
+			require.Contains(t, f.FileContent, "vault {\n")
+			require.Contains(t, f.FileContent, `address = "http://openbao.service.consul:8200"`)
+		case chuboOpenBaoModePath:
+			foundModeFile = true
+			require.Equal(t, "create", f.FileOp)
+			require.Equal(t, "external\n", f.FileContent)
+		case chuboOpenBaoJobPath:
+			foundJobFile = true
+		}
+	}
+
+	require.True(t, foundVaultBlock)
+	require.True(t, foundModeFile)
+	require.False(t, foundJobFile)
+}
+
 func TestMachineConfigNomadInvalidNetworkInterfaceErrors(t *testing.T) {
 	t.Parallel()
 

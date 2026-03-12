@@ -649,7 +649,7 @@ func (s *MachineConfigV1Alpha1) ToV1Alpha1() (*v1alpha1.Config, error) {
 			openBaoEnabled := s.Spec.Modules.Chubo.OpenBao.Enabled == nil || *s.Spec.Modules.Chubo.OpenBao.Enabled
 			mode := strings.TrimSpace(s.Spec.Modules.Chubo.OpenBao.Mode)
 			if mode == "" {
-				mode = chuboOpenBaoModeNomadJob
+				mode = chuboOpenBaoModeExternal
 			}
 
 			if openBaoEnabled {
@@ -969,7 +969,7 @@ func renderOpenWontonConfig(role string, bootstrapExpect int, join []string, net
 	if openBao != nil && (openBao.Enabled == nil || *openBao.Enabled) {
 		mode := strings.TrimSpace(openBao.Mode)
 		if mode == "" {
-			mode = chuboOpenBaoModeNomadJob
+			mode = chuboOpenBaoModeExternal
 		}
 
 		if mode == chuboOpenBaoModeExternal {
