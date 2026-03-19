@@ -272,6 +272,34 @@ chuboctl cluster create qemu [flags]
 
 * [chuboctl cluster create](#chuboctl-cluster-create)	 - Create a local Chubo OS cluster.
 
+## chuboctl cluster create
+
+Create a local Chubo OS cluster.
+
+```
+chuboctl cluster create
+```
+
+### Options
+
+```
+  -h, --help   help for create
+```
+
+### Options inherited from parent commands
+
+```
+      --name string    the name of the cluster (default "chubo-default")
+      --state string   directory path to store cluster state (default "/Users/francesco/.chubo/clusters")
+```
+
+### SEE ALSO
+
+* [chuboctl cluster](#chuboctl-cluster)	 - A collection of commands for managing local docker-based or QEMU-based clusters
+* [chuboctl cluster create dev](#chuboctl-cluster-create-dev)	 - Creates a local QEMU-based cluster for Chubo OS development.
+* [chuboctl cluster create docker](#chuboctl-cluster-create-docker)	 - Create a local Docker based cluster
+* [chuboctl cluster create qemu](#chuboctl-cluster-create-qemu)	 - Create a local QEMU based Chubo OS cluster.
+
 ## chuboctl cluster destroy
 
 Destroys a local provisioned cluster
