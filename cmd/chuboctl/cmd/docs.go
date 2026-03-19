@@ -168,11 +168,14 @@ var docsCmd = &cobra.Command{
 //nolint:gocyclo
 func GenMarkdownReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) string) error {
 	for _, c := range cmd.Commands() {
-		// Generate docs for children of the cluster create command although the command itself is hidden.
+		// Generate docs for children of the hidden "cluster create" command, but skip the hidden
+		// wrapper itself so we don't duplicate child sections in the generated reference.
 		if cmd.Name() == "cluster" && c.Name() == "create" {
 			if err := GenMarkdownReference(c, w, linkHandler); err != nil {
 				return err
 			}
+
+			continue
 		}
 
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {

@@ -1,6 +1,17 @@
-# Talos Review Index
+# Internal Engineering Notes
 
-This folder contains per-subsystem review stubs. Each review should be completed before designing or implementing the corresponding chubo subsystem.
+This folder is the engineering-notes area for the Chubo deep fork.
+
+It is not the main onboarding path for new users.
+
+Use the public docs entry point first:
+
+- [../README.md](../README.md)
+- [../quickstart.md](../quickstart.md)
+- [../workload-access.md](../workload-access.md)
+- [../internal/README.md](../internal/README.md)
+
+The files here contain subsystem review stubs, migration plans, execution checklists, and audit notes used during the Talos-to-Chubo fork.
 
 ## Subsystems
 
@@ -18,7 +29,14 @@ This folder contains per-subsystem review stubs. Each review should be completed
 - Chubo naming/env migration + sunset policy: `migration-notes.md`
 - Artifact publishing/consumption for KubeVirt + Hetzner: `artifacts-kubevirt-hetzner.md`
 
-## Ownership (fill in)
+## Execution And Planning
+
+- deep fork execution checklist: `plan.md`
+- product/source clean plan: `chubo-product-source-clean-plan.md`
+- Talos reference elimination plan: `talos-reference-elimination-plan.md`
+- rename map: `rename-map.md`
+
+## Ownership (internal, optional)
 
 - adapter/systemd:
 - OS updates:

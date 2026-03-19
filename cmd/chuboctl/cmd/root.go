@@ -23,11 +23,11 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "chuboctl",
 	Short: "A CLI for out-of-band management of Chubo OS nodes",
-	Long: `Manage Chubo OS nodes over the OS API.
+Long: `Manage Chubo OS nodes over the OS API.
 
 The OS API is the only remote control plane.
-Workload APIs (OpenWonton/OpenGyoza/OpenBao) are accessed via helper bundles:
-nomadconfig, consulconfig, and openbaoconfig.`,
+Workload APIs (OpenWonton/OpenGyoza/OpenBao) are accessed via helper bundles.
+The default native CLIs are wonton, gyoza, and bao/vault.`,
 	SilenceErrors:     true,
 	SilenceUsage:      true,
 	DisableAutoGenTag: true,
