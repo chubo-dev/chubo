@@ -23,16 +23,26 @@ This repository is still in an alpha, deep-fork stage.
 - the public docs and examples are still being built out
 - many docs under [`docs/talos/`](docs/talos/) are internal migration and design notes, not newcomer guides
 
-If you want a repo you can clone and understand quickly, start with the docs below rather than the internal planning material.
+If you want the shortest newcomer path, start with the docs below rather than the internal planning material.
+
+## What Works Today
+
+The current repo is strongest in these areas:
+
+- local QEMU-based install and lifecycle validation
+- OS API operations through `chuboctl`
+- helper-bundle workflows for `wonton`, `gyoza`, and `bao`/`vault`
+- machine config generation, validation, and apply flows
+- support-bundle and debug-oriented operator workflows
 
 ## Start Here
 
 - [docs/README.md](docs/README.md): docs index
 - [docs/quickstart.md](docs/quickstart.md): fastest local paths
 - [docs/workload-access.md](docs/workload-access.md): helper bundles, native CLIs, and install notes
+- [docs/guides/README.md](docs/guides/README.md): hand-written capability and operator guides
 - [docs/examples/README.md](docs/examples/README.md): concrete alpha-phase walkthroughs
 - [docs/reference/cli.md](docs/reference/cli.md): generated `chuboctl` command reference
-- [docs/guides/README.md](docs/guides/README.md): hand-written capability and operator guides
 
 ## Fast Local Loops
 
@@ -91,8 +101,8 @@ On macOS, the QEMU lanes are the authoritative validation path. The Docker fallb
 
 The main missing pieces for external-readiness are:
 
-- a shorter public overview
-- a more polished 5-minute quickstart
+- a polished public overview with fewer internal assumptions
+- more end-to-end examples
 - example machine configs and local scenarios
 - clearer separation between public docs and internal migration notes
 
