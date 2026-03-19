@@ -1,6 +1,6 @@
 # Cluster Lifecycle
 
-The current codebase supports a local-cluster operator loop centered on `chuboctl cluster`.
+The current codebase supports a local cluster operator loop centered on `chuboctl cluster`.
 
 ## Create
 
@@ -30,7 +30,7 @@ For the current repo state:
 
 - macOS: prefer `sudo -n ./hack/chubo/e2e-core-qemu.sh`
 - Linux: prefer the same QEMU lane first, then experiment with lower-cost create paths if needed
-- use direct `cluster create` flows mainly when you are narrowing provisioning behavior, not when you need the most authoritative proof
+- use direct `cluster create` flows mainly when you are narrowing provisioning behavior, not when you need the most authoritative local proof
 
 ## Inspect
 
@@ -39,7 +39,7 @@ Local cluster inspection commands:
 - `chuboctl cluster show`
 - `chuboctl dashboard`
 
-The dashboard gives a cluster/node-oriented operational view. `cluster show` gives provisioned-cluster metadata.
+The dashboard gives a cluster and node-oriented operational view. `cluster show` gives provisioned cluster metadata.
 
 ## Destroy
 
@@ -62,6 +62,7 @@ Current lifecycle actions on running nodes include:
 - `reset`
 
 These are OS lifecycle operations, not workload-scheduler operations. In alpha, prefer validating them through the local QEMU lanes rather than treating them as broadly portable host workflows.
+These are OS lifecycle operations, not workload-scheduler operations. In alpha, validate them through the local QEMU lanes before treating them as general-purpose workflows across hosts.
 
 ## Current Reality
 

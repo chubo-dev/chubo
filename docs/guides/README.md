@@ -1,6 +1,6 @@
 # Guides
 
-These guides describe what is practically usable in the current alpha codebase.
+These guides describe what is practically usable in the current alpha codebase and how to approach it as an operator.
 
 ## Guides
 

@@ -6,9 +6,9 @@ This repo is still in alpha.
 
 Current docs are improving, but still incomplete:
 
-- examples are still thin
+- examples are still limited in scope
 - some areas are described at the command level more clearly than at the operator-workflow level
-- internal fork notes remain much larger than the public docs surface
+- the internal fork notes are still larger than the public docs surface
 
 ## Platform Reality
 

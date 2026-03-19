@@ -1,6 +1,6 @@
 # Debugging And Support
 
-The current codebase already exposes a useful debugging surface even without SSH.
+The current codebase already exposes a useful debugging surface without making SSH the default operator model.
 
 ## First Places To Look
 
@@ -24,6 +24,15 @@ Useful commands:
 - `support`
 
 These let you observe controller behavior, service failures, and node state directly through the OS API.
+
+Suggested entry commands:
+
+```sh
+./_out/chuboctl-host logs --help
+./_out/chuboctl-host events --help
+./_out/chuboctl-host inspect --help
+./_out/chuboctl-host support --help
+```
 
 ## Debug Containers
 
@@ -50,7 +59,7 @@ This is useful when you need focused tooling on a running node without turning s
 
 This is the main artifact to collect when a failure needs to be analyzed outside an interactive session.
 
-## Narrow Before You Escalate
+## Narrow The Failure First
 
 Follow the smallest authoritative loop:
 

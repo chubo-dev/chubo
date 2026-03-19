@@ -1,6 +1,6 @@
 # Local Development
 
-This repo is optimized around local iteration with `chuboctl`, targeted `go test`, and QEMU-based fixture runs.
+This repo is best approached through local iteration with `chuboctl`, targeted `go test`, and QEMU-based fixture runs.
 
 ## Fastest Loops
 
@@ -81,4 +81,4 @@ For alpha, use:
 - local `--help` output from `./_out/chuboctl-host`
 - [../examples/local-qemu-smoke.md](../examples/local-qemu-smoke.md)
 
-Do not treat the website tree as the primary documentation path yet.
+Treat `docs/` as the primary documentation path for now.

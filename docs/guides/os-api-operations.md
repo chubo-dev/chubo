@@ -50,7 +50,7 @@ Main read/observe operations:
 - `dmesg`
 - `cgroups`
 
-These are the commands to use when you want to inspect the OS and its managed services through the API.
+Use these commands when you want to inspect the OS and its managed services through the API.
 
 Suggested entry commands:
 
@@ -72,7 +72,7 @@ Additional operator/debugging surfaces:
 - `support`
 - `pcap`
 
-This is enough to investigate many node-level problems without adding SSH as a primary operator path.
+These commands cover many node-level investigations without turning SSH into the primary operator path.
 
 Suggested entry commands:
 
