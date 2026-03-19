@@ -1,42 +1,109 @@
 # Chubo OS
 
-This repository contains the Chubo OS distribution for the Chubo stack:
+Chubo OS is a Talos-derived, API-managed operating system for the Chubo stack:
 
 - OpenWonton (Nomad)
 - OpenGyoza (Consul)
-- OpenBao (as a Nomad job)
+- OpenBao
 
-Chubo OS is API-managed and intentionally "no shell":
+It is intentionally "no shell":
+
 - no SSH
 - no console login
-- day-2 operations happen via the OS API (mTLS), plus helper bundles to access workload-native APIs
+- day-2 operations happen through the OS API over mTLS
+- workload-native access happens through helper bundles for the native CLIs: `wonton`, `gyoza`, and `bao`/`vault`
 
-Kubernetes/etcd are not part of the product surface (they are being removed from the repository in staged passes).
+Kubernetes and etcd are not part of the intended product surface.
 
-## Workspace Layout
+## Status
 
-In the `chubo-os` workspace, docs and control-plane tooling live in the sibling repo:
-- `docs/talos/deep-fork-plan.md`
-- `docs/talos/chubo-product-source-clean-plan.md`
-- `../chubo/docs/dev/chubo-os-qemu-devloop.md`
+This repository is still in an alpha, deep-fork stage.
 
-## Build, Test, and Fast Iteration
+- the OS and CLI are usable for local development and targeted QEMU validation
+- the public docs and examples are still being built out
+- many docs under [`docs/talos/`](docs/talos/) are internal migration and design notes, not newcomer guides
 
-From `chubo/`:
+If you want the shortest newcomer path, start with the docs below rather than the internal planning material.
 
-- Unit tests: `make unit-tests`
-- Guardrails (k8s-less deps + rootfs + CLI surface): `make chubo-guardrails`
-- QEMU core E2E (root): `sudo -n ./hack/chubo/e2e-core-qemu.sh`
-- Helper bundles smoke (root): `sudo -n ./hack/chubo/e2e-helper-bundles-qemu.sh`
-- Opengyoza quorum fixture (root): `sudo -n ./hack/chubo/e2e-opengyoza-quorum-qemu.sh`
+## What Works Today
 
-To monitor a QEMU fixture run, tail the per-node serial log in the printed state dir, e.g.:
+The current repo is strongest in these areas:
+
+- local QEMU-based install and lifecycle validation
+- OS API operations through `chuboctl`
+- helper-bundle workflows for `wonton`, `gyoza`, and `bao`/`vault`
+- machine config generation, validation, and apply flows
+- support-bundle and debug-oriented operator workflows
+
+## Start Here
+
+- [docs/README.md](docs/README.md): docs index
+- [docs/quickstart.md](docs/quickstart.md): fastest local paths
+- [docs/workload-access.md](docs/workload-access.md): helper bundles, native CLIs, and install notes
+- [docs/guides/README.md](docs/guides/README.md): hand-written capability and operator guides
+- [docs/examples/README.md](docs/examples/README.md): concrete alpha-phase walkthroughs
+- [docs/reference/cli.md](docs/reference/cli.md): generated `chuboctl` command reference
+
+## Fast Local Loops
+
+Build the CLI:
 
 ```sh
-sudo tail -f /tmp/chubo-*-e2e-state/*/*.log
+make chuboctl
 ```
 
-## CI
+Run the authoritative local QEMU lane:
 
-GitHub Actions workflows are intentionally minimal and Chubo-focused:
-- `.github/workflows/ci.yaml`
+```sh
+sudo -n ./hack/chubo/e2e-core-qemu.sh
+```
+
+Run the helper-bundle smoke lane:
+
+```sh
+sudo -n ./hack/chubo/e2e-helper-bundles-qemu.sh
+```
+
+Run the OpenGyoza quorum lane:
+
+```sh
+sudo -n ./hack/chubo/e2e-opengyoza-quorum-qemu.sh
+```
+
+For a faster, narrower inner loop, use:
+
+```sh
+./hack/qemu/chubo-qemu.sh
+```
+
+## Build And Test
+
+Useful local targets from the repo root:
+
+- `make help`
+- `make unit-tests`
+- `make chuboctl`
+- `make chubo-guardrails`
+
+On macOS, the QEMU lanes are the authoritative validation path. The Docker fallback is still non-authoritative there because host kernel features are missing.
+
+## Repository Layout
+
+- [`cmd/chuboctl/`](cmd/chuboctl/): primary CLI
+- [`cmd/talosctl/`](cmd/talosctl/): compatibility shim during the rename wave
+- [`internal/app/machined/`](internal/app/machined/): boot/runtime controllers and services
+- [`internal/app/apid/`](internal/app/apid/): OS API server
+- [`internal/app/trustd/`](internal/app/trustd/): trust and PKI services
+- [`pkg/provision/`](pkg/provision/): local cluster provisioning
+- [`hack/chubo/`](hack/chubo/): local E2E and validation scripts
+
+## Current Gaps
+
+The main missing pieces for external-readiness are:
+
+- a polished public overview with fewer internal assumptions
+- more end-to-end examples
+- example machine configs and local scenarios
+- clearer separation between public docs and internal migration notes
+
+Those improvements now start under [`docs/`](docs/).

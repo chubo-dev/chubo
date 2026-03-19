@@ -168,11 +168,24 @@ var docsCmd = &cobra.Command{
 //nolint:gocyclo
 func GenMarkdownReference(cmd *cobra.Command, w io.Writer, linkHandler func(string) string) error {
 	for _, c := range cmd.Commands() {
-		// Generate docs for children of the cluster create command although the command itself is hidden.
+		// Generate docs for children of the "cluster create" wrapper first, then emit the wrapper
+		// itself once so the child SEE ALSO links keep a valid #chuboctl-cluster-create anchor.
 		if cmd.Name() == "cluster" && c.Name() == "create" {
-			if err := GenMarkdownReference(c, w, linkHandler); err != nil {
+			for _, gc := range c.Commands() {
+				if !gc.IsAvailableCommand() || gc.IsAdditionalHelpTopicCommand() {
+					continue
+				}
+
+				if err := GenMarkdownReference(gc, w, linkHandler); err != nil {
+					return err
+				}
+			}
+
+			if err := doc.GenMarkdownCustom(c, w, linkHandler); err != nil {
 				return err
 			}
+
+			continue
 		}
 
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
@@ -182,12 +195,6 @@ func GenMarkdownReference(cmd *cobra.Command, w io.Writer, linkHandler func(stri
 		if err := GenMarkdownReference(c, w, linkHandler); err != nil {
 			return err
 		}
-	}
-
-	// Skip generating docs for the cluster create command itself and only generate docs for children.
-	// TODO: remove once "cluster create" is completely migrated to "cluster create dev".
-	if cmd.Name() == "create" && cmd.Parent() != nil && cmd.Parent().Name() == "cluster" {
-		return nil
 	}
 
 	return doc.GenMarkdownCustom(cmd, w, linkHandler)
