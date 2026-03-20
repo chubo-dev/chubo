@@ -8,7 +8,6 @@ package v1alpha1
 
 import (
 	"github.com/chubo-dev/chubo/pkg/machinery/config/encoder"
-	"github.com/chubo-dev/chubo/pkg/machinery/constants"
 )
 
 func (Config) Doc() *encoder.Doc {
@@ -990,8 +989,6 @@ func (RegistryServiceConfig) Doc() *encoder.Doc {
 			},
 		},
 	}
-
-	doc.Fields[1].AddExample("", constants.DefaultDiscoveryServiceEndpoint)
 
 	return doc
 }

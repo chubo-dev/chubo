@@ -21,6 +21,7 @@ Use it when you need:
 - [../talos/deep-fork-plan.md](../talos/deep-fork-plan.md): deep-fork design plan
 - [../talos/migration-notes.md](../talos/migration-notes.md): compatibility and sunset notes
 - [../talos/workload-acl-tokens.md](../talos/workload-acl-tokens.md): workload ACL and helper-bundle background
+- [cluster-discovery-next.md](cluster-discovery-next.md): post-alpha replacement plan for the inherited external discovery subsystem, now disabled by default for alpha
 
 ## Audit Artifacts
 

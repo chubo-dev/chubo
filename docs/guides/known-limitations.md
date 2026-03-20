@@ -20,6 +20,21 @@ Current docs are improving, but still incomplete:
 
 The intended product surface excludes Kubernetes and etcd, but the codebase is still a deep fork in progress. Some compatibility paths and legacy naming remain in place during the transition.
 
+## Cluster Discovery
+
+The inherited external discovery subsystem is not part of the supported alpha story.
+
+- cluster discovery is disabled by default in the CLI/config surface used for alpha
+- the existing discovery path is still structurally Talos-era: external registry -> affiliates -> members -> control-plane endpoints
+- parts of that path still carry Talos naming and legacy control-plane assumptions
+- a Chubo-native replacement is still work to do next, not a feature to rely on during alpha
+
+For alpha, the supported focus is:
+
+- local QEMU validation
+- direct OS API operations through `chuboctl`
+- workload-native access through helper bundles and `wonton` / `gyoza` / `bao`
+
 ## Public Presentation
 
 The repo is not yet at a polished “clone this and understand everything in five minutes” stage.
@@ -37,3 +52,4 @@ What still needs work:
 - richer examples
 - more operator walkthroughs
 - a cleaner publishable public docs site after alpha
+- a Chubo-native replacement for the inherited external discovery subsystem

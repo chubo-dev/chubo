@@ -224,12 +224,7 @@ metadata:
 
 func clusterDiscoveryExample() ClusterDiscoveryConfig {
 	return ClusterDiscoveryConfig{
-		DiscoveryEnabled: pointer.To(true),
-		DiscoveryRegistries: DiscoveryRegistriesConfig{
-			RegistryService: RegistryServiceConfig{
-				RegistryEndpoint: constants.DefaultDiscoveryServiceEndpoint,
-			},
-		},
+		DiscoveryEnabled: pointer.To(false),
 	}
 }
 

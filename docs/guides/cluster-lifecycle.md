@@ -31,6 +31,8 @@ For the current repo state:
 - macOS: prefer `sudo -n ./hack/chubo/e2e-core-qemu.sh`
 - Linux: prefer the same QEMU lane first, then experiment with lower-cost create paths if needed
 - use direct `cluster create` flows mainly when you are narrowing provisioning behavior, not when you need the most authoritative local proof
+- for alpha, external cluster discovery is out of scope and disabled by default; only enable `--with-cluster-discovery` if you are explicitly working on that subsystem
+- control-plane-only local validation is the supported alpha path; worker-bearing discovery-dependent topologies still need follow-up cleanup
 
 ## Inspect
 
@@ -78,3 +80,4 @@ What is still rough:
 - polished newcomer UX
 - non-QEMU platform parity
 - concise, opinionated examples for each create mode
+- the inherited external discovery/member pipeline, which is being deferred as post-alpha work

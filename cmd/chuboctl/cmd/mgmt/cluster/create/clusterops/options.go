@@ -165,7 +165,7 @@ func GetCommon() Common {
 		ControlPlanePort:       constants.DefaultControlPlanePort,
 		RootOps:                &clustercmd.PersistentFlags, // TODO: move this elsewhere
 		NetworkIPv4:            true,
-		EnableClusterDiscovery: true,
+		EnableClusterDiscovery: false,
 		ChuboVersion:           helpers.GetTag(),
 	}
 }

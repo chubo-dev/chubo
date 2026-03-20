@@ -93,7 +93,7 @@ func NewInput(clustername, endpoint, _ string, opts ...Option) (*Input, error) {
 	additionalSubjectAltNames := slices.Clone(input.Options.AdditionalSubjectAltNames)
 
 	if input.Options.DiscoveryEnabled == nil {
-		input.Options.DiscoveryEnabled = pointer.To(true)
+		input.Options.DiscoveryEnabled = pointer.To(false)
 	}
 
 	input.ClusterName = clustername

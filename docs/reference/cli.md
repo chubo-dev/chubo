@@ -152,7 +152,7 @@ chuboctl cluster create dev [flags]
       --wireguard-cidr string                    CIDR of the wireguard network
       --with-apply-config                        enable apply config when the VM is starting in maintenance mode
       --with-bootloader                          enable bootloader to load kernel and initramfs from disk image after install (default true)
-      --with-cluster-discovery                   enable cluster discovery (default true)
+      --with-cluster-discovery                   enable experimental external cluster discovery
       --with-debug                               enable debug in Chubo OS config to send service logs to the console
       --with-firewall string                     inject firewall rules into the cluster, value is default policy - accept/block
       --with-init-node                           create the cluster with an init node
@@ -1055,7 +1055,7 @@ chuboctl gen config <cluster name> <cluster endpoint> [flags]
   -t, --output-types strings                     types of outputs to be generated. valid types are: ["controlplane" "worker" "chuboconfig"] (legacy alias: "talosconfig" -> "chuboconfig") (default [controlplane,worker,chuboconfig])
       --registry-mirror strings                  list of registry mirrors to use in format: <registry host>=<mirror URL>
       --version string                           the desired machine config version to generate (default "v1alpha1")
-      --with-cluster-discovery                   enable cluster discovery feature (default true)
+      --with-cluster-discovery                   enable experimental external cluster discovery
       --with-docs                                renders all machine configs adding the documentation for each field (default true)
       --with-examples                            renders all machine configs with the commented examples (default true)
       --with-secrets string                      use a secrets file generated using 'gen secrets'

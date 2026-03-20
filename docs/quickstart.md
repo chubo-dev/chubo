@@ -35,6 +35,12 @@ Chubo OS is API-managed:
 - OpenWonton, OpenGyoza, and OpenBao access are exposed through helper bundles downloaded via `chuboctl`
 - those bundles are meant to be used with the native CLIs: `wonton`, `gyoza`, and `bao`/`vault`
 
+For alpha, external cluster discovery is not part of the supported first-run path:
+
+- the practical alpha path is local QEMU validation and direct OS API access
+- the inherited external discovery subsystem is being deferred to post-alpha cleanup
+- cluster discovery is disabled by default in the alpha CLI/config surface
+
 For this alpha phase, the main reference path is local CLI help from the built binary:
 
 ```sh
