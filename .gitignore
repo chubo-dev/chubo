@@ -25,11 +25,13 @@ hack/test/libvirt/matchbox/assets/*
 # Go
 .artifacts/
 go.work.sum
+*.test
 
 sha256sum.txt
 sha512sum.txt
 
 **/packet-cluster.yaml
+tmp/
 
 # Local Netlify folder
 .netlify

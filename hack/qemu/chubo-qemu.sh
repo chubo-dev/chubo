@@ -245,17 +245,25 @@ EOF
   )
 fi
 
-"${QEMU_BIN}" \
-  -machine virt,accel="${QEMU_ACCEL}" \
-  -cpu host \
-  -smp 4 \
-  -m 2048 \
-  -object rng-random,filename=/dev/urandom,id=rng0 \
-  -device virtio-rng-pci,rng=rng0 \
-  -drive if=pflash,format=raw,readonly=on,file="${EDK2_CODE}" \
-  -drive if=pflash,format=raw,file="${VARS_PATH}" \
-  "${qemu_disk_args[@]}" \
-  -device virtio-net-pci,netdev=net0 \
-  -netdev user,id=net0,hostfwd=tcp::"${HOST_PORT}"-:50000 \
-  "${qemu_net_args[@]}" \
-  -nographic
+qemu_cmd=(
+  "${QEMU_BIN}"
+  -machine virt,accel="${QEMU_ACCEL}"
+  -cpu host
+  -smp 4
+  -m 2048
+  -object rng-random,filename=/dev/urandom,id=rng0
+  -device virtio-rng-pci,rng=rng0
+  -drive if=pflash,format=raw,readonly=on,file="${EDK2_CODE}"
+  -drive if=pflash,format=raw,file="${VARS_PATH}"
+  "${qemu_disk_args[@]}"
+  -device virtio-net-pci,netdev=net0
+  -netdev user,id=net0,hostfwd=tcp::"${HOST_PORT}"-:50000
+)
+
+if ((${#qemu_net_args[@]})); then
+  qemu_cmd+=("${qemu_net_args[@]}")
+fi
+
+qemu_cmd+=(-nographic)
+
+"${qemu_cmd[@]}"

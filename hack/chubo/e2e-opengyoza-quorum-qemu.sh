@@ -493,11 +493,18 @@ cat >"${DOCKER_CONFIG}/config.json" <<'EOF'
 {"auths":{}}
 EOF
 mkdir -p "${DOCKER_CONFIG}/cli-plugins"
-# Chubo build targets use `docker buildx build`. If buildx is only installed via Docker Desktop,
-# make it available under the isolated DOCKER_CONFIG.
-if [[ -x /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx ]]; then
-	ln -sf /Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx "${DOCKER_CONFIG}/cli-plugins/docker-buildx"
-fi
+# Chubo build targets use `docker buildx build`. If buildx is installed outside the default root
+# plugin search path, make it available under the isolated DOCKER_CONFIG.
+for buildx_path in \
+	/Applications/Docker.app/Contents/Resources/cli-plugins/docker-buildx \
+	/opt/homebrew/lib/docker/cli-plugins/docker-buildx \
+	/usr/local/lib/docker/cli-plugins/docker-buildx
+do
+	if [[ -x "${buildx_path}" ]]; then
+		ln -sf "${buildx_path}" "${DOCKER_CONFIG}/cli-plugins/docker-buildx"
+		break
+	fi
+done
 
 if ! docker version >/dev/null 2>&1; then
 	echo "docker CLI is available but cannot connect to a daemon." >&2
