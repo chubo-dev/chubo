@@ -34,7 +34,7 @@ cluster:
     secret: pofHbABZq7VXuObsdLdy/bHmz6hlMHZ3p8+6WKrv1ic=
     clusterName: base
     discovery:
-        enabled: true
+        enabled: false
         registries:
             service:
                 endpoint: https://discovery.override.example.com
